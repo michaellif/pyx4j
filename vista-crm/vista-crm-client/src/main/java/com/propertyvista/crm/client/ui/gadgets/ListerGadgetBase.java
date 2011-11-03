@@ -14,30 +14,34 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.services.AbstractListService;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase.StyleSuffix;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.StringHolder;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.SortEntity;
@@ -49,17 +53,14 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      */
     private static final RefreshInterval DEFAULT_REFRESH_INTERVAL = RefreshInterval.Never;
 
-    private static final int DEFAULT_ITEMS_PER_PAGE = 10;
+    private static final int DEFAULT_PAGE_SIZE = 10;
 
-    private final EnhancedListerBase<E> listerBase;
+    private final EntityListPanel<E> entityListPanel;
 
     private ListerGadgetBaseSettings settings;
 
-    protected final AbstractListService<E> service;
-
-    public ListerGadgetBase(GadgetMetadata gmd, AbstractListService<E> service, Class<E> entityClass) {
+    public ListerGadgetBase(GadgetMetadata gmd, Class<E> entityClass) {
         super(gmd);
-        this.service = service;
 
         // validate that we got correct settings class 'cause our subclasses could not be trusted (they may have messed something) 
         if (isSettingsInstanceOk(gadgetMetadata.settings())) {
@@ -69,13 +70,62 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             gadgetMetadata.settings().set(settings);
         }
 
-        listerBase = new EnhancedListerBase<E>(entityClass, null);
-        new ListerActivityBase<E>(listerBase, service, entityClass);
+        entityListPanel = new EntityListPanel<E>(entityClass) {
+            @Override
+            // although the name doesn't give a clue, this sets the default column descriptors for the EntityListPanelWidget
+            public List<ColumnDescriptor<E>> getColumnDescriptors() {
+                return fetchColumnDescriptorsFromSettings(this.proto());
+            }
+        };
+        entityListPanel.setPrevActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                prevListPage();
+            }
+        });
+        entityListPanel.setNextActionHandler(new ClickHandler() {
 
+            @Override
+            public void onClick(ClickEvent event) {
+                nextListPage();
+            }
+        });
+        entityListPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+            @Override
+            public void onChange(ColumnDescriptor<E> column) {
+                // get the sorting criteria and store it in settings
+                List<Sort> sorting = new ArrayList<Sort>(2);
+                ColumnDescriptor<E> primarySortColumn = entityListPanel.getDataTable().getDataTableModel().getSortColumn();
+                if (primarySortColumn != null) {
+                    sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
+                }
+                ColumnDescriptor<E> secondarySortColumn = entityListPanel.getDataTable().getDataTableModel().getSecondarySortColumn();
+                if (secondarySortColumn != null) {
+                    sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
+                }
+                settings.sorting().clear();
+                for (Sort sort : sorting) {
+                    SortEntity sortEntity = SortToEntity(sort);
+                    settings.sorting().add(sortEntity);
+                }
+
+                populateList();
+            }
+        });
+        // FIXME add handler for column selection (store the selected columns in settings)
+
+        // use the same style as ListerBase
+        entityListPanel.setWidth("100%");
+        entityListPanel.setStyleName(ListerBase.DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
+        entityListPanel.getDataTable().setColumnSelector(getAvailableColumnDescriptors(entityListPanel.proto()));
+        entityListPanel.getDataTable().setHasColumnClickSorting(true);
+        entityListPanel.getDataTable().setHasCheckboxColumn(false);
+        entityListPanel.getDataTable().setMarkSelectedRow(false);
+        entityListPanel.getDataTable().setAutoColumnsWidth(true);
+        entityListPanel.getDataTable().renderTable();
         // TODO enable filters when they can be persisted
-        listerBase.setFiltersVisible(false);
 
-        listerBase.addAttachHandler(new AttachEvent.Handler() {
+        entityListPanel.addAttachHandler(new AttachEvent.Handler() {
             @Override
             public void onAttachOrDetach(AttachEvent event) {
                 if (event.isAttached()) {
@@ -92,6 +142,44 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         });
     }
 
+    /**
+     * Implement in derived class to fill the page via {@link #setPageData(List, int, int, boolean)}.
+     * 
+     * @param pageNumber
+     */
+    public abstract void populatePage(int pageNumber);
+
+    /**
+     * Implement in derived class to set default columns.<br>
+     * Warning: that method this called from within the constructor!
+     */
+    protected abstract List<ColumnDescriptor<E>> getDefaultColumnDescriptors(E proto);
+
+    /**
+     * Implement in derived class to set available columns.<br>
+     * Warning: that method this called from within the constructor!
+     */
+    protected abstract List<ColumnDescriptor<E>> getAvailableColumnDescriptors(E proto);
+
+    private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings(E proto) {
+        if (settings.columnPaths().isEmpty()) {
+            List<ColumnDescriptor<E>> descriptors = getDefaultColumnDescriptors(proto);
+            for (ColumnDescriptor<E> columnDescriptor : descriptors) {
+                StringHolder columnName = EntityFactory.create(StringHolder.class);
+                columnName.stringValue().setValue(columnDescriptor.getColumnName());
+                settings.columnPaths().add(columnName);
+            }
+        }
+        List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
+        for (StringHolder columnName : settings.columnPaths()) {
+            ColumnDescriptor<E> columnDescriptor = ColumnDescriptorFactory.createColumnDescriptor(proto,
+                    proto.getMember(new Path(columnName.stringValue().getValue())));
+            columnDescriptors.add(columnDescriptor);
+        }
+
+        return columnDescriptors;
+    }
+
     protected boolean isSettingsInstanceOk(AbstractGadgetSettings abstractSettings) {
         return abstractSettings.isInstanceOf(ListerGadgetBaseSettings.class);
     }
@@ -99,38 +187,95 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     @Override
     protected ListerGadgetBaseSettings createSettings() {
         ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
-        assert settings != null : "Failed to instantiate ListerGadgetBaseSettings class";
         settings.refreshInterval().setValue(DEFAULT_REFRESH_INTERVAL);
-        settings.itemsPerPage().setValue(DEFAULT_ITEMS_PER_PAGE);
-        settings.currentPage().setValue(0);
+        settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
+        settings.pageNumber().setValue(0);
         settings.columnPaths().clear();
         return settings;
     }
 
-    protected EnhancedListerBase<E> getListerBase() {
-        return listerBase;
+    @Override
+    public GadgetMetadata getGadgetMetadata() {
+        // FIXME clear columns from settings if they are still doubled
+        return this.gadgetMetadata;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        settings.pageNumber().setValue(0);
+        populateList();
+    }
+
+    @Override
+    public boolean isSetupable() {
+        return true;
+    }
+
+    @Override
+    public ISetup getSetup() {
+        return new SetupLister();
     }
 
     @Override
     protected void onRefreshTimer() {
-        storeSettings();
-
-        // try to reload the page and if the page is empty try to load the previous one
-        int pageToReload = getListerBase().getPageNumber();
-        do {
-            getListerBase().getPresenter().populate(pageToReload--);
-        } while ((getListerBase().getPageNumber() > 0) && (getListerBase().getPageSize() == 0));
+        populateList();
     }
 
-    /*
-     * Implement in derived class to set default table structure.
-     * Note, that it's called from within constructor!
+    protected IsWidget getListerWidget() {
+        return entityListPanel;
+    }
+
+    public int getPageSize() {
+        return settings.pageSize().getValue();
+    }
+
+    /**
+     * Sets page size but does not populate the list: the specified page size will be applied on next population.
+     * 
+     * @param pageSize
      */
-    protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
+    public void setPageSize(int pageSize) {
+        settings.pageSize().setValue(pageSize > 1 ? pageSize : DEFAULT_PAGE_SIZE);
+    }
 
-    protected abstract void fillAvailableColumnDescripors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
+    public int getPageNumber() {
+        return settings.pageNumber().getValue();
+    }
 
-    protected void setRefreshInterval(RefreshInterval refreshInterval) {
+    /**
+     * Fills the lister with data for a single page.
+     * 
+     * @param data
+     * @param pageNumber
+     * @param totalRows
+     * @param hasMoreData
+     */
+    public final void setPageData(List<E> data, int pageNumber, int totalRows, boolean hasMoreData) {
+        settings.pageNumber().setValue(pageNumber);
+        if (data.size() == 0 & pageNumber > 0) {
+            prevListPage();
+        } else {
+            entityListPanel.setPageSize(settings.pageSize().getValue());
+            entityListPanel.populateData(data, pageNumber, hasMoreData, totalRows);
+        }
+    }
+
+    private void nextListPage() {
+        populatePage(getPageNumber() + 1);
+    }
+
+    private void prevListPage() {
+        if (getPageNumber() != 0) {
+            populatePage(getPageNumber() - 1);
+        }
+    }
+
+    private void populateList() {
+        populatePage(getPageNumber());
+    }
+
+    private void setRefreshInterval(RefreshInterval refreshInterval) {
         settings.refreshInterval().setValue(refreshInterval);
         int refreshIntervalMillis;
 
@@ -146,165 +291,20 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         getRefreshTimer().setRefreshInterval(refreshIntervalMillis);
     }
 
-    @Override
-    public GadgetMetadata getGadgetMetadata() {
-        // store the state of ListerBase in the settings in order to provide up to date meta data
-        storeSettings();
-
-        // in normal situation settings property should be referenced by gadget metadata
-        return this.gadgetMetadata;
-    }
-
-    public static SortEntity SortToEntity(Sort sort) {
+    private static SortEntity SortToEntity(Sort sort) {
         SortEntity entity = EntityFactory.create(SortEntity.class);
         entity.propertyName().setValue(sort.getPropertyName());
         entity.descending().setValue(sort.isDescending());
         return entity;
     }
 
-    public static Sort EntityToSort(SortEntity entity) {
+    @SuppressWarnings("unused")
+    private static Sort EntityToSort(SortEntity entity) {
         Sort sort = new Sort(entity.propertyName().getValue(), entity.descending().getValue());
         return sort;
     }
 
-    //
-    // IGadget:
-    @Override
-    public Widget asWidget() {
-        return getListerBase().asWidget();
-    }
-
-    @Override
-    public void start() {
-        super.start();
-        applySettings();
-        getListerBase().getPresenter().populate(settings.currentPage().getValue());
-    }
-
-    @Override
-    public boolean isSetupable() {
-        return true;
-    }
-
-    @Override
-    public ISetup getSetup() {
-        return new SetupLister();
-    }
-
-    /**
-     * Gather the state of the lister and store it into the settings member (note: this method doens't persist the settings to the DB)
-     */
-    private void storeSettings() {
-        // COLUMNS:
-        settings.columnPaths().clear();
-        // FIXME currently pollutes db with strings on each save hence we are not going to enable this feature
-        // don't forget to fix applySettings() when enableing this
-//        Collection<ColumnDescriptor<E>> descriptors = getListerBase().getSelectedColumnDescriptors();
-//        for (ColumnDescriptor<E> columnDescriptor : descriptors) {
-//            StringHolder columnName = EntityFactory.create(StringHolder.class);
-//            columnName.stringValue().setValue(columnDescriptor.getColumnName());
-//            settings.columnPaths().add(columnName);
-//        }
-
-        // SORTING:
-        settings.sorting().clear();
-        List<Sort> sorting = getListerBase().getSorting();
-        for (Sort sort : sorting) {
-            SortEntity sortEntity = SortToEntity(sort);
-            settings.sorting().add(sortEntity);
-        }
-
-        // CURRENT PAGE:
-        Integer currentPage = getListerBase().getLister().getPageNumber();
-        settings.currentPage().setValue(currentPage);
-
-        // TODO FILTERING: current problem: filter value cannot be persisted (needs to be serialised in some way)
-    }
-
-    private void applySettings() {
-        getListerBase().setPageSize(settings.itemsPerPage().getValue());
-        setRefreshInterval(settings.refreshInterval().getValue());
-        getRefreshTimer().reactivate();
-
-        // apply columns
-        // FIXME see storeSettings for more info
-        ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-        fillDefaultColumnDescriptors(columnDescriptors, getListerBase().proto());
-//        if (settings.columnPaths().isEmpty()) {
-//            this.fillDefaultColumnDescriptors(columnDescriptors, getListerBase().proto());
-//        } else {
-//            for (StringHolder columnName : settings.columnPaths()) {
-//                ColumnDescriptor<E> columnDescriptor = ColumnDescriptorFactory.createColumnDescriptor(getListerBase().proto(), getListerBase().proto()
-//                        .getMember(new Path(columnName.stringValue().getValue())));
-//                columnDescriptors.add(columnDescriptor);
-//            }
-//
-//        }
-//        getListerBase().setColumnDescriptors(columnDescriptors);
-
-        // apply sorting
-        List<Sort> sorting = new LinkedList<Sort>();
-        for (SortEntity sortEntity : settings.sorting()) {
-            sorting.add(EntityToSort(sortEntity));
-        }
-        getListerBase().setSorting(sorting);
-
-        // TODO: apply filtering
-    }
-
-    protected class EnhancedListerBase<T> extends ListerBase<E> {
-
-        public EnhancedListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
-            super(clazz, itemOpenPlaceClass);
-        }
-
-        @Override
-        public HandlerRegistration addAttachHandler(AttachEvent.Handler handler) {
-            return getListPanel().addAttachHandler(handler);
-        }
-
-        public E proto() {
-            return getListPanel().proto();
-        }
-
-        public void setPageSize(int itemsPerPage) {
-            getListPanel().setPageSize(itemsPerPage);
-        }
-
-        public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
-            getListPanel().getDataTable().getDataTableModel().setColumnDescriptors(columnDescriptors);
-        }
-
-        public List<ColumnDescriptor<E>> getSelectedColumnDescriptors() {
-            return getListPanel().getDataTable().getDataTableModel().getColumnDescriptors();
-        }
-
-        @Override
-        protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto) {
-            ListerGadgetBase.this.fillDefaultColumnDescriptors(columnDescriptors, proto);
-        }
-
-        @Override
-        protected void fillAvailableColumnDescriptors(java.util.List<com.pyx4j.entity.client.ui.datatable.ColumnDescriptor<E>> columnDescriptors, E proto) {
-            ListerGadgetBase.this.fillAvailableColumnDescripors(columnDescriptors, proto);
-        };
-
-        @Override
-        protected void onPrevPage() {
-            super.onPrevPage();
-            getRefreshTimer().reactivate();
-        }
-
-        @Override
-        protected void onNextPage() {
-            super.onNextPage();
-            getRefreshTimer().reactivate();
-        }
-    }
-
-    //
-    // Setup UI implementation:
-    class SetupLister implements ISetup {
+    private class SetupLister implements ISetup {
 
         protected final FlexTable setupPanel = new FlexTable();
 
@@ -317,8 +317,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
             setupPanel.setWidget(0, 0, new Label(i18n.tr("Items Per Page") + ":"));
 
-            itemsPerPage.setText(String.valueOf(getListerBase().getPageSize()));
-            itemsPerPage.setWidth("100%");
+            itemsPerPage.setText(String.valueOf(settings.pageSize().getValue()));
+            itemsPerPage.setWidth("3em");
             setupPanel.setWidget(0, 1, itemsPerPage);
 
             setupPanel.setWidget(1, 0, new Label(i18n.tr("Refresh Interval") + ":"));
@@ -348,19 +348,17 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
         @Override
         public boolean onOk() {
-            int itemsPerPageCount = settings.itemsPerPage().getValue();
+            int itemsPerPageCount = settings.pageSize().getValue();
             try {
                 itemsPerPageCount = Integer.parseInt(itemsPerPage.getText());
             } catch (Throwable e) {
                 // TODO ignore? show an error message? return false? make control validate the input?
             }
-            settings.itemsPerPage().setValue(itemsPerPageCount);
+            setPageSize(itemsPerPageCount);
 
             if (intervalList.getSelectedIndex() != -1) {
-                settings.refreshInterval().setValue(RefreshInterval.valueOf(intervalList.getValue(intervalList.getSelectedIndex())));
+                setRefreshInterval(RefreshInterval.valueOf(intervalList.getValue(intervalList.getSelectedIndex())));
             }
-
-            storeSettings();
 
             // restart the gadget:
             stop();

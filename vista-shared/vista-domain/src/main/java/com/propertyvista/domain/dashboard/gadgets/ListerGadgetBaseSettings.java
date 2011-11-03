@@ -61,13 +61,10 @@ public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
 
     public IPrimitive<RefreshInterval> refreshInterval();
 
-    public IPrimitive<Integer> itemsPerPage();
+    public IPrimitive<Integer> pageSize();
 
-    public IPrimitive<Integer> currentPage();
+    public IPrimitive<Integer> pageNumber();
 
-    /**
-     * Use empty list of column names for default setting
-     */
     @Owned
     public IList<StringHolder> columnPaths();
 

@@ -47,7 +47,9 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         AvailabilitySummary,
 
-        TurnoverAnalysisGraph;
+        TurnoverAnalysisGraph,
+
+        ArrearsGadget;
 
         @Override
         public String toString() {

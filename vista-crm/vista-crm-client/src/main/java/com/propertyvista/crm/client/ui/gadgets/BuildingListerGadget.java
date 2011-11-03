@@ -13,13 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.site.rpc.services.AbstractListService;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
@@ -27,10 +32,12 @@ import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
+    private final AbstractListService<BuildingDTO> service;
 
     @SuppressWarnings("unchecked")
     public BuildingListerGadget(GadgetMetadata gmd) {
-        super(gmd, (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
+        super(gmd, BuildingDTO.class);
+        service = (AbstractListService<BuildingDTO>) GWT.create(BuildingCrudService.class);
     }
 
     @Override
@@ -40,7 +47,8 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
+    protected List<ColumnDescriptor<BuildingDTO>> getDefaultColumnDescriptors(BuildingDTO proto) {
+        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
 
@@ -52,10 +60,12 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescripors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
+    protected List<ColumnDescriptor<BuildingDTO>> getAvailableColumnDescriptors(BuildingDTO proto) {
+        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
@@ -70,5 +80,29 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
+        return columnDescriptors;
+    }
+
+    @Override
+    public Widget asWidget() {
+        return getListerWidget().asWidget();
+    }
+
+    @Override
+    public void populatePage(final int pageNumber) {
+        EntityListCriteria<BuildingDTO> criteria = new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
+        criteria.setPageSize(getPageSize());
+        criteria.setPageNumber(pageNumber);
+        service.list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
+            @Override
+            public void onSuccess(EntitySearchResult<BuildingDTO> result) {
+                setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                // TODO report error                        
+            }
+        }, criteria);
     }
 }

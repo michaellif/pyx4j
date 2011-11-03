@@ -391,8 +391,8 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
                 return;
             }
             UnitSelectionCriteria select = buttonStateToSelectionCriteria();
-            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitVacancyStatus>>() {
 
+            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitVacancyStatus>>() {
                 @Override
                 public void onSuccess(EntitySearchResult<UnitVacancyStatus> result) {
                     if (pageNumber == 0 | !result.getData().isEmpty()) {
@@ -416,7 +416,6 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
     }
 
     // AUXILLIARY STUFF
-
     private UnitSelectionCriteria buttonStateToSelectionCriteria() {
         // it's done here and not in the toggle button click handler because it separates view from presenter 
         UnitSelectionCriteria select = new UnitSelectionCriteria();

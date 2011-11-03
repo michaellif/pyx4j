@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.AvailabiltySummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.TurnoverAnalysisGraphGadget;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.UnitAvailabilityReportGadget;
@@ -41,7 +42,7 @@ public class GadgetsFactory {
         GadgetType.LineChartDisplay,
         GadgetType.BarChartDisplay,
         GadgetType.PieChartDisplay,
-        GadgetType.GaugeDisplay
+        GadgetType.GaugeDisplay,        
     };
     private static GadgetType[] buildingDashboardGadgets = 
     {
@@ -52,6 +53,7 @@ public class GadgetsFactory {
         GadgetType.UnitAvailabilityReport,
         GadgetType.AvailabilitySummary,
         GadgetType.TurnoverAnalysisGraph,
+        GadgetType.ArrearsGadget,
     };
     //@formatter:on
 
@@ -82,6 +84,8 @@ public class GadgetsFactory {
             return new AvailabiltySummaryGadget(metaData);
         case TurnoverAnalysisGraph:
             return new TurnoverAnalysisGraphGadget(metaData);
+        case ArrearsGadget:
+            return new ArrearsListerGadget(metaData);
         }
         return null;
     }
@@ -115,6 +119,8 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Occupancy/Vacancy Summary...";
         case TurnoverAnalysisGraph:
             return "Gadget intended to demonstrate Unit Turnover graph...";
+        case ArrearsGadget:
+            return "Gadget intended to demonstrate Tenant's arrears...";
         }
         return "";
     }
