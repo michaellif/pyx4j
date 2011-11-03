@@ -28,6 +28,10 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
     private final boolean twoColumns;
 
+    public EmergencyContactFolder(boolean modifyable) {
+        this(modifyable, true);
+    }
+
     public EmergencyContactFolder(boolean modifyable, boolean twoColumns) {
         super(EmergencyContact.class, modifyable);
         this.modifyable = modifyable;

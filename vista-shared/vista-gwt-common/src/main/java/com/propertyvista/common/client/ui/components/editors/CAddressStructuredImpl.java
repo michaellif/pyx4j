@@ -45,6 +45,10 @@ public abstract class CAddressStructuredImpl<A extends AddressStructured> extend
         this.showUnit = showUnit;
     }
 
+    protected boolean isTwoColumns() {
+        return twoColumns;
+    }
+
     @SuppressWarnings("unchecked")
     protected FormFlexPanel internalCreateContent() {
         FormFlexPanel main = new FormFlexPanel();
@@ -81,10 +85,6 @@ public abstract class CAddressStructuredImpl<A extends AddressStructured> extend
         attachFilters(proto(), province, country, postalCode);
 
         return main;
-    }
-
-    protected boolean isTwoColumns() {
-        return twoColumns;
     }
 
     private void attachFilters(final AddressStructured proto, CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country,

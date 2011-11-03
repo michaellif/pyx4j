@@ -60,7 +60,6 @@ public class CPriorAddress extends CAddressStructuredImpl<PriorAddress> {
             row1 = row0;
             col = 0;
         }
-
         main.setWidget(++row1, col, new DecoratorBuilder(rentedComponent, 15).build());
         main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().payment()), 8).build());
         main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerName()), 15).build());

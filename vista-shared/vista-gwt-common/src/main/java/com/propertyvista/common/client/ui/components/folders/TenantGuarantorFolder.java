@@ -22,14 +22,21 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 
 public class TenantGuarantorFolder extends VistaBoxFolder<TenantGuarantor> {
 
+    private final boolean twoColumns;
+
     public TenantGuarantorFolder(boolean modifyable) {
+        this(modifyable, true);
+    }
+
+    public TenantGuarantorFolder(boolean modifyable, boolean twoColumns) {
         super(TenantGuarantor.class, modifyable);
+        this.twoColumns = twoColumns;
     }
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantGuarantor) {
-            return new CTenantGuarantorEditor();
+            return new CTenantGuarantorEditor(twoColumns);
         }
         return super.create(member);
     }

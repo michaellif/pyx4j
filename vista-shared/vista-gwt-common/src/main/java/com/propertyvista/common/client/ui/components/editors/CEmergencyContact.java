@@ -48,7 +48,7 @@ public class CEmergencyContact extends CEntityDecoratableEditor<EmergencyContact
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
@@ -57,7 +57,7 @@ public class CEmergencyContact extends CEntityDecoratableEditor<EmergencyContact
         }
 
         int col = 1;
-        if (!isTwoColumns()) {
+        if (!isEditable() || !isTwoColumns()) {
             row1 = row;
             col = 0;
         }

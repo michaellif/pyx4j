@@ -31,8 +31,19 @@ public class CTenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuara
 
     protected I18n i18n = I18n.get(CTenantGuarantorEditor.class);
 
+    private final boolean twoColumns;
+
     public CTenantGuarantorEditor() {
+        this(true);
+    }
+
+    public CTenantGuarantorEditor(boolean twoColumns) {
         super(TenantGuarantor.class);
+        this.twoColumns = twoColumns;
+    }
+
+    protected boolean isTwoColumns() {
+        return twoColumns;
     }
 
     @Override
@@ -40,21 +51,29 @@ public class CTenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuara
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        int row1 = row;
+
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 4).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().nameSuffix()), 4).build());
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Guarantor")).build());
             get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 8).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
+
+        int col = 1;
+        if (!isEditable() || !isTwoColumns()) {
+            row1 = row;
+            col = 0;
+        }
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().email()), 15).build());
 
         return main;
     }
