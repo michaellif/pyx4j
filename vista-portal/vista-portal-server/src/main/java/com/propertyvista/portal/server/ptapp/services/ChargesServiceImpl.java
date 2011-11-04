@@ -34,6 +34,7 @@ import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
+import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -46,16 +47,17 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     public void retrieve(AsyncCallback<Charges> callback, Key tenantId) {
         log.debug("Retrieving charges for tenant {}", tenantId);
 
+        Lease lease = PtAppContext.getCurrentUserLease();
+        TenantRetriever.UpdateLeaseTenants(lease);
+        Persistence.service().retrieve(lease.tenants());
+
         Charges charges = retrieveApplicationEntity(Charges.class);
         if (charges == null) {
             log.debug("Creating new charges");
             charges = EntityFactory.create(Charges.class);
             charges.application().set(PtAppContext.getCurrentUserApplication());
+            ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
         }
-
-        Lease lease = PtAppContext.getCurrentUserLease();
-        TenantRetriever.UpdateLeaseTenants(lease);
-        Persistence.service().retrieve(lease.tenants());
 
         ChargeItem serviceItem = lease.serviceAgreement().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {

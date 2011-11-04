@@ -19,7 +19,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -33,7 +32,6 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
@@ -87,12 +85,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
 
         main.setWidth("600px");
 
-        // last step - add building picture on the right:
-        HorizontalPanel content = new HorizontalPanel();
-        content.add(main);
-        content.add(new BuildingPicture());
-        content.setWidth("800px");
-        return content;
+        return main;
     }
 
     @Override

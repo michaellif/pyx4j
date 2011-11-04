@@ -99,7 +99,7 @@ public interface TenantScreening extends IEntity {
     @Caption(name = "SIN")
     IPrimitive<String> secureIdentifier();
 
-    @Caption(name = "I'm not resident of Canada")
+    @Caption(name = "Not resident of Canada")
     IPrimitive<Boolean> notCanadianCitizen();
 
 }
