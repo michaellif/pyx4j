@@ -31,12 +31,12 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeFocusComponent;
 import com.pyx4j.widgets.client.TextBox;
 
 import com.propertyvista.domain.contact.Phone;
 
-public class NativePhone extends SimplePanel implements INativeEditableComponent<Phone> {
+public class NativePhone extends SimplePanel implements INativeFocusComponent<Phone> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Phone";
 

@@ -36,14 +36,14 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeFocusComponent;
 import com.pyx4j.widgets.client.TextBox;
 
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 
-public class NativeGeoLocation extends SimplePanel implements INativeEditableComponent<GeoLocation> {
+public class NativeGeoLocation extends SimplePanel implements INativeFocusComponent<GeoLocation> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_GeoLocation";
 

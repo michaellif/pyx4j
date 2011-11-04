@@ -29,12 +29,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeFocusComponent;
 import com.pyx4j.widgets.client.TextBox;
 
 import com.propertyvista.domain.financial.Money;
 
-public class NativeMoney extends SimplePanel implements INativeEditableComponent<Money> {
+public class NativeMoney extends SimplePanel implements INativeFocusComponent<Money> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Money";
 
