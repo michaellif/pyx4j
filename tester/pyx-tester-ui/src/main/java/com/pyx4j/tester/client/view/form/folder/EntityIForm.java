@@ -46,6 +46,7 @@ import com.pyx4j.tester.client.domain.test.EntityIII;
 import com.pyx4j.tester.client.domain.test.EntityIV;
 import com.pyx4j.tester.client.images.Images;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
+import com.pyx4j.tester.client.view.form.EntityIIFormWithVisibilityChange;
 
 public class EntityIForm extends CEntityEditor<EntityI> {
 
@@ -58,7 +59,7 @@ public class EntityIForm extends CEntityEditor<EntityI> {
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EntityII) {
-            return new EntityIIEditor();
+            return new EntityIIFormWithVisibilityChange();
         } else if (member instanceof EntityIII) {
             return new EntityIIIEditor();
         } else if (member instanceof EntityIV) {
@@ -120,8 +121,8 @@ public class EntityIForm extends CEntityEditor<EntityI> {
 
             int row = -1;
 
-            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().stringMember())));
-            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().integerMember())));
+            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextI())));
+            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalInteger())));
             main.setH3(++row, 0, 1, i18n.tr("Box Folder"));
             main.setWidget(++row, 0, inject(proto().entityIIIList(), new EntityIIIFolder()));
             main.setH3(++row, 0, 1, i18n.tr("Table Folder"));
