@@ -113,6 +113,7 @@ public class BuildingImporter {
     public ImportCounters persist(BuildingIO buildingIO, String imagesBaseFolder, boolean ignoreMissingMedia) {
 
         ImportCounters counters = new ImportCounters();
+        counters.buildings++;
 
         // Set defaults
         if (buildingIO.type().isNull()) {

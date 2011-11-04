@@ -49,7 +49,13 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new UserPreloader());
             add(new CampaignPreloader());
 
-            add(new BuildingPreloader());
+            PmcDataPreloader pmcDataPreloader = new PmcDataPreloader();
+            if (pmcDataPreloader.hasData()) {
+                add(pmcDataPreloader);
+            } else {
+                add(new BuildingPreloader());
+            }
+            // TODO move to if in pmcData
             add(new PreloadTenants());
             add(new PtPreloader());
 

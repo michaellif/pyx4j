@@ -9,13 +9,13 @@
 
 -- initialization
 CREATE USER 'vista' IDENTIFIED BY 'vista';
-CREATE DATABASE vista;
+CREATE DATABASE vista DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 GRANT ALL PRIVILEGES ON vista.* TO 'vista'@'%';
 
 
 -- reset
 DROP DATABASE vista;
-CREATE DATABASE vista;
+CREATE DATABASE vista DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
 ----- if you get error:
 ----- ERROR 1396 (HY000) at line 3: Operation CREATE USER failed for 'vista'@'%'
