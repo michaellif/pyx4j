@@ -33,11 +33,12 @@ var Cookie = {
  */
 function setSelectionOptions(selId, optArr, defOpt, selOpt) {
 	var sel = document.getElementById(selId);
-	if (! sel) return;
+	if (!sel) return;
 	sel.options.length = 0;
 	if (defOpt) {
 		sel.options[0] = new Option(defOpt,'');
 	}
+	if (!optArr) return;
 	for (var i = 0; i < optArr.length; i++) {
 		var v = optArr[i];
 		var selected = (v == selOpt);
