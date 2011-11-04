@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -114,7 +113,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @Override
     public void onBound(CEntityComponent<?, ?> parent) {
         super.onBound(parent);
-        ((SimplePanel) getContainer()).setWidget(createContent());
         initContent();
     }
 
