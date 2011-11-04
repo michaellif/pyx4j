@@ -32,6 +32,8 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18n;
@@ -159,6 +161,10 @@ public class DBResetServlet extends HttpServlet {
     private void preloadPmc(StringBuilder buf, String demoPmcName) {
         long pmcStart = System.currentTimeMillis();
         NamespaceManager.setNamespace(Pmc.adminNamespace);
+        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), demoPmcName));
+        Persistence.service().delete(criteria);
+
         Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.name().setValue(demoPmcName + " Demo");
         pmc.dnsName().setValue(demoPmcName);
