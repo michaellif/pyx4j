@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
 import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
 
@@ -180,11 +179,10 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         super.setEnabled(enabled && this.isEditable());
-        String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
         if (enabled) {
-            removeStyleDependentName(dependentSuffix);
+            removeStyleDependentName(StyleDependent.disabled.name());
         } else {
-            addStyleDependentName(dependentSuffix);
+            addStyleDependentName(StyleDependent.disabled.name());
         }
 
     }
@@ -198,11 +196,10 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
     public void setEditable(boolean editable) {
         this.editable = editable;
         super.setEnabled(editable && this.isEnabled());
-        String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
         if (editable) {
-            removeStyleDependentName(dependentSuffix);
+            removeStyleDependentName(StyleDependent.readOnly.name());
         } else {
-            addStyleDependentName(dependentSuffix);
+            addStyleDependentName(StyleDependent.readOnly.name());
         }
     }
 
@@ -270,11 +267,10 @@ public class NativeComboBox<E> extends ListBox implements INativeEditableCompone
 
     @Override
     public void setValid(boolean valid) {
-        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
         if (valid) {
-            removeStyleDependentName(dependentSuffix);
-        } else {
-            addStyleDependentName(dependentSuffix);
+            removeStyleDependentName(StyleDependent.invalid.name());
+        } else if (comboBox.isVisited()) {
+            addStyleDependentName(StyleDependent.invalid.name());
         }
     }
 

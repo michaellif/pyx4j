@@ -28,7 +28,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
@@ -96,11 +95,10 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
 
     @Override
     public void setValid(boolean valid) {
-        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
         if (valid) {
-            getResponseTextBox().removeStyleDependentName(dependentSuffix);
-        } else {
-            getResponseTextBox().addStyleDependentName(dependentSuffix);
+            getResponseTextBox().removeStyleDependentName(StyleDependent.invalid.name());
+        } else if (component.isVisited()) {
+            getResponseTextBox().addStyleDependentName(StyleDependent.invalid.name());
         }
     }
 

@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.ui.NativeTextBox.StyleDependent;
 
 public class NativeDatePicker extends NativeTriggerComponent<Date> implements INativeTextComponent<Date> {
@@ -37,8 +36,11 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
 
     private DatePickerDropDownPanel datePickerDropDown;
 
+    private final CDatePicker datePicker;
+
     public NativeDatePicker(final CDatePicker datePicker) {
         super();
+        this.datePicker = datePicker;
         textBox = new NativeTextBox<Date>(datePicker);
         construct(textBox);
         textBox.setNativeValue(datePicker.getValue());
@@ -124,11 +126,10 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
 
     @Override
     public void setValid(boolean valid) {
-        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
         if (valid) {
-            textBox.removeStyleDependentName(dependentSuffix);
-        } else {
-            textBox.addStyleDependentName(dependentSuffix);
+            textBox.removeStyleDependentName(StyleDependent.invalid.name());
+        } else if (datePicker.isVisited()) {
+            textBox.addStyleDependentName(StyleDependent.invalid.name());
         }
     }
 
