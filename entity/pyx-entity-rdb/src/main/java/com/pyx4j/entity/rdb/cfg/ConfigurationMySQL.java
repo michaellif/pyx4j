@@ -40,11 +40,15 @@ public abstract class ConfigurationMySQL implements Configuration {
 
     @Override
     public String connectionUrl() {
-        return "jdbc:mysql://" + dbHost() + ":" + dbPort() + "/" + dbName();
+        return "jdbc:mysql://" + dbHost() + ":" + dbPort() + "/" + dbName() + (isAutoReconnect() ? "?autoReconnect=true" : "");
     }
 
     @Override
     public boolean isMultitenant() {
+        return false;
+    }
+
+    public boolean isAutoReconnect() {
         return false;
     }
 
