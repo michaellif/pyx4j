@@ -25,7 +25,7 @@ public interface SummaryDTO extends Summary {
 
     ApartmentInfoDTO selectedUnit();
 
-    TenantInLeaseListDTO tenantList();
+    TenantInApplicationListDTO tenantList();
 
     TenantInLeaseListDTO tenantsWithInfo();
 

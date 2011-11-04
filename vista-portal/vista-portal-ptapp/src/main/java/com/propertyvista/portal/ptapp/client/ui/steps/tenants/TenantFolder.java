@@ -45,7 +45,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 
-class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
+public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
 
     public TenantFolder(boolean modifyable) {
         super(TenantInApplicationDTO.class, modifyable);
@@ -53,11 +53,12 @@ class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof TenantInApplicationDTO) {
-            return new TenantEditor();
-        } else {
-            return super.create(member);
-        }
+
+// TODO uncomment when isEditable() be fixed!          
+//        if (isEditable() && member instanceof TenantInApplicationDTO) {
+//            return new TenantEditor();
+//        }
+        return super.create(member);
     }
 
     @Override

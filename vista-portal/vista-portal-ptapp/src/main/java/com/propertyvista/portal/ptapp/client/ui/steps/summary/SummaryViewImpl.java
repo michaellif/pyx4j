@@ -23,12 +23,6 @@ public class SummaryViewImpl extends WizardStepViewImpl<SummaryDTO, SummaryViewP
     }
 
     @Override
-    public void populate(SummaryDTO entity) {
-        // TODO Auto-generated method stub
-        super.populate(entity);
-    }
-
-    @Override
     public void setPresenter(SummaryViewPresenter presenter) {
         super.setPresenter(presenter);
         ((SummaryViewForm) getForm()).setPresenter(getPresenter());

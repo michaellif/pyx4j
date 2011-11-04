@@ -17,11 +17,12 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.TenantIn;
 
 @Transient
-public interface TenantInApplicationDTO extends TenantIn {
+public interface TenantInApplicationDTO extends TenantIn, IBoundToApplication {
 
     public static enum ChangeStatus {
         New, Updated;

@@ -39,9 +39,9 @@ public class ApplicationDebug {
     public static SummaryDTO retrieveApplicationSummary(Application application) {
         SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
         summary.application().set(application);
-        retrieveApplicationEntity(summary.tenantList(), application);
-        //retrieveApplicationEntity(summary.pets(), application);
-        retrieveApplicationEntity(summary.charges(), application);
+
+//        retrieveApplicationEntity(summary.tenantList(), application);
+//        retrieveApplicationEntity(summary.charges(), application);
 
 //        EntityQueryCriteria<TenantFinancialEditorDTO> financialCriteria = EntityQueryCriteria.create(TenantFinancialEditorDTO.class);
 //        financialCriteria.add(PropertyCriterion.eq(financialCriteria.proto().application(), application));

@@ -50,7 +50,7 @@ public class VistaDataPrinter {
         sb.append(print(summary.selectedUnit()));
 
         sb.append("\n\n---------------------------- TENANTS ---------------------------------\n");
-        sb.append(print(summary.tenantList()));
+        sb.append(print(summary.tenantsWithInfo()));
 
         sb.append("\n\n---------------------------- FINANCIALS ------------------------------\n");
         sb.append(printFinancial(summary.tenantFinancials()));

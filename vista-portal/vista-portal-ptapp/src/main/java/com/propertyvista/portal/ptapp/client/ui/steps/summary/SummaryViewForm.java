@@ -14,7 +14,6 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,15 +33,13 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
@@ -55,7 +52,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -65,11 +62,12 @@ import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
-import com.propertyvista.portal.ptapp.client.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
+import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantFolder;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
 public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
@@ -88,10 +86,9 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
     private SummaryViewPresenter presenter;
 
-    private TenantsTable tenantsTable;
-
     public SummaryViewForm() {
         super(SummaryDTO.class, new VistaViewersComponentFactory());
+        setEditable(false);
     }
 
     public SummaryViewPresenter getPresenter() {
@@ -107,21 +104,18 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         FlowPanel main = new FlowPanel();
 
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Apartment"))));
-
         main.add(new ApartmentView());
 
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Term"))));
         main.add(new LeaseTermView());
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new PtSiteMap.Tenants())));
-        main.add(tenantsTable = new TenantsTable());
-        main.add(inject(proto().tenantList().tenants(), new TenantInLeaseFolder(isEditable())));
+        main.add(inject(proto().tenantList().tenants(), new TenantFolder(false)));
 
-        //TODO
-//        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Info"), new PtSiteMap.Info())));
-//        main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
-//
-//        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Full info"), new PtSiteMap.Info())));
+        main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
+
+        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
 //        main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
@@ -132,15 +126,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Digital Signature"))));
         main.add(new SignatureView());
 
-        // last step - add building picture on the right:
-        HorizontalPanel content = new HorizontalPanel();
-        main.setWidth("700px");
-        content.add(main);
-        VerticalPanel rightSite = new VerticalPanel();
-        rightSite.add(new BuildingPicture());
-        rightSite.add(new DemoReportButtons());
-        content.add(rightSite);
-        return content;
+        return main;
     }
 
     public class DemoReportButtons extends FlowPanel {
@@ -170,7 +156,6 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     }
 
     private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
-
         Button edit = new Button(i18n.tr("Edit"));
         edit.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         edit.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
@@ -286,154 +271,36 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     }
 
     /*
-     * Tenants information table implementation
+     * Tenants detailed information view implementation
      */
-    static private class TenantsTable extends HorizontalPanel {
+    private CEntityFolder<TenantInLease> createTenantView() {
+        return new VistaBoxFolder<TenantInLease>(TenantInLease.class, false) {
 
-        private static final Map<String, String> COLUMNS = new LinkedHashMap<String, String>();
-        static {
-            COLUMNS.put("Name", "29%");
-            COLUMNS.put("Date of Birth", "15%");
-            COLUMNS.put("Email", "30%");
-            COLUMNS.put("Relationship", "15%");
-            COLUMNS.put("Status", "11%");
-        }
-
-        public TenantsTable() {
-
-            alignWidth(this);
-
-            FlowPanel main = new FlowPanel();
-            main.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            main.getElement().getStyle().setPaddingRight(1, Unit.EM);
-            add(main);
-            setCellWidth(main, "100%");
-
-            // fill header:
-            for (Entry<String, String> e : COLUMNS.entrySet()) {
-                HTML label = new HTML(i18n.tr(e.getKey()));
-                label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-                label.setWidth(e.getValue());
-                main.add(label);
-            }
-
-            Widget sp = new VistaLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-            sp.getElement().getStyle().setPadding(0, Unit.EM);
-            sp.getElement().getStyle().setPaddingRight(2, Unit.EM);
-            sp.getElement().getStyle().setPosition(Position.RELATIVE);
-            sp.getElement().getStyle().setLeft(-1, Unit.EM);
-            main.add(sp);
-        }
-
-    }
-
-    class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
-
-        public TenantInLeaseFolder(boolean modifyable) {
-            super(TenantInLease.class, modifyable);
-        }
-
-        @Override
-        public CEditableComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof TenantInLease) {
-                return new TenantInLeaseEditor(TenantsTable.COLUMNS);
-            } else {
+            @Override
+            public CEditableComponent<?, ?> create(IObject<?> member) {
+                if (member instanceof TenantInLease) {
+                    return new SummaryViewTenantInfo();
+                }
                 return super.create(member);
             }
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return null;
-        }
-
+        };
     }
 
-    class TenantInLeaseEditor extends CEntityEditor<TenantInLease> {
+    /*
+     * Financial detailed information view implementation
+     */
+    private CEntityFolder<SummaryTenantFinancialDTO> createFinancialView() {
+        return new VistaBoxFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class, false) {
 
-        public TenantInLeaseEditor(Map<String, String> tableLayout) {
-            super(TenantInLease.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            FlowPanel content = new FlowPanel();
-            content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            content.getElement().getStyle().setPaddingRight(1, Unit.EM);
-            addCell(TenantsTable.COLUMNS, content, "Name", DecorationUtils.formFullName(this, proto().tenant().person()));
-            addCell(TenantsTable.COLUMNS, content, "Date of Birth", inject(proto().tenant().person().birthDate()).asWidget());
-            addCell(TenantsTable.COLUMNS, content, "Email", inject(proto().tenant().person().email()).asWidget());
-            //TODO
-            // if (first) {
-            //      addCell(tableLayout, content, "Relationship", new HTML("&nbsp;"));
-            //  } else {
-            addCell(TenantsTable.COLUMNS, content, "Relationship", inject(proto().relationship()).asWidget());
-            //  }
-            addCell(TenantsTable.COLUMNS, content, "Status", inject(proto().status()).asWidget());
-            return content;
-        }
-
-        private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
-            cellContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            cellContent.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
-            cellContent.setWidth(tableLayout.get(cellName));
-            content.add(cellContent);
-        }
+            @Override
+            public CEditableComponent<?, ?> create(IObject<?> member) {
+                if (member instanceof SummaryTenantFinancialDTO) {
+                    return new SummaryViewTenantFinancial();
+                }
+                return super.create(member);
+            }
+        };
     }
-
-    static class TenantInfoFolder extends VistaTableFolder<TenantInLease> {
-
-        public TenantInfoFolder(boolean modifyable) {
-            super(TenantInLease.class, modifyable);
-        }
-
-        @Override
-        protected IFolderDecorator<TenantInLease> createDecorator() {
-            return new BoxReadOnlyFolderDecorator<TenantInLease>();
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return null;
-        }
-    }
-
-//    /*
-//     * Tenants detailed information view implementation
-//     */
-//    public CEntityFolder<TenantInLease> createTenantView() {
-//        return new CEntityFolder<TenantInLease>(TenantInLease.class) {
-//
-//            @Override
-//            protected CEntityFolderBoxEditor<TenantInLease> createItem(boolean first) {
-//                return new SummaryViewTenantInfo();
-//            }
-//
-//            @Override
-//            protected IFolderDecorator<TenantInLease> createDecorator() {
-//                return new BoxReadOnlyFolderDecorator<TenantInLease>();
-//            }
-//        };
-//    }
-//
-//    /*
-//     * Financial detailed information view implementation
-//     */
-//    public CEntityFolder<SummaryTenantFinancialDTO> createFinancialView() {
-//        return new CEntityFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class) {
-//
-//            @Override
-//            protected CEntityFolderBoxEditor<SummaryTenantFinancialDTO> createItem(boolean first) {
-//                return new SummaryViewTenantFinancial();
-//            }
-//
-//            @Override
-//            protected IFolderDecorator<SummaryTenantFinancialDTO> createDecorator() {
-//                return new BoxReadOnlyFolderDecorator<SummaryTenantFinancialDTO>();
-//            }
-//        };
-//    }
 
     /*
      * Lease Terms view implementation
@@ -470,7 +337,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             add(agree);
-
+            check.inheritContainerAccessRules(false);
             check.addValueValidator(new EditableValueValidator<Boolean>() {
 
                 @Override
@@ -534,10 +401,9 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         if (CommonsStringUtils.isEmpty(signature)) {
             return false;
         }
-        for (TenantInLease pti : getValue().tenantList().tenants()) {
+        for (TenantInApplicationDTO pti : getValue().tenantList().tenants()) {
             if (pti.status().getValue() == Status.Applicant) {
-                return isCombinationMatch(signature, pti.tenant().person().name().firstName(), pti.tenant().person().name().lastName(), pti.tenant().person()
-                        .name().middleName());
+                return isCombinationMatch(signature, pti.person().name().firstName(), pti.person().name().lastName(), pti.person().name().middleName());
             }
         }
         return false;

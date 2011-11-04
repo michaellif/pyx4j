@@ -42,8 +42,10 @@ import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 import com.propertyvista.portal.server.report.SummaryReport;
 
@@ -90,7 +92,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         for (TenantInLease tenantInLease : lease.tenants()) {
             Persistence.service().retrieve(tenantInLease);
-            summary.tenantList().tenants().add(tenantInLease);
+            summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
         // We do not remove the info from DB if Tenant status changes
@@ -133,11 +135,11 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 //        retrieveApplicationEntity(summary.addons(), summary.application());
         retrieveApplicationEntity(summary.charges(), summary.application());
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
-            for (TenantInLease tenant : summary.tenantList().tenants()) {
+            for (TenantInApplicationDTO tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
                     charge.tenantFullName().setValue(
-                            EntityFromatUtils.nvl_concat(" ", tenant.tenant().person().name().firstName(), tenant.tenant().person().name().middleName(), tenant
-                                    .tenant().person().name().lastName()));
+                            EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name()
+                                    .lastName()));
                     continue loopOverTenantCharge;
                 }
             }

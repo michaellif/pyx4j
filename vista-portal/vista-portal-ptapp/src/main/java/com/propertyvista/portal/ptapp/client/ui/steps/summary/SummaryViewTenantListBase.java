@@ -27,8 +27,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.folder.BoxReadOnlyFolderItemDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -69,11 +67,6 @@ public abstract class SummaryViewTenantListBase<E extends IEntity> extends CEnti
         main.add(fullView);
 
         return main;
-    }
-
-    @Override
-    public IFolderItemDecorator<E> createDecorator() {
-        return new BoxReadOnlyFolderItemDecorator<E>();
     }
 
     public IsWidget bindCompactView() {
