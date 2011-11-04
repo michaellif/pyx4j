@@ -13,12 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.themes;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.widgets.client.ListBox;
 
@@ -44,6 +41,7 @@ public class PtAppTheme extends VistaTheme {
     @Override
     protected void initStyles() {
         super.initStyles();
+
         initBodyStyles();
         initListBoxStyle();
 
@@ -54,15 +52,6 @@ public class PtAppTheme extends VistaTheme {
         initVistaMainNavigViewStyles();
         initVistaSecondNavigViewStyles();
         initPaymentRadioButtonGroupStyles();
-    }
-
-    @Override
-    protected void initEntityFolderStyles() {
-        addTheme(new DefaultEntityFolderTheme());
-
-        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
-        style.addProperty("width", "930px");
-        addStyle(style);
     }
 
     @Override

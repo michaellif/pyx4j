@@ -37,7 +37,7 @@ public class VistaTheme extends Theme {
 
     protected void initStyles() {
 
-        initEntityFolderStyles();
+        addTheme(new DefaultEntityFolderTheme());
 
         addTheme(new DefaultWidgetDecoratorTheme());
 
@@ -73,14 +73,6 @@ public class VistaTheme extends Theme {
         initSlideshowActionStyle();
         initSuggestBoxStyle();
         initBannerStyle();
-    }
-
-    protected void initEntityFolderStyles() {
-        addTheme(new DefaultEntityFolderTheme());
-
-//        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
-//        style.addProperty("width", "980px");
-//        addStyle(style);
     }
 
     protected void initGeneralStyles() {

@@ -45,14 +45,11 @@ public class PortalTheme extends VistaTheme {
     @Override
     protected void initStyles() {
 
-        initEntityFolderStyles();
-
-        addTheme(new DefaultEntityFolderTheme());
-
         addTheme(new DefaultWidgetDecoratorTheme());
 
         addTheme(new DefaultFormFlexPanelTheme());
 
+        initEntityFolderStyles();
         initTextBoxStyle();
         initCheckBoxStyle();
         initDatePickerStyle();
@@ -66,7 +63,6 @@ public class PortalTheme extends VistaTheme {
         initPaymentRadioButtonGroupStyles();
     }
 
-    @Override
     protected void initEntityFolderStyles() {
         addTheme(new DefaultEntityFolderTheme());
 
