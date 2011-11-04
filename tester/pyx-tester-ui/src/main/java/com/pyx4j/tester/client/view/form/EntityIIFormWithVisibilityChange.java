@@ -85,8 +85,6 @@ public class EntityIIFormWithVisibilityChange extends CEntityEditor<EntityII> {
             type = EntityII.Enum1.Value0;
         }
 
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
         get(proto().optionalTextI()).setVisible(false);
         get(proto().optionalTextII()).setVisible(false);
         get(proto().mandatoryTextI()).setVisible(false);

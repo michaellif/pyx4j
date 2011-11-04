@@ -130,9 +130,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public void setParent(CContainer<?> parent) {
         this.parent = parent;
-        if (inheritContainerAccessRules) {
-            addAccessAdapter(parent.getContainerAccessAdapter());
-        }
+        setContainerAccessRules(inheritContainerAccessRules);
     }
 
     @Override
@@ -152,6 +150,10 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public void inheritContainerAccessRules(boolean inherit) {
         inheritContainerAccessRules = inherit;
+        setContainerAccessRules(inherit);
+    }
+
+    private void setContainerAccessRules(boolean inherit) {
         if (parent != null) {
             if (inherit) {
                 if (!containsAccessAdapter(parent.getContainerAccessAdapter())) {
