@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.preloader.site;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -98,6 +99,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         }
 
         SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
+        site._updateFlag().updated().setValue(new Date());
         site.skin().setValue(skin());
         site.sitePalette().object1().setValue(object1());
         site.sitePalette().object2().setValue(object2());
