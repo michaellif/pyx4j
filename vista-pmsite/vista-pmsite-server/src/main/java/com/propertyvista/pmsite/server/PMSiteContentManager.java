@@ -410,6 +410,18 @@ public class PMSiteContentManager implements Serializable {
         return descriptor.name().getValue();
     }
 
+    public String getSecondaryCaption(PageDescriptor descriptor, AvailableLocale locale) {
+        if (descriptor == null) {
+            return "";
+        }
+        for (PageCaption caption : descriptor.caption()) {
+            if (locale.lang().getValue().equals(caption.locale().lang().getValue())) {
+                return caption.secondaryCaption().getValue();
+            }
+        }
+        return descriptor.name().getValue();
+    }
+
     /*
      * Media images rendered by media servlet at /contextPath/media/{id}/{size}.jpg
      * We want to build a relative! path from the current page down to the servlet root

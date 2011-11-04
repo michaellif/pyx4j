@@ -65,6 +65,8 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._caption().caption()), 20).build());
 
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._caption().secondaryCaption()), 20).build());
+
             if (isEditable()) {
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content()), 60).build());
             } else {

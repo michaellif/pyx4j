@@ -140,9 +140,10 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     protected void createStaticPages(SiteDescriptor site, List<LocaleInfo> siteLocale) {
         {
             final String caption = "About us";
+            final String secondaryCaption = "General";
             PageDescriptor page = createPage(caption, PageDescriptor.Type.staticContent);
             for (LocaleInfo li : siteLocale) {
-                addCaption(page, li.i18n.tr(caption), li.aLocale);
+                addCaption(page, li.i18n.tr(caption), li.i18n.tr(secondaryCaption), li.aLocale);
                 addContent(page, "about.html", li.aLocale);
             }
             site.childPages().add(page);
@@ -259,8 +260,13 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     }
 
     protected void addCaption(PageDescriptor page, String caption, AvailableLocale aLocale) {
+        addCaption(page, caption, null, aLocale);
+    }
+
+    protected void addCaption(PageDescriptor page, String caption, String secondaryCaption, AvailableLocale aLocale) {
         PageCaption pageCaption = EntityFactory.create(PageCaption.class);
         pageCaption.caption().setValue(caption);
+        pageCaption.secondaryCaption().setValue(secondaryCaption);
         pageCaption.locale().set(aLocale);
         page.caption().add(pageCaption);
     }
