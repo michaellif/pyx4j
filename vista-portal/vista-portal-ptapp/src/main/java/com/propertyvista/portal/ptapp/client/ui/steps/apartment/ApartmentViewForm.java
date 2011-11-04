@@ -79,13 +79,13 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         consessionPanel.setWidget(0, 0, inject(proto().concessions(), new ConcessionsFolder()));
         main.setWidget(++row, 0, consessionPanel);
 
-        main.setH1(++row, 0, 1, i18n.tr("Included"));
+        main.setH1(++row, 0, 1, i18n.tr("Included Utilities"));
         main.setWidget(++row, 0, inject(proto().includedUtilities(), new UtilityFolder()));
 
-        main.setH1(++row, 0, 1, i18n.tr("Excluded"));
+        main.setH1(++row, 0, 1, i18n.tr("Excluded Utilities"));
         main.setWidget(++row, 0, inject(proto().externalUtilities(), new UtilityFolder()));
 
-        main.setH1(++row, 0, 1, i18n.tr("Charged Utilities"));
+        main.setH1(++row, 0, 1, i18n.tr("Billed Utilities"));
         chargedPanel.setWidget(0, 0, inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
         main.setWidget(++row, 0, chargedPanel);
 
