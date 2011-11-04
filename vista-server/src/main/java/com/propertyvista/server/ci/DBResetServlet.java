@@ -32,16 +32,16 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
-import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.domain.admin.Pmc;
 
@@ -50,16 +50,24 @@ public class DBResetServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(DBResetServlet.class);
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     private static enum ResetType {
 
+        @Translate("Drop All and Preload all demo PMC")
         all,
 
+        @Translate("Drop All Tables")
         clear,
 
-        // Use http://localhost:8888/vista/o/db-reset?type=preload
-        preload,
+        @Translate("Preload this PMC")
+        preloadPmc,
 
-        pmc,
+        clearPmc;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     @Override
@@ -88,14 +96,18 @@ public class DBResetServlet extends HttpServlet {
                 }
                 if ((req.getParameter("help") != null) || (type == null)) {
                     contentType = "text/html";
-                    buf.append("Usage:</br>");
+                    buf.append("Current PMC is '").append(NamespaceManager.getNamespace()).append("'<br/>");
+                    buf.append("Usage:<br/><table>");
                     for (ResetType t : EnumSet.allOf(ResetType.class)) {
-                        buf.append("<a href=\"");
+                        buf.append("<tr><td><a href=\"");
                         buf.append("?type=").append(t.name()).append("\">");
                         buf.append("?type=").append(t.name());
-                        buf.append("</a></br>");
+                        buf.append("</a></td><td>").append(t.toString());
+                        buf.append("</td></tr>");
                     }
+                    buf.append("</table>");
                 } else {
+                    buf.append("Requested : '" + type.name() + "' " + type.toString());
                     if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
                         RDBUtils.dropAllEntityTables();
                     }
@@ -106,54 +118,19 @@ public class DBResetServlet extends HttpServlet {
 
                     switch (type) {
                     case all:
-                    case preload:
-                        buf.append(conf.getDataPreloaders().preloadAll());
-                        log.info("Preloaded PMC '{}' {}", NamespaceManager.getNamespace(), TimeUtils.secSince(start));
+                        for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
+                            preloadPmc(buf, demoPmc.name());
+                        }
                         break;
-                    case pmc:
-                        buf.append(conf.getDataPreloaders().delete());
+                    case preloadPmc:
+                        preloadPmc(buf, NamespaceManager.getNamespace());
+                        break;
+                    case clearPmc:
+                        RDBUtils.deleteFromAllEntityTables();
                         break;
                     }
+
                     buf.append("\nTotal time: " + TimeUtils.secSince(start));
-
-                    if (EnumSet.of(ResetType.all, ResetType.preload).contains(type)) {
-                        String reqNamespace = NamespaceManager.getNamespace();
-                        try {
-                            NamespaceManager.setNamespace(Pmc.adminNamespace);
-                            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                            criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), reqNamespace));
-                            Pmc pmc = Persistence.service().retrieve(criteria);
-                            if (pmc == null) {
-                                pmc = EntityFactory.create(Pmc.class);
-                                pmc.name().setValue(reqNamespace + " Demo");
-                                pmc.dnsName().setValue(reqNamespace);
-                                Persistence.service().persist(pmc);
-                            }
-                        } finally {
-                            NamespaceManager.setNamespace(reqNamespace);
-                        }
-                    }
-
-                    if ((type == ResetType.all) && NamespaceManager.getNamespace().equals(VistaNamespaceResolver.demoNamespace)) {
-
-                        for (DemoPmc demoPmc : EnumSet.of(DemoPmc.star, DemoPmc.redridge, DemoPmc.rockville)) {
-                            long pmcStart = System.currentTimeMillis();
-                            NamespaceManager.setNamespace(Pmc.adminNamespace);
-                            Pmc pmc = EntityFactory.create(Pmc.class);
-                            pmc.name().setValue(demoPmc.name() + " Demo");
-                            pmc.dnsName().setValue(demoPmc.name());
-
-                            Persistence.service().persist(pmc);
-
-                            NamespaceManager.setNamespace(demoPmc.name());
-                            buf.append("\n--- Preload  " + demoPmc.name() + " ---");
-                            buf.append(conf.getDataPreloaders().preloadAll());
-
-                            log.info("Preloaded PMC '{}' {}", demoPmc.name(), TimeUtils.secSince(pmcStart));
-
-                            buf.append("\nTotal time: " + TimeUtils.secSince(start));
-                        }
-                    }
                     log.info("DB reset {} {}", type, TimeUtils.secSince(start));
                 }
 
@@ -177,5 +154,23 @@ public class DBResetServlet extends HttpServlet {
                 IOUtils.closeQuietly(output);
             }
         }
+    }
+
+    private void preloadPmc(StringBuilder buf, String demoPmcName) {
+        long pmcStart = System.currentTimeMillis();
+        NamespaceManager.setNamespace(Pmc.adminNamespace);
+        Pmc pmc = EntityFactory.create(Pmc.class);
+        pmc.name().setValue(demoPmcName + " Demo");
+        pmc.dnsName().setValue(demoPmcName);
+
+        Persistence.service().persist(pmc);
+
+        NamespaceManager.setNamespace(demoPmcName);
+        buf.append("\n--- Preload  " + demoPmcName + " ---");
+        RDBUtils.deleteFromAllEntityTables();
+        buf.append(((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().preloadAll());
+
+        log.info("Preloaded PMC '{}' {}", demoPmcName, TimeUtils.secSince(pmcStart));
+        buf.append("Preloaded PMC '" + demoPmcName + "' " + TimeUtils.secSince(pmcStart));
     }
 }

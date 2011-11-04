@@ -350,7 +350,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
-        return deleteAll(SiteDescriptor.class, PageDescriptor.class, PageContent.class, AvailableLocale.class, News.class, Testimonial.class);
+        return deleteAll(SiteDescriptor.class, PageDescriptor.class, PageContent.class, News.class, Testimonial.class, AvailableLocale.class);
     }
 
 }
