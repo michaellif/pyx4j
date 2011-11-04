@@ -222,6 +222,9 @@ public class PMSiteContentManager implements Serializable {
     public static List<NavigationItem> getNavigItems(PageDescriptor content) {
         List<NavigationItem> list = new ArrayList<NavigationItem>();
         if (content != null) {
+            if (content.childPages().size() > 0) {
+                list.add(new NavigationItem(content));
+            }
             for (PageDescriptor descriptor : content.childPages()) {
                 list.add(new NavigationItem(descriptor));
             }

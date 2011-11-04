@@ -56,21 +56,9 @@ public class SecondaryNavigationPanel extends Panel {
                         ((PMSiteWebRequest) getRequest()).getSiteLocale())));
                 item.add(link);
 
-                boolean active = false;
-
                 PageDescriptor currentPage = ((PMSiteWebRequest) getRequest()).getContentManager().getStaticPageDescriptor(
                         SecondaryNavigationPanel.this.getPage().getPageParameters());
                 if (currentPage.equals(navItem.getPageDescriptor())) {
-                    active = true;
-                } else if (!currentPage._path().isNull() && !currentPage._path().isEmpty()) {
-                    for (PageDescriptor descriptor : currentPage._path()) {
-                        if (!descriptor.isNull() && descriptor.equals(navItem.getPageDescriptor())) {
-                            active = true;
-                            break;
-                        }
-                    }
-                }
-                if (active) {
                     link.getParent().add(new AttributeAppender("class", new Model<String>("active"), " "));
                 }
 

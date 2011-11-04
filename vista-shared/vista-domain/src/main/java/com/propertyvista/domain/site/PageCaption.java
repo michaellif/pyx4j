@@ -24,4 +24,11 @@ public interface PageCaption extends IEntity {
 
     @NotNull
     IPrimitive<String> caption();
+
+    /**
+     * Caption that represents parent page in secondary navigation menu
+     */
+    @NotNull
+    IPrimitive<String> secondaryCaption();
+
 }
