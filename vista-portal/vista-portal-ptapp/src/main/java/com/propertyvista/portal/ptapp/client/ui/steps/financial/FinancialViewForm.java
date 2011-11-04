@@ -16,6 +16,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.financial;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
@@ -27,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CMoney;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
+import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
@@ -41,6 +43,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
     public FinancialViewForm(IEditableComponentFactory factory) {
         super(TenantFinancialDTO.class, factory);
+        setEditable(factory instanceof BaseEditableComponentFactory);
     }
 
     @Override
@@ -58,7 +61,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 1, proto().incomes().getMeta().getCaption());
-//        main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
         main.setH1(++row, 0, 1, proto().assets().getMeta().getCaption());

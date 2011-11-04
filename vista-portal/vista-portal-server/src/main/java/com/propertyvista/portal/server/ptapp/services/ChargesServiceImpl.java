@@ -21,11 +21,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
@@ -105,13 +103,10 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     }
 
     // If adding new data here sync with @see SummaryServicesImpl#retrieveSummary 
-    @SuppressWarnings("unchecked")
     private void loadTransientData(Charges charges) {
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, charge.tenant().getPrimaryKey());
-
-            Name name = tenant.tenant().person().name().detach();
-            charge.tenantFullName().setValue(EntityFromatUtils.nvl_concat(" ", name.firstName(), name.middleName(), name.lastName()));
+            charge.tenantName().set(tenant.tenant().person().name().detach());
         }
     }
 }

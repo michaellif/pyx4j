@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
+import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,7 +30,7 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
 
     public CrmEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
         super(rootClass, factory);
-        setEditable(this.factory instanceof CrmEditorsComponentFactory);
+        setEditable(factory instanceof BaseEditableComponentFactory);
     }
 
     // decoration stuff:

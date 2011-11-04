@@ -52,6 +52,9 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
 
     public CPersonalIncomeEditor() {
         super(PersonalIncome.class);
+
+// TODO: remove when  isEditable() will be fixed!!!        
+        setEditable(false);
     }
 
     @Override

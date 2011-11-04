@@ -19,21 +19,17 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
-import com.propertyvista.dto.VehiclesDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
 public class VistaDataPrinter {
 
@@ -55,12 +51,6 @@ public class VistaDataPrinter {
         sb.append("\n\n---------------------------- FINANCIALS ------------------------------\n");
         sb.append(printFinancial(summary.tenantFinancials()));
 
-        sb.append("\n\n---------------------------- PETS ------------------------------------\n");
-        sb.append(print(summary.addons().pets()));
-
-        sb.append("\n\n---------------------------- VEHICLES --------------------------------\n");
-        sb.append(printVehicles(summary.addons().vehicles()));
-
         sb.append("\n\n---------------------------- CHARGES ---------------------------------\n");
         sb.append(print(summary.charges()));
 
@@ -69,13 +59,13 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(TenantInLeaseListDTO tenantList) {
+    public static String print(IList<TenantInfoDTO> tenants) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(tenantList.tenants().size()).append(" potential tenants");
+        sb.append(tenants.size()).append(" potential tenants");
         sb.append("\n");
 
-        for (TenantInLease tenant : tenantList.tenants()) {
+        for (TenantInfoDTO tenant : tenants) {
 
             sb.append("\n--- tenant ---\n");
             sb.append(print(tenant));
@@ -85,11 +75,8 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String print(TenantInLease tenant) {
+    public static String print(TenantInfoDTO tenant) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append(tenant.status().getStringView());
-        sb.append(", ");
 
         sb.append(tenant.tenant().person().name().firstName().getStringView());
         sb.append(" ");
@@ -124,11 +111,11 @@ public class VistaDataPrinter {
         return sb.toString();
     }
 
-    public static String printFinancial(IList<SummaryTenantFinancialDTO> tenantFinancials) {
+    public static String printFinancial(IList<TenantFinancialDTO> tenantFinancials) {
         StringBuilder sb = new StringBuilder();
 
-        for (SummaryTenantFinancialDTO summaryFinancial : tenantFinancials) {
-            sb.append(print(summaryFinancial.tenantFinancial()));
+        for (TenantFinancialDTO tenantFinancial : tenantFinancials) {
+            sb.append(print(tenantFinancial));
         }
 
         return sb.toString();
@@ -195,20 +182,6 @@ public class VistaDataPrinter {
             sb.append(pet.breed().getStringView()).append(" ");
             sb.append(pet.weight().getValue()).append(" ").append(pet.weightUnit().getValue()).append(" $");
             sb.append(pet.chargeLine().amount().amount().getValue());
-        }
-        return sb.toString();
-    }
-
-    public static String printVehicles(VehiclesDTO vehicles) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("vehicles\n");
-
-        for (Vehicle vehicle : vehicles.list()) {
-            sb.append("\n\t");
-            sb.append(vehicle.year().getStringView()).append(" ");
-            sb.append(vehicle.province().getStringView()).append(" ");
-            sb.append(vehicle.make().getStringView()).append(" ").append(vehicle.model().getStringView()).append(" ");
-            sb.append(vehicle.plateNumber().getStringView());
         }
         return sb.toString();
     }

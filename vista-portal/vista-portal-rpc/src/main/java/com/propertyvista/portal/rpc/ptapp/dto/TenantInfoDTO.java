@@ -13,9 +13,8 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -26,10 +25,9 @@ import com.propertyvista.domain.tenant.TenantScreening;
 @Transient
 public interface TenantInfoDTO extends TenantScreening {
 
-    @EmbeddedEntity
+    @ToString
     Person person();
 
-    @Owned
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
 }

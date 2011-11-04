@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.charges.Charge;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.TenantInLease;
 
 public interface TenantCharge extends Charge {
@@ -26,7 +27,7 @@ public interface TenantCharge extends Charge {
     TenantInLease tenant();
 
     @Transient
-    IPrimitive<String> tenantFullName();
+    Name tenantName();
 
     IPrimitive<Integer> percentage();
 }

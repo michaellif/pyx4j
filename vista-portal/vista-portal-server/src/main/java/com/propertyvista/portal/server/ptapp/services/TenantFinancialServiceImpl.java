@@ -40,7 +40,6 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         log.debug("Retrieving financials for tenant {}", tenantId);
 
         TenantRetriever r = new TenantRetriever(tenantId, true);
-
         TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
 

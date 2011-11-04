@@ -60,14 +60,16 @@ import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.tenant.TenantIn.Status;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
+import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialViewForm;
+import com.propertyvista.portal.ptapp.client.ui.steps.info.InfoViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantFolder;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
 public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
@@ -113,10 +115,10 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         main.add(inject(proto().tenantList().tenants(), new TenantFolder(false)));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Full info"), new PtSiteMap.Info())));
-        main.add(inject(proto().tenantsWithInfo().tenants(), createTenantView()));
+        main.add(inject(proto().tenantsWithInfo(), createTenantView()));
 
         main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
-//        main.add(inject(proto().tenantFinancials(), createFinancialView()));
+        main.add(inject(proto().tenantFinancials(), createFinancialView()));
 
         main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
         main.add(new LeaseTermsCheck());
@@ -273,13 +275,13 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     /*
      * Tenants detailed information view implementation
      */
-    private CEntityFolder<TenantInLease> createTenantView() {
-        return new VistaBoxFolder<TenantInLease>(TenantInLease.class, false) {
+    private CEntityFolder<TenantInfoDTO> createTenantView() {
+        return new VistaBoxFolder<TenantInfoDTO>(TenantInfoDTO.class, false) {
 
             @Override
             public CEditableComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof TenantInLease) {
-                    return new SummaryViewTenantInfo();
+                if (member instanceof TenantInfoDTO) {
+                    return new InfoViewForm(new VistaViewersComponentFactory());
                 }
                 return super.create(member);
             }
@@ -289,13 +291,13 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     /*
      * Financial detailed information view implementation
      */
-    private CEntityFolder<SummaryTenantFinancialDTO> createFinancialView() {
-        return new VistaBoxFolder<SummaryTenantFinancialDTO>(SummaryTenantFinancialDTO.class, false) {
+    private CEntityFolder<TenantFinancialDTO> createFinancialView() {
+        return new VistaBoxFolder<TenantFinancialDTO>(TenantFinancialDTO.class, false) {
 
             @Override
             public CEditableComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof SummaryTenantFinancialDTO) {
-                    return new SummaryViewTenantFinancial();
+                if (member instanceof TenantFinancialDTO) {
+                    return new FinancialViewForm(new VistaViewersComponentFactory());
                 }
                 return super.create(member);
             }

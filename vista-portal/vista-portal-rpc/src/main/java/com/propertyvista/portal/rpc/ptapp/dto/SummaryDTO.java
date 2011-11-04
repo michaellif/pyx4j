@@ -27,9 +27,9 @@ public interface SummaryDTO extends Summary {
 
     TenantInApplicationListDTO tenantList();
 
-    TenantInLeaseListDTO tenantsWithInfo();
+    IList<TenantInfoDTO> tenantsWithInfo();
 
-    IList<SummaryTenantFinancialDTO> tenantFinancials();
+    IList<TenantFinancialDTO> tenantFinancials();
 
     @Caption(name = "Add-Ons")
     AddOnsDTO addons();

@@ -24,6 +24,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -57,7 +59,12 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
     private ApplicationDocumentsFolderUploader fileUpload;
 
     public InfoViewForm() {
-        super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
+        this(new VistaEditorsComponentFactory());
+    }
+
+    public InfoViewForm(IEditableComponentFactory factory) {
+        super(TenantInfoDTO.class, factory);
+        setEditable(factory instanceof BaseEditableComponentFactory);
     }
 
     @Override

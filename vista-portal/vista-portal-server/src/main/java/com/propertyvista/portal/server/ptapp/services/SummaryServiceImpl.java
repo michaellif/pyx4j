@@ -25,24 +25,20 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.SummaryTenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
@@ -92,54 +88,19 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         for (TenantInLease tenantInLease : lease.tenants()) {
             Persistence.service().retrieve(tenantInLease);
+
+            TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
+
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+            summary.tenantsWithInfo().add(createTenantInfoDTO(tr));
+            summary.tenantFinancials().add(createTenantFinancialDTO(tr));
         }
 
-        // We do not remove the info from DB if Tenant status changes
-        for (TenantInLease tenantInLease : lease.tenants()) {
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
-                summary.tenantsWithInfo().tenants().add(tenantInLease);
-            }
-        }
-
-        for (TenantInLease tenantInLease : lease.tenants()) {
-            EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
-            TenantScreening tenantScreening = Persistence.service().retrieve(criteria);
-
-            Persistence.service().retrieve(tenantScreening.documents());
-            Persistence.service().retrieve(tenantScreening.incomes());
-            Persistence.service().retrieve(tenantScreening.assets());
-            Persistence.service().retrieve(tenantScreening.guarantors());
-
-            // Update Transient values and see if we need to show this Tenant
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
-                SummaryTenantFinancialDTO sf = EntityFactory.create(SummaryTenantFinancialDTO.class);
-                sf.tenantFullName().setValue(
-                        EntityFromatUtils.nvl_concat(" ", tenantInLease.tenant().person().name().firstName(), tenantInLease.tenant().person().name()
-                                .middleName(), tenantInLease.tenant().person().name().lastName()));
-
-                TenantFinancialDTO tf = EntityFactory.create(TenantFinancialDTO.class);
-                tf.incomes().addAll(tenantScreening.incomes());
-                tf.incomes2().addAll(tenantScreening.incomes2());
-                tf.assets().addAll(tenantScreening.assets());
-                tf.guarantors().addAll(tenantScreening.guarantors());
-
-                sf.tenantFinancial().set(tf);
-
-                summary.tenantFinancials().add(sf);
-            }
-        }
-
-// TODO here should be retrived from Lease:        
-//        retrieveApplicationEntity(summary.addons(), summary.application());
         retrieveApplicationEntity(summary.charges(), summary.application());
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
             for (TenantInApplicationDTO tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
-                    charge.tenantFullName().setValue(
-                            EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name()
-                                    .lastName()));
+                    charge.tenantName().set(tenant.person().name());
                     continue loopOverTenantCharge;
                 }
             }
@@ -161,5 +122,19 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         } finally {
             IOUtils.closeQuietly(bos);
         }
+    }
+
+    // internal helpers:
+
+    private TenantInfoDTO createTenantInfoDTO(TenantRetriever tr) {
+        TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, tiDTO);
+        return tiDTO;
+    }
+
+    private TenantFinancialDTO createTenantFinancialDTO(TenantRetriever tr) {
+        TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
+        tfDTO.person().set(tr.tenant.person());
+        return tfDTO;
     }
 }

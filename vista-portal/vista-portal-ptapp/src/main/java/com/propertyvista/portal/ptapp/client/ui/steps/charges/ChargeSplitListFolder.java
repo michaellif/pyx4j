@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -27,7 +28,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,7 +43,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantFullName(), "25em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantName(), "25em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.percentage(), "5em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "5em"));
     }
@@ -102,8 +102,8 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
         @Override
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().tenantFullName()) {
-                return inject(column.getObject(), new CLabel());
+            if (column.getObject() == proto().tenantName()) {
+                return inject(column.getObject(), new CEntityLabel());
             }
             return super.createCell(column);
         }
