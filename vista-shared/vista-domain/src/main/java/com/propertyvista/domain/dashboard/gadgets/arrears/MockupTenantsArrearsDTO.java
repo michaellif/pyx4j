@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface MockupTenantsArrearsDTO extends MockupTenant {
     @Caption(name = "0 - 30 Days")
-    IPrimitive<Double> arrear1MonthAgo();
+    IPrimitive<Double> arrears1MonthAgo();
 
     @Caption(name = "30 - 60 Days")
     IPrimitive<Double> arrears2MonthsAgo();
