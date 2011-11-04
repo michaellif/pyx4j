@@ -56,7 +56,7 @@ public abstract class CAddressStructuredImpl<A extends AddressStructured> extend
         int row = 0;
         int column = 0;
         if (showUnit) {
-            main.setWidget(row++, column, new DecoratorBuilder(inject(proto().unitNumber()), 12).build());
+            main.setWidget(row++, column, new DecoratorBuilder(inject(proto().suiteNumber()), 12).build());
         }
 
         main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetNumber()), 5).build());

@@ -218,8 +218,8 @@ public class Converter {
         if (!from.streetType().isNull()) {
             to.streetType = from.streetType().getValue().name();
         }
-        if (!from.unitNumber().isNull()) {
-            to.unitNumber = from.unitNumber().getValue();
+        if (!from.suiteNumber().isNull()) {
+            to.unitNumber = from.suiteNumber().getValue();
         }
         to.city = from.city().getStringView();
         to.province = from.province().getStringView();
@@ -282,7 +282,7 @@ public class Converter {
         to.streetNumberSuffix().setValue(from.streetNumberSuffix);
         to.streetDirection().setValue(StreetDirection.valueOf(from.streetDirection));
         to.streetType().setValue(StreetType.valueOf(from.streetType));
-        to.unitNumber().setValue(from.unitNumber);
+        to.suiteNumber().setValue(from.unitNumber);
         to.city().setValue(from.city);
         to.province().set(SharedData.findProvinceByCode(from.province));
         to.postalCode().setValue(from.postalCode);

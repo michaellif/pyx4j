@@ -240,7 +240,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
         boolean editable = true;
         if (value == Boolean.TRUE) {
             //TODO use a better forms and copy of data
-            get(proto().billingAddress().unitNumber()).setValue(getValue().currentAddress().unitNumber().getValue());
+            get(proto().billingAddress().suiteNumber()).setValue(getValue().currentAddress().suiteNumber().getValue());
             get(proto().billingAddress().streetNumber()).setValue(getValue().currentAddress().streetNumber().getValue());
             get(proto().billingAddress().streetNumberSuffix()).setValue(getValue().currentAddress().streetNumberSuffix().getValue());
             get(proto().billingAddress().streetName()).setValue(getValue().currentAddress().streetName().getValue());
@@ -262,7 +262,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
             editable = false;
         }
 
-        get(proto().billingAddress().unitNumber()).setEditable(editable);
+        get(proto().billingAddress().suiteNumber()).setEditable(editable);
         get(proto().billingAddress().streetNumber()).setEditable(editable);
         get(proto().billingAddress().streetNumberSuffix()).setEditable(editable);
         get(proto().billingAddress().streetName()).setEditable(editable);

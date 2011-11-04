@@ -183,7 +183,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     protected void assertAddressForm(IDebugId formDebugId, AddressStructured address) {
-        assertValueOnForm(formDebugId, address.unitNumber());
+        assertValueOnForm(formDebugId, address.suiteNumber());
         assertValueOnForm(formDebugId, address.streetNumber());
         assertValueOnForm(formDebugId, address.streetNumberSuffix());
         assertValueOnForm(formDebugId, address.streetName());

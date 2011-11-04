@@ -26,8 +26,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
@@ -43,6 +45,8 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public class ApartmentServiceImpl implements ApartmentService {
+
+    private final static I18n i18n = I18n.get(ApartmentServiceImpl.class);
 
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
 
@@ -104,27 +108,38 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // fill DTO:
-        ApartmentInfoDTO unitInfo = EntityFactory.create(ApartmentInfoDTO.class);
-        unitInfo.name().setValue(lease.unit().floorplan().marketingName().getValue());
-        unitInfo.bedrooms().setValue(lease.unit().floorplan().bedrooms().getStringView());
-        if (lease.unit().floorplan().dens().getValue() > 0) {
-            unitInfo.bedrooms().setValue(unitInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " den(s)");
-        }
-        unitInfo.bathrooms().setValue(lease.unit().floorplan().bathrooms().getStringView());
-        if (lease.unit().floorplan().halfBath().getValue() > 0) {
-            unitInfo.bathrooms().setValue(unitInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + " separate WC(s)");
+        ApartmentInfoDTO aptInfo = EntityFactory.create(ApartmentInfoDTO.class);
+
+        aptInfo.floorplan().setValue(lease.unit().floorplan().marketingName().getValue());
+        aptInfo.bedrooms().setValue(lease.unit().floorplan().bedrooms().getStringView());
+
+        if (lease.unit().floorplan().dens().getValue() == 1) {
+            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + i18n.tr(" den"));
+        } else if (lease.unit().floorplan().dens().getValue() > 1) {
+            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + i18n.tr(" dens"));
         }
 
-        unitInfo.suiteNumber().setValue(lease.unit().info().number().getValue());
+        aptInfo.bathrooms().setValue(lease.unit().floorplan().bathrooms().getStringView());
+        if (lease.unit().floorplan().halfBath().getValue() == 1) {
+            aptInfo.bathrooms().setValue(
+                    aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + i18n.tr(" separate WC"));
+        } else if (lease.unit().floorplan().halfBath().getValue() > 1) {
+            aptInfo.bathrooms().setValue(
+                    aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + i18n.tr(" separate WCs"));
+        }
+
+        aptInfo.address().set(lease.unit().belongsTo().info().address().clone(AddressStructured.class));
+        aptInfo.address().suiteNumber().setValue(lease.unit().info().number().getValue());
 
         // serviceCatalog processing:
-        fillServiceItems(unitInfo, lease.unit().belongsTo(), lease);
+        fillServiceItems(aptInfo, lease.unit().belongsTo(), lease);
 
         // Lease data:
-        unitInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
-        unitInfo.leaseTo().setValue(lease.leaseTo().getValue());
-        unitInfo.unitRent().setValue(lease.serviceAgreement().serviceItem().item().price().getValue());
-        return unitInfo;
+        aptInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
+        aptInfo.leaseTo().setValue(lease.leaseTo().getValue());
+        aptInfo.unitRent().setValue(lease.serviceAgreement().serviceItem().item().price().getValue());
+
+        return aptInfo;
     }
 
     private ServiceCatalog syncBuildingServiceCatalog(Building building) {

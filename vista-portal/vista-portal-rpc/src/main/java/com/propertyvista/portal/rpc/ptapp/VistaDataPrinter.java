@@ -231,7 +231,7 @@ public class VistaDataPrinter {
     public static String print(PriorAddress address) {
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
-        sb.append(address.unitNumber().getValue());
+        sb.append(address.suiteNumber().getValue());
         sb.append(" ");
         sb.append(address.streetNumber().getValue());
         sb.append(" ");
@@ -254,7 +254,7 @@ public class VistaDataPrinter {
 
     public static String print(ApartmentInfoDTO selectedUnit) {
         StringBuilder sb = new StringBuilder();
-        sb.append(selectedUnit.suiteNumber().getValue());
+        sb.append(selectedUnit.address().suiteNumber().getValue());
         return sb.toString();
     }
 

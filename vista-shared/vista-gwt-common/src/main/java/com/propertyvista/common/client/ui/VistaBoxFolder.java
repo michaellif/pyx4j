@@ -24,7 +24,7 @@ import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorato
 
 public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E> {
 
-    private static I18n i18n = I18n.get(VistaBoxFolder.class);
+    protected static I18n i18n = I18n.get(VistaBoxFolder.class);
 
     private final String itemName;
 

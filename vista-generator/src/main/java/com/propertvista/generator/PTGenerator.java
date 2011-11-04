@@ -332,7 +332,7 @@ public class PTGenerator {
 
     public static void populateAddress(AddressStructured address) {
 
-        address.unitNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
+        address.suiteNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
         address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
         address.streetNumberSuffix().setValue("");
 

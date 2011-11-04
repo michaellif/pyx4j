@@ -239,7 +239,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterAddressForm(IDebugId formDebugId, AddressStructured address) {
-        setValueOnForm(formDebugId, address.unitNumber());
+        setValueOnForm(formDebugId, address.suiteNumber());
         setValueOnForm(formDebugId, address.streetNumber());
         setValueOnForm(formDebugId, address.streetNumberSuffix());
         setValueOnForm(formDebugId, address.streetName());

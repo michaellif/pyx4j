@@ -50,7 +50,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
         int row = -1;
 
         CLabel lb;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel())).customLabel("").useLabelSemicolon(false).build());
         lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         CNumberLabel nl;
@@ -64,8 +64,8 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, "40%");
+        main.getColumnFormatter().setWidth(1, "60%");
 
         return main;
     }

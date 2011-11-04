@@ -34,7 +34,7 @@ import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AddressStructured extends IEntity {
 
-    IPrimitive<String> unitNumber();
+    IPrimitive<String> suiteNumber();
 
     IPrimitive<String> streetNumber();
 

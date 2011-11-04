@@ -13,16 +13,15 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.portal.ptapp.client.ui.components.BuildingPicture;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
 public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO> {
@@ -55,21 +54,21 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         FormFlexPanel info = new FormFlexPanel();
 
         int row1 = -1;
-        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
-        info.setHR(++row1, 0, 1);
-        info.getFlexCellFormatter().setColSpan(row1, 0, 2);
+        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
 
-        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().suiteNumber()), 10).build());
+        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().bedrooms()), 10).build());
 
-        row1 = 1;
-        info.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().bedrooms()), 10).build());
+        row1 = 0;
         info.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().bathrooms()), 10).build());
 
         info.getColumnFormatter().setWidth(0, "50%");
         info.getColumnFormatter().setWidth(1, "50%");
-        info.setWidth("75%");
+//        info.setWidth("75%");
 
         main.setWidget(++row, 0, info);
+
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8).build());
@@ -108,11 +107,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         otherPanel.setWidget(0, 0, inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
         main.setWidget(++row, 0, otherPanel);
 
-        // last step - add building picture on the right:
-        HorizontalPanel content = new HorizontalPanel();
-        content.add(main);
-        content.add(new BuildingPicture());
-        return content;
+        return main;
     }
 
     @Override

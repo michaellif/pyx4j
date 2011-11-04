@@ -27,7 +27,7 @@ public class AddressConverter extends EntityDtoBinder<AddressStructured, Address
 
     @Override
     protected void bind() {
-        bind(dtoProto.unitNumber(), dboProto.unitNumber());
+        bind(dtoProto.unitNumber(), dboProto.suiteNumber());
         bind(dtoProto.streetNumber(), dboProto.streetNumber());
         bind(dtoProto.streetNumberSuffix(), dboProto.streetNumberSuffix());
         bind(dtoProto.streetName(), dboProto.streetName());

@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -34,14 +35,14 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 public interface ApartmentInfoDTO extends IEntity {
 
     // Floorplan data:
-    IPrimitive<String> name();
+    IPrimitive<String> floorplan();
 
     IPrimitive<String> bedrooms();
 
     IPrimitive<String> bathrooms();
 
     // Unit data:
-    IPrimitive<String> suiteNumber();
+    AddressStructured address();
 
     // Service Catalogue stuff:
     IList<ServiceItemType> includedUtilities();

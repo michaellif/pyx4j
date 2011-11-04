@@ -158,7 +158,7 @@ public class SummaryViewTenantInfo extends SummaryViewTenantListBase<TenantInLea
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.city()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.county()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.province()), dd2ColumnsTable));
-        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.unitNumber()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.suiteNumber()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.streetNumber()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.streetNumberSuffix()), dd2ColumnsTable));
         addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.streetType()), dd2ColumnsTable));

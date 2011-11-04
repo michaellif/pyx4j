@@ -13,11 +13,10 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
-
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
@@ -30,6 +29,9 @@ class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     private final Feature.Type type;
 
     private final ApartmentViewForm apartmentViewForm;
+
+    // TODO obtain this value somewhere!.. 
+    private final int maxCount = 2;
 
     public FeatureExFolder(boolean modifyable, Feature.Type type, ApartmentViewForm apartmentViewForm) {
         super(ChargeItem.class, modifyable);
@@ -48,19 +50,24 @@ class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
     @Override
     protected void addItem() {
-        new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
-            @Override
-            protected void onClose(SelectFeatureBox box) {
-                if (box.getSelectedItems() != null) {
-                    for (ServiceItem item : box.getSelectedItems()) {
-                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                        newItem.item().set(item);
-                        newItem.price().setValue(item.price().getValue());
-                        newItem.adjustedPrice().setValue(item.price().getValue());
-                        addItem(newItem);
+        if (getValue().size() < maxCount) {
+
+            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
+                @Override
+                protected void onClose(SelectFeatureBox box) {
+                    if (box.getSelectedItems() != null) {
+                        for (ServiceItem item : box.getSelectedItems()) {
+                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                            newItem.item().set(item);
+                            newItem.price().setValue(item.price().getValue());
+                            newItem.adjustedPrice().setValue(item.price().getValue());
+                            addItem(newItem);
+                        }
                     }
                 }
-            }
-        };
+            };
+        } else {
+            MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You can't add more then " + maxCount + i18n.tr(" items here!")));
+        }
     }
 }
