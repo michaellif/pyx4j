@@ -99,10 +99,10 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 if (primarySortColumn != null) {
                     sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
                 }
-                ColumnDescriptor<E> secondarySortColumn = entityListPanel.getDataTable().getDataTableModel().getSecondarySortColumn();
-                if (secondarySortColumn != null) {
-                    sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
-                }
+//                ColumnDescriptor<E> secondarySortColumn = entityListPanel.getDataTable().getDataTableModel().getSecondarySortColumn();
+//                if (secondarySortColumn != null) {
+//                    sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
+//                }
                 settings.sorting().clear();
                 for (Sort sort : sorting) {
                     SortEntity sortEntity = SortToEntity(sort);

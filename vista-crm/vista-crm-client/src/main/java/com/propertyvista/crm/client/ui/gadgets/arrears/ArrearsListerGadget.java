@@ -14,23 +14,39 @@
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenantsArrearsDTO;
 
 public class ArrearsListerGadget extends ListerGadgetBase<MockupTenantsArrearsDTO> implements IBuildingGadget {
 
+    private final ArrearsReportService service;
+
+    private FilterData filterData;
+
     public ArrearsListerGadget(GadgetMetadata gmd) {
         super(gmd, MockupTenantsArrearsDTO.class);
+        service = GWT.create(ArrearsReportService.class);
+        filterData = new FilterData();
+        filterData.toDate = new Date();
     }
 
     @SuppressWarnings("unchecked")
@@ -77,11 +93,26 @@ public class ArrearsListerGadget extends ListerGadgetBase<MockupTenantsArrearsDT
 
     @Override
     public void setFiltering(FilterData filterData) {
-        // TODO Auto-generated method stub        
+        this.filterData = filterData;
+        if (filterData.toDate == null) {
+            filterData.toDate = new Date();
+        }
+        populatePage(0);
     }
 
     @Override
     public void populatePage(int pageNumber) {
-        // TODO Auto-generated method stub
+        final int p = pageNumber;
+        service.arrearsList(new AsyncCallback<EntitySearchResult<MockupTenantsArrearsDTO>>() {
+            @Override
+            public void onSuccess(EntitySearchResult<MockupTenantsArrearsDTO> result) {
+                setPageData(result.getData(), p, result.getTotalRows(), result.hasMoreData());
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new Error(caught);
+            }
+        }, new Vector<Key>(filterData.buildings), new LogicalDate(filterData.toDate), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
     }
 }
