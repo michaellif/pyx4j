@@ -46,6 +46,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         List<AppPlace> items = new ArrayList<AppPlace>();
+        items.add(new Residents());
         items.add(new Residents.PersonalInfo());
         items.add(new Residents.CurrentBill());
         items.add(new Residents.PaymentMethods());
