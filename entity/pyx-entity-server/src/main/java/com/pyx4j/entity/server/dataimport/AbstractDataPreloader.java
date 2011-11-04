@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -82,7 +83,11 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         EntityQueryCriteria<T> criteria = new EntityQueryCriteria<T>(entityClass);
         int count = PersistenceServicesFactory.getPersistenceService().delete(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-        return "Removed " + count + " " + entityMeta.getCaption() + "(s)";
+        if (count > 0) {
+            return "Removed " + count + " " + entityMeta.getCaption() + "(s)";
+        } else {
+            return null;
+        }
     }
 
     protected String deleteAll(Class<? extends IEntity>... entityClass) {
@@ -92,7 +97,10 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         }
         StringBuilder b = new StringBuilder();
         for (Class<? extends IEntity> ec : entityClass) {
-            b.append(deleteAll(ec)).append('\n');
+            String msg = deleteAll(ec);
+            if (CommonsStringUtils.isStringSet(msg)) {
+                b.append(msg).append('\n');
+            }
         }
         return b.toString();
     }

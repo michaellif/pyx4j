@@ -29,6 +29,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.AbstractEntity;
@@ -40,6 +41,7 @@ import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class RDBUtils implements Closeable {
@@ -127,6 +129,27 @@ public class RDBUtils implements Closeable {
             if (srv.isTableExists(meta.getEntityClass())) {
                 log.info("drop table {}", meta.getEntityClass().getName());
                 srv.dropTable(meta.getEntityClass());
+            }
+        }
+    }
+
+    public static void deleteFromAllEntityTables() {
+        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+        for (String className : allClasses) {
+            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+                continue;
+            }
+            if (srv.isTableExists(meta.getEntityClass())) {
+                @SuppressWarnings({ "rawtypes", "unchecked" })
+                EntityQueryCriteria<?> criteria = new EntityQueryCriteria(entityClass);
+                List<Key> keys = srv.queryKeys(criteria);
+                if (keys.size() > 0) {
+                    log.info("delete {} rows from table {}", keys.size(), meta.getEntityClass().getName());
+                    srv.delete(entityClass, keys);
+                }
             }
         }
     }
