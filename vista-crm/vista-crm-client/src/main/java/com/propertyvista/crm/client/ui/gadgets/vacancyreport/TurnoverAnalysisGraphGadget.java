@@ -74,14 +74,22 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
     
     private static final boolean DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT = false;
     public static AnalysisResolution DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX = AnalysisResolution.Year;
-
+    
     @SuppressWarnings("unchecked")
-    private static final List<Tuple<Long, AnalysisResolution>> DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_PER_RANGE = Arrays.asList(
-    // keys must be in ascending order
-            new Tuple<Long, AnalysisResolution>(TimeRange.WEEK, AnalysisResolution.Day), 
-            new Tuple<Long, AnalysisResolution>(2L * TimeRange.MONTH, AnalysisResolution.Week),
-            new Tuple<Long, AnalysisResolution>(TimeRange.YEAR, AnalysisResolution.Year));
-
+    // used for graph scale auto selection and blacklisting of available scales upon filtering setup
+    // the first one in the resolutions list is the default 
+    private static final List<Tuple<Long, List<AnalysisResolution>>> RANGE_TO_ACCEPTED_RESOLUTIONS_MAP = Arrays.asList(
+                // keys must be in DESCENDING order, the list must end with a KEY = 0
+                // keys represent the LOWER BOUND of the range
+                new Tuple<Long, List<AnalysisResolution>>(21L * TimeRange.MONTH + 1l, Arrays.asList(AnalysisResolution.Year)),
+                new Tuple<Long, List<AnalysisResolution>>(20l * TimeRange.MONTH + 1l, Arrays.asList(AnalysisResolution.Year, AnalysisResolution.Month)),
+                new Tuple<Long, List<AnalysisResolution>>(TimeRange.YEAR + 1l, Arrays.asList(AnalysisResolution.Month)),
+                new Tuple<Long, List<AnalysisResolution>>(3L * TimeRange.MONTH +1l, Arrays.asList(AnalysisResolution.Month, AnalysisResolution.Week)),
+                new Tuple<Long, List<AnalysisResolution>>(31l * TimeRange.DAY + 1l, Arrays.asList(AnalysisResolution.Week)),                      
+                new Tuple<Long, List<AnalysisResolution>>(2L * TimeRange.WEEK, Arrays.asList(AnalysisResolution.Day, AnalysisResolution.Week)),
+                new Tuple<Long, List<AnalysisResolution>>(0L, Arrays.asList(AnalysisResolution.Day))
+                );
+            
     List<UnitVacancyReportTurnoverAnalysisDTO> data;
 
     private final SimplePanel graph;
@@ -236,17 +244,31 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         }
         AnalysisResolution[] analysisValues = AnalysisResolution.values();
         int selectedResolutionIndex = -1;
+        int added = -1;
         for (int i = 0; i < analysisValues.length; ++i) {
             AnalysisResolution resolution = analysisValues[i];
-            resolutionSelector.addItem(resolution.toString(), resolution.toString());
+            if (isResolutionAcceptable(resolution)) {
+                resolutionSelector.addItem(resolution.toString(), resolution.toString());
+                ++added;
+            }
             if (resolution.equals(currentResolution)) {
-                selectedResolutionIndex = i;
+                selectedResolutionIndex = added;
             }
         }
 
         if (selectedResolutionIndex >= 0) {
-            resolutionSelector.setItemSelected(selectedResolutionIndex, false);
+            resolutionSelector.setSelectedIndex(selectedResolutionIndex);
         }
+    }
+
+    private boolean isResolutionAcceptable(AnalysisResolution resolution) {
+        long requestedTimerange = filter.getTo().getTime() - filter.getFrom().getTime();
+        for (Tuple<Long, List<AnalysisResolution>> rangeToResolutions : RANGE_TO_ACCEPTED_RESOLUTIONS_MAP) {
+            if (requestedTimerange > rangeToResolutions.car()) {
+                return rangeToResolutions.cdr().contains(resolution);
+            }
+        }
+        return false;
     }
 
     private static AnalysisResolution getDefaultResolution(LogicalDate from, LogicalDate to) {
@@ -256,9 +278,9 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         }
 
         long range = to.getTime() - from.getTime();
-        for (Tuple<Long, AnalysisResolution> defaultSetting : DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_PER_RANGE) {
+        for (Tuple<Long, List<AnalysisResolution>> defaultSetting : RANGE_TO_ACCEPTED_RESOLUTIONS_MAP) {
             if (range <= defaultSetting.car()) {
-                defaultScale = defaultSetting.cdr();
+                defaultScale = defaultSetting.cdr().get(0);
                 break;
             }
         }
@@ -267,15 +289,19 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
     }
 
     private void setResolution(AnalysisResolution resolution) {
-        if (resolution != null) {
+        if (resolutionSelector.getItemCount() == 0) {
+            resolutionSelector.addItem(resolution.toString(), resolution.toString());
+            resolutionSelector.setSelectedIndex(0);
+        } else if (resolution != null) {
             int resolutionsCount = resolutionSelector.getItemCount();
             for (int i = 0; i < resolutionsCount; ++i) {
                 if (resolution.equals(AnalysisResolution.representationToValue(resolutionSelector.getValue(i)))) {
-                    resolutionSelector.setSelectedIndex(i);
+                    resolutionSelector.setSelectedIndex(0);
                     break;
                 }
             }
         }
+
     }
 
     private boolean isFilteringCriteriaAcceptable() {
