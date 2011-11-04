@@ -25,6 +25,15 @@ import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+/**
+ * Q: Why Equipment is not a BuildingElement?
+ * 
+ * Actually, all that equipment not a building elements in terms of... like, let say unit, locker, parking etc...
+ * But, most importantly, this term used mostly for business-money purpose : connect service items in catalog and items which they sell/rent...
+ * end we do not rent equipment (but may be?)
+ * Theoretically, nothing of this prohibit equipment to be a building element too...
+ * 
+ */
 @Inheritance
 @AbstractEntity
 public interface BuildingElement extends IEntity {
