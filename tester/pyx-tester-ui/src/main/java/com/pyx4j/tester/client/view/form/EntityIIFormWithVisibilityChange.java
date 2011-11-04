@@ -28,15 +28,15 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.tester.client.domain.test.EntityI;
+import com.pyx4j.tester.client.domain.test.EntityII;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 
-public class EntityIFormWithVisibility extends CEntityEditor<EntityI> {
+public class EntityIIFormWithVisibilityChange extends CEntityEditor<EntityII> {
 
-    private static I18n i18n = I18n.get(EntityIFormWithVisibility.class);
+    private static I18n i18n = I18n.get(EntityIIFormWithVisibilityChange.class);
 
-    public EntityIFormWithVisibility() {
-        super(EntityI.class);
+    public EntityIIFormWithVisibilityChange() {
+        super(EntityII.class);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class EntityIFormWithVisibility extends CEntityEditor<EntityI> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Visibility Test"));
+        main.setH1(++row, 0, 1, i18n.tr("Form component Visibility Test"));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnum())));
         main.setHR(++row, 0, 1);
 
@@ -54,44 +54,63 @@ public class EntityIFormWithVisibility extends CEntityEditor<EntityI> {
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextII())));
 
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().checkBox())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPassword())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPassword())));
+
         return main;
     }
 
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CComboBox<EntityI.Enum1> type = (CComboBox<EntityI.Enum1>) get(proto().optionalEnum());
-        type.addValueChangeHandler(new ValueChangeHandler<EntityI.Enum1>() {
+        CComboBox<EntityII.Enum1> type = (CComboBox<EntityII.Enum1>) get(proto().optionalEnum());
+        type.addValueChangeHandler(new ValueChangeHandler<EntityII.Enum1>() {
             @Override
-            public void onValueChange(ValueChangeEvent<EntityI.Enum1> event) {
+            public void onValueChange(ValueChangeEvent<EntityII.Enum1> event) {
                 setVisibility(event.getValue());
             }
         });
     }
 
     @Override
-    public void populate(EntityI value) {
+    public void populate(EntityII value) {
         super.populate(value);
         setVisibility(value.optionalEnum().getValue());
     }
 
-    private void setVisibility(EntityI.Enum1 type) {
+    private void setVisibility(EntityII.Enum1 type) {
+
+        if (type == null) {
+            type = EntityII.Enum1.Value0;
+        }
+
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
         get(proto().optionalTextI()).setVisible(false);
         get(proto().optionalTextII()).setVisible(false);
         get(proto().mandatoryTextI()).setVisible(false);
         get(proto().mandatoryTextII()).setVisible(false);
+        get(proto().checkBox()).setVisible(false);
+        get(proto().optionalPassword()).setVisible(false);
+        get(proto().mandatoryPassword()).setVisible(false);
+
         switch (type) {
         case Value0:
             get(proto().optionalTextI()).setVisible(true);
+            get(proto().optionalPassword()).setVisible(true);
             break;
         case Value1:
             get(proto().optionalTextII()).setVisible(true);
+            get(proto().checkBox()).setVisible(true);
             break;
         case Value2:
             get(proto().mandatoryTextI()).setVisible(true);
+            get(proto().mandatoryPassword()).setVisible(true);
             break;
         case Value3:
             get(proto().mandatoryTextII()).setVisible(true);
+            get(proto().checkBox()).setVisible(true);
             break;
 
         default:

@@ -28,11 +28,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 
-public class EntityIForm extends CEntityEditor<EntityI> {
+public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
-    private static I18n i18n = I18n.get(EntityIForm.class);
+    private static I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 
-    public EntityIForm() {
+    public EntityIFormWithoutLists() {
         super(EntityI.class);
     }
 

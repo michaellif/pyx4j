@@ -45,8 +45,8 @@ public class DomainFactory {
 
     public static EntityII createEntityII() {
         EntityII retVal = EntityFactory.create(EntityII.class);
-        retVal.stringMember().setValue("== EntityII Value ==");
-        retVal.integerMember().setValue(counter++);
+        retVal.optionalTextI().setValue("== EntityII Value ==");
+        retVal.optionalInteger().setValue(counter++);
         return retVal;
     }
 

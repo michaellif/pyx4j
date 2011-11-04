@@ -20,19 +20,59 @@
  */
 package com.pyx4j.tester.client.domain.test;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface EntityII extends IEntity {
 
-    @ToString(index = 0)
-    IPrimitive<String> stringMember();
+    @I18n
+    public enum Enum1 {
 
-    @ToString(index = 1)
-    IPrimitive<Integer> integerMember();
+        Value0, Value1, Value2, Value3;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @Caption(description = "Description for optionalStringMemberI")
+    IPrimitive<String> optionalTextI();
+
+    IPrimitive<String> optionalTextII();
+
+    @NotNull
+    IPrimitive<String> mandatoryTextI();
+
+    @NotNull
+    IPrimitive<String> mandatoryTextII();
+
+    IPrimitive<Integer> optionalInteger();
+
+    @NotNull
+    IPrimitive<Integer> mandatoryInteger();
+
+    IPrimitive<Boolean> checkBox();
+
+    @Editor(type = EditorType.password)
+    IPrimitive<String> optionalPassword();
+
+    @Editor(type = EditorType.password)
+    @NotNull
+    IPrimitive<String> mandatoryPassword();
+
+    IPrimitive<Enum1> optionalEnum();
+
+    @NotNull
+    IPrimitive<Enum1> mandatoryEnum();
 
     @Owned
     IList<EntityIII> entityIIIList();

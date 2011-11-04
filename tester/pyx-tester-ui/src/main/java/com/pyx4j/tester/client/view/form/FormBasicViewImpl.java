@@ -29,7 +29,7 @@ public class FormBasicViewImpl extends ScrollPanel implements FormBasicView {
     public FormBasicViewImpl() {
         setSize("100%", "100%");
 
-        EntityIForm mainForm = new EntityIForm();
+        EntityIFormWithoutLists mainForm = new EntityIFormWithoutLists();
         mainForm.initContent();
 
         setWidget(mainForm);

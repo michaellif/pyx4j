@@ -27,11 +27,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.CComponentProperties;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
-import com.pyx4j.tester.client.view.form.EntityIForm;
+import com.pyx4j.tester.client.view.form.EntityIFormWithoutLists;
 
 public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
 
-    private static I18n i18n = I18n.get(EntityIForm.class);
+    private static I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 
     public CComponentViewForm() {
         super(CComponentProperties.class);

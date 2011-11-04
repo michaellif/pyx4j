@@ -29,12 +29,12 @@ public class FormVisibilityViewImpl extends ScrollPanel implements FormVisibilit
     public FormVisibilityViewImpl() {
         setSize("100%", "100%");
 
-        EntityIFormWithVisibility mainForm = new EntityIFormWithVisibility();
+        EntityIIFormWithVisibilityChange mainForm = new EntityIIFormWithVisibilityChange();
         mainForm.initContent();
 
         setWidget(mainForm);
 
-        mainForm.populate(DomainFactory.createEntityI());
+        mainForm.populate(DomainFactory.createEntityII());
 
     }
 
