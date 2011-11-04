@@ -243,6 +243,14 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         return settings.pageNumber().getValue();
     }
 
+    public List<Sort> getSorting() {
+        List<Sort> sorting = new ArrayList<Sort>(2);
+        for (SortEntity sortEntity : settings.sorting()) {
+            sorting.add(EntityToSort(sortEntity));
+        }
+        return sorting;
+    }
+
     /**
      * Fills the lister with data for a single page.
      * 
@@ -298,7 +306,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         return entity;
     }
 
-    @SuppressWarnings("unused")
     private static Sort EntityToSort(SortEntity entity) {
         Sort sort = new Sort(entity.propertyName().getValue(), entity.descending().getValue());
         return sort;
