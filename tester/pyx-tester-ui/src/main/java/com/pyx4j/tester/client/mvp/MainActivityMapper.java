@@ -30,7 +30,8 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.tester.client.TesterSiteMap;
 import com.pyx4j.tester.client.activity.FolderLayoutActivity;
 import com.pyx4j.tester.client.activity.FolderValidationActivity;
-import com.pyx4j.tester.client.activity.GeneralFormActivity;
+import com.pyx4j.tester.client.activity.FormBasicActivity;
+import com.pyx4j.tester.client.activity.FormVisibilityActivity;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -44,12 +45,14 @@ public class MainActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof TesterSiteMap.FolderLayout) {
+                if (place instanceof TesterSiteMap.Folder.FolderLayout) {
                     activity = new FolderLayoutActivity(place);
-                } else if (place instanceof TesterSiteMap.FolderValidation) {
+                } else if (place instanceof TesterSiteMap.Folder.FolderValidation) {
                     activity = new FolderValidationActivity(place);
-                } else if (place instanceof TesterSiteMap.GeneralForm) {
-                    activity = new GeneralFormActivity(place);
+                } else if (place instanceof TesterSiteMap.Form.FormBasic) {
+                    activity = new FormBasicActivity(place);
+                } else if (place instanceof TesterSiteMap.Form.FormVisibility) {
+                    activity = new FormVisibilityActivity(place);
                 }
                 callback.onSuccess(activity);
             }

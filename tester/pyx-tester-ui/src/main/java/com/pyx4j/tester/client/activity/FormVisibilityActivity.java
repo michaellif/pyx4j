@@ -26,14 +26,14 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.tester.client.TesterVeiwFactory;
-import com.pyx4j.tester.client.view.form.GeneralFormView;
+import com.pyx4j.tester.client.view.form.FormVisibilityView;
 
-public class GeneralFormActivity extends AbstractActivity {
+public class FormVisibilityActivity extends AbstractActivity {
 
-    private final GeneralFormView view;
+    private final FormVisibilityView view;
 
-    public GeneralFormActivity(Place place) {
-        this.view = (GeneralFormView) TesterVeiwFactory.retreive(GeneralFormView.class);
+    public FormVisibilityActivity(Place place) {
+        this.view = (FormVisibilityView) TesterVeiwFactory.retreive(FormVisibilityView.class);
         withPlace(place);
     }
 
@@ -42,7 +42,7 @@ public class GeneralFormActivity extends AbstractActivity {
         container.setWidget(view);
     }
 
-    public GeneralFormActivity withPlace(Place place) {
+    public FormVisibilityActivity withPlace(Place place) {
         return this;
     }
 }

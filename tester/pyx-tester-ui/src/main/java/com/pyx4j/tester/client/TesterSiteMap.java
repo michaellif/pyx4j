@@ -30,16 +30,27 @@ public class TesterSiteMap implements SiteMap {
     public static class Landing extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "FolderLayout")
-    public static class FolderLayout extends AppPlace {
+    public static class Folder extends AppPlace {
+
+        @NavigationItem(navigLabel = "FolderLayout")
+        public static class FolderLayout extends AppPlace {
+        }
+
+        @NavigationItem(navigLabel = "FolderValidation")
+        public static class FolderValidation extends AppPlace {
+        }
+
     }
 
-    @NavigationItem(navigLabel = "FolderValidation")
-    public static class FolderValidation extends AppPlace {
-    }
+    public static class Form extends AppPlace {
 
-    @NavigationItem(navigLabel = "GeneralForm")
-    public static class GeneralForm extends AppPlace {
-    }
+        @NavigationItem(navigLabel = "FormBasic")
+        public static class FormBasic extends AppPlace {
+        }
 
+        @NavigationItem(navigLabel = "FormVisibility")
+        public static class FormVisibility extends AppPlace {
+        }
+
+    }
 }

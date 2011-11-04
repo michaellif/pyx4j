@@ -31,6 +31,8 @@ public class DomainFactory {
         retVal.optionalTextI().setValue("Optional String Member");
         retVal.mandatoryTextI().setValue("Mandatory String Member");
         retVal.optionalInteger().setValue(counter++);
+        retVal.optionalEnum().setValue(EntityI.Enum1.Value0);
+
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());

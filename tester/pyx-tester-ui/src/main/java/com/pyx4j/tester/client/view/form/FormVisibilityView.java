@@ -22,6 +22,6 @@ package com.pyx4j.tester.client.view.form;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface GeneralFormView extends IsWidget {
+public interface FormVisibilityView extends IsWidget {
 
 }

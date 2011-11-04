@@ -24,12 +24,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 
-public class GeneralFormViewImpl extends ScrollPanel implements GeneralFormView {
+public class FormVisibilityViewImpl extends ScrollPanel implements FormVisibilityView {
 
-    public GeneralFormViewImpl() {
+    public FormVisibilityViewImpl() {
         setSize("100%", "100%");
 
-        EntityIForm mainForm = new EntityIForm();
+        EntityIFormWithVisibility mainForm = new EntityIFormWithVisibility();
         mainForm.initContent();
 
         setWidget(mainForm);
