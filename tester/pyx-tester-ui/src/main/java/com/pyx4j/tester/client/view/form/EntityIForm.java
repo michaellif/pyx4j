@@ -49,8 +49,24 @@ public class EntityIForm extends CEntityEditor<EntityI> {
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextII())));
 
+        main.setHR(++row, 0, 1);
+
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalInteger())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryInteger())));
+
+        main.setHR(++row, 0, 1);
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().checkBox())));
+
+        main.setHR(++row, 0, 1);
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPassword())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPassword())));
+
+        main.setHR(++row, 0, 1);
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnum())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnum())));
 
         return main;
     }
