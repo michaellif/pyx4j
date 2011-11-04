@@ -34,7 +34,6 @@ public class PersonalInfoForm extends CEntityDecoratableEditor<ResidentDTO> impl
     @Override
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
-        //contact details
 
         int row = 0;
 

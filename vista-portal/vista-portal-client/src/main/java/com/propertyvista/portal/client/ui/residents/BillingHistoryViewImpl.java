@@ -19,12 +19,16 @@ import com.propertyvista.portal.domain.dto.BillListDTO;
 
 public class BillingHistoryViewImpl extends SimplePanel implements BillingHistoryView {
 
-    BillingHistoryForm billingForm;
+    private final BillingHistoryForm billingForm;
+
+    private Presenter presenter;
 
     public BillingHistoryViewImpl() {
         billingForm = new BillingHistoryForm();
         billingForm.initContent();
         setWidget(billingForm);
+
+        //  presenter.search(event.getValue());
 
     }
 
@@ -36,7 +40,6 @@ public class BillingHistoryViewImpl extends SimplePanel implements BillingHistor
 
     @Override
     public void setPresenter(Presenter presenter) {
-        billingForm.setPresenter(presenter);
-
+        this.presenter = presenter;
     }
 }

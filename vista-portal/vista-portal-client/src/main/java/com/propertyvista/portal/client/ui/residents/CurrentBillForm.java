@@ -33,6 +33,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityViewer;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
@@ -53,12 +54,18 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
 
     @Override
     public IsWidget createContent() {
-        FlowPanel container = new FlowPanel();
-        container.add(inject(proto().charges(), new ChargeLineFolder(isEditable())));
-        container.add(inject(proto().total(), new TotalLineViewer()));
-        container.add(new WidgetDecorator(inject(proto().dueDate())));
-        container.add(inject(proto().paymentMethod(), new PaymentMethodViewer()));
-        container.add(inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
+        FormFlexPanel container = new FormFlexPanel();
+
+        int row = 0;
+
+        container.setH1(row++, 0, 1, i18n.tr("Bill Details"));
+
+        container.setWidget(row++, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
+        container.setHR(row++, 0, 1);
+        container.setWidget(row++, 0, inject(proto().total(), new TotalLineViewer()));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().dueDate())));
+        container.setWidget(row++, 0, inject(proto().paymentMethod(), new PaymentMethodViewer()));
+        container.setWidget(row++, 0, inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
         return container;
     }
 
@@ -164,7 +171,6 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
             HorizontalPanel container = (HorizontalPanel) formatBillLine(money.getMeta().getCaption(), money.getStringView());
             container.getElement().getStyle().setFontSize(1.3d, Unit.EM);
             container.getElement().getStyle().setPaddingTop(10d, Unit.PX);
-            container.getElement().getStyle().setProperty("borderTop", "1px dotted");
             return container;
         }
 

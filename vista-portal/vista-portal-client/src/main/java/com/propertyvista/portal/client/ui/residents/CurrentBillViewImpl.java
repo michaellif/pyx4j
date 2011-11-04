@@ -13,12 +13,10 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.portal.domain.dto.BillDTO;
 
 public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
@@ -30,7 +28,6 @@ public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
     public CurrentBillViewImpl() {
         billForm = new CurrentBillForm();
         billForm.initContent();
-        add(new VistaHeaderBar(i18n.tr("Current Bill"), "100%"));
         add(billForm);
 
     }
