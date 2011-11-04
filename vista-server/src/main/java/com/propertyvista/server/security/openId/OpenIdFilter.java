@@ -33,6 +33,7 @@ import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.AntiDoS;
 
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
@@ -71,9 +72,15 @@ public class OpenIdFilter implements Filter {
                     ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 } else {
                     String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
-                    if (!receivingURL.startsWith(ServerSideConfiguration.instance().getMainApplicationURL())
+                    if (receivingURL.contains(".birchwoodsoftwaregroup.com")
+                            && !receivingURL.startsWith(ServerSideConfiguration.instance().getMainApplicationURL())
                             && (!receivingURL.matches("http://\\w+\\.dev\\.birchwoodsoftwaregroup\\.com:\\d+/.+"))) {
                         StringBuffer properUrl = new StringBuffer(ServerSideConfiguration.instance().getMainApplicationURL());
+                        if (receivingURL.startsWith(((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getApplicationURLDefault())) {
+                            properUrl = new StringBuffer("http://");
+                            properUrl.append(DemoData.DemoPmc.vista.name());
+                            properUrl.append(((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getApplicationURLNamespace());
+                        }
                         properUrl.append(servletPath.substring(1));
                         if (CommonsStringUtils.isStringSet(httprequest.getQueryString())) {
                             properUrl.append("?").append(httprequest.getQueryString());
