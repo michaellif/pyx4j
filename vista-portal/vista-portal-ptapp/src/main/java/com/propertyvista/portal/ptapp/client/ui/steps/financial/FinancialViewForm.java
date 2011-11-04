@@ -16,7 +16,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.financial;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
@@ -43,7 +42,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
     public FinancialViewForm(IEditableComponentFactory factory) {
         super(TenantFinancialDTO.class, factory);
-        setEditable(factory instanceof BaseEditableComponentFactory);
+        setEditable(factory instanceof VistaEditorsComponentFactory);
     }
 
     @Override

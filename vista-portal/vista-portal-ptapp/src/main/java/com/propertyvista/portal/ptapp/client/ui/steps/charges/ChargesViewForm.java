@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
@@ -45,7 +44,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
 
     public ChargesViewForm(IEditableComponentFactory factory) {
         super(Charges.class, factory);
-        setEditable(factory instanceof BaseEditableComponentFactory);
+        setEditable(factory instanceof VistaEditorsComponentFactory);
 
         addValueChangeHandler(new ValueChangeHandler<Charges>() {
             @Override

@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 
 public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E> {
@@ -30,7 +30,7 @@ public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E>
 
     public CrmEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
         super(rootClass, factory);
-        setEditable(factory instanceof BaseEditableComponentFactory);
+        setEditable(factory instanceof VistaEditorsComponentFactory);
     }
 
     // decoration stuff:
