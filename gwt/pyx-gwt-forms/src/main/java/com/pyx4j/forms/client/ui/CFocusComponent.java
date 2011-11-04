@@ -20,9 +20,14 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class CFocusComponent<WIDGET_TYPE extends Widget & INativeFocusComponent> extends CComponent<WIDGET_TYPE> {
+public abstract class CFocusComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeFocusComponent<DATA_TYPE>> extends
+        CEditableComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private int tabIndex = 0;
 
@@ -56,4 +61,34 @@ public abstract class CFocusComponent<WIDGET_TYPE extends Widget & INativeFocusC
         super.setEnabled(enabled);
         setTabIndex(enabled ? 0 : -2); // enable/disable focus navigation 
     }
+
+    @Override
+    public void setEditable(boolean editable) {
+        super.setEditable(editable);
+        if (editable != isEditable()) {
+            setTabIndex(editable ? 0 : -2); // enable/disable focus navigation
+        }
+    }
+
+    @Override
+    protected void onWidgetCreated() {
+        super.onWidgetCreated();
+        WIDGET_TYPE widget = super.asWidget();
+        widget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                onEditingStart();
+            }
+        });
+
+        widget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                onEditingStop();
+            }
+        });
+    }
+
 }

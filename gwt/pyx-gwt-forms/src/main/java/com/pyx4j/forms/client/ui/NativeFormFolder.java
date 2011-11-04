@@ -43,7 +43,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.util.BrowserType;
 
-public class NativeFormFolder<E> extends DockPanel implements INativeEditableComponent<List<E>> {
+public class NativeFormFolder<E> extends DockPanel implements INativeFocusComponent<List<E>> {
 
     private static final I18n i18n = I18n.get(NativeFormFolder.class);
 

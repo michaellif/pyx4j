@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
-public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
+public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
 
     private List<E> options;
 

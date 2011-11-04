@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-public interface INativeEditableComponent<E> extends INativeFocusComponent {
+public interface INativeEditableComponent<E> extends INativeComponent {
 
     public void setEditable(boolean editable);
 

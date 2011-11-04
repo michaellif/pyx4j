@@ -22,8 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
-
-public class CButton extends CFocusComponent<NativeButton> {
+public class CButton extends CFocusComponent<Void, NativeButton> {
 
     private String label;
 

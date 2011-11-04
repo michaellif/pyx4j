@@ -25,7 +25,7 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public interface INativeTextComponent<E> extends INativeEditableComponent<E> {
+public interface INativeTextComponent<E> extends INativeFocusComponent<E> {
 
     public void setNativeText(String newValue);
 

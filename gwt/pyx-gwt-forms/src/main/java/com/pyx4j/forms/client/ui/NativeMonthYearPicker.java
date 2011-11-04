@@ -30,7 +30,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.widgets.client.MonthYearPicker;
 
-public class NativeMonthYearPicker extends MonthYearPicker implements INativeEditableComponent<Date> {
+public class NativeMonthYearPicker extends MonthYearPicker implements INativeFocusComponent<Date> {
 
     private boolean enabled = true;
 

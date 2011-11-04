@@ -26,7 +26,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.forms.client.ui.CCheckBox.Alignment;
 import com.pyx4j.widgets.client.CheckBox;
 
-public class NativeCheckBox extends CheckBox implements INativeEditableComponent<Boolean> {
+public class NativeCheckBox extends CheckBox implements INativeFocusComponent<Boolean> {
 
     private final CCheckBox checkBox;
 

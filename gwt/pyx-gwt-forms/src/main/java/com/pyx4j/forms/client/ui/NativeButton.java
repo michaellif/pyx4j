@@ -20,11 +20,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
-public class NativeButton extends com.google.gwt.user.client.ui.Button implements INativeFocusComponent {
+public class NativeButton extends com.google.gwt.user.client.ui.Button implements INativeFocusComponent<Void> {
 
     private Command comand;
 
@@ -68,6 +70,36 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
 
     @Override
     public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setNativeValue(Void value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Void getNativeValue() throws ParseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setValid(boolean valid) {
         // TODO Auto-generated method stub
 
     }

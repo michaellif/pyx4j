@@ -24,7 +24,7 @@ import java.util.Date;
 
 import com.google.gwt.view.client.Range;
 
-public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPicker> {
+public class CMonthYearPicker extends CFocusComponent<Date, NativeMonthYearPicker> {
 
     private final boolean yearOnly;
 

@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
-public interface INativeListBox<E> extends INativeEditableComponent<List<E>> {
+public interface INativeListBox<E> extends INativeFocusComponent<List<E>> {
 
     public int getSelectedIndex();
 

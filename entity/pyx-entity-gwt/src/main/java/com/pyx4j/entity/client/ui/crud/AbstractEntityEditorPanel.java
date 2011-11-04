@@ -44,6 +44,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCaption;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -162,8 +163,8 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             public void execute() {
                 Collection<CComponent<?>> components = form.getComponents();
                 for (CComponent<?> cComponent : components) {
-                    if (cComponent instanceof CEditableComponent && cComponent.isVisible() && cComponent.isEnabled()) {
-                        ((CEditableComponent) cComponent).setFocus(true);
+                    if (cComponent instanceof CFocusComponent && cComponent.isVisible() && cComponent.isEnabled()) {
+                        ((CFocusComponent) cComponent).setFocus(true);
                         break;
                     }
                 }

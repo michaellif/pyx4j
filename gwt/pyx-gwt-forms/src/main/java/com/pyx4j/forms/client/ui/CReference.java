@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class CReference<E, T extends Widget & INativeReference<E>> extends CEditableComponent<E, T> {
+public abstract class CReference<E, T extends Widget & INativeReference<E>> extends CFocusComponent<E, T> {
 
     private boolean wordWrap = false;
 

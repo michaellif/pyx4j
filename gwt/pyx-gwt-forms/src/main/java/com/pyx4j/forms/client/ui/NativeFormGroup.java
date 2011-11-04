@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -35,7 +34,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.util.BrowserType;
 
-public class NativeFormGroup<E> extends DockPanel implements INativeEditableComponent<E> {
+public class NativeFormGroup<E> extends DockPanel implements INativeFocusComponent<E> {
 
     private static final I18n i18n = I18n.get(NativeFormGroup.class);
 

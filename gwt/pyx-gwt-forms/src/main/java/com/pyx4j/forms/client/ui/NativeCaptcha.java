@@ -31,7 +31,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
-public class NativeCaptcha extends CaptchaComposite implements INativeEditableComponent<Pair<String, String>> {
+public class NativeCaptcha extends CaptchaComposite implements INativeFocusComponent<Pair<String, String>> {
 
     public static enum StyleDependent implements IStyleDependent {
         invalid

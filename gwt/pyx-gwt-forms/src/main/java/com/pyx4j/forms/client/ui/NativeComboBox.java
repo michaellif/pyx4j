@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.ListBox;
 /**
  *
  */
-public class NativeComboBox<E> extends ListBox implements INativeEditableComponent<E> {
+public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<E> {
 
     public static enum StyleDependent implements IStyleDependent {
         disabled, readOnly, invalid

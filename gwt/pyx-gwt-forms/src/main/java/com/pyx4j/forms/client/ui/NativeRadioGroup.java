@@ -41,7 +41,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.RadioButton;
 
-public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableComponent<E> {
+public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComponent<E> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_RadioGroup";
 

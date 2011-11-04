@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface INativeRichTextComponent<E> extends INativeEditableComponent<E> {
+public interface INativeRichTextComponent<E> extends INativeFocusComponent<E> {
 
     void setWatermark(String watermark);
 

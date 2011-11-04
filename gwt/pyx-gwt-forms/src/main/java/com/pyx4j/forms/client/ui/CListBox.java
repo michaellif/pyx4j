@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 //TODO add another CLIstBox impl for NativeInLineListBox (make CListBoxBase)
-public class CListBox<E> extends CEditableComponent<List<E>, NativeListBox<E>> implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>,
+public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>,
         HasRequiredValueValidationMessage<E> {
 
     public static enum Layout {

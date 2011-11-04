@@ -24,10 +24,6 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -39,8 +35,8 @@ import com.pyx4j.commons.ICloneable;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends CFocusComponent<WIDGET_TYPE>
-        implements HasValueChangeHandlers<DATA_TYPE> {
+public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends CComponent<WIDGET_TYPE> implements
+        HasValueChangeHandlers<DATA_TYPE> {
 
     private String mandatoryValidationMessage = "This field is Mandatory";
 
@@ -162,7 +158,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (editable != isEditable()) {
             defaultAccessAdapter.setEditable(editable);
             applyEditabilityRules();
-            setTabIndex(editable ? 0 : -2); // enable/disable focus navigation
         }
     }
 
@@ -263,22 +258,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     protected void onWidgetCreated() {
         super.onWidgetCreated();
         setNativeValue(getValue());
-        WIDGET_TYPE widget = super.asWidget();
-        widget.addFocusHandler(new FocusHandler() {
-
-            @Override
-            public void onFocus(FocusEvent event) {
-                onEditingStart();
-            }
-        });
-
-        widget.addBlurHandler(new BlurHandler() {
-
-            @Override
-            public void onBlur(BlurEvent event) {
-                onEditingStop();
-            }
-        });
     }
 
     protected void setNativeValue(DATA_TYPE value) {

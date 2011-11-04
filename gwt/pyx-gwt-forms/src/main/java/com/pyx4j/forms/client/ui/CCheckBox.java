@@ -20,8 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
-public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
+public class CCheckBox extends CFocusComponent<Boolean, NativeCheckBox> {
 
     private Alignment alignment = Alignment.left;
 

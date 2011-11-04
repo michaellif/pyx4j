@@ -24,7 +24,7 @@ import com.google.gwt.user.client.DOM;
 
 import com.pyx4j.widgets.client.TextArea;
 
-public class NativeTextArea extends TextArea implements INativeEditableComponent<String> {
+public class NativeTextArea extends TextArea implements INativeFocusComponent<String> {
 
     private final CTextArea cComponent;
 

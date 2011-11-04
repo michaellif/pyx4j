@@ -20,9 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IObject;
@@ -32,14 +29,6 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeEditableComponent<E> {
 
     public NativeEntityPanel() {
-    }
-
-    @Override
-    public void setTabIndex(int tabIndex) {
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
     }
 
     @Override
@@ -71,16 +60,6 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
 
     @Override
     public void setValid(boolean valid) {
-    }
-
-    @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        return null;
     }
 
     @Override
