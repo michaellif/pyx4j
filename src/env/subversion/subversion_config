@@ -116,8 +116,8 @@ enable-auto-props = yes
 *.h = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
 *.dsp = svn:eol-style=CRLF
 *.dsw = svn:eol-style=CRLF
-*.sh = svn:mime-type=application/x-sh;svn:executable;svn:eol-style=LF;svn:keywords=Date Author Id Revision
-*.initd = svn:mime-type=application/x-sh;svn:executable;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.sh = svn:mime-type=text/x-script.sh;svn:executable;svn:eol-style=LF;svn:keywords=Date Author Id Revision
+*.initd = svn:mime-type=text/x-script.sh;svn:executable;svn:eol-style=LF;svn:keywords=Date Author Id Revision
 *.cmd = svn:mime-type=text/plain;svn:eol-style=CRLF;svn:keywords=Date Author Id Revision
 *.bat = svn:mime-type=text/plain;svn:eol-style=CRLF;svn:keywords=Date Author Id Revision
 Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
