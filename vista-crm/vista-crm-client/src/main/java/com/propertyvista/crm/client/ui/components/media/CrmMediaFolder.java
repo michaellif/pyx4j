@@ -102,6 +102,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             row = -1;
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().caption()), 15, 10).build());
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().visibility()), 7, 10).build());
+            main.getFlexCellFormatter().setRowSpan(row, 1, 3);
 
             main.getColumnFormatter().setWidth(0, "50%");
             main.getColumnFormatter().setWidth(1, "50%");
