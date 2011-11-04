@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -29,6 +31,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -36,7 +39,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
@@ -58,21 +60,26 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
+    //@formatter:off
+    /** Graph height in <i>EMs</i>. */
+    private static double GRAPH_HEIGHT = 20.0;
+    /** Controls toolbar height in <i>EMs</i>. */
+    private static double CONTROLS_HEIGHT = 3.5;
+   
+    
     private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadget.class);
 
     private static final String MEASURE_SELECTOR_RADIO_GROUP_ID = "measureSelector";
-
     private static final String RESOLUTION_SELECTOR_LABEL = "Scale";
-
+    
     private static final boolean DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT = false;
-
     public static AnalysisResolution DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX = AnalysisResolution.Year;
 
     @SuppressWarnings("unchecked")
     private static final List<Tuple<Long, AnalysisResolution>> DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_PER_RANGE = Arrays.asList(
     // keys must be in ascending order
-            new Tuple<Long, AnalysisResolution>(TimeRange.WEEK, AnalysisResolution.Day), // 
-            new Tuple<Long, AnalysisResolution>(2L * TimeRange.MONTH, AnalysisResolution.Week), //
+            new Tuple<Long, AnalysisResolution>(TimeRange.WEEK, AnalysisResolution.Day), 
+            new Tuple<Long, AnalysisResolution>(2L * TimeRange.MONTH, AnalysisResolution.Week),
             new Tuple<Long, AnalysisResolution>(TimeRange.YEAR, AnalysisResolution.Year));
 
     List<UnitVacancyReportTurnoverAnalysisDTO> data;
@@ -81,7 +88,7 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
 
     private final HorizontalPanel controls;
 
-    private final FormFlexPanel layoutPanel;
+    private final LayoutPanel layoutPanel;
 
     ListBox resolutionSelector;
 
@@ -97,13 +104,16 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
 
     private AnalysisResolution currentDefaultResolution;
 
+    //@formatter:on
     public TurnoverAnalysisGraphGadget(GadgetMetadata gmd) {
         super(gmd);
         settings = gadgetMetadata.settings().cast();
 
         graph = new SimplePanel();
+        graph.setSize("100%", "100%");
 
         controls = new HorizontalPanel();
+        controls.setHeight("100%");
         controls.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
         controls.getElement().getStyle().setPaddingLeft(2, Unit.EM);
         controls.setSpacing(10);
@@ -144,11 +154,27 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         measureSelection.add(number);
         controls.add(measureSelection);
 
-        layoutPanel = new FormFlexPanel();
-        int row = -1;
+        layoutPanel = new LayoutPanel() {
+            @Override
+            public void onResize() {
+                super.onResize();
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        redraw();
+                    }
+                });
+            }
+        };
+
         layoutPanel.setWidth("100%");
-        layoutPanel.setWidget(++row, 0, graph);
-        layoutPanel.setWidget(++row, 0, controls);
+        layoutPanel.setHeight("" + (GRAPH_HEIGHT + CONTROLS_HEIGHT) + "em");
+        layoutPanel.add(graph);
+        layoutPanel.setWidgetTopHeight(graph, 0, Unit.EM, GRAPH_HEIGHT, Unit.EM);
+        layoutPanel.setWidgetLeftWidth(graph, 0, Unit.PCT, 100, Unit.PCT);
+        layoutPanel.add(controls);
+        layoutPanel.setWidgetTopHeight(controls, GRAPH_HEIGHT, Unit.EM, CONTROLS_HEIGHT, Unit.EM);
+        layoutPanel.setWidgetLeftWidth(controls, 0, Unit.PCT, 100, Unit.PCT);
 
         service = GWT.create(VacancyReportService.class);
     }
@@ -297,7 +323,8 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
 
         SvgFactory factory = new SvgFactoryForGwt();
 
-        GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 700, 200);
+        GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, graph.getElement().getClientWidth(), graph.getElement()
+                .getClientHeight());
         config.setGridType(GridType.Both);
         config.setTheme(ChartTheme.Bright);
         config.setShowValueLabels(true);
@@ -307,7 +334,6 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         svgroot.add(new LineChart(config));
 
         graph.add((Widget) svgroot);
-        graph.setSize("700px", "200px");
         graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
     }
 
