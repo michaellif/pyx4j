@@ -92,7 +92,7 @@
         </profile>
 
         <profile>
-            <id>gwtce</id>
+            <id>XXX-gwtce</id>
             <build>
                 <plugins>
 
