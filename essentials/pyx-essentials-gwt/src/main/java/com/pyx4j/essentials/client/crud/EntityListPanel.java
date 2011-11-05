@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -36,7 +37,6 @@ import com.pyx4j.entity.client.ui.datatable.DataTableActionsBar;
 import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.NavigUtils;
@@ -73,7 +73,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
                 if (editorPage != null) {
                     E entity = dataTable.getSelectedItem();
                     if (entity != null) {
-                        AbstractSiteDispatcher.show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
+                        show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
                     }
                 }
             }
@@ -81,6 +81,18 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
         upperActionsBar.setDataTableModel(dataTableModel);
         lowerActionsBar.setDataTableModel(dataTableModel);
+    }
+
+    public static void show(String path) {
+        History.newItem(path);
+    }
+
+    public static void show(Class<? extends NavigNode> page) {
+        show(NavigUtils.getPageUri(page));
+    }
+
+    public static void show(NavigationUri uri) {
+        show(uri.getPath());
     }
 
     public void removeUpperActionsBar() {
