@@ -20,20 +20,17 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IAccessAdapter;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
-        CEditableComponent<DATA_TYPE, WIDGET_TYPE> implements IEditableComponentFactory, IAccessAdapter {
+public abstract class CEntityComponent<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory, IAccessAdapter {
 
-    private CEntityComponent<?, ?> bindParent;
+    private CEntityComponent<?> bindParent;
 
     @Override
     public boolean isEnabled(CComponent<?> component) {
@@ -65,7 +62,7 @@ public abstract class CEntityComponent<DATA_TYPE, WIDGET_TYPE extends Widget & I
         return bindParent.create(member);
     }
 
-    public void onBound(CEntityComponent<?, ?> parent) {
+    public void onBound(CEntityComponent<?> parent) {
         assert (bindParent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + bindParent;
         bindParent = parent;
     }

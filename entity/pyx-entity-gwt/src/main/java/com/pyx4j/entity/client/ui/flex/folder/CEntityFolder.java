@@ -136,7 +136,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void onBound(CEntityComponent<?, ?> parent) {
+    public void onBound(CEntityComponent<?> parent) {
         super.onBound(parent);
         initContent();
         addValidations();
@@ -156,6 +156,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             public IFolderItemDecorator<E> createDecorator() {
                 return createItemDecorator();
             }
+
         };
     }
 
@@ -470,4 +471,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
     }
 
+    @Override
+    public void addComponent(CComponent<?> component) {
+        // TODO Auto-generated method stub
+
+    }
 }

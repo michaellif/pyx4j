@@ -38,7 +38,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         aggregatingAccessAdapter = new ContainerAccessAdapter(this);
     }
 
-    public abstract Collection<CComponent<?>> getComponents();
+    public abstract Collection<? extends CEditableComponent<?, ?>> getComponents();
 
     public abstract void addComponent(CComponent<?> component);
 
@@ -47,11 +47,13 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         if (!isEditable() || !isEnabled()) {
             return true;
         }
-        for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
-                return false;
-            } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
-                return false;
+        if (getComponents() != null) {
+            for (CComponent<?> ccomponent : getComponents()) {
+                if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+                    return false;
+                } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
+                    return false;
+                }
             }
         }
         return true;
@@ -59,12 +61,14 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
-        for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
-                validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
-                        + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
-            } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
-                validationResults.appendValidationErrors(((CContainer) ccomponent).getValidationResults());
+        if (getComponents() != null) {
+            for (CComponent<?> ccomponent : getComponents()) {
+                if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+                    validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
+                            + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
+                } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
+                    validationResults.appendValidationErrors(((CContainer) ccomponent).getValidationResults());
+                }
             }
         }
         return validationResults;

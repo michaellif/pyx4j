@@ -69,7 +69,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     }
 
     @Override
-    public void onBound(CEntityComponent<?, ?> parent) {
+    public void onBound(CEntityComponent<?> parent) {
         super.onBound(parent);
         setDecorator(createContent());
         addValidations();

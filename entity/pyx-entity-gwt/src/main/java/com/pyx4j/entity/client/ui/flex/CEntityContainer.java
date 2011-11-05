@@ -20,8 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import java.util.Collection;
-
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
@@ -32,17 +30,13 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComponent<E, NativeEntityPanel<E>> {
+public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComponent<E> {
 
     protected static I18n i18n = I18n.get(CEntityContainer.class);
 
     private IDecorator decorator;
 
     private ImageResource icon;
-
-    public abstract Collection<? extends CEditableComponent<?, ?>> getComponents();
-
-    public abstract ValidationResults getValidationResults();
 
     @Override
     public boolean isValid() {
