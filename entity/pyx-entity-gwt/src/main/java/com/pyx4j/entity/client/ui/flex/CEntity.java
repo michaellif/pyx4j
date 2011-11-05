@@ -28,8 +28,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CButton;
-import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.IAccessAdapter;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
@@ -137,8 +137,6 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
         return icon;
     }
 
-    private CEntity<?> bindParent;
-
     @Override
     public boolean isEnabled(CComponent<?, ?> component) {
         if (component instanceof CButton) {
@@ -165,17 +163,8 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        assert (bindParent != null) : "Flex Component " + this.getClass().getName() + "is not bound";
-        return bindParent.create(member);
-    }
-
-    public void onBound(CEntity<?> parent) {
-        assert (bindParent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + bindParent;
-        bindParent = parent;
-    }
-
-    public boolean isBound() {
-        return bindParent != null;
+        assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
+        return ((CEntity<?>) getParent()).create(member);
     }
 
     public void addValidations() {

@@ -40,6 +40,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntity<E> {
@@ -111,7 +112,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntity<E> {
     @Override
     public IsWidget createContent() {
         editor = (CEntityEditor<E>) create(EntityFactory.getEntityPrototype(clazz));
-        editor.onBound(this);
+        editor.onAttach(this);
         return editor;
     }
 
@@ -228,8 +229,8 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public void onBound(CEntity<?> parent) {
-        super.onBound(parent);
+    public void onAttach(CContainer<?, ?> parent) {
+        super.onAttach(parent);
         getContainer().setWidget(createContent());
         initContent();
     }

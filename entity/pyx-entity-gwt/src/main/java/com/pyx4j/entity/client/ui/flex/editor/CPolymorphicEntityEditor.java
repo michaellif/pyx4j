@@ -34,12 +34,12 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.ui.flex.CEntity;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 /**
@@ -68,8 +68,8 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     }
 
     @Override
-    public void onBound(CEntity<?> parent) {
-        super.onBound(parent);
+    public void onAttach(CContainer<?, ?> parent) {
+        super.onAttach(parent);
         setDecorator(createContent());
         addValidations();
     }
@@ -225,7 +225,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         for (IDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {
                 CEntityEditor editor = createItemPrivate(discriminator);
-                editor.onBound(this);
+                editor.onAttach(this);
                 editor.populate(value);
                 container.setWidget(editor);
 

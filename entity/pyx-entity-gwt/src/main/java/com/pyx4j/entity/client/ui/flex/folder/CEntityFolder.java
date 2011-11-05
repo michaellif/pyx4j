@@ -47,6 +47,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -134,8 +135,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
     }
 
     @Override
-    public void onBound(CEntity<?> parent) {
-        super.onBound(parent);
+    public void onAttach(CContainer<?, ?> parent) {
+        super.onAttach(parent);
         initContent();
         addValidations();
     }
@@ -164,7 +165,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
 
         CEntityFolderItem<E> item = createItem(first);
 
-        item.onBound(this);
+        item.onAttach(this);
 
         if (modifiable == false) {
             item.setRemovable(false);

@@ -35,6 +35,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
@@ -81,7 +82,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (isBound()) {
+        if (isAttached()) {
             return super.create(member);
         } else {
             return factory.create(member);
@@ -112,8 +113,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public void onBound(CEntity<?> parent) {
-        super.onBound(parent);
+    public void onAttach(CContainer<?, ?> parent) {
+        super.onAttach(parent);
         initContent();
     }
 

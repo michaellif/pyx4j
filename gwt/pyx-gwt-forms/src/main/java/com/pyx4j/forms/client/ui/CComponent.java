@@ -157,7 +157,16 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
-    public void setParent(CContainer<?, ?> parent) {
+    public CContainer<?, ?> getParent() {
+        return parent;
+    }
+
+    public boolean isAttached() {
+        return parent != null;
+    }
+
+    public void onAttach(CContainer<?, ?> parent) {
+        assert (this.parent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(inheritContainerAccessRules);
     }
@@ -192,10 +201,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 removeAccessAdapter(parent.getContainerAccessAdapter());
             }
         }
-    }
-
-    public CContainer<?, ?> getParent() {
-        return parent;
     }
 
     public boolean isEnabled() {

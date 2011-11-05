@@ -24,8 +24,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
-        CComponent<DATA_TYPE, WIDGET_TYPE> {
+public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends CComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private final IAccessAdapter aggregatingAccessAdapter;
 
@@ -61,8 +60,8 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         ValidationResults validationResults = new ValidationResults();
         if (getComponents() != null) {
             for (CComponent<?, ?> ccomponent : getComponents()) {
-                if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
-                    validationResults.appendValidationErrors(((CContainer) ccomponent).getValidationResults());
+                if (ccomponent instanceof CContainer && !((CContainer<?, ?>) ccomponent).isValid()) {
+                    validationResults.appendValidationErrors(((CContainer<?, ?>) ccomponent).getValidationResults());
                 } else if (!((CComponent<?, ?>) ccomponent).isValid()) {
                     validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
                             + ((CComponent<?, ?>) ccomponent).getValidationMessage());

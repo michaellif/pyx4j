@@ -22,9 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 public class ContainerAccessAdapter implements IAccessAdapter {
 
-    private final CContainer container;
+    private final CContainer<?, ?> container;
 
-    public ContainerAccessAdapter(CContainer container) {
+    public ContainerAccessAdapter(CContainer<?, ?> container) {
         this.container = container;
     }
 

@@ -198,10 +198,7 @@ public class EntityBinder<E extends IEntity> {
             }
         });
 
-        component.addAccessAdapter(editor);
-        if (component instanceof CEntity) {
-            ((CEntity<?>) component).onBound(editor);
-        }
+        component.onAttach(editor);
 
     }
 
@@ -271,7 +268,7 @@ public class EntityBinder<E extends IEntity> {
     }
 
     public E getOrigValue() {
-        if (getEntityEditor().isBound()) {
+        if (getEntityEditor().isAttached()) {
             throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
         }
         return origEntity;
@@ -279,7 +276,7 @@ public class EntityBinder<E extends IEntity> {
 
     @SuppressWarnings("unchecked")
     public void populate(E entity) {
-        if (getEntityEditor().isBound()) {
+        if (getEntityEditor().isAttached()) {
             setValue(entity);
         } else {
             if (entity != null) {
@@ -293,7 +290,7 @@ public class EntityBinder<E extends IEntity> {
     }
 
     public boolean isChanged() {
-        if (getEntityEditor().isBound()) {
+        if (getEntityEditor().isAttached()) {
             throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
         }
         return !equalRecursive(getOrigValue(), getValue());
