@@ -7,12 +7,18 @@
 	overflow: hidden;
 }
 
+.vista-pmsite-staticPage .caption {
+	
+	background: ${object2_100}
+}
+
 .vista-pmsite-staticPage .secondaryNavig {
 	padding: 35px 0;
 	width: 211px;
 	float: left;
-	min-height: 400px;
+	min-height: 400px;	
 	border-right:1px solid ${foreground_20};
+	background: ${contrast1_10};
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul {
@@ -48,7 +54,7 @@
 	min-height: 396px;
 	color: ${foreground_100};
 	border-top:1px solid ${foreground_20};
-	background-color: white;
+	background-color: ${background_10};
 	overflow: hidden;
 	padding: 30px 30px 0;
 }

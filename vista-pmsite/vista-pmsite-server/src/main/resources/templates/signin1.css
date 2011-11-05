@@ -13,6 +13,7 @@
 	height: 80px;
 	overflow: hidden;
 	padding: 40px 0 0 30px;
+	background: ${object2_100}
 }
 
 .vista-pmsite-signInPage .caption h1 {

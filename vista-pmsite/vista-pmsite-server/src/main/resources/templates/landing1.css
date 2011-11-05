@@ -20,7 +20,7 @@
 	width: 200px;
 	height:335px;
 	padding:20px 40px;
-	background:#f4f4f4;
+	/*background:${object2_50};*/
 }
 
 .quickSearchPanel h3 {
@@ -92,7 +92,7 @@
 	position: relative;
 	float: left;
 	left: 680px;
-	background: ${bgC0lor_100};
+	background: ${background_100};
 }
 
 .testimBox {
@@ -107,8 +107,8 @@
 }
 
 .testimBox .callout_line {
-	fill:${object1_10};
-	stroke:${object1_20};
+	fill:${contrast2_10};
+	stroke:${contrast2_20};
 	stroke-width:1;
 }
 
@@ -125,7 +125,7 @@
 	float: left;
 	margin: 10px;
 	padding: 20px;
-	background: ${object1_10};
+	background: ${contrast2_10};
 	
 	border: 1px solid ${object1_20};
 	border-radius: 15px;
@@ -174,9 +174,16 @@
 	vertical-align: text-top;
 }
 
+.infobox_header {
+	font-size: 22px;
+	line-height: 40px;
+	/*background: ${object2_100}*/
+}
+
 .infobox_header_title {
 	font-size: 22px;
 	line-height: 40px;
+	padding:5px;
 }
 
 .infobox_header_title:lang(fr) {
