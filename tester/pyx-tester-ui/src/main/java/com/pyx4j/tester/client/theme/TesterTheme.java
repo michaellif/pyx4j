@@ -25,7 +25,7 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
-import com.pyx4j.entity.client.ui.flex.folder.DefaultEntityFolderTheme;
+import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeComboBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;

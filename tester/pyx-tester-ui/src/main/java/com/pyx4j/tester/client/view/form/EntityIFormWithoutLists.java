@@ -22,7 +22,7 @@ package com.pyx4j.tester.client.view.form;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
