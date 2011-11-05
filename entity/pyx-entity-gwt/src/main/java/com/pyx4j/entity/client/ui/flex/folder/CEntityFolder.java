@@ -40,8 +40,7 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.entity.client.ui.flex.CEntityComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityContainer;
+import com.pyx4j.entity.client.ui.flex.CEntity;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -55,7 +54,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -136,7 +135,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void onBound(CEntityComponent<?> parent) {
+    public void onBound(CEntity<?> parent) {
         super.onBound(parent);
         initContent();
         addValidations();

@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.ui.flex.CEntityComponent;
+import com.pyx4j.entity.client.ui.flex.CEntity;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -69,7 +69,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     }
 
     @Override
-    public void onBound(CEntityComponent<?> parent) {
+    public void onBound(CEntity<?> parent) {
         super.onBound(parent);
         setDecorator(createContent());
         addValidations();

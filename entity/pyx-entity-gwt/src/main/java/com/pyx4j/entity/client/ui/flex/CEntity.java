@@ -25,14 +25,19 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CButton;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.IAccessAdapter;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComponent<E> {
+public abstract class CEntity<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory, IAccessAdapter {
 
-    protected static I18n i18n = I18n.get(CEntityContainer.class);
+    protected static I18n i18n = I18n.get(CEntity.class);
 
     private IDecorator decorator;
 
@@ -61,8 +66,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComp
             if (component.isValid()) {
                 continue;
             }
-            if (component instanceof CEntityContainer<?>) {
-                validationResults.appendValidationErrors(((CEntityContainer<?>) component).getValidationResults());
+            if (component instanceof CEntity<?>) {
+                validationResults.appendValidationErrors(((CEntity<?>) component).getValidationResults());
             } else if (component.isVisited()) {
                 validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid. {1}", component.getTitle(), component.getValidationMessage()));
             }
@@ -131,5 +136,50 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CEntityComp
 
     public ImageResource getIcon() {
         return icon;
+    }
+
+    private CEntity<?> bindParent;
+
+    @Override
+    public boolean isEnabled(CComponent<?> component) {
+        if (component instanceof CButton) {
+            return isEditable() && isEnabled();
+        } else {
+            return isEnabled();
+        }
+    }
+
+    @Override
+    public boolean isEditable(CComponent<?> component) {
+        return isEditable();
+    }
+
+    @Override
+    public boolean isVisible(CComponent<?> component) {
+        return isVisible();
+    }
+
+    @Override
+    public boolean isVisited() {
+        return true;
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        assert (bindParent != null) : "Flex Component " + this.getClass().getName() + "is not bound";
+        return bindParent.create(member);
+    }
+
+    public void onBound(CEntity<?> parent) {
+        assert (bindParent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + bindParent;
+        bindParent = parent;
+    }
+
+    public boolean isBound() {
+        return bindParent != null;
+    }
+
+    public void addValidations() {
+
     }
 }

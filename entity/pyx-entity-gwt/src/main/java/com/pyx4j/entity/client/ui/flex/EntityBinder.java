@@ -199,8 +199,8 @@ public class EntityBinder<E extends IEntity> {
         });
 
         component.addAccessAdapter(editor);
-        if (component instanceof CEntityContainer) {
-            ((CEntityComponent<?>) component).onBound(editor);
+        if (component instanceof CEntity) {
+            ((CEntity<?>) component).onBound(editor);
         }
 
     }

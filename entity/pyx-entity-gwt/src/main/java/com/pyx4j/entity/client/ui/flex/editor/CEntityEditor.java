@@ -29,8 +29,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.CEntityComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityContainer;
+import com.pyx4j.entity.client.ui.flex.CEntity;
 import com.pyx4j.entity.client.ui.flex.EntityBinder;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -39,8 +38,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-//TODO to be renamed to CEntityForm
-public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E> {
+public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
@@ -115,7 +113,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void onBound(CEntityComponent<?> parent) {
+    public void onBound(CEntity<?> parent) {
         super.onBound(parent);
         initContent();
     }

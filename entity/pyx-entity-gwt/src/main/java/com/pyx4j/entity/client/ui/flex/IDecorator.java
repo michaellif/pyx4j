@@ -22,7 +22,7 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IDecorator<E extends CEntityContainer> extends IsWidget {
+public interface IDecorator<E extends CEntity> extends IsWidget {
 
     void setComponent(E content);
 
