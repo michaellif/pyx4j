@@ -42,12 +42,16 @@ public abstract class AbstractListServiceImpl<E extends IEntity> implements Abst
     protected void enhanceListRetrieved(E entity) {
     }
 
+    protected void delete(E actualEntity) {
+        Persistence.service().delete(actualEntity);
+    }
+
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         SecurityController.assertPermission(new EntityPermission(entityClass, EntityPermission.DELETE));
-        IEntity actualEntity = Persistence.service().retrieve(entityClass, entityId);
+        E actualEntity = Persistence.service().retrieve(entityClass, entityId);
         SecurityController.assertPermission(EntityPermission.permissionDelete(actualEntity));
-        Persistence.service().delete(actualEntity);
+        delete(actualEntity);
         callback.onSuccess(true);
     }
 
