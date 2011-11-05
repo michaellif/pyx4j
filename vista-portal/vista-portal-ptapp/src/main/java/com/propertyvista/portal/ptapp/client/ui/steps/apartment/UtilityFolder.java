@@ -22,7 +22,6 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 
@@ -63,7 +62,7 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
         }
 
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().name()) {
                 return inject(column.getObject(), new CLabel());
             }
