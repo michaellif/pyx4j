@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.site.AvailableLocale;

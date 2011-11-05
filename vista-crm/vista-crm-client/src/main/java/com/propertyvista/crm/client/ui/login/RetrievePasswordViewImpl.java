@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.login;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;

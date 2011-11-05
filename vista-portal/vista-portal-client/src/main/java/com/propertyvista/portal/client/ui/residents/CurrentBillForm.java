@@ -28,8 +28,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityViewer;
+import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;

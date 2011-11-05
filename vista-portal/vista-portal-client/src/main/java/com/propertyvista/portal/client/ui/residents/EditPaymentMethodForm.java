@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;

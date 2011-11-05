@@ -18,7 +18,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;

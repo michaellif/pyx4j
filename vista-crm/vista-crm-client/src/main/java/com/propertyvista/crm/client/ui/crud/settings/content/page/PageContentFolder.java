@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.settings.content.page;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;

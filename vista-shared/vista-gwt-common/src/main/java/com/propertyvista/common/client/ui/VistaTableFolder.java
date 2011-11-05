@@ -15,11 +15,11 @@ package com.propertyvista.common.client.ui;
 
 import java.util.List;
 
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;

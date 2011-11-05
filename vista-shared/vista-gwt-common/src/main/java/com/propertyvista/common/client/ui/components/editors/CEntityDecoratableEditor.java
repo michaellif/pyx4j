@@ -13,8 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors;
 
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;

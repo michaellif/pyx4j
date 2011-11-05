@@ -19,7 +19,7 @@ import java.util.Calendar;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 import com.pyx4j.widgets.client.datepicker.DatePickerIDs;

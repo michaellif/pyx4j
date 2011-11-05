@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.dto.ApplicationStatusDTO;

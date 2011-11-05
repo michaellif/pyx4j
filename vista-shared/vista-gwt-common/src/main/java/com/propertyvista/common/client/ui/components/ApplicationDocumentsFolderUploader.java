@@ -43,11 +43,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;

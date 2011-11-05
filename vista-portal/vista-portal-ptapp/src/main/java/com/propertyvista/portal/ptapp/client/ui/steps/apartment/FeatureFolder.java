@@ -16,8 +16,8 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 

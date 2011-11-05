@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components.folders;
 
-import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;

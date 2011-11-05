@@ -17,8 +17,8 @@ import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.EntityFormComponentFactory;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
