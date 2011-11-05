@@ -162,7 +162,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
         }
 
         if (editor != null) {
-            editor.onBound(this);
+            editor.onAttach(this);
             editor.populate(value.extraData().cast());
             extraDataPanel.setWidget(editor);
         }
