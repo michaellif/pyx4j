@@ -33,19 +33,19 @@ import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractListServiceImpl<E extends IEntity> implements AbstractListService<E> {
 
-    protected Class<E> dboClass;
+    protected Class<E> entityClass;
 
-    protected AbstractListServiceImpl(Class<E> dboClass) {
-        this.dboClass = dboClass;
+    protected AbstractListServiceImpl(Class<E> entityClass) {
+        this.entityClass = entityClass;
     }
 
-    protected void enhanceListRetrieve(E entity) {
+    protected void enhanceListRetrieved(E entity) {
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        SecurityController.assertPermission(new EntityPermission(dboClass, EntityPermission.DELETE));
-        IEntity actualEntity = Persistence.service().retrieve(dboClass, entityId);
+        SecurityController.assertPermission(new EntityPermission(entityClass, EntityPermission.DELETE));
+        IEntity actualEntity = Persistence.service().retrieve(entityClass, entityId);
         SecurityController.assertPermission(EntityPermission.permissionDelete(actualEntity));
         Persistence.service().delete(actualEntity);
         callback.onSuccess(true);
@@ -53,12 +53,12 @@ public abstract class AbstractListServiceImpl<E extends IEntity> implements Abst
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria) {
-        if (criteria.getEntityClass().equals(dboClass)) {
-            throw new Error("Service " + this.getClass().getName() + " declaration error. " + dboClass + "!=" + criteria.getEntityClass());
+        if (criteria.getEntityClass().equals(entityClass)) {
+            throw new Error("Service " + this.getClass().getName() + " declaration error. " + entityClass + "!=" + criteria.getEntityClass());
         }
         EntitySearchResult<E> result = EntityLister.secureQuery(criteria);
         for (E entity : result.getData()) {
-            enhanceListRetrieve(entity);
+            enhanceListRetrieved(entity);
         }
         callback.onSuccess(result);
     }

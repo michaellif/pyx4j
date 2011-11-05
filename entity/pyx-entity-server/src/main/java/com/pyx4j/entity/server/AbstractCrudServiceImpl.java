@@ -28,37 +28,35 @@ import com.pyx4j.entity.shared.IEntity;
 
 public abstract class AbstractCrudServiceImpl<E extends IEntity> extends AbstractListServiceImpl<E> implements AbstractCrudService<E> {
 
-    protected AbstractCrudServiceImpl(Class<E> dboClass) {
-        super(dboClass);
+    protected AbstractCrudServiceImpl(Class<E> entityClass) {
+        super(entityClass);
     }
 
-    protected void enhanceRetrieve(E entity) {
+    protected void enhanceRetrieved(E entity) {
     }
 
-    protected void persistDBO(E dbo) {
-        EntityServicesImpl.secureSave(dbo);
+    protected void persist(E entity) {
+        EntityServicesImpl.secureSave(entity);
     }
 
     @Override
     public void create(AsyncCallback<E> callback, E entity) {
-        persistDBO(entity);
+        persist(entity);
+        enhanceRetrieved(entity);
         callback.onSuccess(entity);
     }
 
     @Override
     public void retrieve(AsyncCallback<E> callback, Key entityId) {
-        E entity = EntityServicesImpl.secureRetrieve(dboClass, entityId);
-        enhanceRetrieve(entity);
+        E entity = EntityServicesImpl.secureRetrieve(entityClass, entityId);
+        enhanceRetrieved(entity);
         callback.onSuccess(entity);
-    }
-
-    protected void enhanceSave(E entity) {
     }
 
     @Override
     public void save(AsyncCallback<E> callback, E entity) {
-        persistDBO(entity);
-        enhanceSave(entity);
+        persist(entity);
+        enhanceRetrieved(entity);
         callback.onSuccess(entity);
     }
 
