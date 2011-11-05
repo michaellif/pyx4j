@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,7 +44,6 @@ import com.pyx4j.site.client.ui.crud.lister.FilterData;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.FilterData.Operands;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.services.AbstractListService;
 
 public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter {
 

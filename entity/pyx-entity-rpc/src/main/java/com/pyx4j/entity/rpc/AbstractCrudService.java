@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2006-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,24 +13,23 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- *
- * Created on Oct 5, 2011
- * @author Vlad
+ * 
+ * Created on Apr 17, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.rpc.services;
+package com.pyx4j.entity.rpc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.rpc.shared.IService;
 
-public interface AbstractListService<Entity extends IEntity> extends IService {
+public interface AbstractCrudService<E extends IEntity> extends AbstractListService<E> {
 
-    public void list(AsyncCallback<EntitySearchResult<Entity>> callback, EntityListCriteria<Entity> criteria);
+    public void create(AsyncCallback<E> callback, E editableEntity);
 
-    public void delete(AsyncCallback<Boolean> callback, Key entityId);
+    public void retrieve(AsyncCallback<E> callback, Key entityId);
+
+    public void save(AsyncCallback<E> callback, E editableEntity);
 }

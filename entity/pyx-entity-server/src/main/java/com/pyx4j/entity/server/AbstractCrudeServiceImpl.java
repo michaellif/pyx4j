@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2006-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,23 +13,16 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
- * Created on Apr 17, 2011
+ *
+ * Created on Nov 5, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.rpc.services;
+package com.pyx4j.entity.server;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface AbstractCrudService<EditableEntity extends IEntity> extends AbstractListService<EditableEntity> {
+public abstract class AbstractCrudeServiceImpl<E extends IEntity> implements AbstractCrudService<E> {
 
-    public void create(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
-
-    public void retrieve(AsyncCallback<EditableEntity> callback, Key entityId);
-
-    public void save(AsyncCallback<EditableEntity> callback, EditableEntity editableEntity);
 }

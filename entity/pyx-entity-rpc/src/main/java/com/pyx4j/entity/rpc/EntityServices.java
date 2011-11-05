@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+@Deprecated
 public interface EntityServices {
 
     public interface Save extends Service<IEntity, IEntity> {
