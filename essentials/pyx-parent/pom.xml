@@ -8,7 +8,7 @@
 
     <groupId>com.pyx4j</groupId>
     <artifactId>pyx-parent</artifactId>
-    <version>2.1.1-SNAPSHOT</version><!--pyx-version-->
+    <version>2.1.2-SNAPSHOT</version><!--pyx-version-->
 
     <packaging>pom</packaging>
     <name>pyx-parent</name>
