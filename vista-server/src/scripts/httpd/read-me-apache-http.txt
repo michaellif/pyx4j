@@ -1,0 +1,24 @@
+#version $Revision$ ($Author$)  $Date$
+
+Downloading the Apache HTTP Server   (64 bit version for windows is here http://www.anindya.com/)
+Make it run on port 80
+All *.dev.birchwoodsoftwaregroup.com  are already local.
+
+
+For VladS To do more tests he may edit the file hosts and add
+
+127.0.0.1 vista.residentportalsite.com
+127.0.0.1 vista.propertyvista.com
+127.0.0.1 vista.prospectportalsite.com
+
+127.0.0.1 star.residentportalsite.com
+127.0.0.1 star.propertyvista.com
+127.0.0.1 star.prospectportalsite.com
+
+127.0.0.1 redridge.residentportalsite.com
+127.0.0.1 redridge.propertyvista.com
+127.0.0.1 redridge.prospectportalsite.com
+
+127.0.0.1 rockville.residentportalsite.com
+127.0.0.1 rockville.propertyvista.com
+127.0.0.1 rockville.prospectportalsite.com
