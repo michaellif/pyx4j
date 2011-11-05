@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.decorations;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 /*
@@ -51,31 +51,31 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
         this.defaultLabelWidth = defaultLabelWidth;
     }
 
-    public void add(final CComponent<?> component, double componentWidth) {
+    public void add(final CEditableComponent<?, ?> component, double componentWidth) {
         this.add(component, defaultLabelWidth, componentWidth);
     }
 
-    public void add(final CComponent<?> component, double componentWidth, String componentCaption) {
+    public void add(final CEditableComponent<?, ?> component, double componentWidth, String componentCaption) {
         this.add(component, defaultLabelWidth, componentWidth, componentCaption);
     }
 
-    public void add(final CComponent<?> component, double labelWidth, double componentWidth) {
+    public void add(final CEditableComponent<?, ?> component, double labelWidth, double componentWidth) {
         this.add(component, labelWidth, componentWidth, null);
     }
 
-    public void add(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
+    public void add(final CEditableComponent<?, ?> component, double labelWidth, double componentWidth, String componentCaption) {
         super.add(createDecorator(component, labelWidth, componentWidth, componentCaption));
     }
 
-    public WidgetDecorator createDecorator(final CComponent<?> component, double componentWidth) {
+    public WidgetDecorator createDecorator(final CEditableComponent<?, ?> component, double componentWidth) {
         return this.createDecorator(component, defaultLabelWidth, componentWidth);
     }
 
-    public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
+    public WidgetDecorator createDecorator(final CEditableComponent<?, ?> component, double labelWidth, double componentWidth) {
         return this.createDecorator(component, labelWidth, componentWidth, null);
     }
 
-    public WidgetDecorator createDecorator(final CComponent<?> component, double labelWidth, double componentWidth, String componentCaption) {
+    public WidgetDecorator createDecorator(final CEditableComponent<?, ?> component, double labelWidth, double componentWidth, String componentCaption) {
         WidgetDecorator decorator = new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
         if (readOnlyMode) {
             decorator.addStyleDependentName(WidgetDecorator.StyleDependent.readOnly.name());

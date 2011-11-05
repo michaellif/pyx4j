@@ -29,7 +29,6 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
@@ -264,7 +263,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
     class InnerPanelWidgetDecorator extends WidgetDecorator {
 
-        public InnerPanelWidgetDecorator(CComponent<?> component) {
+        public InnerPanelWidgetDecorator(CEditableComponent<?, ?> component) {
             super(new Builder(component).labelWidth(12).componentWidth(12));
         }
 

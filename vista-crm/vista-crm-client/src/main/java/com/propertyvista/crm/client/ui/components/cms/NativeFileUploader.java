@@ -21,7 +21,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.forms.client.ui.NativeTriggerComponent;
 
@@ -87,7 +87,7 @@ public class NativeFileUploader extends NativeTriggerComponent<File> implements 
     }
 
     @Override
-    public CComponent<?> getCComponent() {
+    public CEditableComponent<?, ?> getCComponent() {
         // TODO Auto-generated method stub
         return null;
     }

@@ -30,7 +30,6 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -97,7 +96,7 @@ public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
             if (first) {
                 HorizontalPanel main = new HorizontalPanel();
                 for (EntityFolderColumnDescriptor column : columns) {
-                    CComponent<?> component = createCell(column);
+                    CEditableComponent<?, ?> component = createCell(column);
                     // Don't show relation and takeOwnership 
                     if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
                         component.setVisible(false);
@@ -174,8 +173,8 @@ public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?> comp = null;
+        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CEditableComponent<?, ?> comp = null;
             if (first && proto().status() == column.getObject()) {
                 CTextField textComp = new CTextField();
                 textComp.setEditable(false);

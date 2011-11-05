@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 
@@ -31,7 +31,7 @@ public class VistaReadOnlyDecorator extends FlowPanel {
         Left, Right
     }
 
-    public VistaReadOnlyDecorator(final CComponent<?> component, DecorationData decorData) {
+    public VistaReadOnlyDecorator(final CEditableComponent<?, ?> component, DecorationData decorData) {
 
         setStyleName(DEFAULT_STYLE_PREFIX);
 

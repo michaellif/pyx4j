@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 abstract public class CEntityDecoratableEditor<E extends IEntity> extends CEntityEditor<E> {
@@ -32,18 +32,18 @@ abstract public class CEntityDecoratableEditor<E extends IEntity> extends CEntit
     // decoration stuff:
     protected class DecoratorBuilder extends WidgetDecorator.Builder {
 
-        public DecoratorBuilder(CComponent<?> component) {
+        public DecoratorBuilder(CEditableComponent<?, ?> component) {
             super(component);
             readOnlyMode(!isEditable());
         }
 
-        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
+        public DecoratorBuilder(CEditableComponent<?, ?> component, double componentWidth) {
             super(component);
             readOnlyMode(!isEditable());
             componentWidth(componentWidth);
         }
 
-        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
+        public DecoratorBuilder(CEditableComponent<?, ?> component, double componentWidth, double labelWidth) {
             super(component);
             readOnlyMode(!isEditable());
             componentWidth(componentWidth);

@@ -26,7 +26,6 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -101,7 +100,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         }
 
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().tenantName()) {
                 return inject(column.getObject(), new CEntityLabel());
             }
@@ -109,7 +108,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         }
 
         @Override
-        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
+        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CEditableComponent<?, ?> component, String width) {
             Widget w = super.createCellDecorator(column, component, width);
 
             if (column.getObject() == proto().percentage()) {

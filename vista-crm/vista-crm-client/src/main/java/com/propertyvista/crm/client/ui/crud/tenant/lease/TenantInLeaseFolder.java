@@ -35,7 +35,6 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -130,7 +129,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             if (first) {
                 HorizontalPanel main = new HorizontalPanel();
                 for (EntityFolderColumnDescriptor column : columns) {
-                    CComponent<?> component = createCell(column);
+                    CEditableComponent<?, ?> component = createCell(column);
                     // Don't show relation and takeOwnership 
                     if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
                         component.setVisible(false);
@@ -146,8 +145,8 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?> comp = null;
+        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CEditableComponent<?, ?> comp = null;
             if (first && proto().status() == column.getObject()) {
                 CTextField textComp = new CTextField();
                 textComp.setEditable(false);

@@ -23,7 +23,6 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -85,9 +84,9 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         }
 
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
-                CComponent<?> comp = null;
+                CEditableComponent<?, ?> comp = null;
                 if (parent.isEditable()) {
                     comp = inject(column.getObject(), new CLabel());
                 } else {

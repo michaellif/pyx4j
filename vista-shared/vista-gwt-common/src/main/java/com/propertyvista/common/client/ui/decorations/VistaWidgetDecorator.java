@@ -34,7 +34,6 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
@@ -58,7 +57,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
         Label, Component
     }
 
-    private final CComponent<?> component;
+    private final CEditableComponent<?, ?> component;
 
     private final Widget nativeComponent;
 
@@ -72,19 +71,19 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
     private final SpaceHolder infoImageHolder;
 
-    public VistaWidgetDecorator(final CComponent<?> component) {
+    public VistaWidgetDecorator(final CEditableComponent<?, ?> component) {
         this(component, new DecorationData());
     }
 
-    public VistaWidgetDecorator(final CComponent<?> component, int labelWidth, int componentWidth) {
+    public VistaWidgetDecorator(final CEditableComponent<?, ?> component, int labelWidth, int componentWidth) {
         this(component, new DecorationData(labelWidth, componentWidth));
     }
 
-    public VistaWidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
+    public VistaWidgetDecorator(final CEditableComponent<?, ?> component, double labelWidth, double componentWidth) {
         this(component, new DecorationData(labelWidth, componentWidth));
     }
 
-    public VistaWidgetDecorator(final CComponent<?> component, DecorationData decorData) {
+    public VistaWidgetDecorator(final CEditableComponent<?, ?> component, DecorationData decorData) {
         this.component = component;
         this.decorData = decorData;
 
@@ -222,7 +221,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
     private void renderMandatoryMessage() {
         if (component instanceof CEditableComponent<?, ?>) {
-            CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
+            CEditableComponent<?, ?> editableComponent = component;
             if (editableComponent.isVisible() && editableComponent.isEnabled() && editableComponent.isEditable()) {
                 if (editableComponent.isMandatory() && DecorationData.ShowMandatory.Mandatory.equals(decorData.showMandatory)) {
 //                    mandatoryLabel.setText(DecorationData.ShowMandatory.Mandatory.toString());
@@ -244,7 +243,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
     private void renderValidationMessage() {
         if (component instanceof CEditableComponent<?, ?>) {
-            CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
+            CEditableComponent<?, ?> editableComponent = component;
             if (!editableComponent.isValid()) {
                 validationLabel.setText(editableComponent.getValidationMessage());
             } else {
