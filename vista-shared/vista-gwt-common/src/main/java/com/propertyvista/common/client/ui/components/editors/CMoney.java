@@ -13,12 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components.editors;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.domain.financial.Money;
 
-public class CMoney extends CEditableComponent<Money, NativeMoney> {
+public class CMoney extends CFocusComponent<Money, NativeMoney> {
 
     private IFormat<Money> format;
 
