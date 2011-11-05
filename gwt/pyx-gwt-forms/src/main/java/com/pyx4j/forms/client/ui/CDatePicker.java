@@ -76,7 +76,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
     class PastDateSelectionAllowedValidator implements EditableValueValidator<Date> {
 
         @Override
-        public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+        public String getValidationMessage(CComponent<Date, ?> component, Date value) {
             if (dateConditionValidationMessage == null) {
                 return i18n.tr("Date must be equal or greater than today's date");
             } else {
@@ -86,7 +86,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
         @Override
         @SuppressWarnings("deprecation")
-        public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+        public boolean isValid(CComponent<Date, ?> component, Date value) {
             Date selectedDate = getValue();
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();

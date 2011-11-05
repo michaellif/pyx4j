@@ -39,7 +39,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntity<E> {
@@ -240,15 +240,15 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public Collection<CEditableComponent<?, ?>> getComponents() {
+    public Collection<CComponent<?, ?>> getComponents() {
         if (editor == null) {
             return null;
         }
-        return Arrays.asList(new CEditableComponent<?, ?>[] { editor });
+        return Arrays.asList(new CComponent<?, ?>[] { editor });
     }
 
     @Override
-    public void addComponent(CEditableComponent<?, ?> component) {
+    public void addComponent(CComponent<?, ?> component) {
         // TODO Auto-generated method stub
 
     }

@@ -34,7 +34,7 @@ import com.pyx4j.entity.client.ui.flex.EntityBinder;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
@@ -80,7 +80,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (isBound()) {
             return super.create(member);
         } else {
@@ -89,7 +89,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public Collection<? extends CEditableComponent<?, ?>> getComponents() {
+    public Collection<? extends CComponent<?, ?>> getComponents() {
         if (binder == null) {
             return null;
         }
@@ -101,7 +101,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
         return getAllValidationResults();
     }
 
-    public final <T> void bind(CEditableComponent<T, ?> component, IObject<?> member) {
+    public final <T> void bind(CComponent<T, ?> component, IObject<?> member) {
         binder.bind(component, member);
     }
 
@@ -117,27 +117,27 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
         initContent();
     }
 
-    public final CEditableComponent<?, ?> inject(IObject<?> member) {
-        CEditableComponent<?, ?> comp = create(member);
+    public final CComponent<?, ?> inject(IObject<?> member) {
+        CComponent<?, ?> comp = create(member);
         bind(comp, member);
         return comp;
     }
 
-    public final CEditableComponent<?, ?> inject(IObject<?> member, CEditableComponent<?, ?> comp) {
+    public final CComponent<?, ?> inject(IObject<?> member, CComponent<?, ?> comp) {
         bind(comp, member);
         return comp;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CEditableComponent<T, ?> get(T member) {
-        return (CEditableComponent<T, ?>) binder.get((IObject<?>) member);
+    public <T extends IEntity> CComponent<T, ?> get(T member) {
+        return (CComponent<T, ?>) binder.get((IObject<?>) member);
     }
 
-    public <T> CEditableComponent<T, ?> get(IObject<T> member) {
+    public <T> CComponent<T, ?> get(IObject<T> member) {
         return binder.get(member);
     }
 
-    public CEditableComponent<?, ?> getRaw(IObject<?> member) {
+    public CComponent<?, ?> getRaw(IObject<?> member) {
         return binder.get(member);
     }
 
@@ -146,7 +146,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public void addComponent(CEditableComponent<?, ?> component) {
+    public void addComponent(CComponent<?, ?> component) {
         // TODO Auto-generated method stub
 
     }

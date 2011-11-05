@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.Collection;
 
 
-public abstract class CRadioGroup<E> extends CEditableComponent<E, NativeRadioGroup<E>> {
+public abstract class CRadioGroup<E> extends CComponent<E, NativeRadioGroup<E>> {
 
     public enum Layout {
         VERTICAL, HORISONTAL;

@@ -22,13 +22,13 @@ package com.pyx4j.tester.client.view;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 public interface CComponentView extends IsWidget {
 
     public void setPresenter(ConsolePresenter presenter);
 
-    public void show(CEditableComponent<?, ?> cComponent);
+    public void show(CComponent<?, ?> cComponent);
 
     public interface ConsolePresenter {
 

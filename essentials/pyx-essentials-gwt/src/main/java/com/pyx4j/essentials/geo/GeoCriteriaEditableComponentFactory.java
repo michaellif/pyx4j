@@ -23,12 +23,12 @@ package com.pyx4j.essentials.geo;
 import com.pyx4j.entity.client.ui.crud.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 public class GeoCriteriaEditableComponentFactory extends CriteriaEditableComponentFactory {
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getObjectClass().equals(GeoCriteria.class)) {
             return new CLocationCriteriaTextField();
         } else {

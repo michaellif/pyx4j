@@ -20,14 +20,14 @@
  */
 package com.pyx4j.forms.client.validators;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 /**
  * Created on 2008-08-01
  */
 public interface EditableValueValidator<E> {
 
-    public boolean isValid(CEditableComponent<E, ?> component, E value);
+    public boolean isValid(CComponent<E, ?> component, E value);
 
-    public String getValidationMessage(CEditableComponent<E, ?> component, E value);
+    public String getValidationMessage(CComponent<E, ?> component, E value);
 }

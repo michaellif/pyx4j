@@ -62,7 +62,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.NavigationIDs;
@@ -680,7 +680,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     path = fieldsList.getValue().getPath();
                 }
                 Operands operand = operandsList.getValue();
-                Serializable value = (Serializable) ((CEditableComponent) ((INativeEditableComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
+                Serializable value = (Serializable) ((CComponent) ((INativeEditableComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
 
                 return new FilterData(path, operand, value);
             }
@@ -710,7 +710,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             private void setValueHolder(String valuePath, Serializable value) {
 
                 IObject<?> member = getListPanel().proto().getMember(new Path(valuePath));
-                CEditableComponent comp = compFactory.create(member);
+                CComponent comp = compFactory.create(member);
                 comp.setValue(value);
                 valueHolder.setWidget(comp);
 

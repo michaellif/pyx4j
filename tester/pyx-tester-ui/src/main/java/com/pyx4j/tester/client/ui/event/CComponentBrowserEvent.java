@@ -22,15 +22,15 @@ package com.pyx4j.tester.client.ui.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 public class CComponentBrowserEvent extends GwtEvent<CComponentBrowserHandler> {
 
     private static Type<CComponentBrowserHandler> TYPE;
 
-    private final CEditableComponent<?, ?> component;
+    private final CComponent<?, ?> component;
 
-    public CComponentBrowserEvent(CEditableComponent<?, ?> component) {
+    public CComponentBrowserEvent(CComponent<?, ?> component) {
         this.component = component;
     }
 
@@ -51,7 +51,7 @@ public class CComponentBrowserEvent extends GwtEvent<CComponentBrowserHandler> {
         handler.onBrowseEntity(this);
     }
 
-    public CEditableComponent<?, ?> getComponent() {
+    public CComponent<?, ?> getComponent() {
         return component;
     }
 

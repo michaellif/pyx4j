@@ -50,7 +50,7 @@ import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -221,12 +221,12 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                     if (unavailableValidator == null) {
                         unavailableValidator = new EditableValueValidator<E>() {
                             @Override
-                            public String getValidationMessage(CEditableComponent<E, ?> component, E value) {
+                            public String getValidationMessage(CComponent<E, ?> component, E value) {
                                 return "Reference data unavailable";
                             }
 
                             @Override
-                            public boolean isValid(CEditableComponent<E, ?> component, E value) {
+                            public boolean isValid(CComponent<E, ?> component, E value) {
                                 return !isUnavailable;
                             }
                         };

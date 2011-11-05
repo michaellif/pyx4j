@@ -191,7 +191,7 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
     }
 
     @Override
-    public CEditableComponent<?, ?> getCComponent() {
+    public CComponent<?, ?> getCComponent() {
         return cComponent;
     }
 

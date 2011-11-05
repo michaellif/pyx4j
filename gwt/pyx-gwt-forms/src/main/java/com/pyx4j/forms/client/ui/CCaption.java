@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 
-public class CCaption extends CEditableComponent<String, NativeCaption> implements SelfManagedComponent {
+public class CCaption extends CComponent<String, NativeCaption> implements SelfManagedComponent {
 
     private final String caption;
 

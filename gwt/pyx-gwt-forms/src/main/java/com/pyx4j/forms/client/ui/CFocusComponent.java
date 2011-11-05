@@ -27,7 +27,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class CFocusComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeFocusComponent<DATA_TYPE>> extends
-        CEditableComponent<DATA_TYPE, WIDGET_TYPE> {
+        CComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private int tabIndex = 0;
 

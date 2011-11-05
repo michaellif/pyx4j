@@ -38,7 +38,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
 
@@ -54,7 +54,7 @@ public class WidgetDecorator extends FlexTable {
         readOnly, noMandatoryStar
     }
 
-    private final CEditableComponent<?, ?> component;
+    private final CComponent<?, ?> component;
 
     private final Label label;
 
@@ -66,7 +66,7 @@ public class WidgetDecorator extends FlexTable {
 
     private final Label validationLabel;
 
-    public WidgetDecorator(CEditableComponent<?, ?> component) {
+    public WidgetDecorator(CComponent<?, ?> component) {
         this(new Builder(component));
     }
 
@@ -179,8 +179,8 @@ public class WidgetDecorator extends FlexTable {
     }
 
     protected void renderMandatoryStar() {
-        if (component instanceof CEditableComponent<?, ?>) {
-            if (!((CEditableComponent<?, ?>) component).isMandatoryConditionMet()) {
+        if (component instanceof CComponent<?, ?>) {
+            if (!((CComponent<?, ?>) component).isMandatoryConditionMet()) {
                 if (mandatoryImage == null) {
                     mandatoryImage = new Image();
                     mandatoryImage.setResource(ImageFactory.getImages().mandatory());
@@ -196,8 +196,8 @@ public class WidgetDecorator extends FlexTable {
     }
 
     protected void renderValidationMessage() {
-        if (component instanceof CEditableComponent<?, ?>) {
-            CEditableComponent<?, ?> editableComponent = component;
+        if (component instanceof CComponent<?, ?>) {
+            CComponent<?, ?> editableComponent = component;
             if (!editableComponent.isValid()) {
                 if (!editableComponent.isMandatoryConditionMet()) {
                     validationLabel.setText(editableComponent.getMandatoryValidationMessage());
@@ -216,7 +216,7 @@ public class WidgetDecorator extends FlexTable {
             left, right
         }
 
-        private final CEditableComponent<?, ?> component;
+        private final CComponent<?, ?> component;
 
         private double labelWidth = 15;
 
@@ -230,7 +230,7 @@ public class WidgetDecorator extends FlexTable {
 
         private Alignment labelAlignment = Alignment.right;
 
-        public Builder(final CEditableComponent<?, ?> component) {
+        public Builder(final CComponent<?, ?> component) {
             this.component = component;
         }
 
@@ -270,12 +270,12 @@ public class WidgetDecorator extends FlexTable {
     }
 
     @Deprecated
-    public static WidgetDecorator build(CEditableComponent<?, ?> component, double componentWidth) {
+    public static WidgetDecorator build(CComponent<?, ?> component, double componentWidth) {
         return new WidgetDecorator.Builder(component).componentWidth(componentWidth).build();
     }
 
     @Deprecated
-    public static WidgetDecorator build(CEditableComponent<?, ?> component, double labelWidth, double componentWidth) {
+    public static WidgetDecorator build(CComponent<?, ?> component, double labelWidth, double componentWidth) {
         return new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
     }
 }

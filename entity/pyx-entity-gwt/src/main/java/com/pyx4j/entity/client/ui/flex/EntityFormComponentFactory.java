@@ -27,7 +27,7 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolder;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 public class EntityFormComponentFactory extends BaseEditableComponentFactory {
 
@@ -35,9 +35,9 @@ public class EntityFormComponentFactory extends BaseEditableComponentFactory {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?, ?> comp = null;
+        CComponent<?, ?> comp = null;
         if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.EntityList) {
             comp = createMemberFolderEditor(member);
         } else if (mm.isOwnedRelationships() && mm.isEntity()) {

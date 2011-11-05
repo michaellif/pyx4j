@@ -52,7 +52,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
@@ -68,7 +68,7 @@ public class EntityBinder<E extends IEntity> {
 
     private E origEntity;
 
-    private final HashMap<CEditableComponent<?, ?>, Path> binding = new HashMap<CEditableComponent<?, ?>, Path>();
+    private final HashMap<CComponent<?, ?>, Path> binding = new HashMap<CComponent<?, ?>, Path>();
 
     @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valuePropagation;
@@ -116,19 +116,19 @@ public class EntityBinder<E extends IEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CEditableComponent<T, ?> get(T member) {
-        return (CEditableComponent<T, ?>) get((IObject<?>) member);
+    public <T extends IEntity> CComponent<T, ?> get(T member) {
+        return (CComponent<T, ?>) get((IObject<?>) member);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> CEditableComponent<T, ?> get(IObject<T> member) {
+    public <T> CComponent<T, ?> get(IObject<T> member) {
         return getRaw(member);
     }
 
     @SuppressWarnings("rawtypes")
-    public <T> CEditableComponent getRaw(IObject<T> member) {
+    public <T> CComponent getRaw(IObject<T> member) {
         Path memberPath = member.getPath();
-        for (Map.Entry<CEditableComponent<?, ?>, Path> me : binding.entrySet()) {
+        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
             if (me.getValue().equals(memberPath)) {
                 return me.getKey();
             }
@@ -138,7 +138,7 @@ public class EntityBinder<E extends IEntity> {
 
     public boolean contains(IObject<?> member) {
         Path memberPath = member.getPath();
-        for (Map.Entry<CEditableComponent<?, ?>, Path> me : binding.entrySet()) {
+        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
             if (me.getValue().equals(memberPath)) {
                 return true;
             }
@@ -147,7 +147,7 @@ public class EntityBinder<E extends IEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> void bind(CEditableComponent<T, ?> component, IObject<?> member) {
+    public <T> void bind(CComponent<T, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
         assert (proto().getMember(member.getPath()) != null);
         component.addValueChangeHandler(valuePropagation);
@@ -205,7 +205,7 @@ public class EntityBinder<E extends IEntity> {
 
     }
 
-    protected void applyAttributes(CEditableComponent<?, ?> component, IObject<?> member) {
+    protected void applyAttributes(CComponent<?, ?> component, IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.isValidatorAnnotationPresent(NotNull.class)) {
             component.setMandatory(true);
@@ -235,7 +235,7 @@ public class EntityBinder<E extends IEntity> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected void populateComponents() {
-        for (CEditableComponent component : binding.keySet()) {
+        for (CComponent component : binding.keySet()) {
             Path memberPath = binding.get(component);
             IObject<?> m = editableEntity.getMember(memberPath);
             try {
@@ -257,7 +257,7 @@ public class EntityBinder<E extends IEntity> {
     }
 
     public void setComponentsDebugId(IDebugId debugId) {
-        for (Map.Entry<CEditableComponent<?, ?>, Path> me : binding.entrySet()) {
+        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
             me.getKey().setDebugId(new CompositeDebugId(debugId, me.getValue()));
         }
     }
@@ -266,7 +266,7 @@ public class EntityBinder<E extends IEntity> {
         return editableEntity;
     }
 
-    public Set<CEditableComponent<?, ?>> getComponents() {
+    public Set<CComponent<?, ?>> getComponents() {
         return binding.keySet();
     }
 

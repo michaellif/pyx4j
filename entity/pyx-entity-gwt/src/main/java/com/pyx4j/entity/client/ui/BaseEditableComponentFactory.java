@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CIntegerField;
@@ -58,7 +58,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         EditorType editorType = mm.getEditorType();
         if (editorType != null) {

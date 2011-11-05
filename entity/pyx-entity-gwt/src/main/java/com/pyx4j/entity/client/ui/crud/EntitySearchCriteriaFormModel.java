@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IAcceptText;
@@ -56,7 +56,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     private EntitySearchCriteria<E> editableCriteria;
 
-    private final HashMap<CEditableComponent<?, ?>, PathSearch> binding = new HashMap<CEditableComponent<?, ?>, PathSearch>();
+    private final HashMap<CComponent<?, ?>, PathSearch> binding = new HashMap<CComponent<?, ?>, PathSearch>();
 
     @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valuePropagation;
@@ -83,7 +83,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                     || (event.getPropertyName() == PropertyChangeEvent.PropertyName.enabled)) {
                 PathSearch path = binding.get(event.getSource());
                 if ((path != null) && (editableCriteria != null)) {
-                    CEditableComponent<?, ?> component = (CEditableComponent<?, ?>) event.getSource();
+                    CComponent<?, ?> component = (CComponent<?, ?>) event.getSource();
                     if (component.isVisible() && component.isEnabled()) {
                         setPropertyValue(path, component.getValue());
                     } else {
@@ -114,34 +114,34 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         return new EntitySearchCriteriaFormModel<T>(clazz, editableComponentFactory);
     }
 
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         return create(null, member, null);
     }
 
-    public CEditableComponent<?, ?> create(String name, IObject<?> member, String pathProperty) {
+    public CComponent<?, ?> create(String name, IObject<?> member, String pathProperty) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?, ?> comp = editableComponentFactory.create(member);
+        CComponent<?, ?> comp = editableComponentFactory.create(member);
         comp.setTitle((name == null) ? mm.getCaption() : name);
         bind(comp, new PathSearch(member, pathProperty));
         return comp;
     }
 
     @SuppressWarnings("unchecked")
-    public void bind(CEditableComponent<?, ?> component, PathSearch path) {
+    public void bind(CComponent<?, ?> component, PathSearch path) {
         binding.put(component, path);
         component.addValueChangeHandler(valuePropagation);
         component.addPropertyChangeHandler(visibilityPropagation);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> CEditableComponent<T, ?> get(IObject<T> member, String pathProperty) {
+    public <T> CComponent<T, ?> get(IObject<T> member, String pathProperty) {
         return getRaw(member, pathProperty);
     }
 
     @SuppressWarnings("rawtypes")
-    public <T> CEditableComponent getRaw(IObject<T> member, String pathProperty) {
+    public <T> CComponent getRaw(IObject<T> member, String pathProperty) {
         PathSearch memberPath = new PathSearch(member, pathProperty);
-        for (Map.Entry<CEditableComponent<?, ?>, PathSearch> me : binding.entrySet()) {
+        for (Map.Entry<CComponent<?, ?>, PathSearch> me : binding.entrySet()) {
             if (me.getValue().equals(memberPath)) {
                 return me.getKey();
             }
@@ -150,11 +150,11 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CEditableComponent<T, ?> get(T member) {
-        return (CEditableComponent<T, ?>) get((IObject<?>) member);
+    public <T extends IEntity> CComponent<T, ?> get(T member) {
+        return (CComponent<T, ?>) get((IObject<?>) member);
     }
 
-    public <T> CEditableComponent<T, ?> get(IObject<T> member) {
+    public <T> CComponent<T, ?> get(IObject<T> member) {
         return get(member, null);
     }
 
@@ -167,8 +167,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) entityPrototype.getValueClass());
         }
 
-        for (Map.Entry<CEditableComponent<?, ?>, PathSearch> me : binding.entrySet()) {
-            ((CEditableComponent) me.getKey()).setValue(editableCriteria.getValue(me.getValue()));
+        for (Map.Entry<CComponent<?, ?>, PathSearch> me : binding.entrySet()) {
+            ((CComponent) me.getKey()).setValue(editableCriteria.getValue(me.getValue()));
         }
     }
 
@@ -189,9 +189,9 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void obtainEntitySearchCriteria(final Iterator<CEditableComponent<?, ?>> iterator, final AsyncCallback<EntitySearchCriteria<E>> callback) {
+    private void obtainEntitySearchCriteria(final Iterator<CComponent<?, ?>> iterator, final AsyncCallback<EntitySearchCriteria<E>> callback) {
         while (iterator.hasNext()) {
-            CEditableComponent<?, ?> comp = iterator.next();
+            CComponent<?, ?> comp = iterator.next();
             if (comp instanceof HasAsyncValue) {
                 if (((HasAsyncValue) comp).isAsyncValue()) {
                     ((HasAsyncValue) comp).obtainValue(new AsyncCallback() {
@@ -214,8 +214,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void populateHistory(Map<String, String> history) {
-        for (Map.Entry<CEditableComponent<?, ?>, PathSearch> me : binding.entrySet()) {
-            CEditableComponent comp = me.getKey();
+        for (Map.Entry<CComponent<?, ?>, PathSearch> me : binding.entrySet()) {
+            CComponent comp = me.getKey();
             if (!comp.isVisible()) {
                 continue;
             }
@@ -231,8 +231,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Map<String, String> getHistory() {
         Map<String, String> map = new HashMap<String, String>();
-        for (Map.Entry<CEditableComponent<?, ?>, PathSearch> me : binding.entrySet()) {
-            CEditableComponent<?, ?> comp = me.getKey();
+        for (Map.Entry<CComponent<?, ?>, PathSearch> me : binding.entrySet()) {
+            CComponent<?, ?> comp = me.getKey();
             if ((!comp.isVisible()) || (comp.isValueEmpty())) {
                 continue;
             }

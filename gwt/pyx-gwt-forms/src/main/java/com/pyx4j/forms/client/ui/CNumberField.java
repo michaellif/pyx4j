@@ -88,7 +88,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         }
 
         @Override
-        public boolean isValid(CEditableComponent<E, ?> component, E value) {
+        public boolean isValid(CComponent<E, ?> component, E value) {
             if (super.isValid(component, value)) {
                 if (value == null) {
                     return true;

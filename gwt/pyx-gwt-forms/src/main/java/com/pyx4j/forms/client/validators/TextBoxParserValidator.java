@@ -8,7 +8,7 @@
  */
 package com.pyx4j.forms.client.validators;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 
 /**
@@ -23,12 +23,12 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<E, ?> component, E value) {
+    public String getValidationMessage(CComponent<E, ?> component, E value) {
         return validationMessage;
     }
 
     @Override
-    public boolean isValid(CEditableComponent<E, ?> component, E value) {
+    public boolean isValid(CComponent<E, ?> component, E value) {
         if (component instanceof CTextFieldBase) {
             return ((CTextFieldBase<?, ?>) component).isParsedSuccesfully();
         }

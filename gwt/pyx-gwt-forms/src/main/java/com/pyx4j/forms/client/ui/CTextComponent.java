@@ -77,12 +77,12 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         }
 
         @Override
-        public String getValidationMessage(CEditableComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
+        public String getValidationMessage(CComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
             return validationMessage;
         }
 
         @Override
-        public boolean isValid(CEditableComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
+        public boolean isValid(CComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
             if (value == null) {
                 return true;
             }

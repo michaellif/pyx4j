@@ -8,7 +8,7 @@
  */
 package com.pyx4j.forms.client.validators;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 /**
  *
@@ -31,12 +31,12 @@ public class RegexValidator<E> implements EditableValueValidator<E> {
     }
 
     @Override
-    public boolean isValid(CEditableComponent<E, ?> component, E value) {
+    public boolean isValid(CComponent<E, ?> component, E value) {
         return (component.isValueEmpty() && !component.isMandatory()) || ((value != null) && (value.toString().matches(regex)));
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<E, ?> component, E value) {
+    public String getValidationMessage(CComponent<E, ?> component, E value) {
         if (validationMessage == null) {
             return "This field should have the following format:" + regex;
         } else {

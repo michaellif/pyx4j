@@ -25,7 +25,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
-        CEditableComponent<DATA_TYPE, WIDGET_TYPE> {
+        CComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private final IAccessAdapter aggregatingAccessAdapter;
 
@@ -38,9 +38,9 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         aggregatingAccessAdapter = new ContainerAccessAdapter(this);
     }
 
-    public abstract Collection<? extends CEditableComponent<?, ?>> getComponents();
+    public abstract Collection<? extends CComponent<?, ?>> getComponents();
 
-    public abstract void addComponent(CEditableComponent<?, ?> component);
+    public abstract void addComponent(CComponent<?, ?> component);
 
     @Override
     public boolean isValid() {
@@ -48,7 +48,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
             return true;
         }
         if (getComponents() != null) {
-            for (CEditableComponent<?, ?> ccomponent : getComponents()) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
                 if (!ccomponent.isValid()) {
                     return false;
                 }
@@ -60,12 +60,12 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
         if (getComponents() != null) {
-            for (CEditableComponent<?, ?> ccomponent : getComponents()) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
                 if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
                     validationResults.appendValidationErrors(((CContainer) ccomponent).getValidationResults());
-                } else if (!((CEditableComponent<?, ?>) ccomponent).isValid()) {
+                } else if (!((CComponent<?, ?>) ccomponent).isValid()) {
                     validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
-                            + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
+                            + ((CComponent<?, ?>) ccomponent).getValidationMessage());
                 }
             }
         }
@@ -96,7 +96,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         if (getComponents() != null) {
-            for (CEditableComponent<?, ?> component : getComponents()) {
+            for (CComponent<?, ?> component : getComponents()) {
                 component.applyVisibilityRules();
             }
         }
@@ -106,7 +106,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
-            for (CEditableComponent<?, ?> component : getComponents()) {
+            for (CComponent<?, ?> component : getComponents()) {
                 component.applyEnablingRules();
             }
         }
@@ -115,7 +115,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     @Override
     public void applyEditabilityRules() {
         if (getComponents() != null) {
-            for (CEditableComponent<?, ?> component : getComponents()) {
+            for (CComponent<?, ?> component : getComponents()) {
                 component.applyEditabilityRules();
             }
         }

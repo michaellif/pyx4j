@@ -47,7 +47,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> implements HasHandlers,
+public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> implements HasHandlers,
         HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
 
     private String title;
@@ -95,11 +95,11 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     private boolean parseFailed;
 
-    public CEditableComponent() {
+    public CComponent() {
         this(null);
     }
 
-    public CEditableComponent(String title) {
+    public CComponent(String title) {
         this.title = title;
         defaultAccessAdapter = new ComponentAccessAdapter();
         addAccessAdapter(defaultAccessAdapter);
@@ -108,7 +108,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     /**
      * Basic information would be available in server log
      */
-    public static String runtimeCrashInfo(CEditableComponent<?, ?> component) {
+    public static String runtimeCrashInfo(CComponent<?, ?> component) {
         if (component == null) {
             return "n/a";
         }
@@ -494,8 +494,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (validators != null) {
             validationMessage = null;
             for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
-                if (!validator.isValid((CEditableComponent) this, getValue())) {
-                    validationMessage = validator.getValidationMessage((CEditableComponent) this, getValue());
+                if (!validator.isValid((CComponent) this, getValue())) {
+                    validationMessage = validator.getValidationMessage((CComponent) this, getValue());
                     return false;
                 }
             }

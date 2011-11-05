@@ -88,7 +88,7 @@ public abstract class ListSelectionPopup<E> extends Dialog {
         }
 
         @Override
-        public CEditableComponent<?, ?> getCComponent() {
+        public CComponent<?, ?> getCComponent() {
             return null;
         }
 

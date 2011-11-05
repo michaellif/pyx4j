@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPhoneField;
@@ -42,9 +42,9 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?, ?> comp;
+        CComponent<?, ?> comp;
         if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {

@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.validators;
 
 import java.util.ArrayList;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 
 public class EmailListTextBoxValidator implements EditableValueValidator<String> {
@@ -52,7 +52,7 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
+    public String getValidationMessage(CComponent<String, ?> component, String value) {
         EmailAddress[] adr = parse(value);
         if (adr == null) {
             return null;
@@ -67,7 +67,7 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
     }
 
     @Override
-    public boolean isValid(CEditableComponent<String, ?> component, String value) {
+    public boolean isValid(CComponent<String, ?> component, String value) {
         EmailAddress[] adr = parse(value);
         if (adr == null) {
             return true;

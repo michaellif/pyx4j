@@ -29,7 +29,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IAccessAdapter;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,7 +50,7 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
         }
 
         if (getComponents() != null) {
-            for (CEditableComponent<?, ?> ccomponent : getComponents()) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
                 if (!ccomponent.isValid()) {
                     return false;
                 }
@@ -61,7 +61,7 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
 
     public ValidationResults getAllValidationResults() {
         ValidationResults validationResults = getContainerValidationResults();
-        for (CEditableComponent<?, ?> component : this.getComponents()) {
+        for (CComponent<?, ?> component : this.getComponents()) {
             if (component.isValid()) {
                 continue;
             }
@@ -92,8 +92,8 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
     public void setVisited(boolean visited) {
         super.setVisited(visited);
         if (getComponents() != null) {
-            for (CEditableComponent<?, ?> ccomponent : getComponents()) {
-                ((CEditableComponent<?, ?>) ccomponent).setVisited(visited);
+            for (CComponent<?, ?> ccomponent : getComponents()) {
+                ((CComponent<?, ?>) ccomponent).setVisited(visited);
             }
         }
     }
@@ -140,7 +140,7 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
     private CEntity<?> bindParent;
 
     @Override
-    public boolean isEnabled(CEditableComponent<?, ?> component) {
+    public boolean isEnabled(CComponent<?, ?> component) {
         if (component instanceof CButton) {
             return isEditable() && isEnabled();
         } else {
@@ -149,12 +149,12 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
     }
 
     @Override
-    public boolean isEditable(CEditableComponent<?, ?> component) {
+    public boolean isEditable(CComponent<?, ?> component) {
         return isEditable();
     }
 
     @Override
-    public boolean isVisible(CEditableComponent<?, ?> component) {
+    public boolean isVisible(CComponent<?, ?> component) {
         return isVisible();
     }
 
@@ -164,7 +164,7 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         assert (bindParent != null) : "Flex Component " + this.getClass().getName() + "is not bound";
         return bindParent.create(member);
     }

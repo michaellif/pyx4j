@@ -24,7 +24,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCaptcha> {
+public class CCaptcha extends CComponent<Pair<String, String>, NativeCaptcha> {
 
     protected static I18n i18n = I18n.get(CCaptcha.class);
 

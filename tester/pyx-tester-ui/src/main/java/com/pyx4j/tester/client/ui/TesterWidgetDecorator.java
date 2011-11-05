@@ -23,14 +23,14 @@ package com.pyx4j.tester.client.ui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
 public class TesterWidgetDecorator extends WidgetDecorator {
 
-    public TesterWidgetDecorator(final CEditableComponent<?, ?> component) {
+    public TesterWidgetDecorator(final CComponent<?, ?> component) {
         super(component);
         getLabel().addClickHandler(new ClickHandler() {
 

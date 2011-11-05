@@ -22,10 +22,10 @@ package com.pyx4j.forms.client.ui;
 
 public interface IAccessAdapter {
 
-    public boolean isEnabled(CEditableComponent<?, ?> component);
+    public boolean isEnabled(CComponent<?, ?> component);
 
-    public boolean isEditable(CEditableComponent<?, ?> component);
+    public boolean isEditable(CComponent<?, ?> component);
 
-    public boolean isVisible(CEditableComponent<?, ?> component);
+    public boolean isVisible(CComponent<?, ?> component);
 
 }
