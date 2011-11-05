@@ -50,7 +50,7 @@ public abstract class XMLEntityFactoryStrict implements XMLEntityFactory {
         if (xmlName != null) {
             entityClass = (Class<T>) binding.get(xmlName);
             if (entityClass == null) {
-                throw new Error("Unbound XML name " + xmlName);
+                throw new Error("Unbound XML entity name '" + xmlName + "'");
             }
         } else {
             entityClass = objectClass;
