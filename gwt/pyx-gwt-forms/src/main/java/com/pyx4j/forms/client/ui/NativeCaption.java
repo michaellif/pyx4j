@@ -20,9 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.user.client.ui.HTML;
 
-public class NativeCaption extends HTML implements INativeComponent {
+public class NativeCaption extends HTML implements INativeEditableComponent<String> {
 
     private final CCaption cComponent;
 
@@ -31,7 +33,7 @@ public class NativeCaption extends HTML implements INativeComponent {
     }
 
     @Override
-    public CComponent<?> getCComponent() {
+    public CCaption getCComponent() {
         return cComponent;
     }
 
@@ -46,6 +48,36 @@ public class NativeCaption extends HTML implements INativeComponent {
 
     @Override
     public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setNativeValue(String value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getNativeValue() throws ParseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setValid(boolean valid) {
         // TODO Auto-generated method stub
 
     }

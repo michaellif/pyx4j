@@ -23,17 +23,17 @@ package com.pyx4j.forms.client.ui;
 public abstract class AbstractAccessAdapter implements IAccessAdapter {
 
     @Override
-    public boolean isEditable(CComponent<?> component) {
+    public boolean isEditable(CEditableComponent<?, ?> component) {
         return true;
     }
 
     @Override
-    public boolean isEnabled(CComponent<?> component) {
+    public boolean isEnabled(CEditableComponent<?, ?> component) {
         return true;
     }
 
     @Override
-    public boolean isVisible(CComponent<?> component) {
+    public boolean isVisible(CEditableComponent<?, ?> component) {
         return true;
     }
 

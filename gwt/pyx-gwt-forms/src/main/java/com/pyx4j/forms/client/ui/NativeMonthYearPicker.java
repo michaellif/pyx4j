@@ -69,7 +69,7 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
     }
 
     @Override
-    public CComponent<?> getCComponent() {
+    public CEditableComponent<?, ?> getCComponent() {
         return cComponent;
     }
 

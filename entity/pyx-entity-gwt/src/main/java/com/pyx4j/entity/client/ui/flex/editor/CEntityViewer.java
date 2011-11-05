@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.flex.CEntity;
 import com.pyx4j.entity.client.ui.flex.NativeEntityPanel;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
@@ -66,7 +65,7 @@ public abstract class CEntityViewer<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public void addComponent(CComponent<?> component) {
+    public void addComponent(CEditableComponent<?, ?> component) {
         // TODO Auto-generated method stub
 
     }

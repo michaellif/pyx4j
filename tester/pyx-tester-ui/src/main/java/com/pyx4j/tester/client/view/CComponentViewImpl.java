@@ -23,7 +23,6 @@ package com.pyx4j.tester.client.view;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.tester.client.domain.CComponentProperties;
 
@@ -48,7 +47,7 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
     }
 
     @Override
-    public void show(CComponent<?> cComponent) {
+    public void show(CEditableComponent<?, ?> cComponent) {
         if (cComponent == null) {
             form.populate(null);
             form.setVisible(false);
@@ -59,7 +58,7 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
             properties.title().setValue(cComponent.getTitle());
 
             if (cComponent instanceof CEditableComponent) {
-                CEditableComponent editableComponent = (CEditableComponent) cComponent;
+                CEditableComponent editableComponent = cComponent;
 
                 properties.componentValue().setValue(editableComponent.getValue() == null ? "null" : editableComponent.getValue().toString());
                 properties.title().setValue(editableComponent.getTitle());

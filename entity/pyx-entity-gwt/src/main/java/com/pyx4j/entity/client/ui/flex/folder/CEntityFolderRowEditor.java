@@ -32,7 +32,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> {
 
@@ -47,14 +47,14 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> 
     public IsWidget createContent() {
         HorizontalPanel main = new HorizontalPanel();
         for (EntityFolderColumnDescriptor column : columns) {
-            CComponent<?> component = createCell(column);
+            CEditableComponent<?, ?> component = createCell(column);
             component.setWidth("100%");
             main.add(createCellDecorator(column, component, column.getWidth()));
         }
         return main;
     }
 
-    protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
+    protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CEditableComponent<?, ?> component, String width) {
         SimplePanel wrapper = new SimplePanel();
         wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
         wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
@@ -63,8 +63,8 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> 
         return wrapper;
     }
 
-    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-        CComponent<?> comp = inject(column.getObject());
+    protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        CEditableComponent<?, ?> comp = inject(column.getObject());
 
         //Special TableFolder customisation
         if (comp instanceof CCheckBox) {
@@ -75,7 +75,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> 
     }
 
     @Override
-    public void addComponent(CComponent<?> component) {
+    public void addComponent(CEditableComponent<?, ?> component) {
         // TODO Auto-generated method stub
 
     }

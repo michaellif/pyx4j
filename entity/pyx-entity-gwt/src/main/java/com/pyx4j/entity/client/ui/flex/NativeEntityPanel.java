@@ -23,7 +23,7 @@ package com.pyx4j.entity.client.ui.flex;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
 public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeEditableComponent<E> {
@@ -41,7 +41,7 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
     }
 
     @Override
-    public CComponent<?> getCComponent() {
+    public CEditableComponent<?, ?> getCComponent() {
         return null;
     }
 

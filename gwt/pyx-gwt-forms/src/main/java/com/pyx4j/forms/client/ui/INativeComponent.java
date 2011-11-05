@@ -32,7 +32,7 @@ public interface INativeComponent extends IsWidget {
 
     public boolean isVisible();
 
-    public CComponent<?> getCComponent();
+    public CEditableComponent<?, ?> getCComponent();
 
     public void setWidth(String width);
 

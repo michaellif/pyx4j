@@ -34,7 +34,7 @@ public class NativeWidgetHolder extends SimplePanel implements INativeWidgetHold
     }
 
     @Override
-    public CComponent<?> getCComponent() {
+    public CEditableComponent<?, ?> getCComponent() {
         return null;
     }
 

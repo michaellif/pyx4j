@@ -39,7 +39,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
@@ -249,7 +248,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public void addComponent(CComponent<?> component) {
+    public void addComponent(CEditableComponent<?, ?> component) {
         // TODO Auto-generated method stub
 
     }

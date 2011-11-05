@@ -28,7 +28,8 @@ public class ContainerAccessAdapter implements IAccessAdapter {
         this.container = container;
     }
 
-    public boolean isEnabled(CComponent<?> component) {
+    @Override
+    public boolean isEnabled(CEditableComponent<?, ?> component) {
         if (component instanceof CButton) {
             return container.isEditable() && container.isEnabled();
         } else {
@@ -36,11 +37,13 @@ public class ContainerAccessAdapter implements IAccessAdapter {
         }
     }
 
-    public boolean isEditable(CComponent<?> component) {
+    @Override
+    public boolean isEditable(CEditableComponent<?, ?> component) {
         return container.isEditable();
     }
 
-    public boolean isVisible(CComponent<?> component) {
+    @Override
+    public boolean isVisible(CEditableComponent<?, ?> component) {
         return container.isVisible();
     }
 

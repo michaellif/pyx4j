@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.TesterVeiwFactory;
@@ -51,7 +50,7 @@ public class CComponentActivity extends AbstractActivity implements ConsolePrese
             @Override
             public void onBrowseEntity(CComponentBrowserEvent event) {
 
-                final CComponent<?> component = event.getComponent();
+                final CEditableComponent<?, ?> component = event.getComponent();
                 view.show(event.getComponent());
 
                 component.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -62,7 +61,7 @@ public class CComponentActivity extends AbstractActivity implements ConsolePrese
                 });
 
                 if (component instanceof CEditableComponent) {
-                    CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
+                    CEditableComponent<?, ?> editableComponent = component;
                     editableComponent.addValueChangeHandler(new ValueChangeHandler() {
                         @Override
                         public void onValueChange(ValueChangeEvent event) {

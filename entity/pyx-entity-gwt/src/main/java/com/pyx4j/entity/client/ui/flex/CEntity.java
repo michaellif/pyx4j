@@ -28,7 +28,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CButton;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.IAccessAdapter;
@@ -141,7 +140,7 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
     private CEntity<?> bindParent;
 
     @Override
-    public boolean isEnabled(CComponent<?> component) {
+    public boolean isEnabled(CEditableComponent<?, ?> component) {
         if (component instanceof CButton) {
             return isEditable() && isEnabled();
         } else {
@@ -150,12 +149,12 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
     }
 
     @Override
-    public boolean isEditable(CComponent<?> component) {
+    public boolean isEditable(CEditableComponent<?, ?> component) {
         return isEditable();
     }
 
     @Override
-    public boolean isVisible(CComponent<?> component) {
+    public boolean isVisible(CEditableComponent<?, ?> component) {
         return isVisible();
     }
 

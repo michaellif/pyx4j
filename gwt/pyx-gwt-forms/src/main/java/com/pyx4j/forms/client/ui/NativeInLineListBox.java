@@ -43,7 +43,7 @@ public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
     }
 
     @Override
-    public CComponent<?> getCComponent() {
+    public CEditableComponent<?, ?> getCComponent() {
         return cListBox;
     }
 

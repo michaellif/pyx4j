@@ -46,7 +46,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -427,7 +426,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
+            for (CEditableComponent<?, ?> component : getComponents()) {
                 component.applyVisibilityRules();
             }
         }
@@ -437,7 +436,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
+            for (CEditableComponent<?, ?> component : getComponents()) {
                 component.applyEnablingRules();
             }
         }
@@ -446,7 +445,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
     @Override
     public void applyEditabilityRules() {
         if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
+            for (CEditableComponent<?, ?> component : getComponents()) {
                 if (component instanceof CEditableComponent<?, ?>) {
                     ((CEditableComponent<?, ?>) component).applyEditabilityRules();
                 }
@@ -471,7 +470,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
     }
 
     @Override
-    public void addComponent(CComponent<?> component) {
+    public void addComponent(CEditableComponent<?, ?> component) {
         // TODO Auto-generated method stub
 
     }
