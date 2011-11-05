@@ -19,7 +19,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -86,12 +86,12 @@ public class CTenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuara
         get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+            public boolean isValid(CComponent<Date, ?> component, Date value) {
                 return ValidationUtils.isOlderThen18(value);
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
                 return i18n.tr("Guarantor should be at least 18 years old");
             }
         });

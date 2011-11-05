@@ -37,7 +37,7 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -252,11 +252,11 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
             get(proto().phone()).setValue(getValue().currentPhone());
 
             @SuppressWarnings("unchecked")
-            CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) getRaw(proto().billingAddress().country());
+            CComponent<Country, ?> country = (CComponent<Country, ?>) getRaw(proto().billingAddress().country());
             country.setValue(getValue().currentAddress().country());
 
             @SuppressWarnings("unchecked")
-            CEditableComponent<Province, ?> prov = (CEditableComponent<Province, ?>) getRaw(proto().billingAddress().province());
+            CComponent<Province, ?> prov = (CComponent<Province, ?>) getRaw(proto().billingAddress().province());
             prov.setValue(getValue().currentAddress().province());
 
             editable = false;
@@ -323,8 +323,8 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
             }
 
             @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
-                CEditableComponent<?, ?> comp = super.create(member);
+            public CComponent<?, ?> create(IObject<?> member) {
+                CComponent<?, ?> comp = super.create(member);
                 if (comp instanceof CMonthYearPicker) {
                     Date now = new Date();
                     @SuppressWarnings("deprecation")
@@ -334,7 +334,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
                     ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
 
                         @Override
-                        public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                        public boolean isValid(CComponent<Date, ?> component, Date value) {
                             if (value == null) {
                                 return true;
                             } else {
@@ -345,7 +345,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
                         }
 
                         @Override
-                        public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                        public String getValidationMessage(CComponent<Date, ?> component, Date value) {
                             return i18n.tr("Card expiry should be a future date");
                         }
                     });

@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.components.cms;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.domain.File;
 
-public class CFileUploader extends CEditableComponent<File, NativeFileUploader> {
+public class CFileUploader extends CComponent<File, NativeFileUploader> {
 
     @Override
     protected NativeFileUploader createWidget() {

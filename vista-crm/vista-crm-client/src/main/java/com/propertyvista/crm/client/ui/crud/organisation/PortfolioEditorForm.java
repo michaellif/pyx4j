@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -56,7 +56,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         return new CrmScrollPanel(main);
     }
 
-    private CEditableComponent<?, ?> createBuildingListView() {
+    private CComponent<?, ?> createBuildingListView() {
         return new VistaTableFolder<AssignedBuilding>(AssignedBuilding.class, isEditable()) {
             private final VistaTableFolder<AssignedBuilding> parent = this;
 

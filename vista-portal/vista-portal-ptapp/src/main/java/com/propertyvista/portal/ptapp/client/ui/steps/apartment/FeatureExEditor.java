@@ -22,7 +22,7 @@ import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -92,10 +92,10 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
 
                     row = 0; // skip header
                     panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().plateNumber()), 10).build());
-                    CEditableComponent<Country, ?> country;
-                    panel.setWidget(++row, 1, new DecoratorBuilder(country = (CEditableComponent<Country, ?>) inject(proto().country()), 13).build());
-                    CEditableComponent<Province, ?> province;
-                    panel.setWidget(++row, 1, new DecoratorBuilder(province = (CEditableComponent<Province, ?>) inject(proto().province()), 17).build());
+                    CComponent<Country, ?> country;
+                    panel.setWidget(++row, 1, new DecoratorBuilder(country = (CComponent<Country, ?>) inject(proto().country()), 13).build());
+                    CComponent<Province, ?> province;
+                    panel.setWidget(++row, 1, new DecoratorBuilder(province = (CComponent<Province, ?>) inject(proto().province()), 17).build());
 
                     ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
                         @Override
@@ -116,7 +116,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
                 }
 
                 @Override
-                public CEditableComponent<?, ?> create(IObject<?> member) {
+                public CComponent<?, ?> create(IObject<?> member) {
                     return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
                 }
             };
@@ -150,7 +150,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
                 }
 
                 @Override
-                public CEditableComponent<?, ?> create(IObject<?> member) {
+                public CComponent<?, ?> create(IObject<?> member) {
                     return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
                 }
             };

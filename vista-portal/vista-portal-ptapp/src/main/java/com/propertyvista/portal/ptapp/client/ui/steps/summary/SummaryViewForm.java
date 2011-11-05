@@ -44,7 +44,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -279,7 +279,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return new VistaBoxFolder<TenantInfoDTO>(TenantInfoDTO.class, false) {
 
             @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
+            public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantInfoDTO) {
                     return new InfoViewForm(new VistaViewersComponentFactory());
                 }
@@ -295,7 +295,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return new VistaBoxFolder<TenantFinancialDTO>(TenantFinancialDTO.class, false) {
 
             @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
+            public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantFinancialDTO) {
                     return new FinancialViewForm(new VistaViewersComponentFactory());
                 }
@@ -343,12 +343,12 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             check.addValueValidator(new EditableValueValidator<Boolean>() {
 
                 @Override
-                public boolean isValid(CEditableComponent<Boolean, ?> component, Boolean value) {
+                public boolean isValid(CComponent<Boolean, ?> component, Boolean value) {
                     return value == Boolean.TRUE;
                 }
 
                 @Override
-                public String getValidationMessage(CEditableComponent<Boolean, ?> component, Boolean value) {
+                public String getValidationMessage(CComponent<Boolean, ?> component, Boolean value) {
                     return i18n.tr("You should agree to terms");
                 }
             });
@@ -387,12 +387,12 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             edit.addValueValidator(new EditableValueValidator<String>() {
 
                 @Override
-                public boolean isValid(CEditableComponent<String, ?> component, String value) {
+                public boolean isValid(CComponent<String, ?> component, String value) {
                     return isSignatureValid(value);
                 }
 
                 @Override
-                public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
+                public String getValidationMessage(CComponent<String, ?> component, String value) {
                     return i18n.tr("Digital Signature string should match your name");
                 }
             });

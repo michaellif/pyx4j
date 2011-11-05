@@ -16,13 +16,13 @@ package com.propertyvista.common.client.ui.validators;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 public class RevalidationTrigger<E> implements ValueChangeHandler<E> {
 
-    private final CEditableComponent<?, ?> targetComponent;
+    private final CComponent<?, ?> targetComponent;
 
-    public RevalidationTrigger(CEditableComponent<?, ?> targetComponent) {
+    public RevalidationTrigger(CComponent<?, ?> targetComponent) {
         this.targetComponent = targetComponent;
     }
 

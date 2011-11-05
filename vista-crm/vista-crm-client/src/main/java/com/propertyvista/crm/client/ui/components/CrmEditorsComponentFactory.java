@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.components;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CMoney;
@@ -23,7 +23,7 @@ import com.propertyvista.domain.financial.Money;
 public class CrmEditorsComponentFactory extends VistaEditorsComponentFactory {
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
             return new CMoney();
         }

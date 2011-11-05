@@ -13,12 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components.editors;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.domain.GeoLocation;
 
-public class CGeoLocation extends CEditableComponent<GeoLocation, NativeGeoLocation> {
+public class CGeoLocation extends CComponent<GeoLocation, NativeGeoLocation> {
 
     public CGeoLocation() {
         addValueValidator(new GeoLocationValidator());
@@ -49,12 +49,12 @@ public class CGeoLocation extends CEditableComponent<GeoLocation, NativeGeoLocat
         private String validationMessage = "";
 
         @Override
-        public String getValidationMessage(CEditableComponent<GeoLocation, ?> component, GeoLocation value) {
+        public String getValidationMessage(CComponent<GeoLocation, ?> component, GeoLocation value) {
             return validationMessage;
         }
 
         @Override
-        public boolean isValid(CEditableComponent<GeoLocation, ?> component, GeoLocation value) {
+        public boolean isValid(CComponent<GeoLocation, ?> component, GeoLocation value) {
             validationMessage = "";
 
             if (value != null && !value.isEmpty()) {

@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -57,7 +57,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantCharge) {
             return new TenantChargeEditor();
         }
@@ -69,7 +69,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         this.addValueValidator(new EditableValueValidator<IList<TenantCharge>>() {
 
             @Override
-            public boolean isValid(CEditableComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
+            public boolean isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
                 int totalPrc = 0;
                 boolean first = true;
                 for (TenantCharge charge : value) {
@@ -87,7 +87,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
+            public String getValidationMessage(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
                 return i18n.tr("Sum of all percentages should not exceed 100%");
             }
         });
@@ -100,7 +100,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         }
 
         @Override
-        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().tenantName()) {
                 return inject(column.getObject(), new CEntityLabel());
             }
@@ -108,7 +108,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         }
 
         @Override
-        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CEditableComponent<?, ?> component, String width) {
+        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?, ?> component, String width) {
             Widget w = super.createCellDecorator(column, component, width);
 
             if (column.getObject() == proto().percentage()) {
@@ -125,7 +125,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         @SuppressWarnings("unchecked")
         @Override
         public void addValidations() {
-            CEditableComponent<Integer, ?> prc = get(proto().percentage());
+            CComponent<Integer, ?> prc = get(proto().percentage());
             if (prc instanceof CNumberField) {
                 ((CNumberField<Integer>) prc).setRange(0, 100);
             }

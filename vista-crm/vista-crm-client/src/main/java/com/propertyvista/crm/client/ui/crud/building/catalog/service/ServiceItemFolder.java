@@ -23,7 +23,7 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
@@ -58,7 +58,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ServiceItem) {
             return new ServiceItemEditor();
         }
@@ -73,7 +73,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().type().getValue()) {
             case residentialUnit:
@@ -92,7 +92,7 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
                 break;
             }
 
-            CEditableComponent<?, ?> comp;
+            CComponent<?, ?> comp;
             if (column.getObject() == proto().element()) {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {

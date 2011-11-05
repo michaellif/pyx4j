@@ -25,7 +25,7 @@ import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -180,13 +180,13 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
     private void validationOfStartStopDates(final CEntityEditor<? extends IIncomeInfo> comp) {
         comp.get(comp.proto().starts()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+            public boolean isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = comp.getValue().ends();
                 return (value != null) && (date.isNull() || value.before(date.getValue()));
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
                 return i18n.tr("The start date cannot be equal or after end date");
             }
         });
@@ -195,13 +195,13 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
 
         comp.get(comp.proto().ends()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+            public boolean isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = comp.getValue().starts();
                 return (value != null) && (date.isNull() || value.after(date.getValue()));
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
                 return i18n.tr("The end date cannot be before of equal to start date");
             }
         });

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
@@ -37,7 +37,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PageContent) {
             return new PageContentEditor();
         }

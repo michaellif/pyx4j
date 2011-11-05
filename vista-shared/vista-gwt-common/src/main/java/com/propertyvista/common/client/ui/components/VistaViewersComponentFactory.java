@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
@@ -44,7 +44,7 @@ import com.propertyvista.domain.ref.Province;
 public class VistaViewersComponentFactory extends EntityFormComponentFactory {
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getObjectClassType() == ObjectClassType.Primitive) {
             if (mm.getValueClass().equals(String.class)) {

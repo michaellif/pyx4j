@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
@@ -71,7 +71,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     @Override
     public void populate(AptUnitDTO value) {
-        CEditableComponent<Floorplan, ?> comp = get(proto().floorplan());
+        CComponent<Floorplan, ?> comp = get(proto().floorplan());
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
@@ -115,7 +115,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
         // restrict floorplan combo here to current building:
-        CEditableComponent<Floorplan, ?> comp = get(proto().floorplan());
+        CComponent<Floorplan, ?> comp = get(proto().floorplan());
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;

@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
@@ -122,12 +122,12 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
 
             @Override
-            public boolean isValid(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+            public boolean isValid(CComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
                 return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts());
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+            public String getValidationMessage(CComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
                 return i18n.tr("Duplicate contacts specified");
             }
         });

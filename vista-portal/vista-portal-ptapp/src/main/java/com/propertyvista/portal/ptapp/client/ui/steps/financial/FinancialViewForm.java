@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,7 +46,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
             return new CMoney();
         } else {
@@ -84,12 +84,12 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         this.addValueValidator(new EditableValueValidator<TenantFinancialDTO>() {
 
             @Override
-            public boolean isValid(CEditableComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
+            public boolean isValid(CComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
                 return (value.assets().size() > 0) || (value.incomes().size() > 0);
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
+            public String getValidationMessage(CComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
                 return i18n.tr("At least one source of income or one asset is required");
             }
         });

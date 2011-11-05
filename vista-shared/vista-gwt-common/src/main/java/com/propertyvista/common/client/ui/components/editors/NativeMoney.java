@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeFocusComponent;
 import com.pyx4j.widgets.client.TextBox;
 
@@ -95,7 +95,7 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     }
 
     @Override
-    public CEditableComponent<?, ?> getCComponent() {
+    public CComponent<?, ?> getCComponent() {
         return cComponent;
     }
 

@@ -22,7 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -46,7 +46,7 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PersonalAsset) {
             return new PersonalAssetEditor();
         } else {
@@ -64,12 +64,12 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
         public void addValidations() {
             get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
                 @Override
-                public boolean isValid(CEditableComponent<Double, ?> component, Double value) {
+                public boolean isValid(CComponent<Double, ?> component, Double value) {
                     return (value == null) || ((value >= 0) && (value <= 100));
                 }
 
                 @Override
-                public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
+                public String getValidationMessage(CComponent<Double, ?> component, Double value) {
                     return VistaTableFolder.i18n.tr("Value should be in range 0-100%");
                 }
 

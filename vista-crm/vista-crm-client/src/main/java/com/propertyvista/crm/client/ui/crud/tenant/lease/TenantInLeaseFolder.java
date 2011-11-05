@@ -35,7 +35,7 @@ import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -108,7 +108,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantInLease) {
             return new TenantInLeaseEditor();
         }
@@ -129,7 +129,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             if (first) {
                 HorizontalPanel main = new HorizontalPanel();
                 for (EntityFolderColumnDescriptor column : columns) {
-                    CEditableComponent<?, ?> component = createCell(column);
+                    CComponent<?, ?> component = createCell(column);
                     // Don't show relation and takeOwnership 
                     if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
                         component.setVisible(false);
@@ -145,8 +145,8 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CEditableComponent<?, ?> comp = null;
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?, ?> comp = null;
             if (first && proto().status() == column.getObject()) {
                 CTextField textComp = new CTextField();
                 textComp.setEditable(false);
@@ -190,7 +190,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             get(proto().tenant().person().birthDate()).addValueValidator(new BirthdayDateValidator());
             get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
                 @Override
-                public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                public boolean isValid(CComponent<Date, ?> component, Date value) {
                     TenantInLease.Status status = getValue().status().getValue();
                     if ((status == TenantInLease.Status.Applicant) || (status == TenantInLease.Status.CoApplicant)) {
                         // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
@@ -201,7 +201,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 }
 
                 @Override
-                public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                public String getValidationMessage(CComponent<Date, ?> component, Date value) {
                     return i18n.tr("Applicant and Co-applicant must be at least 18 years old");
                 }
             });

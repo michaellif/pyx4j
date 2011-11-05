@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.validators;
 
 import java.util.Date;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,14 +26,14 @@ public class OldAgeValidator implements EditableValueValidator<Date> {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+    public boolean isValid(CComponent<Date, ?> component, Date value) {
         Date current = new Date();
         return current.getYear() - value.getYear() < 150;
     }
 
     @Override
     @I18nComment("User input validation message")
-    public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+    public String getValidationMessage(CComponent<Date, ?> component, Date value) {
         return i18n.tr("Age cannot be greater than 150 years");
     }
 }

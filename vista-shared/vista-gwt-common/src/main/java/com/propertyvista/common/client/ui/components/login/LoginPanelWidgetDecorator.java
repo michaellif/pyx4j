@@ -13,12 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class LoginPanelWidgetDecorator extends WidgetDecorator {
 
-    public LoginPanelWidgetDecorator(CEditableComponent<?, ?> component) {
+    public LoginPanelWidgetDecorator(CComponent<?, ?> component) {
         super(new Builder(component).labelWidth(9).componentWidth(16).labelAlignment(Builder.Alignment.left));
         addStyleDependentName(WidgetDecorator.StyleDependent.noMandatoryStar.name());
 

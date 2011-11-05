@@ -25,7 +25,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntitySuggestBox;
 import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IAcceptText;
 
 import com.propertyvista.domain.ref.Country;
@@ -45,7 +45,7 @@ public class ProvinceContryFilters {
     /**
      * Add proper dependencies between shown list of countries and provinces/states
      */
-    public static void attachFilters(CEditableComponent<Province, ?> province, final CEditableComponent<Country, ?> country,
+    public static void attachFilters(CComponent<Province, ?> province, final CComponent<Country, ?> country,
             OptionsFilter<Province> provinceFilter) {
         if ((!(province instanceof CEntityComboBox)) || (!(country instanceof IAcceptText))) {
             return;

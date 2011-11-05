@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.validators;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.Path;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -41,7 +41,7 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public boolean isValid(CEditableComponent<String, ?> component, String value) {
+    public boolean isValid(CComponent<String, ?> component, String value) {
         String c = countryName();
         if ("Canada".equals(c)) {
             return ValidationUtils.isCanadianPostalCodeValid(value);
@@ -53,7 +53,7 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
+    public String getValidationMessage(CComponent<String, ?> component, String value) {
         String c = countryName();
         if ("Canada".equals(c)) {
             return i18n.tr("Invalid Canadian Postal Code");

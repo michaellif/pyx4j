@@ -21,7 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 
@@ -48,7 +48,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PageDescriptor) {
             return new PageDescriptorEditor();
         }
@@ -69,9 +69,9 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         }
 
         @Override
-        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
-                CEditableComponent<?, ?> comp = null;
+                CComponent<?, ?> comp = null;
                 if (parent.isEditable()) {
                     comp = inject(column.getObject(), new CLabel());
                 } else {

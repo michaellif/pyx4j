@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -73,13 +73,13 @@ public abstract class CAddressStructuredImpl<A extends AddressStructured> extend
         main.setWidget(row++, column, new DecoratorBuilder(inject(proto().county()), 15).build());
 
         // Need local variables to avoid extended casting that make the code unreadable
-        CEditableComponent<Province, ?> province = (CEditableComponent<Province, ?>) inject(proto().province());
+        CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
         main.setWidget(row++, column, new DecoratorBuilder(province, 17).build());
 
-        CEditableComponent<Country, ?> country = (CEditableComponent<Country, ?>) inject(proto().country());
+        CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
         main.setWidget(row++, column, new DecoratorBuilder(country, 15).build());
 
-        CEditableComponent<String, ?> postalCode = (CEditableComponent<String, ?>) inject(proto().postalCode());
+        CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
         main.setWidget(row++, column, new DecoratorBuilder(postalCode, 7).build());
 
         attachFilters(proto(), province, country, postalCode);
@@ -87,8 +87,8 @@ public abstract class CAddressStructuredImpl<A extends AddressStructured> extend
         return main;
     }
 
-    private void attachFilters(final AddressStructured proto, CEditableComponent<Province, ?> province, CEditableComponent<Country, ?> country,
-            CEditableComponent<String, ?> postalCode) {
+    private void attachFilters(final AddressStructured proto, CComponent<Province, ?> province, CComponent<Country, ?> country,
+            CComponent<String, ?> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 

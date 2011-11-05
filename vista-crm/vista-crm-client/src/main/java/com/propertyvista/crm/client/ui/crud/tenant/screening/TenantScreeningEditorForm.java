@@ -27,7 +27,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -129,13 +129,13 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+            public boolean isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
                 return (date.isNull() || value.before(date.getValue()));
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
                 return i18n.tr("Move In Date must be less then Move Out Date");
             }
         });
@@ -150,13 +150,13 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
-            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+            public boolean isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
                 return (date.isNull() || value.after(date.getValue()));
             }
 
             @Override
-            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
                 return i18n.tr("Move Out Date must be greater then Move In Date");
             }
         });
@@ -175,7 +175,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicense()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicenseState()), 20).build());
-        final CEditableComponent<?, ?> sin = inject(proto().secureIdentifier());
+        final CComponent<?, ?> sin = inject(proto().secureIdentifier());
         main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());

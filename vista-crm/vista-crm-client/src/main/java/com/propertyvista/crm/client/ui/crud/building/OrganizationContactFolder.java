@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
@@ -29,7 +29,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof OrganizationContact) {
             return new OrganizationContactEditor();
         } else {

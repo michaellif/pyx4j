@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -70,7 +70,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ChargeItem) {
             return new ChargeItemEditor(this);
         }

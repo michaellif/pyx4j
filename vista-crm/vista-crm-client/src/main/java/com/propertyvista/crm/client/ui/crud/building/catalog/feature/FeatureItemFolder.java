@@ -25,7 +25,7 @@ import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.editor.CEntityEditor;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -53,7 +53,7 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ServiceItem) {
             return new ServiceItemEditor();
         }
@@ -67,8 +67,8 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
         }
 
         @Override
-        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CEditableComponent<?, ?> comp = super.createCell(column);
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?, ?> comp = super.createCell(column);
             if (column.getObject() == proto().type()) {
                 if (comp instanceof CEntityComboBox<?>) {
                     @SuppressWarnings("unchecked")

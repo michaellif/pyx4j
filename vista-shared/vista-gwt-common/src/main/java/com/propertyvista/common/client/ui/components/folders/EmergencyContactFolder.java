@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.folders;
 import com.pyx4j.entity.client.ui.flex.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.editors.CEmergencyContact;
@@ -39,7 +39,7 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
             return new CEmergencyContact(twoColumns);
         } else {

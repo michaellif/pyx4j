@@ -17,7 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.PriorAddress;
@@ -47,7 +47,7 @@ public class CPriorAddress extends CAddressStructuredImpl<PriorAddress> {
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveOutDate()), 8.2).build());
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().phone()), 15).build());
 
-        CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
+        CComponent<?, ?> rentedComponent = inject(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {

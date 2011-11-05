@@ -22,7 +22,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -70,7 +70,7 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
     @SuppressWarnings("unchecked")
     @Override
     public void populate(ComplexDTO value) {
-        CEditableComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
+        CComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
         if (isEditable() && primaryBuildingWidget instanceof CEntityComboBox<?>) {
             CEntityComboBox<Building> primaryBuildingCombo = (CEntityComboBox<Building>) primaryBuildingWidget;
             primaryBuildingCombo.resetCriteria();
@@ -87,7 +87,7 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
         panel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().primaryBuilding())).build());
 
-        CEditableComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
+        CComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
 
         // restrict primary building selector to this complex
         if (isEditable() && primaryBuildingWidget instanceof CEntityComboBox<?>) {

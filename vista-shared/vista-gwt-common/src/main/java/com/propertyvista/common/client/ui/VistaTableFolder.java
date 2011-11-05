@@ -22,7 +22,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -75,7 +75,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (clazz.equals(member.getObjectClass())) {
             return new CEntityFolderRowEditor<E>(clazz, columns());
         } else {

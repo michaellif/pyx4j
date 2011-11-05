@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.components;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -27,7 +27,7 @@ public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getOwner() == null) {
             throw new Error("Factory doesn't have editor for " + member);
         }

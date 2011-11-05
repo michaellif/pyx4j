@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.components.media;
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -24,7 +24,7 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
     private static I18n i18n = I18n.get(MediaItemValidator.class);
 
     @Override
-    public boolean isValid(CEditableComponent<Media, ?> component, Media value) {
+    public boolean isValid(CComponent<Media, ?> component, Media value) {
         if (value.type().isNull()) {
             return false;
         }
@@ -44,7 +44,7 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<Media, ?> component, Media value) {
+    public String getValidationMessage(CComponent<Media, ?> component, Media value) {
         return i18n.tr("Media source cannot be empty!");
     }
 }

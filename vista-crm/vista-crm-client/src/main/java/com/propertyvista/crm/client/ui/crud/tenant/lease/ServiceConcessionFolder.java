@@ -30,7 +30,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -84,7 +84,7 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ServiceConcession) {
             return new ServiceConcessionEditor();
         }
@@ -98,7 +98,7 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
         }
 
         @Override
-        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().concession()) {
                 return inject(column.getObject(), new CEntityLabel());
             }

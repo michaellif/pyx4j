@@ -14,7 +14,7 @@
 package com.propertyvista.common.client.ui.validators;
 
 
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -24,7 +24,7 @@ public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
     private static I18n i18n = I18n.get(YouTubeVideoIdValidator.class);
 
     @Override
-    public boolean isValid(CEditableComponent<String, ?> component, String value) {
+    public boolean isValid(CComponent<String, ?> component, String value) {
         for (String p : new String[] { "watch?v=", "watch#!v=", "/vi/", "/?v=", "/v/" }) {
             String v = YouTubeVideoIdFormat.extract(value, p);
             if (v != null) {
@@ -37,7 +37,7 @@ public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
+    public String getValidationMessage(CComponent<String, ?> component, String value) {
         return i18n.tr("This is not a valid YouTube Video ID");
     }
 

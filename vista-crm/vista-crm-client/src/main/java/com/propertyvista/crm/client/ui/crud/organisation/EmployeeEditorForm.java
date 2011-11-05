@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -113,7 +113,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         return new CrmScrollPanel(main);
     }
 
-    private CEditableComponent<?, ?> createPortfolioListView() {
+    private CComponent<?, ?> createPortfolioListView() {
         return new VistaTableFolder<AssignedPortfolio>(AssignedPortfolio.class, isEditable()) {
 
             @Override
@@ -135,7 +135,7 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         };
     }
 
-    private CEditableComponent<?, ?> createEmpoloyeeListView() {
+    private CComponent<?, ?> createEmpoloyeeListView() {
         return new VistaTableFolder<ManagedEmployee>(ManagedEmployee.class, isEditable()) {
 
             @Override

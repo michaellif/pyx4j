@@ -26,7 +26,7 @@ import com.pyx4j.entity.client.ui.flex.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
@@ -53,7 +53,7 @@ class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ServiceFeature) {
             return new ServiceFeatureEditor();
         }
@@ -90,7 +90,7 @@ class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
         }
 
         @Override
-        protected CEditableComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().feature()) {
                 return inject(column.getObject(), new CEntityLabel());
             }

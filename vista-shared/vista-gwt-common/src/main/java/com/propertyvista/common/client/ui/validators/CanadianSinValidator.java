@@ -14,7 +14,7 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -25,7 +25,7 @@ public class CanadianSinValidator implements EditableValueValidator<String> {
     private static I18n i18n = I18n.get(CanadianSinValidator.class);
 
     @Override
-    public boolean isValid(CEditableComponent<String, ?> component, String value) {
+    public boolean isValid(CComponent<String, ?> component, String value) {
         if (CommonsStringUtils.isStringSet(value)) {
             return ValidationUtils.isSinValid(value.trim().replaceAll(" ", ""));
         } else {
@@ -34,7 +34,7 @@ public class CanadianSinValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
+    public String getValidationMessage(CComponent<String, ?> component, String value) {
         return i18n.tr("Invalid SIN");
     }
 
