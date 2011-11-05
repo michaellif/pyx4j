@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
-public class CForm extends CContainer<NativeForm> {
+public class CForm extends CContainer<Serializable, NativeForm> {
 
     public enum LabelAlignment {
         LEFT, TOP;

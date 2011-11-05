@@ -89,7 +89,7 @@ public class CRangeDatePicker extends CHorizontalPanel {
     }
 
     @SuppressWarnings("deprecation")
-    public Date[] getValue() {
+    public Date[] getDateValue() {
         Date toDateEndOfDay = null;
         if (toDate.getValue() != null) {
             toDateEndOfDay = new Date(toDate.getValue().getYear(), toDate.getValue().getMonth(), toDate.getValue().getDate(), 23, 59, 59);
@@ -97,6 +97,7 @@ public class CRangeDatePicker extends CHorizontalPanel {
         return new Date[] { fromDate.getValue(), toDateEndOfDay };
     }
 
+    @Override
     public boolean isValueEmpty() {
         return fromDate.isValueEmpty() && toDate.isValueEmpty();
     }

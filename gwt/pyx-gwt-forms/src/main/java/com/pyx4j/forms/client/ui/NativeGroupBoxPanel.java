@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
+
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -227,6 +229,36 @@ public class NativeGroupBoxPanel extends FieldSetPanel implements INativeSimpleP
 
     @Override
     public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setNativeValue(Void value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Void getNativeValue() throws ParseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setValid(boolean valid) {
         // TODO Auto-generated method stub
 
     }

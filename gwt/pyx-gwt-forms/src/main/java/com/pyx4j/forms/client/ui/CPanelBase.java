@@ -25,7 +25,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class CPanelBase<WIDGET_TYPE extends Widget & INativeComponent> extends CContainer<WIDGET_TYPE> {
+public abstract class CPanelBase<WIDGET_TYPE extends Widget & INativeEditableComponent<Void>> extends CContainer<Void, WIDGET_TYPE> {
 
     private final Collection<CComponent<?>> components = new ArrayList<CComponent<?>>();
 

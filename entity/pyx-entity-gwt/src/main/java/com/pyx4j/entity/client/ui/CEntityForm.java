@@ -169,7 +169,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
         }
     }
 
-    public E getValue() {
+    public E getFormValue() {
         return editableEntity;
     }
 

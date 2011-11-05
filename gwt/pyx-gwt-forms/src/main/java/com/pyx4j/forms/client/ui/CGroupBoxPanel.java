@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
  * This is a border panel that has single CContainer as a child.
  * 
  */
-public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
+public class CGroupBoxPanel extends CContainer<Void, NativeGroupBoxPanel> {
 
     public static enum Layout {
 
@@ -53,7 +53,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
 
     private final Layout layout;
 
-    private CContainer<?> component;
+    private CContainer<?, ?> component;
 
     private boolean expended = true;
 
@@ -108,7 +108,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
         if (!(component instanceof CContainer)) {
             throw new RuntimeException("Can't add CComponent that is not a CContainer to CGroupBoxPanel");
         }
-        this.component = (CContainer<?>) component;
+        this.component = (CContainer<?, ?>) component;
         component.setParent(this);
     }
 

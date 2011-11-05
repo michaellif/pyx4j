@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -64,7 +66,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
-public class NativeForm extends FlowPanel implements INativeComponent {
+public class NativeForm extends FlowPanel implements INativeEditableComponent<Serializable> {
 
     private static final I18n i18n = I18n.get(NativeForm.class);
 
@@ -766,6 +768,36 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     @Override
     public void installStyles(String stylePrefix) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setNativeValue(Serializable value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Serializable getNativeValue() throws ParseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setValid(boolean valid) {
         // TODO Auto-generated method stub
 
     }

@@ -44,7 +44,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     private String tooltip;
 
-    private CContainer<?> parent;
+    private CContainer<?, ?> parent;
 
     private CLayoutConstraints constraints;
 
@@ -128,7 +128,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         }
     }
 
-    public void setParent(CContainer<?> parent) {
+    public void setParent(CContainer<?, ?> parent) {
         this.parent = parent;
         setContainerAccessRules(inheritContainerAccessRules);
     }
@@ -165,7 +165,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         }
     }
 
-    public CContainer<?> getParent() {
+    public CContainer<?, ?> getParent() {
         return parent;
     }
 

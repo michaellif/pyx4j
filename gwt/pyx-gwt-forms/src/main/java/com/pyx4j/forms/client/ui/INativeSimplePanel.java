@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface INativeSimplePanel extends INativeComponent {
+public interface INativeSimplePanel extends INativeEditableComponent<Void> {
 
     public void add(INativeComponent nativeWidget, CLayoutConstraints layoutConstraints);
 

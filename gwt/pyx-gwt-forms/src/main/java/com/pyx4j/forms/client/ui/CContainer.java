@@ -24,7 +24,8 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> extends CComponent<WIDGET_TYPE> {
+public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
+        CEditableComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private final IAccessAdapter aggregatingAccessAdapter;
 
@@ -41,6 +42,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public abstract void addComponent(CComponent<?> component);
 
+    @Override
     public boolean isValid() {
         if (!isEditable() || !isEnabled()) {
             return true;
@@ -74,6 +76,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
         return aggregatingAccessAdapter;
     }
 
+    @Override
     public boolean isEditable() {
         for (IAccessAdapter adapter : getAccessAdapters()) {
             if (!adapter.isEditable(this)) {
@@ -83,6 +86,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
         return true;
     }
 
+    @Override
     public void setEditable(boolean editable) {
         defaultAccessAdapter.setEditable(editable);
         applyEditabilityRules();
@@ -108,6 +112,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
         }
     }
 
+    @Override
     public void applyEditabilityRules() {
         if (getComponents() != null) {
             for (CComponent<?> component : getComponents()) {
