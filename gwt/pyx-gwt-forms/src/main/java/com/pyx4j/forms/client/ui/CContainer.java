@@ -60,9 +60,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
         for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CFormFolder && !((CFormFolder) ccomponent).isValid()) {
-                validationResults.appendValidationErrors(((CFormFolder) ccomponent).getValidationResults());
-            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
                 validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
                         + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
             } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
