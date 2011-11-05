@@ -89,6 +89,10 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
         }
     }
 
+    protected CrudEntityForm<E> getForm() {
+        return form;
+    }
+
     @Override
     public void populate(E value) {
         assert (form != null);
