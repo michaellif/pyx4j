@@ -90,7 +90,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
     @Override
     public void populate(Charges value) {
         super.populate(value);
-//        splitCharges.setVisible(value.paymentSplitCharges().charges().size() > 1);
+        splitCharges.setVisible(value.paymentSplitCharges().charges().size() > 1);
     }
 
     private Widget createTotal(Money member) {
