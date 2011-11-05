@@ -81,7 +81,4 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
         actionsPanel.setCellWidth(action, "1%");
     }
 
-    protected AdminEntityForm<E> getForm() {
-        return (AdminEntityForm<E>) form;
-    }
 }

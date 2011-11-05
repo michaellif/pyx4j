@@ -83,7 +83,4 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         actionsPanel.setCellWidth(action, "1%");
     }
 
-    protected CrmEntityForm<E> getForm() {
-        return (CrmEntityForm<E>) form;
-    }
 }
