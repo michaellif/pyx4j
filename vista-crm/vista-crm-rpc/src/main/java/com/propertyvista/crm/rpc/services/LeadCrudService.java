@@ -16,7 +16,7 @@ package com.propertyvista.crm.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;

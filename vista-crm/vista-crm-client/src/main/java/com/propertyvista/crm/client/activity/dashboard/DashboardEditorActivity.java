@@ -18,12 +18,12 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.crm.client.event.NavigationUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardEditor;

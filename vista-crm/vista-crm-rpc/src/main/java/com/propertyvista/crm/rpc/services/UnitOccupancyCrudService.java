@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 

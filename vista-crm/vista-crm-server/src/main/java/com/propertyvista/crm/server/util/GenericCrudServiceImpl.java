@@ -16,9 +16,9 @@ package com.propertyvista.crm.server.util;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 /**
  * DBO - Data Base Object

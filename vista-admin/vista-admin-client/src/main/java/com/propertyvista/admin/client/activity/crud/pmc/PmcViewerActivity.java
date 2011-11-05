@@ -16,8 +16,8 @@ package com.propertyvista.admin.client.activity.crud.pmc;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.admin.client.viewfactories.ManagementVeiwFactory;

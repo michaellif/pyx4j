@@ -18,11 +18,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.rpc.services.AbstractCrudService;
 
 import com.propertyvista.portal.client.ui.residents.MaintenanceListerView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;

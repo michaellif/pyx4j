@@ -15,7 +15,7 @@ package com.propertyvista.admin.rpc.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;

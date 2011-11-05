@@ -22,9 +22,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.site.rpc.services.AbstractListService;
 
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services.dashboard;
 
-import com.pyx4j.site.rpc.services.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
