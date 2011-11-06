@@ -22,24 +22,23 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
 import com.propertyvista.domain.site.SiteDescriptor;
-import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
 @IgnoreSessionToken
 public class SiteThemeServicesImpl implements SiteThemeServices {
 
     @Override
-    public void retrievePalette(AsyncCallback<SitePalette> callback) {
-        SitePalette palette = null;
-        Key paletteKey = (Key) CacheService.get(SitePalette.cacheKey);
-        if (paletteKey != null) {
-            palette = Persistence.service().retrieve(SitePalette.class, paletteKey);
+    public void retrieveSiteDescriptor(AsyncCallback<SiteDescriptor> callback) {
+        SiteDescriptor descriptor = null;
+        Key descriptorKey = (Key) CacheService.get(SiteDescriptor.cacheKey);
+        if (descriptorKey != null) {
+            descriptor = Persistence.service().retrieve(SiteDescriptor.class, descriptorKey);
         }
-        if (palette == null) {
+        if (descriptor == null) {
             SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-            palette = siteDescriptor.sitePalette().cloneEntity();
-            CacheService.put(SitePalette.cacheKey, palette.getPrimaryKey());
+            descriptor = siteDescriptor.cloneEntity();
+            CacheService.put(SiteDescriptor.cacheKey, descriptor.getPrimaryKey());
         }
-        callback.onSuccess(palette);
+        callback.onSuccess(descriptor);
     }
 }

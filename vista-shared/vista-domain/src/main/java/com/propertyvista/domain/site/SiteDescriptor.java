@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.site;
 
+import com.pyx4j.entity.annotations.Cached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -23,16 +24,20 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+@Cached
 public interface SiteDescriptor extends IEntity {
+
+    //TODO make single instance objects part of framework
+    public final String cacheKey = "SiteDescriptor";
 
     @I18n
     public enum Skin {
 
-        skin1(),
+        skin1(12, 23, 89, 37, 100, 100, 100, 100, 0, 10, 0, 100),
 
-        skin2(70, 98, 10, 98, 100, 100, 100, 100, 0, 30, 0, 95),
+        skin2(70, 98, 10, 98, 100, 100, 100, 100, 0, 10, 0, 100),
 
-        skin3(20, 80, 20, 80, 98, 98, 98, 98, 0, 30, 0, 95);
+        skin3(20, 80, 20, 80, 98, 98, 98, 98, 0, 10, 0, 100);
 
         private final Integer[] colorProperties;
 

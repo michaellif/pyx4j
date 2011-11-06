@@ -13,21 +13,36 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.commons.css.ThemeColors;
 
 import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
 
 public class PortalPalette extends VistaPalette {
 
-    public PortalPalette(SitePalette palette) {
+    public PortalPalette(SiteDescriptor descriptor) {
 
-        putThemeColor(ThemeColors.object1, palette.object1().getValue());
-        putThemeColor(ThemeColors.object2, palette.object2().getValue());
-        putThemeColor(ThemeColors.contrast1, palette.contrast1().getValue());
-        putThemeColor(ThemeColors.contrast2, palette.contrast2().getValue());
-        putThemeColor(ThemeColors.background, palette.background().getValue());
-        putThemeColor(ThemeColors.foreground, palette.foreground().getValue());
+        SitePalette palette = descriptor.sitePalette();
+
+        Skin skin = descriptor.skin().getValue();
+
+        putThemeColor(ThemeColors.object1, ColorUtil.hsbToRgb((float) palette.object1().getValue() / 360, (float) skin.getColorProperties()[0] / 100,
+                (float) skin.getColorProperties()[1] / 100));
+        putThemeColor(ThemeColors.object2, ColorUtil.hsbToRgb((float) palette.object2().getValue() / 360, (float) skin.getColorProperties()[2] / 100,
+                (float) skin.getColorProperties()[3] / 100));
+        putThemeColor(ThemeColors.contrast1, ColorUtil.hsbToRgb((float) palette.contrast1().getValue() / 360, (float) skin.getColorProperties()[4] / 100,
+                (float) skin.getColorProperties()[5] / 100));
+        putThemeColor(ThemeColors.contrast2, ColorUtil.hsbToRgb((float) palette.contrast2().getValue() / 360, (float) skin.getColorProperties()[6] / 100,
+                (float) skin.getColorProperties()[7] / 100));
+        putThemeColor(ThemeColors.foreground, ColorUtil.hsbToRgb((float) palette.background().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
+                (float) skin.getColorProperties()[9] / 100));
+        putThemeColor(
+                ThemeColors.background,
+                ColorUtil.hsbToRgb((float) palette.foreground().getValue() / 360, (float) skin.getColorProperties()[10] / 100,
+                        (float) skin.getColorProperties()[11] / 100));
 
     }
 }

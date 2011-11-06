@@ -17,10 +17,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.site.SitePalette;
+import com.propertyvista.domain.site.SiteDescriptor;
 
 public interface SiteThemeServices extends IService {
 
-    public void retrievePalette(AsyncCallback<SitePalette> callback);
+    public void retrieveSiteDescriptor(AsyncCallback<SiteDescriptor> callback);
 
 }

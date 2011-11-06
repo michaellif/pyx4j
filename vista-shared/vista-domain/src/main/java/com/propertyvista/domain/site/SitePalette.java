@@ -13,15 +13,10 @@
  */
 package com.propertyvista.domain.site;
 
-import com.pyx4j.entity.annotations.Cached;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Cached
 public interface SitePalette extends IEntity {
-
-    //TODO make single instance objects part of framework
-    public final String cacheKey = "SitePalette";
 
     IPrimitive<Integer> object1();
 
