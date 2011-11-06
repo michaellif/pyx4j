@@ -114,9 +114,19 @@ public class ColorUtil {
     }
 
     public static int hsbvToRgb(float hue, float saturation, float brightness, float vibrance) {
-        float ns = saturation * vibrance;
-        float nb = 1 - (1 - brightness) * vibrance;
-        return hsbToRgb(hue, ns, nb);
+        assert hue >= 0 && hue <= 1 : "hue should be between 0 and 1";
+        assert saturation >= 0 && saturation <= 1 : "saturation should be between 0 and 1";
+        assert brightness >= 0 && brightness <= 1 : "brightness should be between 0 and 1";
+        assert vibrance >= 0 && vibrance <= 2 : "vibrance should be between 0 and 1";
+        if (vibrance > 1) {
+            float ns = saturation + (1 - saturation) * (vibrance - 1);
+            float nb = (brightness) * (vibrance - 1);
+            return hsbToRgb(hue, ns, nb);
+        } else {
+            float ns = saturation * vibrance;
+            float nb = 1 - (1 - brightness) * vibrance;
+            return hsbToRgb(hue, ns, nb);
+        }
     }
 
     public static int rgbToRgbv(int rgb, float vibrance) {

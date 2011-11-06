@@ -40,5 +40,14 @@ public class ColorUtilTest extends TestCase {
 
         assertEquals("#ffff00", ColorUtil.rgbToHex(ColorUtil.rgbToRgbv(ColorUtil.parseToRgb("yellow"), 1)));
         assertEquals("#ffff80", ColorUtil.rgbToHex(ColorUtil.rgbToRgbv(ColorUtil.parseToRgb("yellow"), (float) 0.5)));
+
+        assertEquals("#313329", ColorUtil.rgbToHex(ColorUtil.hsbToRgb((float) 0.2, (float) 0.2, (float) 0.2)));
+
+        assertEquals("#96998a", ColorUtil.rgbToHex(ColorUtil.hsbToRgb((float) 0.2, (float) 0.1, (float) 0.6)));
+        assertEquals("#96998a", ColorUtil.rgbToHex(ColorUtil.hsbvToRgb((float) 0.2, (float) 0.2, (float) 0.2, (float) 0.5)));
+
+        assertEquals("#161a0a", ColorUtil.rgbToHex(ColorUtil.hsbToRgb((float) 0.2, (float) 0.6, (float) 0.1)));
+        assertEquals("#161a0a", ColorUtil.rgbToHex(ColorUtil.hsbvToRgb((float) 0.2, (float) 0.2, (float) 0.2, (float) 1.5)));
+
     }
 }
