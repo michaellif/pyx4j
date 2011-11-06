@@ -151,13 +151,6 @@ public class ServerSideConfiguration {
         return System.getProperty("com.pyx4j.appUrl");
     }
 
-    /**
-     * When HTTPD site is proxing requests by removing context.
-     */
-    public boolean isContextLessDeployment() {
-        return false;
-    }
-
     public String getApplicationEmailSender() {
         return "\"Pyx Software Services Inc\" <skarzhevskyy@gmail.com>";
     }

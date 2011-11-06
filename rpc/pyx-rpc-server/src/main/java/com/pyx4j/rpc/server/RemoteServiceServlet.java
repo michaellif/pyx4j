@@ -89,12 +89,16 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
                 beginModuleBaseURL = serializedRequest.indexOf('|', beginModuleBaseURL) + 1;
             }
             String moduleBaseURL = serializedRequest.substring(beginModuleBaseURL, serializedRequest.indexOf('|', beginModuleBaseURL));
-            String contextPath = Context.getRequest().getContextPath();
-            //log.debug("moduleBaseURL = [{}] contextPath [{}]", moduleBaseURL, contextPath);
             String modulePath = new URL(moduleBaseURL).getPath();
+
+            // Allow for redirected requests environments
+            String forwardedContext = Context.getRequest().getHeader("x-forwarded-context");
+            if (forwardedContext != null) {
+                modulePath = forwardedContext + modulePath;
+            }
             String moduleRelativePath;
+            String contextPath = Context.getRequest().getContextPath();
             if (modulePath.contains(contextPath)) {
-                // Allow for redirected requests environments, consider the context is mapped to root.
                 moduleRelativePath = modulePath.substring(contextPath.length());
             } else {
                 moduleRelativePath = modulePath;
@@ -137,16 +141,22 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     @Override
     protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
-        if (ServerSideConfiguration.instance().isContextLessDeployment()) {
+        String forwardedContext = request.getHeader("x-forwarded-context");
+        final boolean debug = true;
+        if (debug) {
+            log.debug("moduleBaseURL orig {}", moduleBaseURL);
+            RequestDebug.debug(request);
+        }
+        if (forwardedContext != null) {
             try {
-                //log.debug("moduleBaseURL orig {}", moduleBaseURL);
                 URL url = new URL(moduleBaseURL);
                 String modulePath = url.getPath();
-                //log.debug("modulePath {}", modulePath);
-                String contextPath = request.getContextPath();
-                if ((modulePath != null) && !modulePath.contains(contextPath)) {
-                    moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + contextPath + modulePath;
-                    //log.debug("moduleBaseURL corrected {}", moduleBaseURL);
+                moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + forwardedContext;
+                if (modulePath != null) {
+                    moduleBaseURL += modulePath;
+                }
+                if (debug) {
+                    log.debug("moduleBaseURL corrected {}", moduleBaseURL);
                 }
             } catch (MalformedURLException e) {
                 log.error("Malformed moduleBaseURL {} ", moduleBaseURL, e);
@@ -168,7 +178,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         } else if ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment)
                 && (ServerSideConfiguration.instance().isDevelopmentBehavior())) {
             realServiceName = serviceInterfaceClassName;
-            log.warn("Using development serveice name {}", serviceInterfaceClassName);
+            log.warn("Using development service name {}", serviceInterfaceClassName);
         } else {
             log.error("unable to find service-manifest");
             throw new IncompatibleRemoteServiceException();
