@@ -28,15 +28,30 @@ public interface SiteDescriptor extends IEntity {
     @I18n
     public enum Skin {
 
-        skin1,
+        skin1(),
 
-        skin2,
+        skin2(70, 98, 10, 98, 100, 100, 100, 100, 100, 0, 0, 100),
 
-        skin3;
+        skin3(20, 80, 20, 80, 98, 98, 98, 98, 100, 0, 0, 100);
+
+        private final Integer[] colorProperties;
+
+        private Skin(Integer o1b, Integer o1s, Integer o2b, Integer o2s, Integer c1b, Integer c1s, Integer c2b, Integer c2s, Integer fb, Integer fs,
+                Integer bb, Integer bs) {
+            this.colorProperties = new Integer[] { o1b, o1s, o2b, o2s, c1b, c1s, c2b, c2s, fb, fs, bb, bs };
+        }
+
+        private Skin() {
+            this(0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 100);
+        }
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public Integer[] getColorProperties() {
+            return colorProperties;
         }
     }
 

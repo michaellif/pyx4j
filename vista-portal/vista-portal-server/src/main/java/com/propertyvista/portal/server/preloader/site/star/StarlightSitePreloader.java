@@ -29,38 +29,33 @@ public class StarlightSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
-    protected String object1() {
-        return "#1E2026";
+    protected Integer object1() {
+        return 20;
     }
 
     @Override
-    protected String object2() {
-        return "#1E2026";
+    protected Integer object2() {
+        return 70;
     }
 
     @Override
-    protected String contrast1() {
-        return "#B5E329";
+    protected Integer contrast1() {
+        return 120;
     }
 
     @Override
-    protected String contrast2() {
-        return "#B5E329";
+    protected Integer contrast2() {
+        return 170;
     }
 
     @Override
-    protected String foreground() {
-        return "#666666";
+    protected Integer foreground() {
+        return 220;
     }
 
     @Override
-    protected String background() {
-        return "#000000";
-    }
-
-    @Override
-    protected String form() {
-        return "#666666";
+    protected Integer background() {
+        return 270;
     }
 
     @Override

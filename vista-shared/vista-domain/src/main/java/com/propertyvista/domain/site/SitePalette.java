@@ -23,18 +23,16 @@ public interface SitePalette extends IEntity {
     //TODO make single instance objects part of framework
     public final String cacheKey = "SitePalette";
 
-    IPrimitive<String> object1();
+    IPrimitive<Integer> object1();
 
-    IPrimitive<String> object2();
+    IPrimitive<Integer> object2();
 
-    IPrimitive<String> contrast1();
+    IPrimitive<Integer> contrast1();
 
-    IPrimitive<String> contrast2();
+    IPrimitive<Integer> contrast2();
 
-    IPrimitive<String> background();
+    IPrimitive<Integer> background();
 
-    IPrimitive<String> foreground();
-
-    IPrimitive<String> form();
+    IPrimitive<Integer> foreground();
 
 }

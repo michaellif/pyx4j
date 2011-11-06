@@ -28,7 +28,6 @@ public class PortalPalette extends VistaPalette {
         putThemeColor(ThemeColors.contrast2, palette.contrast2().getValue());
         putThemeColor(ThemeColors.background, palette.background().getValue());
         putThemeColor(ThemeColors.foreground, palette.foreground().getValue());
-        putThemeColor(ThemeColors.form, palette.form().getValue());
 
     }
 }

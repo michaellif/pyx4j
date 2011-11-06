@@ -62,9 +62,6 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().background()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().foreground()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().form()), 10).build());
 
         main.setHR(row++, 0, 1);
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());

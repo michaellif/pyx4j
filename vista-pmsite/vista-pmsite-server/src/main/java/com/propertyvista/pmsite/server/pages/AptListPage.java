@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
@@ -134,11 +133,9 @@ public class AptListPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
-        SitePalette sitePalette = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteDescriptor().sitePalette();
-
         String fileCSS = "aptlist" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                new StylesheetTemplateModel(sitePalette));
+                new StylesheetTemplateModel(getRequest()));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

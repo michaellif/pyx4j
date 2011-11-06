@@ -17,11 +17,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.request.Request;
 
+import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.ThemeColors;
 
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 
 public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String, Object>> {
 
@@ -31,32 +35,35 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
 
     private static final int VIBRANCE_CNT = 10;
 
-    public StylesheetTemplateModel(SitePalette sitePalette) {
+    public StylesheetTemplateModel(Request request) {
+        SitePalette sitePalette = ((PMSiteWebRequest) request).getContentManager().getSiteDescriptor().sitePalette();
+        Skin skin = ((PMSiteWebRequest) request).getContentManager().getSiteDescriptor().skin().getValue();
         palette = new Palette();
-        palette.putThemeColor(ThemeColors.object1, sitePalette.object1().getValue());
-        palette.putThemeColor(ThemeColors.object2, sitePalette.object2().getValue());
-        palette.putThemeColor(ThemeColors.contrast1, sitePalette.contrast1().getValue());
-        palette.putThemeColor(ThemeColors.contrast2, sitePalette.contrast2().getValue());
-        palette.putThemeColor(ThemeColors.background, sitePalette.background().getValue());
-        palette.putThemeColor(ThemeColors.foreground, sitePalette.foreground().getValue());
+        palette.putThemeColor(
+                ThemeColors.object1,
+                ColorUtil.hsbToRgb((float) sitePalette.object1().getValue() / 360, (float) skin.getColorProperties()[0] / 100,
+                        (float) skin.getColorProperties()[1] / 100));
+        palette.putThemeColor(
+                ThemeColors.object2,
+                ColorUtil.hsbToRgb((float) sitePalette.object2().getValue() / 360, (float) skin.getColorProperties()[2] / 100,
+                        (float) skin.getColorProperties()[3] / 100));
+        palette.putThemeColor(
+                ThemeColors.contrast1,
+                ColorUtil.hsbToRgb((float) sitePalette.contrast1().getValue() / 360, (float) skin.getColorProperties()[4] / 100,
+                        (float) skin.getColorProperties()[5] / 100));
+        palette.putThemeColor(
+                ThemeColors.contrast2,
+                ColorUtil.hsbToRgb((float) sitePalette.contrast2().getValue() / 360, (float) skin.getColorProperties()[6] / 100,
+                        (float) skin.getColorProperties()[7] / 100));
+        palette.putThemeColor(
+                ThemeColors.foreground,
+                ColorUtil.hsbToRgb((float) sitePalette.background().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
+                        (float) skin.getColorProperties()[9] / 100));
+        palette.putThemeColor(
+                ThemeColors.background,
+                ColorUtil.hsbToRgb((float) sitePalette.foreground().getValue() / 360, (float) skin.getColorProperties()[10] / 100,
+                        (float) skin.getColorProperties()[11] / 100));
 
-//             palette.putThemeColor(ThemeColors.object1, "#269bff");
-//            palette.putThemeColor(ThemeColors.object2, "#2670ff");
-//            palette.putThemeColor(ThemeColors.contrast1, "#ff170f");
-//            palette.putThemeColor(ThemeColors.contrast2, "#6f5879");
-//            palette.putThemeColor(ThemeColors.background, "#ffffff");
-//            palette.putThemeColor(ThemeColors.foreground, "#000000");
-//            break;
-//        case 2:
-//        default:
-//            palette.putThemeColor(ThemeColors.object1, "#072255");
-//            palette.putThemeColor(ThemeColors.object2, "#5D466B");
-//            palette.putThemeColor(ThemeColors.contrast1, "#8BAEDA");
-//            palette.putThemeColor(ThemeColors.contrast2, "#5177A6");
-//            palette.putThemeColor(ThemeColors.background, "#666666");
-//            palette.putThemeColor(ThemeColors.foreground, "#444444");
-//            break;
-//        }
     }
 
     @Override

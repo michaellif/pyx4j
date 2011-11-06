@@ -19,7 +19,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 import templates.TemplateResources;
 
-import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -39,11 +38,9 @@ public class ResidentsPage extends BasePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
-        SitePalette sitePalette = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteDescriptor().sitePalette();
-
         String fileCSS = "resident" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                new StylesheetTemplateModel(sitePalette));
+                new StylesheetTemplateModel(getRequest()));
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

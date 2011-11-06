@@ -31,38 +31,33 @@ public class RedridgeSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
-    protected String object1() {
-        return "#269bff";
+    protected Integer object1() {
+        return 211;
     }
 
     @Override
-    protected String object2() {
-        return "#2670ff";
+    protected Integer object2() {
+        return 38;
     }
 
     @Override
-    protected String contrast1() {
-        return "#ff170f";
+    protected Integer contrast1() {
+        return 0;
     }
 
     @Override
-    protected String contrast2() {
-        return "#6f5879";
+    protected Integer contrast2() {
+        return 194;
     }
 
     @Override
-    protected String foreground() {
-        return "#000000";
+    protected Integer foreground() {
+        return 220;
     }
 
     @Override
-    protected String background() {
-        return "#ffffff";
-    }
-
-    @Override
-    protected String form() {
-        return "#000000";
+    protected Integer background() {
+        return 270;
     }
 
     @SuppressWarnings("deprecation")

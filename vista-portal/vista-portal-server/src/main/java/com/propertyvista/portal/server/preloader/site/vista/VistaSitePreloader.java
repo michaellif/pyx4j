@@ -31,38 +31,33 @@ public class VistaSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
-    protected String object1() {
-        return "#4488bb";
+    protected Integer object1() {
+        return 20;
     }
 
     @Override
-    protected String object2() {
-        return "green";
+    protected Integer object2() {
+        return 70;
     }
 
     @Override
-    protected String contrast1() {
-        return "green";
+    protected Integer contrast1() {
+        return 120;
     }
 
     @Override
-    protected String contrast2() {
-        return "green";
+    protected Integer contrast2() {
+        return 170;
     }
 
     @Override
-    protected String foreground() {
-        return "green";
+    protected Integer foreground() {
+        return 220;
     }
 
     @Override
-    protected String background() {
-        return "green";
-    }
-
-    @Override
-    protected String form() {
-        return "green";
+    protected Integer background() {
+        return 270;
     }
 
     @SuppressWarnings("deprecation")
