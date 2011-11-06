@@ -63,6 +63,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         EntityListCriteria<UnitVacancyStatus> criteria = new EntityListCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
         criteria.setSorts(sortingCriteria);
 
+        //TODO THIS IS VERY BAD. Do not use Strings Use Keys
         if (!buildings.isEmpty()) {
             // TODO add protection from SQL injection if in the future buildings are still represented as strings
             criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
@@ -302,17 +303,19 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         intervalStart = intervalEnd;
         intervalEnd = resolution.addTo(intervalStart);
 
-        // now add some more intervals if we don't have more events but still haven't reached till the end of the rest of time time 
-        while (endReportTime >= intervalEnd) {
-            if (!isFirstEmptyRange) {
-                UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
-                analysis.fromDate().setValue(new LogicalDate(intervalStart));
-                analysis.toDate().setValue(new LogicalDate(intervalEnd));
-                analysis.unitsTurnedOverAbs().setValue(0);
-                result.add(analysis);
+        if (false) {
+            // now add some more intervals if we don't have more events but still haven't reached till the end of the rest of time time 
+            while (endReportTime >= intervalEnd) {
+                if (!isFirstEmptyRange) {
+                    UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+                    analysis.fromDate().setValue(new LogicalDate(intervalStart));
+                    analysis.toDate().setValue(new LogicalDate(intervalEnd));
+                    analysis.unitsTurnedOverAbs().setValue(0);
+                    result.add(analysis);
 
-                intervalStart = intervalEnd;
-                intervalEnd = resolution.addTo(intervalStart);
+                    intervalStart = intervalEnd;
+                    intervalEnd = resolution.addTo(intervalStart);
+                }
             }
         }
 
