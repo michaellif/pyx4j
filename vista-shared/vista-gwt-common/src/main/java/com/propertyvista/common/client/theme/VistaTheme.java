@@ -292,7 +292,7 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-top", "0.5em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("border-bottom", "4px solid");
-        style.addProperty("border-bottom-color", ThemeColors.OBJECT_TONE35);
+        style.addProperty("border-bottom-color", ThemeColors.object1, 0.35);
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab");
@@ -306,12 +306,12 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-right", "10px");
         style.addProperty("padding-left", "10px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColors.SELECTION);
+        style.addProperty("border-right-color", ThemeColors.object1, 1.5);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.SELECTION);
+        style.addProperty("border-left-color", ThemeColors.object1, 1.5);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.SELECTION);
-        style.addProperty("background", ThemeColors.SELECTION);
+        style.addProperty("border-top-color", ThemeColors.object1, 1.5);
+        style.addProperty("background", ThemeColors.object1);
         style.addProperty("color", "white");
         style.addProperty("display", "inline-block");
         style.addProperty("position", "relative");
@@ -319,7 +319,7 @@ public class VistaTheme extends Theme {
 
         style = new Style(".gwt-TabLayoutPanelTab-selected");
         style.addProperty("cursor", "default");
-        style.addGradient(ThemeColors.OBJECT_TONE10, ThemeColors.OBJECT_TONE30);
+        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.30);
         style.addProperty("color", "#333");
         addStyle(style);
 
@@ -516,11 +516,11 @@ public class VistaTheme extends Theme {
 //        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
 
         style.addProperty("font", "12px Arial, Helvetica, sans-serif");
-        style.addProperty("color", ThemeColors.TEXT);
-        style.addProperty("background-color", ThemeColors.TEXT_BACKGROUND);
+        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("background-color", ThemeColors.background);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.BORDER);
+        style.addProperty("border-color", ThemeColors.foreground);
         if (!BrowserType.isIE7()) {
             style.addProperty("padding", "2px 5px");
         }
@@ -544,7 +544,7 @@ public class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.readOnly));
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "none");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
+        style.addProperty("background-color", ThemeColors.object1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.invalid));
@@ -560,7 +560,7 @@ public class VistaTheme extends Theme {
         Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.BORDER);
+        style.addProperty("border-color", ThemeColors.foreground);
         addStyle(style);
 
         style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.disabled));
@@ -570,7 +570,7 @@ public class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.readOnly));
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "none");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
+        style.addProperty("background-color", ThemeColors.object1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.invalid));
