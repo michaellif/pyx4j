@@ -133,7 +133,7 @@ public class VistaCrmTheme extends VistaTheme {
 
         // Header:
         style = new Style(".", CrmPanel.StyleName.SiteViewHeader.name());
-        style.addGradient(ThemeColors.object1, 0.8, ThemeColors.object1, 0.9);
+        style.addGradient(ThemeColors.object1, 0.9, ThemeColors.object1, 1.1);
         style.addProperty("color", "white");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
@@ -200,7 +200,7 @@ public class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
         style.addProperty("color", "#333");
-        style.addGradient(ThemeColors.object1, 0.4, ThemeColors.object1, 0.45);
+        style.addGradient(ThemeColors.object1, 0.4, ThemeColors.object1, 0.5);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader", null, NavigViewImpl.StyleDependent.selected));
@@ -592,7 +592,7 @@ public class VistaCrmTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
         style.addProperty("background-color", ThemeColors.object1);
-        style.addProperty("color", ThemeColors.object1, 0.95);
+        style.addProperty("color", ThemeColors.object1, 0.1);
         style.addProperty("font", "caption");
         style.addProperty("font-weight", "bold");
         style.addProperty("height", "20px");
@@ -730,9 +730,9 @@ public class VistaCrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
-        style.addProperty("background-color", ThemeColors.object1, 0.3);
+        style.addProperty("background-color", ThemeColors.object1, 0.2);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1);
+        style.addProperty("border-color", ThemeColors.object1, 0.3);
         addStyle(style);
     }
 }
