@@ -14,7 +14,6 @@
 	height: 80px;
 	overflow: hidden;
 	padding: 0 0 0 30px;
-	background: ${object2_100}
 }
 
 .vista-pmsite-findAptPage .caption h1 {
@@ -30,9 +29,9 @@
 }
 
 .advancedSearchWideWrap input[type=submit] {
-	background: url("images/template1/submit.png") no-repeat;
-	border: none;
-	color: ${background_100};
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;
@@ -60,7 +59,7 @@
 	margin-left:30px;
 	padding:6px 20px;
 	color:${foreground_100};
-	background-color:${contrast1_40};
+	background-color:${foreground_10};
 	text-align:center;
 	float:left; 
 }
@@ -142,9 +141,9 @@
 }
 .advancedSearchWideWrap .typeselActiveHover {
 	color:${object1_20} !important;
-	background-color:${contrast1_80} !important;
+	background-color:${foreground_60} !important;
 }
 .advancedSearchWideWrap .typeselActive {
 	color:${object1_20} !important;
-	background-color:${contrast1_80} !important;
+	background-color:${foreground_60} !important;
 }

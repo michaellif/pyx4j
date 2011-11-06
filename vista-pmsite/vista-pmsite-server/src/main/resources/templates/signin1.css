@@ -13,7 +13,6 @@
 	height: 80px;
 	overflow: hidden;
 	padding: 40px 0 0 30px;
-	background: ${object2_100}
 }
 
 .vista-pmsite-signInPage .caption h1 {
@@ -37,9 +36,9 @@
 }
 
 .vista-pmsite-signInPage .signInFormWrap input[type=submit] {
-	background: url("images/template1/submit.png") no-repeat;
-	border: none;
-	color: ${background_100};
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;
@@ -54,7 +53,7 @@
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput label {
 	display:inline-block;
-	width:120px;
+	width:80px;
 	padding-right:4px;
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.remember label {
@@ -62,5 +61,5 @@
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=text],
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=password] {
-	width:300px;
+	width:200px;
 }

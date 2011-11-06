@@ -118,7 +118,7 @@ select {
 	position: absolute;
 	top: 104px;
 	width: 100%;
-    background: ${object1_80}
+    background: ${object1_100}
 }
 
 .navigation ul {
@@ -150,7 +150,7 @@ select {
 }
 
 .navigation a {
-	color: ${foreground_100};
+	color: ${object1_10};
 	text-decoration: none;
 	float: left;
 }
@@ -160,7 +160,7 @@ select {
 }
 
 .navigation .active a {
-	color: ${background_100};
+	color: ${contrast1_10};
 	background-color: ${contrast1_100};
 }
 
@@ -206,7 +206,7 @@ select {
  */
  
  #footer {
-	background: none repeat scroll 0 0 ${foreground_10};
+	background: none repeat scroll 0 0 ${object2_100};
 	border-top: 1px solid ${foreground_20};
 	position: relative;
 }
@@ -234,7 +234,7 @@ ul.footer_locations label {
 ul.footer_locations li {
 	float: left;
 	width: 195px;
-	color: ${foreground_40};
+	color: ${object2_10};
 	font-weight: bold;
 }
 

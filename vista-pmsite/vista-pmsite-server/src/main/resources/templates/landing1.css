@@ -20,7 +20,7 @@
 	width: 200px;
 	height:335px;
 	padding:20px 40px;
-	/*background:${object2_50};*/
+	background:${object2_100};
 }
 
 .quickSearchPanel h3 {
@@ -55,12 +55,13 @@
 }
 
 .quickSearchPanel .submit {
-	background: url("images/template1/submit.png") no-repeat scroll 0 0
-		transparent;
+	background: ${contrast1_100};
+	color: ${contrast1_10}
 	height: 32px;
 	margin: 15px auto 0;
 	overflow: hidden;
 	width: 128px;
+	border: 2px solid ${contrast1_120};
 }
 
 .vista-pmsite-mainWrap {
@@ -74,7 +75,7 @@
 	position: relative;
 	width: 100%;
 	right: 680px;
-	border-right: 1px solid ${contrast1_10};
+	border-right: 1px solid ${object1_100};
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;   
@@ -107,8 +108,8 @@
 }
 
 .testimBox .callout_line {
-	fill:${contrast2_10};
-	stroke:${contrast2_20};
+	fill:${object1_30};
+	stroke:${object1_40};
 	stroke-width:1;
 }
 
@@ -125,9 +126,9 @@
 	float: left;
 	margin: 10px;
 	padding: 20px;
-	background: ${contrast2_10};
+	background: ${object1_30};
 	
-	border: 1px solid ${object1_20};
+	border: 1px solid ${object1_40};
 	border-radius: 15px;
 	-moz-border-radius: 15px;
 	-webkit-border-radius: 15px;
