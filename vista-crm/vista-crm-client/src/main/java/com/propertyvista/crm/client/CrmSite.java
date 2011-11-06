@@ -88,18 +88,18 @@ public class CrmSite extends VistaSite {
             @Override
             public void onSuccess(SiteDescriptor descriptor) {
                 StyleManger.installTheme(new VistaCrmTheme(), new VistaPalette(descriptor));
+                if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
+                    if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
+                        AppSite.getPlaceController().goTo(getSystemFashboardPlace());
+                    } else {
+                        CrmSite.getHistoryHandler().handleCurrentHistory();
+                    }
+                } else {
+                    AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+                }
             }
         });
 
-        if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
-            if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
-                AppSite.getPlaceController().goTo(getSystemFashboardPlace());
-            } else {
-                CrmSite.getHistoryHandler().handleCurrentHistory();
-            }
-        } else {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-        }
     }
 
     private void obtainAuthenticationData() {
