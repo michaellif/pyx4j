@@ -30,11 +30,9 @@ public enum ThemeColors {
 
     contrast2("#E76B6B"),
 
-    background("#F9EFD6"),
+    background("#FFFFFF"),
 
-    foreground("#FFFFFF"),
-
-    form("#FFFFFF"),
+    foreground("#000000"),
 
     //=================================== Old stuff
 

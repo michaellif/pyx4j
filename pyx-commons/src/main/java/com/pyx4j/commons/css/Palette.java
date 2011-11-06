@@ -51,11 +51,6 @@ public class Palette {
 
     // ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08)
 
-    /**
-     * 
-     * @deprecated use putThemeColor(ThemeColors color, String value)
-     */
-    @Deprecated
     public void putThemeColor(ThemeColors color, Integer rgb) {
         themeColors.put(color, ColorUtil.rgbToHex(rgb));
     }
