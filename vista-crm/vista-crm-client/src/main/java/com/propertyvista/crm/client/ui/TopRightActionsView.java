@@ -6,7 +6,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.shared.CompiledLocale;
 
 public interface TopRightActionsView extends IsWidget {
@@ -18,8 +17,6 @@ public interface TopRightActionsView extends IsWidget {
         PlaceController getPlaceController();
 
         Place getWhere();
-
-        void setTheme(Theme theme);
 
         void logout();
 

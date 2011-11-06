@@ -17,27 +17,32 @@ import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.ThemeColors;
 
+import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.domain.site.SitePalette;
+
 public class VistaPalette extends Palette {
 
-    public VistaPalette() {
-        float hue = (float) 0 / 360;
-        float saturation = 0;
-        float brightness = (float) 0.5;
+    public VistaPalette(SiteDescriptor descriptor) {
 
-        putThemeColor(ThemeColors.OBJECT_TONE1, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.08));
-        putThemeColor(ThemeColors.OBJECT_TONE2, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemeColors.OBJECT_TONE3, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemeColors.OBJECT_TONE4, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColors.OBJECT_TONE5, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.99));
+        SitePalette palette = descriptor.sitePalette();
 
-        putThemeColor(ThemeColors.BORDER, 0xe7e7e7);
-        putThemeColor(ThemeColors.SELECTION, ColorUtil.hsbvToRgb(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColors.SELECTION_TEXT, 0xffffff);
-        putThemeColor(ThemeColors.TEXT, 0x333333);
-        putThemeColor(ThemeColors.TEXT_BACKGROUND, 0xffffff);
-        putThemeColor(ThemeColors.DISABLED_TEXT_BACKGROUND, 0xfafafa);
-        putThemeColor(ThemeColors.MANDATORY_TEXT_BACKGROUND, 0xe5e5e5);
-        putThemeColor(ThemeColors.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
-        putThemeColor(ThemeColors.SEPARATOR, 0xeeeeee);
+        Skin skin = descriptor.skin().getValue();
+
+        putThemeColor(ThemeColors.object1, ColorUtil.hsbToRgb((float) palette.object1().getValue() / 360, (float) skin.getColorProperties()[0] / 100,
+                (float) skin.getColorProperties()[1] / 100));
+        putThemeColor(ThemeColors.object2, ColorUtil.hsbToRgb((float) palette.object2().getValue() / 360, (float) skin.getColorProperties()[2] / 100,
+                (float) skin.getColorProperties()[3] / 100));
+        putThemeColor(ThemeColors.contrast1, ColorUtil.hsbToRgb((float) palette.contrast1().getValue() / 360, (float) skin.getColorProperties()[4] / 100,
+                (float) skin.getColorProperties()[5] / 100));
+        putThemeColor(ThemeColors.contrast2, ColorUtil.hsbToRgb((float) palette.contrast2().getValue() / 360, (float) skin.getColorProperties()[6] / 100,
+                (float) skin.getColorProperties()[7] / 100));
+        putThemeColor(ThemeColors.foreground, ColorUtil.hsbToRgb((float) palette.background().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
+                (float) skin.getColorProperties()[9] / 100));
+        putThemeColor(
+                ThemeColors.background,
+                ColorUtil.hsbToRgb((float) palette.foreground().getValue() / 360, (float) skin.getColorProperties()[10] / 100,
+                        (float) skin.getColorProperties()[11] / 100));
+
     }
 }

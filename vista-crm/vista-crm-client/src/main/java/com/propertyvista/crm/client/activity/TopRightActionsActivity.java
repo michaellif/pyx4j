@@ -21,21 +21,14 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.common.client.theme.BlueColdPalette;
-import com.propertyvista.common.client.theme.BownWarmPalette;
-import com.propertyvista.common.client.theme.GainsboroPalette;
-import com.propertyvista.common.client.theme.VillageGreenPalette;
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
-import com.propertyvista.crm.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.shared.CompiledLocale;
@@ -90,24 +83,6 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void login() {
         AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-    }
-
-    @Override
-    public void setTheme(Theme theme) {
-        switch (theme) {
-        case Gainsboro:
-            StyleManger.installTheme(new VistaCrmTheme(), new GainsboroPalette());
-            break;
-        case VillageGreen:
-            StyleManger.installTheme(new VistaCrmTheme(), new VillageGreenPalette());
-            break;
-        case BlueCold:
-            StyleManger.installTheme(new VistaCrmTheme(), new BlueColdPalette());
-            break;
-        case BrownWarm:
-            StyleManger.installTheme(new VistaCrmTheme(), new BownWarmPalette());
-            break;
-        }
     }
 
     private void obtainAvailableLocales() {

@@ -36,8 +36,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final CHyperlink login;
 
-    private final CHyperlink themes;
-
     private final CHyperlink account;
 
     private final CHyperlink settings;
@@ -48,7 +46,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final SearchBox search;
 
-    private Theme otherTheme = Theme.BrownWarm;
+    private final Theme otherTheme = Theme.BrownWarm;
 
     public TopRightActionsViewImpl() {
         setStyleName(AdminView.DEFAULT_STYLE_PREFIX + AdminView.StyleSuffix.Action);
@@ -101,29 +99,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             }
         });
 
-        themes = new CHyperlink(null, new Command() {
-            @Override
-            public void execute() {
-                presenter.setTheme(otherTheme);
-
-                for (Theme theme : Theme.values()) {
-                    if (otherTheme.equals(theme)) {
-                        if (theme.ordinal() + 1 < Theme.values().length) {
-                            otherTheme = Theme.values()[theme.ordinal() + 1];
-                        } else {
-                            otherTheme = Theme.values()[0];
-                        }
-                        break;
-                    }
-                }
-
-                themes.setValue(otherTheme.name());
-            }
-        });
-        themes.setValue(otherTheme.name());
-        themes.setDebugId(new StringDebugId("themes"));
-        themes.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
-
         alert = new Image(AdminImages.INSTANCE.alert());
         alert.addClickHandler(new ClickHandler() {
             @Override
@@ -168,7 +143,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         container.add(settings);
         container.add(login);
         container.add(logout);
-        container.add(themes);
         container.add(searchwr);
         container.add(messagewr);
         container.add(alertwr);

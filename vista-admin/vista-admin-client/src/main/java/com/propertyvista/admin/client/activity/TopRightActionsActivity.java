@@ -19,21 +19,14 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.admin.client.ui.TopRightActionsView;
-import com.propertyvista.admin.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
-import com.propertyvista.common.client.theme.BlueColdPalette;
-import com.propertyvista.common.client.theme.BownWarmPalette;
-import com.propertyvista.common.client.theme.GainsboroPalette;
-import com.propertyvista.common.client.theme.VillageGreenPalette;
-import com.propertyvista.common.client.theme.VistaTheme;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -84,24 +77,6 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void login() {
         AppSite.getPlaceController().goTo(new AdminSiteMap.Login());
-    }
-
-    @Override
-    public void setTheme(Theme theme) {
-        switch (theme) {
-        case Gainsboro:
-            StyleManger.installTheme(new VistaTheme(), new GainsboroPalette());
-            break;
-        case VillageGreen:
-            StyleManger.installTheme(new VistaTheme(), new VillageGreenPalette());
-            break;
-        case BlueCold:
-            StyleManger.installTheme(new VistaTheme(), new BlueColdPalette());
-            break;
-        case BrownWarm:
-            StyleManger.installTheme(new VistaTheme(), new BownWarmPalette());
-            break;
-        }
     }
 
     public TopRightActionsActivity withPlace(Place place) {

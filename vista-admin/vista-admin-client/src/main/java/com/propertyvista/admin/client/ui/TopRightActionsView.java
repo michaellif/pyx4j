@@ -4,8 +4,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.admin.client.ui.TopRightActionsViewImpl.Theme;
-
 public interface TopRightActionsView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
@@ -15,8 +13,6 @@ public interface TopRightActionsView extends IsWidget {
         public PlaceController getPlaceController();
 
         public Place getWhere();
-
-        public void setTheme(Theme theme);
 
         public void logout();
 

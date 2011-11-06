@@ -45,8 +45,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final CHyperlink login;
 
-    private final CHyperlink themes;
-
     private final CHyperlink account;
 
     private final CHyperlink settings;
@@ -59,10 +57,10 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final SearchBox search;
 
-    private Theme otherTheme = Theme.BrownWarm;
+    private final Theme otherTheme = Theme.BrownWarm;
 
     public TopRightActionsViewImpl() {
-        setStyleName(CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Action);
+        setStyleName(CrmPanel.StyleName.SiteViewAction.name());
         setSize("100%", "100%");
 
         HorizontalPanel container = new HorizontalPanel();
@@ -115,29 +113,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         settings.setValue(i18n.tr("Administration"));
         settings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        themes = new CHyperlink(null, new Command() {
-            @Override
-            public void execute() {
-                presenter.setTheme(otherTheme);
-
-                for (Theme theme : Theme.values()) {
-                    if (otherTheme.equals(theme)) {
-                        if (theme.ordinal() + 1 < Theme.values().length) {
-                            otherTheme = Theme.values()[theme.ordinal() + 1];
-                        } else {
-                            otherTheme = Theme.values()[0];
-                        }
-                        break;
-                    }
-                }
-
-                themes.setValue(otherTheme.name());
-            }
-        });
-        themes.setValue(otherTheme.name());
-        themes.setDebugId(new StringDebugId("themes"));
-        themes.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
-
         locales = new HorizontalPanel();
         locales.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
@@ -185,7 +160,6 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         container.add(settings);
         container.add(login);
         container.add(logout);
-        container.add(themes);
         container.add(searchwr);
         container.add(messagewr);
         container.add(alertwr);

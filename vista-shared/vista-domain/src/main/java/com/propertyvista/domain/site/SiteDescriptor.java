@@ -33,17 +33,17 @@ public interface SiteDescriptor extends IEntity {
     @I18n
     public enum Skin {
 
-        skin1(12, 23, 89, 37, 100, 100, 100, 100, 0, 10, 0, 100),
+        skin1(23, 12, 37, 89, 100, 100, 100, 100, 0, 10, 0, 100),
 
-        skin2(70, 98, 10, 98, 100, 100, 100, 100, 0, 10, 0, 100),
+        skin2(98, 70, 98, 10, 100, 100, 100, 100, 0, 10, 0, 100),
 
         skin3(20, 80, 20, 80, 98, 98, 98, 98, 0, 10, 0, 100);
 
         private final Integer[] colorProperties;
 
-        private Skin(Integer o1b, Integer o1s, Integer o2b, Integer o2s, Integer c1b, Integer c1s, Integer c2b, Integer c2s, Integer fb, Integer fs,
-                Integer bb, Integer bs) {
-            this.colorProperties = new Integer[] { o1b, o1s, o2b, o2s, c1b, c1s, c2b, c2s, fb, fs, bb, bs };
+        private Skin(Integer o1s, Integer o1b, Integer o2s, Integer o2b, Integer c1s, Integer c1b, Integer c2s, Integer c2b, Integer fs, Integer fb,
+                Integer bs, Integer bb) {
+            this.colorProperties = new Integer[] { o1s, o1b, o2s, o2b, c1s, c1b, c2s, c2b, fs, fb, bs, bb };
         }
 
         private Skin() {

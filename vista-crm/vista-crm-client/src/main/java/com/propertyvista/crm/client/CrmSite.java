@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -32,10 +33,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.crm.client.ui.CrmView;
+import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.CrmPanel;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.AuthenticationService;
 import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
 public class CrmSite extends VistaSite {
 
@@ -53,7 +58,7 @@ public class CrmSite extends VistaSite {
 
         RootPanel.get().add(RootLayoutPanel.get());
 
-        RootLayoutPanel.get().add(new CrmView());
+        RootLayoutPanel.get().add(new CrmPanel());
 
         hideLoadingIndicator();
 
@@ -78,6 +83,14 @@ public class CrmSite extends VistaSite {
     }
 
     private void init() {
+        SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
+        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDescriptor>() {
+            @Override
+            public void onSuccess(SiteDescriptor descriptor) {
+                StyleManger.installTheme(new VistaCrmTheme(), new VistaPalette(descriptor));
+            }
+        });
+
         if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
             if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
                 AppSite.getPlaceController().goTo(getSystemFashboardPlace());

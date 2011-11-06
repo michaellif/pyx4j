@@ -19,7 +19,7 @@ public class FooterViewImpl extends SimplePanel implements FooterView {
 
     public FooterViewImpl() {
         setSize("100%", "100%");
-        setStyleName(CrmView.DEFAULT_STYLE_PREFIX + CrmView.StyleSuffix.Footer);
+        setStyleName(CrmPanel.StyleName.SiteViewFooter.name());
 //        HTML label = new HTML("&copy;2011-All Rights Reserved.");
 //        label.getElement().getStyle().setFontSize(1.2, Unit.EM);
 //        setWidget(label);

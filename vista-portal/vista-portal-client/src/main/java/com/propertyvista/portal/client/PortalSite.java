@@ -25,8 +25,8 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.domain.site.SiteDescriptor;
-import com.propertyvista.portal.client.themes.PortalPalette;
 import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -76,7 +76,7 @@ public class PortalSite extends VistaSite {
                         siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDescriptor>() {
                             @Override
                             public void onSuccess(SiteDescriptor descriptor) {
-                                StyleManger.installTheme(new PortalTheme(), new PortalPalette(descriptor));
+                                StyleManger.installTheme(new PortalTheme(), new VistaPalette(descriptor));
                             }
                         });
                         getHistoryHandler().handleCurrentHistory();
