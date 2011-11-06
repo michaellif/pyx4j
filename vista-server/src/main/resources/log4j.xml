@@ -7,7 +7,7 @@
 		<param name="Threshold" value="info" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<!-- The Line# should clickable in eclipse console. Do not change -->
-			<param name="ConversionPattern" value="%-5p %m \t{ %l}\n" />
+			<param name="ConversionPattern" value="%-5p [%X{namespace}] %m \t{ %l}\n" />
 		</layout>
 	</appender>
 
