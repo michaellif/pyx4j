@@ -68,7 +68,7 @@ public class ServletUtils {
         if (forwarded != null) {
             receivingURL = "http://" + forwarded;
             String forwardedContext = request.getHeader("x-forwarded-context");
-            if (forwardedContext != null) {
+            if (forwardedContext == null) {
                 receivingURL += request.getContextPath();
             }
         } else {
