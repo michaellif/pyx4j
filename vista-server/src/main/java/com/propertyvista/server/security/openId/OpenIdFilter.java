@@ -75,7 +75,7 @@ public class OpenIdFilter implements Filter {
                     String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
                     if (receivingURL.contains(".birchwoodsoftwaregroup.com")
                             && !receivingURL.startsWith(ServerSideConfiguration.instance().getMainApplicationURL())
-                            && (!receivingURL.matches("http://\\w+\\.dev\\.birchwoodsoftwaregroup\\.com:\\d+/.+"))) {
+                            && (!receivingURL.matches("http://\\w+\\.dev\\.birchwoodsoftwaregroup\\.com/.*"))) {
                         StringBuffer properUrl = new StringBuffer(ServerSideConfiguration.instance().getMainApplicationURL());
                         if (receivingURL.startsWith(((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getApplicationURLDefault())) {
                             properUrl = new StringBuffer("http://");
