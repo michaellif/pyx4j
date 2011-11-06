@@ -124,6 +124,10 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         return dto;
     }
 
+    protected boolean retriveDetachedMember(IEntity dboMemeber) {
+        return false;
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void copyDBOtoDTO(DBO dbo, DTO dto) {
         init();
@@ -133,7 +137,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
             // Assert that all data has been retrieved
             if ((dboM instanceof IEntity) && ((IEntity) dboM).isValuesDetached() && !dtoM.getMeta().isDetached()) {
-                throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
+                if (!retriveDetachedMember((IEntity) dboM)) {
+                    throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
+                }
             }
 
             if (b.binder == null) {
@@ -141,7 +147,9 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                     ((ICollection<IEntity, ?>) dtoM).clear();
                     for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
                         if (dboMi.isValuesDetached() && !dtoM.getMeta().isDetached()) {
-                            throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
+                            if (!retriveDetachedMember(dboMi)) {
+                                throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
+                            }
                         }
                         ((ICollection<IEntity, ?>) dtoM).add(dboMi);
                     }

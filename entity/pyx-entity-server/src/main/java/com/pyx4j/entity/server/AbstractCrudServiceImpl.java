@@ -40,15 +40,15 @@ public abstract class AbstractCrudServiceImpl<E extends IEntity> extends Abstrac
     }
 
     @Override
-    public void create(AsyncCallback<E> callback, E entity) {
-        persist(entity);
+    public void retrieve(AsyncCallback<E> callback, Key entityId) {
+        E entity = EntityServicesImpl.secureRetrieve(entityClass, entityId);
         enhanceRetrieved(entity);
         callback.onSuccess(entity);
     }
 
     @Override
-    public void retrieve(AsyncCallback<E> callback, Key entityId) {
-        E entity = EntityServicesImpl.secureRetrieve(entityClass, entityId);
+    public void create(AsyncCallback<E> callback, E entity) {
+        persist(entity);
         enhanceRetrieved(entity);
         callback.onSuccess(entity);
     }
