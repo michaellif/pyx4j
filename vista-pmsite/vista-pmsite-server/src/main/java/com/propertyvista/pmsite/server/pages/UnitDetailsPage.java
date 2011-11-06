@@ -28,10 +28,12 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
@@ -40,6 +42,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourc
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class UnitDetailsPage extends BasePage {
+
     private static final long serialVersionUID = 1L;
 
     public UnitDetailsPage() {
@@ -87,8 +90,9 @@ public class UnitDetailsPage extends BasePage {
         }
         add(new Label("address", addrFmt));
         // get price range
-        Double minPrice = null, maxPrice = null, minArea = null;
-        String areaUnits = null;
+        Double minPrice = null, maxPrice = null;
+        Integer minArea = null;
+        AreaMeasurementUnit areaUnits = null;
         for (AptUnit u : fpUnits) {
             Double _prc = u.financial().unitRent().getValue();
             if (minPrice == null || minPrice > _prc) {
@@ -97,10 +101,9 @@ public class UnitDetailsPage extends BasePage {
             if (maxPrice == null || maxPrice < _prc) {
                 maxPrice = _prc;
             }
-            Double _area = u.info().area().getValue();
-            if (minArea == null || minArea > _area) {
-                minArea = _area;
-                areaUnits = u.info().areaUnits().getValue().toString();
+            minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+            if (areaUnits == null) {
+                areaUnits = u.info().areaUnits().getValue();
             }
         }
         String priceFmt = "Not available";
@@ -121,8 +124,8 @@ public class UnitDetailsPage extends BasePage {
         // right side - floorplan details
         add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
         add(new Label("name", fp.name().getValue()));
-        add(new Label("rooms", "bedrooms: " + fp.bedrooms().getValue() + ", bathrooms: " + fp.bathrooms().getValue() + ", from " + Math.round(minArea) + " "
-                + areaUnits));
+        add(new Label("rooms", "bedrooms: " + fp.bedrooms().getValue() + ", bathrooms: " + fp.bathrooms().getValue()
+                + ((minArea != null) ? (", from " + Math.round(minArea) + " " + areaUnits) : "")));
         add(new Label("description", fp.description().getValue()));
         add(new ListView<FloorplanAmenity>("amenities", amenities) {
             private static final long serialVersionUID = 1L;

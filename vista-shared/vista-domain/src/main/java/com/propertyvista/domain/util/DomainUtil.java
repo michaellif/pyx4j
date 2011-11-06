@@ -114,4 +114,44 @@ public class DomainUtil {
             return Double.valueOf(Math.floor(area.getValue() * 10.763911)).intValue();
         }
     }
+
+    public static Double min(Double a, Double b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.min(a, b);
+        }
+    }
+
+    public static Double max(Double a, Double b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.max(a, b);
+        }
+    }
+
+    public static Integer min(Integer a, Integer b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.min(a, b);
+        }
+    }
+
+    public static Integer max(Integer a, Integer b) {
+        if (a == null) {
+            return b;
+        } else if (b == null) {
+            return a;
+        } else {
+            return Math.max(a, b);
+        }
+    }
 }

@@ -206,10 +206,10 @@ public class BuildingsResource {
                         for (AptUnit u : Persistence.service().query(criteria)) {
                             floorplanRS.unitCount++;
 
-                            floorplanRS.rentFrom = min(floorplanRS.rentFrom, u.financial().marketRent().getValue());
-                            floorplanRS.rentTo = max(floorplanRS.rentTo, u.financial().marketRent().getValue());
-                            floorplanRS.sqftFrom = min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-                            floorplanRS.sqftTo = max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+                            floorplanRS.rentFrom = DomainUtil.min(floorplanRS.rentFrom, u.financial().marketRent().getValue());
+                            floorplanRS.rentTo = DomainUtil.max(floorplanRS.rentTo, u.financial().marketRent().getValue());
+                            floorplanRS.sqftFrom = DomainUtil.min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+                            floorplanRS.sqftTo = DomainUtil.max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
 
                             if (!u.availableForRent().isNull()) {
                                 if ((floorplanRS.availableFrom == null) || (floorplanRS.availableFrom.after(u.availableForRent().getValue()))) {
@@ -226,17 +226,17 @@ public class BuildingsResource {
                                 || floorplanRS.availableFrom.after(floorplanSameRS.availableFrom)) {
                             // Ignore this floorplanRS
                             floorplanSameRS.unitCount += floorplanRS.unitCount;
-                            floorplanSameRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
-                            floorplanSameRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
-                            floorplanSameRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
-                            floorplanSameRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
+                            floorplanSameRS.rentFrom = DomainUtil.min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
+                            floorplanSameRS.rentTo = DomainUtil.max(floorplanSameRS.rentTo, floorplanRS.rentTo);
+                            floorplanSameRS.sqftFrom = DomainUtil.min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
+                            floorplanSameRS.sqftTo = DomainUtil.max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
                             continue nextFloorplan;
                         }
                         floorplanRS.unitCount += floorplanSameRS.unitCount;
-                        floorplanRS.rentFrom = min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
-                        floorplanRS.rentTo = max(floorplanSameRS.rentTo, floorplanRS.rentTo);
-                        floorplanRS.sqftFrom = min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
-                        floorplanRS.sqftTo = max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
+                        floorplanRS.rentFrom = DomainUtil.min(floorplanSameRS.rentFrom, floorplanRS.rentFrom);
+                        floorplanRS.rentTo = DomainUtil.max(floorplanSameRS.rentTo, floorplanRS.rentTo);
+                        floorplanRS.sqftFrom = DomainUtil.min(floorplanSameRS.sqftFrom, floorplanRS.sqftFrom);
+                        floorplanRS.sqftTo = DomainUtil.max(floorplanSameRS.sqftTo, floorplanRS.sqftTo);
 
                         buildingRS.floorplans.remove(floorplanSameRS);
                     }
@@ -273,10 +273,10 @@ public class BuildingsResource {
         for (BuildingRS buildingRS : buildingsRS.buildings) {
             for (FloorplanRS floorplanRS : buildingRS.floorplans) {
                 buildingRS.unitCount += floorplanRS.unitCount;
-                buildingRS.rentFrom = min(buildingRS.rentFrom, floorplanRS.rentFrom);
-                buildingRS.rentTo = max(buildingRS.rentTo, floorplanRS.rentTo);
-                buildingRS.sqftFrom = min(buildingRS.sqftFrom, floorplanRS.sqftFrom);
-                buildingRS.sqftTo = max(buildingRS.sqftTo, floorplanRS.sqftTo);
+                buildingRS.rentFrom = DomainUtil.min(buildingRS.rentFrom, floorplanRS.rentFrom);
+                buildingRS.rentTo = DomainUtil.max(buildingRS.rentTo, floorplanRS.rentTo);
+                buildingRS.sqftFrom = DomainUtil.min(buildingRS.sqftFrom, floorplanRS.sqftFrom);
+                buildingRS.sqftTo = DomainUtil.max(buildingRS.sqftTo, floorplanRS.sqftTo);
             }
         }
 
@@ -306,43 +306,4 @@ public class BuildingsResource {
         return value1.equals(value2);
     }
 
-    Double min(Double a, Double b) {
-        if (a == null) {
-            return b;
-        } else if (b == null) {
-            return a;
-        } else {
-            return Math.min(a, b);
-        }
-    }
-
-    Double max(Double a, Double b) {
-        if (a == null) {
-            return b;
-        } else if (b == null) {
-            return a;
-        } else {
-            return Math.max(a, b);
-        }
-    }
-
-    Integer min(Integer a, Integer b) {
-        if (a == null) {
-            return b;
-        } else if (b == null) {
-            return a;
-        } else {
-            return Math.min(a, b);
-        }
-    }
-
-    Integer max(Integer a, Integer b) {
-        if (a == null) {
-            return b;
-        } else if (b == null) {
-            return a;
-        } else {
-            return Math.max(a, b);
-        }
-    }
 }

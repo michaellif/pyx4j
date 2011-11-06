@@ -5,6 +5,13 @@
 <phones>
       <propertyPhone><type>landLine</type><designation>office</designation><visibility>global</visibility><number>778-788-1857 </number><description>Office</description></propertyPhone>
 </phones>
+    <medias>
+            <media>
+              <mediaType>file</mediaType>
+              <uri>23rd210r/buildings/building.jpg</uri>
+              <visibility>global</visibility>
+            </media>
+          </medias>
 <floorplans>
 <floorplan><name>1 Bedroom</name><bedrooms>1</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <units>

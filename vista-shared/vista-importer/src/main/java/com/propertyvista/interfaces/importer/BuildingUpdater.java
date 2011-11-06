@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -33,10 +34,13 @@ import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
+import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
-public class BuildingUpdater {
+public class BuildingUpdater extends ImportPersister {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingUpdater.class);
+
+    private static I18n i18n = I18n.get(BuildingUpdater.class);
 
     public ImportCounters updateUnitAvailability(BuildingIO buildingIO, String imagesBaseFolder) {
         ImportCounters counters = new ImportCounters();
@@ -118,9 +122,7 @@ public class BuildingUpdater {
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
                 buildingIsNew = true;
-                building = new BuildingConverter().createDBO(buildingIO);
-                Persistence.service().persist(building);
-                PublicDataUpdater.updateIndexData(building);
+                building = createBuilding(buildingIO, imagesBaseFolder, ignoreMissingMedia);
                 counters.buildings += 1;
                 log.debug("created building {}", buildingIO.propertyCode().getValue());
             } else if (buildings.size() > 1) {
@@ -135,9 +137,12 @@ public class BuildingUpdater {
                 }
 
                 boolean buildingUpdated = new BuildingConverter().updateDBO(buildingIO, building);
-
+                if (building.info().address().location().isNull()) {
+                    buildingUpdated |= SharedGeoLocator.populateGeo(building.info().address());
+                }
                 if (buildingUpdated) {
                     Persistence.service().persist(building);
+                    PublicDataUpdater.updateIndexData(building);
                     counters.buildings += 1;
                     log.debug("updated building {}", buildingIO.propertyCode().getValue());
                 }
@@ -166,8 +171,7 @@ public class BuildingUpdater {
             if (floorplan == null) {
                 floorplanIsNew = true;
                 floorplanUpdated = true;
-                floorplan = new FloorplanConverter().createDBO(floorplanIO);
-                floorplan.building().set(building);
+                floorplan = createFloorplan(floorplanIO, building, imagesBaseFolder, ignoreMissingMedia);
             } else {
                 floorplanUpdated = new FloorplanConverter().updateDBO(floorplanIO, floorplan);
             }
