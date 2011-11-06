@@ -45,30 +45,30 @@ public class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", FormFlexPanelHR);
-        style.addProperty("background-color", ThemeColors.object2);
+        style.addProperty("background-color", ThemeColors.object1);
         style.addProperty("height", "1px");
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
         style = new Style(".", FormFlexPanelH1);
-        style.addProperty("background-color", ThemeColors.object2);
+        style.addProperty("background-color", ThemeColors.object1);
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
         style = new Style(".", FormFlexPanelH1Label);
-        style.addProperty("color", ThemeColors.object2, 0.05);
+        style.addProperty("color", ThemeColors.object1, 0.05);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
         addStyle(style);
 
         style = new Style(".", FormFlexPanelH2);
-        style.addProperty("background-color", ThemeColors.object2, 0.9);
+        style.addProperty("background-color", ThemeColors.object1, 0.9);
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
         style = new Style(".", FormFlexPanelH2Label);
-        style.addProperty("color", ThemeColors.object2, 0.05);
+        style.addProperty("color", ThemeColors.object1, 0.05);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "3px");
         style.addProperty("font-size", "1.2em");
@@ -76,12 +76,12 @@ public class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", FormFlexPanelH3);
-        style.addProperty("background-color", ThemeColors.object2, 0.8);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
         style = new Style(".", FormFlexPanelH3Label);
-        style.addProperty("color", ThemeColors.object2, 0.05);
+        style.addProperty("color", ThemeColors.object1, 0.05);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "2px");
         style.addProperty("font-size", "1.1em");

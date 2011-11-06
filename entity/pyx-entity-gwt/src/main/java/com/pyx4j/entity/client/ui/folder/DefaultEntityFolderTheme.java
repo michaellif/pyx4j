@@ -75,12 +75,12 @@ public class DefaultEntityFolderTheme extends Theme {
         style = new Style(".", EntityFolderBoxItemDecorator);
         style.addProperty("margin", "6px");
         style.addProperty("border", "dotted 1px");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColors.object1);
         addStyle(style);
 
         style = new Style(".", EntityFolderBoxItemDecorator, ":hover");
         style.addProperty("border", "solid 1px");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColors.object1);
         addStyle(style);
 
         style = new Style(".", EntityFolderRowItemDecorator);
@@ -132,7 +132,8 @@ public class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", EntityFolderTableHeader);
-        style.addProperty("border-bottom", "1px dotted #333");
+        style.addProperty("border-bottom", "1px dotted");
+        style.addProperty("border-bottom-color", ThemeColors.object1);
         addStyle(style);
 
         style = new Style(".", EntityFolderTableHeaderLabel);
