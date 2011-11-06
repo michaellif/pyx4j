@@ -2,8 +2,7 @@
 
 Downloading the Apache HTTP Server   (64 bit version for windows is here http://www.anindya.com/)
 Make it run on port 80
-All *.dev.birchwoodsoftwaregroup.com  are already local.
-
+All *.dev.birchwoodsoftwaregroup.com are already local.
 
 For VladS To do more tests he may edit the file hosts and add
 

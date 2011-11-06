@@ -30,11 +30,6 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
     }
 
     @Override
-    public boolean isContextLessDeployment() {
-        return true;
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support22\" <support.www22@birchwoodsoftwaregroup.com>";
     }

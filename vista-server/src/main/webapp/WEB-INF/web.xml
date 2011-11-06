@@ -14,6 +14,12 @@
         <param-value>com.propertyvista.server.config.VistaServerSideConfiguration</param-value>
     </context-param>
 
+    <!-- For Tomcat the same sessionCookiePath is set context.xml  -->
+    <context-param>
+        <param-name>org.eclipse.jetty.servlet.SessionPath</param-name>
+        <param-value>/</param-value>
+    </context-param>
+
     <listener>
         <listener-class>com.propertyvista.server.config.VistaInitializationServletContextListener</listener-class>
     </listener>
@@ -135,6 +141,17 @@
         <url-pattern>/o/openid</url-pattern>
     </servlet-mapping>
 
+    <!--  See RewriteRule in Apache HTTP -->
+    <servlet-mapping>
+        <servlet-name>OpenIdServlet</servlet-name>
+        <url-pattern>/crm/o/openid</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>OpenIdServlet</servlet-name>
+        <url-pattern>/ptapp/o/openid</url-pattern>
+    </servlet-mapping>
+        
     <servlet>
         <servlet-name>StatusServlet</servlet-name>
         <servlet-class>com.propertyvista.server.ci.VistaStatusServlet</servlet-class>

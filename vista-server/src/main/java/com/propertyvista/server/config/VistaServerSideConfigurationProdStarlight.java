@@ -46,11 +46,6 @@ public class VistaServerSideConfigurationProdStarlight extends VistaServerSideCo
     }
 
     @Override
-    public boolean isContextLessDeployment() {
-        return true;
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Starlight Support\" <support.www22@birchwoodsoftwaregroup.com>";
     }
