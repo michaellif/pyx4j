@@ -14,10 +14,31 @@
 package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+import com.pyx4j.config.server.IPersistenceConfiguration;
 
 import com.propertyvista.config.VistaSMTPMailServiceConfig;
 
 public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration {
+
+    @Override
+    public IPersistenceConfiguration getPersistenceConfiguration() {
+        return new VistaConfigurationMySQL() {
+            @Override
+            public String dbName() {
+                return "vista22";
+            }
+
+            @Override
+            public String userName() {
+                return "vista22";
+            }
+
+            @Override
+            public String password() {
+                return "vista22";
+            }
+        };
+    }
 
     @Override
     public String getApplicationURLDefault() {
