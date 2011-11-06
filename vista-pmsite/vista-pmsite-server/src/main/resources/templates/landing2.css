@@ -50,7 +50,7 @@
 .quickSearchPanel input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
-	color: ${contrast1_100};
+	color: ${object1_10};
 	cursor: pointer;
 	font-size: 16px;
 	padding: 5px 0;
@@ -59,17 +59,17 @@
 }
 
 .quickSearchPanel .submit {
-	background: url("images/template2/submit.png") no-repeat scroll 0 0
-		transparent;
+	background: ${object1_100};
 	height: 32px;
 	margin: 15px auto 0;
 	overflow: hidden;
 	width: 128px;
+	border: 2px splid ${object1_100};
 }
 
 .vista-pmsite-mainWrap {
 	display:inline-block;
-	background: ${background_10};
+	background: ${object2_10};
 }
 
 .vista-pmsite-sidebarWrap {
@@ -166,7 +166,7 @@
 
 .newsBox .headline {
 	padding-top: 10px;
-	color: ${contrast2_100};
+	color: ${object1_50};
 }
 
 .newsBox .text {
@@ -178,7 +178,7 @@
 }
 
 .infobox_content .read_more {
-	color: ${contrast2_100};
+	color: ${object1_50};
 	font-size: 20px;
 	line-height: 14px;
 	vertical-align: text-top;
@@ -215,7 +215,7 @@
 
 .promoBox .infobox_body {
 	float:left;
-	border-left: solid 1px ${object2_20};
+	border-left: solid 1px ${object2_50};
 }
 .promoBox .infobox_content {
 	width:139px;

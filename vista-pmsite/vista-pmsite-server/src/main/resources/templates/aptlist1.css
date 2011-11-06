@@ -28,9 +28,9 @@
 	margin: 10px;
 }
 .advancedSearchNarrowWrap input[type=submit] {
-	background: url("images/template1/submit.png") no-repeat;
-	border: none;
-	color: ${background_100};
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;
@@ -59,7 +59,7 @@
 	font-size: 14px;
 	letter-spacing: 0px;
 	color:${foreground_100};
-	background-color:${object1_20};
+	background-color:${foreground_10};
 	margin-left: 10px;
 	padding: 3px 10px;
 	text-align: center;
@@ -138,13 +138,13 @@
 }
 
 .advancedSearchNarrowWrap .typeselActiveHover {
-	color:${object1_20} !important;
-	background-color:${foreground_80} !important;
+	color:${foreground_10} !important;
+	background-color:${foreground_60} !important;
 }
 
 .advancedSearchNarrowWrap .typeselActive {
-	color:${object1_20} !important;
-	background-color:${foreground_80} !important;
+	color:${foreground_10} !important;
+	background-color:${foreground_60} !important;
 }
 .vista-pmsite-aptListPage .vista-pmsite-main {
 	display: inline-block;

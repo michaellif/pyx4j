@@ -7,7 +7,7 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-    background: ${background_10};
+    background: ${object2_10};
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-main .caption {
@@ -29,9 +29,9 @@
 }
 
 .advancedSearchWideWrap input[type=submit] {
-	background: url("images/template2/submit.png") no-repeat;
-	border: none;
-	color: ${object2_10};
+	background: ${object1_100};
+	border: 2px solid ${object1_100};
+	color: ${object1_10};
 	cursor: pointer;
 	font-size: 16px;
 	margin: 15px auto 0;

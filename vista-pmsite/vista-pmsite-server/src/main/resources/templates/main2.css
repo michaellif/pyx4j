@@ -137,7 +137,7 @@ select {
 }
 
 .navigation a {
-	color: ${contrast1_100};
+	color: ${object1_20};
 	text-decoration: none;
 }
 
@@ -146,10 +146,10 @@ select {
 }
 
 .navigation .active a {
-	color: ${contrast1_60};
+	color: ${object1_20};
 }
 .navigation .active a span {
-	border-bottom:2px solid ${contrast1_60};
+	border-bottom:2px solid ${object1_20};
 }
 
 .navigation .active a:hover {
@@ -162,7 +162,7 @@ select {
 }
 
 .langItem {
-	border-left: 1px solid ${contrast2_100};
+	border-left: 1px solid  ${object1_20};
 	padding: 0 3px;
 	text-align: center;
 }
@@ -172,7 +172,7 @@ select {
 }
 
 .langItem a {
-	color:${contrast2_100};
+	color: ${object1_20};
 }
 
 .langItem a:hover {
@@ -186,7 +186,7 @@ select {
 }
 
 .auth a {
-	color: ${contrast2_100};
+	color:  ${object1_20};
 }
 
 .auth a:hover {
@@ -230,7 +230,7 @@ ul.footer_locations li {
 }
 
 .footer_locations a {
-	color: ${contrast1_100};
+	color:  ${object1_20};
 }
 
 .footer_locations a:hover {
@@ -247,11 +247,11 @@ ul.footer_locations li {
 
 .footer_link {
 	padding: 0 10px;
-	border-left: 1px solid ${contrast1_100};
+	border-left: 1px solid ${object1_20};
 }
 
 .footer_link a {
-	color: ${contrast1_100};
+	color:  ${object1_20};
 }
 
 .footer_link a:hover {
@@ -261,7 +261,7 @@ ul.footer_locations li {
 .footer_legal {
 	text-align: center;
 	line-height: 60px;
-	color: ${contrast1_100};
+	color:  ${object1_20};
 }
 .footer_social {
 	display:inline-block;
