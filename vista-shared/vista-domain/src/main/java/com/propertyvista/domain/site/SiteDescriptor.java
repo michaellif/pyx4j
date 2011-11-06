@@ -30,9 +30,9 @@ public interface SiteDescriptor extends IEntity {
 
         skin1(),
 
-        skin2(70, 98, 10, 98, 100, 100, 100, 100, 100, 0, 0, 100),
+        skin2(70, 98, 10, 98, 100, 100, 100, 100, 0, 30, 0, 95),
 
-        skin3(20, 80, 20, 80, 98, 98, 98, 98, 100, 0, 0, 100);
+        skin3(20, 80, 20, 80, 98, 98, 98, 98, 0, 30, 0, 95);
 
         private final Integer[] colorProperties;
 
