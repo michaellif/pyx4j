@@ -64,6 +64,9 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
 
     @SuppressWarnings("deprecation")
     private String generateRandom() {
+        if ((config().minimizePreloadTime)) {
+            return null;
+        }
         int eventsCount = 0;
         LogicalDate start = new LogicalDate();
         start.setYear(106);

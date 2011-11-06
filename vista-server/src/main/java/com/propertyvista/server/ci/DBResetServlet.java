@@ -31,6 +31,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -43,6 +44,8 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.misc.VistaDataPreloaderParameter;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.domain.admin.Pmc;
@@ -57,6 +60,9 @@ public class DBResetServlet extends HttpServlet {
 
         @Translate("Drop All and Preload all demo PMC")
         all,
+
+        @Translate("Drop All and Preload all demo PMC : Mini version for UI Design")
+        allMini,
 
         @Translate("Drop All Tables")
         clear,
@@ -110,7 +116,7 @@ public class DBResetServlet extends HttpServlet {
                     buf.append("</table>");
                 } else {
                     buf.append("Requested : '" + type.name() + "' " + type.toString());
-                    if (EnumSet.of(ResetType.all, ResetType.clear).contains(type)) {
+                    if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.clear).contains(type)) {
                         RDBUtils.dropAllEntityTables();
                     }
 
@@ -120,12 +126,13 @@ public class DBResetServlet extends HttpServlet {
 
                     switch (type) {
                     case all:
+                    case allMini:
                         for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                            preloadPmc(buf, demoPmc.name());
+                            preloadPmc(buf, demoPmc.name(), type);
                         }
                         break;
                     case preloadPmc:
-                        preloadPmc(buf, NamespaceManager.getNamespace());
+                        preloadPmc(buf, NamespaceManager.getNamespace(), type);
                         break;
                     case clearPmc:
                         RDBUtils.deleteFromAllEntityTables();
@@ -134,6 +141,7 @@ public class DBResetServlet extends HttpServlet {
 
                     buf.append("\nTotal time: " + TimeUtils.secSince(start));
                     log.info("DB reset {} {}", type, TimeUtils.secSince(start));
+                    buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
                 }
 
             } catch (Throwable t) {
@@ -158,7 +166,7 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
-    private void preloadPmc(StringBuilder buf, String demoPmcName) {
+    private void preloadPmc(StringBuilder buf, String demoPmcName, ResetType type) {
         long pmcStart = System.currentTimeMillis();
         NamespaceManager.setNamespace(Pmc.adminNamespace);
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
@@ -173,8 +181,16 @@ public class DBResetServlet extends HttpServlet {
 
         NamespaceManager.setNamespace(demoPmcName);
         buf.append("\n--- Preload  " + demoPmcName + " ---");
-        RDBUtils.deleteFromAllEntityTables();
-        buf.append(((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().preloadAll());
+
+        if (!EnumSet.of(ResetType.all, ResetType.allMini).contains(type)) {
+            RDBUtils.deleteFromAllEntityTables();
+        }
+
+        DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
+        if (type == ResetType.allMini) {
+            preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), VistaDevPreloadConfig.createUIDesignMini());
+        }
+        buf.append(preloaders.preloadAll());
 
         log.info("Preloaded PMC '{}' {}", demoPmcName, TimeUtils.secSince(pmcStart));
         buf.append("Preloaded PMC '" + demoPmcName + "' " + TimeUtils.secSince(pmcStart));

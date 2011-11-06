@@ -38,7 +38,7 @@ public class ImporterLauncher {
         log.info("Importing new Data...");
         try {
             Importer importer = new Importer();
-            importer.start();
+            importer.start(1000);
         } catch (Exception e) {
             log.error("Problem with importing XML", e);
         }

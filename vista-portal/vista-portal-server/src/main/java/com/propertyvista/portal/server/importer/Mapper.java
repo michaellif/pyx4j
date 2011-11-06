@@ -47,18 +47,22 @@ import com.propertyvista.server.common.generator.UnitRelatedData;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class Mapper {
+
     private static final Logger log = LoggerFactory.getLogger(Mapper.class);
 
     private List<AvailableUnit> availableUnits = new ArrayList<AvailableUnit>();
 
     private final Model model;
 
+    private int maxResidentialBuildings;
+
     public Mapper(Model model) {
         this.model = model;
     }
 
-    public void load(Residential residential, List<AvailableUnit> availableUnits) {
+    public void load(Residential residential, List<AvailableUnit> availableUnits, int maxResidentialBuildings) {
         this.availableUnits = availableUnits;
+        this.maxResidentialBuildings = maxResidentialBuildings;
         log.debug("Mapping residential");
 
         for (Region region : residential.getRegions()) {
@@ -87,12 +91,18 @@ public class Mapper {
     private void create(Region region) {
         for (City city : region.getCities()) {
             create(city);
+            if (model.getBuildings().size() > maxResidentialBuildings) {
+                break;
+            }
         }
     }
 
     private void create(City city) {
         for (Property property : city.getProperties()) {
             create(property);
+            if (model.getBuildings().size() > maxResidentialBuildings) {
+                break;
+            }
         }
     }
 

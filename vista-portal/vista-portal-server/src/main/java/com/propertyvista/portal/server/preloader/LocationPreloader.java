@@ -56,7 +56,7 @@ public class LocationPreloader extends AbstractDataPreloader {
 
         StringBuilder b = new StringBuilder();
         b.append("Created " + countriesCount + " Countries").append('\n');
-        b.append("Created " + provinceCount + " Provinces");
+        b.append("Created " + provinceCount + " Provinces").append('\n');
         b.append("Created " + cities.size() + " Cities");
         return b.toString();
     }

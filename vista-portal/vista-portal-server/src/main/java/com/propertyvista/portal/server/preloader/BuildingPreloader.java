@@ -327,7 +327,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Created ").append(buildings.size()).append(" buildings, ").append(unitCount).append(" units");
+        sb.append("Created ").append(buildings.size()).append(" buildings\n");
+        sb.append("Created ").append(unitCount).append(" units");
         return sb.toString();
     }
 
@@ -336,13 +337,13 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             Importer importer = new Importer();
             importer.setAttachMedia(this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE);
 
-            importer.start();
+            importer.start(config().getNumResidentialBuildings());
 
             StringBuilder sb = new StringBuilder();
 
-            sb.append("Imported ").append(importer.getModel().getBuildings().size()).append(" buildings, ");
-            sb.append(importer.getModel().getFloorplans().size()).append(" floorplans");
-            sb.append(importer.getModel().getUnits().size()).append(" units");
+            sb.append("Imported ").append(importer.getModel().getBuildings().size()).append(" buildings\n");
+            sb.append("Imported ").append(importer.getModel().getFloorplans().size()).append(" floorplans\n");
+            sb.append("Imported ").append(importer.getModel().getUnits().size()).append(" units\n");
 
             return sb.toString();
         } catch (Exception e) {
@@ -353,16 +354,10 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-        String generated = generate();
-        String imported = importData();
-
         StringBuilder sb = new StringBuilder();
-
-        sb.append("--------- GENERATED ----------");
-        sb.append(generated);
-        sb.append("--------- IMPORTED -----------");
-        sb.append(imported);
-
+        sb.append(generate());
+        sb.append("\n");
+        sb.append(importData());
         return sb.toString();
     }
 

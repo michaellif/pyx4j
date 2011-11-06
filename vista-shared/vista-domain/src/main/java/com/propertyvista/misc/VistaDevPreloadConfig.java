@@ -18,6 +18,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public final class VistaDevPreloadConfig implements Serializable {
 
+    public boolean minimizePreloadTime = false;
+
     private int maxCustomers = 20;
 
     private int maxPropertyManagers = 10;
@@ -74,6 +76,25 @@ public final class VistaDevPreloadConfig implements Serializable {
         config.setNumLockerAreas(1);
         config.setNumLockers(2);
         config.setNumUnitsPerFloor(2);
+        return config;
+    }
+
+    public static VistaDevPreloadConfig createUIDesignMini() {
+        VistaDevPreloadConfig config = new VistaDevPreloadConfig();
+        config.setMaxCustomers(2);
+        config.setMaxPropertyManagers(2);
+        config.setMaxAdmin(1);
+        config.setNumResidentialBuildings(10);
+        config.setNumTenants(4);
+        config.setNumPotentialTenants(2);
+        config.setNumFloors(2);
+        config.setNumFloorplans(2);
+        config.setNumParkings(1);
+        config.setNumParkingSpots(3);
+        config.setNumLockerAreas(1);
+        config.setNumLockers(2);
+        config.setNumUnitsPerFloor(2);
+        config.minimizePreloadTime = true;
         return config;
     }
 

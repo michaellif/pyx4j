@@ -76,10 +76,10 @@ public class Importer {
         reader.readXml();
     }
 
-    public void map() {
+    public void map(int maxResidentialBuildings) {
         // map
         mapper = new Mapper(model);
-        mapper.load(reader.getResidential(), reader.getUnits());
+        mapper.load(reader.getResidential(), reader.getUnits(), maxResidentialBuildings);
     }
 
     public void geo() throws JAXBException, IOException {
@@ -170,9 +170,9 @@ public class Importer {
         }
     }
 
-    public void start() throws Exception {
+    public void start(int maxResidentialBuildings) throws Exception {
         read();
-        map();
+        map(maxResidentialBuildings);
         geo();
         generate();
         save();

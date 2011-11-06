@@ -58,6 +58,10 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
             for (BuildingIO building : importIO.buildings()) {
                 //counters.add(new BuildingImporter().persist(building, imagesBaseFolder, true));
                 counters.add(new BuildingUpdater().updateData(building, imagesBaseFolder, true));
+
+                if ((config().minimizePreloadTime) && (counters.buildings > config().getNumResidentialBuildings())) {
+                    break;
+                }
             }
             SharedGeoLocator.save();
             return SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", counters.buildings, counters.floorplans,

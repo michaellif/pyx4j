@@ -44,6 +44,9 @@ public class MockupVacancyReportUnitPreloader extends BaseVistaDevDataPreloader 
 
     @Override
     public String create() {
+        if ((config().minimizePreloadTime)) {
+            return null;
+        }
 
         final HashMap<String, Integer> memberToIndexMap = new HashMap<String, Integer>();
         StringBuilder creationReport = new StringBuilder();

@@ -36,6 +36,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
  * 
  */
 public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
+
     private static final long ONE_DAY = 1000l * 60l * 60l * 24l;
 
     private static final long MAX_LEASE = 24l * 60l * 60l * 1000l * 24l * 30l;
@@ -48,10 +49,11 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
 
     private static final Random RND = new Random(9001);
 
+    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(MockupArrear.class) + "; " + deleteAll(MockupTenant.class);
+            return deleteAll(MockupArrear.class, MockupTenant.class);
         } else {
             return "This is production";
         }
@@ -59,6 +61,10 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
+        if ((config().minimizePreloadTime)) {
+            return null;
+        }
+
         int counter = 0;
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         List<AptUnit> units = Persistence.service().query(criteria);
