@@ -30,8 +30,6 @@ maven profiles used in build:
         * soyc
             Generate soyc reports for created GWT modules
 
-
-
     * gwtct
         Compile Test GWT modules to Javascript.
 
@@ -47,5 +45,7 @@ maven profiles for build server
     * build-ci (for cruisecontrol)
     * build-selenium
     * deploy (deploy to tomcat)
+    * deploy-target-www11
+    * deploy-target-www22
     * deploy-target-www33
     * deploy-target-www44

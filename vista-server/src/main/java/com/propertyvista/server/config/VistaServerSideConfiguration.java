@@ -45,6 +45,10 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         if ("vista-star".equals(contextName)) {
             return new VistaServerSideConfigurationProdStarlight();
+        } else if ("vista11".equals(contextName)) {
+            return new VistaServerSideConfiguration11();
+        } else if ("vista22".equals(contextName)) {
+            return new VistaServerSideConfiguration22();
         } else if ("vista33".equals(contextName)) {
             return new VistaServerSideConfiguration33();
         } else if ("vista44".equals(contextName)) {
