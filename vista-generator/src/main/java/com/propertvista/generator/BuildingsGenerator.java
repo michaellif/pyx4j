@@ -119,11 +119,16 @@ public class BuildingsGenerator {
         return building;
     }
 
+    private String getName(AddressStructured address) {
+        return address.streetName().getStringView().toLowerCase().replaceAll("ave", "").replaceAll("st", "").replaceAll("\\s+", "")
+                + address.streetNumber().getStringView();
+    }
+
     private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, AddressStructured address, Email email) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
 
-        building.info().name().setValue(RandomUtil.randomLetters(5));
+        building.info().name().setValue(getName(address));
         building.info().address().set(address);
         building.info().type().setValue(buildingType);
         building.info().shape().setValue(RandomUtil.random(BuildingInfo.Shape.values()));
@@ -146,7 +151,7 @@ public class BuildingsGenerator {
         building.financial().lastAppraisalValue().setValue(100d + RandomUtil.randomDouble(2000000));
         building.financial().currency().name().setValue("CAD");
 
-        building.marketing().name().setValue(RandomUtil.randomLetters(4) + " " + RandomUtil.randomLetters(6));
+        building.marketing().name().setValue(building.info().name().getStringView() + " mkt" + RandomUtil.randomLetters(2));
         building.marketing().description().setValue(CommonsGenerator.lipsum());
         for (int i = 0; 1 < RandomUtil.randomInt(3); i++) {
             AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
@@ -359,7 +364,7 @@ public class BuildingsGenerator {
 
         amenity.type().setValue(RandomUtil.randomEnum(BuildingAmenity.Type.class));
 
-        amenity.name().setValue(RandomUtil.randomLetters(6));
+        amenity.name().setValue(amenity.type().getStringView() + " " + RandomUtil.randomLetters(2));
         amenity.description().setValue(CommonsGenerator.lipsumShort());
 
         return amenity;

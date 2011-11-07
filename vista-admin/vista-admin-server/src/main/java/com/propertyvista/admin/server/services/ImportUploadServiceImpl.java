@@ -41,6 +41,7 @@ import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.admin.Pmc;
 
@@ -86,7 +87,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             }
             NamespaceManager.setNamespace(pmc.dnsName().getValue());
 
-            String imagesBaseFolder = "data/export/images/";
+            String imagesBaseFolder = "data";
             //imagesBaseFolder = "M:\\stuff\\vista\\prod";
 
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
@@ -111,6 +112,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             }
 
             count = 0;
+            SharedGeoLocator.setMode(Mode.updateCache);
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
                 log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.propertyCode().getValue());

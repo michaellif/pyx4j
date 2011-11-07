@@ -52,7 +52,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         if (data != null) {
-            String imagesBaseFolder = "data/buildings";
+            String imagesBaseFolder = "data";
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new StringReader(data)));
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {

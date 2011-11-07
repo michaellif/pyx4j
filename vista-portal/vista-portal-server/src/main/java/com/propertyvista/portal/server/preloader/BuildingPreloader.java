@@ -68,6 +68,8 @@ import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.server.importer.Importer;
 import com.propertyvista.server.common.generator.UnitRelatedData;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
+import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
+import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.ThumbnailBlob;
 
@@ -139,7 +141,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         List<Complex> complexesWithBuildins = new Vector<Complex>();
 
+        SharedGeoLocator.setMode(Mode.useCacheOnly);
+
         for (Building building : buildings) {
+            if (building.info().address().location().isNull()) {
+                SharedGeoLocator.populateGeo(building.info().address());
+            }
             Persistence.service().persist(building);
 
             if (DataGenerator.randomBoolean()) {
@@ -226,7 +233,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // Amenities:
-            List<BuildingAmenity> amenities = generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(3));
+            List<BuildingAmenity> amenities = generator.createBuildingAmenities(building, 1 + RandomUtil.randomInt(5));
             for (BuildingAmenity item : amenities) {
                 Persistence.service().persist(item);
             }
@@ -325,6 +332,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 PublicDataUpdater.updateIndexData(building);
             }
         }
+        SharedGeoLocator.save();
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created ").append(buildings.size()).append(" buildings\n");
@@ -358,7 +366,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         sb.append(generate());
         if (!config().minimizePreloadTime) {
             sb.append("\n");
-            sb.append(importData());
+            // sb.append(importData());
         }
         return sb.toString();
     }

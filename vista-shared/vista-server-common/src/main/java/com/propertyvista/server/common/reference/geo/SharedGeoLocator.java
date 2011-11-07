@@ -30,6 +30,11 @@ public class SharedGeoLocator {
 
     private static long nextCachePersistTime = System.currentTimeMillis() + cachePersistIntervals;
 
+    public static void setMode(Mode mode) {
+        save();
+        geoLocator = new GeoLocator(mode);
+    }
+
     public static boolean populateGeo(AddressStructured address) {
         boolean found = geoLocator.populateGeo(address);
 

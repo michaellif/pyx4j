@@ -36,7 +36,7 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     private int numFloors = 4;
 
-    private int numFloorplans = 2;
+    private int numFloorplans = 4;
 
     private int numParkings = 1;
 

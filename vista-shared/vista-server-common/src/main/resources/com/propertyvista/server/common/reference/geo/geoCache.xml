@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <geoPairs>
     <pair>
-        <address>55 Rue Laframboise, Saint-Laurent,  H4N 3B7</address>
-        <geoPoint>45.53080/-73.67741</geoPoint>
-    </pair>
-    <pair>
         <address>80 Wellesley, Toronto, ON M4Y 1H3</address>
         <geoPoint>43.6659261/-79.3800021</geoPoint>
     </pair>
@@ -21,8 +17,16 @@
         <geoPoint>45.9461777/-66.6735426</geoPoint>
     </pair>
     <pair>
+        <address>75 Hidden Valley, Calgary, AB </address>
+        <geoPoint>51.1473863/-114.0970985</geoPoint>
+    </pair>
+    <pair>
         <address>3 Broadway, Toronto, ON M4P 1T7</address>
         <geoPoint>43.7095806/-79.3985608</geoPoint>
+    </pair>
+    <pair>
+        <address>2825 Pickerel, Kitchener, ON </address>
+        <geoPoint>43.434311/-80.477747</geoPoint>
     </pair>
     <pair>
         <address>555 The West Mall, Etobicoke, ON M9C 1G8</address>
@@ -41,8 +45,16 @@
         <geoPoint>45.5105401/-73.7080565</geoPoint>
     </pair>
     <pair>
+        <address>607 Chase, Guelph, ON </address>
+        <geoPoint>43.4648052/-80.4892883</geoPoint>
+    </pair>
+    <pair>
         <address>2831-2839 Cedarwood, Ottawa, ON K1V 0G6</address>
         <geoPoint>45.3762311/-75.6531205</geoPoint>
+    </pair>
+    <pair>
+        <address>833 Forest View, Toronto, ON </address>
+        <geoPoint>43.6316343/-79.5720066</geoPoint>
     </pair>
     <pair>
         <address>2473 Charles-Darwin, Saint-Laurent, QC H4R 2Z6</address>
@@ -53,16 +65,28 @@
         <geoPoint>43.0176095/-81.2459264</geoPoint>
     </pair>
     <pair>
-        <address>321 South 23rd, London, ON </address>
-        <geoPoint>42.979398/-81.246138</geoPoint>
-    </pair>
-    <pair>
         <address>495 - 509 Delmar Avenue, Pointe-Claire,  H9R 4A5</address>
         <geoPoint>45.4667025/-73.8031151</geoPoint>
     </pair>
     <pair>
+        <address>321 South 23rd, London, ON </address>
+        <geoPoint>42.979398/-81.246138</geoPoint>
+    </pair>
+    <pair>
+        <address>370 Mooney, Kitchener, ON </address>
+        <geoPoint>43.434311/-80.477747</geoPoint>
+    </pair>
+    <pair>
         <address>208 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5232848/-73.4564405</geoPoint>
+    </pair>
+    <pair>
+        <address>3890 Ridgeview, Mississauga, ON </address>
+        <geoPoint>43.672486/-79.755906</geoPoint>
+    </pair>
+    <pair>
+        <address>19 Milliken, Saint John, NB </address>
+        <geoPoint>45.2733153/-66.0633081</geoPoint>
     </pair>
     <pair>
         <address>143 Stephen, Etobicoke, ON M8Y 3N5</address>
@@ -81,16 +105,24 @@
         <geoPoint>51.063211/-114.07573</geoPoint>
     </pair>
     <pair>
-        <address>2474 Harriet Quimby, Saint-Laurent, QC H4R 3A4</address>
-        <geoPoint>45.5120858/-73.7091672</geoPoint>
+        <address>440 Bathurst St, Montreal, NM 67132, United States</address>
+        <geoPoint>37.8173632/-96.5569882</geoPoint>
     </pair>
     <pair>
         <address>342 Avenue Road, Toronto, ON M4V 2H4, Canada</address>
         <geoPoint>43.6808787/-79.3991033</geoPoint>
     </pair>
     <pair>
+        <address>2474 Harriet Quimby, Saint-Laurent, QC H4R 3A4</address>
+        <geoPoint>45.5120858/-73.7091672</geoPoint>
+    </pair>
+    <pair>
         <address>740 Kipps Lane, London, ON N5Y 4R8, Canada</address>
         <geoPoint>43.0178181/-81.2452022</geoPoint>
+    </pair>
+    <pair>
+        <address>4 Great Cove, Toronto, ON </address>
+        <geoPoint>43.766021/-79.273347</geoPoint>
     </pair>
     <pair>
         <address>689 Barber, Listowel, ON N4W 1S4</address>
@@ -99,6 +131,10 @@
     <pair>
         <address>2010 St. Johns, Port Moody, BC V3H 2A2</address>
         <geoPoint>49.2766627/-122.8668725</geoPoint>
+    </pair>
+    <pair>
+        <address>88 Stockton, Toronto, ON </address>
+        <geoPoint>43.7208203/-79.4497324</geoPoint>
     </pair>
     <pair>
         <address>350 Alnwick, Saint John, NB </address>
@@ -129,6 +165,10 @@
         <geoPoint>45.4671828/-73.8034078</geoPoint>
     </pair>
     <pair>
+        <address>343 Concord, Toronto, ON </address>
+        <geoPoint>43.6634075/-79.4274789</geoPoint>
+    </pair>
+    <pair>
         <address>93 Westwood, Kitchener, ON N2M 2K7</address>
         <geoPoint>43.4451959/-80.5275071</geoPoint>
     </pair>
@@ -143,6 +183,10 @@
     <pair>
         <address>1150 Kingston , Toronto, ON M1N 1N9</address>
         <geoPoint>43.6815926/-79.2810352</geoPoint>
+    </pair>
+    <pair>
+        <address>10 Westchester, Halifax, NS </address>
+        <geoPoint>44.648881/-63.575312</geoPoint>
     </pair>
     <pair>
         <address>2906 Mousseau, Longueuil, QC J4L 1V3</address>
@@ -161,8 +205,16 @@
         <geoPoint>44.6548624/-63.5843781</geoPoint>
     </pair>
     <pair>
+        <address>5 Calloway, Halifax, NS </address>
+        <geoPoint>44.648881/-63.575312</geoPoint>
+    </pair>
+    <pair>
         <address>2130 Cambridge, Vancouver, BC V5L 1E3, Canada</address>
         <geoPoint>49.2864084/-123.0606685</geoPoint>
+    </pair>
+    <pair>
+        <address>415 Del Rey, Kitchener, ON </address>
+        <geoPoint>43.6894559/-79.4582541</geoPoint>
     </pair>
     <pair>
         <address>3100 Masson, Longueuil, QC J4L 4C7</address>
@@ -171,6 +223,14 @@
     <pair>
         <address>751 Clarke, Coquitlam, BC V3J 3Y3</address>
         <geoPoint>49.268341/-122.8815507</geoPoint>
+    </pair>
+    <pair>
+        <address>31 Harpers Ferry, Toronto, ON </address>
+        <geoPoint>43.653226/-79.3831843</geoPoint>
+    </pair>
+    <pair>
+        <address>1105 Jess Lyons, New Westminster, BC </address>
+        <geoPoint>49.210086/-122.917209</geoPoint>
     </pair>
     <pair>
         <address>7 Wilsonview, Guelph, ON </address>
@@ -189,6 +249,10 @@
         <geoPoint>43.8456136/-79.1600026</geoPoint>
     </pair>
     <pair>
+        <address>7594 16th Ave, Richmond Hill, MB L6L 6M6, Canada</address>
+        <geoPoint>43.8587079/-79.4036079</geoPoint>
+    </pair>
+    <pair>
         <address>3185 Chemin Chambly, Longueuil, QC J4L 1N3</address>
         <geoPoint>45.5173177/-73.4526376</geoPoint>
     </pair>
@@ -197,64 +261,80 @@
         <geoPoint>45.3765383/-75.651319</geoPoint>
     </pair>
     <pair>
-        <address>5300 Rundlehorn, Calgary, AB T1Y 3V5</address>
-        <geoPoint>51.0716485/-113.9567828</geoPoint>
-    </pair>
-    <pair>
         <address>170 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5223654/-73.4569254</geoPoint>
     </pair>
     <pair>
-        <address>2834 Sandalwood, Ottawa, ON K1V 7P5</address>
-        <geoPoint>45.3783292/-75.6487156</geoPoint>
+        <address>5300 Rundlehorn, Calgary, AB T1Y 3V5</address>
+        <geoPoint>51.0716485/-113.9567828</geoPoint>
     </pair>
     <pair>
         <address>2406 Queen, ,  </address>
         <geoPoint>43.7133024/-82.9321192</geoPoint>
     </pair>
     <pair>
-        <address>583 Barber, Listowel, ON N4W 1S4</address>
-        <geoPoint>43.7382812/-80.9526344</geoPoint>
+        <address>2834 Sandalwood, Ottawa, ON K1V 7P5</address>
+        <geoPoint>45.3783292/-75.6487156</geoPoint>
     </pair>
     <pair>
         <address>1948 McCallum Road, Abbotsford, BC V2S 3M9, Canada</address>
         <geoPoint>49.0377166/-122.2931223</geoPoint>
     </pair>
     <pair>
-        <address>2175 Avenue, Toronto, ON M5M 4B6</address>
-        <geoPoint>43.7398751/-79.4215504</geoPoint>
+        <address>583 Barber, Listowel, ON N4W 1S4</address>
+        <geoPoint>43.7382812/-80.9526344</geoPoint>
     </pair>
     <pair>
         <address>5 Hartham, Toronto, ON M3K 1P2</address>
         <geoPoint>43.7296614/-79.4595456</geoPoint>
     </pair>
     <pair>
+        <address>2175 Avenue, Toronto, ON M5M 4B6</address>
+        <geoPoint>43.7398751/-79.4215504</geoPoint>
+    </pair>
+    <pair>
+        <address>2570 Pennsylvania, Toronto, ON </address>
+        <geoPoint>43.80266/-79.53197</geoPoint>
+    </pair>
+    <pair>
         <address>380 Hearne, Pointe-Claire, QC H9R 5T9</address>
         <geoPoint>45.4667714/-73.8030715</geoPoint>
     </pair>
     <pair>
-        <address>504 Delmar, Pointe-Claire, QC H9R 1E2</address>
-        <geoPoint>45.4670128/-73.803354</geoPoint>
+        <address>39 Rexford, Toronto, ON </address>
+        <geoPoint>43.6633005/-79.4874154</geoPoint>
     </pair>
     <pair>
         <address>180 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5228026/-73.4567079</geoPoint>
     </pair>
     <pair>
+        <address>504 Delmar, Pointe-Claire, QC H9R 1E2</address>
+        <geoPoint>45.4670128/-73.803354</geoPoint>
+    </pair>
+    <pair>
         <address>225 Wilson, North York, ON M3M 3B2</address>
         <geoPoint>43.719964/-79.51369</geoPoint>
     </pair>
     <pair>
-        <address>601 Barber, Listowel, ON N4W 1S4</address>
-        <geoPoint>43.738522/-80.9525269</geoPoint>
+        <address>1320 Larratt, Guelph, ON </address>
+        <geoPoint>43.539102/-80.247622</geoPoint>
     </pair>
     <pair>
         <address>155 Mystery Lake, St. John, NB E2J 4B5</address>
         <geoPoint>45.3213847/-66.0008922</geoPoint>
     </pair>
     <pair>
+        <address>601 Barber, Listowel, ON N4W 1S4</address>
+        <geoPoint>43.738522/-80.9525269</geoPoint>
+    </pair>
+    <pair>
         <address>200 Ridley, North York, ON M5M 3M2</address>
         <geoPoint>43.7386194/-79.4195743</geoPoint>
+    </pair>
+    <pair>
+        <address>530 Scott, London, ON </address>
+        <geoPoint>42.9956763/-81.1864169</geoPoint>
     </pair>
     <pair>
         <address>425 Simcoe Street, Victoria, BC V8V 4T3, Canada</address>
@@ -265,6 +345,14 @@
         <geoPoint>43.4641268/-80.5464191</geoPoint>
     </pair>
     <pair>
+        <address>175 Queen, Saint John, NB </address>
+        <geoPoint>45.2699166/-66.052043</geoPoint>
+    </pair>
+    <pair>
+        <address>53 White Oak, London, ON </address>
+        <geoPoint>42.9315105/-81.2259659</geoPoint>
+    </pair>
+    <pair>
         <address>1463-1477 Walkley, Ottawa, ON K1V 0H3</address>
         <geoPoint>45.3755189/-75.6510271</geoPoint>
     </pair>
@@ -273,24 +361,32 @@
         <geoPoint>43.4450372/-80.5282615</geoPoint>
     </pair>
     <pair>
+        <address>2283 North Kendall, Toronto, ON </address>
+        <geoPoint>43.6742351/-79.4093533</geoPoint>
+    </pair>
+    <pair>
         <address>218 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5236673/-73.4561171</geoPoint>
     </pair>
     <pair>
-        <address>50 Tripp, Trenton, ON K8V 5Z7</address>
-        <geoPoint>44.0937306/-77.5970684</geoPoint>
+        <address>2896 West Silvania, Ottawa, ON </address>
+        <geoPoint>41.6919963/-83.6128928</geoPoint>
     </pair>
     <pair>
         <address>435 Ash, New Westminster, BC V3M 3N2</address>
         <geoPoint>49.2103497/-122.9210823</geoPoint>
     </pair>
     <pair>
-        <address>3050 Masson, Longueuil, QC J4L 4C7</address>
-        <geoPoint>45.5195468/-73.4535905</geoPoint>
+        <address>50 Tripp, Trenton, ON K8V 5Z7</address>
+        <geoPoint>44.0937306/-77.5970684</geoPoint>
     </pair>
     <pair>
         <address>235 Menard, Longueuil, QC J4L 1J6</address>
         <geoPoint>45.5224293/-73.4555927</geoPoint>
+    </pair>
+    <pair>
+        <address>3050 Masson, Longueuil, QC J4L 4C7</address>
+        <geoPoint>45.5195468/-73.4535905</geoPoint>
     </pair>
     <pair>
         <address>2201 32ND, Lethbridge, AB T1K 3A7, Canada</address>
@@ -301,12 +397,12 @@
         <geoPoint>43.7929733/-79.4431731</geoPoint>
     </pair>
     <pair>
-        <address>499 Albert, Waterloo, ON N2L 5A7</address>
-        <geoPoint>43.4866204/-80.5413688</geoPoint>
-    </pair>
-    <pair>
         <address>40 Primrose, Dartmouth, NS B3A 4C5</address>
         <geoPoint>44.6836322/-63.5842703</geoPoint>
+    </pair>
+    <pair>
+        <address>499 Albert, Waterloo, ON N2L 5A7</address>
+        <geoPoint>43.4866204/-80.5413688</geoPoint>
     </pair>
     <pair>
         <address>2431 Charles-Darwin, Saint-Laurent, QC H4R 2Z6</address>
@@ -317,16 +413,20 @@
         <geoPoint>45.3792833/-75.6488364</geoPoint>
     </pair>
     <pair>
+        <address>2060 16th Ave, North York, FL 73309, United States</address>
+        <geoPoint>41.8538376/-87.957639</geoPoint>
+    </pair>
+    <pair>
         <address>2826 Sandalwood, Ottawa, ON K1V 7P5</address>
         <geoPoint>45.3792833/-75.6488364</geoPoint>
     </pair>
     <pair>
-        <address>3155 Chemin Chambly, Longueuil, QC J4L 1N3</address>
-        <geoPoint>45.5175691/-73.4532359</geoPoint>
-    </pair>
-    <pair>
         <address>192 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5230923/-73.4565464</geoPoint>
+    </pair>
+    <pair>
+        <address>3155 Chemin Chambly, Longueuil, QC J4L 1N3</address>
+        <geoPoint>45.5175691/-73.4532359</geoPoint>
     </pair>
     <pair>
         <address>3110 Masson, Longueuil, QC J4L 4C7</address>
@@ -345,8 +445,16 @@
         <geoPoint>45.5222754/-73.4569473</geoPoint>
     </pair>
     <pair>
+        <address>1 Christianburg, Saint John, NB </address>
+        <geoPoint>45.2733153/-66.0633081</geoPoint>
+    </pair>
+    <pair>
         <address>1862 Bathurst, Toronto, ON M5P 3K8</address>
         <geoPoint>43.697914/-79.4243462</geoPoint>
+    </pair>
+    <pair>
+        <address>80 Birchwood, Ottawa, ON </address>
+        <geoPoint>45.3558501/-75.7325666</geoPoint>
     </pair>
     <pair>
         <address>2403 Charles-Darwin, Saint-Laurent, QC H4R 2Z6</address>
@@ -357,32 +465,32 @@
         <geoPoint>44.6547609/-63.5842872</geoPoint>
     </pair>
     <pair>
-        <address>15 Kennedy Drive, Dartmouth, NS B2X 1N7, Canada</address>
-        <geoPoint>44.6914618/-63.5306203</geoPoint>
-    </pair>
-    <pair>
         <address>100 Rideau, Oshawa, ON L1J 6P5</address>
         <geoPoint>43.8974523/-78.8760176</geoPoint>
     </pair>
     <pair>
-        <address>204 Des Ormeaux, Longueuil, QC J4L 1J2</address>
-        <geoPoint>45.5231217/-73.45653</geoPoint>
+        <address>15 Kennedy Drive, Dartmouth, NS B2X 1N7, Canada</address>
+        <geoPoint>44.6914618/-63.5306203</geoPoint>
     </pair>
     <pair>
         <address>2 Grant, Dundas, ON L9H 4L4</address>
         <geoPoint>43.2591203/-79.9414702</geoPoint>
     </pair>
     <pair>
+        <address>204 Des Ormeaux, Longueuil, QC J4L 1J2</address>
+        <geoPoint>45.5231217/-73.45653</geoPoint>
+    </pair>
+    <pair>
         <address>1200 Kingston , Toronto, ON M1N 1N9</address>
         <geoPoint>43.6820953/-79.2797258</geoPoint>
     </pair>
     <pair>
-        <address>320 Avenue Road, Toronto, ON M4V 2H3, Canada</address>
-        <geoPoint>43.680224/-79.3993434</geoPoint>
-    </pair>
-    <pair>
         <address>196 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5231119/-73.4565355</geoPoint>
+    </pair>
+    <pair>
+        <address>320 Avenue Road, Toronto, ON M4V 2H3, Canada</address>
+        <geoPoint>43.680224/-79.3993434</geoPoint>
     </pair>
     <pair>
         <address>245 Lakeshore, Etobicoke, ON M8V 2A8</address>
@@ -395,6 +503,10 @@
     <pair>
         <address>176 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5226291/-73.4568046</geoPoint>
+    </pair>
+    <pair>
+        <address>392 Cooke, Toronto, ON </address>
+        <geoPoint>43.7665218/-79.5036813</geoPoint>
     </pair>
     <pair>
         <address>2339 Charles-Darwin, Saint-Laurent, QC H4R 2X9</address>
@@ -449,6 +561,10 @@
         <geoPoint>45.5121417/-73.7075241</geoPoint>
     </pair>
     <pair>
+        <address>2465 South Paxton, Ottawa, ON </address>
+        <geoPoint>45.4408444/-75.5737792</geoPoint>
+    </pair>
+    <pair>
         <address>340 Avenue Road, Toronto, ON M4V 2H4, Canada</address>
         <geoPoint>43.6808927/-79.3993083</geoPoint>
     </pair>
@@ -461,6 +577,14 @@
         <geoPoint>45.3752842/-75.6525362</geoPoint>
     </pair>
     <pair>
+        <address>5700 Yonge St, Richmond Hill, TN 51531, United States</address>
+        <geoPoint>43.901354/-79.4441681</geoPoint>
+    </pair>
+    <pair>
+        <address>357 Second, Halifax, NS </address>
+        <geoPoint>44.8680559/-63.6114901</geoPoint>
+    </pair>
+    <pair>
         <address>115 Westwood, Kitchener, ON N2M 2K7</address>
         <geoPoint>43.4450437/-80.5281998</geoPoint>
     </pair>
@@ -471,6 +595,10 @@
     <pair>
         <address>1212 des Pins Avenue W, Montreal,  H3G 1A9</address>
         <geoPoint>45.502672/-73.583609</geoPoint>
+    </pair>
+    <pair>
+        <address>2805 Flower Hill Church, Vancouver, BC </address>
+        <geoPoint>49.261226/-123.1139268</geoPoint>
     </pair>
     <pair>
         <address>758 Kipps Lane, London, ON N5Y 4Y1, Canada</address>
@@ -497,6 +625,18 @@
         <geoPoint>43.4450615/-80.5280808</geoPoint>
     </pair>
     <pair>
+        <address>1021 Primrose, Vancouver, BC </address>
+        <geoPoint>49.347895/-124.444201</geoPoint>
+    </pair>
+    <pair>
+        <address>5214 Cleveland Forest, Ottawa, ON </address>
+        <geoPoint>45.4215296/-75.6971931</geoPoint>
+    </pair>
+    <pair>
+        <address>1 Weldwood, Calgary, AB </address>
+        <geoPoint>51.045/-114.0572222</geoPoint>
+    </pair>
+    <pair>
         <address>496 Delmar, Pointe-Claire, QC H9R 5V4</address>
         <geoPoint>45.4658907/-73.8025094</geoPoint>
     </pair>
@@ -521,6 +661,14 @@
         <geoPoint>49.1456535/-122.3022112</geoPoint>
     </pair>
     <pair>
+        <address>758 Chase, Toronto, ON </address>
+        <geoPoint>43.9001748/-78.5945806</geoPoint>
+    </pair>
+    <pair>
+        <address>573 Linda, Ottawa, ON </address>
+        <geoPoint>45.360121/-76.1182574</geoPoint>
+    </pair>
+    <pair>
         <address>2292 Weston, North York, ON M9N 1Z2</address>
         <geoPoint>43.7050888/-79.5292987</geoPoint>
     </pair>
@@ -531,6 +679,10 @@
     <pair>
         <address>210 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5232848/-73.4564405</geoPoint>
+    </pair>
+    <pair>
+        <address>59 Seaton, Toronto, ON </address>
+        <geoPoint>43.6564502/-79.368557</geoPoint>
     </pair>
     <pair>
         <address>1065 Eglinton, Toronto, ON M6C 2E1</address>
@@ -589,6 +741,10 @@
         <geoPoint>44.6832223/-63.584732</geoPoint>
     </pair>
     <pair>
+        <address>1310 Monument, London, ON </address>
+        <geoPoint>42.9895209/-81.1406494</geoPoint>
+    </pair>
+    <pair>
         <address>2828 Sandalwood, Ottawa, ON K1V 7P5</address>
         <geoPoint>45.3792833/-75.6488364</geoPoint>
     </pair>
@@ -603,6 +759,10 @@
     <pair>
         <address>2181 Avenue, Toronto, ON M5M 4B8</address>
         <geoPoint>43.7398751/-79.4215504</geoPoint>
+    </pair>
+    <pair>
+        <address>990 Halley, Guelph, ON </address>
+        <geoPoint>43.539102/-80.247622</geoPoint>
     </pair>
     <pair>
         <address>750 Kipps Lane, London, ON N5Y 4R9, Canada</address>
@@ -625,8 +785,16 @@
         <geoPoint>45.5122177/-73.7075335</geoPoint>
     </pair>
     <pair>
+        <address>191 Faye, Saint Laurent, QC </address>
+        <geoPoint>45.5172008/-73.6667383</geoPoint>
+    </pair>
+    <pair>
         <address>659 Barber, Listowel, ON N4W 1S4</address>
         <geoPoint>43.7392376/-80.9520042</geoPoint>
+    </pair>
+    <pair>
+        <address>64 Newton, Dartmouth, NS </address>
+        <geoPoint>44.6447649/-63.60727</geoPoint>
     </pair>
     <pair>
         <address>155 Wellesley, Toronto, ON M4Y 1J4</address>
@@ -671,6 +839,10 @@
     <pair>
         <address>1812 Piree, Saint-Laurent, QC H4R 2Z5</address>
         <geoPoint>45.5122574/-73.7076578</geoPoint>
+    </pair>
+    <pair>
+        <address>123 Memorial, Halifax, NS </address>
+        <geoPoint>44.6298633/-63.5974288</geoPoint>
     </pair>
     <pair>
         <address>444 Victoria, Guelph, ON N1E 5J8</address>
@@ -729,6 +901,18 @@
         <geoPoint>45.5243351/-73.4558798</geoPoint>
     </pair>
     <pair>
+        <address>5300 Manchester, London, ON </address>
+        <geoPoint>42.9807539/-81.3282769</geoPoint>
+    </pair>
+    <pair>
+        <address>1080 Elmwood, Saint Laurent, QC </address>
+        <geoPoint>45.455474/-73.7890418</geoPoint>
+    </pair>
+    <pair>
+        <address>50 Staple, Nanaimo, BC </address>
+        <geoPoint>49.1658836/-123.9400647</geoPoint>
+    </pair>
+    <pair>
         <address>1080 Kingston , Toronto, ON M1N 1N5</address>
         <geoPoint>43.6810078/-79.2828588</geoPoint>
     </pair>
@@ -739,6 +923,10 @@
     <pair>
         <address>1968 McCallum, Abbotsford, BC V2S 3M6</address>
         <geoPoint>49.0382111/-122.2930603</geoPoint>
+    </pair>
+    <pair>
+        <address>30 Sedgwick, Kitchener, ON </address>
+        <geoPoint>43.434311/-80.477747</geoPoint>
     </pair>
     <pair>
         <address>109 Westwood, Kitchener, ON N2M 2K7</address>
@@ -765,6 +953,14 @@
         <geoPoint>44.6558276/-63.5851996</geoPoint>
     </pair>
     <pair>
+        <address>5 Trinity, Halifax, NS </address>
+        <geoPoint>44.6796412/-63.5940916</geoPoint>
+    </pair>
+    <pair>
+        <address>2535 Florida, Toronto, ON </address>
+        <geoPoint>43.7345378/-79.5414979</geoPoint>
+    </pair>
+    <pair>
         <address>3109 Masson, Longueuil, QC J4L 1T9</address>
         <geoPoint>45.5188215/-73.4526272</geoPoint>
     </pair>
@@ -773,12 +969,16 @@
         <geoPoint>51.0716485/-113.9567828</geoPoint>
     </pair>
     <pair>
+        <address>220 Des Ormeaux, Longueuil, QC J4L 1J2</address>
+        <geoPoint>45.5239081/-73.4561077</geoPoint>
+    </pair>
+    <pair>
         <address>5 Wilsonview, Guelph, ON N1G 2W5</address>
         <geoPoint>43.5224653/-80.2387046</geoPoint>
     </pair>
     <pair>
-        <address>220 Des Ormeaux, Longueuil, QC J4L 1J2</address>
-        <geoPoint>45.5239081/-73.4561077</geoPoint>
+        <address>915 Willivee, Vancouver, BC </address>
+        <geoPoint>49.261226/-123.1139268</geoPoint>
     </pair>
     <pair>
         <address>500 Delmar, Pointe-Claire, QC H9R 1E2</address>
@@ -805,40 +1005,48 @@
         <geoPoint>45.4669375/-73.8033082</geoPoint>
     </pair>
     <pair>
-        <address>1485-1499 Walkley, Ottawa, ON K1V 0H3</address>
-        <geoPoint>45.3761774/-75.6494019</geoPoint>
-    </pair>
-    <pair>
         <address>222 Des Ormeaux, Longueuil, QC J4L 1J2</address>
         <geoPoint>45.5241216/-73.4559937</geoPoint>
+    </pair>
+    <pair>
+        <address>1485-1499 Walkley, Ottawa, ON K1V 0H3</address>
+        <geoPoint>45.3761774/-75.6494019</geoPoint>
     </pair>
     <pair>
         <address>33690 Marshall, Abbotsford, BC V2S 1L2</address>
         <geoPoint>49.0388565/-122.2906149</geoPoint>
     </pair>
     <pair>
-        <address>3069 Chemin Chambly, Longueuil, QC J4L 1N3</address>
-        <geoPoint>45.5184602/-73.4553554</geoPoint>
-    </pair>
-    <pair>
         <address>1481 Walkley, Ottawa, ON K1V 0H3</address>
         <geoPoint>45.3759656/-75.6509221</geoPoint>
+    </pair>
+    <pair>
+        <address>3069 Chemin Chambly, Longueuil, QC J4L 1N3</address>
+        <geoPoint>45.5184602/-73.4553554</geoPoint>
     </pair>
     <pair>
         <address>326 Avenue Road, Toronto, ON M4V 2H3, Canada</address>
         <geoPoint>43.6805533/-79.3989746</geoPoint>
     </pair>
     <pair>
-        <address>425 Simcoe, Victoria, BC V8V 4T3</address>
-        <geoPoint>48.415801/-123.375521</geoPoint>
-    </pair>
-    <pair>
         <address>2177 Avenue, Toronto, ON M5M 4B7</address>
         <geoPoint>43.7398751/-79.4215504</geoPoint>
     </pair>
     <pair>
+        <address>425 Simcoe, Victoria, BC V8V 4T3</address>
+        <geoPoint>48.415801/-123.375521</geoPoint>
+    </pair>
+    <pair>
+        <address>55 Rue Laframboise, Saint-Laurent,  H4N 3B7</address>
+        <geoPoint>45.5308/-73.67741</geoPoint>
+    </pair>
+    <pair>
         <address>3135 Chemin Chambly, Longueuil, QC J4L 1N3</address>
         <geoPoint>45.5177367/-73.4536348</geoPoint>
+    </pair>
+    <pair>
+        <address>3894 Lincoln, Toronto, ON </address>
+        <geoPoint>43.6592655/-79.4796335</geoPoint>
     </pair>
     <pair>
         <address>754 Kipps Lane, London, ON N5Y 4V3, Canada</address>
@@ -853,6 +1061,10 @@
         <geoPoint>49.2050301/-122.926312</geoPoint>
     </pair>
     <pair>
+        <address>2334 Tiger Flowers, Toronto, ON </address>
+        <geoPoint>43.653226/-79.3831843</geoPoint>
+    </pair>
+    <pair>
         <address>1463-1477, 1481 Walkley, Ottawa, ON K1V 0H3</address>
         <geoPoint>45.3759656/-75.6509221</geoPoint>
     </pair>
@@ -865,16 +1077,20 @@
         <geoPoint>51.148606/-114.2218253</geoPoint>
     </pair>
     <pair>
+        <address>1581 Sautee, Saint Laurent, QC </address>
+        <geoPoint>45.5172008/-73.6667383</geoPoint>
+    </pair>
+    <pair>
         <address>33690 Marshall Road, Abbotsford, BC V2S 1L2, Canada</address>
         <geoPoint>49.0388565/-122.2906149</geoPoint>
     </pair>
     <pair>
-        <address>6020 Bathurst Street, Toronto, ON M2R 1Z8, Canada</address>
-        <geoPoint>43.7870826/-79.4472285</geoPoint>
-    </pair>
-    <pair>
         <address>756 Kipps Lane, London, ON N5Y 4X9, Canada</address>
         <geoPoint>43.0178569/-81.2450675</geoPoint>
+    </pair>
+    <pair>
+        <address>6020 Bathurst Street, Toronto, ON M2R 1Z8, Canada</address>
+        <geoPoint>43.7870826/-79.4472285</geoPoint>
     </pair>
     <pair>
         <address>752 Kipps Lane, London, ON N5Y 4V4, Canada</address>
@@ -887,6 +1103,10 @@
     <pair>
         <address>4190 Bathurst, Toronto, ON M3H 3P9</address>
         <geoPoint>43.7490591/-79.4369147</geoPoint>
+    </pair>
+    <pair>
+        <address>1799 Williams, Saint John, NB </address>
+        <geoPoint>45.3352204/-65.618089</geoPoint>
     </pair>
     <pair>
         <address>1650 Bathurst, Toronto, ON M5P 3J7</address>
@@ -913,6 +1133,10 @@
         <geoPoint>45.5180782/-73.4505854</geoPoint>
     </pair>
     <pair>
+        <address>20 Budday, Guelph, ON </address>
+        <geoPoint>43.539102/-80.247622</geoPoint>
+    </pair>
+    <pair>
         <address>33095 Old Yale, Abbotsford, BC V2S 6C7</address>
         <geoPoint>49.0521396/-122.3057739</geoPoint>
     </pair>
@@ -937,12 +1161,12 @@
         <geoPoint>45.5188544/-73.4527181</geoPoint>
     </pair>
     <pair>
-        <address>2816 Sandalwood, Ottawa, ON K1V 7P5</address>
-        <geoPoint>45.3791248/-75.6488117</geoPoint>
-    </pair>
-    <pair>
         <address>501 Delmar, Pointe-Claire, QC H9R 1E2</address>
         <geoPoint>45.4668748/-73.8032204</geoPoint>
+    </pair>
+    <pair>
+        <address>2816 Sandalwood, Ottawa, ON K1V 7P5</address>
+        <geoPoint>45.3791248/-75.6488117</geoPoint>
     </pair>
     <pair>
         <address>457 Albert, Waterloo, ON N2L 5A7</address>
@@ -957,24 +1181,28 @@
         <geoPoint>43.6808927/-79.3993083</geoPoint>
     </pair>
     <pair>
+        <address>565 Belmont Ave W., Kitchener, ON N2M 5E7, Canada</address>
+        <geoPoint>43.4509823/-80.5164271</geoPoint>
+    </pair>
+    <pair>
         <address>633 Barber, Listowel, ON N4W 1S4</address>
         <geoPoint>43.7389179/-80.952241</geoPoint>
     </pair>
     <pair>
-        <address>565 Belmont Ave W., Kitchener, ON N2M 5E7, Canada</address>
-        <geoPoint>43.4509823/-80.5164271</geoPoint>
+        <address>6428 Yonge St, Richmond Hill, NL X5E 7X1, Canada</address>
+        <geoPoint>43.7962476/-79.4196265</geoPoint>
     </pair>
     <pair>
         <address>1303 8th, New Westminster, BC V3M 2S2</address>
         <geoPoint>49.209642/-122.935771</geoPoint>
     </pair>
     <pair>
-        <address>252 Belleville, Napanee, ON K7R 2R5</address>
-        <geoPoint>44.2485952/-76.9608717</geoPoint>
-    </pair>
-    <pair>
         <address>7 Jackson Road, Dartmouth, NS B3A 4A4, Canada</address>
         <geoPoint>44.6803208/-63.5856391</geoPoint>
+    </pair>
+    <pair>
+        <address>252 Belleville, Napanee, ON K7R 2R5</address>
+        <geoPoint>44.2485952/-76.9608717</geoPoint>
     </pair>
     <pair>
         <address>172 Des Ormeaux, Longueuil, QC J4L 1J2</address>
