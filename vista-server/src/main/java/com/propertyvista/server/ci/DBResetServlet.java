@@ -136,7 +136,7 @@ public class DBResetServlet extends HttpServlet {
                         break;
                     case clearPmc: {
                         String thisPmcName = NamespaceManager.getNamespace();
-                        buf.append("--- Clear  " + thisPmcName + " ---\n");
+                        buf.append("\n--- PMC  '" + thisPmcName + "' ---\n");
                         RDBUtils.deleteFromAllEntityTables();
                         NamespaceManager.setNamespace(Pmc.adminNamespace);
                         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
