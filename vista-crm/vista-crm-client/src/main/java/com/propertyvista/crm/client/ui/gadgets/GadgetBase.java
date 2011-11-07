@@ -25,6 +25,7 @@ import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 public abstract class GadgetBase implements IGadgetBase {
+    private boolean isSuspended = true;
 
     protected static I18n i18n = I18n.get(GadgetBase.class);
 
@@ -130,24 +131,31 @@ public abstract class GadgetBase implements IGadgetBase {
     }
 
     // runtime:
+    public boolean isSuspended() {
+        return isSuspended;
+    }
 
     @Override
     public void start() {
+        isSuspended = false;
         getRefreshTimer().reactivate();
     }
 
     @Override
     public void suspend() {
+        isSuspended = true;
         getRefreshTimer().deactivate();
     }
 
     @Override
     public void resume() {
+        isSuspended = false;
         getRefreshTimer().reactivate();
     }
 
     @Override
     public void stop() {
+        isSuspended = true;
         getRefreshTimer().deactivate();
     }
 
