@@ -173,6 +173,7 @@ public class PropertyMarker extends Marker {
             imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
             Image image = MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small);
             image.setSize("70px", "50px");
+            image.getElement().getStyle().setProperty("backgroundSize", "100%");
             imageHolder.setWidget(image);
             left.add(imageHolder);
 
