@@ -100,6 +100,7 @@ public class VistaCrmTheme extends VistaTheme {
         initTabPanelStyles();
         initDialogBoxStyles();
         initDialogPanelStyles();
+        initMenuBarStyles();
     }
 
     @Override

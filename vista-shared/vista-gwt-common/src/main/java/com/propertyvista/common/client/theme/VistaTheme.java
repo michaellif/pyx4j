@@ -165,23 +165,26 @@ public class VistaTheme extends Theme {
     protected void initMenuBarStyles() {
         Style style = new Style(".gwt-MenuBar");
         style.addProperty("cursor", "default");
+        style.addProperty("color", ThemeColors.foreground, 0.2);
         addStyle(style);
 
-        style = new Style(".gwt-MenuBar .gwt-MenuItem");
+        style = new Style(".gwt-MenuItem");
         style.addProperty("cursor", "default");
+        style.addProperty("color", ThemeColors.foreground, 0.9);
+        style.addProperty("background-color", ThemeColors.foreground, 0.2);
         addStyle(style);
 
-        style = new Style(".gwt-MenuBar .gwt-MenuItem-selected");
-        style.addProperty("background", ThemeColors.object1, 0.8);
-        style.addProperty("color", ThemeColors.object1, 0.2);
+        style = new Style(".gwt-MenuItem-selected");
+        style.addProperty("background", ThemeColors.foreground, 0.8);
+        style.addProperty("color", ThemeColors.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
-        style.addProperty("background", ThemeColors.background);
+        style.addProperty("background", ThemeColors.foreground);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.8);
+        style.addProperty("border-color", ThemeColors.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
