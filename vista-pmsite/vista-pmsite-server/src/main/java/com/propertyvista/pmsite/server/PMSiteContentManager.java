@@ -259,10 +259,20 @@ public class PMSiteContentManager implements Serializable {
         ArrayList<City> cityList = new ArrayList<City>();
         EntityQueryCriteria<City> criteria = EntityQueryCriteria.create(City.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
+        PropertySearchCriteria propSearch = EntityFactory.create(PropertySearchCriteria.class);
+        propSearch.searchType().setValue(PropertySearchCriteria.SearchType.city);
         for (City city : EntityServicesImpl.secureQuery(criteria)) {
-            if (!city.name().isNull() && !city.province().name().isNull() && !city.province().code().isNull()) {
-                cityList.add(city);
+            // sanity check
+            if (city.name().isNull() || city.province().name().isNull() || city.province().code().isNull()) {
+                continue;
             }
+            // make sure the city has buildings to show
+            propSearch.city().setValue(city.name().getValue());
+            propSearch.province().setValue(city.province().name().getValue());
+            if (getPropertyList(propSearch).size() < 1) {
+                continue;
+            }
+            cityList.add(city);
         }
         return cityList;
     }
