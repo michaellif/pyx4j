@@ -336,7 +336,9 @@ public class VistaCrmTheme extends VistaTheme {
         style.addProperty("heigh", "16px");
         style.addProperty("float", "right !important");
         style.addProperty("border", "none");
-        style.addProperty("margin-right", "0.2em !important");
+        style.addProperty("margin-right", "6px !important");
+        style.addProperty("margin-top", "1px !important");
+
         addStyle(style);
     }
 
