@@ -37,7 +37,9 @@ public class CrmTitleBar extends HorizontalPanel {
         add(captionHolder);
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
 
-        breadcrumbHolder = new HTML("breadcrumb1->breadcrumb2");
+        breadcrumbHolder = new HTML("");
+        //TODO implement breadcrumbs
+        //breadcrumbHolder = new HTML("breadcrumb1->breadcrumb2");
         setStyleName(getStylePrefix());
         breadcrumbHolder.setStyleName(getStylePrefix() + StyleSuffix.Breadcrumb.name());
         add(breadcrumbHolder);

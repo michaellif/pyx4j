@@ -137,7 +137,7 @@ public class VistaTheme extends Theme {
     protected void initBodyStyles() {
         Style style = new Style("body");
         style.addProperty("background-color", ThemeColors.background);
-        style.addProperty("color", ThemeColors.TEXT);
+        style.addProperty("color", ThemeColors.foreground);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
         style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
@@ -147,19 +147,19 @@ public class VistaTheme extends Theme {
 
     protected void initSectionStyles() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Border));
-        style.addProperty("background-color", ThemeColors.BORDER);
+        style.addProperty("background-color", ThemeColors.object1, 0.6);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_SelectionBorder));
-        style.addProperty("background-color", ThemeColors.SELECTION);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Background));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Content));
-        style.addProperty("background-color", ThemeColors.TEXT_BACKGROUND);
+        style.addProperty("background-color", ThemeColors.background);
         addStyle(style);
     }
 
@@ -170,14 +170,14 @@ public class VistaTheme extends Theme {
 
         //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        style.addGradient(ThemeColors.OBJECT_TONE20, ThemeColors.OBJECT_TONE50);
+        style.addGradient(ThemeColors.object1, 0.2, ThemeColors.object1, 0.5);
 
         addStyle(style);
     }
 
     protected void initStatusBarStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_StatusBar));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
@@ -185,7 +185,7 @@ public class VistaTheme extends Theme {
     protected void initBarSeparatorStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
         style.addProperty("border-left", "2px ridge");
-        style.addProperty("border-left-color", ThemeColors.OBJECT_TONE2);
+        style.addProperty("border-left-color", ThemeColors.object1, 0.8);
 
         style.addProperty("margin-left", "3px");
         addStyle(style);
@@ -193,15 +193,15 @@ public class VistaTheme extends Theme {
 
     protected void initProgressBarStyles() {
         Style style = new Style(".gwt-ProgressBar-shell");
-        style.addProperty("background-color", ThemeColors.BORDER);
+        style.addProperty("background-color", ThemeColors.object1, 0.6);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-bar");
-        style.addProperty("background-color", ThemeColors.SELECTION);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-text");
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        style.addProperty("color", ThemeColors.object1, 0.2);
         addStyle(style);
     }
 
@@ -215,16 +215,16 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-MenuBar .gwt-MenuItem-selected");
-        style.addProperty("background", ThemeColors.SELECTION);
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        style.addProperty("background", ThemeColors.object1, 0.8);
+        style.addProperty("color", ThemeColors.object1, 0.2);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
-        style.addProperty("background", ThemeColors.TEXT_BACKGROUND);
+        style.addProperty("background", ThemeColors.background);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.SELECTION);
+        style.addProperty("border-color", ThemeColors.object1, 0.8);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
@@ -244,12 +244,12 @@ public class VistaTheme extends Theme {
 
         Style style = new Style(".gwt-DialogBox");
         style.addProperty("border", "2px outset");
-        style.addProperty("border-color", ThemeColors.BORDER);
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE4);
+        style.addProperty("border-color", ThemeColors.object1, 0.6);
+        style.addProperty("background-color", ThemeColors.object1, 0.6);
         addStyle(style);
 
         style = new Style(".gwt-DialogBox .Caption");
-        style.addProperty("background-color", ThemeColors.SELECTION);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
         addStyle(style);
 
         style = new Style(".gwt-PopupPanelGlass");
@@ -262,25 +262,25 @@ public class VistaTheme extends Theme {
 
     protected void initDialogPanelStyles() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog));
-        style.addProperty("background-color", ThemeColors.SELECTION);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Caption));
-        style.addProperty("background", ThemeColors.SELECTION);
+        style.addProperty("background", ThemeColors.object1, 0.8);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        style.addProperty("color", ThemeColors.object1, 0.2);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Resizer));
-        style.addProperty("background", ThemeColors.SELECTION);
+        style.addProperty("background", ThemeColors.object1, 0.8);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Content));
-        style.addProperty("background-color", ThemeColors.TEXT_BACKGROUND);
+        style.addProperty("background-color", ThemeColors.background);
         addStyle(style);
     }
 
@@ -345,7 +345,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_PickerPanel);
-        style.addProperty("border-color", ThemeColors.BORDER);
+        style.addProperty("border-color", ThemeColors.object1, 0.6);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("background-color", "#fff");
@@ -379,11 +379,11 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-right", "2px");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColors.OBJECT_TONE5);
+        style.addProperty("border-color", ThemeColors.object1, 0.5);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
+        style.addProperty("background-color", ThemeColors.object1, 0.9);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_ButtonImage);
@@ -391,7 +391,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE4);
+        style.addProperty("background-color", ThemeColors.object1, 0.4);
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
@@ -399,7 +399,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background", ThemeColors.OBJECT_TONE3);
+        style.addProperty("background", ThemeColors.object1, 0.3);
         style.addProperty("border-style", "inset");
         addStyle(style);
     }
@@ -471,7 +471,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-TreeItem-selected");
-        style.addProperty("background", ThemeColors.SELECTION);
+        style.addProperty("background", ThemeColors.object1, 0.8);
         addStyle(style);
     }
 
@@ -587,7 +587,7 @@ public class VistaTheme extends Theme {
         style.addProperty("margin", "2px 4px");
         style.addProperty("border", "1px solid #A2BBDD");
         style.addProperty("background-color", "white");
-        style.addProperty("color", ThemeColors.TEXT);
+        style.addProperty("color", ThemeColors.foreground);
         addStyle(style);
 
         style = new Style(".gwt-DatePicker td, .datePickerMonthSelector td:focus");
@@ -602,7 +602,7 @@ public class VistaTheme extends Theme {
 
         style = new Style(".datePickerDay, .datePickerWeekdayLabel, .datePickerWeekendLabel");
         style.addProperty("font-size", "75%");
-        style.addProperty("outline-color", ThemeColors.TEXT);
+        style.addProperty("outline-color", ThemeColors.foreground);
         style.addProperty("outline-style", "none");
         style.addProperty("outline-width", "medium");
         style.addProperty("padding", "4px");
@@ -717,8 +717,8 @@ public class VistaTheme extends Theme {
 
         style = new Style(".datePickerGrid .gwt-Label.heighlighted");
         style.addProperty("border", "1px solid #D0D0F0");
-        style.addProperty("background-color", ThemeColors.SELECTION);
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        style.addProperty("background-color", ThemeColors.object1, 0.8);
+        style.addProperty("color", ThemeColors.object1, 0.2);
         addStyle(style);
 
         style = new Style(".datePickerGrid .gwt-Label.selected");
@@ -811,19 +811,19 @@ public class VistaTheme extends Theme {
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-expanded");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.OBJECT_TONE5);
+        style.addProperty("border-color", ThemeColors.object1, 0.5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-collapsed");
         style.addProperty("border", "none");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemeColors.OBJECT_TONE5);
+        style.addProperty("border-color", ThemeColors.object1, 0.5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox_Caption);
         style.addProperty("padding", "5px 2px 2px 2px");
         style.addProperty("verticalAlign", "top");
-        style.addProperty("color", ThemeColors.OBJECT_TONE5);
+        style.addProperty("color", ThemeColors.object1, 0.5);
         addStyle(style);
     }
 
@@ -893,7 +893,7 @@ public class VistaTheme extends Theme {
         Style style = new Style(".gwt-SuggestBoxPopup");
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColors.BORDER);
+        style.addProperty("border-color", ThemeColors.object1, 0.6);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("cursor", "pointer");
