@@ -336,3 +336,11 @@ ul.footer_locations li {
 .vista-pmsite-main .caption2 .rightControl:hover {
 	color:${object2_10};
 }
+
+.vista-pmsite-sidebarWrap {
+		background-color:${object2_10};	
+}
+
+.vista-pmsite-main .content{
+		background-color:white;	
+}

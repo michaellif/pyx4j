@@ -164,6 +164,7 @@
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	background: ${background_10};
 	padding-bottom:40px;
+	min-height:600px;
 }
 
 #aptListModeSwitch {

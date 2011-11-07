@@ -2,6 +2,11 @@
     color: ${foreground_100};
     font-size: 16px;
 }
+
+.vista-pmsite-residentPage .vista-pmsite-content {
+		min-height: 500px;
+}
+
 .vista-pmsite-residentPage .vista-pmsite-mainWrap {
 	width: 960px;
 	margin: 0 auto;
@@ -24,6 +29,9 @@
 	list-style: none outside none;
 	margin: 0;
 	padding: 0;
+	font-size: 17px;
+    font-weight: bold;
+    line-height: 38px;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li {

@@ -2,6 +2,11 @@
     color: ${foreground_100};
     font-size: 16px;
 }
+
+.vista-pmsite-residentPage .vista-pmsite-content {
+		min-height: 500px;
+}
+
 .vista-pmsite-residentPage .vista-pmsite-mainWrap {
 	width: 960px;
 	margin: 0 auto;

@@ -6,6 +6,7 @@
 .vista-pmsite-residentPage .vista-pmsite-content {
 	background: url("images/template0/inner_bg.png") no-repeat scroll 50% 0
 		transparent;
+		min-height: 546px;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-contentWrap {

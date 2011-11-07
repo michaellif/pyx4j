@@ -61,6 +61,7 @@
 }
 .vista-pmsite-aptDetailsPage .apartmentDetailsWrap {
 	border-left:1px solid ${object2_20};
+	background-color: white;
 }
 .apartmentDetailsWrap .detailBox {
 	color:${foreground_100};
