@@ -266,12 +266,6 @@ public class PMSiteContentManager implements Serializable {
             if (city.name().isNull() || city.province().name().isNull() || city.province().code().isNull()) {
                 continue;
             }
-            // make sure the city has buildings to show
-            propSearch.city().setValue(city.name().getValue());
-            propSearch.province().setValue(city.province().name().getValue());
-            if (getPropertyList(propSearch).size() < 1) {
-                continue;
-            }
             cityList.add(city);
         }
         return cityList;
