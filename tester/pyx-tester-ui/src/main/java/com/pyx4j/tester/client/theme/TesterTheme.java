@@ -43,11 +43,23 @@ public class TesterTheme extends Theme {
 
     protected void initStyles() {
 
-        addTheme(new DefaultEntityFolderTheme());
+        addTheme(new DefaultEntityFolderTheme() {
+
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.object1;
+            }
+        });
 
         addTheme(new DefaultWidgetDecoratorTheme());
 
-        addTheme(new DefaultFormFlexPanelTheme());
+        addTheme(new DefaultFormFlexPanelTheme() {
+
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.object1;
+            }
+        });
 
         initGeneralStyles();
         initBodyStyles();
