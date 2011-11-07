@@ -31,6 +31,7 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -170,7 +171,9 @@ public class PropertyMarker extends Marker {
             imageHolder.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
 
             imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
-            imageHolder.setWidget(MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small));
+            Image image = MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small);
+            image.setSize("70px", "50px");
+            imageHolder.setWidget(image);
             left.add(imageHolder);
 
             //from price
