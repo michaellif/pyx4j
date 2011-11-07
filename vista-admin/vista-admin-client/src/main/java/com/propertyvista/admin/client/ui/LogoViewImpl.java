@@ -24,7 +24,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
     private Presenter presenter;
 
     public LogoViewImpl() {
-        HTML logo = new HTML("<h1>PO Branded Header</h1>");
+        HTML logo = new HTML("<h1>Property Vista Software - Administrator</h1>");
         logo.getElement().getStyle().setCursor(Cursor.POINTER);
         logo.addClickHandler(new ClickHandler() {
 
