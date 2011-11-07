@@ -153,7 +153,7 @@ public class VistaCrmTheme extends VistaTheme {
         // Action (Header right side hyperlinks):
         style = new Style(".", CrmPanel.StyleName.SiteViewAction.name());
         //style.addProperty("min-width", "700px");
-        style.addProperty("color", ThemeColors.contrast1);
+        style.addProperty("color", ThemeColors.object1, 0.1);
         style.addProperty("font-size", "1em");
         addStyle(style);
 
@@ -258,7 +258,7 @@ public class VistaCrmTheme extends VistaTheme {
         style.addProperty("color", ThemeColors.object1, 0.9);
         style.addProperty("background-color", ThemeColors.object1, 0.4);
         style.addProperty("border-top", "solid 4px");
-        style.addProperty("border-top-color", "#ccc");
+        style.addProperty("border-top-color", ThemeColors.object1);
         // NOTE: must correspond with the header size defined by stackpanel
         style.addProperty("line-height", "2.2em");
         addStyle(style);
@@ -451,7 +451,7 @@ public class VistaCrmTheme extends VistaTheme {
         String prefix = CrmTitleBar.DEFAULT_STYLE_PREFIX;
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", ThemeColors.object1, 0.60);
-        style.addProperty("color", ThemeColors.contrast1);
+        style.addProperty("color", ThemeColors.object1, 0.1);
         style.addProperty("width", "100%");
         addStyle(style);
 
