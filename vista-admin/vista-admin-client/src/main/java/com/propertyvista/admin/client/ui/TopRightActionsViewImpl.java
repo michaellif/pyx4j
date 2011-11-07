@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.resources.AdminImages;
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 
@@ -49,7 +50,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     private final Theme otherTheme = Theme.BrownWarm;
 
     public TopRightActionsViewImpl() {
-        setStyleName(AdminView.DEFAULT_STYLE_PREFIX + AdminView.StyleSuffix.Action);
+        setStyleName(CrmSitePanelTheme.StyleName.SiteViewAction.name());
         setSize("100%", "100%");
 
         HorizontalPanel container = new HorizontalPanel();

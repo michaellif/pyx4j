@@ -46,4 +46,7 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     @Override
     @Source("qv.png")
     ImageResource formTooltipInfo();
+
+    @Source("logo.png")
+    ImageResource logo();
 }

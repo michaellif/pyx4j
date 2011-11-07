@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
@@ -46,32 +45,27 @@ import com.propertyvista.admin.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.admin.client.mvp.TopRightActionsActivityMapper;
 import com.propertyvista.admin.client.themes.VistaAdminPalette;
 import com.propertyvista.admin.client.themes.VistaAdminTheme;
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
-public class AdminView extends LayoutPanel {
+public class AdminPanel extends LayoutPanel {
 
-    public static String DEFAULT_STYLE_PREFIX = "SiteView";
-
-    public static enum StyleSuffix implements IStyleName {
-        Content, Action, Header, Navigation, Footer, Display, NavigContainer;
-    }
-
-    public AdminView() {
+    public AdminPanel() {
 
         EventBus eventBus = AppSite.getEventBus();
 
         StyleManger.installTheme(new VistaAdminTheme(), new VistaAdminPalette());
 
-        setStyleName(AppSiteView.DEFAULT_STYLE_PREFIX);
+        setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
-        contentPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
+        contentPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
         add(contentPanel);
 
         //============ Header Panel ============
 
         FlowPanel headerPanel = new FlowPanel();
         contentPanel.addNorth(headerPanel, 5);
-        headerPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Header);
+        headerPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewHeader.name());
 
         DisplayPanel logoDisplay = new DisplayPanel();
         //VS should correspond with the logo size
@@ -138,7 +132,7 @@ public class AdminView extends LayoutPanel {
         leftPanel.setCellWidth(footerDisplay, "100%");
         leftPanel.setCellHeight(footerDisplay, "40px");
 
-        leftPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NavigContainer);
+        leftPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewNavigContainer.name());
 
         //============ Main Panel ============
 
@@ -168,7 +162,7 @@ public class AdminView extends LayoutPanel {
     class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
         DisplayPanel() {
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + StyleSuffix.Display);
+            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override
@@ -187,7 +181,7 @@ public class AdminView extends LayoutPanel {
         UtilityDisplayPanel(LayoutPanel parent) {
             this.parent = parent;
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + StyleSuffix.Display);
+            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override

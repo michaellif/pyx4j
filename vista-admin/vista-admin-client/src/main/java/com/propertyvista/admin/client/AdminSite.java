@@ -27,7 +27,7 @@ import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.admin.client.ui.AdminView;
+import com.propertyvista.admin.client.ui.AdminPanel;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AuthenticationService;
 import com.propertyvista.common.client.Message;
@@ -50,7 +50,7 @@ public class AdminSite extends VistaSite {
 
         RootPanel.get().add(RootLayoutPanel.get());
 
-        RootLayoutPanel.get().add(new AdminView());
+        RootLayoutPanel.get().add(new AdminPanel());
 
         hideLoadingIndicator();
 

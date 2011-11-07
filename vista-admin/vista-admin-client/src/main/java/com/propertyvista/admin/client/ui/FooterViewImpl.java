@@ -15,11 +15,13 @@ package com.propertyvista.admin.client.ui;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
+
 public class FooterViewImpl extends SimplePanel implements FooterView {
 
     public FooterViewImpl() {
         setSize("100%", "100%");
-        setStyleName(AdminView.DEFAULT_STYLE_PREFIX + AdminView.StyleSuffix.Footer);
+        setStyleName(CrmSitePanelTheme.StyleName.SiteViewFooter.name());
 //        HTML label = new HTML("&copy;2011-All Rights Reserved.");
 //        label.getElement().getStyle().setFontSize(1.2, Unit.EM);
 //        setWidget(label);

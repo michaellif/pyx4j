@@ -22,14 +22,8 @@ public interface CrmImages extends VistaImages {
 
     CrmImages INSTANCE = GWT.create(CrmImages.class);
 
-    @Source("bg_body.gif")
-    ImageResource bodyBackground();
-
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
-
-    @Source("logo.png")
-    ImageResource logo();
 
     @Source("bell.png")
     ImageResource alert();

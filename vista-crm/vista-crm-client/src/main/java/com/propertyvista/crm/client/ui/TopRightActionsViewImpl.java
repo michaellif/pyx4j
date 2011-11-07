@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Tooltip;
 
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.shared.CompiledLocale;
@@ -60,7 +61,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     private final Theme otherTheme = Theme.BrownWarm;
 
     public TopRightActionsViewImpl() {
-        setStyleName(CrmPanel.StyleName.SiteViewAction.name());
+        setStyleName(CrmSitePanelTheme.StyleName.SiteViewAction.name());
         setSize("100%", "100%");
 
         HorizontalPanel container = new HorizontalPanel();

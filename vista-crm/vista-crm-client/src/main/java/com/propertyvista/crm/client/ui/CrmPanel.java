@@ -30,12 +30,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.client.ui.AppSiteView;
 
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.LoginActivityMapper;
 import com.propertyvista.crm.client.mvp.LogoActivityMapper;
@@ -46,25 +46,21 @@ import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
 
 public class CrmPanel extends LayoutPanel {
 
-    public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewNavigation, SiteViewFooter, SiteViewDisplay, SiteViewNavigContainer;
-    }
-
     public CrmPanel() {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        setStyleName(StyleName.SiteView.name());
+        setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
-        contentPanel.setStyleName(StyleName.SiteViewContent.name());
+        contentPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
         add(contentPanel);
 
         //============ Header Panel ============
 
         FlowPanel headerPanel = new FlowPanel();
         contentPanel.addNorth(headerPanel, 5);
-        headerPanel.setStyleName(StyleName.SiteViewHeader.name());
+        headerPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewHeader.name());
 
         DisplayPanel logoDisplay = new DisplayPanel();
         //VS should correspond with the logo size
@@ -131,7 +127,7 @@ public class CrmPanel extends LayoutPanel {
         leftPanel.setCellWidth(footerDisplay, "100%");
         leftPanel.setCellHeight(footerDisplay, "40px");
 
-        leftPanel.setStyleName(StyleName.SiteViewNavigContainer.name());
+        leftPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewNavigContainer.name());
 
         //============ Main Panel ============
 
@@ -161,7 +157,7 @@ public class CrmPanel extends LayoutPanel {
     class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
         DisplayPanel() {
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + StyleName.SiteViewDisplay);
+            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override
@@ -180,7 +176,7 @@ public class CrmPanel extends LayoutPanel {
         UtilityDisplayPanel(LayoutPanel parent) {
             this.parent = parent;
             String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + StyleName.SiteViewDisplay);
+            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override

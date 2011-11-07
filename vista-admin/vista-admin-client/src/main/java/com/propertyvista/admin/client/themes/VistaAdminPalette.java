@@ -20,12 +20,12 @@ public class VistaAdminPalette extends Palette {
 
     public VistaAdminPalette() {
 
-        putThemeColor(ThemeColors.object1, "#666666");
+        putThemeColor(ThemeColors.object1, "#906b5b");
         putThemeColor(ThemeColors.object2, "#666666");
         putThemeColor(ThemeColors.contrast1, "#666666");
         putThemeColor(ThemeColors.contrast2, "#666666");
         putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.background, "#666666");
+        putThemeColor(ThemeColors.background, "#ffffff");
 
     }
 }

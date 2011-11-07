@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui.decorations;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 
+@Deprecated
 public class VistaLineSeparator extends HTML {
 
     public static String DEFAULT_STYLE_PREFIX = "vista_LineSeparator";

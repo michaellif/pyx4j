@@ -21,9 +21,6 @@ public interface AdminImages extends ClientBundle {
 
     AdminImages INSTANCE = GWT.create(AdminImages.class);
 
-    @Source("bg_body.gif")
-    ImageResource bodyBackground();
-
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
 

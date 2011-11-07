@@ -24,13 +24,13 @@ import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
+import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.ui.CrmPanel;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
@@ -80,16 +80,20 @@ public class VistaCrmTheme extends VistaTheme {
             }
         });
 
+        addTheme(new DraggerMixin());
+
+        addTheme(new CrmSitePanelTheme());
+
         initGeneralStyles();
         initBodyStyles();
 
-        initSiteViewStyles();
         intitNavigationStyles();
         intitShortCutStyles();
 
         initSearchBoxStyles();
         initButtonStylesEx();
         initHeadersStyle();
+
         initSectionSeparatorStyle();
         initVistaTabStyles();
         initVistaDecoratorsPanelStyles();
@@ -111,19 +115,6 @@ public class VistaCrmTheme extends VistaTheme {
         style.addProperty("color", "#333");
         addStyle(style);
 
-        style = new Style(".gwt-SplitLayoutPanel");
-        addStyle(style);
-
-        style = new Style(".gwt-SplitLayoutPanel-HDragger");
-        style.addProperty("background", ThemeColors.object1, 1);
-        style.addProperty("cursor", "col-resize");
-        addStyle(style);
-
-        style = new Style(".gwt-SplitLayoutPanel-VDragger");
-        style.addProperty("background", ThemeColors.object1, 0.8);
-        style.addProperty("cursor", "row-resize");
-        addStyle(style);
-
         // editor forms:
         style = new Style(Selector.valueOf(VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME));
 //        style.addProperty("color", ThemeColor.TEXT);
@@ -132,69 +123,6 @@ public class VistaCrmTheme extends VistaTheme {
 //        style.addProperty("boxSizing", "border-box");
 //        style.addProperty("padding", "0.7em");
 //        style.addProperty("margin", "0.7em");
-        addStyle(style);
-    }
-
-    @Override
-    protected void initBodyStyles() {
-        super.initBodyStyles();
-        Style style = new Style(".body-navig");
-        style.addProperty("background", "url('" + CrmImages.INSTANCE.bodyBackground().getSafeUri().asString() + "') repeat-x 0 0 #F7F7F7");
-        addStyle(style);
-    }
-
-    protected void initSiteViewStyles() {
-        // All viewable area:
-        Style style = new Style(".", CrmPanel.StyleName.SiteView.name());
-        style.addProperty("color", ThemeColors.foreground);
-        addStyle(style);
-
-        // DockLayoutPanel:
-        style = new Style(".", CrmPanel.StyleName.SiteViewContent.name());
-        style.addProperty("min-width", "700px");
-        style.addProperty("min-height", "500px");
-        addStyle(style);
-
-        // Header:
-        style = new Style(".", CrmPanel.StyleName.SiteViewHeader.name());
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.7);
-        style.addProperty("color", "white");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("padding-left", "0.3em");
-        addStyle(style);
-
-        // Footer:
-        style = new Style(".", CrmPanel.StyleName.SiteViewFooter.name());
-        style.addProperty("background", "url('" + CrmImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
-        style.addProperty("background-color", ThemeColors.object1);
-        addStyle(style);
-
-        // NavigationContainer (Accordion menu):
-        style = new Style(".", CrmPanel.StyleName.SiteViewNavigContainer.name());
-        style.addProperty("min-width", "100px");
-        addStyle(style);
-
-        // Action (Header right side hyperlinks):
-        style = new Style(".", CrmPanel.StyleName.SiteViewAction.name());
-        //style.addProperty("min-width", "700px");
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addProperty("font-size", "1em");
-        addStyle(style);
-
-        style = new Style(".", CrmPanel.StyleName.SiteViewAction.name(), " td");
-        style.addProperty("vertical-align", "middle !important");
-        style.addProperty("white-space", "nowrap");
-        addStyle(style);
-
-        // anchors within the ActionBar:
-        style = new Style(".", CrmPanel.StyleName.SiteViewAction.name(), " a:link, .", CrmPanel.StyleName.SiteViewAction.name(), " a:visited, .",
-                CrmPanel.StyleName.SiteViewAction.name(), " a:active");
-        style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColors.object1, 0.2);
-        addStyle(style);
-
-        style = new Style(".", CrmPanel.StyleName.SiteViewAction.name(), " a:hover");
-        style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
 
