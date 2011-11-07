@@ -222,15 +222,14 @@ public class VistaCrmTheme extends VistaTheme {
 //        style.addProperty("padding-top", "0.2em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
-        style.addProperty("color", "#333");
-        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.3);
+        style.addProperty("color", ThemeColors.object1, 0.1);
+        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.6);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader", null, NavigViewImpl.StyleDependent.selected));
         style.addProperty("font-weight", "bold");
-        style.addProperty("color", ThemeColors.foreground, 0.1);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
-        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.5);
+        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.8);
         addStyle(style);
 
         // stack content
