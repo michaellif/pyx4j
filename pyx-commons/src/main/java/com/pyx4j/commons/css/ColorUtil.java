@@ -120,7 +120,7 @@ public class ColorUtil {
         assert vibrance >= 0 && vibrance <= 2 : "vibrance should be between 0 and 1";
         if (vibrance > 1) {
             float ns = saturation + (1 - saturation) * (vibrance - 1);
-            float nb = (brightness) * (vibrance - 1);
+            float nb = brightness - brightness * (vibrance - 1);
             return hsbToRgb(hue, ns, nb);
         } else {
             float ns = saturation * vibrance;
