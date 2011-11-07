@@ -51,7 +51,7 @@ import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.TimeRange;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -106,7 +106,7 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
 
     FlowPanel measureSelection;
 
-    private final VacancyReportService service;
+    private final AvailabilityReportService service;
 
     private final TurnoverAnalysisSettings settings;
 
@@ -184,7 +184,7 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         layoutPanel.setWidgetTopHeight(controls, GRAPH_HEIGHT, Unit.EM, CONTROLS_HEIGHT, Unit.EM);
         layoutPanel.setWidgetLeftWidth(controls, 0, Unit.PCT, 100, Unit.PCT);
 
-        service = GWT.create(VacancyReportService.class);
+        service = GWT.create(AvailabilityReportService.class);
     }
 
     @Override

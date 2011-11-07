@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
@@ -40,7 +40,7 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
 
     public final Panel panel;
 
-    private VacancyReportService service;
+    private AvailabilityReportService service;
 
     private boolean isOk = true;
 
@@ -91,7 +91,7 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
         form.setWidth("100%");
         panel = new VerticalPanel();
         panel.add(form);
-        service = GWT.create(VacancyReportService.class);
+        service = GWT.create(AvailabilityReportService.class);
     }
 
     @Override
