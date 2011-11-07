@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
@@ -27,7 +26,7 @@ public class MediaUtils {
 
     public static Image createPublicMediaImage(IPrimitive<Key> mediaPk, ThumbnailSize size) {
         if (mediaPk.isNull()) {
-            return new Image(PortalImages.INSTANCE.noImage());
+            return new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + "0/" + size.name() + ".jpg");
         } else {
             return new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaPk.getValue().toString() + "/"
                     + size.name() + ".jpg");
