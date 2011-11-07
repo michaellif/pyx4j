@@ -13,12 +13,18 @@
  */
 package com.propertyvista.portal.ptapp.client.themes;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.entity.client.ui.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.widgets.client.ListBox;
 
+import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -35,12 +41,23 @@ import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
 public class PtAppTheme extends VistaTheme {
 
     public PtAppTheme() {
-        super();
+        initStyles();
     }
 
-    @Override
     protected void initStyles() {
-        super.initStyles();
+
+        addTheme(new HorizontalAlignCenterMixin());
+
+        addTheme(new DefaultWidgetDecoratorTheme());
+
+        addTheme(new DefaultFormFlexPanelTheme() {
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.object1;
+            }
+        });
+
+        initEntityFolderStyles();
 
         initBodyStyles();
         initListBoxStyle();
@@ -52,6 +69,19 @@ public class PtAppTheme extends VistaTheme {
         initVistaMainNavigViewStyles();
         initVistaSecondNavigViewStyles();
         initPaymentRadioButtonGroupStyles();
+    }
+
+    protected void initEntityFolderStyles() {
+        addTheme(new DefaultEntityFolderTheme() {
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.object1;
+            }
+        });
+
+        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        style.addProperty("width", "690px");
+        addStyle(style);
     }
 
     @Override

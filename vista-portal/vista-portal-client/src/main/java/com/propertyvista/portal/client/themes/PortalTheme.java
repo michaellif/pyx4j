@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.ListBox;
 
+import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
@@ -39,15 +40,21 @@ import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
 public class PortalTheme extends VistaTheme {
 
     public PortalTheme() {
-        super();
+        initStyles();
     }
 
-    @Override
     protected void initStyles() {
+
+        addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new DefaultWidgetDecoratorTheme());
 
-        addTheme(new DefaultFormFlexPanelTheme());
+        addTheme(new DefaultFormFlexPanelTheme() {
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.foreground;
+            }
+        });
 
         initEntityFolderStyles();
         initTextBoxStyle();
@@ -64,7 +71,12 @@ public class PortalTheme extends VistaTheme {
     }
 
     protected void initEntityFolderStyles() {
-        addTheme(new DefaultEntityFolderTheme());
+        addTheme(new DefaultEntityFolderTheme() {
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.foreground;
+            }
+        });
 
         Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
         style.addProperty("width", "690px");

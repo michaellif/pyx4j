@@ -18,6 +18,9 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.admin.client.resources.AdminImages;
@@ -32,6 +35,7 @@ import com.propertyvista.admin.client.ui.decorations.AdminHeader1Decorator;
 import com.propertyvista.admin.client.ui.decorations.AdminHeader2Decorator;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 import com.propertyvista.admin.client.ui.decorations.AdminScrollPanel;
+import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -52,12 +56,28 @@ public class VistaAdminTheme extends VistaTheme {
     }
 
     public VistaAdminTheme() {
-        super();
+        initStyles();
     }
 
-    @Override
     protected void initStyles() {
-        super.initStyles();
+        addTheme(new HorizontalAlignCenterMixin());
+
+        addTheme(new DefaultWidgetDecoratorTheme());
+
+        addTheme(new DefaultFormFlexPanelTheme() {
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.foreground;
+            }
+        });
+
+        addTheme(new DefaultEntityFolderTheme() {
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.foreground;
+            }
+        });
+
         initGeneralStyles();
         initBodyStyles();
 
@@ -72,6 +92,9 @@ public class VistaAdminTheme extends VistaTheme {
         initVistaDecoratorsPanelStyles();
         initListerStyles();
         initEntityDataTableStyles();
+        initTabPanelStyles();
+        initDialogBoxStyles();
+        initDialogPanelStyles();
     }
 
     @Override
