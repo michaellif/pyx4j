@@ -23,13 +23,14 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
-import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
@@ -73,12 +74,12 @@ public class PortalSite extends VistaSite {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDescriptor>() {
+                        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
                             @Override
-                            public void onSuccess(SiteDescriptor descriptor) {
-                                StyleManger.installTheme(new PortalTheme(), new VistaPalette(descriptor));
+                            public void onSuccess(SiteDefinitionsDTO descriptor) {
+                                StyleManger.installTheme(new PortalTheme(), new VistaPalette(descriptor.palette()));
                             }
-                        });
+                        }, ClentNavigUtils.getCurrentLocale());
                         getHistoryHandler().handleCurrentHistory();
                     }
 

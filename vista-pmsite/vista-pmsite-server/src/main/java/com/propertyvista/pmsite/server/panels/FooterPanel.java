@@ -81,6 +81,6 @@ public class FooterPanel extends Panel {
             }
         });
 
-        add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo()));
+        add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo(((PMSiteWebRequest) getRequest()).getSiteLocale())));
     }
 }

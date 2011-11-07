@@ -33,7 +33,8 @@ public class TestimPanel extends Panel {
 
     public TestimPanel(String id) {
         super(id);
-        add(new ListView<Testimonial>("testimItem", ((PMSiteWebRequest) getRequest()).getContentManager().getTestimonials()) {
+        add(new ListView<Testimonial>("testimItem", ((PMSiteWebRequest) getRequest()).getContentManager().getTestimonials(
+                ((PMSiteWebRequest) getRequest()).getSiteLocale())) {
             private static final long serialVersionUID = 1L;
 
             @Override

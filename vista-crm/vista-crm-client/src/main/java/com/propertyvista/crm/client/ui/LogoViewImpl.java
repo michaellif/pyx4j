@@ -23,8 +23,16 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
 
     private Presenter presenter;
 
+    private static String brandedHeader;
+
+    //TODO Misha How can I do this properly ?
+    @Deprecated
+    public static void temporaryWayToSetTitle(String title) {
+        brandedHeader = title;
+    }
+
     public LogoViewImpl() {
-        HTML logo = new HTML("<h1>PO Branded Header</h1>");
+        HTML logo = new HTML("<h1>" + brandedHeader + "</h1>");
         logo.getElement().getStyle().setCursor(Cursor.POINTER);
         logo.addClickHandler(new ClickHandler() {
 

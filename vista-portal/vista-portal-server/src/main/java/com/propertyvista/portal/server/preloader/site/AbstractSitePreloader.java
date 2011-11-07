@@ -39,6 +39,7 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.portal.server.preloader.AbstractVistaDataPreloader;
 import com.propertyvista.shared.CompiledLocale;
@@ -98,6 +99,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         SiteDescriptor site = EntityFactory.create(SiteDescriptor.class);
         site._updateFlag().updated().setValue(new Date());
+
         site.skin().setValue(skin());
         site.sitePalette().object1().setValue(object1());
         site.sitePalette().object2().setValue(object2());
@@ -105,7 +107,22 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         site.sitePalette().contrast2().setValue(contrast2());
         site.sitePalette().background().setValue(background());
         site.sitePalette().foreground().setValue(foreground());
-        site.copyright().setValue(copyright());
+
+        {
+            for (LocaleInfo li : siteLocale) {
+                SiteTitles titles = EntityFactory.create(SiteTitles.class);
+                titles.locale().set(li.aLocale);
+
+                titles.crmHeader().setValue(pmcName());
+                titles.residentPortalTitle().setValue(pmcName());
+                titles.prospectPortalTitle().setValue(pmcName());
+                titles.copyright().setValue(copyright());
+
+                titles.residentPortalPromotions().setValue(li.i18n.tr("Promotions"));
+
+                site.siteTitles().add(titles);
+            }
+        }
 
         {
             final String caption = "Find an Apartment";

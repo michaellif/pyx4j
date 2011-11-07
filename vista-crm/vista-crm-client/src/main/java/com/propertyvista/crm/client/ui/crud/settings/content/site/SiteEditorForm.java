@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
+import java.util.EnumSet;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -26,6 +30,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
@@ -56,18 +61,24 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().skin()), 10).build());
-        main.setH1(row++, 0, 1, i18n.tr("Theme Colors"));
+
+        main.setH1(row++, 0, 1, i18n.tr("Look And Feel"));
+        CComponent<?, ?> skinComp;
+        main.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
 
-        main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());
+        if (skinComp instanceof CComboBox) {
+            ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(EnumSet.of(SiteDescriptor.Skin.skin1, SiteDescriptor.Skin.skin2, SiteDescriptor.Skin.skin3));
+        }
 
         main.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
+
+        main.setH1(row++, 0, 1, proto().siteTitles().getMeta().getCaption());
+        main.setWidget(row++, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
 
 // TODO: image lists uploaders:
 //        main.setWidget(row++, 0, decorate(inject(proto().logo(), new CFileUploader()), 60).build());

@@ -18,17 +18,21 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.SiteTitles;
+import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.shared.CompiledLocale;
 
 @IgnoreSessionToken
 public class SiteThemeServicesImpl implements SiteThemeServices {
 
     @Override
-    public void retrieveSiteDescriptor(AsyncCallback<SiteDescriptor> callback) {
+    public void retrieveSiteDescriptor(AsyncCallback<SiteDefinitionsDTO> callback, CompiledLocale locale) {
         SiteDescriptor descriptor = null;
         Key descriptorKey = (Key) CacheService.get(SiteDescriptor.cacheKey);
         if (descriptorKey != null) {
@@ -39,6 +43,25 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
             descriptor = siteDescriptor.cloneEntity();
             CacheService.put(SiteDescriptor.cacheKey, descriptor.getPrimaryKey());
         }
-        callback.onSuccess(descriptor);
+        SiteDefinitionsDTO def = EntityFactory.create(SiteDefinitionsDTO.class);
+        def.palette().setValue(descriptor.sitePalette().getValue());
+
+        for (SiteTitles t : descriptor.siteTitles()) {
+            if (locale == t.locale().lang().getValue()) {
+                def.siteTitles().setValue(t.getValue());
+                break;
+            }
+        }
+        // Second pass to match en_US to en
+        if (def.siteTitles().isNull()) {
+            for (SiteTitles t : descriptor.siteTitles()) {
+                if ((locale.name().startsWith(t.locale().lang().getValue().name())) || (t.locale().lang().getValue().name().startsWith(locale.name()))) {
+                    def.siteTitles().setValue(t.getValue());
+                    break;
+                }
+            }
+        }
+
+        callback.onSuccess(def);
     }
 }

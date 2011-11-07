@@ -22,9 +22,7 @@ import com.propertyvista.domain.site.SitePalette;
 
 public class VistaPalette extends Palette {
 
-    public VistaPalette(SiteDescriptor descriptor) {
-
-        SitePalette palette = descriptor.sitePalette();
+    public VistaPalette(SitePalette palette) {
 
         putThemeColor(ThemeColors.object1, ColorUtil.hsbToRgb((float) palette.object1().getValue() / 360,
                 (float) SiteDescriptor.Skin.crm.getColorProperties()[0] / 100, (float) SiteDescriptor.Skin.crm.getColorProperties()[1] / 100));

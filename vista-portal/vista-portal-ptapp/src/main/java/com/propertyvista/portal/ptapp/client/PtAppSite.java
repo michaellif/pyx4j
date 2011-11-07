@@ -15,6 +15,7 @@ package com.propertyvista.portal.ptapp.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.essentials.client.SessionInactiveDialog;
@@ -25,11 +26,14 @@ import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
+import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
+import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppSite extends VistaSite {
@@ -54,6 +58,22 @@ public class PtAppSite extends VistaSite {
 
         wizardManager = new PtAppWizardManager();
 
+        SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
+        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
+            @Override
+            public void onSuccess(SiteDefinitionsDTO descriptor) {
+                com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
+                Window.setTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
+
+                //TODO
+                ///StyleManger.installTheme(new VistaCrmTheme(), new VistaPalette(descriptor.palette()));
+                authenticateAndInit();
+            }
+        }, ClentNavigUtils.getCurrentLocale());
+
+    }
+
+    private void authenticateAndInit() {
         ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(AuthenticationService.class),
                 new DefaultAsyncCallback<Boolean>() {
 
@@ -68,7 +88,6 @@ public class PtAppSite extends VistaSite {
                         super.onFailure(caught);
                     }
                 });
-
     }
 
     private void init() {

@@ -35,7 +35,7 @@ public class ErrorPage extends WebPage {
 
         add(new BookmarkablePageLink<Void>("titleLogo", LandingPage.class));
         add(new LocalePanel("locale"));
-        add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo()));
+        add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo(((PMSiteWebRequest) getRequest()).getSiteLocale())));
 
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "error" + styleId + ".css";

@@ -27,7 +27,7 @@ public class NewsPanel extends Panel {
     public NewsPanel(String id) {
         super(id);
 
-        add(new ListView<News>("newsItem", ((PMSiteWebRequest) getRequest()).getContentManager().getNews()) {
+        add(new ListView<News>("newsItem", ((PMSiteWebRequest) getRequest()).getContentManager().getNews(((PMSiteWebRequest) getRequest()).getSiteLocale())) {
             private static final long serialVersionUID = 1L;
 
             @Override

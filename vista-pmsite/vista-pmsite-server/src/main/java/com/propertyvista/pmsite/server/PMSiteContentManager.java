@@ -45,6 +45,7 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
+import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
@@ -74,15 +75,13 @@ public class PMSiteContentManager implements Serializable {
 
     public static final int DEFAULT_STYLE_ID = 0;
 
-    private AvailableLocale locale;
-
     private List<AvailableLocale> allAvailableLocale;
 
     private SiteDescriptor siteDescriptor;
 
-    private Map<String, List<News>> news;
+    private Map<AvailableLocale, List<News>> news;
 
-    private Map<String, List<Testimonial>> testimonials;
+    private Map<AvailableLocale, List<Testimonial>> testimonials;
 
     public PMSiteContentManager() {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
@@ -120,18 +119,6 @@ public class PMSiteContentManager implements Serializable {
         }
     }
 
-    /**
-     * Use PMSiteWebRequest.getSiteLocale();
-     */
-    @Deprecated
-    public AvailableLocale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(AvailableLocale l) {
-        locale = l;
-    }
-
     public List<AvailableLocale> getAllAvailableLocale() {
         if (allAvailableLocale == null) {
             EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
@@ -149,33 +136,31 @@ public class PMSiteContentManager implements Serializable {
         return allAvailableLocale;
     }
 
-    public List<News> getNews() {
-        final String lang = locale.lang().getValue().name();
+    public List<News> getNews(AvailableLocale locale) {
         if (news == null) {
-            news = new HashMap<String, List<News>>();
+            news = new HashMap<AvailableLocale, List<News>>();
         }
-        if (news.get(lang) == null) {
+        if (news.get(locale) == null) {
             EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), lang));
+            criteria.add(PropertyCriterion.eq(criteria.proto().locale(), locale));
             criteria.desc(criteria.proto().date().getPath().toString());
             criteria.setPageSize(4);
             criteria.setPageNumber(0);
-            news.put(lang, Persistence.service().query(criteria));
+            news.put(locale, Persistence.service().query(criteria));
         }
-        return news.get(lang);
+        return news.get(locale);
     }
 
-    public List<Testimonial> getTestimonials() {
-        final String lang = locale.lang().getValue().name();
+    public List<Testimonial> getTestimonials(AvailableLocale locale) {
         if (testimonials == null) {
-            testimonials = new HashMap<String, List<Testimonial>>();
+            testimonials = new HashMap<AvailableLocale, List<Testimonial>>();
         }
-        if (testimonials.get(lang) == null) {
+        if (testimonials.get(locale) == null) {
             EntityQueryCriteria<Testimonial> criteria = EntityQueryCriteria.create(Testimonial.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().locale().lang(), lang));
-            testimonials.put(lang, Persistence.service().query(criteria));
+            criteria.add(PropertyCriterion.eq(criteria.proto().locale(), locale));
+            testimonials.put(locale, Persistence.service().query(criteria));
         }
-        return testimonials.get(lang);
+        return testimonials.get(locale);
     }
 
     public PageDescriptor getStaticPageDescriptor(PageParameters parameters) {
@@ -257,8 +242,17 @@ public class PMSiteContentManager implements Serializable {
         return caption.toLowerCase().replaceAll("\\s+", "_").trim();
     }
 
-    public String getCopyrightInfo() {
-        return siteDescriptor.copyright().getValue();
+    public SiteTitles getSiteTitles(AvailableLocale locale) {
+        for (SiteTitles t : siteDescriptor.siteTitles()) {
+            if (t.locale().equals(locale)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public String getCopyrightInfo(AvailableLocale locale) {
+        return getSiteTitles(locale).copyright().getValue();
     }
 
     public List<City> getCities() {

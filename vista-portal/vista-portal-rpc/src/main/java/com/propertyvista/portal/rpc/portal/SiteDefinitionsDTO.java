@@ -7,21 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 2, 2011
- * @author michaellif
+ * Created on Nov 7, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services;
+package com.propertyvista.portal.rpc.portal;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.domain.site.SitePalette;
+import com.propertyvista.domain.site.SiteTitles;
 
-import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
-import com.propertyvista.shared.CompiledLocale;
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface SiteDefinitionsDTO extends IEntity {
 
-public interface SiteThemeServices extends IService {
+    SitePalette palette();
 
-    public void retrieveSiteDescriptor(AsyncCallback<SiteDefinitionsDTO> callback, CompiledLocale locale);
+    SiteTitles siteTitles();
 
 }

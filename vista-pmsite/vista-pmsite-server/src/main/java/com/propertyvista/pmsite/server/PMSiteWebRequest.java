@@ -73,8 +73,7 @@ public class PMSiteWebRequest extends ServletWebRequest {
         }
         I18nManager.setThreadLocale(getLocale(locale.lang().getValue()));
         siteLocale = locale;
-        contentManager.setLocale(siteLocale);
-        // need locale on the client for GWT modules
+        // need locale on the client for GWT modules ?
         ((WebResponse) RequestCycle.get().getResponse()).addCookie(new Cookie("locale", siteLocale.lang().getValue().name()));
     }
 

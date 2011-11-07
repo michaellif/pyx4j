@@ -14,6 +14,7 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Cached;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -41,11 +42,10 @@ public interface SiteDescriptor extends IEntity {
 
         crm(85, 90, 10, 98, 100, 100, 100, 100, 0, 40, 0, 100);
 
-        private final Integer[] colorProperties;
+        private final int[] colorProperties;
 
-        private Skin(Integer o1s, Integer o1b, Integer o2s, Integer o2b, Integer c1s, Integer c1b, Integer c2s, Integer c2b, Integer fs, Integer fb,
-                Integer bs, Integer bb) {
-            this.colorProperties = new Integer[] { o1s, o1b, o2s, o2b, c1s, c1b, c2s, c2b, fs, fb, bs, bb };
+        private Skin(int o1s, int o1b, int o2s, int o2b, int c1s, int c1b, int c2s, int c2b, int fs, int fb, int bs, int bb) {
+            this.colorProperties = new int[] { o1s, o1b, o2s, o2b, c1s, c1b, c2s, c2b, fs, fb, bs, bb };
         }
 
         private Skin() {
@@ -57,23 +57,25 @@ public interface SiteDescriptor extends IEntity {
             return I18nEnum.toString(this);
         }
 
-        public Integer[] getColorProperties() {
+        public int[] getColorProperties() {
             return colorProperties;
         }
     }
 
     @NotNull
     @ToString(index = 0)
+    @Caption(name = "Resident Portal Skin")
     IPrimitive<Skin> skin();
 
     @Owned
     SitePalette sitePalette();
 
-    IPrimitive<String> copyright();
-
     IList<Resource> logo();
 
     IList<Resource> slogan();
+
+    @Owned
+    IList<SiteTitles> siteTitles();
 
     // Image for landing page
     @Owned
