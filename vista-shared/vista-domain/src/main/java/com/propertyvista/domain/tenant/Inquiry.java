@@ -37,7 +37,7 @@ public interface Inquiry extends IEntity {
     Email email();
 
     @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> description();
+    IPrimitive<String> comments();
 
     Building building();
 

@@ -41,7 +41,7 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 57).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 57).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, proto().phones().getMeta().getCaption());
