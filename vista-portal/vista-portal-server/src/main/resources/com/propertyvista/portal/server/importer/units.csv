@@ -1,60 +1,65 @@
 Code ,Address,City,Prov,Unit,Type,Area,Rent,Unit Description,Date Available
-23rd210r,3210 23rd Avenue South,Lethbridge,AB,305,2bdrm   ,863,905,2 Bedroom,11-06-01
-23rd210r,3210 23rd Avenue South,Lethbridge,AB,306,2bdrm   ,854,930,2 Bedroom,11-05-01
-32nd201r,2201 32ND,Lethbridge,AB,704,1bdrm   ,595,835,1 Bedroom,11-07-09
-32nd201r,2201 32ND,Lethbridge,AB,804,1bdrm   ,595,835,1 Bedroom,11-04-01
-aven0330,330 Avenue Road,Toronto,ON,332,1bdrm   ,578,975,1 Bedroom,11-08-01
-aven0340,340 Avenue Road,Toronto,ON,422,1bdrm   ,586,975,1 Bedroom,11-07-01
-bath020r,6020 Bathurst Street,Toronto,ON,1005,2bdrm   ,940,1170,2 Bedroom,11-07-11
-bath030r,6030 Bathurst Street,Toronto,ON,110,1bdrm   ,798,1000,1 Bedroom,11-07-01
-bath030r,6030 Bathurst Street,Toronto,ON,703,2bdrm   ,950,1195,2 Bedroom,11-07-01
-bath030r,6030 Bathurst Street,Toronto,ON,1101,3bdrm   ,1231,1440,3 Bedroom,11-07-01
-cent1219,1219 Centre Street,Brooks,AB,101,2bdrm   ,738,860,2 Bedroom,11-05-14
-kipp0740,740 Kipps Lane,London,ON,101,2bdrm   ,948,725,2 Bedroom,11-07-01
-kipp0740,740 Kipps Lane,London,ON,107,2bdrm   ,931,725,2 Bedroom,11-06-01
-kipp0740,740 Kipps Lane,London,ON,407,2bdrm   ,931,725,2 Bedroom,11-05-05
-kipp0740,740 Kipps Lane,London,ON,608,1bdrm   ,673,625,1 Bedroom,11-06-01
-kipp0740,740 Kipps Lane,London,ON,901,2bdrm   ,948,725,2 Bedroom,11-08-01
-kipp0750,750 Kipps Lane,London,ON,302,1bdrm   ,673,625,1 Bedroom,11-07-01
-kipp0750,750 Kipps Lane,London,ON,805,2bdrm   ,936,725,2 Bedroom,11-05-15
-kipp0752,752 Kipps Lane,London,ON,306,2bdrm   ,1020,725,2 Bedroom,11-07-01
-kipp0752,752 Kipps Lane,London,ON,502,1bdrm   ,675,625,1 Bedroom,11-07-01
-kipp0752,752 Kipps Lane,London,ON,703,1bdrm   ,675,625,1 Bedroom,11-06-01
-kipp0752,752 Kipps Lane,London,ON,804,2bdrm   ,932,725,2 Bedroom,11-05-01
-kipp0752,752 Kipps Lane,London,ON,805,2bdrm   ,1047,725,2 Bedroom,11-06-01
-kipp0754,754 Kipps Lane,London,ON,205,2bdrm   ,934,725,2 Bedroom,11-06-01
-kipp0754,754 Kipps Lane,London,ON,402,1bdrm   ,668,625,1 Bedroom,11-06-01
-kipp0754,754 Kipps Lane,London,ON,413,1bdrm   ,667,625,1 Bedroom,11-07-01
-kipp0754,754 Kipps Lane,London,ON,807,2bdrm   ,935,725,2 Bedroom,11-03-30
-kipp0756,756 Kipps Lane,London,ON,402,2bdrm   ,1067,800,2 Bedroom,11-06-15
-kipp0756,756 Kipps Lane,London,ON,705,2bdrm   ,1068,800,2 Bedroom,11-07-01
-kipp0756,756 Kipps Lane,London,ON,805,2bdrm   ,1068,800,2 Bedroom,11-05-01
-kipp0756,756 Kipps Lane,London,ON,1001,1bdrm   ,796,700,1 Bedroom,11-05-01
-kipp0756,756 Kipps Lane,London,ON,1006,1bdrm   ,776,700,1 Bedroom,11-06-15
-kipp0756,756 Kipps Lane,London,ON,1011,1bdrm   ,797,700,1 Bedroom,11-06-01
-kipp0756,756 Kipps Lane,London,ON,1102,2bdrm   ,1067,800,2 Bedroom,11-06-01
-kipp0758,758 Kipps Lane,London,ON,312,2bdrm   ,1064,800,2 Bedroom,11-05-01
-kipp0758,758 Kipps Lane,London,ON,411,1bdrm   ,792,700,1 Bedroom,11-06-01
-kipp0758,758 Kipps Lane,London,ON,712,2bdrm   ,1064,800,2 Bedroom,11-07-01
-kipp0758,758 Kipps Lane,London,ON,806,1bdrm   ,773,700,1 Bedroom,11-05-01
-kipp0758,758 Kipps Lane,London,ON,811,1bdrm   ,792,700,1 Bedroom,11-07-01
-regi300r,300 Regina Street North,Waterloo,ON,301-0107,1bdrm   ,690,998,1 Bedroom,11-06-01
-regi300r,300 Regina Street North,Waterloo,ON,301-0206,1bdrm   ,734,1028,1 Bedroom,11-05-01
-regi300r,300 Regina Street North,Waterloo,ON,301-0211,2bdrm   ,970,1232,2 Bedroom,11-05-01
-regi300r,300 Regina Street North,Waterloo,ON,301-0707,1bdrm   ,690,1028,1 Bedroom,11-07-01
-regi300r,300 Regina Street North,Waterloo,ON,301-1509,2bdrm   ,922,1247,2 Bedroom,11-09-01
-regi300r,300 Regina Street North,Waterloo,ON,301-1703,2bdrm   ,934,1247,2 Bedroom,11-07-01
-regi300r,300 Regina Street North,Waterloo,ON,302-0703,2bdrm   ,922,1272,2 Bedroom,11-06-01
-regi300r,300 Regina Street North,Waterloo,ON,302-0906,1bdrm   ,690,1028,1 Bedroom,11-09-01
-rich675r,675 Richmond Street,London,ON,409,1.den   ,875,1249,1 bedroom + den,11-07-01
-rich675r,675 Richmond Street,London,ON,603,1bdrm   ,875,1149,1 Bedroom,11-06-01
-rich675r,675 Richmond Street,London,ON,604,2bdrm   ,875,1400,2 Bedroom,11-07-01
-rich675r,675 Richmond Street,London,ON,1004,1bdrm   ,875,1149,1 Bedroom,11-05-01
-rich675r,675 Richmond Street,London,ON,1103,1bdrm   ,875,1149,1 Bedroom,11-07-01
-rund5300,5300 Rundlehorn Drive NE,Calgary,AB,101,2bdrm   ,838,1199,2 Bedroom,11-06-01
-rund5300,5300 Rundlehorn Drive NE,Calgary,AB,411,1bdrm   ,612,929,1 Bedroom,11-06-01
-rund5300,5300 Rundlehorn Drive NE,Calgary,AB,704,1bdrm   ,648,999,1 Bedroom,11-07-01
-rund5300,5300 Rundlehorn Drive NE,Calgary,AB,1701,1bdrm   ,624,899,1 Bedroom,11-04-01
-rund5300,5300 Rundlehorn Drive NE,Calgary,AB,1706,2bdrm   ,838,1083,2 Bedroom,11-05-02
-well0155,155 Wellesley Street East,Toronto,ON,206,1bdrm   ,526,1255,1 Bedroom,11-07-16
-well0155,155 Wellesley Street East,Toronto,ON,1900,3bdrm   ,1462,4000,3 Bedroom,11-06-01
+23rd210r,3210 23rd Avenue South,Lethbridge,AB,305,2bdrm   ,863,905,2 Bedroom,12-06-01
+23rd210r,3210 23rd Avenue South,Lethbridge,AB,306,2bdrm   ,854,930,2 Bedroom,12-05-01
+32nd201r,2201 32ND,Lethbridge,AB,704,1bdrm   ,595,835,1 Bedroom,12-07-09
+32nd201r,2201 32ND,Lethbridge,AB,804,1bdrm   ,595,835,1 Bedroom,12-04-01
+aven0330,330 Avenue Road,Toronto,ON,332,1bdrm   ,578,975,1 Bedroom,12-08-01
+aven0340,340 Avenue Road,Toronto,ON,422,1bdrm   ,586,975,1 Bedroom,12-07-01
+bath020r,6020 Bathurst Street,Toronto,ON,1005,2bdrm   ,940,1170,2 Bedroom,12-07-11
+bath030r,6030 Bathurst Street,Toronto,ON,110,1bdrm   ,798,1000,1 Bedroom,12-07-01
+bath030r,6030 Bathurst Street,Toronto,ON,703,2bdrm   ,950,1195,2 Bedroom,12-07-01
+bath030r,6030 Bathurst Street,Toronto,ON,1101,3bdrm   ,1231,1440,3 Bedroom,12-07-01
+cent1219,1219 Centre Street,Brooks,AB,101,2bdrm   ,738,860,2 Bedroom,12-05-14
+kipp0740,740 Kipps Lane,London,ON,101,2bdrm   ,948,725,2 Bedroom,12-07-01
+kipp0740,740 Kipps Lane,London,ON,107,2bdrm   ,931,725,2 Bedroom,12-06-01
+kipp0740,740 Kipps Lane,London,ON,407,2bdrm   ,931,725,2 Bedroom,12-05-05
+kipp0740,740 Kipps Lane,London,ON,608,1bdrm   ,673,625,1 Bedroom,12-06-01
+kipp0740,740 Kipps Lane,London,ON,901,2bdrm   ,948,725,2 Bedroom,12-08-01
+kipp0750,750 Kipps Lane,London,ON,302,1bdrm   ,673,625,1 Bedroom,12-07-01
+kipp0750,750 Kipps Lane,London,ON,805,2bdrm   ,936,725,2 Bedroom,12-05-15
+kipp0752,752 Kipps Lane,London,ON,306,2bdrm   ,1020,725,2 Bedroom,12-07-01
+kipp0752,752 Kipps Lane,London,ON,502,1bdrm   ,675,625,1 Bedroom,12-07-01
+kipp0752,752 Kipps Lane,London,ON,703,1bdrm   ,675,625,1 Bedroom,12-06-01
+kipp0752,752 Kipps Lane,London,ON,804,2bdrm   ,932,725,2 Bedroom,12-05-01
+kipp0752,752 Kipps Lane,London,ON,805,2bdrm   ,1047,725,2 Bedroom,12-06-01
+kipp0754,754 Kipps Lane,London,ON,205,2bdrm   ,934,725,2 Bedroom,12-06-01
+kipp0754,754 Kipps Lane,London,ON,402,1bdrm   ,668,625,1 Bedroom,12-06-01
+kipp0754,754 Kipps Lane,London,ON,413,1bdrm   ,667,625,1 Bedroom,12-07-01
+kipp0754,754 Kipps Lane,London,ON,807,2bdrm   ,935,725,2 Bedroom,12-03-30
+kipp0756,756 Kipps Lane,London,ON,402,2bdrm   ,1067,800,2 Bedroom,12-06-15
+kipp0756,756 Kipps Lane,London,ON,705,2bdrm   ,1068,800,2 Bedroom,12-07-01
+kipp0756,756 Kipps Lane,London,ON,805,2bdrm   ,1068,800,2 Bedroom,12-05-01
+kipp0756,756 Kipps Lane,London,ON,1001,1bdrm   ,796,700,1 Bedroom,12-05-01
+kipp0756,756 Kipps Lane,London,ON,1006,1bdrm   ,776,700,1 Bedroom,12-06-15
+kipp0756,756 Kipps Lane,London,ON,1011,1bdrm   ,797,700,1 Bedroom,12-06-01
+kipp0756,756 Kipps Lane,London,ON,1102,2bdrm   ,1067,800,2 Bedroom,12-06-01
+kipp0758,758 Kipps Lane,London,ON,312,2bdrm   ,1064,800,2 Bedroom,12-05-01
+kipp0758,758 Kipps Lane,London,ON,411,1bdrm   ,792,700,1 Bedroom,12-06-01
+kipp0758,758 Kipps Lane,London,ON,712,2bdrm   ,1064,800,2 Bedroom,12-07-01
+kipp0758,758 Kipps Lane,London,ON,806,1bdrm   ,773,700,1 Bedroom,12-05-01
+kipp0758,758 Kipps Lane,London,ON,811,1bdrm   ,792,700,1 Bedroom,12-07-01
+regi300r,300 Regina Street North,Waterloo,ON,301-0107,1bdrm   ,690,998,1 Bedroom,12-06-01
+regi300r,300 Regina Street North,Waterloo,ON,301-0206,1bdrm   ,734,1028,1 Bedroom,12-05-01
+regi300r,300 Regina Street North,Waterloo,ON,301-0211,2bdrm   ,970,1232,2 Bedroom,12-05-01
+regi300r,300 Regina Street North,Waterloo,ON,301-0707,1bdrm   ,690,1028,1 Bedroom,12-07-01
+regi300r,300 Regina Street North,Waterloo,ON,301-1509,2bdrm   ,922,1247,2 Bedroom,12-09-01
+regi300r,300 Regina Street North,Waterloo,ON,301-1703,2bdrm   ,934,1247,2 Bedroom,12-07-01
+regi300r,300 Regina Street North,Waterloo,ON,302-0703,2bdrm   ,922,1272,2 Bedroom,12-06-01
+regi300r,300 Regina Street North,Waterloo,ON,302-0906,1bdrm   ,690,1028,1 Bedroom,12-09-01
+rich675r,675 Richmond Street,London,ON,409,1.den   ,875,1249,1 bedroom + den,12-07-01
+rich675r,675 Richmond Street,London,ON,603,1bdrm   ,875,1149,1 Bedroom,12-06-01
+rich675r,675 Richmond Street,London,ON,604,2bdrm   ,875,1400,2 Bedroom,12-07-01
+rich675r,675 Richmond Street,London,ON,1004,1bdrm   ,875,1149,1 Bedroom,12-05-01
+rich675r,675 Richmond Street,London,ON,1103,1bdrm   ,875,1149,1 Bedroom,12-07-01
+rund5300,5300 Rundlehorn Drive NE,Calgary,AB,101,2bdrm   ,838,1199,2 Bedroom,12-06-01
+rund5300,5300 Rundlehorn Drive NE,Calgary,AB,411,1bdrm   ,612,929,1 Bedroom,12-06-01
+rund5300,5300 Rundlehorn Drive NE,Calgary,AB,704,1bdrm   ,648,999,1 Bedroom,12-07-01
+rund5300,5300 Rundlehorn Drive NE,Calgary,AB,1701,1bdrm   ,624,899,1 Bedroom,12-04-01
+rund5300,5300 Rundlehorn Drive NE,Calgary,AB,1706,2bdrm   ,838,1083,2 Bedroom,12-05-02
+well0155,155 Wellesley Street East,Toronto,ON,206,1bdrm   ,526,1255,1 Bedroom,12-07-16
+well0155,155 Wellesley Street East,Toronto,ON,1900,3bdrm   ,1462,4000,3 Bedroom,12-06-01
+xtent123,5300 Rundlehorn Drive NE,Calgary,AB,101,2bdrm   ,838,1199,2 Bedroom,12-06-01
+xtent123,5300 Rundlehorn Drive NE,Calgary,AB,411,1bdrm   ,612,929,1 Bedroom,12-06-01
+xtent123,5300 Rundlehorn Drive NE,Calgary,AB,704,1bdrm   ,648,999,1 Bedroom,12-07-01
+xtent123,5300 Rundlehorn Drive NE,Calgary,AB,1701,1bdrm   ,624,899,1 Bedroom,12-04-01
+xtent123,5300 Rundlehorn Drive NE,Calgary,AB,1706,2bdrm   ,838,1083,2 Bedroom,12-05-02
