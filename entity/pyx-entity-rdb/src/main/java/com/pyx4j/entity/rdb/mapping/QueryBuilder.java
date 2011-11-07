@@ -272,8 +272,11 @@ public class QueryBuilder<T extends IEntity> {
                         .getObjectClass());
 
                 String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
-                MemberOperationsMeta memberOper2 = otherEntityOperMeta.getMember(GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getObjectClass())
-                        + Path.PATH_SEPARATOR + pathFragmet);
+                String memberName = GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getObjectClass()) + Path.PATH_SEPARATOR + pathFragmet;
+                MemberOperationsMeta memberOper2 = otherEntityOperMeta.getMember(memberName);
+                if (memberOper2 == null) {
+                    throw new RuntimeException("Member " + memberName + " not found in " + otherEntityOperMeta.entityMeta().getEntityClass());
+                }
 
                 return new MemeberWithAlias(memberOper2, thisAlias);
             } else {

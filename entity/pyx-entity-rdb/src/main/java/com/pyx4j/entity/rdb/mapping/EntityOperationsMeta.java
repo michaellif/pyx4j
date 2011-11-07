@@ -51,6 +51,8 @@ import com.pyx4j.geo.GeoPoint;
  */
 public class EntityOperationsMeta {
 
+    private final EntityMeta mainEntityMeta;
+
     private final List<MemberOperationsMeta> allMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> columnMembers = new Vector<MemberOperationsMeta>();
@@ -70,8 +72,13 @@ public class EntityOperationsMeta {
     private final Mappings mappings;
 
     EntityOperationsMeta(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
+        mainEntityMeta = entityMeta;
         build(dialect, dialect.getNamingConvention(), entityMeta, GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()), null, null, entityMeta);
         this.mappings = mappings;
+    }
+
+    public EntityMeta entityMeta() {
+        return mainEntityMeta;
     }
 
     public EntityOperationsMeta getMappedOperationsMeta(Class<? extends IEntity> entityClass) {
