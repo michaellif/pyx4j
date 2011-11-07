@@ -24,7 +24,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -55,75 +54,72 @@ public class VacancyReportServiceImpl implements VacancyReportService {
             boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate from, LogicalDate to,
             Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
         EntitySearchResult<UnitVacancyStatus> units = null;
-
-        // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
-        List<Sort> transientSortCriteria = null;
-        transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(sortingCriteria);
-
-        EntityListCriteria<UnitVacancyStatus> criteria = new EntityListCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
-        criteria.setSorts(sortingCriteria);
-
-        //TODO THIS IS VERY BAD. Do not use Strings Use Keys
-        if (!buildings.isEmpty()) {
-            // TODO add protection from SQL injection if in the future buildings are still represented as strings
-            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
-        }
-
-        final ICursorIterator<UnitVacancyStatus> unfiltered = Persistence.service().query(null, criteria);
-
-        PriorityQueue<UnitVacancyStatus> queue = new PriorityQueue<UnitVacancyStatus>(100, getTransientPropertySortEngine()
-                .getComparator(transientSortCriteria));
         try {
-            while (unfiltered.hasNext()) {
-                UnitVacancyStatus unit = unfiltered.next();
+            // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
+            List<Sort> transientSortCriteria = null;
+            transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(sortingCriteria);
+
+            EntityListCriteria<UnitVacancyStatus> criteria = new EntityListCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
+            criteria.setSorts(sortingCriteria);
+
+            //TODO THIS IS VERY BAD. Do not use Strings Use Keys
+            if (!buildings.isEmpty()) {
+                // TODO add protection from SQL injection if in the future buildings are still represented as strings
+                criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
+            }
+
+            List<UnitVacancyStatus> unfiltered = Persistence.service().query(criteria);
+
+            PriorityQueue<UnitVacancyStatus> queue = new PriorityQueue<UnitVacancyStatus>(100, getTransientPropertySortEngine().getComparator(
+                    transientSortCriteria));
+
+            for (UnitVacancyStatus unit : unfiltered) {
                 computeTransientFields(unit, from, to);
                 queue.add(unit);
             }
-        } finally {
-            unfiltered.completeRetrieval();
-        }
 
-        Vector<UnitVacancyStatus> unitsData = new Vector<UnitVacancyStatus>();
+            Vector<UnitVacancyStatus> unitsData = new Vector<UnitVacancyStatus>();
 
-        int currentPage = 0;
-        int currentPagePosition = 0;
-        int totalRows = 0;
-        boolean hasMoreRows = false;
+            int currentPage = 0;
+            int currentPagePosition = 0;
+            int totalRows = 0;
+            boolean hasMoreRows = false;
 
-        while (!queue.isEmpty()) {
-            UnitVacancyStatus unit = queue.poll();
-            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
-                ++currentPagePosition;
-                ++totalRows;
-                if (currentPagePosition > pageSize) {
-                    ++currentPage;
-                    currentPagePosition = 1;
-                }
-                if (currentPage < pageNumber) {
-                    continue;
-                } else if (currentPage == pageNumber) {
-                    unitsData.add(unit);
-                } else {
-                    hasMoreRows = true;
-                    break;
+            while (!queue.isEmpty()) {
+                UnitVacancyStatus unit = queue.poll();
+                if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
+                    ++currentPagePosition;
+                    ++totalRows;
+                    if (currentPagePosition > pageSize) {
+                        ++currentPage;
+                        currentPagePosition = 1;
+                    }
+                    if (currentPage < pageNumber) {
+                        continue;
+                    } else if (currentPage == pageNumber) {
+                        unitsData.add(unit);
+                    } else {
+                        hasMoreRows = true;
+                        break;
+                    }
                 }
             }
-        }
-        while (!queue.isEmpty()) {
-            UnitVacancyStatus unit = queue.poll();
-            if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
-                ++totalRows;
+            while (!queue.isEmpty()) {
+                UnitVacancyStatus unit = queue.poll();
+                if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
+                    ++totalRows;
+                }
             }
+
+            units = new EntitySearchResult<UnitVacancyStatus>();
+            units.setData(unitsData);
+            units.setTotalRows(totalRows);
+            units.hasMoreData(hasMoreRows);
+
+            callback.onSuccess(units);
+        } catch (Throwable error) {
+            callback.onFailure(new Error(error));
         }
-
-        units = new EntitySearchResult<UnitVacancyStatus>();
-        units.setData(unitsData);
-        units.setTotalRows(totalRows);
-        units.hasMoreData(hasMoreRows);
-        // TODO what is that?
-        //units.setEncodedCursorReference(?);
-
-        callback.onSuccess(units);
     }
 
     private static boolean isAcceptable(UnitVacancyStatus unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice, boolean displayRented,
