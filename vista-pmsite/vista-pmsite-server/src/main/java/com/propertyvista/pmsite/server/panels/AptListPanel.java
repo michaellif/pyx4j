@@ -26,6 +26,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -64,7 +66,11 @@ public class AptListPanel extends Panel {
                             + addr.province().code().getValue() + " " + addr.postalCode().getValue();
                 }
                 item.add(new Label("address", addrFmt));
-                item.add(new Label("description", propInfo.marketing().description().getValue()));
+                String desc = propInfo.marketing().description().getValue();
+                if (ApplicationMode.isDevelopment()) {
+                    desc += " (" + propInfo.propertyCode().getValue() + ")";
+                }
+                item.add(new Label("description", desc));
 
                 final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(propInfo);
                 item.add(new ListView<Floorplan>("types", new ArrayList<Floorplan>(fpUnits.keySet())) {
