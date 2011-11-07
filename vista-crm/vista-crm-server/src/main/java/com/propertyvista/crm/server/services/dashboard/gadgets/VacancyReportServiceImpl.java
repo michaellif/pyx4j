@@ -303,26 +303,27 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         intervalStart = intervalEnd;
         intervalEnd = resolution.addTo(intervalStart);
 
-        if (false) {
-            // now add some more intervals if we don't have more events but still haven't reached till the end of the rest of time time 
+        if (!isFirstEmptyRange) {
+            // now add some more intervals if we don't have more events but still haven't reached till the end of the requested report time range 
             while (endReportTime >= intervalEnd) {
-                if (!isFirstEmptyRange) {
-                    UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
-                    analysis.fromDate().setValue(new LogicalDate(intervalStart));
-                    analysis.toDate().setValue(new LogicalDate(intervalEnd));
-                    analysis.unitsTurnedOverAbs().setValue(0);
-                    result.add(analysis);
 
-                    intervalStart = intervalEnd;
-                    intervalEnd = resolution.addTo(intervalStart);
-                }
+                UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+                analysis.fromDate().setValue(new LogicalDate(intervalStart));
+                analysis.toDate().setValue(new LogicalDate(intervalEnd));
+                analysis.unitsTurnedOverAbs().setValue(0);
+                result.add(analysis);
+
+                intervalStart = intervalEnd;
+                intervalEnd = resolution.addTo(intervalStart);
             }
         }
 
-        for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
-            if (total > 0) {
+        if (total > 0) {
+            for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
                 analysis.unitsTurnedOverPct().setValue(((double) analysis.unitsTurnedOverAbs().getValue()) / total * 100);
-            } else {
+            }
+        } else {
+            for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
                 analysis.unitsTurnedOverPct().setValue(0d);
             }
         }
