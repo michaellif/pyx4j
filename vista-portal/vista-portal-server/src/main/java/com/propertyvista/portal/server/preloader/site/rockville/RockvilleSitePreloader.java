@@ -32,7 +32,7 @@ public class RockvilleSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Integer object1() {
-        return 219;
+        return 45;
     }
 
     @Override

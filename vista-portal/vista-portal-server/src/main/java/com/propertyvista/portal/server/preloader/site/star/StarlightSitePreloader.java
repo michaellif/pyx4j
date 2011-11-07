@@ -30,7 +30,7 @@ public class StarlightSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Integer object1() {
-        return 223;
+        return 103;
     }
 
     @Override
