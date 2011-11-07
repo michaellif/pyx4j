@@ -37,6 +37,7 @@ import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenantsArrearsDTO;
 
 public class ArrearsListerGadget extends ListerGadgetBase<MockupTenantsArrearsDTO> implements IBuildingGadget {
+    private boolean isLoading = false;
 
     private final ArrearsReportService service;
 
@@ -102,17 +103,24 @@ public class ArrearsListerGadget extends ListerGadgetBase<MockupTenantsArrearsDT
 
     @Override
     public void populatePage(int pageNumber) {
-        final int p = pageNumber;
-        service.arrearsList(new AsyncCallback<EntitySearchResult<MockupTenantsArrearsDTO>>() {
-            @Override
-            public void onSuccess(EntitySearchResult<MockupTenantsArrearsDTO> result) {
-                setPageData(result.getData(), p, result.getTotalRows(), result.hasMoreData());
-            }
+        // TODO move isSuspended() check to the base class
+        // TODO isLoading is for avoiding redundant reloads, investigate why they are happening and then remove it if it's possible
+        if (!isSuspended() & !isLoading) {
+            final int p = pageNumber;
+            isLoading = true;
+            service.arrearsList(new AsyncCallback<EntitySearchResult<MockupTenantsArrearsDTO>>() {
+                @Override
+                public void onSuccess(EntitySearchResult<MockupTenantsArrearsDTO> result) {
+                    setPageData(result.getData(), p, result.getTotalRows(), result.hasMoreData());
+                    isLoading = false;
+                }
 
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new Error(caught);
-            }
-        }, new Vector<Key>(filterData.buildings), new LogicalDate(filterData.toDate), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+                @Override
+                public void onFailure(Throwable caught) {
+                    isLoading = false;
+                    throw new Error(caught);
+                }
+            }, new Vector<Key>(filterData.buildings), new LogicalDate(filterData.toDate), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+        }
     }
 }
