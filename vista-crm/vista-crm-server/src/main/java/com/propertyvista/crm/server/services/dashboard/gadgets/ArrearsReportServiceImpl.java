@@ -14,7 +14,6 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +30,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -75,7 +75,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                     preliminaryResults = new ArrayDeque<MockupTenantsArrearsDTO>(tenants.size());
                 } else {
                     preliminaryResults = new PriorityQueue<MockupTenantsArrearsDTO>(tenants.size(), SORT_FACTORY.createDtoComparator(sortingCriteria));
-
                 }
                 if (!buildingsSet.isEmpty()) {
                     for (MockupTenant tenant : tenants) {
@@ -111,7 +110,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                     }
 
                 }
-                // FIXME totalRows is not calculated correctly
                 totalRows += preliminaryResults.size();
             }
 
@@ -141,27 +139,16 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         return memberMap;
     }
 
-    @SuppressWarnings("deprecation")
     private static MockupTenantsArrearsDTO computeArrears(MockupTenant tenant, LogicalDate when) {
         MockupTenantsArrearsDTO arrearsEntity = tenant.clone(MockupTenantsArrearsDTO.class);
         Persistence.service().retrieve(arrearsEntity.belongsTo());
         Persistence.service().retrieve(arrearsEntity.belongsTo().belongsTo());
+        EntityQueryCriteria<MockupArrear> criteria = new EntityQueryCriteria<MockupArrear>(MockupArrear.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), tenant));
+        criteria.add(new PropertyCriterion(criteria.proto().month(), Restriction.LESS_THAN_OR_EQUAL, when));
+        criteria.desc(criteria.proto().month().getFieldName());
 
-        // FIXME the following section is currently disabled in order to make performance bearable, but needs to be somehow reconsidered so that the demo will become functional
-//        EntityListCriteria<MockupArrear> criteria = new EntityListCriteria<MockupArrear>(MockupArrear.class);
-//        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), tenant));
-//        criteria.add(new PropertyCriterion(criteria.proto().month(), Restriction.LESS_THAN_OR_EQUAL, when));
-//
-//        LogicalDate fourMonthsAgo = new LogicalDate();
-//        fourMonthsAgo.setMonth((11 + when.getMonth() - 4) % 12);
-//        criteria.add(new PropertyCriterion(criteria.proto().month(), Restriction.GREATER_THAN_OR_EQUAL, fourMonthsAgo));
-//        criteria.setPageNumber(0);
-//        criteria.setPageSize(4);
-//        criteria.desc(criteria.proto().month().getFieldName());
-//
-//        List<MockupArrear> arrears = Persistence.service().query(criteria);
-
-        List<MockupArrear> arrears = new ArrayList<MockupArrear>();
+        List<MockupArrear> arrears = Persistence.service().query(criteria);
         arrearsEntity.arrears1MonthAgo().setValue(arrears.size() > 0 ? arrears.get(0).amount().getValue() : 0d);
         arrearsEntity.arrears2MonthsAgo().setValue(arrears.size() > 1 ? arrears.get(1).amount().getValue() : 0d);
         arrearsEntity.arrears3MonthsAgo().setValue(arrears.size() > 2 ? arrears.get(2).amount().getValue() : 0d);

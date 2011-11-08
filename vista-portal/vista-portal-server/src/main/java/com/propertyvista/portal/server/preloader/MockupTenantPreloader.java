@@ -36,12 +36,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
  * 
  */
 public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
-
     private static final long ONE_DAY = 1000l * 60l * 60l * 24l;
 
-    private static final long MAX_LEASE = 24l * 60l * 60l * 1000l * 31l * 48l;
-
-    private static final long MIN_LEASE = 24l * 60l * 60l * 1000l * 31l * 36l;
+    private static final long MAX_LEASE = 24l * 60l * 60l * 1000l * 24l * 30l;
 
     private static final double MAX_ARREAR = 3000d;
 
@@ -51,11 +48,10 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
 
     private static final Random RND = new Random(9001);
 
-    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(MockupArrear.class, MockupTenant.class);
+            return deleteAll(MockupArrear.class) + "; " + deleteAll(MockupTenant.class);
         } else {
             return "This is production";
         }
@@ -63,30 +59,20 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-        if ((config().minimizePreloadTime)) {
-            return null;
-        }
-
-        int tenantCounter = 0;
-        int arrearsCounter = 0;
+        int counter = 0;
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        //criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo().propertyManager().name(), "Redridge"));
         List<AptUnit> units = Persistence.service().query(criteria);
-
         final LogicalDate startDate = new LogicalDate();
         startDate.setYear(106);
         startDate.setMonth(0);
         startDate.setDate(1);
         final LogicalDate endDate = new LogicalDate();
+
         for (AptUnit unit : units) {
-            Persistence.service().retrieve(unit.belongsTo());
-            if (!"Redridge".equals(unit.belongsTo().propertyManager().name().getValue())) {
-                continue;
-            }
             LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
             while (movein.before(endDate)) {
-                LogicalDate moveout = new LogicalDate(movein.getTime() + Math.max(MIN_LEASE, Math.abs(RND.nextLong()) % MAX_LEASE));
+                LogicalDate moveout = new LogicalDate(movein.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
                 MockupTenant tenant = EntityFactory.create(MockupTenant.class);
                 tenant.belongsTo().set(unit);
@@ -97,7 +83,7 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
                 tenant.arBalance().setValue(RandomUtil.randomDouble(MAX_ARBALANCE));
                 tenant.prepayments().setValue(RandomUtil.randomDouble(MAX_PREPAYMENTS));
                 Persistence.service().persist(tenant);
-                ++tenantCounter;
+                ++counter;
 
                 // create mockup arrears history
                 LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(movein.getTime()));
@@ -108,13 +94,12 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
                     arrear.amount().setValue((RND.nextInt() % 10 < 7) ? RandomUtil.randomDouble(MAX_ARREAR) : 0d);
                     Persistence.service().persist(arrear);
                     currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
-                    ++arrearsCounter;
                 }
                 movein = new LogicalDate(moveout.getTime() + ONE_DAY);
             }
 
         }
 
-        return "Created " + tenantCounter + " mockup tennants and " + arrearsCounter + " mockup payment history events for Arrears Gadget";
+        return "Created " + counter + " mockup tennants for Arrears Gadget";
     }
 }

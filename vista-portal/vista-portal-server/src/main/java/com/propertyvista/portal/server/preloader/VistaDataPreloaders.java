@@ -62,7 +62,9 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new DevelopmentSecurityPreloader());
 
             // DEMO - temporary!!!
-            add(new MockupAvailabilityStatusPreloader());
+            add(new MockupVacancyReportUnitPreloader());
+            add(new MockupVacancyReportEventPreloader());
+
             add(new MockupTenantPreloader());
         }
 

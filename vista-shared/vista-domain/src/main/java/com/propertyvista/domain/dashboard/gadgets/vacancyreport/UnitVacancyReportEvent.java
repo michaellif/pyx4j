@@ -13,34 +13,18 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.vacancyreport;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-
-public interface MockupAvailabilityReportEvent extends IEntity {
-    @Owner
-    @Detached
-    @ReadOnly
-    @Caption(name = "Unit")
-    @XmlTransient
-    AptUnit belongsTo();
+public interface UnitVacancyReportEvent extends IEntity {
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> eventDate();
 
-    // FIXME remove this property once the service/gadget is fixed
     IPrimitive<String> propertyCode();
 
-    // FIXME remove this property once the service/gadget is fixed
     IPrimitive<String> unit();
 
     IPrimitive<String> eventType();

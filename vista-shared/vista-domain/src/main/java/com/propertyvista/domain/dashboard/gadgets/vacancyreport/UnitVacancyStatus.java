@@ -15,10 +15,8 @@ package com.propertyvista.domain.dashboard.gadgets.vacancyreport;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -26,9 +24,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 
-public interface UnitAvailabilityStatus extends IEntity {
+// TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready 
+// @Transient
+public interface UnitVacancyStatus extends IEntity {
 
     // TODO ask Vlad about @Translatable and @XMLType
     public enum VacancyStatus {
@@ -48,8 +47,8 @@ public interface UnitAvailabilityStatus extends IEntity {
         }
     }
 
-    public enum RentReadinessStatus {
-        RentReady, RenoInProgress, NeedsRepairs;
+    public enum RentReady {
+        RentReady, RenoInProgress, NeedRepairs;
 
         @Override
         public String toString() {
@@ -57,77 +56,105 @@ public interface UnitAvailabilityStatus extends IEntity {
         }
     }
 
-    IPrimitive<LogicalDate> statusDate();
-
-    @Owner
-    @ReadOnly
-    @Detached
-    AptUnit belongsTo();
-
+    @Caption(name = "Property")
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> buildingName();
 
+    // TODO change to normal Address Entity
     IPrimitive<String> address();
 
     IPrimitive<String> region();
 
     IPrimitive<String> owner();
 
-    IPrimitive<String> propertyManagerName();
+    IPrimitive<String> propertyManager();
 
     IPrimitive<String> complexName();
 
-    /** {@link AptUnit#info()} -> {@link AptUnitInfo#number()} */
+    // AptUnitInfo.number
+    // supposed to be String
     IPrimitive<String> unit();
 
     IPrimitive<String> floorplanName();
 
     IPrimitive<String> floorplanMarketingName();
 
+    @Transient
     @Caption(name = "Vacant/Notice")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<VacancyStatus> vacancyStatus();
 
+    @Transient
     @Caption(name = "Rented/Unrented/OffMarket")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<RentedStatus> rentedStatus();
 
+    @Transient
     @Caption(name = "Scoping")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Boolean> isScoped();
 
+    @Transient
     @Caption(name = "Physical Condition")
     @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<RentReadinessStatus> rentReadinessStatus();
+    IPrimitive<RentReady> rentReady();
 
     IPrimitive<Double> unitRent();
 
     IPrimitive<Double> marketRent();
 
     /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
+    @Transient
     @Caption(name = "Delta, in $")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> rentDeltaAbsolute();
 
     /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */
+    @Transient
     @Caption(name = "Delta, in %")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> rentDeltaRelative();
 
     /** {@link AptUnit#availableForRent()} - 1 */
+    @Transient
     @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveOutDay();
 
     /** Applicable only for rented */
+    @Transient
     @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveInDay();
 
     /** Applicable only for rented; maybe different than move out date */
+    @Transient
     @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> rentedFromDate();
+
+    /** For Vacant units numberOfDays between today and availableForRent date */
+    @Transient
+    @CustomComparator(clazz = ComparableComparator.class)
+    IPrimitive<Integer> daysVacant();
+
+    /** days vacant * marketRent / 30 */
+    @Transient
+    @Caption(name = "Revenue Lost, in $")
+    @Format("#0.00")
+    @CustomComparator(clazz = ComparableComparator.class)
+    IPrimitive<Double> revenueLost();
+
+    /** this is hack to use the lister service interface */
+    @Transient
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> fromDate();
+
+    /** this is hack to use the lister service interface */
+    @Transient
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> toDate();
+
 }
