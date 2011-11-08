@@ -113,3 +113,15 @@
 	text-align:center;
 	padding-left:10px;
 } 
+.apartmentDetailsWrap .requestBtn {
+	background: ${object1_100};
+	border: 2px solid ${object1_100};
+	color: ${object1_10};
+    display:inline-block;
+    line-height: 32px;
+    padding:0 8px;
+    margin-left:40px;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-decoration:none;
+}

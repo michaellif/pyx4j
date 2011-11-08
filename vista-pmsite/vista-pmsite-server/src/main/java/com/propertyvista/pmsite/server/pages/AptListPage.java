@@ -131,6 +131,11 @@ public class AptListPage extends BasePage {
     }
 
     @Override
+    public String getLocalizedPageTitle() {
+        return i18n.tr("Property List");
+    }
+
+    @Override
     public void renderHead(IHeaderResponse response) {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "aptlist" + styleId + ".css";

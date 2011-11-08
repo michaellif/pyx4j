@@ -13,10 +13,60 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-public class InquiryPage extends BasePage {
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-    public InquiryPage() {
-        super();
+import templates.TemplateResources;
+
+import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
+import com.propertyvista.pmsite.server.panels.InquiryPanel;
+
+public class InquiryPage extends BasePage {
+    private static final long serialVersionUID = 1L;
+
+    private static final I18n i18n = I18n.get(InquiryPage.class);
+
+    public InquiryPage(PageParameters params) {
+        super(params);
+        Long planId = null;
+        try {
+            planId = params.get("fpId").toLong();
+        } catch (Exception e) {
+            throw new RuntimeException();
+//            throw new RestartResponseException(FindAptPage.class);
+        }
+
+        final Floorplan fp = PMSiteContentManager.getFloorplanDetails(planId);
+        // left side
+        add(new FloorplanInfoPanel("floorplanInfoPanel", fp));
+
+        // right side - inquiry form
+        add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
+        add(new InquiryPanel("inquiryPanel", fp));
     }
 
+    @Override
+    public String getLocalizedPageTitle() {
+        return i18n.tr("Request Appointment");
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
+        String fileCSS = "inquiry" + styleId + ".css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                new StylesheetTemplateModel(getRequest()));
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
+
+    }
 }

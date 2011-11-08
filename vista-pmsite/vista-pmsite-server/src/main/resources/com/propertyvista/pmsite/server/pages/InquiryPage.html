@@ -5,9 +5,28 @@
 </head>
 <body>
 	<wicket:extend>
-
-        Inquiry Page
-
-      </wicket:extend>
+	<div class="vista-pmsite-inquiryFormPage">
+		<div class="vista-pmsite-contentWrap">
+			<div class="vista-pmsite-content">
+				<div class="vista-pmsite-mainWrap">
+					<div class="vista-pmsite-sidebarWrap">
+						<div class="vista-pmsite-sidebar">
+							<div wicket:id="floorplanInfoPanel"/>
+						</div>
+						<div class="vista-pmsite-main">
+							<div class="caption2">
+								<h1><wicket:i18n>Request Appointment</wicket:i18n></h1>
+								<div wicket:id="backButton" class="rightControl">Back</div>
+							</div>
+							<div class="inquiryFormWrap">
+								<div wicket:id="inquiryPanel" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    </wicket:extend>
 </body>
 </html>

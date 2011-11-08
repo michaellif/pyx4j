@@ -1,0 +1,93 @@
+.vista-pmsite-inquiryFormPage {
+	font-size:14px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 318px;
+	vertical-align: top;
+	padding:20px 16px;
+	border-right:1px solid ${foreground_20};
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-main {
+	display: inline-block;
+	width: 605px;
+	vertical-align: top;
+	min-height:600px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-main .caption2 {
+	border-bottom:1px solid ${foreground_20};
+}
+
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox {
+	width:100%;
+	text-align:center;
+} 
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .picture {
+	width:100%;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery {
+	height:50px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery img {
+	width:57px;
+	height:40px;
+	cursor:pointer;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery span {
+	float:left;
+	margin:5px 0 5px 8px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery span:first-child {
+	margin-left:0;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBox {
+	width:100%;
+	font-weight:bold;
+	color:${foreground_60};
+} 
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBoxEntry {
+	padding-top:15px;
+} 
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxCaption {
+	display:block;
+	padding-top:4px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxText {
+	display:block;
+	padding-top:4px;
+}
+.inquiryFormWrap .inputEntry {
+	padding:10px 0;
+	margin:0 30px;
+}
+.inquiryFormWrap .inputEntry .inputLabel {
+	display:inline-block;
+	width: 150px;
+	padding-right:20px;
+	text-align:right;
+	vertical-align:top;
+	color:${foreground_40};
+}
+.inquiryFormWrap .inputBox {
+	display:inline-block;
+	width:370px;
+}
+.inquiryFormWrap .inputEntry textarea {
+	width:360px;
+}
+.inquiryFormWrap input[type=submit] {
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
+    height: 32px;
+    min-width:128px;
+    padding:0 8px;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+}

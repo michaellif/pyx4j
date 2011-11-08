@@ -42,14 +42,14 @@ public class StaticPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
 
+    private final String caption;
+
     public StaticPage(final PageParameters parameters) {
         super(parameters);
         setVersioned(false);
 
         WebMarkupContainer mainPanel = new WebMarkupContainer("mainPanel");
         add(mainPanel);
-
-        final PageDescriptor descriptor = ((PMSiteWebRequest) getRequest()).getContentManager().getStaticPageDescriptor(parameters);
 
         SecondaryNavigationPanel secondaryNavigationPanel = new SecondaryNavigationPanel("secondaryNavig", this);
 
@@ -59,8 +59,9 @@ public class StaticPage extends BasePage {
             mainPanel.add(AttributeModifier.replace("style", "width:100%"));
         }
 
-        mainPanel.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(descriptor,
-                ((PMSiteWebRequest) getRequest()).getSiteLocale())));
+        final PageDescriptor descriptor = ((PMSiteWebRequest) getRequest()).getContentManager().getStaticPageDescriptor(parameters);
+        caption = ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(descriptor, ((PMSiteWebRequest) getRequest()).getSiteLocale());
+        mainPanel.add(new Label("caption", caption));
 
         mainPanel.add(new WebComponent("content") {
 
@@ -82,6 +83,11 @@ public class StaticPage extends BasePage {
 
         });
 
+    }
+
+    @Override
+    public String getLocalizedPageTitle() {
+        return caption;
     }
 
     @Override

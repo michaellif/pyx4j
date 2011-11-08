@@ -11,26 +11,7 @@
 				<div class="vista-pmsite-mainWrap">
 					<div class="vista-pmsite-sidebarWrap">
 						<div class="vista-pmsite-sidebar">
-							<div class="pictureBox">
-								<img class="picture" wicket:id="picture"/>
-								<div class="gallery">
-									<span wicket:id="gallery"><img wicket:id="thumbnail"/></span>
-								</div>
-							</div>
-							<div class="infoBox">
-								<div class="infoBoxEntry address">
-									<label class="infoBoxCaption"><wicket:i18n>Address</wicket:i18n>:</label>
-									<span class="infoBoxText" wicket:id="address"/>
-								</div>
-								<div class="infoBoxEntry price">
-									<label class="infoBoxCaption"><wicket:i18n>Price Range</wicket:i18n>:</label>
-									<span class="infoBoxText" wicket:id="priceRange"/>
-								</div>
-								<div class="infoBoxEntry phone">
-									<label class="infoBoxCaption"><wicket:i18n>Phone</wicket:i18n>:</label>
-									<span class="infoBoxText" wicket:id="phone"/>
-								</div>
-							</div>
+							<div wicket:id="floorplanInfoPanel"/>
 						</div>
 						<div class="vista-pmsite-main">
 							<div class="caption2">
@@ -58,6 +39,7 @@
 										</div>
 									</div>
 								</div>
+								<a wicket:id="requestApmnt" class="requestBtn" href="">Request Appointment</a>
 							</div>
 						</div>
 					</div>

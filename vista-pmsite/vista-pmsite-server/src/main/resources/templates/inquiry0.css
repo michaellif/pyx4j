@@ -1,0 +1,97 @@
+.vista-pmsite-inquiryFormPage {
+	font-size:14px;
+	color:#CCCCCC;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-contentWrap {
+	background: url("images/template0/inner_content_bg.png") repeat-x #37393F;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-content {
+	background: url("images/template0/inner_bg.png") no-repeat;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 318px;
+	vertical-align: top;
+	padding:20px 16px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-main {
+	display: inline-block;
+	width: 605px;
+	vertical-align: top;
+	min-height:600px;
+	background:white;
+	color:#222;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox {
+	width:100%;
+	text-align:center;
+} 
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .picture {
+	width:100%;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery {
+	height:50px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery img {
+	width:57px;
+	height:40px;
+	cursor:pointer;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery span {
+	float:left;
+	margin:5px 0 5px 8px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .pictureBox .gallery span:first-child {
+	margin-left:0;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBox {
+	width:100%;
+	font-weight:bold;
+	color:#CCC;
+} 
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBoxEntry {
+	padding-top:15px;
+} 
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxCaption {
+	display:block;
+	padding-top:4px;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxText {
+	display:block;
+	padding-top:4px;
+}
+.inquiryFormWrap .inputEntry {
+	padding:10px 0;
+	margin:0 30px;
+}
+.inquiryFormWrap .inputEntry .inputLabel {
+	display:inline-block;
+	width: 150px;
+	padding-right:20px;
+	text-align:right;
+	vertical-align:top;
+	color:#777;
+}
+.inquiryFormWrap .inputBox {
+	display:inline-block;
+	width:370px;
+}
+.inquiryFormWrap .inputEntry textarea {
+	width:360px;
+}
+.inquiryFormWrap input[type=submit] {
+    background: url("images/template0/btn.png") no-repeat;
+    background-size:100% 64px;
+    border: none;
+    height: 32px;
+    min-width:128px;
+    padding:0 8px;
+    color: #000000;
+    font-size: 16px;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.inquiryFormWrap input[type=submit]:hover {
+	background-position: 0 -32px;
+}

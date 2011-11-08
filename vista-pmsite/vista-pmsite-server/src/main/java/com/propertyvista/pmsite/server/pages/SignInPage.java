@@ -18,6 +18,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -26,12 +28,20 @@ import com.propertyvista.pmsite.server.panels.SignInPanel;
 public final class SignInPage extends BasePage {
     private static final long serialVersionUID = 1L;
 
+    private static final I18n i18n = I18n.get(SignInPage.class);
+
     public SignInPage() {
         this(null);
     }
 
     public SignInPage(final PageParameters parameters) {
+        super(parameters);
         add(new SignInPanel("signInPanel"));
+    }
+
+    @Override
+    public String getLocalizedPageTitle() {
+        return i18n.tr("Sign In");
     }
 
     @Override

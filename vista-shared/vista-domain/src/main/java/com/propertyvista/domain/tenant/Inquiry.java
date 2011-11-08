@@ -19,6 +19,8 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
@@ -27,6 +29,42 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public interface Inquiry extends IEntity {
+
+    @I18n
+    public enum Title {
+        Mr, Mrs, Ms, Miss;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    public enum LeaseTerm {
+        mon6(6), mon12(12), mon18(18);
+
+        private static final com.pyx4j.i18n.shared.I18n i18n = com.pyx4j.i18n.shared.I18n.get(Inquiry.LeaseTerm.class);
+
+        private final int term;
+
+        private LeaseTerm(int months) {
+            term = months;
+        }
+
+        private int rightOrdinal() {
+            return (LeaseTerm.values().length - this.ordinal() - 1);
+        }
+
+        public int getTerm() {
+            return term;
+        }
+
+        @Override
+        public String toString() {
+            String format = "{0} months{1,choice,0# or longer|0<}";
+            return i18n.tr(format, term, rightOrdinal());
+        }
+    }
 
     @ToString(index = 0)
     Name name();

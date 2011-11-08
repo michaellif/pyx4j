@@ -24,6 +24,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.visit.IVisit;
@@ -56,7 +57,6 @@ public abstract class BasePage extends WebPage {
 
     public BasePage() {
         this(null);
-
     }
 
     public BasePage(PageParameters parameters) {
@@ -64,6 +64,10 @@ public abstract class BasePage extends WebPage {
         add(new LocalizedHtmlTag("localizedHtml"));
         add(new HeaderPanel());
         add(new FooterPanel());
+    }
+
+    public String getLocalizedPageTitle() {
+        return null;
     }
 
     @Override
@@ -82,6 +86,15 @@ public abstract class BasePage extends WebPage {
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
+
+        String title = getLocalizedPageTitle();
+        if (title != null && title.trim().length() > 0) {
+            title = " - " + title;
+        } else {
+            title = "";
+        }
+        PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
+        add(new Label("pageTitle", req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
 
         if (ApplicationMode.isDevelopment()) {
             checkIfPageStateless(this);

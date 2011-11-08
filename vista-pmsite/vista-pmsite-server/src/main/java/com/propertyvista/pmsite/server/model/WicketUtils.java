@@ -73,12 +73,22 @@ public class WicketUtils {
     public static class DropDownList<T> extends DropDownChoice<T> {
         private static final long serialVersionUID = 1L;
 
-        final boolean useDefault;
+        private boolean useDefault;
 
-        final boolean useKeys;
+        private boolean useKeys;
 
         public DropDownList(String id, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
-            super(id, choices, new IChoiceRenderer<T>() {
+            super(id, choices);
+            init(useDefault, useKeys);
+        }
+
+        public DropDownList(String id, IModel<T> model, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
+            super(id, model, choices);
+            init(useDefault, useKeys);
+        }
+
+        private void init(final boolean useKeys, final boolean useDefault) {
+            setChoiceRenderer(new IChoiceRenderer<T>() {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -90,7 +100,6 @@ public class WicketUtils {
                 public String getIdValue(T param, int paramInt) {
                     return useKeys ? String.valueOf(paramInt) : getDisplayValue(param);
                 }
-
             });
             this.useDefault = useDefault;
             this.useKeys = useKeys;

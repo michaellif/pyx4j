@@ -19,6 +19,8 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 import templates.TemplateResources;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -29,10 +31,17 @@ public class ResidentsPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
 
+    private static final I18n i18n = I18n.get(ResidentsPage.class);
+
     public ResidentsPage() {
         super();
 
         add(new GwtInclude("gwtInclude"));
+    }
+
+    @Override
+    public String getLocalizedPageTitle() {
+        return i18n.tr("Residents");
     }
 
     @Override
