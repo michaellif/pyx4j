@@ -48,6 +48,8 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().unitRent()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().marketRent()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.availableForRent()));
     }
 
     @Override
@@ -66,5 +68,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().unitRent()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().marketRent()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.availableForRent()));
     }
 }
