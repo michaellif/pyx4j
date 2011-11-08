@@ -315,8 +315,8 @@ public class VistaCrmTheme extends VistaTheme {
         // Toggle Button
         buttonEx = Selector.valueOf("gwt-ToggleButton");
         style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
+        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColors.foreground, 0.8);
         style.addProperty("border-width", "0px");
         style.addProperty("border-style", "solid");
         style.addProperty("margin", "0.2em 0.2em");
