@@ -32,18 +32,32 @@
 	padding: 0 10px 0 35px;
 }
 
-.vista-pmsite-staticPage .secondaryNavig ul li.active {
-	background: url("images/template2/menu_active.png") no-repeat left center;
-}
+
 
 .vista-pmsite-staticPage .secondaryNavig ul li a {
-	color: ${foreground_100};
-}
-
-.vista-pmsite-staticPage .secondaryNavig ul li a:hover {
-	color: ${contrast2_100};
+	color: ${object2_100};
 	text-decoration: none;
 }
+
+
+.vista-pmsite-staticPage .secondaryNavig ul li.active a {
+	color: ${object2_100};
+}
+
+
+/*.vista-pmsite-staticPage .secondaryNavig ul li a:hover {
+	color: ${object2_100};
+	text-decoration: none;
+}*/
+
+.vista-pmsite-staticPage .secondaryNavig ul li.a:hover span {
+	border-bottom:1px solid ${object2_100};
+}
+
+.vista-pmsite-staticPage .secondaryNavig ul li.active span {
+	border-bottom:2px solid ${object2_100};
+}
+
 
 .vista-pmsite-staticPage .content {
 	min-height: 396px;
