@@ -89,7 +89,7 @@ public class AptDetailsPage extends BasePage {
         Double minPrice = null, maxPrice = null;
         for (Floorplan fp : fpUnits.keySet()) {
             for (AptUnit u : fpUnits.get(fp)) {
-                Double _prc = u.financial().unitRent().getValue();
+                Double _prc = u.financial().marketRent().getValue();
                 if (minPrice == null || minPrice > _prc) {
                     minPrice = _prc;
                 }
