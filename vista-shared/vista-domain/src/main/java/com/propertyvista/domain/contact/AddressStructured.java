@@ -50,6 +50,8 @@ public interface AddressStructured extends IEntity {
 
         avenue,
 
+        alley,
+
         boulevard,
 
         road,
@@ -58,7 +60,11 @@ public interface AddressStructured extends IEntity {
 
         court,
 
+        circle,
+
         crescent,
+
+        grove,
 
         way,
 
