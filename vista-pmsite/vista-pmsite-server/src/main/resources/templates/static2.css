@@ -50,11 +50,11 @@
 	text-decoration: none;
 }*/
 
-.vista-pmsite-staticPage .secondaryNavig ul li.a:hover span {
+.vista-pmsite-staticPage .secondaryNavig ul li a:hover span {
 	border-bottom:1px solid ${object2_100};
 }
 
-.vista-pmsite-staticPage .secondaryNavig ul li.active span {
+.vista-pmsite-staticPage .secondaryNavig ul li.active a span {
 	border-bottom:2px solid ${object2_100};
 }
 
