@@ -39,6 +39,7 @@ import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
@@ -87,8 +88,8 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             }
             NamespaceManager.setNamespace(pmc.dnsName().getValue());
 
-            String imagesBaseFolder = "data";
-            //imagesBaseFolder = "M:\\stuff\\vista\\prod";
+            MediaConfig mediaConfig = new MediaConfig();
+            mediaConfig.baseFolder = "data";
 
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
             process.status().setProgress(0);
@@ -98,7 +99,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             if (!importDTO.type().getValue().equals(PmcImportDTO.ImportType.updateUnitAvailability)) {
                 List<String> messages = new Vector<String>();
                 for (BuildingIO building : importIO.buildings()) {
-                    messages.addAll(new BuildingImporter().verify(building, imagesBaseFolder));
+                    messages.addAll(new BuildingImporter().verify(building, mediaConfig));
                     count++;
                     process.status().setProgress(count);
                 }
@@ -111,6 +112,8 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
                 process.status().setProgress(0);
             }
 
+            mediaConfig.ignoreMissingMedia = importDTO.ignoreMissingMedia().isBooleanTrue();
+
             count = 0;
             SharedGeoLocator.setMode(Mode.updateCache);
             ImportCounters counters = new ImportCounters();
@@ -118,13 +121,13 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
                 log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.propertyCode().getValue());
                 switch (importDTO.type().getValue()) {
                 case newData:
-                    counters.add(new BuildingImporter().persist(building, imagesBaseFolder, importDTO.ignoreMissingMedia().isBooleanTrue()));
+                    counters.add(new BuildingImporter().persist(building, mediaConfig));
                     break;
                 case updateUnitAvailability:
-                    counters.add(new BuildingUpdater().updateUnitAvailability(building, imagesBaseFolder));
+                    counters.add(new BuildingUpdater().updateUnitAvailability(building, mediaConfig));
                     break;
                 case updateData:
-                    counters.add(new BuildingUpdater().updateData(building, imagesBaseFolder, importDTO.ignoreMissingMedia().isBooleanTrue()));
+                    counters.add(new BuildingUpdater().updateData(building, mediaConfig));
                     break;
                 }
                 count++;

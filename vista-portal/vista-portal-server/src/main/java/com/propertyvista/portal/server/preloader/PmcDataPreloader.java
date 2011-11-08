@@ -27,6 +27,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -52,12 +53,16 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         if (data != null) {
-            String imagesBaseFolder = "data";
+            MediaConfig mediaConfig = new MediaConfig();
+            mediaConfig.baseFolder = "data";
+            mediaConfig.ignoreMissingMedia = true;
+            mediaConfig.mimizePreloadDataSize = true;
+
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new StringReader(data)));
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
                 //counters.add(new BuildingImporter().persist(building, imagesBaseFolder, true));
-                counters.add(new BuildingUpdater().updateData(building, imagesBaseFolder, true));
+                counters.add(new BuildingUpdater().updateData(building, mediaConfig));
 
                 if ((config().minimizePreloadTime) && (counters.buildings > config().getNumResidentialBuildings())) {
                     break;

@@ -36,14 +36,16 @@ import com.propertyvista.interfaces.importer.converter.BuildingAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.converter.ParkingConverter;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingRetriever {
 
-    public BuildingIO getModel(Building building, String imagesBaseFolder) {
+    public BuildingIO getModel(Building building, MediaConfig mediaConfig) {
 
         if (building.contacts().contacts().getMeta().isDetached()) {
             Persistence.service().retrieve(building.contacts().contacts());
@@ -76,7 +78,7 @@ public class BuildingRetriever {
 
         Persistence.service().retrieve(building.media());
         for (Media media : building.media()) {
-            buildingIO.medias().add(new MediaConverter(imagesBaseFolder).createDTO(media));
+            buildingIO.medias().add(new MediaConverter(mediaConfig, ImageTarget.Building).createDTO(media));
         }
 
         //TODO
@@ -109,7 +111,7 @@ public class BuildingRetriever {
 
             Persistence.service().retrieve(floorplan.media());
             for (Media media : floorplan.media()) {
-                floorplanIO.medias().add(new MediaConverter(imagesBaseFolder).createDTO(media));
+                floorplanIO.medias().add(new MediaConverter(mediaConfig, ImageTarget.Floorplan).createDTO(media));
             }
 
         }

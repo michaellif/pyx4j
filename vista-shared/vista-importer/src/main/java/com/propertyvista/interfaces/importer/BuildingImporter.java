@@ -32,12 +32,14 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanAmenityConverter;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.model.AmenityIO;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingImporter extends ImportPersister {
 
@@ -45,7 +47,7 @@ public class BuildingImporter extends ImportPersister {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingImporter.class);
 
-    public List<String> verify(BuildingIO buildingIO, String imagesBaseFolder) {
+    public List<String> verify(BuildingIO buildingIO, MediaConfig mediaConfig) {
         List<String> messages = new Vector<String>();
         // Set defaults
         if (buildingIO.type().isNull()) {
@@ -59,7 +61,7 @@ public class BuildingImporter extends ImportPersister {
         // Media
         {
             for (MediaIO iIO : buildingIO.medias()) {
-                String m = new MediaConverter(imagesBaseFolder).verify(iIO);
+                String m = new MediaConverter(mediaConfig, ImageTarget.Building).verify(iIO);
                 if (m != null) {
                     messages.add("Building '" + buildingIO.propertyCode().getValue() + "' " + m);
                 }
@@ -76,7 +78,7 @@ public class BuildingImporter extends ImportPersister {
                 // Media
                 {
                     for (MediaIO iIO : floorplanIO.medias()) {
-                        String m = new MediaConverter(imagesBaseFolder).verify(iIO);
+                        String m = new MediaConverter(mediaConfig, ImageTarget.Floorplan).verify(iIO);
                         if (m != null) {
                             messages.add("Floorplan '" + floorplanIO.name().getValue() + "' in building '" + buildingIO.propertyCode().getValue() + "' " + m);
                         }
@@ -84,7 +86,6 @@ public class BuildingImporter extends ImportPersister {
                 }
                 //Units
                 {
-                    List<AptUnit> items = new Vector<AptUnit>();
                     for (AptUnitIO iIO : floorplanIO.units()) {
                         if (iIO.number().isNull()) {
                             messages.add("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '" + buildingIO.propertyCode().getValue()
@@ -98,7 +99,7 @@ public class BuildingImporter extends ImportPersister {
         return messages;
     }
 
-    public ImportCounters persist(BuildingIO buildingIO, String imagesBaseFolder, boolean ignoreMissingMedia) {
+    public ImportCounters persist(BuildingIO buildingIO, MediaConfig mediaConfig) {
 
         ImportCounters counters = new ImportCounters();
         counters.buildings++;
@@ -121,12 +122,12 @@ public class BuildingImporter extends ImportPersister {
         }
 
         // Save building
-        Building building = createBuilding(buildingIO, imagesBaseFolder, ignoreMissingMedia);
+        Building building = createBuilding(buildingIO, mediaConfig);
 
         //Floorplan
         {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
-                Floorplan floorplan = createFloorplan(floorplanIO, building, imagesBaseFolder, ignoreMissingMedia);
+                Floorplan floorplan = createFloorplan(floorplanIO, building, mediaConfig);
 
                 counters.floorplans += 1;
 

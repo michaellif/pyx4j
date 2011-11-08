@@ -42,6 +42,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.BuildingRetriever;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
 
@@ -56,9 +57,12 @@ public class ExportDownloadServlet extends HttpServlet {
         SecurityController.assertBehavior(VistaBehavior.ADMIN);
 
         log.debug("download export");
-        String imagesBaseFolder = "data/export/images/";
+
+        MediaConfig mediaConfig = new MediaConfig();
+        mediaConfig.baseFolder = "data/export/images/";
+
         if ("false".equals(request.getParameter("images"))) {
-            imagesBaseFolder = null;
+            mediaConfig.baseFolder = null;
         }
 
         byte[] data;
@@ -68,7 +72,7 @@ public class ExportDownloadServlet extends HttpServlet {
             List<Building> buildings = Persistence.service().query(buildingCriteria);
             for (Building building : buildings) {
                 try {
-                    importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));
+                    importIO.buildings().add(new BuildingRetriever().getModel(building, mediaConfig));
                 } catch (Throwable t) {
                     log.error("Error converting building {}", building, t);
                     throw t;

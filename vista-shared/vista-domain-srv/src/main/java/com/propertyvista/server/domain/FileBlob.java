@@ -25,11 +25,10 @@ import com.pyx4j.i18n.annotations.I18n;
 /**
  * This file would be stored in file system or in database.
  * 
- * @deprecated DO Not use directly! @see com.propertyvista.server.common.blob.BlobService
+ * DO Not use directly! @see com.propertyvista.server.common.blob.BlobService
  * 
  */
 @RpcTransient
-@Deprecated
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface FileBlob extends IEntity {
 

@@ -25,6 +25,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
@@ -42,12 +43,15 @@ public class BuildingImport {
 
         //fileName = "all-buildings-example.xml";
         fileName = "buildings.xml";
-        String imagesBaseFolder = "data/export/images/";
+
+        MediaConfig mediaConfig = new MediaConfig();
+        mediaConfig.baseFolder = "data/export/images/";
+        mediaConfig.ignoreMissingMedia = true;
 
         ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new FileReader(new File(fileName))));
 
         for (BuildingIO building : importIO.buildings()) {
-            new BuildingImporter().persist(building, imagesBaseFolder, true);
+            new BuildingImporter().persist(building, mediaConfig);
         }
 
         log.info("Total time {} msec", TimeUtils.since(start));

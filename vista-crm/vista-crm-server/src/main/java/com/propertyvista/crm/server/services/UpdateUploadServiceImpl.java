@@ -34,6 +34,7 @@ import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
@@ -68,17 +69,19 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
     }
 
     private static void runImport(UploadData data, UploadDeferredProcess process, UploadResponse response) {
-        String imagesBaseFolder = "data/export/images/";
 
         ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
         process.status().setProgress(0);
         process.status().setProgressMaximum(importIO.buildings().size());
 
+        MediaConfig mediaConfig = new MediaConfig();
+        mediaConfig.baseFolder = "data/export/images/";
+
         int count = 0;
         ImportCounters counters = new ImportCounters();
         for (BuildingIO building : importIO.buildings()) {
             log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.propertyCode().getValue());
-            counters.add(new BuildingUpdater().updateUnitAvailability(building, imagesBaseFolder));
+            counters.add(new BuildingUpdater().updateUnitAvailability(building, mediaConfig));
             count++;
             process.status().setProgress(count);
         }

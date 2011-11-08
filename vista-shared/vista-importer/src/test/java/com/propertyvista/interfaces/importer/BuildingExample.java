@@ -35,6 +35,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.CreateModelXML;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
@@ -49,7 +50,9 @@ public class BuildingExample {
 
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
-        String imagesBaseFolder = "data/export/images/";
+
+        MediaConfig mediaConfig = new MediaConfig();
+        mediaConfig.baseFolder = "data/export/images/";
 
         ImportIO importIO = EntityFactory.create(ImportIO.class);
 
@@ -58,7 +61,7 @@ public class BuildingExample {
         List<Building> buildings = Persistence.service().query(buildingCriteria);
 
         for (Building building : buildings) {
-            importIO.buildings().add(new BuildingRetriever().getModel(building, imagesBaseFolder));
+            importIO.buildings().add(new BuildingRetriever().getModel(building, mediaConfig));
         }
 
         File f = new File("all-buildings-example.xml");

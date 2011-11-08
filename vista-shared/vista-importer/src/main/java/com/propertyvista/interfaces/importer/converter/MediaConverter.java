@@ -19,10 +19,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -37,28 +44,24 @@ import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
+import com.propertyvista.server.domain.ThumbnailBlob;
 
 public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
+    private final static Logger log = LoggerFactory.getLogger(MediaConverter.class);
+
     private static I18n i18n = I18n.get(MediaConverter.class);
 
-    private final String baseFolder;
-
-    private static Collection<String> extensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
-
-    private final boolean ignoreMissingMedia;
+    private final MediaConfig mediaConfig;
 
     private final ImageTarget imageTarget;
 
-    public MediaConverter(String baseFolder, boolean ignoreMissingMedia, ImageTarget imageTarget) {
-        super(Media.class, MediaIO.class, false);
-        this.baseFolder = baseFolder;
-        this.ignoreMissingMedia = ignoreMissingMedia;
-        this.imageTarget = imageTarget;
-    }
+    private static Collection<String> extensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
 
-    public MediaConverter(String baseFolder) {
-        this(baseFolder, false, ImageTarget.Building);
+    public MediaConverter(MediaConfig mediaConfig, ImageTarget imageTarget) {
+        super(Media.class, MediaIO.class, false);
+        this.mediaConfig = mediaConfig;
+        this.imageTarget = imageTarget;
     }
 
     @Override
@@ -73,10 +76,10 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         switch (dbo.type().getValue()) {
         case file:
             dto.mediaType().setValue(MediaIO.MediaType.file);
-            if (baseFolder != null) {
+            if (mediaConfig.baseFolder != null) {
                 dto.uri().setValue(dbo.file().blobKey().getStringView() + "-" + dbo.file().filename().getStringView());
                 try {
-                    BlobService.save(dbo.file().blobKey().getValue(), new File(baseFolder + dto.uri().getValue()));
+                    BlobService.save(dbo.file().blobKey().getValue(), new File(mediaConfig.baseFolder + dto.uri().getValue()));
                 } catch (IOException e) {
                     throw new Error(e);
                 }
@@ -101,7 +104,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         }
         switch (dto.mediaType().getValue()) {
         case file:
-            File file = new File(new File(baseFolder), dto.uri().getValue());
+            File file = new File(new File(mediaConfig.baseFolder), dto.uri().getValue());
             if (!file.exists()) {
                 file = FileIOUtils.findFileIgnoreCase(file);
                 if (!file.exists()) {
@@ -119,11 +122,14 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         return null;
     }
 
+    //This is shared between created PMCs
+    private static Map<String, ThumbnailBlob> resized = new HashMap<String, ThumbnailBlob>();
+
     @Override
     public void copyDTOtoDBO(MediaIO dto, Media dbo) {
         super.copyDTOtoDBO(dto, dbo);
         if (dto.mediaType().isNull()) {
-            if (ignoreMissingMedia) {
+            if (mediaConfig.ignoreMissingMedia) {
                 return;
             } else {
                 throw new UserRuntimeException(i18n.tr("Media type is empty"));
@@ -132,11 +138,11 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
         switch (dto.mediaType().getValue()) {
         case file:
             dbo.type().setValue(Media.Type.file);
-            File file = new File(new File(baseFolder), dto.uri().getValue());
+            File file = new File(new File(mediaConfig.baseFolder), dto.uri().getValue());
             if (!file.exists()) {
                 file = FileIOUtils.findFileIgnoreCase(file);
                 if (!file.exists()) {
-                    if (ignoreMissingMedia) {
+                    if (mediaConfig.ignoreMissingMedia) {
                         return;
                     } else {
                         throw new UserRuntimeException(i18n.tr("Media file not found ''{0}''", dto.uri().getValue()));
@@ -148,20 +154,41 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                 extension = extension.toLowerCase(Locale.ENGLISH);
             }
             if (!extensions.contains(extension)) {
-                if (ignoreMissingMedia) {
+                if (mediaConfig.ignoreMissingMedia) {
                     return;
                 } else {
                     throw new UserRuntimeException(i18n.tr("Unsupported Media file ''{0}'' extension ''{1}''", dto.uri().getValue(), extension));
                 }
             }
             dbo.file().filename().setValue(file.getName());
+            dbo.file().fileSize().setValue(Long.valueOf(file.length()).intValue());
             dbo.file().contentMimeType().setValue(MimeMap.getContentType(extension));
             dbo.file().timestamp().setValue(System.currentTimeMillis());
-            byte raw[] = getBinary(file);
-            dbo.file().fileSize().setValue(raw.length);
 
-            dbo.file().blobKey().setValue(BlobService.persist(raw, dbo.file().filename().getValue(), dbo.file().contentMimeType().getValue()));
-            ThumbnailService.persist(dbo.file().blobKey().getValue(), file.getName(), raw, imageTarget);
+            if (!mediaConfig.mimizePreloadDataSize) {
+                byte raw[] = getBinary(file);
+                dbo.file().blobKey().setValue(BlobService.persist(raw, dbo.file().filename().getValue(), dbo.file().contentMimeType().getValue()));
+                ThumbnailService.persist(dbo.file().blobKey().getValue(), file.getName(), raw, imageTarget);
+            } else {
+                String uniqueName = MediaConverter.class.getName() + imageTarget + file.getAbsolutePath().toLowerCase(Locale.ENGLISH);
+                Key blobKey = CacheService.get(uniqueName);
+                if (blobKey == null) {
+                    byte raw[] = getBinary(file);
+                    blobKey = BlobService.persist(raw, dbo.file().filename().getValue(), dbo.file().contentMimeType().getValue());
+                    CacheService.put(uniqueName, blobKey);
+                    ThumbnailBlob thumbnailBlob = resized.get(uniqueName);
+                    if (thumbnailBlob == null) {
+                        thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.file().filename().getValue(), raw, imageTarget);
+                        resized.put(uniqueName, thumbnailBlob);
+                        log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.file().filename().getValue(), resized.size());
+                    } else {
+                        thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
+                    }
+                    thumbnailBlob.setPrimaryKey(blobKey);
+                    Persistence.service().persist(thumbnailBlob);
+                }
+                dbo.file().blobKey().setValue(blobKey);
+            }
 
             break;
         case externalUrl:

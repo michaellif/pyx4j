@@ -30,6 +30,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
+import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
@@ -42,7 +43,7 @@ public class BuildingUpdater extends ImportPersister {
 
     private static I18n i18n = I18n.get(BuildingUpdater.class);
 
-    public ImportCounters updateUnitAvailability(BuildingIO buildingIO, String imagesBaseFolder) {
+    public ImportCounters updateUnitAvailability(BuildingIO buildingIO, MediaConfig mediaConfig) {
         ImportCounters counters = new ImportCounters();
         Building building;
         {
@@ -109,7 +110,7 @@ public class BuildingUpdater extends ImportPersister {
         return counters;
     }
 
-    public ImportCounters updateData(BuildingIO buildingIO, String imagesBaseFolder, boolean ignoreMissingMedia) {
+    public ImportCounters updateData(BuildingIO buildingIO, MediaConfig mediaConfig) {
         if (buildingIO.propertyCode().isNull()) {
             throw new UserRuntimeException("propertyCode can't be empty");
         }
@@ -122,7 +123,7 @@ public class BuildingUpdater extends ImportPersister {
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
                 buildingIsNew = true;
-                building = createBuilding(buildingIO, imagesBaseFolder, ignoreMissingMedia);
+                building = createBuilding(buildingIO, mediaConfig);
                 counters.buildings += 1;
                 log.debug("created building {}", buildingIO.propertyCode().getValue());
             } else if (buildings.size() > 1) {
@@ -172,7 +173,7 @@ public class BuildingUpdater extends ImportPersister {
             if (floorplan == null) {
                 floorplanIsNew = true;
                 floorplanUpdated = true;
-                floorplan = createFloorplan(floorplanIO, building, imagesBaseFolder, ignoreMissingMedia);
+                floorplan = createFloorplan(floorplanIO, building, mediaConfig);
             } else {
                 floorplanUpdated = new FloorplanConverter().updateDBO(floorplanIO, floorplan);
             }
