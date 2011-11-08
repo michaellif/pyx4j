@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -145,18 +149,18 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
                 populate(EntityFactory.create(UnitVacancyReportSummaryDTO.class));
                 return;
             }
-//            service.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    reportError(caught);
-//                }
-//
-//                @Override
-//                public void onSuccess(UnitVacancyReportSummaryDTO result) {
-//                    populate(result);
-//                }
-//            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo());
+            service.summary(new AsyncCallback<UnitVacancyReportSummaryDTO>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    reportError(caught);
+                }
+
+                @Override
+                public void onSuccess(UnitVacancyReportSummaryDTO result) {
+                    populate(result);
+                }
+            }, new Vector<Key>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo());
         }
     }
 }

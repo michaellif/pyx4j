@@ -69,12 +69,15 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             }
 
             criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, to));
+            // use descending order of the status date in order to select the most recent statuses first
             criteria.desc(criteria.proto().statusDate().getPath().toString());
             List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
 
-            PriorityQueue<UnitAvailabilityStatusDTO> queue = new PriorityQueue<UnitAvailabilityStatusDTO>(unfiltered.size(), getTransientPropertySortEngine()
-                    .getComparator(transientSortCriteria));
-            //PriorityQueue<UnitAvailabilityStatusDTO> queue = new PriorityQueue<UnitAvailabilityStatusDTO>(unfiltered.size());
+            // +1 is for the times when size() == 0 since it's an illegal argument
+            PriorityQueue<UnitAvailabilityStatusDTO> queue = new PriorityQueue<UnitAvailabilityStatusDTO>(unfiltered.size() + 1,
+                    getTransientPropertySortEngine().getComparator(transientSortCriteria));
+
+            // we use hash map to filter only unit statuses for the requested date 
             HashSet<Key> addedUnits = new HashSet<Key>(unfiltered.size());
 
             for (UnitAvailabilityStatus unitStatus : unfiltered) {
@@ -132,35 +135,34 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     private static boolean isAcceptable(UnitAvailabilityStatusDTO unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice,
             boolean displayRented, boolean displayNotRented) {
 
-//        VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
-//        RentedStatus rentedStatus = unit.rentedStatus().getValue();
-//
-//        return (displayOccupied & vacancyStatus == null) //
-//                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
-//                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
+        VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
+        RentedStatus rentedStatus = unit.rentedStatus().getValue();
 
-        return true;
+        return (displayOccupied & vacancyStatus == null) //
+                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
+                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
+
     }
 
     @Override
-    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<String> buildings, LogicalDate fromDate, LogicalDate toDate) {
+    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate fromDate, LogicalDate toDate) {
         if (buildings == null | fromDate == null | toDate == null) {
             callback.onFailure(new Error("one of the required arguments was not set."));
             return;
         }
 
-        EntityQueryCriteria<UnitAvailabilityStatusDTO> criteria = new EntityQueryCriteria<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         if (!buildings.isEmpty()) {
-            // TODO dependency injection check for buildings if they are still represented as strings or ask if that check performed on more deeper level
-//            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
-        }
 
-        List<UnitAvailabilityStatusDTO> units = Persistence.service().query(criteria);
+            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
+        }
+        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
+        // use descending order of the status date in order to select the most recent statuses first
+        criteria.desc(criteria.proto().statusDate().getPath().toString());
+
+        List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);
 
         UnitVacancyReportSummaryDTO summary = EntityFactory.create(UnitVacancyReportSummaryDTO.class);
-
-        long fromTime = fromDate.getTime();
-        long toTime = toDate.getTime();
 
         int total = 0;
 
@@ -174,9 +176,20 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         int netExposure = 0;
 
-        for (UnitAvailabilityStatusDTO unit : units) {
+        // use hash to mark units, since we need only the last date
+        HashSet<Key> checkedUnits = new HashSet<Key>(unitStatuses.size());
+
+        for (UnitAvailabilityStatus unitStatus : unitStatuses) {
+            Key unitPK = unitStatus.belongsTo().getPrimaryKey();
+
+            if (checkedUnits.contains(unitPK)) {
+                continue;
+            } else {
+                checkedUnits.add(unitPK);
+            }
+
             ++total;
-            VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
+            VacancyStatus vacancyStatus = unitStatus.vacancyStatus().getValue();
 
             // check that we have vacancy status, and don't waste the cpu cycles if we don't have it            
             if (vacancyStatus == null)
@@ -184,15 +197,12 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
             if (VacancyStatus.Vacant.equals(vacancyStatus)) {
                 ++vacant;
-                if (isRevenueLost(unit)) {
-                    computeDaysVacantAndRevenueLost(unit, fromTime, toTime);
-                }
-                if (RentedStatus.Rented.equals(unit.rentedStatus().getValue())) {
+                if (RentedStatus.Rented.equals(unitStatus.rentedStatus().getValue())) {
                     ++vacantRented;
                 }
             } else if (VacancyStatus.Notice.equals(vacancyStatus)) {
                 ++notice;
-                if (RentedStatus.Rented.equals(unit.rentedStatus().getValue())) {
+                if (RentedStatus.Rented.equals(unitStatus.rentedStatus().getValue())) {
                     ++noticeRented;
                 }
             }
@@ -214,7 +224,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         netExposure = vacant + notice - (vacantRented + noticeRented);
         summary.netExposureAbsolute().setValue(netExposure);
-        summary.netExposureRelative().setValue(netExposure / (double) total);
+        summary.netExposureRelative().setValue(netExposure / (double) total * 100);
         callback.onSuccess(summary);
     }
 
