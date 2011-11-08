@@ -237,11 +237,11 @@
 }
 
 .promoBox a .picture {
-	border:1px solid ${background_100};
+	border:1px solid ${object1_100};
 }
 
 .promoBox a:hover .picture {
-	border:1px solid ${contrast2_100};
+	border:1px solid ${object2_100};
 }
 
 

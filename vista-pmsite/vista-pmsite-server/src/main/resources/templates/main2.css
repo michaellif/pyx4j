@@ -60,7 +60,7 @@ input,select,textarea {
 }
 
 a {
-	color: ${contrast2_100};
+	color: ${object2_100};
 	outline: medium none;
 	text-decoration: none;
 }
