@@ -78,17 +78,7 @@ public class WicketUtils {
         private boolean useKeys;
 
         public DropDownList(String id, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
-            super(id, choices);
-            init(useDefault, useKeys);
-        }
-
-        public DropDownList(String id, IModel<T> model, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
-            super(id, model, choices);
-            init(useDefault, useKeys);
-        }
-
-        private void init(final boolean useKeys, final boolean useDefault) {
-            setChoiceRenderer(new IChoiceRenderer<T>() {
+            super(id, choices, new IChoiceRenderer<T>() {
                 private static final long serialVersionUID = 1L;
 
                 @Override
