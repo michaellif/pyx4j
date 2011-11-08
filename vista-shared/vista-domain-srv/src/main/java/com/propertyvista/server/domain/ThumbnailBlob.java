@@ -35,6 +35,9 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface ThumbnailBlob extends IEntity {
 
     @Length(32 * 1024)
+    IPrimitive<byte[]> xsmall();
+
+    @Length(32 * 1024)
     IPrimitive<byte[]> small();
 
     @Length(64 * 1024)

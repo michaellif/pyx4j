@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.ThumpnailRescaleOp;
 
 import com.pyx4j.commons.Key;
@@ -44,7 +43,6 @@ import com.propertyvista.server.domain.ThumbnailBlob;
 /**
  * Simple DB base Blob storage abstraction for future refactoring.
  */
-@SuppressWarnings("deprecation")
 public class ThumbnailService {
 
     private final static Logger log = LoggerFactory.getLogger(ThumbnailService.class);
@@ -54,10 +52,12 @@ public class ThumbnailService {
     public static void persist(Key key, String fileName, byte[] originalContent, ImageTarget imageTarget) {
         switch (imageTarget) {
         case Building:
-            ThumbnailService.persist(key, fileName, originalContent, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+            ThumbnailService.persist(key, fileName, originalContent, ImageConsts.BUILDING_XSMALL, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
+                    ImageConsts.BUILDING_LARGE);
             break;
         case Floorplan:
-            ThumbnailService.persist(key, fileName, originalContent, ImageConsts.FLOORPLAN_SMALL, ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
+            ThumbnailService.persist(key, fileName, originalContent, null, ImageConsts.FLOORPLAN_SMALL, ImageConsts.FLOORPLAN_MEDIUM,
+                    ImageConsts.FLOORPLAN_LARGE);
             break;
         default:
             throw new IllegalArgumentException();
@@ -67,21 +67,23 @@ public class ThumbnailService {
     public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, ImageTarget imageTarget) {
         switch (imageTarget) {
         case Building:
-            return createThumbnailBlob(fileName, originalContent, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+            return createThumbnailBlob(fileName, originalContent, ImageConsts.BUILDING_XSMALL, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
+                    ImageConsts.BUILDING_LARGE);
         case Floorplan:
-            return createThumbnailBlob(fileName, originalContent, ImageConsts.FLOORPLAN_SMALL, ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
+            return createThumbnailBlob(fileName, originalContent, null, ImageConsts.FLOORPLAN_SMALL, ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
         default:
             throw new IllegalArgumentException();
         }
     }
 
-    public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
+    public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, Dimension xsmall, Dimension small, Dimension medum, Dimension large) {
         ThumbnailBlob blob = EntityFactory.create(ThumbnailBlob.class);
         try {
             BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(originalContent));
             if (inputImage == null) {
                 throw new UserRuntimeException(i18n.tr("Unable to read the image ''{0}''", fileName));
             }
+            blob.xsmall().setValue(resample(inputImage, xsmall));
             blob.small().setValue(resample(inputImage, small));
             blob.medium().setValue(resample(inputImage, medum));
             blob.large().setValue(resample(inputImage, large));
@@ -92,8 +94,8 @@ public class ThumbnailService {
         return blob;
     }
 
-    public static void persist(Key key, String fileName, byte[] originalContent, Dimension small, Dimension medum, Dimension large) {
-        ThumbnailBlob blob = createThumbnailBlob(fileName, originalContent, small, medum, large);
+    public static void persist(Key key, String fileName, byte[] originalContent, Dimension xsmall, Dimension small, Dimension medum, Dimension large) {
+        ThumbnailBlob blob = createThumbnailBlob(fileName, originalContent, xsmall, small, medum, large);
         blob.setPrimaryKey(key);
         Persistence.service().persist(blob);
     }
@@ -128,7 +130,7 @@ public class ThumbnailService {
         int clipThumpnailBorders = 1;
         //Resize
         ThumpnailRescaleOp resampleOp = new ThumpnailRescaleOp(dimension.width + 2 * clipThumpnailBorders, dimension.height + 2 * clipThumpnailBorders);
-        resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
+        //resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
         BufferedImage rescaled = resampleOp.filter(image, null);
         if (clipThumpnailBorders != 0) {
             rescaled = rescaled.getSubimage(clipThumpnailBorders, clipThumpnailBorders, rescaled.getWidth() - 2 * clipThumpnailBorders, rescaled.getHeight()
@@ -159,6 +161,9 @@ public class ThumbnailService {
         if (blob != null) {
             byte[] data = null;
             switch (size) {
+            case xsmall:
+                data = blob.xsmall().getValue();
+                break;
             case small:
                 data = blob.small().getValue();
                 break;

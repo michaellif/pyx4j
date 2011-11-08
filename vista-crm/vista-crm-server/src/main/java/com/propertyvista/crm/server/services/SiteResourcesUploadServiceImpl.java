@@ -27,9 +27,7 @@ import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 
 import com.propertyvista.crm.rpc.services.SiteResourcesUploadService;
-import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.server.common.blob.BlobService;
-import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity> implements SiteResourcesUploadService {
 
@@ -47,7 +45,6 @@ public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity> i
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
-        ThumbnailService.persist(blobKey, response.fileName, data.data, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
         response.uploadKey = blobKey;
         return ProcessingStatus.completed;
     }
