@@ -21,7 +21,7 @@ import com.pyx4j.site.shared.Dimension;
 public interface ImageConsts {
 
     public static enum ThumbnailSize implements Serializable {
-        small, medium, large
+        xsmall, small, medium, large
     }
 
     public static enum ImageTarget implements Serializable {
@@ -31,16 +31,18 @@ public interface ImageConsts {
         Floorplan
     }
 
+    public static final Dimension BUILDING_XSMALL = new Dimension(57, 41);
+
     public static final Dimension BUILDING_SMALL = new Dimension(70, 50);
 
-    public static final Dimension BUILDING_MEDIUM = new Dimension(150, 100);
+    public static final Dimension BUILDING_MEDIUM = new Dimension(140, 93);
 
-    public static final Dimension BUILDING_LARGE = new Dimension(300, 200);
+    public static final Dimension BUILDING_LARGE = new Dimension(318, 212);
 
-    public static final Dimension FLOORPLAN_SMALL = new Dimension(70, 70);
+    public static final Dimension FLOORPLAN_SMALL = new Dimension(57, 40);
 
-    public static final Dimension FLOORPLAN_MEDIUM = new Dimension(150, 150);
+    public static final Dimension FLOORPLAN_MEDIUM = new Dimension(80, 80);
 
-    public static final Dimension FLOORPLAN_LARGE = new Dimension(500, 505);
+    public static final Dimension FLOORPLAN_LARGE = new Dimension(318, 321);
 
 }
