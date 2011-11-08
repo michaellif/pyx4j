@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -27,7 +26,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -379,18 +377,18 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
                 setTurnoverAnalysisData(null);
                 return;
             }
-            service.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    reportError(caught);
-                }
-
-                @Override
-                public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
-                    setTurnoverAnalysisData(result);
-                }
-            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo(), scale);
+//            service.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
+//
+//                @Override
+//                public void onFailure(Throwable caught) {
+//                    reportError(caught);
+//                }
+//
+//                @Override
+//                public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
+//                    setTurnoverAnalysisData(result);
+//                }
+//            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo(), scale);
         }
     }
 

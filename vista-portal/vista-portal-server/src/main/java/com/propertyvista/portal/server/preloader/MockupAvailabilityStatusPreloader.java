@@ -127,6 +127,26 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
                     }
                 }
                 ++statusesCount;
+
+                Persistence.service().retrieve(status.belongsTo());
+                status.unit().setValue(status.belongsTo().info().number().getValue());
+                status.unitRent().setValue(status.belongsTo().financial().unitRent().getValue());
+                status.marketRent().setValue(status.belongsTo().financial().marketRent().getValue());
+
+                Persistence.service().retrieve(status.belongsTo().floorplan());
+                status.floorplanName().setValue(status.belongsTo().floorplan().name().getValue());
+                status.floorplanMarketingName().setValue(status.belongsTo().floorplan().marketingName().getValue());
+
+                Persistence.service().retrieve(status.belongsTo().belongsTo());
+                status.buildingName().setValue(status.belongsTo().belongsTo().info().name().getValue());
+                status.propertyCode().setValue(status.belongsTo().belongsTo().propertyCode().getValue());
+                status.propertyManagerName().setValue(status.belongsTo().belongsTo().propertyManager().name().getValue());
+
+                Persistence.service().retrieve(status.belongsTo().belongsTo().complex());
+                status.complexName().setValue(status.belongsTo().belongsTo().complex().name().getValue());
+
+                //status.owner().setValue(status.belongsTo().belongsTo().info())
+                // TODO fill other things
                 Persistence.service().persist(status);
             } // end of unit status creation loop
 
@@ -151,9 +171,12 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
     private static void moveIn(UnitAvailabilityStatus status) {
         status.statusDate().setValue(status.moveInDay().getValue());
         status.vacancyStatus().setValue(null);
-        status.moveOutDay().setValue(null);
         status.isScoped().setValue(null);
         status.rentReadinessStatus().setValue(null);
+        status.rentedStatus().setValue(null);
+        status.rentedFromDate().setValue(null);
+        status.moveOutDay().setValue(null);
+        status.moveInDay().setValue(null);
     }
 
     private static void scoped(UnitAvailabilityStatus status) {
@@ -186,6 +209,7 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
         }
         if (minRentedTime < maxRentedTime) {
             status.statusDate().setValue((new LogicalDate(rand(minRentedTime, maxRentedTime))));
+            status.rentedFromDate().setValue(status.statusDate().getValue());
             status.rentedStatus().setValue(RentedStatus.Rented);
             LogicalDate moveInDay = new LogicalDate(rand(status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA, MAX_VACANT_TIME));
             status.moveInDay().setValue(moveInDay);

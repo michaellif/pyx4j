@@ -24,6 +24,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -32,9 +33,11 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
@@ -220,7 +223,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReady()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReadinessStatus()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute()),
@@ -390,26 +393,26 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
             }
             UnitSelectionCriteria select = buttonStateToSelectionCriteria();
 
-//            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitVacancyStatusDTO>>() {
-//                @Override
-//                public void onSuccess(EntitySearchResult<UnitVacancyStatusDTO> result) {
-//                    if (pageNumber == 0 | !result.getData().isEmpty()) {
-//                        setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
-//                    } else {
-//                        populateUnitStatusListPage(pageNumber - 1);
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    reportError(caught);
-//                }
-//            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), //
-//                    select.occupied, select.vacant, select.notice, select.rented, select.notrented, filter.getFrom(), //
-//                    filter.getTo(), //
-//                    new Vector<Sort>(getUnitStatusListSortingCriteria()), //
-//                    pageNumber, //
-//                    getPageSize());
+            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>>() {
+                @Override
+                public void onSuccess(EntitySearchResult<UnitAvailabilityStatusDTO> result) {
+                    if (pageNumber == 0 | !result.getData().isEmpty()) {
+                        setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
+                    } else {
+                        populateUnitStatusListPage(pageNumber - 1);
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    reportError(caught);
+                }
+            }, new Vector<Key>(filter.getBuildingsFilteringCriteria()), //
+                    select.occupied, select.vacant, select.notice, select.rented, select.notrented, filter.getFrom(), //
+                    filter.getTo(), //
+                    new Vector<Sort>(getUnitStatusListSortingCriteria()), //
+                    pageNumber, //
+                    getPageSize());
         }
     }
 

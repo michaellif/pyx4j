@@ -13,91 +13,17 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.vacancyreport;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentReadinessStatus;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.VacancyStatus;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 
 @Transient
-public interface UnitAvailabilityStatusDTO extends IEntity {
+public interface UnitAvailabilityStatusDTO extends UnitAvailabilityStatus {
     @Caption(name = "Property")
-    IPrimitive<String> propertyCode();
-
-    IPrimitive<String> buildingName();
-
-    IPrimitive<String> address();
-
-    IPrimitive<String> region();
-
-    IPrimitive<String> owner();
-
-    IPrimitive<String> propertyManagerName();
-
-    IPrimitive<String> complexName();
-
-    /** {@link AptUnit#info()} -> {@link AptUnitInfo#number()} */
-    IPrimitive<String> unit();
-
-    IPrimitive<String> floorplanName();
-
-    IPrimitive<String> floorplanMarketingName();
-
-    @Caption(name = "Vacant/Notice")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<VacancyStatus> vacancyStatus();
-
-    @Caption(name = "Rented/Unrented/OffMarket")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<RentedStatus> rentedStatus();
-
-    @Caption(name = "Scoping")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<Boolean> isScoped();
-
-    @Caption(name = "Physical Condition")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<RentReadinessStatus> rentReady();
-
-    IPrimitive<Double> unitRent();
-
-    IPrimitive<Double> marketRent();
-
-    /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
-    @Caption(name = "Delta, in $")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<Double> rentDeltaAbsolute();
-
-    /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */
-    @Caption(name = "Delta, in %")
-    @Format("#0.00")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<Double> rentDeltaRelative();
-
-    /** {@link AptUnit#availableForRent()} - 1 */
-    @Format("MM/dd/yyyy")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<LogicalDate> moveOutDay();
-
-    /** Applicable only for rented */
-    @Format("MM/dd/yyyy")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<LogicalDate> moveInDay();
-
-    /** Applicable only for rented; maybe different than move out date */
-    @Format("MM/dd/yyyy")
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<LogicalDate> rentedFromDate();
-
     /** For Vacant units numberOfDays between today and availableForRent date */
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Integer> daysVacant();
