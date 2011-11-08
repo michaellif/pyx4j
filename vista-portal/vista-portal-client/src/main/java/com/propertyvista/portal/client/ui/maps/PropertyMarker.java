@@ -179,13 +179,19 @@ public class PropertyMarker extends Marker {
             left.add(imageHolder);
 
             //from price
-            item = new Label(i18n.tr("Starting from"));
-            item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftLabel);
-            left.add(item);
-            item = new Label("$" + property.price().min().getStringView());
-            item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftItem);
-            item.addStyleName("price");
-            left.add(item);
+            if (property.price().min().isNull()) {
+                item = new Label(i18n.tr("Price not available"));
+                item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftLabel);
+                left.add(item);
+            } else {
+                item = new Label(i18n.tr("Starting from"));
+                item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftLabel);
+                left.add(item);
+                item = new Label("$" + property.price().min().getStringView());
+                item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftItem);
+                item.addStyleName("price");
+                left.add(item);
+            }
 
             add(content, DockPanel.CENTER);
             add(left, DockPanel.WEST);
