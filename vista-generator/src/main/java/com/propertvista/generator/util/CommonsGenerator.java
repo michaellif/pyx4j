@@ -13,8 +13,11 @@
  */
 package com.propertvista.generator.util;
 
+import java.util.List;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -38,6 +41,8 @@ public class CommonsGenerator {
     static String[] lipsum;
 
     static String[] lipsumShort;
+
+    static List<AddressStructured> adresses;
 
     public static String lipsum() {
         if (lipsum == null) {
@@ -136,6 +141,18 @@ public class CommonsGenerator {
     }
 
     public static AddressStructured createAddress() {
+        boolean useNewAddress = false;
+        if (useNewAddress) {
+            if (adresses == null) {
+                adresses = EntityCSVReciver.create(AddressStructured.class).loadFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
+            }
+            return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10));
+        } else {
+            return createAddressWrong();
+        }
+    }
+
+    public static AddressStructured createAddressWrong() {
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
         address.suiteNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
