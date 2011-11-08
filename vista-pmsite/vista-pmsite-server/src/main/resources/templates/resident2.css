@@ -33,7 +33,7 @@
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li {
-	color: ${foreground_100};
+	color: ${object2_100};
 	font-size: 17px;
 	font-weight:bold;
 	height: 38px;
@@ -42,13 +42,13 @@
 	padding: 0 10px 0 35px;
 }
 
-.vista-pmsite-residentPage .secondaryNavig ul li.active {
-	background: url("images/template2/menu_active.png") no-repeat left center;
+
+.vista-pmsite-residentPage .secondaryNavig ul li:hover div {
+	border-bottom:1px solid ${object2_100};
 }
 
-.vista-pmsite-residentPage .secondaryNavig ul li:hover {
-	color: ${contrast2_100};
-	text-decoration: none;
+.vista-pmsite-residentPage .secondaryNavig ul li.active div {
+	border-bottom:2px solid ${object2_100};
 }
 
 .vista-pmsite-residentPage .content {

@@ -45,11 +45,6 @@
 }
 
 
-/*.vista-pmsite-staticPage .secondaryNavig ul li a:hover {
-	color: ${object2_100};
-	text-decoration: none;
-}*/
-
 .vista-pmsite-staticPage .secondaryNavig ul li a:hover span {
 	border-bottom:1px solid ${object2_100};
 }
