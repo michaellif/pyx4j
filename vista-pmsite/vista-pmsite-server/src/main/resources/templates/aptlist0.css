@@ -237,6 +237,9 @@
 	width:340px;
 	font-weight:bold;
 }
+.apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxText .typeInfo {
+	font-weight:normal;
+}
 .apartmentListingWrap .listingEntry .infoBox .description .infoBoxText {
 	font-weight:normal;
 }

@@ -27,6 +27,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -43,6 +44,8 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
+
+    private static I18n i18n = I18n.get(AptListPanel.class);
 
     public AptListPanel(String id, CompoundPropertyModel<List<Building>> model, AptListPage.ViewMode viewMode) {
         super(id, model);
@@ -67,6 +70,9 @@ public class AptListPanel extends Panel {
                 }
                 item.add(new Label("address", addrFmt));
                 String desc = propInfo.marketing().description().getValue();
+                if (desc == null) {
+                    desc = "";
+                }
                 if (ApplicationMode.isDevelopment()) {
                     desc += " (" + propInfo.propertyCode().getValue() + ")";
                 }
@@ -79,25 +85,25 @@ public class AptListPanel extends Panel {
                     @Override
                     protected void populateItem(ListItem<Floorplan> item) {
                         Floorplan floorPlan = item.getModelObject();
-                        String type = floorPlan.name().getValue();
-                        if (type != null && type.length() > 0) {
-                            type += " - ";
-                        } else {
-                            type = "";
-                        }
-                        type += floorPlan.bedrooms().getValue() + " Bed, " + floorPlan.bathrooms().getValue() + " Bath";
-                        String price = "price not available";
+                        String name = floorPlan.name().getValue();
+
+                        String info = floorPlan.bedrooms().getValue() + " " + i18n.tr("Bed") + ", " + floorPlan.bathrooms().getValue() + " " + i18n.tr("Bath");
+                        String price = i18n.tr("price not available");
                         Double minPrice = null;
                         for (AptUnit u : fpUnits.get(floorPlan)) {
-                            Double _prc = u.financial().unitRent().getValue();
+                            Double _prc = u.financial().marketRent().getValue();
                             if (minPrice == null || minPrice > _prc) {
                                 minPrice = _prc;
                             }
                         }
                         if (minPrice != null) {
-                            price = "from $" + String.valueOf(Math.round(minPrice));
+                            price = i18n.tr("from") + " $" + String.valueOf(Math.round(minPrice));
                         }
-                        item.add(new Label("type", type + ", " + price));
+                        if (name == null) {
+                            name = floorPlan.bedrooms().getValue() + " " + i18n.tr("Bedroom");
+                        }
+                        item.add(new Label("typeName", name));
+                        item.add(new Label("typeInfo", info + ", " + price));
                     }
                 });
 
