@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -26,6 +27,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -49,7 +51,7 @@ import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.TimeRange;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -104,7 +106,7 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
 
     FlowPanel measureSelection;
 
-    private final AvailabilityReportService service;
+    private final VacancyReportService service;
 
     private final TurnoverAnalysisSettings settings;
 
@@ -182,7 +184,7 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         layoutPanel.setWidgetTopHeight(controls, GRAPH_HEIGHT, Unit.EM, CONTROLS_HEIGHT, Unit.EM);
         layoutPanel.setWidgetLeftWidth(controls, 0, Unit.PCT, 100, Unit.PCT);
 
-        service = GWT.create(AvailabilityReportService.class);
+        service = GWT.create(VacancyReportService.class);
     }
 
     @Override
@@ -377,18 +379,18 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
                 setTurnoverAnalysisData(null);
                 return;
             }
-//            service.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
-//
-//                @Override
-//                public void onFailure(Throwable caught) {
-//                    reportError(caught);
-//                }
-//
-//                @Override
-//                public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
-//                    setTurnoverAnalysisData(result);
-//                }
-//            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo(), scale);
+            service.turnoverAnalysis(new AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    reportError(caught);
+                }
+
+                @Override
+                public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
+                    setTurnoverAnalysisData(result);
+                }
+            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), filter.getFrom(), filter.getTo(), scale);
         }
     }
 

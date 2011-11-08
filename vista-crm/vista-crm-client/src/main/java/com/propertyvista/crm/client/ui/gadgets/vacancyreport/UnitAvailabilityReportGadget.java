@@ -33,7 +33,6 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
@@ -45,12 +44,12 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.StyleSuffix;
 
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityReportSettings;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatusDTO;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 
 // TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
 // TODO somehow use GWT Places in order to store the state instead of clumsy settings
@@ -59,13 +58,13 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
     private static final String ALL_BUTTON_CAPTION = "All";
 
-    private EntityListPanel<UnitAvailabilityStatusDTO> unitListPanel;
+    private EntityListPanel<UnitVacancyStatus> unitListPanel;
 
     private UnitAvailabilityReportSettings settings;
 
     private VerticalPanel panel;
 
-    private AvailabilityReportService service;
+    private VacancyReportService service;
 
     private FlexTable controlsPanel;
 
@@ -89,13 +88,13 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         super(gmd);
         settings = gadgetMetadata.settings().cast();
 
-        final List<ColumnDescriptor<UnitAvailabilityStatusDTO>> defaultColumns = getDefaultColumns();
-        final List<ColumnDescriptor<UnitAvailabilityStatusDTO>> availableColumns = getAvailableColumns();
-        unitListPanel = new EntityListPanel<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class) {
+        final List<ColumnDescriptor<UnitVacancyStatus>> defaultColumns = getDefaultColumns();
+        final List<ColumnDescriptor<UnitVacancyStatus>> availableColumns = getAvailableColumns();
+        unitListPanel = new EntityListPanel<UnitVacancyStatus>(UnitVacancyStatus.class) {
 
             @Override
             // although the name doesn't give a clue, this sets the default column descriptors for the EntityListPanelWidget
-            public List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getColumnDescriptors() {
+            public List<ColumnDescriptor<UnitVacancyStatus>> getColumnDescriptors() {
                 return defaultColumns;
             }
 
@@ -113,10 +112,10 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
                 nextUnitStatusListPage();
             }
         });
-        unitListPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<UnitAvailabilityStatusDTO>() {
+        unitListPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<UnitVacancyStatus>() {
 
             @Override
-            public void onChange(ColumnDescriptor<UnitAvailabilityStatusDTO> column) {
+            public void onChange(ColumnDescriptor<UnitVacancyStatus> column) {
                 populateUnitStatusList();
             }
         });
@@ -178,7 +177,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         panel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
         panel.setWidth("100%");
 
-        service = GWT.create(AvailabilityReportService.class);
+        service = GWT.create(VacancyReportService.class);
     }
 
     @Override
@@ -196,12 +195,12 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         return settings;
     }
 
-    private static List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getDefaultColumns() {
-        UnitAvailabilityStatusDTO proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatusDTO.class);
+    private static List<ColumnDescriptor<UnitVacancyStatus>> getDefaultColumns() {
+        UnitVacancyStatus proto = EntityFactory.getEntityPrototype(UnitVacancyStatus.class);
         @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<UnitAvailabilityStatusDTO>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
+        List<ColumnDescriptor<UnitVacancyStatus>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
@@ -209,13 +208,13 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         return x;
     }
 
-    private List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getAvailableColumns() {
-        UnitAvailabilityStatusDTO proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatusDTO.class);
+    private List<ColumnDescriptor<UnitVacancyStatus>> getAvailableColumns() {
+        UnitVacancyStatus proto = EntityFactory.getEntityPrototype(UnitVacancyStatus.class);
         @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<UnitAvailabilityStatusDTO>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
+        List<ColumnDescriptor<UnitVacancyStatus>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()), ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanName()),
@@ -223,7 +222,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReadinessStatus()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReady()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute()),
@@ -328,7 +327,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         };
     }
 
-    private void setPageData(List<UnitAvailabilityStatusDTO> data, int pageNumber, int totalRows, boolean hasMoreData) {
+    private void setPageData(List<UnitVacancyStatus> data, int pageNumber, int totalRows, boolean hasMoreData) {
         if (!isOk) {
             isOk = true;
             panel.add(unitListPanel);
@@ -352,11 +351,11 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
     private List<Sort> getUnitStatusListSortingCriteria() {
         List<Sort> sorting = new ArrayList<Sort>(2);
-        ColumnDescriptor<UnitAvailabilityStatusDTO> primarySortColumn = unitListPanel.getDataTable().getDataTableModel().getSortColumn();
+        ColumnDescriptor<UnitVacancyStatus> primarySortColumn = unitListPanel.getDataTable().getDataTableModel().getSortColumn();
         if (primarySortColumn != null) {
             sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
         }
-        ColumnDescriptor<UnitAvailabilityStatusDTO> secondarySortColumn = unitListPanel.getDataTable().getDataTableModel().getSecondarySortColumn();
+        ColumnDescriptor<UnitVacancyStatus> secondarySortColumn = unitListPanel.getDataTable().getDataTableModel().getSecondarySortColumn();
         if (secondarySortColumn != null) {
             sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
         }
@@ -388,14 +387,14 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         if (this.isEnabled()) {
 
             if (filter == null) {
-                setPageData(new Vector<UnitAvailabilityStatusDTO>(), 0, 0, false);
+                setPageData(new Vector<UnitVacancyStatus>(), 0, 0, false);
                 return;
             }
             UnitSelectionCriteria select = buttonStateToSelectionCriteria();
 
-            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>>() {
+            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitVacancyStatus>>() {
                 @Override
-                public void onSuccess(EntitySearchResult<UnitAvailabilityStatusDTO> result) {
+                public void onSuccess(EntitySearchResult<UnitVacancyStatus> result) {
                     if (pageNumber == 0 | !result.getData().isEmpty()) {
                         setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
                     } else {
@@ -407,7 +406,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
                 public void onFailure(Throwable caught) {
                     reportError(caught);
                 }
-            }, new Vector<Key>(filter.getBuildingsFilteringCriteria()), //
+            }, new Vector<String>(filter.getBuildingsFilteringCriteria()), //
                     select.occupied, select.vacant, select.notice, select.rented, select.notrented, filter.getFrom(), //
                     filter.getTo(), //
                     new Vector<Sort>(getUnitStatusListSortingCriteria()), //

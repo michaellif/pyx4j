@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.vacancyreport;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.pyx4j.commons.Key;
@@ -32,7 +34,7 @@ import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 public class FilterDataDemoAdapter {
     private static final long DEFAULT_MAX_INTERVALS = 100;
 
-    public Set<Key> buildings;
+    public Set<String> buildings;
 
     public LogicalDate fromDate;
 
@@ -40,7 +42,7 @@ public class FilterDataDemoAdapter {
 
     @SuppressWarnings("deprecation")
     public FilterDataDemoAdapter(IBuildingGadget.FilterData filterData) {
-        buildings = filterData.buildings == null ? new HashSet<Key>() : new HashSet<Key>(filterData.buildings);
+        buildings = Collections.unmodifiableSet(fakeBuildings(filterData.buildings));
 
         if (filterData.toDate != null) {
             toDate = new LogicalDate(filterData.toDate);
@@ -63,7 +65,26 @@ public class FilterDataDemoAdapter {
         }
     }
 
-    public Set<Key> getBuildingsFilteringCriteria() {
+    private HashSet<String> fakeBuildings(List<Key> buildings) {
+        HashSet<String> fakeBuildings = new HashSet<String>();
+        if (buildings == null || buildings.size() == 0) {
+            // empty list should denote all buildings
+        }
+        if (buildings.size() == 1) {
+            if (buildings.get(0).asLong() == -1d) {
+                fakeBuildings = null;
+            } else {
+                fakeBuildings.add("jean0200");
+            }
+        } else if (buildings.size() > 1) {
+            fakeBuildings.add("bath1650");
+            fakeBuildings.add("com0164");
+            fakeBuildings.add("chel3126");
+        }
+        return fakeBuildings;
+    }
+
+    public Set<String> getBuildingsFilteringCriteria() {
         return buildings;
     }
 
