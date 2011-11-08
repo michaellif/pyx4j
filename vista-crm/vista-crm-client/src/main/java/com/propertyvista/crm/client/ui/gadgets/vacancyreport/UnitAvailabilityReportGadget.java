@@ -40,7 +40,6 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.StyleSuffix;
 
@@ -68,7 +67,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
     private FlexTable controlsPanel;
 
-    private boolean isOk = true;
+    private boolean isLoading = false;
 
     ToggleButton allButton;
 
@@ -328,17 +327,13 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
     }
 
     private void setPageData(List<UnitVacancyStatus> data, int pageNumber, int totalRows, boolean hasMoreData) {
-        if (!isOk) {
-            isOk = true;
-            panel.add(unitListPanel);
-        }
         settings.currentPage().setValue(pageNumber);
         unitListPanel.setPageSize(settings.itemsPerPage().getValue());
         unitListPanel.populateData(data, pageNumber, hasMoreData, totalRows);
     }
 
     private boolean isEnabled() {
-        return asWidget().isVisible();
+        return asWidget().isVisible() & !isSuspended();
     }
 
     private int getPageNumber() {
@@ -363,9 +358,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
     }
 
     private void reportError(Throwable error) {
-        isOk = false;
-        panel.clear();
-        panel.add(new CTextArea(error.toString()));
+        // TODO implement error handling framework for GadgetBase
     }
 
     // PRESENTER PART:
@@ -384,18 +377,21 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
     }
 
     private void populateUnitStatusListPage(final int pageNumber) {
-        if (this.isEnabled()) {
 
+        if (this.isEnabled() & !isLoading) {
             if (filter == null) {
                 setPageData(new Vector<UnitVacancyStatus>(), 0, 0, false);
                 return;
             }
+
+            isLoading = true;
             UnitSelectionCriteria select = buttonStateToSelectionCriteria();
 
             service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitVacancyStatus>>() {
                 @Override
                 public void onSuccess(EntitySearchResult<UnitVacancyStatus> result) {
                     if (pageNumber == 0 | !result.getData().isEmpty()) {
+                        isLoading = false;
                         setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
                     } else {
                         populateUnitStatusListPage(pageNumber - 1);

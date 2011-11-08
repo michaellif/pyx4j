@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -41,8 +40,6 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
     public final Panel panel;
 
     private VacancyReportService service;
-
-    private boolean isOk = true;
 
     public AvailabiltySummaryGadget(GadgetMetadata gmd) {
         super(gmd);
@@ -123,11 +120,6 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
     }
 
     private void populate(UnitVacancyReportSummaryDTO summary) {
-        if (!isOk) {
-            panel.add(form);
-        } else {
-            isOk = true;
-        }
         form.populate(summary);
     }
 
@@ -136,9 +128,7 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
     }
 
     private void reportError(Throwable error) {
-        isOk = false;
-        panel.clear();
-        panel.add(new CTextArea(error.toString()));
+        // TODO implement this in GadgetBase
     }
 
     // PRESENTER

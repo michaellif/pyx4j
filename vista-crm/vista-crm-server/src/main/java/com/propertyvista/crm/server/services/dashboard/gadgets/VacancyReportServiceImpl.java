@@ -145,7 +145,6 @@ public class VacancyReportServiceImpl implements VacancyReportService {
 
         EntityQueryCriteria<UnitVacancyStatus> criteria = new EntityQueryCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
         if (!buildings.isEmpty()) {
-            // TODO dependency injection check for buildings if they are still represented as strings or ask if that check performed on more deeper level
             criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
         }
 
@@ -301,10 +300,9 @@ public class VacancyReportServiceImpl implements VacancyReportService {
 
         intervalStart = intervalEnd;
         intervalEnd = resolution.addTo(intervalStart);
-
-        // now add some more intervals if we don't have more events but still haven't reached till the end of the rest of time time 
-        while (endReportTime >= intervalEnd) {
-            if (!isFirstEmptyRange) {
+        if (!isFirstEmptyRange) {
+            // now add some more intervals if we don't have more events but still haven't reached till the end of the rest of time
+            while (endReportTime >= intervalEnd) {
                 UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
                 analysis.fromDate().setValue(new LogicalDate(intervalStart));
                 analysis.toDate().setValue(new LogicalDate(intervalEnd));
@@ -316,10 +314,12 @@ public class VacancyReportServiceImpl implements VacancyReportService {
             }
         }
 
-        for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
-            if (total > 0) {
+        if (total > 0) {
+            for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
                 analysis.unitsTurnedOverPct().setValue(((double) analysis.unitsTurnedOverAbs().getValue()) / total * 100);
-            } else {
+            }
+        } else {
+            for (UnitVacancyReportTurnoverAnalysisDTO analysis : result) {
                 analysis.unitsTurnedOverPct().setValue(0d);
             }
         }
