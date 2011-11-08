@@ -46,6 +46,7 @@ import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.StyleSuffix;
 import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertyMarker extends Marker {
@@ -166,13 +167,13 @@ public class PropertyMarker extends Marker {
             left.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeft);
             //image
             SimplePanel imageHolder = new SimplePanel();
-            imageHolder.getElement().getStyle().setHeight(50, Unit.PX);
-            imageHolder.getElement().getStyle().setWidth(70, Unit.PX);
+            imageHolder.getElement().getStyle().setHeight(ImageConsts.BUILDING_SMALL.height, Unit.PX);
+            imageHolder.getElement().getStyle().setWidth(ImageConsts.BUILDING_SMALL.width, Unit.PX);
             imageHolder.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
 
-            imageHolder.getElement().getStyle().setProperty("minHeight", "50px");
+            imageHolder.getElement().getStyle().setProperty("minHeight", ImageConsts.BUILDING_SMALL.height + "px");
             Image image = MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small);
-            image.setSize("70px", "50px");
+            image.setPixelSize(ImageConsts.BUILDING_SMALL.width, ImageConsts.BUILDING_SMALL.height);
             image.getElement().getStyle().setProperty("backgroundSize", "100%");
             imageHolder.setWidget(image);
             left.add(imageHolder);
