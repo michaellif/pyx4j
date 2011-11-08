@@ -53,10 +53,11 @@ public class CacheService {
         return entityCacheService;
     }
 
-    public static Object get(Object key) {
+    @SuppressWarnings("unchecked")
+    public static <T> T get(Object key) {
         Element element = getCache().get(key);
         if (element != null) {
-            return element.getObjectValue();
+            return (T) element.getObjectValue();
         } else {
             return null;
         }
