@@ -14,6 +14,7 @@
 package com.propertyvista.domain.property.asset.building;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -129,6 +130,7 @@ public interface BuildingAmenity extends Amenity {
     @Owner
     @Detached
     @ReadOnly
+    @Indexed
     Building belongsTo();
 
     @ToString(index = 0)

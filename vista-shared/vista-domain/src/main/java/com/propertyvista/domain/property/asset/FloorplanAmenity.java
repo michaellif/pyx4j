@@ -14,6 +14,7 @@
 package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -110,5 +111,6 @@ public interface FloorplanAmenity extends Amenity {
     @Owner
     @Detached
     @ReadOnly
+    @Indexed
     Floorplan belongsTo();
 }

@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -43,5 +44,6 @@ public interface BuildingElement extends IEntity {
     @ReadOnly
     @Caption(name = "Building")
     @XmlTransient
+    @Indexed(group = "b")
     Building belongsTo();
 }

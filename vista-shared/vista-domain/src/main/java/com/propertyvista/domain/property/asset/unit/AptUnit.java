@@ -36,6 +36,7 @@ public interface AptUnit extends BuildingElement {
     @NotNull
     @Detached
     @MemberColumn(modificationAdapters = { FloorplanCountersUpdateAdapter.class })
+    @Indexed(group = { "b", "f" })
     Floorplan floorplan();
 
     /**
