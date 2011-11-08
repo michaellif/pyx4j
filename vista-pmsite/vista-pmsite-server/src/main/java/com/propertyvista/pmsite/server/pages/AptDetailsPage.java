@@ -28,6 +28,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
+import com.pyx4j.commons.SimpleMessageFormat;
+
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -81,8 +83,8 @@ public class AptDetailsPage extends BasePage {
         AddressStructured addr = propInfo.info().address();
         String addrFmt = "";
         if (addr != null) {
-            addrFmt += addr.streetNumber().getValue() + " " + addr.streetName().getValue() + ", " + addr.city().getValue() + ", "
-                    + addr.province().code().getValue() + " " + addr.postalCode().getValue();
+            addrFmt += SimpleMessageFormat.format("{0} {1}, {2}, {3} {4}", addr.streetNumber().getValue(), addr.streetName().getValue(),
+                    addr.city().getValue(), addr.province().code().getValue(), addr.postalCode().getValue());
         }
         add(new Label("address", addrFmt));
         // get price range
