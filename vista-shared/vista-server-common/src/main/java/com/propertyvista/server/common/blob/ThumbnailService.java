@@ -101,6 +101,9 @@ public class ThumbnailService {
     }
 
     private static byte[] resample(BufferedImage image, Dimension dimension) {
+        if (dimension == null) {
+            return null;
+        }
         //Crop to match destination proportions
         int x;
         int y;
