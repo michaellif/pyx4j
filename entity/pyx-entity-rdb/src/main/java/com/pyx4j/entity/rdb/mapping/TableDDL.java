@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
@@ -33,6 +34,16 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class TableDDL {
+
+    private static class IndexDef {
+
+        String name;
+
+        String group;
+
+        List<String> columns = new Vector<String>();
+
+    }
 
     static List<String> sqlCreate(Dialect dialect, TableModel tableModel) {
         List<String> sqls = new Vector<String>();
@@ -49,11 +60,17 @@ class TableDDL {
             sql.append(" ns ").append(dialect.getSqlType(String.class)).append('(').append(200).append(')');
         }
 
+        List<IndexDef> indexes = new Vector<IndexDef>();
+
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
                 member.getValueAdapter().appendColumnDefinition(sql, dialect, member, sqlName);
+
+                if (member.getMemberMeta().isIndexed()) {
+                    addIndexDef(indexes, sqlName, member.getMemberMeta().getAnnotation(Indexed.class));
+                }
             }
 
             // TODO create FK
@@ -73,7 +90,44 @@ class TableDDL {
         sqls.add(sql.toString());
 
         Collections.reverse(sqls);
+
+        for (IndexDef indexDef : indexes) {
+            //sqls.add(createIndexSql(indexDef));
+        }
+
         return sqls;
+    }
+
+    private static String createIndexSql(IndexDef indexDef) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private static void addIndexDef(List<IndexDef> indexes, String sqlName, Indexed indexedAnnotation) {
+        if ((indexedAnnotation.group() != null) && (indexedAnnotation.group().length > 0)) {
+            nextGroup: for (String group : indexedAnnotation.group()) {
+                // find index of the same group
+                if (group != null) {
+                    for (IndexDef other : indexes) {
+                        if (group.equals(other.group)) {
+                            other.columns.add(sqlName);
+                            continue nextGroup;
+                        }
+                    }
+                }
+                IndexDef def = new IndexDef();
+                def.name = indexedAnnotation.name();
+                def.group = group;
+                def.columns.add(sqlName);
+                indexes.add(def);
+            }
+        } else {
+            IndexDef def = new IndexDef();
+            def.name = indexedAnnotation.name();
+            def.columns.add(sqlName);
+            indexes.add(def);
+        }
+
     }
 
     static List<String> validateAndAlter(Dialect dialect, TableMetadata tableMetadata, TableModel tableModel) throws SQLException {
@@ -167,6 +221,13 @@ class TableDDL {
         sql.append(')');
 
         sqls.add(sql.toString());
+
+        StringBuilder sqlIdx = new StringBuilder();
+        sqlIdx.append("CREATE INDEX ");
+        sqlIdx.append(member.sqlName()).append('_').append("ownerIdx");
+        sqlIdx.append(" ON ").append(member.sqlName()).append(" (").append("owner)");
+
+        sqls.add(sqlIdx.toString());
 
         return sqls;
     }

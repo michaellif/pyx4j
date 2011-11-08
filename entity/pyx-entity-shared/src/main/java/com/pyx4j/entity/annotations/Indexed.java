@@ -44,4 +44,9 @@ public @interface Indexed {
 
     char global() default 0;
 
+    /**
+     * Allow for multi column indexes
+     */
+    String[] group() default {};
+
 }
