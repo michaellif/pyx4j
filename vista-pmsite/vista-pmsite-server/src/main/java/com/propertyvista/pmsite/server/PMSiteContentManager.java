@@ -243,12 +243,15 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public SiteTitles getSiteTitles(AvailableLocale locale) {
+        if (locale == null) {
+            throw new NullPointerException("locale is null");
+        }
         for (SiteTitles t : siteDescriptor.siteTitles()) {
             if (t.locale().equals(locale)) {
                 return t;
             }
         }
-        return null;
+        throw new Error("Locale " + locale.lang().getStringView() + " not available");
     }
 
     public String getCopyrightInfo(AvailableLocale locale) {
