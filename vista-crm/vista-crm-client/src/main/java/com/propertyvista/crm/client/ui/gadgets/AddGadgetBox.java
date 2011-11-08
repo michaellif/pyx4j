@@ -95,7 +95,7 @@ public class AddGadgetBox extends DialogPanel {
         vPanel.setSize("100%", "100%");
 
         setContentWidget(vPanel);
-        setSize("400px", "150px");
+        setSize("600px", "250px");
     }
 
     public IGadget getSelectedGadget() {
