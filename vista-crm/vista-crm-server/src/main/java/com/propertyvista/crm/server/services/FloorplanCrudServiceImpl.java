@@ -43,6 +43,10 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
             dto.amenities().add(amenity);
         }
 
+        if (updateUnitCounter(in)) {
+            dto.counters()._unitCount().setValue(in.counters()._unitCount().getValue());
+        }
+
         if (!fromList) {
             Persistence.service().retrieve(dto.media());
         }
@@ -147,5 +151,13 @@ public class FloorplanCrudServiceImpl extends GenericCrudServiceDtoImpl<Floorpla
                 Persistence.service().persist(othrPlan.counters());
             }
         }
+    }
+
+    private boolean updateUnitCounter(Floorplan dbo) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), dbo));
+        Integer orig = dbo.counters()._unitCount().getValue();
+        dbo.counters()._unitCount().setValue(Persistence.service().count(criteria));
+        return (!dbo.counters()._unitCount().getValue().equals(orig));
     }
 }
