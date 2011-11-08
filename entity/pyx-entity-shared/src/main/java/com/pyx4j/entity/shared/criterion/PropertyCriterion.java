@@ -98,4 +98,11 @@ public class PropertyCriterion implements Criterion {
         return this.restriction.hashCode() + ((this.propertyName != null) ? this.propertyName.hashCode() : -1)
                 + ((this.value != null) ? this.value.hashCode() : -1);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(propertyName).append(' ').append(restriction).append(' ').append(value);
+        return builder.toString();
+    }
 }
