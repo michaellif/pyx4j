@@ -131,7 +131,7 @@ public class CrmSite extends VistaSite {
 
     static public Place getSystemFashboardPlace() {
         CrudAppPlace place = new CrmSiteMap.Dashboard();
-        place.formDashboardPlace(new Key(1)); // assume system dashboard is first one populated!?.
+        place.formDashboardPlace(new Key(-1));
         return place;
     }
 }

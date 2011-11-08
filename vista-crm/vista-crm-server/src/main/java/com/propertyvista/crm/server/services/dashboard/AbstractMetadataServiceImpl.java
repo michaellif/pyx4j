@@ -62,7 +62,14 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     @Override
     public void retrieveMetadata(AsyncCallback<DashboardMetadata> callback, Key entityId) {
-        DashboardMetadata dm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
+        DashboardMetadata dm;
+        if (entityId.asLong() == -1) {
+            EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
+            dm = EntityServicesImpl.secureRetrieve(criteria);
+        } else {
+            dm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
+        }
         callback.onSuccess(dm);
     }
 
