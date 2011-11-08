@@ -84,9 +84,9 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
 
         for (Key unitPk : getRelevantUnits()) {
             UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
-            status.date().setValue(start);
+            status.statusDate().setValue(start);
             status.belongsTo().setPrimaryKey(unitPk);
-            while (status.date().getValue().before(end)) {
+            while (status.statusDate().getValue().before(end)) {
                 // create a 'new' entity (I hope it works)
                 status.setPrimaryKey(null);
 
@@ -135,8 +135,8 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
     }
 
     private static void notice(UnitAvailabilityStatus status) {
-        LogicalDate eventDate = new LogicalDate(status.date().getValue().getTime() + rand(MIN_RESIDENCY_TIME, MAX_RESIDENCY_TIME));
-        status.date().setValue(eventDate);
+        LogicalDate eventDate = new LogicalDate(status.statusDate().getValue().getTime() + rand(MIN_RESIDENCY_TIME, MAX_RESIDENCY_TIME));
+        status.statusDate().setValue(eventDate);
         status.vacancyStatus().setValue(VacancyStatus.Notice);
         status.rentedStatus().setValue(RentedStatus.Unrented);
         status.isScoped().setValue(false);
@@ -144,12 +144,12 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
     }
 
     private static void moveOut(UnitAvailabilityStatus status) {
-        status.date().setValue(status.moveOutDay().getValue());
+        status.statusDate().setValue(status.moveOutDay().getValue());
         status.vacancyStatus().setValue(VacancyStatus.Vacant);
     }
 
     private static void moveIn(UnitAvailabilityStatus status) {
-        status.date().setValue(status.moveInDay().getValue());
+        status.statusDate().setValue(status.moveInDay().getValue());
         status.vacancyStatus().setValue(null);
         status.moveOutDay().setValue(null);
         status.isScoped().setValue(null);
@@ -160,7 +160,7 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
         long minScopingTime;
         long maxScopingTime;
         if (status.vacancyStatus().equals(VacancyStatus.Notice)) {
-            minScopingTime = status.date().getValue().getTime() + MIN_EVENT_DELTA;
+            minScopingTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
             maxScopingTime = status.moveOutDay().getValue().getTime() - MIN_EVENT_DELTA;
         } else { // Vacant
             minScopingTime = status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA;
@@ -168,7 +168,7 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
         }
         if (minScopingTime < maxScopingTime) {
             LogicalDate eventDate = new LogicalDate(rand(minScopingTime, maxScopingTime));
-            status.date().setValue(eventDate);
+            status.statusDate().setValue(eventDate);
             status.rentReadinessStatus().setValue(RND.nextInt(5) > 1 ? RentReadinessStatus.RentReady : RentReadinessStatus.NeedsRepairs);
             status.isScoped().setValue(true);
         }
@@ -178,14 +178,14 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
         long minRentedTime;
         long maxRentedTime;
         if (VacancyStatus.Notice.equals(status.vacancyStatus().getValue())) {
-            minRentedTime = status.date().getValue().getTime() + MIN_EVENT_DELTA;
+            minRentedTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
             maxRentedTime = status.moveOutDay().getValue().getTime() - MIN_EVENT_DELTA;
         } else { // VacancyStatus == Vacant
-            minRentedTime = status.date().getValue().getTime() + MIN_EVENT_DELTA;
+            minRentedTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
             maxRentedTime = minRentedTime + MAX_VACANT_TIME;
         }
         if (minRentedTime < maxRentedTime) {
-            status.date().setValue((new LogicalDate(rand(minRentedTime, maxRentedTime))));
+            status.statusDate().setValue((new LogicalDate(rand(minRentedTime, maxRentedTime))));
             status.rentedStatus().setValue(RentedStatus.Rented);
             LogicalDate moveInDay = new LogicalDate(rand(status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA, MAX_VACANT_TIME));
             status.moveInDay().setValue(moveInDay);
@@ -193,12 +193,12 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
     }
 
     private static void renoInProgress(UnitAvailabilityStatus status) {
-        status.date().setValue(new LogicalDate(rand(status.date().getValue().getTime() + MIN_EVENT_DELTA, MAX_WAIT_UNTIL_RENO_STARTS)));
+        status.statusDate().setValue(new LogicalDate(rand(status.statusDate().getValue().getTime() + MIN_EVENT_DELTA, MAX_WAIT_UNTIL_RENO_STARTS)));
         status.rentReadinessStatus().setValue(RentReadinessStatus.RenoInProgress);
     }
 
     private static void renoFinished(UnitAvailabilityStatus status) {
-        status.date().setValue(new LogicalDate(rand(status.date().getValue().getTime() + MIN_EVENT_DELTA, MAX_WAIT_UNTIL_RENO_ENDS)));
+        status.statusDate().setValue(new LogicalDate(rand(status.statusDate().getValue().getTime() + MIN_EVENT_DELTA, MAX_WAIT_UNTIL_RENO_ENDS)));
         status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
         status.rentedStatus().setValue(RentedStatus.Unrented);
         status.vacancyStatus().setValue(VacancyStatus.Vacant);

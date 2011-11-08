@@ -52,7 +52,7 @@ public interface UnitAvailabilityStatus extends IEntity {
         }
     }
 
-    IPrimitive<LogicalDate> date();
+    IPrimitive<LogicalDate> statusDate();
 
     @Owner
     @ReadOnly
