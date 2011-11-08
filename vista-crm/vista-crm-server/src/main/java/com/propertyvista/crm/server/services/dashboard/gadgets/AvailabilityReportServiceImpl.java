@@ -36,31 +36,31 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.TransientPropertySortEngine;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.MockupAvailabilityReportEvent;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentReadinessStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatusDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatusDTO;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatusDTO.RentReady;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatusDTO.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatusDTO.VacancyStatus;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
 
     private static final Object TRANSIENT_PROPERTIES_MUTEX = new Object();
 
-    private static TransientPropertySortEngine<UnitVacancyStatusDTO> TRANSIENT_PROPERTY_SORT_ENGINE = null;
+    private static TransientPropertySortEngine<UnitAvailabilityStatusDTO> TRANSIENT_PROPERTY_SORT_ENGINE = null;
 
     @Override
-    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitVacancyStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,
+    public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,
             boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate from, LogicalDate to,
             Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
-        EntitySearchResult<UnitVacancyStatusDTO> units = null;
+        EntitySearchResult<UnitAvailabilityStatusDTO> units = null;
         try {
             // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
             List<Sort> transientSortCriteria = null;
             transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(sortingCriteria);
 
-            EntityListCriteria<UnitVacancyStatusDTO> criteria = new EntityListCriteria<UnitVacancyStatusDTO>(UnitVacancyStatusDTO.class);
+            EntityListCriteria<UnitAvailabilityStatusDTO> criteria = new EntityListCriteria<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
             criteria.setSorts(sortingCriteria);
 
             //TODO THIS IS VERY BAD. Do not use Strings Use Keys
@@ -69,17 +69,17 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                 criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
             }
 
-            List<UnitVacancyStatusDTO> unfiltered = Persistence.service().query(criteria);
+            List<UnitAvailabilityStatusDTO> unfiltered = Persistence.service().query(criteria);
 
-            PriorityQueue<UnitVacancyStatusDTO> queue = new PriorityQueue<UnitVacancyStatusDTO>(100, getTransientPropertySortEngine().getComparator(
+            PriorityQueue<UnitAvailabilityStatusDTO> queue = new PriorityQueue<UnitAvailabilityStatusDTO>(100, getTransientPropertySortEngine().getComparator(
                     transientSortCriteria));
 
-            for (UnitVacancyStatusDTO unit : unfiltered) {
+            for (UnitAvailabilityStatusDTO unit : unfiltered) {
                 computeTransientFields(unit, from, to);
                 queue.add(unit);
             }
 
-            Vector<UnitVacancyStatusDTO> unitsData = new Vector<UnitVacancyStatusDTO>();
+            Vector<UnitAvailabilityStatusDTO> unitsData = new Vector<UnitAvailabilityStatusDTO>();
 
             int currentPage = 0;
             int currentPagePosition = 0;
@@ -87,7 +87,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             boolean hasMoreRows = false;
 
             while (!queue.isEmpty()) {
-                UnitVacancyStatusDTO unit = queue.poll();
+                UnitAvailabilityStatusDTO unit = queue.poll();
                 if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
                     ++currentPagePosition;
                     ++totalRows;
@@ -106,13 +106,13 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                 }
             }
             while (!queue.isEmpty()) {
-                UnitVacancyStatusDTO unit = queue.poll();
+                UnitAvailabilityStatusDTO unit = queue.poll();
                 if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
                     ++totalRows;
                 }
             }
 
-            units = new EntitySearchResult<UnitVacancyStatusDTO>();
+            units = new EntitySearchResult<UnitAvailabilityStatusDTO>();
             units.setData(unitsData);
             units.setTotalRows(totalRows);
             units.hasMoreData(hasMoreRows);
@@ -123,15 +123,17 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         }
     }
 
-    private static boolean isAcceptable(UnitVacancyStatusDTO unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice, boolean displayRented,
-            boolean displayNotRented) {
+    private static boolean isAcceptable(UnitAvailabilityStatusDTO unit, boolean displayOccupied, boolean displayVacant, boolean displayNotice,
+            boolean displayRented, boolean displayNotRented) {
 
-        VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
-        RentedStatus rentedStatus = unit.rentedStatus().getValue();
+//        VacancyStatus vacancyStatus = unit.vacancyStatus().getValue();
+//        RentedStatus rentedStatus = unit.rentedStatus().getValue();
+//
+//        return (displayOccupied & vacancyStatus == null) //
+//                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
+//                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
 
-        return (displayOccupied & vacancyStatus == null) //
-                | ((displayVacant & vacancyStatus == VacancyStatus.Vacant) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented))) //
-                | ((displayNotice & vacancyStatus == VacancyStatus.Notice) & ((displayRented & rentedStatus == RentedStatus.Rented) | (displayNotRented & rentedStatus != RentedStatus.Rented)));
+        return true;
     }
 
     @Override
@@ -141,13 +143,13 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             return;
         }
 
-        EntityQueryCriteria<UnitVacancyStatusDTO> criteria = new EntityQueryCriteria<UnitVacancyStatusDTO>(UnitVacancyStatusDTO.class);
+        EntityQueryCriteria<UnitAvailabilityStatusDTO> criteria = new EntityQueryCriteria<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
         if (!buildings.isEmpty()) {
             // TODO dependency injection check for buildings if they are still represented as strings or ask if that check performed on more deeper level
             criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
         }
 
-        List<UnitVacancyStatusDTO> units = Persistence.service().query(criteria);
+        List<UnitAvailabilityStatusDTO> units = Persistence.service().query(criteria);
 
         UnitVacancyReportSummaryDTO summary = EntityFactory.create(UnitVacancyReportSummaryDTO.class);
 
@@ -166,7 +168,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         int netExposure = 0;
 
-        for (UnitVacancyStatusDTO unit : units) {
+        for (UnitAvailabilityStatusDTO unit : units) {
             ++total;
             computeState(unit, fromDate, toDate);
 
@@ -232,7 +234,8 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>();
 
-        EntityQueryCriteria<MockupAvailabilityReportEvent> criteria = new EntityQueryCriteria<MockupAvailabilityReportEvent>(MockupAvailabilityReportEvent.class);
+        EntityQueryCriteria<MockupAvailabilityReportEvent> criteria = new EntityQueryCriteria<MockupAvailabilityReportEvent>(
+                MockupAvailabilityReportEvent.class);
         if (!buildings.isEmpty()) {
             criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
         }
@@ -328,7 +331,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         callback.onSuccess(result);
     }
 
-    private static void computeTransientFields(final UnitVacancyStatusDTO unit, final LogicalDate fromDate, final LogicalDate toDate) {
+    private static void computeTransientFields(final UnitAvailabilityStatusDTO unit, final LogicalDate fromDate, final LogicalDate toDate) {
         computeState(unit, fromDate, toDate);
         computeRentDelta(unit);
         if (isRevenueLost(unit)) {
@@ -343,12 +346,13 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
      * @param fromDate
      * @param toDate
      */
-    private static void computeState(final UnitVacancyStatusDTO unit, final LogicalDate fromDate, final LogicalDate toDate) {
+    private static void computeState(final UnitAvailabilityStatusDTO unit, final LogicalDate fromDate, final LogicalDate toDate) {
         // TODO: this procedure is real waste of CPU cycles!!! think about better implementation!
         // consider the following:
         //      - maybe its worth to limit a query (i.e. we need at most 10 events (maybe even less)
         //      - real implementation should probably have a real key for the unit - no need to use ('propertyCode', 'unitNumber') as key.
-        EntityQueryCriteria<MockupAvailabilityReportEvent> criteria = new EntityQueryCriteria<MockupAvailabilityReportEvent>(MockupAvailabilityReportEvent.class);
+        EntityQueryCriteria<MockupAvailabilityReportEvent> criteria = new EntityQueryCriteria<MockupAvailabilityReportEvent>(
+                MockupAvailabilityReportEvent.class);
 
         String unitNumber = unit.unit().getValue();
         String propertyCode = unit.propertyCode().getValue();
@@ -395,10 +399,10 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                 unit.isScoped().setValue(true);
 
                 String strVal = event.rentReady().getValue();
-                RentReady rentReady = rentReadyValueOf(strVal);
+                RentReadinessStatus rentReady = rentReadyValueOf(strVal);
                 unit.rentReady().setValue(rentReady);
 
-                if (RentReady.RenoInProgress.equals(rentReady)) {
+                if (RentReadinessStatus.RenoInProgress.equals(rentReady)) {
                     unit.rentedStatus().setValue(RentedStatus.OffMarket);
                 }
 
@@ -425,7 +429,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         } // while
     }
 
-    private static void computeRentDelta(UnitVacancyStatusDTO unit) {
+    private static void computeRentDelta(UnitAvailabilityStatusDTO unit) {
         double unitMarketRent = unit.marketRent().getValue();
         double unitRent = unit.unitRent().getValue();
 
@@ -436,11 +440,11 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         unit.rentDeltaRelative().setValue(rentDeltaRelative);
     }
 
-    private static boolean isRevenueLost(final UnitVacancyStatusDTO unit) {
+    private static boolean isRevenueLost(final UnitAvailabilityStatusDTO unit) {
         return VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
 
-    private static void computeDaysVacantAndRevenueLost(final UnitVacancyStatusDTO unit, final long startOfTime, final long endOfTime) {
+    private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatusDTO unit, final long startOfTime, final long endOfTime) {
         long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
         availableFrom = Math.max(startOfTime, availableFrom);
         long millisecondsVacant = endOfTime - availableFrom;
@@ -453,17 +457,17 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         unit.revenueLost().setValue(revenueLost);
     }
 
-    private static RentReady rentReadyValueOf(String strVal) {
-        return "rentready".equals(strVal) ? RentReady.RentReady : "needs repairs".equals(strVal) ? RentReady.NeedRepairs
-                : "reno in progress".equals(strVal) ? RentReady.RenoInProgress : null;
+    private static RentReadinessStatus rentReadyValueOf(String strVal) {
+        return "rentready".equals(strVal) ? RentReadinessStatus.RentReady : "needs repairs".equals(strVal) ? RentReadinessStatus.NeedsRepairs
+                : "reno in progress".equals(strVal) ? RentReadinessStatus.RenoInProgress : null;
     }
 
-    private static TransientPropertySortEngine<UnitVacancyStatusDTO> getTransientPropertySortEngine() {
-        TransientPropertySortEngine<UnitVacancyStatusDTO> sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE;
+    private static TransientPropertySortEngine<UnitAvailabilityStatusDTO> getTransientPropertySortEngine() {
+        TransientPropertySortEngine<UnitAvailabilityStatusDTO> sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE;
         if (sortEngine == null) {
             synchronized (TRANSIENT_PROPERTIES_MUTEX) {
                 if (sortEngine == null) {
-                    sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitVacancyStatusDTO>(UnitVacancyStatusDTO.class);
+                    sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
                 }
             }
         }

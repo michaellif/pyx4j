@@ -19,49 +19,22 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentReadinessStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.VacancyStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 
 @Transient
-public interface UnitVacancyStatusDTO extends IEntity {
-
-    // TODO ask Vlad about @Translatable and @XMLType
-    public enum VacancyStatus {
-        Vacant, Notice;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    public enum RentedStatus {
-        Rented, Unrented, OffMarket;
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    public enum RentReady {
-        RentReady, RenoInProgress, NeedRepairs;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
+public interface UnitAvailabilityStatusDTO extends IEntity {
     @Caption(name = "Property")
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> buildingName();
 
-    // TODO change to normal Address Entity
     IPrimitive<String> address();
 
     IPrimitive<String> region();
@@ -93,7 +66,7 @@ public interface UnitVacancyStatusDTO extends IEntity {
 
     @Caption(name = "Physical Condition")
     @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<RentReady> rentReady();
+    IPrimitive<RentReadinessStatus> rentReady();
 
     IPrimitive<Double> unitRent();
 
@@ -134,13 +107,4 @@ public interface UnitVacancyStatusDTO extends IEntity {
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> revenueLost();
-
-    /** this is hack to use the lister service interface */
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> fromDate();
-
-    /** this is hack to use the lister service interface */
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> toDate();
-
 }
