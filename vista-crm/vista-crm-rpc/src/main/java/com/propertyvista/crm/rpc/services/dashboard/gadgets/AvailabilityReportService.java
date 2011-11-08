@@ -30,8 +30,7 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 
 public interface AvailabilityReportService extends IService {
 
-    //TODO FIX: THIS IS VERY BAD. Do not use Strings Use Keys
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buidlings, LogicalDate fromDate,
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<Key> buidlings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution);
 
     void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,

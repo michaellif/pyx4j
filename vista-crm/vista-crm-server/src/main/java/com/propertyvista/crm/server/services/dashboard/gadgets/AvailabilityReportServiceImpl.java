@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +34,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.TransientPropertySortEngine;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.MockupAvailabilityReportEvent;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.VacancyStatus;
@@ -154,7 +152,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         if (!buildings.isEmpty()) {
 
-            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
+            criteria.add(new PropertyCriterion(criteria.proto().belongsTo(), Restriction.IN, buildings));
         }
         criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
         // use descending order of the status date in order to select the most recent statuses first
@@ -229,7 +227,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     @Override
-    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<String> buildings, LogicalDate fromDate,
+    public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<Key> buildings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution) {
         // FIXME refactor this one: separate generic aggregation and intervals creation from the actual computations
         if (callback == null | fromDate == null || toDate == null | resolution == null) {
@@ -244,25 +242,18 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             return;
         }
 
-        // FIXME add DOS protection based on calculation timeout rather than range and "SUPPORTED INTERVALS", or just report error if too many intervals have been created
-
         Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>();
 
-        EntityQueryCriteria<MockupAvailabilityReportEvent> criteria = new EntityQueryCriteria<MockupAvailabilityReportEvent>(
-                MockupAvailabilityReportEvent.class);
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         if (!buildings.isEmpty()) {
-            criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.IN, buildings));
+            criteria.add(new PropertyCriterion(criteria.proto().belongsTo(), Restriction.IN, buildings));
         }
-        criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
-        criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.LESS_THAN, toDate));
+        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
+        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN, toDate));
+        criteria.desc(criteria.proto().statusDate().getPath().toString());
 
-        ArrayList<String> eventsFilter = new ArrayList<String>();
-        eventsFilter.add("movein");
-        eventsFilter.add("moveout");
-        criteria.add(new PropertyCriterion(criteria.proto().eventType(), Restriction.IN, eventsFilter));
-        criteria.sort(new Sort(criteria.proto().eventDate().getPath().toString(), false));
+        List<UnitAvailabilityStatus> statuses = Persistence.service().query(criteria);
 
-        List<MockupAvailabilityReportEvent> events = Persistence.service().query(criteria);
         // TODO consider using ordering of results by unitKey and then date (if possible) instead of hashmap 
         HashMap<String, Boolean> someoneMovedOut = new HashMap<String, Boolean>();
 
@@ -272,8 +263,8 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         int total = 0;
         boolean isFirstEmptyRange = true;
 
-        for (MockupAvailabilityReportEvent event : events) {
-            long eventTime = event.eventDate().getValue().getTime();
+        for (UnitAvailabilityStatus status : statuses) {
+            long eventTime = status.statusDate().getValue().getTime();
             while (eventTime >= intervalEnd) {
                 if (!isFirstEmptyRange) {
                     someoneMovedOut = new HashMap<String, Boolean>();
@@ -293,16 +284,16 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                 }
             }
             // FIXME Really Slow: hope there will be unique key someday !!!
-            String unitKey = "" + event.propertyCode() + event.unit();
-            String eventType = event.eventType().getValue();
-            Boolean isMovedOut = someoneMovedOut.get(unitKey);
-            if (isMovedOut == null && eventType.equals("moveout")) {
-                someoneMovedOut.put(unitKey, Boolean.TRUE);
-            } else if (isMovedOut == Boolean.TRUE & eventType.equals("movein")) {
-                isFirstEmptyRange = false; // TODO optimize this: separate into two loops
-                ++turnovers;
-                ++total;
-            }
+            String unitKey = "" + status.propertyCode() + status.unit();
+//            String eventType = status.statusDate().getValue();
+//            Boolean isMovedOut = someoneMovedOut.get(unitKey);
+//            if (isMovedOut == null && eventType.equals("moveout")) {
+//                someoneMovedOut.put(unitKey, Boolean.TRUE);
+//            } else if (isMovedOut == Boolean.TRUE & eventType.equals("movein")) {
+//                isFirstEmptyRange = false; // TODO optimize this: separate into two loops
+//                ++turnovers;
+//                ++total;
+//            }
         }
 
         final long endReportTime = toDate.getTime();
@@ -347,25 +338,11 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     private static UnitAvailabilityStatusDTO computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate fromDate,
             final LogicalDate toDate) {
-        Persistence.service().retrieve(unitStatus.belongsTo());
         UnitAvailabilityStatusDTO unitDTO = unitStatus.clone(UnitAvailabilityStatusDTO.class);
-        computeRentDelta(unitDTO);
         if (isRevenueLost(unitDTO)) {
             computeDaysVacantAndRevenueLost(unitDTO, fromDate.getTime(), toDate.getTime());
         }
         return unitDTO;
-    }
-
-    private static void computeRentDelta(UnitAvailabilityStatusDTO unit) {
-        // TODO optimization: move this to the preloader
-        double unitMarketRent = unit.marketRent().getValue();
-        double unitRent = unit.unitRent().getValue();
-
-        double rentDeltaAbsoute = unitMarketRent - unitRent;
-        double rentDeltaRelative = rentDeltaAbsoute / unitMarketRent * 100;
-
-        unit.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
-        unit.rentDeltaRelative().setValue(rentDeltaRelative);
     }
 
     private static boolean isRevenueLost(final UnitAvailabilityStatusDTO unit) {
@@ -373,6 +350,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatusDTO unit, final long startOfTime, final long endOfTime) {
+        // FIXME availableFrom computation MUST be made in the preloader 
         long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
         availableFrom = Math.max(startOfTime, availableFrom);
         long millisecondsVacant = endOfTime - availableFrom;

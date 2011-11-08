@@ -23,14 +23,12 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.MockupAvailabilityReportEvent;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentReadinessStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityStatus.VacancyStatus;
-import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader {
@@ -45,8 +43,6 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
     private static final long MIN_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 30l;
 
     private static final long MAX_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 60l;
-
-    private static final long MAX_WAIT_UNTIL_RENTED = 1000l * 60l * 60l * 24l * 90l; // approx 3 months
 
     private static final long MAX_VACANT_TIME = 1000l * 60l * 60l * 24l * 30l; // approx 1 month
 
@@ -130,8 +126,16 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
 
                 Persistence.service().retrieve(status.belongsTo());
                 status.unit().setValue(status.belongsTo().info().number().getValue());
-                status.unitRent().setValue(status.belongsTo().financial().unitRent().getValue());
-                status.marketRent().setValue(status.belongsTo().financial().marketRent().getValue());
+                status.unitRent().setValue(status.belongsTo().financial().unitRent().isNull() ? 0d : status.belongsTo().financial().unitRent().getValue());
+                status.marketRent()
+                        .setValue(status.belongsTo().financial().marketRent().isNull() ? 0d : status.belongsTo().financial().marketRent().getValue());
+                double unitMarketRent = status.marketRent().getValue();
+                double unitRent = status.unitRent().getValue();
+
+                double rentDeltaAbsoute = unitMarketRent - unitRent;
+                double rentDeltaRelative = unitMarketRent == 0d ? 0d : rentDeltaAbsoute / unitMarketRent * 100;
+                status.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
+                status.rentDeltaRelative().setValue(rentDeltaRelative);
 
                 Persistence.service().retrieve(status.belongsTo().floorplan());
                 status.floorplanName().setValue(status.belongsTo().floorplan().name().getValue());
@@ -229,16 +233,8 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
     }
 
     private static List<Key> getRelevantUnits() {
-        EntityQueryCriteria<PropertyManager> pmCriteria = new EntityQueryCriteria<PropertyManager>(PropertyManager.class);
-        // pmCriteria.add(PropertyCriterion.eq(pmCriteria.proto().name(), "Redridge"));
-        List<PropertyManager> pmList = Persistence.service().query(pmCriteria);
-        if (pmList.isEmpty()) {
-            return new ArrayList<Key>();
-        } else {
-            EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo().propertyManager(), pmList.get(0)));
-            return Persistence.service().queryKeys(criteria);
-        }
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        return Persistence.service().queryKeys(criteria);
     }
 
     @SuppressWarnings("unused")
