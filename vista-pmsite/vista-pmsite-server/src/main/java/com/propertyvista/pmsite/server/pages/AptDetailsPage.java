@@ -133,7 +133,7 @@ public class AptDetailsPage extends BasePage {
                 String price = "price not available";
                 Double minPrice = null;
                 for (AptUnit u : fpUnits.get(floorPlan)) {
-                    Double _prc = u.financial().unitRent().getValue();
+                    Double _prc = u.financial().marketRent().getValue();
                     if (minPrice == null || minPrice > _prc) {
                         minPrice = _prc;
                     }
