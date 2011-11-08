@@ -27,12 +27,12 @@ public class PortalEntryPoint implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        if (Window.Location.getHost().endsWith("birchwoodsoftwaregroup.com")) {
-            // Key for .birchwoodsoftwaregroup.com
-            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
-        } else {
+        if (Window.Location.getHost().endsWith("residentportalsite.com")) {
             // Key for .residentportalsite.com
             GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hShXpG0z1GYh8qtGf1RDMPw_eX7gBQVD9gTYQZV0bRTbYFAMAnoaOWTqQ");
+        } else {
+            // Key for .birchwoodsoftwaregroup.com
+            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
         }
 
         if (RootPanel.get(APT_MAP_INSERTION_ID) != null) {
