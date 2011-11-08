@@ -181,12 +181,14 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
         filterData.buildings.add(buildingId);
 
-        // notify gadgets:
-        IGadgetIterator it = dashboardView.getBoard().getGadgetIterator();
-        while (it.hasNext()) {
-            IGadget gadget = it.next();
-            if (gadget instanceof IBuildingGadget) {
-                ((IBuildingGadget) gadget).setFiltering(filterData);
+        if (dashboardView.getBoard() != null) {
+            // notify gadgets:
+            IGadgetIterator it = dashboardView.getBoard().getGadgetIterator();
+            while (it.hasNext()) {
+                IGadget gadget = it.next();
+                if (gadget instanceof IBuildingGadget) {
+                    ((IBuildingGadget) gadget).setFiltering(filterData);
+                }
             }
         }
     }
