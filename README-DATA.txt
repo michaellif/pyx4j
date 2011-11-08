@@ -10,4 +10,4 @@ Run DB preload. All images would be loaded to DB
 
 redridge  images:
  from http://dev.birchwoodsoftwaregroup.com/data/  get file building-demo.zip
- Unzip to propertyvista\vista-server\data\buildings
+ Unzip to propertyvista\vista-server\data\building-demo
