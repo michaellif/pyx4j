@@ -31,13 +31,13 @@ public class InternalErrorPage extends ErrorPage {
         StringWriter err = new StringWriter();
         // get internal exception if available
         Exception e = PMSiteApplication.get().getInternalError();
+        log.error("site error", e);
         if (e == null) {
             err.write("Unknown Error");
         } else {
             e.printStackTrace(new PrintWriter(err));
         }
         add(new Label("errorContent", err.toString()));
-        log.error(err.toString());
     }
 
     @Override
