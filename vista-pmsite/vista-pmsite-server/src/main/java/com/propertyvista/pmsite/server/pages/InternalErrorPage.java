@@ -17,11 +17,15 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.propertyvista.pmsite.server.PMSiteApplication;
 
 public class InternalErrorPage extends ErrorPage {
     private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(InternalErrorPage.class);
 
     public InternalErrorPage() {
         StringWriter err = new StringWriter();
@@ -33,6 +37,7 @@ public class InternalErrorPage extends ErrorPage {
             e.printStackTrace(new PrintWriter(err));
         }
         add(new Label("errorContent", err.toString()));
+        log.error(err.toString());
     }
 
     @Override
