@@ -326,40 +326,40 @@ public class VistaCrmTheme extends VistaTheme {
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-up");
         style = new Style(buttonEx);
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.95);
+        style.addProperty("background-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-top-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-right-color", ThemeColors.foreground, 0.95);
+        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.95);
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
         style = new Style(buttonEx);
         style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.95);
+        style.addProperty("background-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.1);
+        style.addProperty("border-top-color", ThemeColors.foreground, 0.1);
+        style.addProperty("border-right-color", ThemeColors.foreground, 0.95);
+        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.95);
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down");
         style = new Style(buttonEx);
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.1);
+        style.addProperty("background-color", ThemeColors.foreground, 0.8);
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.95);
+        style.addProperty("border-top-color", ThemeColors.foreground, 0.95);
+        style.addProperty("border-right-color", ThemeColors.foreground, 0.1);
+        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.1);
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down-hovering");
         style = new Style(buttonEx);
         style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.1);
+        style.addProperty("background-color", ThemeColors.foreground, 0.8);
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.95);
+        style.addProperty("border-top-color", ThemeColors.foreground, 0.95);
+        style.addProperty("border-right-color", ThemeColors.foreground, 0.1);
+        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.1);
         addStyle(style);
 
         //
