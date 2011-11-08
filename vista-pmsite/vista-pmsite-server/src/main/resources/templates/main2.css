@@ -141,19 +141,24 @@ select {
 	text-decoration: none;
 }
 
-.navigation a:hover {
-	color: ${contrast1_60};
-}
 
 .navigation .active a {
 	color: ${object1_20};
 }
+
+.navigation a:hover span {
+	border-bottom:1px solid ${object1_20};
+}
+
 .navigation .active a span {
 	border-bottom:2px solid ${object1_20};
 }
 
 .navigation .active a:hover {
 }
+
+
+
 
 .locale {
 	float:right;
@@ -176,7 +181,7 @@ select {
 }
 
 .langItem a:hover {
-	color: ${contrast2_60};
+	color: ${object1_20};
 }
 
 .auth {
@@ -190,7 +195,7 @@ select {
 }
 
 .auth a:hover {
-	color: ${contrast2_60};
+	color: ${object1_20};
 }
 /*
  * Footer
@@ -234,7 +239,7 @@ ul.footer_locations li {
 }
 
 .footer_locations a:hover {
-	color: ${contrast1_60};
+	color: ${object1_20};
 }
 
 .footer_links {
@@ -255,7 +260,7 @@ ul.footer_locations li {
 }
 
 .footer_link a:hover {
-	color: ${contrast1_60};
+	color: ${object1_20};
 }
 
 .footer_legal {
