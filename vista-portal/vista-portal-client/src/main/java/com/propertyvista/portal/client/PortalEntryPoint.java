@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.gwt.geo.GoogleAPI;
@@ -26,8 +27,13 @@ public class PortalEntryPoint implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        // Key for .birchwoodsoftwaregroup.com
-        GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
+        if (Window.Location.getHost().endsWith("birchwoodsoftwaregroup.com")) {
+            // Key for .birchwoodsoftwaregroup.com
+            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
+        } else {
+            // Key for .residentportalsite.com
+            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hT_reCJphII0xq04pEBPin6xLE3_xTP25TFN5BRmIeHnTU_tgz_y1HAZg");
+        }
 
         if (RootPanel.get(APT_MAP_INSERTION_ID) != null) {
             RootPanel.get(APT_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
@@ -36,5 +42,4 @@ public class PortalEntryPoint implements EntryPoint {
         }
 
     }
-
 }
