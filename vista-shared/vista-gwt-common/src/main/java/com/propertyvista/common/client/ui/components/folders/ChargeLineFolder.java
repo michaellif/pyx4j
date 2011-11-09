@@ -17,9 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
 import com.propertyvista.domain.charges.ChargeLine;
+import com.propertyvista.domain.financial.Money;
 
 public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
 
@@ -30,11 +34,18 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
     }
 
     @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member.getValueClass().equals(Money.class)) {
+            return new CMoneyLabel();
+        }
+        return super.create(member);
+    }
+
+    @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-//        columns.add(new EntityFolderColumnDescriptor(proto().type(), "30em"));
         columns.add(new EntityFolderColumnDescriptor(proto().label(), "30em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().amount(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().amount(), "7em"));
         return columns;
     }
 }

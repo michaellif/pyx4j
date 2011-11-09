@@ -18,18 +18,15 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CMoney;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
-import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
@@ -43,15 +40,6 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
     public FinancialViewForm(IEditableComponentFactory factory) {
         super(TenantFinancialDTO.class, factory);
         setEditable(factory instanceof VistaEditorsComponentFactory);
-    }
-
-    @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Money.class)) {
-            return new CMoney();
-        } else {
-            return super.create(member);
-        }
     }
 
     @Override

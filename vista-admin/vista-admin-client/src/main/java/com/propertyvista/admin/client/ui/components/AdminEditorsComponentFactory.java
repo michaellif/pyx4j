@@ -17,16 +17,11 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CMoney;
-import com.propertyvista.domain.financial.Money;
 
 public class AdminEditorsComponentFactory extends VistaEditorsComponentFactory {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Money.class)) {
-            return new CMoney();
-        }
         return super.create(member);
     }
 }

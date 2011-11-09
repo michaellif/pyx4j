@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.common.client.ui.components.editors.CEmail;
 import com.propertyvista.common.client.ui.components.editors.CGeoLocation;
-import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
+import com.propertyvista.common.client.ui.components.editors.CMoney;
 import com.propertyvista.common.client.ui.components.editors.CPhone;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Email;
@@ -35,9 +35,7 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Money.class)) {
-            return new CMoneyLabel();
-        } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
+        if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {
 
@@ -59,6 +57,8 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
                 }
             });
             return c;
+        } else if (member.getValueClass().equals(Money.class)) {
+            return new CMoney();
         } else if (member.getValueClass().equals(Phone.class)) {
             return new CPhone();
         } else if (member.getValueClass().equals(Email.class)) {

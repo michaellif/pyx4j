@@ -13,8 +13,15 @@
  */
 package com.propertyvista.admin.client.ui.components;
 
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 
 public class AdminViewersComponentFactory extends VistaViewersComponentFactory {
 
+    @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        return super.create(member);
+    }
 }

@@ -32,19 +32,23 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     private static I18n i18n = I18n.get(ChargeSplitListFolder.class);
 
+    private final boolean summaryViewMode;
+
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantName(), "25em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.percentage(), "5em"));
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "5em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "7em"));
     }
 
     @Override
@@ -54,12 +58,15 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     ChargeSplitListFolder(boolean summaryViewMode) {
         super(TenantCharge.class, false);
+        this.summaryViewMode = summaryViewMode;
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantCharge) {
             return new TenantChargeEditor();
+        } else if (member.getValueClass().equals(Money.class)) {
+            return new CMoneyLabel();
         }
         return super.create(member);
     }
@@ -113,8 +120,8 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
             if (column.getObject() == proto().percentage()) {
                 FlowPanel wrap = new FlowPanel();
+                wrap.add(DecorationUtils.inline(w, "3em", "right"));
                 wrap.add(DecorationUtils.inline(new HTML("%"), "1em"));
-                wrap.add(DecorationUtils.inline(w, "3em"));
                 wrap.setWidth(width);
                 return wrap;
             }
