@@ -44,6 +44,6 @@ public interface BuildingElement extends IEntity {
     @ReadOnly
     @Caption(name = "Building")
     @XmlTransient
-    @Indexed(group = "b")
+    @Indexed(group = "b,10")
     Building belongsTo();
 }
