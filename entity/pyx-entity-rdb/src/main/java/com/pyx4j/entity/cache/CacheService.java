@@ -20,9 +20,15 @@
  */
 package com.pyx4j.entity.cache;
 
+import java.util.List;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.config.Configuration;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -31,22 +37,38 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 public class CacheService {
 
+    private static final Logger log = LoggerFactory.getLogger(CacheService.class);
+
     private static final IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
 
+    private static boolean shutdown = false;
+
+    private static Configuration configuration = createCacheConfiguration();
+
     private static Cache getCache() {
-        Cache cache = CacheManager.getInstance().getCache(NamespaceManager.getNamespace());
+        if (shutdown) {
+            throw new Error("Cache already shutdown");
+        }
+        CacheManager mgr = CacheManager.create(configuration);
+        Cache cache = mgr.getCache(NamespaceManager.getNamespace());
         if (cache == null) {
             synchronized (CacheService.class) {
-                cache = CacheManager.getInstance().getCache(NamespaceManager.getNamespace());
+                cache = mgr.getCache(NamespaceManager.getNamespace());
                 if (cache == null) {
                     int maxElementsInMemory = 10 * 1024;
                     int timeToLiveSeconds = 2 * Consts.HOURS2SEC;
                     cache = new Cache(NamespaceManager.getNamespace(), maxElementsInMemory, false, false, timeToLiveSeconds, timeToLiveSeconds);
-                    CacheManager.getInstance().addCache(cache);
+                    mgr.addCache(cache);
                 }
             }
         }
         return cache;
+    }
+
+    private static Configuration createCacheConfiguration() {
+        Configuration config = new Configuration();
+        config.setUpdateCheck(false);
+        return config;
     }
 
     public static IEntityCacheService entityCache() {
@@ -73,5 +95,14 @@ public class CacheService {
 
     public static void reset() {
         getCache().removeAll();
+    }
+
+    public static void shutdown() {
+        log.info("CacheManager.shutdown");
+        shutdown = true;
+        List<CacheManager> knownCacheManagers = CacheManager.ALL_CACHE_MANAGERS;
+        while (!knownCacheManagers.isEmpty()) {
+            CacheManager.ALL_CACHE_MANAGERS.get(0).shutdown();
+        }
     }
 }

@@ -112,6 +112,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public void deregister() {
         connectionProvider.deregister();
+        CacheService.shutdown();
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
