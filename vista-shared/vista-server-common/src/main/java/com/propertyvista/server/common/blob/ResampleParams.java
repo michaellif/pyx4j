@@ -19,6 +19,11 @@ public class ResampleParams {
 
     boolean crop = false;
 
+    //Do not resize already small images
+    boolean enlarge = false;
+
+    public int clipBorders = 0;
+
     public int clipThumpnailBorders = 1;
 
     public static enum UnsharpenMask implements Serializable {

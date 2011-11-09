@@ -22,6 +22,7 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class MediaFileViewDialog extends VerticalPanel implements OkOption {
@@ -33,7 +34,7 @@ public class MediaFileViewDialog extends VerticalPanel implements OkOption {
     public void show() {
         Dialog dialog = new Dialog(title, this);
         this.add(new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/"
-                + ThumbnailSize.large.name() + ".jpg"));
+                + ThumbnailSize.large.name() + "." + ImageConsts.THUMBNAIL_TYPE));
         dialog.setBody(this);
         dialog.show();
     }

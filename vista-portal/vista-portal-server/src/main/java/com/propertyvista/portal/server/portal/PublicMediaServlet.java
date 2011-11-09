@@ -37,6 +37,7 @@ import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ETag;
@@ -143,8 +144,8 @@ public class PublicMediaServlet extends HttpServlet {
             if (raw == null) {
                 return;
             }
-            blob = ThumbnailService.createThumbnailBlob(filename, raw, ImageConsts.BUILDING_XSMALL, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM,
-                    ImageConsts.BUILDING_LARGE);
+            blob = ThumbnailService.createThumbnailBlob(filename, raw, ThumbnailService.getDefaultResampleParams(ImageTarget.Building),
+                    ImageConsts.BUILDING_XSMALL, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
             CacheService.put(PublicMediaServlet.class.getName() + filename, blob);
         }
         ThumbnailService.serve(blob, thumbnailSize, response);

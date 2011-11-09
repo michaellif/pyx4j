@@ -172,7 +172,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                     if (!getValue().file().blobKey().isNull()) {
                         thumbnail.setVisible(true);
                         thumbnail.setUrl(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping
-                                + getValue().getPrimaryKey().toString() + "/" + ThumbnailSize.small.name() + ".jpg");
+                                + getValue().getPrimaryKey().toString() + "/" + ThumbnailSize.small.name() + "." + ImageConsts.THUMBNAIL_TYPE);
                     }
                     break;
                 case externalUrl:

@@ -24,6 +24,12 @@ public interface ImageConsts {
         xsmall, small, medium, large
     }
 
+    public static enum ThumbnailType {
+        jpg, png
+    }
+
+    public final ThumbnailType THUMBNAIL_TYPE = ThumbnailType.png;
+
     public static enum ImageTarget implements Serializable {
 
         Building,

@@ -49,6 +49,7 @@ import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
@@ -426,7 +427,7 @@ public class PMSiteContentManager implements Serializable {
         String servletPath = com.pyx4j.server.contexts.Context.getRequest().getServletPath();
         // shift back for every path segment; then remove one segment - for the script name
         String servletRoot = servletPath.replaceAll("/+[^/]*", "../").replaceFirst("../", "");
-        return servletRoot + "media/" + mediaId + "/" + size.name() + ".jpg";
+        return servletRoot + "media/" + mediaId + "/" + size.name() + "." + ImageConsts.THUMBNAIL_TYPE;
     }
 
     public static String getFistVisibleMediaImgUrl(List<Media> medias, ThumbnailSize size) {
