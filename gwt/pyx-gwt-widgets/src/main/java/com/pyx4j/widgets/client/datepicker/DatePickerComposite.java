@@ -39,7 +39,6 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.MonthSelector;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.css.Selector;
 
 public class DatePickerComposite extends Composite implements HasHandlers {
 
@@ -116,7 +115,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
             picker.ensureDebugId(new CompositeDebugId(DatePickerIDs.DatePicker, Integer.toString(i)).debugId());
         }
         if (numberOfMonths > 1) {
-            pickers.get(0).addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.first));
+            pickers.get(0).setStyleDependentName(DefaultDatePickerTheme.StyleDependent.first.name(), true);
             tempMonthSelector = pickers.get(0).getMyMonthSelector();
             ((MonthSelectorMultiple) tempMonthSelector).setAsFirstCalendar();
             tempMonthSelector = pickers.get(pickers.size() - 1).getMyMonthSelector();

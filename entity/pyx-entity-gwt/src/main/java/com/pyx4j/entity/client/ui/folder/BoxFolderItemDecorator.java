@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItem;
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItemDecorator;
+
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -30,7 +33,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
@@ -51,7 +53,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel) {
         super(images);
 
-        setStyleName(StyleName.EntityFolderBoxItemDecorator.name());
+        setStyleName(EntityFolderBoxItemDecorator.name());
 
         addDomHandler(new MouseOverHandler() {
             @Override
@@ -76,7 +78,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();
-        contentHolder.setStyleName(StyleName.EntityFolderBoxItem.name());
+        contentHolder.setStyleName(EntityFolderBoxItem.name());
 
         mainPanel.add(contentHolder);
 

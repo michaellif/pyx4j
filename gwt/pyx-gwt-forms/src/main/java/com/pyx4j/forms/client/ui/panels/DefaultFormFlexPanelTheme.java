@@ -20,54 +20,55 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanel;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH1;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH1Label;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH2;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH2Label;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH3;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelH3Label;
-import static com.pyx4j.forms.client.ui.panels.FormFlexPanel.StyleName.FormFlexPanelHR;
-
+import com.pyx4j.commons.css.IStyleDependent;
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
 
 public abstract class DefaultFormFlexPanelTheme extends Theme {
 
+    public static enum StyleName implements IStyleName {
+        FormFlexPanel, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+
+    }
+
     public DefaultFormFlexPanelTheme() {
         initStyles();
     }
 
     protected void initStyles() {
-        Style style = new Style(".", FormFlexPanel);
+        Style style = new Style(".", StyleName.FormFlexPanel);
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelHR);
+        style = new Style(".", StyleName.FormFlexPanelHR);
         style.addProperty("background-color", getBackgroundColor());
         style.addProperty("height", "1px");
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelH1);
+        style = new Style(".", StyleName.FormFlexPanelH1);
         style.addProperty("background-color", getBackgroundColor());
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelH1Label);
+        style = new Style(".", StyleName.FormFlexPanelH1Label);
         style.addProperty("color", getBackgroundColor(), 0.05);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelH2);
+        style = new Style(".", StyleName.FormFlexPanelH2);
         style.addProperty("background-color", getBackgroundColor(), 0.9);
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelH2Label);
+        style = new Style(".", StyleName.FormFlexPanelH2Label);
         style.addProperty("color", getBackgroundColor(), 0.05);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "3px");
@@ -75,12 +76,12 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("font-style", "italic");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelH3);
+        style = new Style(".", StyleName.FormFlexPanelH3);
         style.addProperty("background-color", getBackgroundColor(), 0.8);
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
-        style = new Style(".", FormFlexPanelH3Label);
+        style = new Style(".", StyleName.FormFlexPanelH3Label);
         style.addProperty("color", getBackgroundColor(), 0.05);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "2px");

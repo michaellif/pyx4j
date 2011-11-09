@@ -31,10 +31,8 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 
-@SuppressWarnings("deprecation")
 public class MonthSelectorMultiple extends MonthSelectorExtended {
 
     private Image backwards;
@@ -76,7 +74,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
         // Set up backwards.
         backwards = new Image(resource.MonthPrevious());
         backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
-        backwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
+        backwards.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
         backwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -87,7 +85,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
 
         forwards = new Image(resource.MonthNext());
         forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
-        forwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
+        forwards.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
         forwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -98,8 +96,8 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
 
         grid = new Grid(1, 3);
 
-        grid.setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.MonthSelector));
-        grid.setStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.multiple), true);
+        grid.setStyleName(DefaultDatePickerTheme.StyleName.DatePickerMonthSelector.name());
+        grid.addStyleName(DefaultDatePickerTheme.StyleDependent.multiple.name());
         initWidget(grid);
     }
 

@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolder;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,8 +40,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.client.CEntity;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -58,22 +58,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
-    public static enum StyleName implements IStyleName {
-        EntityFolder, EntityFolderActionsBar, EntityFolderAddButton, EntityFolderAddButtonImage, EntityFolderAddButtonLabel,
-
-        EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton,
-
-        //Box
-        EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxItemDecorator,
-
-        //Table
-        EntityFolderRowItem, EntityFolderTableDecorator, EntityFolderRowItemDecorator, EntityFolderTableHeader, EntityFolderTableHeaderLabel
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        hover, readOnly
-    }
-
     private final FlowPanel container;
 
     public boolean orderable = true;
@@ -91,7 +75,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>>
     public CEntityFolder(Class<E> rowClass) {
         this.rowClass = rowClass;
         container = new FlowPanel();
-        asWidget().setStyleName(StyleName.EntityFolder.name());
+        asWidget().setStyleName(EntityFolder.name());
         itemsList = new ArrayList<CEntityFolderItem<E>>();
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);

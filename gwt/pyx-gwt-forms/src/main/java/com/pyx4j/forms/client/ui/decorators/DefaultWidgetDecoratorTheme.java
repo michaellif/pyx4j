@@ -20,72 +20,72 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleDependent.noMandatoryStar;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleDependent.readOnly;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecorator;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorComponent;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorComponentHolder;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorContentPanel;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorInfoImage;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorLabel;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorLabelHolder;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorMandatoryImage;
-import static com.pyx4j.forms.client.ui.decorators.WidgetDecorator.StyleName.WidgetDecoratorValidationLabel;
-
+import com.pyx4j.commons.css.IStyleDependent;
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 
 public class DefaultWidgetDecoratorTheme extends Theme {
+
+    public static enum StyleName implements IStyleName {
+        WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
+
+        WidgetDecoratorValidationLabel, WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        readOnly, noMandatoryStar
+    }
 
     public DefaultWidgetDecoratorTheme() {
         initStyles();
     }
 
     protected void initStyles() {
-        Style style = new Style(".", WidgetDecorator);
+        Style style = new Style(".", StyleName.WidgetDecorator);
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorLabelHolder);
+        style = new Style(".", StyleName.WidgetDecoratorLabelHolder);
         style.addProperty("padding-right", "10px");
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorLabel);
+        style = new Style(".", StyleName.WidgetDecoratorLabel);
         style.addProperty("color", "#333333");
         style.addProperty("font-weight", "bold");
         style.addProperty("display", "inline");
         addStyle(style);
 
-        style = new Style(".", WidgetDecorator, "-", readOnly, " .", WidgetDecoratorLabel);
+        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.readOnly, " .", StyleName.WidgetDecoratorLabel);
         style.addProperty("color", "#888888");
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorInfoImage);
+        style = new Style(".", StyleName.WidgetDecoratorInfoImage);
         style.addProperty("padding-left", "5px");
         style.addProperty("line-height", "0");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorMandatoryImage);
+        style = new Style(".", StyleName.WidgetDecoratorMandatoryImage);
         style.addProperty("display", "inline-block");
         style.addProperty("width", "5px");
         style.addProperty("padding-right", "3px");
         addStyle(style);
 
-        style = new Style(".", WidgetDecorator, "-", noMandatoryStar, " .", WidgetDecoratorMandatoryImage, " ", "img");
+        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.noMandatoryStar, " .", StyleName.WidgetDecoratorMandatoryImage, " ", "img");
         style.addProperty("display", "none");
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorValidationLabel);
+        style = new Style(".", StyleName.WidgetDecoratorValidationLabel);
         style.addProperty("color", "red");
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorContentPanel);
+        style = new Style(".", StyleName.WidgetDecoratorContentPanel);
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorComponentHolder);
+        style = new Style(".", StyleName.WidgetDecoratorComponentHolder);
         addStyle(style);
 
-        style = new Style(".", WidgetDecoratorComponent);
+        style = new Style(".", StyleName.WidgetDecoratorComponent);
         addStyle(style);
 
     }

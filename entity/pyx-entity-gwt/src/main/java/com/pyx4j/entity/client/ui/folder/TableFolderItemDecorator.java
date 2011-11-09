@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderRowItemDecorator;
+
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -33,7 +35,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -54,7 +55,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     public TableFolderItemDecorator(EntityFolderImages images, String removeLabel) {
         super(images);
 
-        setStyleName(StyleName.EntityFolderRowItemDecorator.name());
+        setStyleName(EntityFolderRowItemDecorator.name());
 
         addDomHandler(new MouseOverHandler() {
             @Override

@@ -33,17 +33,12 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.css.Selector;
-
-@SuppressWarnings(/* Date manipulation required */{ "deprecation" })
+@SuppressWarnings("deprecation")
 public class DateGrid extends Grid {
 
     private DateCell selectedCell;
 
     private Date selectedDate;
-
-    private IDebugId debugId;
 
     private final Date minDate;
 
@@ -62,7 +57,7 @@ public class DateGrid extends Grid {
         this.minDate = minDate;
         this.maxDate = maxDate;
         this.disabledDates = disabledDates;
-        setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.Grid));
+        setStyleName(DefaultDatePickerTheme.StyleName.DatePickerGrid.name());
         resize(CalendarModel.WEEKS_IN_MONTH + 1, CalendarModel.DAYS_IN_WEEK);
         drawCells();
     }

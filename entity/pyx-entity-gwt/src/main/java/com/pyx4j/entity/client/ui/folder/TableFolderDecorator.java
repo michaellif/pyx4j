@@ -20,6 +20,10 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableDecorator;
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableHeader;
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableHeaderLabel;
+
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
@@ -32,7 +36,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
@@ -59,16 +62,16 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title, boolean addable) {
         super(images, title, addable);
 
-        asWidget().setStyleName(StyleName.EntityFolderTableDecorator.name());
+        asWidget().setStyleName(EntityFolderTableDecorator.name());
 
         header = new HorizontalPanel();
-        header.setStyleName(StyleName.EntityFolderTableHeader.name());
+        header.setStyleName(EntityFolderTableHeader.name());
         setHeaderVisible(false);
 
         for (EntityFolderColumnDescriptor column : columns) {
             HorizontalPanel headerLabelPanel = new HorizontalPanel();
             headerLabelPanel.setWidth(column.getWidth());
-            headerLabelPanel.setStyleName(StyleName.EntityFolderTableHeaderLabel.name());
+            headerLabelPanel.setStyleName(EntityFolderTableHeaderLabel.name());
 
             String caption = column.getObject().getMeta().getCaption();
             if (caption == "") {

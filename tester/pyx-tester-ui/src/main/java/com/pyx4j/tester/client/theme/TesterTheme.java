@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class TesterTheme extends Theme {
@@ -61,6 +62,8 @@ public class TesterTheme extends Theme {
             }
         });
 
+        addTheme(new DefaultDatePickerTheme());
+
         initGeneralStyles();
         initBodyStyles();
         initSectionStyles();
@@ -81,8 +84,6 @@ public class TesterTheme extends Theme {
         initTextBoxStyle();
         initCheckBoxStyle();
         initListBoxStyle();
-        initDatePickerStyle();
-        initMultipleDatePicker();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initPhotoalbomStyle();
@@ -604,224 +605,6 @@ public class TesterTheme extends Theme {
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "#f79494");
         style.addProperty("background-color", "#f8d8d8");
-        addStyle(style);
-    }
-
-    protected void initDatePickerStyle() {
-
-        Style style = new Style(".gwt-DatePicker");
-        style.addProperty("margin", "2px 4px");
-        style.addProperty("border", "1px solid #A2BBDD");
-        style.addProperty("background-color", "white");
-        style.addProperty("color", ThemeColors.TEXT);
-        addStyle(style);
-
-        style = new Style(".gwt-DatePicker td, .datePickerMonthSelector td:focus");
-        style.addProperty("outline-style", "none");
-        style.addProperty("outline-width", "medium");
-        addStyle(style);
-
-        style = new Style(".datePickerDays");
-        style.addProperty("background", "white none repeat scroll 0 0");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(".datePickerDay, .datePickerWeekdayLabel, .datePickerWeekendLabel");
-        style.addProperty("font-size", "75%");
-        style.addProperty("outline-color", ThemeColors.TEXT);
-        style.addProperty("outline-style", "none");
-        style.addProperty("outline-width", "medium");
-        style.addProperty("padding", "4px");
-        style.addProperty("text-align", "center");
-        addStyle(style);
-
-        style = new Style(".datePickerWeekdayLabel, .datePickerWeekendLabel");
-        style.addProperty("background", "#C3D9FF none repeat scroll 0 0");
-        style.addProperty("cursor", "default");
-        style.addProperty("padding", "0 4px 2px");
-        addStyle(style);
-
-        style = new Style(".datePickerDay");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("padding", "4px");
-        addStyle(style);
-
-        style = new Style(".datePickerDayIsToday");
-        style.addProperty("border", "1px solid black");
-        style.addProperty("padding", "3px");
-        addStyle(style);
-
-        style = new Style(".datePickerDayIsWeekend");
-        style.addProperty("background", "#EEEEEE none repeat scroll 0 0");
-        addStyle(style);
-
-        style = new Style(".datePickerDayIsFiller");
-        style.addProperty("color", "#888888");
-        addStyle(style);
-
-        style = new Style(".datePickerDayIsValue");
-        style.addProperty("background", "#AACCEE none repeat scroll 0 0");
-        addStyle(style);
-
-        style = new Style(".datePickerDayIsDisabled");
-        style.addProperty("color", "#AAAAAA");
-        style.addProperty("font-style", "italic");
-        addStyle(style);
-
-        style = new Style(".datePickerDayIsHighlighted");
-        style.addProperty("background", "#F0E68C none repeat scroll 0 0");
-        addStyle(style);
-
-        style = new Style(".datePickerDayIsValueAndHighlighted");
-        style.addProperty("background", "#BBDDD9 none repeat scroll 0 0");
-        addStyle(style);
-
-        style = new Style(".datePickerMonthSelector");
-        style.addProperty("background", "#C3D9FF none repeat scroll 0 0");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style("td.datePickerMonth");
-        style.addProperty("color", "blue");
-        style.addProperty("font-size", "70%");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("text-align", "center");
-        style.addProperty("white-space", "nowrap");
-        addStyle(style);
-
-        style = new Style(".datePickerPreviousButton, .datePickerNextButton");
-        style.addProperty("color", "blue");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("font-size", "120%");
-        style.addProperty("line-height", "1em");
-        style.addProperty("padding", "0 4px");
-        addStyle(style);
-
-    }
-
-    private void initMultipleDatePicker() {
-        Style style = new Style("table.datePickerMonthSelector");
-        style.addProperty("background-color", "#99A2A9");
-        style.addProperty("color", "#FFF");
-        style.addProperty("line-height", "12px");
-        style.addProperty("border-bottom", "1px solid #A8A8A8");
-        style.addProperty("border-collapse", "collapse");
-        addStyle(style);
-
-        style = new Style("table.datePickerMonthSelector table");
-        style.addProperty("border-collapse", "collapse");
-        addStyle(style);
-
-        style = new Style("table.gwt-DatePicker");
-        style.addProperty("width", "250px");
-        style.addProperty("border", "1px solid #A8A8A8");
-        addStyle(style);
-
-        style = new Style("table.gwt-DatePicker.multiple");
-        style.addProperty("border-left", "0");
-        style.addProperty("margin", "0");
-        addStyle(style);
-
-        style = new Style("table.gwt-DatePicker.multiple.first");
-        style.addProperty("border-left", "1px solid #A8A8A8");
-        addStyle(style);
-
-        style = new Style(".gwt-DatePicker td");
-        style.addProperty("text-align", "center");
-        style.addProperty("padding", "0");
-        style.addProperty("font-size", "11px");
-        style.addProperty("cursor", "pointer");
-        addStyle(style);
-
-        style = new Style(".datePickerGrid .gwt-Label");
-        style.addProperty("border", "1px solid #F0F0F0");
-        addStyle(style);
-
-        style = new Style(".datePickerGrid .gwt-Label.disabled");
-        style.addProperty("color", "#B0B0B0");
-        addStyle(style);
-
-        style = new Style(".datePickerGrid .gwt-Label.heighlighted");
-        style.addProperty("border", "1px solid #D0D0F0");
-        style.addProperty("background-color", ThemeColors.SELECTION);
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
-        addStyle(style);
-
-        style = new Style(".datePickerGrid .gwt-Label.selected");
-        style.addProperty("border", "1px solid #E06020");
-        addStyle(style);
-
-        style = new Style(".datePickerMonthSelector .gwt-Label");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("font-size", "13px");
-        addStyle(style);
-
-        style = new Style("table.datePickerMonthSelector.multiple");
-        style.addProperty("line-height", "24px");
-        addStyle(style);
-
-        style = new Style(".datePickerMonthSelector img");
-        style.addProperty("width", "10px");
-        addStyle(style);
-
-        style = new Style(".datePickerMonthSelector img.top");
-        style.addProperty("position", "relative");
-        style.addProperty("top", "4px");
-        addStyle(style);
-
-        style = new Style(".datePickerMonthSelector img.middle");
-        style.addProperty("position", "relative");
-        style.addProperty("top", "2px");
-        addStyle(style);
-
-        style = new Style(".datePickerMonthSelector img.bottom");
-        style.addProperty("position", "relative");
-        style.addProperty("top", "-2px");
-        addStyle(style);
-
-        style = new Style(".datePickerMonthSelector");
-        style.addProperty("background-color", "#F0F0F0");
-        style.addProperty("margin", "0");
-        style.addProperty("padding", "0");
-        addStyle(style);
-
-        style = new Style(".datePickerGrid");
-        style.addProperty("width", "100%");
-        style.addProperty("background-color", "#F0F0F0");
-        style.addProperty("padding", "10px");
-        addStyle(style);
-
-        style = new Style(".datePickerGrid tr.datePickerGridDaysRow");
-        style.addProperty("height", "20px");
-        addStyle(style);
-
-        style = new Style(".datePickerGrid .datePickerGridDaysRow td");
-        style.addProperty("border-bottom", "1px solid black");
-        style.addProperty("margin-bottom", "5px");
-        addStyle(style);
-
-        style = new Style("monthSelectorNextMonth");
-        style.addProperty("border-right", "1px solid #A8B8B8");
-        addStyle(style);
-
-        style = new Style(".monthSelectorNavigation.right");
-        style.addProperty("border-right", "1px solid #A8B8B8");
-        addStyle(style);
-
-        style = new Style(".monthSelectorNavigation");
-        style.addProperty("width", "15%");
-        addStyle(style);
-
-        style = new Style("monthSelectorMonthLabel");
-        style.addProperty("width", "35%");
-        addStyle(style);
-
-        style = new Style(".monthSelectorYearLabel");
-        style.addProperty("width", "25%");
-        addStyle(style);
-
-        style = new Style(".monthSelectorYearNavigation");
-        style.addProperty("width", "10%");
         addStyle(style);
     }
 

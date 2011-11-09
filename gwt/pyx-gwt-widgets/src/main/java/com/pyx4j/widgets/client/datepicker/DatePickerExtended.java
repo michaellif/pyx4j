@@ -28,20 +28,7 @@ import java.util.Date;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
-
 public abstract class DatePickerExtended extends DatePicker {
-
-    public static String BASE_NAME = "datePicker";
-
-    public static enum StyleSuffix implements IStyleName {
-        Grid, MonthSelector, GridDaysRow, Navigation, MonthLabel, YearLabel, YearNavigation
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        disabled, heighlighted, selected, right, multiple, first, top, bottom, middle
-    }
 
     protected MonthSelectorExtended monthSelector;
 

@@ -33,8 +33,6 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.CalendarView;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
-import com.pyx4j.commons.css.Selector;
-
 public class CalendarViewExtended extends CalendarView {
 
     private Date firstDisplayed;
@@ -124,7 +122,7 @@ public class CalendarViewExtended extends CalendarView {
             grid.setText(0, i, daysOfWeek[dayIdx]);
         }
         //grid.getRowFormatter().setStyleName(0, "datePickerGridDaysRow");
-        grid.getRowFormatter().setStyleName(0, Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.GridDaysRow));
+        grid.getRowFormatter().setStyleName(0, DefaultDatePickerTheme.StyleName.DatePickerGridDaysRow.name());
         initWidget(grid);
     }
 

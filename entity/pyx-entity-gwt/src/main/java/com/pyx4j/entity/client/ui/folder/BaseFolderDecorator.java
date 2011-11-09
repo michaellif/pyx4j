@@ -20,6 +20,10 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderAddButton;
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderAddButtonImage;
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderAddButtonLabel;
+
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -28,7 +32,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
@@ -52,14 +55,14 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         if (images.add() != null) {
 
             actionsPanel = new FlowPanel();
-            actionsPanel.setStyleName(StyleName.EntityFolderAddButton.name());
+            actionsPanel.setStyleName(EntityFolderAddButton.name());
 
             addImage = new ImageButton(images.add(), images.addHover(), title);
-            addImage.setStyleName(StyleName.EntityFolderAddButtonImage.name());
+            addImage.setStyleName(EntityFolderAddButtonImage.name());
             actionsPanel.add(addImage);
 
             addButtonLabel = new Label(title);
-            addButtonLabel.setStyleName(StyleName.EntityFolderAddButtonLabel.name());
+            addButtonLabel.setStyleName(EntityFolderAddButtonLabel.name());
             actionsPanel.add(addButtonLabel);
         }
     }

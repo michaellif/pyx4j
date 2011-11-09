@@ -20,6 +20,16 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponentHolder;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorInfoImage;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabelHolder;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorValidationLabel;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -33,8 +43,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -43,16 +51,6 @@ import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
 
 public class WidgetDecorator extends FlexTable {
-
-    public static enum StyleName implements IStyleName {
-        WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
-
-        WidgetDecoratorValidationLabel, WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        readOnly, noMandatoryStar
-    }
 
     private final CComponent<?, ?> component;
 
@@ -72,11 +70,11 @@ public class WidgetDecorator extends FlexTable {
 
     protected WidgetDecorator(Builder builder) {
 
-        setStyleName(StyleName.WidgetDecorator.name());
+        setStyleName(WidgetDecorator.name());
 
         this.component = builder.component;
         final Widget nativeComponent = component.asWidget();
-        nativeComponent.addStyleName(StyleName.WidgetDecoratorComponent.name());
+        nativeComponent.addStyleName(WidgetDecoratorComponent.name());
 
         String caption = builder.customLabel;
 
@@ -91,7 +89,7 @@ public class WidgetDecorator extends FlexTable {
         }
 
         label = new Label(caption);
-        label.setStyleName(StyleName.WidgetDecoratorLabel.name());
+        label.setStyleName(WidgetDecoratorLabel.name());
 
         Cursor.setDefault(label.getElement());
 
@@ -112,7 +110,7 @@ public class WidgetDecorator extends FlexTable {
         }
 
         infoImageHolder = new SpaceHolder();
-        infoImageHolder.setStyleName(StyleName.WidgetDecoratorInfoImage.name());
+        infoImageHolder.setStyleName(WidgetDecoratorInfoImage.name());
 
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
@@ -121,7 +119,7 @@ public class WidgetDecorator extends FlexTable {
         }
 
         mandatoryImageHolder = new SpaceHolder();
-        mandatoryImageHolder.setStyleName(StyleName.WidgetDecoratorMandatoryImage.name());
+        mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
 
         renderMandatoryStar();
 
@@ -144,7 +142,7 @@ public class WidgetDecorator extends FlexTable {
         });
 
         FlowPanel labelHolder = new FlowPanel();
-        labelHolder.setStyleName(StyleName.WidgetDecoratorLabelHolder.name());
+        labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
         labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
@@ -153,15 +151,15 @@ public class WidgetDecorator extends FlexTable {
         getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         SimplePanel componentHolder = new SimplePanel();
-        componentHolder.setStyleName(StyleName.WidgetDecoratorComponentHolder.name());
+        componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
         componentHolder.getElement().getStyle().setWidth(builder.componentWidth, Unit.EM);
         componentHolder.add(nativeComponent);
 
         validationLabel = new Label();
-        validationLabel.setStyleName(StyleName.WidgetDecoratorValidationLabel.name());
+        validationLabel.setStyleName(WidgetDecoratorValidationLabel.name());
 
         HorizontalPanel contentPanel = new HorizontalPanel();
-        contentPanel.setStyleName(StyleName.WidgetDecoratorContentPanel.name());
+        contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
         contentPanel.add(infoImageHolder);
         setWidget(0, 1, contentPanel);
@@ -169,7 +167,7 @@ public class WidgetDecorator extends FlexTable {
         setWidget(1, 1, validationLabel);
 
         if (builder.readOnlyMode) {
-            addStyleDependentName(WidgetDecorator.StyleDependent.readOnly.name());
+            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
         }
 
     }

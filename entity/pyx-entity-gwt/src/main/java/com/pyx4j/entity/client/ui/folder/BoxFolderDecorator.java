@@ -20,10 +20,11 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecorator;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder.StyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -40,7 +41,7 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
     public BoxFolderDecorator(EntityFolderImages images, String title, boolean addable) {
         super(images, title, addable);
 
-        asWidget().setStyleName(StyleName.EntityFolderBoxDecorator.name());
+        asWidget().setStyleName(EntityFolderBoxDecorator.name());
 
         add(getContainer());
 

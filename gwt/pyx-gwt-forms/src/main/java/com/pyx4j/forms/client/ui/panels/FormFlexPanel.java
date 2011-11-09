@@ -20,45 +20,45 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanel;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1Label;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH2;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH2Label;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH3;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH3Label;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelHR;
+
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName;
 
 public class FormFlexPanel extends FlexTable {
 
-    public static enum StyleName implements IStyleName {
-        FormFlexPanel, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-
-    }
-
     public FormFlexPanel() {
-        setStyleName(StyleName.FormFlexPanel.name());
+        setStyleName(FormFlexPanel.name());
     }
 
     public void setHR(int row, int col, int span) {
         getFlexCellFormatter().setColSpan(row, col, span);
         HTML header = new HTML("&nbsp;");
-        header.setStyleName(StyleName.FormFlexPanelHR.name());
+        header.setStyleName(FormFlexPanelHR.name());
         super.setWidget(row, 0, header);
     }
 
     public void setH1(int row, int col, int span, String caption) {
-        setHX(row, col, span, caption, StyleName.FormFlexPanelH1Label, StyleName.FormFlexPanelH1);
+        setHX(row, col, span, caption, FormFlexPanelH1Label, FormFlexPanelH1);
     }
 
     public void setH2(int row, int col, int span, String caption) {
-        setHX(row, col, span, caption, StyleName.FormFlexPanelH2Label, StyleName.FormFlexPanelH2);
+        setHX(row, col, span, caption, FormFlexPanelH2Label, FormFlexPanelH2);
     }
 
     public void setH3(int row, int col, int span, String caption) {
-        setHX(row, col, span, caption, StyleName.FormFlexPanelH3Label, StyleName.FormFlexPanelH3);
+        setHX(row, col, span, caption, FormFlexPanelH3Label, FormFlexPanelH3);
     }
 
     private void setHX(int row, int col, int span, String caption, StyleName labelStyle, StyleName headerStyle) {

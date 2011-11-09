@@ -31,12 +31,10 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEvent;
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEventHandler;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 
-@SuppressWarnings("deprecation")
 public class MonthSelectorSingle extends MonthSelectorExtended {
 
     private Image backwards;
@@ -65,8 +63,6 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
     private final int previousYearRow = 1;
 
-    private final String BASE_NAME = "monthSelector";
-
     public MonthSelectorSingle(Date minDate, Date maxDate) {
         super(minDate, maxDate);
     }
@@ -88,7 +84,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         // Set up backwards.        
         backwards = new Image(resource.MonthPrevious());
         backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsMonth.debugId());
-        backwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.middle));
+        backwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         backwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -99,7 +95,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
         forwards = new Image(resource.MonthNext());
         forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardMonth.debugId());
-        forwards.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.middle));
+        forwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         forwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -110,7 +106,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         // Set up backwards year
         backwardsYear = new HoldableImage(resource.YearPrevious(), 300);
         backwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
-        backwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.bottom));
+        backwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.bottom.name());
         backwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
             @Override
@@ -122,7 +118,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
         forwardsYear = new HoldableImage(resource.YearNext(), 300);
         forwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
-        forwardsYear.addStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.top));
+        forwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.bottom.name());
         forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
             @Override
@@ -149,13 +145,13 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
         grid.setWidget(0, yearNavigationColumn, yearGrid);
 
-        grid.setStyleName(Selector.getStyleName(DatePickerExtended.BASE_NAME, DatePickerExtended.StyleSuffix.MonthSelector));
-        grid.getCellFormatter().addStyleName(0, previousMonthColumn, Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.Navigation));
-        grid.getCellFormatter().addStyleName(0, dateMonthColumn, Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.MonthLabel));
-        grid.getCellFormatter().addStyleName(0, nextMonthColumn, Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.Navigation));
-        grid.getCellFormatter().addStyleName(0, nextMonthColumn, Selector.getDependentName(DatePickerExtended.StyleDependent.right));
-        grid.getCellFormatter().addStyleName(0, dateYearColumn, Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.YearLabel));
-        grid.getCellFormatter().addStyleName(0, yearNavigationColumn, Selector.getStyleName(BASE_NAME, DatePickerExtended.StyleSuffix.YearNavigation));
+        grid.setStyleName(DefaultDatePickerTheme.StyleName.DatePickerMonthSelector.name());
+        grid.getCellFormatter().addStyleName(0, previousMonthColumn, DefaultDatePickerTheme.StyleName.DatePickerNavigation.name());
+        grid.getCellFormatter().addStyleName(0, dateMonthColumn, DefaultDatePickerTheme.StyleName.DatePickerMonthLabel.name());
+        grid.getCellFormatter().addStyleName(0, nextMonthColumn, DefaultDatePickerTheme.StyleName.DatePickerNavigation.name());
+        grid.getCellFormatter().addStyleName(0, nextMonthColumn, DefaultDatePickerTheme.StyleDependent.right.name());
+        grid.getCellFormatter().addStyleName(0, dateYearColumn, DefaultDatePickerTheme.StyleName.DatePickerYearLabel.name());
+        grid.getCellFormatter().addStyleName(0, yearNavigationColumn, DefaultDatePickerTheme.StyleName.DatePickerYearNavigation.name());
         initWidget(grid);
     }
 }

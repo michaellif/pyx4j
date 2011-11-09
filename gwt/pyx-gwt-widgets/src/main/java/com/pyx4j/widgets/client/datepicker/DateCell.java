@@ -34,8 +34,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.css.Selector;
-
 public class DateCell extends Label {
 
     private boolean enabled = true;
@@ -53,7 +51,7 @@ public class DateCell extends Label {
             @Override
             public void onClick(ClickEvent event) {
                 DateCell cell = (DateCell) event.getSource();
-                cell.setStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.selected), true);
+                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), true);
             }
         });
         this.addMouseOverHandler(new MouseOverHandler() {
@@ -94,16 +92,16 @@ public class DateCell extends Label {
 
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        this.setStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.disabled), !enabled);
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.disabled.name(), !enabled);
     }
 
     public final void setSelected(boolean selected) {
-        this.setStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.selected), selected);
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), selected);
         heighlight(false);
     }
 
     private void heighlight(boolean isheighlighted) {
-        this.setStyleName(Selector.getDependentName(DatePickerExtended.StyleDependent.heighlighted), isheighlighted);
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.heighlighted.name(), isheighlighted);
     }
 
     private void redraw() {

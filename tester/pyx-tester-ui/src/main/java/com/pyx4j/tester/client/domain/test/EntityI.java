@@ -20,6 +20,8 @@
  */
 package com.pyx4j.tester.client.domain.test;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -73,6 +75,11 @@ public interface EntityI extends IEntity {
 
     @NotNull
     IPrimitive<Enum1> mandatoryEnum();
+
+    IPrimitive<Date> optionalSingleMonthDatePicker();
+
+    @NotNull
+    IPrimitive<Date> mandatorySingleMonthDatePicker();
 
     @Owned
     IList<EntityII> entityIIList();
