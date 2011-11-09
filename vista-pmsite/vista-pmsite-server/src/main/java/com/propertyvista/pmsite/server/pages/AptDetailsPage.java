@@ -40,7 +40,6 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -126,7 +125,7 @@ public class AptDetailsPage extends BasePage {
                 if (floorPlan.media().size() > 0) {
                     mediaId = floorPlan.media().get(0).getPrimaryKey().asLong();
                 }
-                item.add(new SimpleImage("plan", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small)));
+                item.add(new SimpleImage("plan", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.medium)));
                 item.add(new Label("name", floorPlan.name().getValue()));
                 item.add(new Label("beds", String.valueOf(floorPlan.bedrooms().getValue())));
                 item.add(new Label("bath", String.valueOf(floorPlan.bathrooms().getValue())));

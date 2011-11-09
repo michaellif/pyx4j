@@ -10,7 +10,7 @@
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
 	display: inline-block;
-	width: 318px;
+	width: ${image_building_large_width};
 	vertical-align: top;
 	padding:20px 16px;
 }
@@ -33,7 +33,7 @@
 	height:50px;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery img {
-	width:57px;
+	width:${image_building_xsmall_width};
 	cursor:pointer;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span {

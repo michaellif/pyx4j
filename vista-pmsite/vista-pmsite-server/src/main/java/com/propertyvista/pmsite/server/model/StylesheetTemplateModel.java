@@ -26,6 +26,7 @@ import com.pyx4j.commons.css.ThemeColors;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 
 public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String, Object>> {
 
@@ -75,6 +76,23 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
         varModel.putAll(generateColorMap("contrast2", ThemeColors.contrast2));
         varModel.putAll(generateColorMap("background", ThemeColors.background));
         varModel.putAll(generateColorMap("foreground", ThemeColors.foreground));
+
+        varModel.put("image_building_xsmall_height", ImageConsts.BUILDING_XSMALL.height + "px");
+        varModel.put("image_building_xsmall_width", ImageConsts.BUILDING_XSMALL.width + "px");
+        varModel.put("image_building_small_height", ImageConsts.BUILDING_SMALL.height + "px");
+        varModel.put("image_building_small_width", ImageConsts.BUILDING_SMALL.width + "px");
+        varModel.put("image_building_medium_height", ImageConsts.BUILDING_MEDIUM.height + "px");
+        varModel.put("image_building_medium_width", ImageConsts.BUILDING_MEDIUM.width + "px");
+        varModel.put("image_building_large_height", ImageConsts.BUILDING_LARGE.height + "px");
+        varModel.put("image_building_large_width", ImageConsts.BUILDING_LARGE.width + "px");
+
+        varModel.put("image_floorplan_small_height", ImageConsts.FLOORPLAN_SMALL.height + "px");
+        varModel.put("image_floorplan_small_width", ImageConsts.FLOORPLAN_SMALL.width + "px");
+        varModel.put("image_floorplan_medium_height", ImageConsts.FLOORPLAN_MEDIUM.height + "px");
+        varModel.put("image_floorplan_medium_width", ImageConsts.FLOORPLAN_MEDIUM.width + "px");
+        varModel.put("image_floorplan_large_height", ImageConsts.FLOORPLAN_LARGE.height + "px");
+        varModel.put("image_floorplan_large_width", ImageConsts.FLOORPLAN_LARGE.width + "px");
+
         return varModel;
     }
 

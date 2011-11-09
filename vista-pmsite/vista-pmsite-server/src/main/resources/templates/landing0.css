@@ -139,7 +139,7 @@
 }
 
 .promoBox .picture {
-	width:140px;
+	width:${image_building_medium_width};
 	background:grey;
 }
 .promoBox a .picture {
