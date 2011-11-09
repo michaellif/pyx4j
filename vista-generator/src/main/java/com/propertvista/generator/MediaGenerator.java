@@ -86,7 +86,7 @@ public class MediaGenerator {
             building.media().add(media);
         }
 
-        int imageIndex = RandomUtil.randomInt(6) + 1;
+        int imageIndex = RandomUtil.nextInt(7, "bld-img", 4) + 1;
         String filename = "building" + imageIndex;
 
         boolean newData = false;
@@ -124,7 +124,7 @@ public class MediaGenerator {
     }
 
     public static void attachGeneratedFloorplanMedia(Floorplan floorplan) {
-        int imageIndex = RandomUtil.randomInt(5) + 1;
+        int imageIndex = RandomUtil.nextInt(5, "fp-img", 3) + 1;
         String filename = "apartment" + imageIndex;
         boolean newData = false;
         @SuppressWarnings("unchecked")
