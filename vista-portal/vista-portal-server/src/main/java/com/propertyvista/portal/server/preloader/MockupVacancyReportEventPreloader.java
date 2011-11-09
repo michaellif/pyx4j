@@ -200,6 +200,9 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
 
     private static void persist(Key unitId, UnitVacancyReportEvent event) {
         event.belongsTo().setPrimaryKey(unitId);
+        Persistence.service().retrieve(event.belongsTo());
+        event.propertyCode().setValue(event.belongsTo().propertyCode().getValue());
+        event.unit().setValue(event.belongsTo().unit().getValue());
         Persistence.service().persist(event);
     }
 

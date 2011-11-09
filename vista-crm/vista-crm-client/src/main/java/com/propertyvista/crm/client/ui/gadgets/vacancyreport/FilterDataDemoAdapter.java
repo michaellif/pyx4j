@@ -82,7 +82,7 @@ public class FilterDataDemoAdapter {
             if (buildings.get(0).asLong() == -1d) {
                 fakeBuildings = null;
             } else {
-                fakeBuildings.add("jean0200");
+                fakeBuildings.add("chel3126");
             }
         } else if (buildings.size() > 1) {
             fakeBuildings.add("bath1650");
