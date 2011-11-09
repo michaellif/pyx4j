@@ -35,7 +35,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -77,7 +76,7 @@ public class FloorplanInfoPanel extends Panel {
         // get price range
         Double minPrice = null, maxPrice = null;
         for (AptUnit u : fpUnits) {
-            Double _prc = u.financial().unitRent().getValue();
+            Double _prc = u.financial().marketRent().getValue();
             if (minPrice == null || minPrice > _prc) {
                 minPrice = _prc;
             }

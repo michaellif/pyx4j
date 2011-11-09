@@ -146,7 +146,7 @@ public class PropertyMarker extends Marker {
                 content.add(item);
             }
 
-            viewDetailsItem = new Anchor(i18n.tr("Details >>"));
+            viewDetailsItem = new Anchor(i18n.tr("Details") + " >>");
             viewDetailsItem.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardMenuItem);
             viewDetailsItem.getElement().getStyle().setFloat(Float.LEFT);
             viewDetailsItem.getElement().getStyle().setFontWeight(FontWeight.BOLD);

@@ -301,6 +301,10 @@ public class PMSiteContentManager implements Serializable {
 
         // add search criteria
         if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
+            String prov = searchCriteria.province().getValue();
+            if (prov != null) {
+                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().province().name(), prov));
+            }
             String city = searchCriteria.city().getValue();
             if (city != null) {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));

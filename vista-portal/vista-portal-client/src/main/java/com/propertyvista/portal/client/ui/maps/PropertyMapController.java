@@ -59,6 +59,7 @@ public enum PropertyMapController {
         criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, Window.Location.getParameterMap());
 
         if (allProperties == null) {
+            // TODO this call could use search criteria instead of returning all available properties
             PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
                 @Override
                 public void onSuccess(PropertyListDTO properties) {
@@ -113,9 +114,12 @@ public enum PropertyMapController {
 
     private PropertyListDTO filterInboundProperties() {
         PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
-        if (SearchType.city.equals(criteria.searchType().getValue()) && !criteria.city().isNull()) {
+        if (SearchType.city.equals(criteria.searchType().getValue())) {
             for (PropertyDTO property : allProperties.properties()) {
-                if (!criteria.city().equals(property.address().city())) {
+                if (!criteria.city().isNull() && !criteria.city().equals(property.address().city())) {
+                    continue;
+                }
+                if (!criteria.province().isNull() && !criteria.province().equals(property.address().province().name())) {
                     continue;
                 }
                 filteredProperties.properties().add(property);
@@ -146,7 +150,13 @@ public enum PropertyMapController {
             map.setDistanceOverlay(proximityCenter, criteria.distance().getValue(), callback);
         } else {
             map.removeDistanceOverlay();
-            map.setBounds(inboundProperties, callback);
+            if (!inboundProperties.isEmpty()) {
+                map.setBounds(inboundProperties, callback);
+            } else if (!criteria.city().isNull()) {
+                // TODO set bounds using city location
+            } else {
+                // TODO set bounds using a list of province cities
+            }
         }
 
     }
