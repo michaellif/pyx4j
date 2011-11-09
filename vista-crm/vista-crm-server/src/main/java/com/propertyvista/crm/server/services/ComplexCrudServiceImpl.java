@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.ComplexCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
@@ -35,6 +36,16 @@ public class ComplexCrudServiceImpl extends GenericCrudServiceDtoImpl<Complex, C
     protected void enhanceDTO(Complex in, ComplexDTO dto, boolean fromList) {
         super.enhanceDTO(in, dto, fromList);
         Persistence.service().retrieve(dto.dashboard());
+
+        if (dto.dashboard().isEmpty()) {
+            // load first building  dashoard by default:
+            EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
+            List<DashboardMetadata> dashboards = Persistence.service().query(criteria);
+            if (!dashboards.isEmpty()) {
+                dto.dashboard().set(dashboards.get(0));
+            }
+        }
 
         if (!fromList) {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
