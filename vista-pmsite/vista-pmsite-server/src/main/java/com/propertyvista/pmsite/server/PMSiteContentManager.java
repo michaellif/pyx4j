@@ -77,7 +77,7 @@ public class PMSiteContentManager implements Serializable {
 
     private List<AvailableLocale> allAvailableLocale;
 
-    private SiteDescriptor siteDescriptor;
+    private final SiteDescriptor siteDescriptor;
 
     private Map<AvailableLocale, List<News>> news;
 
@@ -89,25 +89,16 @@ public class PMSiteContentManager implements Serializable {
         if (siteDescriptor == null) {
             throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
-        updatePages();
-    }
-
-    private void updatePages() {
         for (PageDescriptor descriptor : siteDescriptor.childPages()) {
             createPath(descriptor);
         }
     }
 
-    public boolean refresh() {
+    public boolean refreshRequired() {
         SiteDescriptorChanges latest = Persistence.service().retrieve(SiteDescriptorChanges.class, siteDescriptor._updateFlag().getPrimaryKey());
         if ((latest != null) && latest.updated().equals(siteDescriptor._updateFlag().updated())) {
             return false;
         } else {
-            siteDescriptor = Persistence.service().retrieve(SiteDescriptor.class, siteDescriptor.getPrimaryKey());
-            if (siteDescriptor == null) {
-                siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-            }
-            updatePages();
             return true;
         }
     }
