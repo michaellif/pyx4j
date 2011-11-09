@@ -74,11 +74,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             }
         });
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
-        addActionButton(btnEdit);
+        addActionWidget(btnEdit);
         return actionsPanel;
     }
 
-    protected void addActionButton(Widget action) {
+    protected void addActionWidget(Widget action) {
         actionsPanel.insert(action, 1);
         actionsPanel.setCellWidth(action, "1%");
     }

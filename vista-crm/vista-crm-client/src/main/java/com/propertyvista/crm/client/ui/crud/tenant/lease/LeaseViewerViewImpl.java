@@ -13,11 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.Command;
 
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.pyx4j.forms.client.ui.CHyperlink;
+
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -26,21 +25,19 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
-    private final Button createApplicationButton;
+    private final CHyperlink createApplicationButton;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
-        createApplicationButton = new Button(i18n.tr("Create Application"), new ClickHandler() {
+        createApplicationButton = new CHyperlink(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 ((LeaseViewerView.Presenter) presenter).createMasterApplication();
             }
         });
-        //TODO
-        //createApplicationButton.setWrap(false);
-        createApplicationButton.addStyleName(createApplicationButton.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
-        addActionButton(createApplicationButton);
+        createApplicationButton.setValue(i18n.tr("Create Application"));
+        addActionWidget(createApplicationButton.asWidget());
 
         // set main form here: 
         setForm(new LeaseEditorForm(new CrmViewersComponentFactory()));

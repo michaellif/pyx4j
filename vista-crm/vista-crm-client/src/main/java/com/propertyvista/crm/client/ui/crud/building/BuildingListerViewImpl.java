@@ -38,7 +38,7 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
                 UpdateUploadDialog.show();
             }
         });
-        upload.setValue("Upload update.xml");
+        upload.setValue(i18n.tr("Upload update.xml"));
         lister.addActionButton(upload.asWidget());
     }
 
