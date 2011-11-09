@@ -106,7 +106,7 @@ public class FloorplanInfoPanel extends Panel {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "unitdetails" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                new StylesheetTemplateModel(getRequest()));
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);
         super.renderHead(response);
 

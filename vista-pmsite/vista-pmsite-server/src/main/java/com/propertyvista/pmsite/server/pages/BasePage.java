@@ -75,7 +75,7 @@ public abstract class BasePage extends WebPage {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "main" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                new StylesheetTemplateModel(getRequest()));
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));

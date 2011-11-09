@@ -21,7 +21,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import templates.TemplateResources;
 
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.LocalePanel;
 
@@ -39,7 +38,8 @@ public class ErrorPage extends WebPage {
 
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "error" + styleId + ".css";
-        refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css", new StylesheetTemplateModel(getRequest()));
+        refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
     }
 
     @Override

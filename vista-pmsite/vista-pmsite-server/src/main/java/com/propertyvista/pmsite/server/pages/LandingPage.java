@@ -49,7 +49,7 @@ public class LandingPage extends BasePage {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
         String fileCSS = "landing" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                new StylesheetTemplateModel(getRequest()));
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
 
         response.renderCSSReference(refCSS);
 

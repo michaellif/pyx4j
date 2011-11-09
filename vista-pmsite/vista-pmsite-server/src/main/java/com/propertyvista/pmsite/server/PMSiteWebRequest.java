@@ -27,11 +27,14 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.i18n.server.I18nManager;
 
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteWebRequest extends ServletWebRequest {
 
     private final PMSiteContentManager contentManager;
+
+    private final StylesheetTemplateModel stylesheetTemplateModel;
 
     private AvailableLocale siteLocale;
 
@@ -52,6 +55,12 @@ public class PMSiteWebRequest extends ServletWebRequest {
             }
         }
         contentManager = cm;
+
+        stylesheetTemplateModel = new StylesheetTemplateModel(this);
+    }
+
+    public StylesheetTemplateModel getStylesheetTemplateModel() {
+        return stylesheetTemplateModel;
     }
 
     public PMSiteContentManager getContentManager() {
