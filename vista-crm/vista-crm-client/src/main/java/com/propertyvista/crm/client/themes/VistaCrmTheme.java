@@ -105,6 +105,7 @@ public class VistaCrmTheme extends VistaTheme {
         initDialogBoxStyles();
         initDialogPanelStyles();
         initMenuBarStyles();
+        initDatePickerStyle();
     }
 
     @Override

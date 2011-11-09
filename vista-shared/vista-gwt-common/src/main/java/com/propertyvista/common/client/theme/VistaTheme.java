@@ -545,9 +545,16 @@ public class VistaTheme extends Theme {
 
         Style style = new Style(".gwt-DatePicker");
         style.addProperty("margin", "2px 4px");
-        style.addProperty("border", "1px solid #A2BBDD");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.object1, 1.1);
         style.addProperty("background-color", "white");
+        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("width", "200px");
+        addStyle(style);
+
+        style = new Style(".gwt-DatePicker .datePickerGrid");
         style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".gwt-DatePicker td, .datePickerMonthSelector td:focus");
@@ -611,7 +618,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".datePickerMonthSelector");
-        style.addProperty("background", "#C3D9FF none repeat scroll 0 0");
+        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.6);
         style.addProperty("width", "100%");
         addStyle(style);
 
