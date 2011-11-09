@@ -40,9 +40,17 @@ public class FilterDataDemoAdapter {
 
     public LogicalDate toDate;
 
+    public final boolean isEnabled;
+
     @SuppressWarnings("deprecation")
     public FilterDataDemoAdapter(IBuildingGadget.FilterData filterData) {
-        buildings = Collections.unmodifiableSet(fakeBuildings(filterData.buildings));
+        Set<String> fake = fakeBuildings(filterData.buildings);
+        if (fake != null) {
+            buildings = Collections.unmodifiableSet(fake);
+            isEnabled = true;
+        } else {
+            isEnabled = false;
+        }
 
         if (filterData.toDate != null) {
             toDate = new LogicalDate(filterData.toDate);

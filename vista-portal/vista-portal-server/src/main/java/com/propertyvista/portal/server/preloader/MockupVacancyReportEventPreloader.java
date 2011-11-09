@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -36,7 +35,9 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
 
     private static final long MIN_EVENT_DELTA = 1000l * 60l * 60l * 24l; // one day
 
-    private static final long MAX_STAY_IN_UNIT_DELTA = 1000l * 60l * 60l * 24l * 365l; // approx 1 year
+    private static final long MIN_STAY_IN_UNIT_DELTA = 1000l * 60l * 60l * 24l * 365l; // approx 1 year
+
+    private static final long MAX_STAY_IN_UNIT_DELTA = 1000l * 60l * 60l * 24l * 365l * 4l; // approx 4 years
 
     private static final long MAX_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 30l;
 
@@ -145,7 +146,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                 // create move out event
                 event = EntityFactory.create(UnitVacancyReportEvent.class);
                 if (!hasNotice) {
-                    moveoutDate = newDate(moveinDate.getTime() + rand(MIN_EVENT_DELTA, MAX_STAY_IN_UNIT_DELTA));
+                    moveoutDate = newDate(moveinDate.getTime() + rand(MIN_EVENT_DELTA + MIN_STAY_IN_UNIT_DELTA, MAX_STAY_IN_UNIT_DELTA));
                 }
                 event.eventDate().setValue(moveoutDate);
                 event.eventType().setValue("moveout");
@@ -204,16 +205,16 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
         // TODO currently we have to generate these also but later they should be available in the DB
         List<UnitId> unitIds = new ArrayList<UnitId>();
         HashMap<String, List<String>> buildings = new HashMap<String, List<String>>();
-
-        buildings.put("bath1652", Arrays.asList(new String[] { "106", "207", "311", "404", "411" }));
-        buildings.put("chel3126", Arrays.asList(new String[] { "609" }));
-        buildings.put("corn0164", Arrays.asList(new String[] { "112", "113" }));
-        buildings.put("jean0200", Arrays.asList(new String[] { "8", "26" }));
-
+//
+//        buildings.put("bath1652", Arrays.asList(new String[] { "106", "207", "311", "404", "411" }));
+//        buildings.put("chel3126", Arrays.asList(new String[] { "609" }));
+//        buildings.put("corn0164", Arrays.asList(new String[] { "112", "113" }));
+//        buildings.put("jean0200", Arrays.asList(new String[] { "8", "26" }));
+//
         // bath1650
         List<String> bathUnits = new ArrayList<String>();
         for (int i = 1; i <= 6; ++i) {
-            for (int j = 0; j <= 12; ++j) {
+            for (int j = 0; j <= 3; ++j) {
                 bathUnits.add(Integer.toString(100 * i + j));
             }
         }
