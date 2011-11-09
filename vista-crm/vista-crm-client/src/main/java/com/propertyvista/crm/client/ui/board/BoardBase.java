@@ -176,10 +176,12 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     }
 
     public IBoard getBoard() {
+        assert (board != null);
         return board;
     }
 
     public DashboardMetadata getDashboardMetadata() {
+        assert (dashboardMetadata != null);
         return dashboardMetadata;
     }
 

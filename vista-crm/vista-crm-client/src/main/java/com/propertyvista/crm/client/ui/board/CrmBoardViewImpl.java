@@ -53,6 +53,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
@@ -95,6 +96,18 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     public void fill(DashboardMetadata dashboardMetadata) {
         super.fill(dashboardMetadata);
 
+        board.getBoard().addEventHandler(new BoardEvent() {
+
+            @Override
+            public void onEvent(Reason reason) {
+                switch (reason) {
+                case addGadget:
+                    setDashboardFiltering(filters.getFiltering());
+                    break;
+                }
+            }
+        });
+
         filters = null;
         filtersPanel.setWidget(null);
         setWidgetSize(filtersPanel, 0);
@@ -105,16 +118,15 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 filters = new BuildingFilters();
                 filtersPanel.setWidget(filters.getCompactVeiw());
                 setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
+                // set filtering (default at this point) to gadgets:
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        setDashboardFiltering(filters.getFiltering());
+                    }
+                });
             }
         }
-
-        // set default (all building for all time) filtering:
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                setDashboardFiltering(new IBuildingGadget.FilterData());
-            }
-        });
     }
 
     @Override
@@ -388,7 +400,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             return description;
         }
 
-        private void applyFiltering() {
+        private IBuildingGadget.FilterData getFiltering() {
             IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
 
             List<Building> selectedBuildings = buildingLister.getLister().getCheckedItems();
@@ -435,8 +447,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                 log.info("calculated dates: " + from + " - " + to);
             }
 
+            return filterData;
+        }
+
+        private void applyFiltering() {
             // notify gadgets:
-            setDashboardFiltering(filterData);
+            setDashboardFiltering(getFiltering());
         }
     }
 }
