@@ -123,7 +123,6 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         controls.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
         controls.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
         controls.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-//        controls.setSpacing(5);
 
         resolutionSelector = new ListBox(false);
         resolutionSelector.addChangeHandler(new ChangeHandler() {
