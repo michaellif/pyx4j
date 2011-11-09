@@ -198,6 +198,7 @@ public class DBResetServlet extends HttpServlet {
             preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), VistaDevPreloadConfig.createUIDesignMini());
         }
         buf.append(preloaders.preloadAll());
+        CacheService.reset();
 
         log.info("Preloaded PMC '{}' {}", demoPmcName, TimeUtils.secSince(pmcStart));
         buf.append("Preloaded PMC '" + demoPmcName + "' " + TimeUtils.secSince(pmcStart));

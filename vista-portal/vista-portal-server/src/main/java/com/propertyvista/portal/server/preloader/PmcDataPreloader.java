@@ -21,16 +21,40 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.domain.contact.Email;
+import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.marketing.yield.Amenity;
+import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.PropertyManager;
+import com.propertyvista.domain.property.asset.Boiler;
+import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Elevator;
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.Locker;
+import com.propertyvista.domain.property.asset.LockerArea;
+import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.ParkingSpot;
+import com.propertyvista.domain.property.asset.Roof;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
+import com.propertyvista.server.domain.FileBlob;
+import com.propertyvista.server.domain.ThumbnailBlob;
 
 public class PmcDataPreloader extends BaseVistaDevDataPreloader {
 
@@ -43,6 +67,18 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
             data = IOUtils.getUTF8TextResource("pmc/" + NamespaceManager.getNamespace() + ".xml", PmcDataPreloader.class);
         } catch (IOException e) {
             log.error("resource load error", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public String delete() {
+        if (ApplicationMode.isDevelopment()) {
+            return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
+                    LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class,
+                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ServiceCatalog.class);
+        } else {
+            return "This is production";
         }
     }
 
@@ -74,11 +110,6 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public String delete() {
-        return null;
     }
 
 }
