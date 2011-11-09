@@ -106,7 +106,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
             marginTop = "2";
         }
         DOM.setStyleAttribute(triggerButton.getElement(), "marginTop", marginTop);
-        DOM.setStyleAttribute(triggerButton.getElement(), "marginLeft", "1px");
+        DOM.setStyleAttribute(triggerButton.getElement(), "marginLeft", "4px");
 
         triggerButton.addClickHandler(new ClickHandler() {
 
