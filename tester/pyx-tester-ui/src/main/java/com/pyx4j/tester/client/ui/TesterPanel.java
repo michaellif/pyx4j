@@ -39,7 +39,6 @@ import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
-import com.pyx4j.site.client.ui.AppSiteView;
 import com.pyx4j.tester.client.mvp.ConsoleActivityMapper;
 import com.pyx4j.tester.client.mvp.MainActivityMapper;
 import com.pyx4j.tester.client.mvp.NavigActivityMapper;
@@ -60,7 +59,7 @@ public class TesterPanel extends LayoutPanel {
 
         StyleManger.installTheme(new TesterTheme(), new TesterPalette());
 
-        setStyleName(AppSiteView.DEFAULT_STYLE_PREFIX);
+        setStyleName(DEFAULT_STYLE_PREFIX);
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
@@ -103,7 +102,7 @@ public class TesterPanel extends LayoutPanel {
 
     class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
         DisplayPanel() {
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+            String prefix = DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
         }
 
@@ -122,7 +121,7 @@ public class TesterPanel extends LayoutPanel {
 
         UtilityDisplayPanel(LayoutPanel parent) {
             this.parent = parent;
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+            String prefix = DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
         }
 
