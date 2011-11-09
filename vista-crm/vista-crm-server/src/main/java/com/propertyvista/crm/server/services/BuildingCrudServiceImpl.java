@@ -26,6 +26,7 @@ import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.media.Media;
@@ -51,6 +52,16 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             Persistence.service().retrieve(dto.contacts().contacts());
             Persistence.service().retrieve(dto.marketing().adBlurbs());
             Persistence.service().retrieve(dto.dashboard());
+
+            if (dto.dashboard().isEmpty()) {
+                // load first building  dashoard by default:
+                EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
+                List<DashboardMetadata> dashboards = Persistence.service().query(criteria);
+                if (!dashboards.isEmpty()) {
+                    dto.dashboard().set(dashboards.get(0));
+                }
+            }
 
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
