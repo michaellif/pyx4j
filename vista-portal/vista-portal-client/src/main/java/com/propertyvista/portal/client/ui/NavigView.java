@@ -26,8 +26,6 @@ public interface NavigView extends IsWidget {
 
     public void setNavig(List<AppPlace> items);
 
-    public void changePlace(AppPlace place);
-
     public interface NavigPresenter {
         public void navigTo(Place place);
 

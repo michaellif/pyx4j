@@ -22,6 +22,7 @@ import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
 import com.propertyvista.admin.client.ui.NavigViewImpl;
 import com.propertyvista.admin.client.ui.SearchBox;
@@ -77,6 +78,8 @@ public class VistaAdminTheme extends VistaTheme {
         addTheme(new DraggerMixin());
 
         addTheme(new CrmSitePanelTheme());
+
+        addTheme(new DefaultDatePickerTheme());
 
         initGeneralStyles();
         initBodyStyles();

@@ -33,7 +33,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
-import com.pyx4j.site.client.ui.AppSiteView;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
@@ -156,8 +155,7 @@ public class CrmPanel extends LayoutPanel {
 
     class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
         DisplayPanel() {
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
+            setStyleName(CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override
@@ -175,8 +173,7 @@ public class CrmPanel extends LayoutPanel {
 
         UtilityDisplayPanel(LayoutPanel parent) {
             this.parent = parent;
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
+            setStyleName(CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override

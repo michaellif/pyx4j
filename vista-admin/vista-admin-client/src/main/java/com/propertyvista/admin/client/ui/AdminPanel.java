@@ -34,7 +34,6 @@ import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
-import com.pyx4j.site.client.ui.AppSiteView;
 
 import com.propertyvista.admin.client.mvp.FooterActivityMapper;
 import com.propertyvista.admin.client.mvp.LoginActivityMapper;
@@ -48,6 +47,8 @@ import com.propertyvista.admin.client.themes.VistaAdminTheme;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
 public class AdminPanel extends LayoutPanel {
+
+    public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public AdminPanel() {
 
@@ -161,7 +162,7 @@ public class AdminPanel extends LayoutPanel {
 
     class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
         DisplayPanel() {
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+            String prefix = DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
@@ -180,7 +181,7 @@ public class AdminPanel extends LayoutPanel {
 
         UtilityDisplayPanel(LayoutPanel parent) {
             this.parent = parent;
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+            String prefix = DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 

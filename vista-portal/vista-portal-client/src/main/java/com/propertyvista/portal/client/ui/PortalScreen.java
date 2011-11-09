@@ -22,7 +22,6 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
-import com.pyx4j.site.client.ui.AppSiteView;
 
 import com.propertyvista.portal.client.mvp.CaptionActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
@@ -85,7 +84,7 @@ public class PortalScreen extends SimplePanel {
 
     class DisplayPanel extends SimplePanel {
         DisplayPanel() {
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+            String prefix = DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
 
         }

@@ -196,16 +196,4 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
     }
 
-    @Override
-    public void changePlace(AppPlace place) {
-        NavigTab mainTag = tabsHolder.getTabByPlace(place);
-        NavigTab selectedTab = tabsHolder.getSelectedTab();
-
-        if (mainTag != null) {//main navig tab
-            if (selectedTab != null) {
-                selectedTab.deselect();
-            }
-            mainTag.select();
-        }
-    }
 }

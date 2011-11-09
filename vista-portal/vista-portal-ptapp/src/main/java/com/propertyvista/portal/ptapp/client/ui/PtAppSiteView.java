@@ -24,7 +24,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.AppSiteView;
 
 import com.propertyvista.portal.ptapp.client.mvp.ActionsActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.BottomActivityMapper;
@@ -51,7 +50,7 @@ public class PtAppSiteView extends FlowPanel {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+        String prefix = DEFAULT_STYLE_PREFIX;
 
         setStyleName(prefix);
 
@@ -159,7 +158,7 @@ public class PtAppSiteView extends FlowPanel {
 
     class DisplayPanel extends SimplePanel {
         DisplayPanel() {
-            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+            String prefix = DEFAULT_STYLE_PREFIX;
             setStyleName(prefix + StyleSuffix.Display);
         }
     }
