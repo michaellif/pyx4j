@@ -70,7 +70,7 @@ public abstract class MultitenantTestCase extends DatastoreTestBase {
         Assert.assertEquals("result set size", 0, emps.size());
     }
 
-    public void testUpdate() {
+    public void testUpdate(TestCaseMethod testCaseMethod) {
         NamespaceManager.setNamespace("1");
         Employee emp = EntityFactory.create(Employee.class);
         String empName = "Bob " + uniqueString();
@@ -86,7 +86,7 @@ public abstract class MultitenantTestCase extends DatastoreTestBase {
 
         boolean saved = false;
         try {
-            srv.persist(emp2);
+            srvSave(emp2, testCaseMethod);
             saved = true;
         } catch (RuntimeException e) {
             // OK
@@ -99,5 +99,13 @@ public abstract class MultitenantTestCase extends DatastoreTestBase {
         Employee emp1 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertNotNull("retrieve", emp1);
         Assert.assertEquals("orig Not Changed", empName, emp1.firstName().getValue());
+    }
+
+    public void testUpdatePersist() {
+        testUpdate(TestCaseMethod.Persist);
+    }
+
+    public void testUpdateMerge() {
+        testUpdate(TestCaseMethod.Merge);
     }
 }
