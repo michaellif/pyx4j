@@ -34,7 +34,9 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
@@ -122,6 +124,7 @@ public class OpenApiModelTest {
 
     @BeforeClass
     public static void init() {
+        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
         SharedData.init();
     }
 }
