@@ -13,12 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dashboard.IGadget;
@@ -84,7 +86,14 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         super(CrmSiteMap.Properties.Building.class);
 
         dashboardSelect.setWidth("25em");
-        dashboardSelect.addCriterion(PropertyCriterion.eq(dashboardSelect.proto().type(), DashboardType.building));
+// TODO: investigate why set options by criterion doesn't always work in this case!? 
+//        dashboardSelect.addCriterion(PropertyCriterion.eq(dashboardSelect.proto().type(), DashboardType.building));
+        dashboardSelect.setOptionsFilter(new OptionsFilter<DashboardMetadata>() {
+            @Override
+            public boolean acceptOption(DashboardMetadata entity) {
+                return (entity.type().getValue() == DashboardType.building);
+            }
+        });
         dashboardSelect.addValueChangeHandler(new ValueChangeHandler<DashboardMetadata>() {
             @Override
             public void onValueChange(ValueChangeEvent<DashboardMetadata> event) {
@@ -170,11 +179,16 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public void populate(BuildingDTO value) {
+    public void populate(final BuildingDTO value) {
         super.populate(value);
 
         dashboardSelect.setValue(value.dashboard());
-        applyFiltering(value.getPrimaryKey());
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                applyFiltering(value.getPrimaryKey());
+            }
+        });
     }
 
     private void applyFiltering(Key buildingId) {

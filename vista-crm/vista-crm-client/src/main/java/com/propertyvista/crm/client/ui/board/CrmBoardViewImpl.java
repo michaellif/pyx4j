@@ -20,6 +20,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -107,7 +109,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         }
 
         // set default (all building for all time) filtering:
-        setDashboardFiltering(new IBuildingGadget.FilterData());
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                setDashboardFiltering(new IBuildingGadget.FilterData());
+            }
+        });
     }
 
     @Override
@@ -115,7 +122,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         return (filters != null ? filters.getBuildingListerView() : null);
     }
 
-    private void setDashboardFiltering(IBuildingGadget.FilterData filterData) {
+    public void setDashboardFiltering(IBuildingGadget.FilterData filterData) {
         IGadgetIterator it = board.getBoard().getGadgetIterator();
         while (it.hasNext()) {
             IGadget gadget = it.next();
