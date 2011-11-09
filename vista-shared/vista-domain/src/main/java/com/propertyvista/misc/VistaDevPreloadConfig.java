@@ -26,7 +26,7 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     private int maxAdmin = 2;
 
-    private int numResidentialBuildings = 10;
+    private int numResidentialBuildings = 15;
 
     private int numLeads = 5;
 
@@ -36,7 +36,7 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     private int numFloors = 4;
 
-    private int numFloorplans = 4;
+    private int numFloorplans = 5;
 
     private int numParkings = 1;
 
