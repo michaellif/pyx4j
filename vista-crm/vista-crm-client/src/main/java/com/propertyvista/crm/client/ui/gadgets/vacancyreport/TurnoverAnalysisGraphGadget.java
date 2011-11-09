@@ -70,8 +70,9 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
     private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadget.class);
 
     private static final String MEASURE_SELECTOR_RADIO_GROUP_ID = "measureSelector";
-    private static final String RESOLUTION_SELECTOR_LABEL = "Scale";
-    
+    private static final String RESOLUTION_SELECTOR_LABEL = "Resolution:";
+    private static final String SCALE_SELECTOR_LABEL = "Scale:";
+   
     private static final boolean DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT = false;
     public static AnalysisResolution DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX = AnalysisResolution.Year;
     
@@ -98,13 +99,11 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
 
     private final LayoutPanel layoutPanel;
 
-    ListBox resolutionSelector;
+    private final ListBox resolutionSelector;
 
-    RadioButton percent;
+    private final RadioButton percent;
 
-    RadioButton number;
-
-    FlowPanel measureSelection;
+    private final RadioButton number;
 
     private final VacancyReportService service;
 
@@ -121,10 +120,10 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         graph.setSize("100%", "100%");
 
         controls = new HorizontalPanel();
-        controls.setHeight("100%");
         controls.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+        controls.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
         controls.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-        controls.setSpacing(10);
+//        controls.setSpacing(5);
 
         resolutionSelector = new ListBox(false);
         resolutionSelector.addChangeHandler(new ChangeHandler() {
@@ -134,6 +133,8 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
                 populateTurnoverAnalysis();
             }
         });
+        resolutionSelector.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
+        resolutionSelector.setWidth("5em");
 
         controls.add(new Label(i18n.tr(RESOLUTION_SELECTOR_LABEL)));
         controls.add(resolutionSelector);
@@ -151,15 +152,19 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         percent = new RadioButton(MEASURE_SELECTOR_RADIO_GROUP_ID, i18n.tr("%"));
         percent.addValueChangeHandler(measureChangeHandler);
         percent.setValue(DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT, false);
+
         number = new RadioButton(MEASURE_SELECTOR_RADIO_GROUP_ID, i18n.tr("#"));
         number.addValueChangeHandler(measureChangeHandler);
         number.setValue(!percent.getValue(), false);
 
-        measureSelection = new FlowPanel();
-        measureSelection.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-        measureSelection.getElement().getStyle().setPaddingRight(2, Unit.EM);
+        FlowPanel measureSelection = new FlowPanel();
+        measureSelection.getElement().getStyle().setMarginLeft(0.4, Unit.EM);
         measureSelection.add(percent);
         measureSelection.add(number);
+
+        Widget w;
+        controls.add(w = new Label(i18n.tr(SCALE_SELECTOR_LABEL)));
+        w.getElement().getStyle().setMarginLeft(2, Unit.EM);
         controls.add(measureSelection);
 
         layoutPanel = new LayoutPanel() {
