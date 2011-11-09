@@ -68,8 +68,15 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     private boolean filling;
 
+    private final boolean readOnly;
+
     public BoardBase() {
+        this(false);
+    }
+
+    public BoardBase(boolean readOnly) {
         super(Unit.EM);
+        this.readOnly = readOnly;
 
         actionsPanel = new HorizontalPanel();
         actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
@@ -155,6 +162,10 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         });
     }
 
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
     @Override
     public DashboardMetadata getData() {
         if (dashboardMetadata != null) {
@@ -227,7 +238,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             break;
         }
 
-        if (save) {
+        if (save && !isReadOnly()) {
             if (showSaveButton) {
                 btnSave.setEnabled(true); // user should manually save the state... 
             } else {

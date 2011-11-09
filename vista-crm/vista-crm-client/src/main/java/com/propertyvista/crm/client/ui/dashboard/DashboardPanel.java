@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -49,6 +48,11 @@ public class DashboardPanel extends BoardBase implements DashboardView {
     private LayoutsSet layouts;
 
     public DashboardPanel() {
+        this(false);
+    }
+
+    public DashboardPanel(boolean readOnly) {
+        super(readOnly);
     }
 
 //
@@ -198,8 +202,10 @@ public class DashboardPanel extends BoardBase implements DashboardView {
             this.add(layout21);
             this.add(layout22);
             this.add(layout3);
-            this.add(new HTML("&nbsp;&nbsp;&nbsp;&nbsp;"));
-            this.add(addGadget);
+            if (!isReadOnly()) {
+                this.add(new HTML("&nbsp;&nbsp;&nbsp;&nbsp;"));
+                this.add(addGadget);
+            }
             this.setSpacing(4);
         }
 

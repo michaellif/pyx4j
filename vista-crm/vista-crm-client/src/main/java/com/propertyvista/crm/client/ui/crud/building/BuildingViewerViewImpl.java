@@ -78,7 +78,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final IListerView<Concession> concessionLister;
 
-    private final DashboardPanel dashboardView = new DashboardPanel();
+    private final DashboardPanel dashboardView = new DashboardPanel(true);
 
     private final CEntityComboBox<DashboardMetadata> dashboardSelect = new CEntityComboBox<DashboardMetadata>(DashboardMetadata.class);
 
