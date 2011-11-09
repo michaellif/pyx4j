@@ -63,7 +63,6 @@ public enum PropertyMapController {
             PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
                 @Override
                 public void onSuccess(PropertyListDTO properties) {
-                    System.out.println(properties);
                     allProperties = properties;
                     obtainGeopoint();
                 }
@@ -116,6 +115,7 @@ public enum PropertyMapController {
         PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
         if (SearchType.city.equals(criteria.searchType().getValue())) {
             for (PropertyDTO property : allProperties.properties()) {
+                System.out.println("++++++++++" + property.address().city());
                 if (!criteria.city().isNull() && !criteria.city().equals(property.address().city())) {
                     continue;
                 }
