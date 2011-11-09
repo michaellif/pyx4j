@@ -30,16 +30,16 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
 
 /**
- * Sorting engine for DTO classes. Provides various utilities to aid DBO to DTO mapping and sorting of DTO objects.
+ * Sorting engine for times when customized sorting of resuls is required.
  */
-public class DTOSortingFactory<DTO extends IEntity> {
+public class SortingFactory<X extends IEntity> {
     @SuppressWarnings("rawtypes")
-    private final Map<String, Comparator> dtoPropertyToComparatorMap;
+    private final Map<String, Comparator> propertyToComparatorMap;
 
     @SuppressWarnings("rawtypes")
-    public DTOSortingFactory(Class<DTO> dtoClazz) {
+    public SortingFactory(Class<X> clazz) {
         Map<String, Comparator> temp = new HashMap<String, Comparator>();
-        IEntity dtoProto = EntityFactory.getEntityPrototype(dtoClazz);
+        IEntity dtoProto = EntityFactory.getEntityPrototype(clazz);
 
         for (String memberName : dtoProto.getEntityMeta().getMemberNames()) {
             String propertyName = dtoProto.getMember(memberName).getPath().toString();
@@ -49,15 +49,16 @@ public class DTOSortingFactory<DTO extends IEntity> {
                 try {
                     propertyComparator = customComparatorAnnotation.clazz().newInstance();
                 } catch (InstantiationException e) {
-                    // TODO do something (log maybe) (ask Vlad how to access the logger)
+                    // TODO how to access logger?
+                    e.printStackTrace();
                 } catch (IllegalAccessException e) {
-                    // TODO do something (log maybe) (ask Vlad how to access the logger)
+                    e.printStackTrace();
                 }
                 temp.put(propertyName, propertyComparator);
             }
 
         }
-        dtoPropertyToComparatorMap = Collections.unmodifiableMap(temp);
+        propertyToComparatorMap = Collections.unmodifiableMap(temp);
     }
 
     /**
@@ -84,11 +85,11 @@ public class DTOSortingFactory<DTO extends IEntity> {
         return extractedSorts;
     }
 
-    public Comparator<? super DTO> createDtoComparator(List<Sort> sortingCriteria) {
+    public Comparator<? super X> createDtoComparator(List<Sort> sortingCriteria) {
         return new CombinedComparator(sortingCriteria);
     }
 
-    public void sortDto(List<DTO> unsortedList, List<Sort> sortCriteria) {
+    public void sortDto(List<X> unsortedList, List<Sort> sortCriteria) {
         List<Sort> relevantSortCriteria = new LinkedList<Sort>();
 
         for (Sort sortCriterion : sortCriteria) {
@@ -98,19 +99,20 @@ public class DTOSortingFactory<DTO extends IEntity> {
         Collections.sort(unsortedList, createDtoComparator(relevantSortCriteria));
     }
 
-    private class CombinedComparator implements Comparator<DTO> {
+    // TODO consider optimizing performance by usage of arrays instead of lists...
+    private class CombinedComparator implements Comparator<X> {
         @SuppressWarnings("rawtypes")
         final List<Comparator> comps;
 
-        final List<Sort> sortCriteria;
+        final List<Path> sortCriteria;
 
         @SuppressWarnings("rawtypes")
         public CombinedComparator(List<Sort> relevantSortCriteria) {
             comps = new ArrayList<Comparator>(relevantSortCriteria.size());
-            sortCriteria = relevantSortCriteria;
+            sortCriteria = new ArrayList<Path>();
 
-            for (Sort sortCriterion : sortCriteria) {
-                final Comparator cmp = dtoPropertyToComparatorMap.get(sortCriterion.getPropertyName());
+            for (Sort sortCriterion : relevantSortCriteria) {
+                final Comparator cmp = propertyToComparatorMap.get(sortCriterion.getPropertyName());
                 if (cmp == null) {
                     // TODO maybe throw exception/log error (someone is trying to sort something that has no associated comparator)
                     continue;
@@ -128,21 +130,22 @@ public class DTOSortingFactory<DTO extends IEntity> {
                 } else {
                     comps.add(cmp);
                 }
+                sortCriteria.add(new Path(sortCriterion.getPropertyName()));
             }
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public int compare(DTO paramT1, DTO paramT2) {
+        public int compare(X paramT1, X paramT2) {
             @SuppressWarnings("rawtypes")
             Iterator<Comparator> ci = comps.iterator();
-            Iterator<Sort> si = sortCriteria.iterator();
-            while (ci.hasNext() & si.hasNext()) {
-                Sort sortCriterion = si.next();
+            Iterator<Path> si = sortCriteria.iterator();
+            while (ci.hasNext()) {
+                Path sortCriterion = si.next();
                 @SuppressWarnings("rawtypes")
                 Comparator cmp = ci.next();
-                Object val1 = paramT1.getMember(new Path(sortCriterion.getPropertyName())).getValue();
-                Object val2 = paramT2.getMember(new Path(sortCriterion.getPropertyName())).getValue();
+                Object val1 = paramT1.getMember(sortCriterion).getValue();
+                Object val2 = paramT2.getMember(sortCriterion).getValue();
                 int result = cmp.compare(val1, val2);
                 if (result != 0) {
                     return result;

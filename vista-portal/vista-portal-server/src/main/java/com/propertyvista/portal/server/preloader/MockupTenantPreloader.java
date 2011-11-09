@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -30,23 +31,24 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 /**
- * Generates and preloads mockup tenants for the Arrears Gadget Demos
+ * Generates and preloads mockup tenants for the Arrears Gadget Demos.
  * 
- * @author ArtyomB
+ * @author artyom
  * 
  */
 public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
-    private static final long ONE_DAY = 1000l * 60l * 60l * 24l;
-
-    private static final long MAX_LEASE = 24l * 60l * 60l * 1000l * 24l * 30l;
-
-    private static final double MAX_ARREAR = 3000d;
-
-    private static final double MAX_ARBALANCE = 10000d;
-
-    private static final double MAX_PREPAYMENTS = 3000d;
-
     private static final Random RND = new Random(9001);
+
+    //@formatter:off
+    private static final long ONE_DAY = 1000l * 60l * 60l * 24l;
+    private static final long MAX_LEASE = 24l * 60l * 60l * 1000l * 24l * 30l;
+    private static final double MAX_ARREAR = 3000d;
+    private static final double MAX_ARBALANCE = 10000d;
+    
+    private static final double HAS_ARREAR_CHANCE = 0.2;
+    private static final double HAS_PREPAYMENT_CHANCE = 0.1;
+    private static final double MAX_PREPAYMENTS = 2000d;
+    //@formatter:on
 
     @Override
     public String delete() {
@@ -59,9 +61,12 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-        int counter = 0;
+        int tenantCounter = 0;
+        int statusCounter = 0;
+
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         List<AptUnit> units = Persistence.service().query(criteria);
+
         final LogicalDate startDate = new LogicalDate();
         startDate.setYear(106);
         startDate.setMonth(0);
@@ -70,36 +75,69 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
 
         for (AptUnit unit : units) {
             LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
-
+            Persistence.service().retrieve(unit.belongsTo());
             while (movein.before(endDate)) {
                 LogicalDate moveout = new LogicalDate(movein.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
                 MockupTenant tenant = EntityFactory.create(MockupTenant.class);
-                tenant.belongsTo().set(unit);
+                tenant.belongsTo().setPrimaryKey(unit.getPrimaryKey());
                 tenant.moveIn().setValue(movein);
                 tenant.moveOut().setValue(moveout);
                 tenant.firstName().setValue(RandomUtil.randomFirstName());
                 tenant.lastName().setValue(RandomUtil.randomLastName());
-                tenant.arBalance().setValue(RandomUtil.randomDouble(MAX_ARBALANCE));
-                tenant.prepayments().setValue(RandomUtil.randomDouble(MAX_PREPAYMENTS));
                 Persistence.service().persist(tenant);
-                ++counter;
+                ++tenantCounter;
 
                 // create mockup arrears history
                 LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(movein.getTime()));
+                List<MockupArrear> arrears = new ArrayList<MockupArrear>();
                 while (currentMonth.before(moveout)) {
                     MockupArrear arrear = EntityFactory.create(MockupArrear.class);
-                    arrear.month().setValue(currentMonth);
-                    arrear.belongsTo().set(tenant);
-                    arrear.amount().setValue((RND.nextInt() % 10 < 7) ? RandomUtil.randomDouble(MAX_ARREAR) : 0d);
-                    Persistence.service().persist(arrear);
+
+                    // FIXME this is doesn't feel right! we cannot store values that belong to properties of other entities that are prone to updates (i.e. tenant's name, building property code, unit number etc.)                    
+                    arrear.belongsTo().setPrimaryKey(tenant.getPrimaryKey());
+                    arrear.firstName().setValue(tenant.firstName().getValue());
+                    arrear.lastName().setValue(tenant.lastName().getValue());
+
+                    arrear.unit().setPrimaryKey(unit.getPrimaryKey());
+                    arrear.unitNumber().setValue(unit.info().number().getValue());
+
+                    arrear.building().setPrimaryKey(unit.belongsTo().getPrimaryKey());
+                    arrear.propertyCode().setValue(unit.belongsTo().propertyCode().getValue());
+
+                    arrear.monthAgo().setValue(randomArrear());
+                    arrear.twoMonthsAgo().setValue(randomArrear());
+                    arrear.threeMonthsAgo().setValue(randomArrear());
+                    arrear.overFourMonthsAgo().setValue(randomArrear());
+                    arrear.arBalance().setValue(randomARBalance());
+                    arrear.prepayments().setValue(randomPrepayments());
+                    arrear.totalBalance().setValue(arrear.arBalance().getValue() - arrear.prepayments().getValue());
+
+                    arrear.statusTimestamp().setValue(currentMonth);
+                    arrears.add(arrear);
+                    ++statusCounter;
+
                     currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
                 }
+                Persistence.service().persist(arrears);
                 movein = new LogicalDate(moveout.getTime() + ONE_DAY);
             }
 
         }
 
-        return "Created " + counter + " mockup tennants for Arrears Gadget";
+        return "Created " + tenantCounter + " mockup tennants and " + statusCounter + " arrear statuses for Arrears Gadget";
     }
+
+    private double randomArrear() {
+        return (RND.nextDouble() <= HAS_ARREAR_CHANCE) ? RND.nextDouble() * MAX_ARREAR : 0d;
+    }
+
+    private double randomARBalance() {
+        return RND.nextDouble() * MAX_ARBALANCE;
+    }
+
+    private double randomPrepayments() {
+        return (RND.nextDouble() <= HAS_PREPAYMENT_CHANCE) ? RND.nextDouble() * MAX_PREPAYMENTS : 0d;
+    }
+
 }

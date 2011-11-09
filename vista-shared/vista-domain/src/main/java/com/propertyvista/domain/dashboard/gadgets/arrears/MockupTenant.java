@@ -16,7 +16,6 @@ package com.propertyvista.domain.dashboard.gadgets.arrears;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -41,13 +40,6 @@ public interface MockupTenant extends IEntity {
     IPrimitive<LogicalDate> moveIn();
 
     IPrimitive<LogicalDate> moveOut();
-
-    @Format("#0.00")
-    IPrimitive<Double> prepayments();
-
-    @Caption(name = "AR Balance")
-    @Format("#0.00")
-    IPrimitive<Double> arBalance();
 
     @Owner
     @Detached
