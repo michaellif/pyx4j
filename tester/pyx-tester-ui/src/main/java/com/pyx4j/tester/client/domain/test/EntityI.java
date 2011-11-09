@@ -81,6 +81,11 @@ public interface EntityI extends IEntity {
     @NotNull
     IPrimitive<Date> mandatoryDatePicker();
 
+    IPrimitive<Date> optionalSingleMonthDatePicker();
+
+    @NotNull
+    IPrimitive<Date> mandatorySingleMonthDatePicker();
+
     @Editor(type = EditorType.phone)
     IPrimitive<String> optionalPhone();
 
@@ -93,5 +98,12 @@ public interface EntityI extends IEntity {
 
     @Owned
     IList<EntityIV> entityIVList();
+
+    @Editor(type = EditorType.email)
+    IPrimitive<String> optionalEmail();
+
+    @Editor(type = EditorType.email)
+    @NotNull
+    IPrimitive<String> mandatoryEmail();
 
 }
