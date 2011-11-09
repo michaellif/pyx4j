@@ -22,6 +22,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -209,7 +210,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
 
         netExposure = vacant + notice - (vacantRented + noticeRented);
         summary.netExposureAbsolute().setValue(netExposure);
-        summary.netExposureRelative().setValue(netExposure / (double) total);
+        summary.netExposureRelative().setValue(netExposure / (double) total * 100);
         callback.onSuccess(summary);
     }
 
@@ -248,7 +249,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
 
         List<UnitVacancyReportEvent> events = Persistence.service().query(criteria);
         // TODO consider using ordering of results by unitKey and then date (if possible) instead of hashmap 
-        HashMap<String, Boolean> someoneMovedOut = new HashMap<String, Boolean>();
+        HashMap<Key, Boolean> someoneMovedOut = new HashMap<Key, Boolean>();
 
         long intervalStart = fromDate.getTime();
         long intervalEnd = resolution.intervalEnd(intervalStart);
@@ -260,7 +261,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
             long eventTime = event.eventDate().getValue().getTime();
             while (eventTime >= intervalEnd) {
                 if (!isFirstEmptyRange) {
-                    someoneMovedOut = new HashMap<String, Boolean>();
+                    someoneMovedOut = new HashMap<Key, Boolean>();
                     UnitVacancyReportTurnoverAnalysisDTO analysis = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
                     analysis.fromDate().setValue(new LogicalDate(intervalStart));
                     analysis.toDate().setValue(new LogicalDate(intervalEnd));
@@ -277,7 +278,7 @@ public class VacancyReportServiceImpl implements VacancyReportService {
                 }
             }
             // FIXME Really Slow: hope there will be unique key someday !!!
-            String unitKey = "" + event.propertyCode() + event.unit();
+            Key unitKey = event.belongsTo().getPrimaryKey();
             String eventType = event.eventType().getValue();
             Boolean isMovedOut = someoneMovedOut.get(unitKey);
             if (isMovedOut == null && eventType.equals("moveout")) {
@@ -349,12 +350,13 @@ public class VacancyReportServiceImpl implements VacancyReportService {
         //      - real implementation should probably have a real key for the unit - no need to use ('propertyCode', 'unitNumber') as key.
         EntityQueryCriteria<UnitVacancyReportEvent> criteria = new EntityQueryCriteria<UnitVacancyReportEvent>(UnitVacancyReportEvent.class);
 
-        String unitNumber = unit.unit().getValue();
-        String propertyCode = unit.propertyCode().getValue();
+//        String unitNumber = unit.unit().getValue();
+//        String propertyCode = unit.propertyCode().getValue();
 
         criteria.add(new PropertyCriterion(criteria.proto().eventDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
-        criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.EQUAL, propertyCode));
-        criteria.add(new PropertyCriterion(criteria.proto().unit(), Restriction.EQUAL, unitNumber));
+//        criteria.add(new PropertyCriterion(criteria.proto().propertyCode(), Restriction.EQUAL, propertyCode));
+//        criteria.add(new PropertyCriterion(criteria.proto().unit(), Restriction.EQUAL, unitNumber));
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), unit));
         criteria.sort(new Sort(criteria.proto().eventDate().getPath().toString(), true));
 
         List<UnitVacancyReportEvent> events = Persistence.service().query(criteria);

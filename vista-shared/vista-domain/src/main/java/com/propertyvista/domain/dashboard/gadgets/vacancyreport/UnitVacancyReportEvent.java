@@ -14,11 +14,18 @@
 package com.propertyvista.domain.dashboard.gadgets.vacancyreport;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface UnitVacancyReportEvent extends IEntity {
+    @Owner
+    @Detached
+    @ReadOnly
+    UnitVacancyStatus belongsTo();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> eventDate();

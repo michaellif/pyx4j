@@ -18,15 +18,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportEvent;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 
 public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
     private static final String DATA_SOURCE_FILE = "unit-vacancy-report-events.csv";
@@ -37,7 +40,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
 
     private static final long MIN_STAY_IN_UNIT_DELTA = 1000l * 60l * 60l * 24l * 365l; // approx 1 year
 
-    private static final long MAX_STAY_IN_UNIT_DELTA = 1000l * 60l * 60l * 24l * 365l * 4l; // approx 4 years
+    private static final long MAX_STAY_IN_UNIT_DELTA = 1000l * 60l * 60l * 24l * 365l * 3l; // approx 3 years
 
     private static final long MAX_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 30l;
 
@@ -76,7 +79,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
         UnitVacancyReportEvent event = EntityFactory.create(UnitVacancyReportEvent.class);
         event.eventDate().setValue(start);
 
-        for (UnitId unitId : getAvailableUnits()) {
+        for (Key statusPk : getAvailableUnits()) {
             LogicalDate rentedFrom = newDate(start.getTime() + rand(MIN_EVENT_DELTA, MAX_WAIT_UNTIL_RENTSTART));
             do {
 
@@ -89,7 +92,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                 event.eventType().setValue("movein");
                 if (event.eventDate().getValue().getTime() > end.getTime())
                     break;
-                persist(unitId, event);
+                persist(statusPk, event);
                 ++eventsCount;
 
                 // create notice event (if needed)
@@ -105,7 +108,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                     event.moveOutDate().setValue(moveoutDate);
                     if (event.eventDate().getValue().getTime() > end.getTime())
                         break;
-                    persist(unitId, event);
+                    persist(statusPk, event);
                     ++eventsCount;
                 }
 
@@ -122,7 +125,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                     event.rentReady().setValue(isRenoNeeded ? "needs repairs" : "rentready");
                     if (event.eventDate().getValue().getTime() > end.getTime())
                         break;
-                    persist(unitId, event);
+                    persist(statusPk, event);
                     ++eventsCount;
                 }
 
@@ -139,7 +142,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                     event.rentFromDate().setValue(rentedFrom);
                     if (event.eventDate().getValue().getTime() > end.getTime())
                         break;
-                    persist(unitId, event);
+                    persist(statusPk, event);
                     ++eventsCount;
                 }
 
@@ -152,7 +155,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                 event.eventType().setValue("moveout");
                 if (event.eventDate().getValue().getTime() > end.getTime())
                     break;
-                persist(unitId, event);
+                persist(statusPk, event);
                 ++eventsCount;
 
                 // scoped event if not scoped yet
@@ -165,7 +168,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                     event.rentReady().setValue(isRenoNeeded ? "needs repairs" : "rentready");
                     if (event.eventDate().getValue().getTime() > end.getTime())
                         break;
-                    persist(unitId, event);
+                    persist(statusPk, event);
                     ++eventsCount;
                 }
 
@@ -187,7 +190,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
                     event.rentFromDate().setValue(rentedFrom);
                     if (event.eventDate().getValue().getTime() > end.getTime())
                         break;
-                    persist(unitId, event);
+                    persist(statusPk, event);
                     ++eventsCount;
                 }
             } while (true);
@@ -195,51 +198,29 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
         return "Created " + eventsCount + " unit (apartment) events for Availability/Vacancy Gadgets";
     }
 
-    private static void persist(UnitId unitId, UnitVacancyReportEvent event) {
-        event.unit().setValue(unitId.unit);
-        event.propertyCode().setValue(unitId.propertyCode);
+    private static void persist(Key unitId, UnitVacancyReportEvent event) {
+        event.belongsTo().setPrimaryKey(unitId);
         Persistence.service().persist(event);
     }
 
-    private static List<UnitId> getAvailableUnits() {
-        // TODO currently we have to generate these also but later they should be available in the DB
-        List<UnitId> unitIds = new ArrayList<UnitId>();
-        HashMap<String, List<String>> buildings = new HashMap<String, List<String>>();
-//
-//        buildings.put("bath1652", Arrays.asList(new String[] { "106", "207", "311", "404", "411" }));
-//        buildings.put("chel3126", Arrays.asList(new String[] { "609" }));
-//        buildings.put("corn0164", Arrays.asList(new String[] { "112", "113" }));
-//        buildings.put("jean0200", Arrays.asList(new String[] { "8", "26" }));
-//
-        // bath1650
-        List<String> bathUnits = new ArrayList<String>();
-        for (int i = 1; i <= 6; ++i) {
-            for (int j = 0; j <= 3; ++j) {
-                bathUnits.add(Integer.toString(100 * i + j));
-            }
-        }
-        buildings.put("bath1650", bathUnits);
-        buildings.put("bath1652", bathUnits);
-        buildings.put("chel3123", bathUnits);
-        buildings.put("corn0164", bathUnits);
-        buildings.put("jean0200", bathUnits);
+    private static List<Key> getAvailableUnits() {
+        EntityQueryCriteria<UnitVacancyStatus> criteria = new EntityQueryCriteria<UnitVacancyStatus>(UnitVacancyStatus.class);
+        List<UnitVacancyStatus> statuses = Persistence.service().query(criteria);
+        List<Key> unitPKs = new ArrayList<Key>();
 
-        for (String building : buildings.keySet()) {
-            for (String unit : buildings.get(building)) {
-                UnitId unitId = new UnitId();
-                unitId.propertyCode = building;
-                unitId.unit = unit;
-                unitIds.add(unitId);
-            }
+        for (UnitVacancyStatus status : statuses) {
+            unitPKs.add(status.getPrimaryKey());
         }
-        return unitIds;
+
+        return randomChoice(unitPKs, 40);
     }
 
-    @SuppressWarnings("unused")
     private static <T> List<T> randomChoice(List<T> list, int howMany) {
         List<T> copy = new ArrayList<T>(list);
         List<T> result = new ArrayList<T>(list);
-
+        if (howMany >= list.size()) {
+            return list;
+        }
         int minIndex = list.size() - howMany;
         for (int lastIndex = list.size() - 1; lastIndex >= minIndex; --lastIndex) {
             int i = RND.nextInt(lastIndex + 1);
