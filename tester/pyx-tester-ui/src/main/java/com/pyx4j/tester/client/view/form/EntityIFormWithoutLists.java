@@ -70,8 +70,23 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setHR(++row, 0, 1);
 
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalDatePicker())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryDatePicker())));
+
+        main.setHR(++row, 0, 1);
+
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalSingleMonthDatePicker())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatorySingleMonthDatePicker())));
+
+        main.setHR(++row, 0, 1);
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPhone())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPhone())));
+
+        main.setHR(++row, 0, 1);
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEmail())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEmail())));
 
         return main;
     }
