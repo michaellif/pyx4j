@@ -56,8 +56,8 @@ propertyCode,streetNumber,streetName,streetType,streetDirection,city,province.co
 ,3332,McCarthy,road,,Ottawa,ON,Canada,K1V 0H9
 ,428,Kent,,,Ottawa,ON,Canada,K2P 2B3
 ,2222,Webster,avenue,,Ottawa,ON,Canada,K1H 7H2
-,572,Weber,north,,Waterloo,ON,Canada,N2L 5C6
-,1155,King,east,,Hamilton,ON,Canada,L8M 1G1
+,572,Weber,,north,Waterloo,ON,Canada,N2L 5C6
+,1155,King,,east,Hamilton,ON,Canada,L8M 1G1
 ,477,Guelph,line,,Burlington,ON,Canada,L7R 3L8
 ,281,Lakeshore,,east,Port Credit,ON,Canada,L5G 1H3
 ,4884,Dundas,,west,Etobicoke,ON,Canada,M9A 1B5
