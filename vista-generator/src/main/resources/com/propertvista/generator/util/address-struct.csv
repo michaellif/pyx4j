@@ -1,68 +1,68 @@
-propertyCode,streetNumber,streetName,streetType,streetDirection,city,province.code,country.name,postalCode
-,3822,St Denis,,,Montréal,QC,Canada,H2W 2M2
-,572,Weber,street,north,Waterloo,ON,Canada,N2L 5C6
-,1155,King,street,east,Hamilton,ON,Canada,L8M 1G1
-,477,Guelph,line,,Burlington,ON,Canada,L7R 3L8
-,41,Main,street,east,Milton,ON,Canada,L9T 1N2
-,140,University,avenue,west,Waterloo,ON,Canada,N2L 6J3
-,1264,Victoria,,north,Kitchener,ON,Canada,N2B 3C9
-,92,Erb,,east,Waterloo,ON,Canada,N2J 1L9
-,675,Queen,street,south,Kitchener,ON,Canada,N2M 1A1
-,604,Belmont,,west,Kitchener,ON,Canada,N2M 1N5
-,10,Lovett Lake,crescent,,Halifax,NS,Canada,B3S 1B8
-,6241,Quinpool,road,,Halifax,NS,Canada,B3L 1A4
-,201,Chain Lake,drive,,Halifax,NS,Canada,B3S 1C8
-,1568,Hollis,street,,Halifax,NS,Canada,B3J 1V3
-,114,Chain Lake,drive,,Halifax,NS,Canada,B3S 1B1
-,5657,Spring Garden,road,,Halifax,NS,Canada,B3J 3R4
-,6112,Willow,,,Halifax,NS,Canada,B3K 1M2
-,310,Broadway,,,Winnipeg,MB,Canada,R3C 0S6
-,1600,Church,avenue,,Winnipeg,MB,Canada,R2X 1G8
-,167,McPhillips,,,Winnipeg,MB,Canada,R3E 2K1
-,420,DesMeurons,,,Winnipeg,MB,Canada,R2H 2N9
-,1650,Notre Dame,avenue,,St James,MB,Canada,R3H 1H6
-,566,Osborne,street,,Winnipeg,MB,Canada,R3L 2B4
-,1428,Commercial,drive,,Vancouver,BC,Canada,V5L 3X9
-,808,Nelson,street,,Vancouver,BC,Canada,V6Z 2H2
-,938,Howe,street,,Vancouver,BC,Canada,V6Z 1N9
-,6964,Victoria,drive,,Vancouver,BC,Canada,V5P 3Y8
-,8874,Hudson,street,,Vancouver,BC,Canada,V6P 4N2
-,8465,Granville,street,,Vancouver,BC,Canada,V6P 4Z9
-,200,Albert,street,,Regina,SK,Canada,S4R 2N4
-,2176,7th,avenue,,Regina,SK,Canada,S4R 1C4
-,1362,Mcintyre,street,,Regina,SK,Canada,S4R 2M8
-,259,McDonald,street,north,Regina,SK,Canada,
-,1758,McAra,street,,Regina,SK,Canada,S4N 6L4
-,1953,Scarth,street,,Regina,SK,Canada,S4P 2H1
-,2062,Albert,street,,Regina,SK,Canada,S4P 2T7
-,435,Longman,crescent,,Regina,SK,Canada,S4N 6G3
-,1735,Francis,street,,Regina,SK,Canada,S4N 7N2
-,505,Park,street,,Regina,SK,Canada,S4N 5B2
-,150,1st,avenue,south,Saskatoon,SK,Canada,S7K 1K2
-,110,60th,street,west,Saskatoon,SK,Canada,S7R 1E1
-,1633,Quebec,avenue,,Saskatoon,SK,Canada,S7K 2C7
-,1023,Colony,street,,Saskatoon,SK,Canada,S7N 0S3
-,610,Idylwyld,drive,north,Saskatoon,SK,Canada,S7L 0Z2
-,1915,Ontario,avenue,,Saskatoon,SK,Canada,S7K 1T5
-,2705,Wentz,avenue,,Saskatoon,SK,Canada,S7K 4B6
-,409,Haviland,crescent,,Saskatoon,SK,Canada,S7L 5B3
-,210,Faithful,crescent,,Saskatoon,SK,Canada,S7K 8H8
-,1206,Emerson,avenue,,Saskatoon,SK,Canada,S7H 2X1
-,707,Brand,road,,Saskatoon,SK,Canada,S7J 5L5
-,2625,Airport,drive,,Saskatoon,SK,Canada,S7L 7L1
-,1495,Startop,road,,Gloucester,ON,Canada,K1B 3W5
-,341,MacLaren,,,Ottawa,ON,Canada,K2P 2E2
-,343,O'Connor,,,Ottawa,ON,Canada,K2P 1V9
-,3332,McCarthy,road,,Ottawa,ON,Canada,K1V 0H9
-,428,Kent,,,Ottawa,ON,Canada,K2P 2B3
-,2222,Webster,avenue,,Ottawa,ON,Canada,K1H 7H2
-,572,Weber,,north,Waterloo,ON,Canada,N2L 5C6
-,1155,King,,east,Hamilton,ON,Canada,L8M 1G1
-,477,Guelph,line,,Burlington,ON,Canada,L7R 3L8
-,281,Lakeshore,,east,Port Credit,ON,Canada,L5G 1H3
-,4884,Dundas,,west,Etobicoke,ON,Canada,M9A 1B5
-,2489,Finch,avenue,west,North York,ON,Canada,M9M 2G1
-,4555,Highway 7,,,Woodbridge,ON,Canada,L4L 1S6
-,121,Harbord,street,,Toronto,ON,Canada,M5S 1G9
-,645,Gardiners,,,Kingston,ON,Canada,K7M 8K2
-,221,Portsmouth,avenue,,Kingston,ON,Canada,K7M 1V5
+streetNumber,streetName,streetType,streetDirection,city,province.code,country.name,postalCode
+3822,St Denis,,,Montréal,QC,Canada,H2W 2M2
+572,Weber,street,north,Waterloo,ON,Canada,N2L 5C6
+1155,King,street,east,Hamilton,ON,Canada,L8M 1G1
+477,Guelph,line,,Burlington,ON,Canada,L7R 3L8
+41,Main,street,east,Milton,ON,Canada,L9T 1N2
+140,University,avenue,west,Waterloo,ON,Canada,N2L 6J3
+1264,Victoria,,north,Kitchener,ON,Canada,N2B 3C9
+92,Erb,,east,Waterloo,ON,Canada,N2J 1L9
+675,Queen,street,south,Kitchener,ON,Canada,N2M 1A1
+604,Belmont,,west,Kitchener,ON,Canada,N2M 1N5
+10,Lovett Lake,crescent,,Halifax,NS,Canada,B3S 1B8
+6241,Quinpool,road,,Halifax,NS,Canada,B3L 1A4
+201,Chain Lake,drive,,Halifax,NS,Canada,B3S 1C8
+1568,Hollis,street,,Halifax,NS,Canada,B3J 1V3
+114,Chain Lake,drive,,Halifax,NS,Canada,B3S 1B1
+5657,Spring Garden,road,,Halifax,NS,Canada,B3J 3R4
+6112,Willow,,,Halifax,NS,Canada,B3K 1M2
+310,Broadway,,,Winnipeg,MB,Canada,R3C 0S6
+1600,Church,avenue,,Winnipeg,MB,Canada,R2X 1G8
+167,McPhillips,,,Winnipeg,MB,Canada,R3E 2K1
+420,DesMeurons,,,Winnipeg,MB,Canada,R2H 2N9
+1650,Notre Dame,avenue,,St James,MB,Canada,R3H 1H6
+566,Osborne,street,,Winnipeg,MB,Canada,R3L 2B4
+1428,Commercial,drive,,Vancouver,BC,Canada,V5L 3X9
+808,Nelson,street,,Vancouver,BC,Canada,V6Z 2H2
+938,Howe,street,,Vancouver,BC,Canada,V6Z 1N9
+6964,Victoria,drive,,Vancouver,BC,Canada,V5P 3Y8
+8874,Hudson,street,,Vancouver,BC,Canada,V6P 4N2
+8465,Granville,street,,Vancouver,BC,Canada,V6P 4Z9
+200,Albert,street,,Regina,SK,Canada,S4R 2N4
+2176,7th,avenue,,Regina,SK,Canada,S4R 1C4
+1362,Mcintyre,street,,Regina,SK,Canada,S4R 2M8
+259,McDonald,street,north,Regina,SK,Canada,S4N 5W3
+1758,McAra,street,,Regina,SK,Canada,S4N 6L4
+1953,Scarth,street,,Regina,SK,Canada,S4P 2H1
+2062,Albert,street,,Regina,SK,Canada,S4P 2T7
+435,Longman,crescent,,Regina,SK,Canada,S4N 6G3
+1735,Francis,street,,Regina,SK,Canada,S4N 7N2
+505,Park,street,,Regina,SK,Canada,S4N 5B2
+150,1st,avenue,south,Saskatoon,SK,Canada,S7K 1K2
+110,60th,street,west,Saskatoon,SK,Canada,S7R 1E1
+1633,Quebec,avenue,,Saskatoon,SK,Canada,S7K 2C7
+1023,Colony,street,,Saskatoon,SK,Canada,S7N 0S3
+610,Idylwyld,drive,north,Saskatoon,SK,Canada,S7L 0Z2
+1915,Ontario,avenue,,Saskatoon,SK,Canada,S7K 1T5
+2705,Wentz,avenue,,Saskatoon,SK,Canada,S7K 4B6
+409,Haviland,crescent,,Saskatoon,SK,Canada,S7L 5B3
+210,Faithful,crescent,,Saskatoon,SK,Canada,S7K 8H8
+1206,Emerson,avenue,,Saskatoon,SK,Canada,S7H 2X1
+707,Brand,road,,Saskatoon,SK,Canada,S7J 5L5
+2625,Airport,drive,,Saskatoon,SK,Canada,S7L 7L1
+1495,Startop,road,,Gloucester,ON,Canada,K1B 3W5
+341,MacLaren,,,Ottawa,ON,Canada,K2P 2E2
+343,O'Connor,,,Ottawa,ON,Canada,K2P 1V9
+3332,McCarthy,road,,Ottawa,ON,Canada,K1V 0H9
+428,Kent,,,Ottawa,ON,Canada,K2P 2B3
+2222,Webster,avenue,,Ottawa,ON,Canada,K1H 7H2
+572,Weber,,north,Waterloo,ON,Canada,N2L 5C6
+1155,King,,east,Hamilton,ON,Canada,L8M 1G1
+477,Guelph,line,,Burlington,ON,Canada,L7R 3L8
+281,Lakeshore,,east,Port Credit,ON,Canada,L5G 1H3
+4884,Dundas,,west,Etobicoke,ON,Canada,M9A 1B5
+2489,Finch,avenue,west,North York,ON,Canada,M9M 2G1
+4555,Highway 7,,,Woodbridge,ON,Canada,L4L 1S6
+121,Harbord,street,,Toronto,ON,Canada,M5S 1G9
+645,Gardiners,,,Kingston,ON,Canada,K7M 8K2
+221,Portsmouth,avenue,,Kingston,ON,Canada,K7M 1V5
