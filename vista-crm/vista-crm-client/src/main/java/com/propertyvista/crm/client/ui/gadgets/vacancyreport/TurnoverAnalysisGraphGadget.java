@@ -334,19 +334,20 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
         }
 
         DataSource ds = new DataSource();
+        // TODO the following is needed to avoid one point with zero value that is drawed in the wrong place
+        if (!(data.size() == 1 && data.get(0).unitsTurnedOverAbs().getValue() == 0)) {
+            for (UnitVacancyReportTurnoverAnalysisDTO intervalData : data) {
+                ArrayList<Double> values = new ArrayList<Double>();
+                if (!isTunoverMeasuredByPercent()) {
+                    values.add((double) intervalData.unitsTurnedOverAbs().getValue().intValue());
+                } else {
+                    values.add(intervalData.unitsTurnedOverPct().getValue());
+                }
 
-        for (UnitVacancyReportTurnoverAnalysisDTO intervalData : data) {
-            ArrayList<Double> values = new ArrayList<Double>();
-            if (!isTunoverMeasuredByPercent()) {
-                values.add((double) intervalData.unitsTurnedOverAbs().getValue().intValue());
-            } else {
-                values.add(intervalData.unitsTurnedOverPct().getValue());
+                ds.addDataSet(ds.new Metric(getSelectedResolution().intervalLabelFormat(intervalData.fromDate().getValue(), intervalData.toDate().getValue())),
+                        values);
             }
-
-            ds.addDataSet(ds.new Metric(getSelectedResolution().intervalLabelFormat(intervalData.fromDate().getValue(), intervalData.toDate().getValue())),
-                    values);
         }
-
         SvgFactory factory = new SvgFactoryForGwt();
 
         GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, graph.getElement().getClientWidth(), graph.getElement()
