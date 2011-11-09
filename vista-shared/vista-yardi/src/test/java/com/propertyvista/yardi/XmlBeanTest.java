@@ -26,7 +26,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -198,6 +200,7 @@ public class XmlBeanTest {
 
     @BeforeClass
     public static void init() {
+        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
         SharedData.init();
     }
 }
