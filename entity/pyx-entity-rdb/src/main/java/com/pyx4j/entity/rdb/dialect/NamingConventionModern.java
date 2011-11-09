@@ -92,4 +92,22 @@ public class NamingConventionModern implements NamingConvention {
         return tableName + "_seq";
     }
 
+    @Override
+    public String sqlTableIndexName(String tableName, List<String> columns) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(tableName);
+        sql.append('_');
+        boolean first = true;
+        for (String column : columns) {
+            if (first) {
+                first = false;
+            } else {
+                sql.append("$");
+            }
+            sql.append(column);
+        }
+        sql.append("Idx");
+        return sql.toString();
+    }
+
 }

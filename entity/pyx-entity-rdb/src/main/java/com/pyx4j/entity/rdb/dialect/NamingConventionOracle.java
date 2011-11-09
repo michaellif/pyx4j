@@ -99,6 +99,19 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     @Override
+    public String sqlTableIndexName(String tableName, List<String> columns) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(tableName);
+        sql.append('_');
+        for (String column : columns) {
+            sql.append(column);
+            sql.append('_');
+        }
+        sql.append("_IDX");
+        return sql.toString();
+    }
+
+    @Override
     public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName) {
         return sqlTableName(javaPersistenceTableName) + "_" + sqlTableName(javaPersistenceChildTableName);
     }

@@ -22,9 +22,13 @@ package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
@@ -41,7 +45,7 @@ class TableDDL {
 
         String group;
 
-        List<String> columns = new Vector<String>();
+        Map<String, String> columns = new HashMap<String, String>();
 
     }
 
@@ -92,25 +96,59 @@ class TableDDL {
         Collections.reverse(sqls);
 
         for (IndexDef indexDef : indexes) {
-            //sqls.add(createIndexSql(indexDef));
+            sqls.add(createIndexSql(dialect, tableModel.tableName, indexDef));
         }
 
         return sqls;
     }
 
-    private static String createIndexSql(IndexDef indexDef) {
-        // TODO Auto-generated method stub
-        return null;
+    private static String createIndexSql(Dialect dialect, String tableName, final IndexDef indexDef) {
+        List<String> columnsSorted = new Vector<String>();
+        columnsSorted.addAll(indexDef.columns.keySet());
+        Collections.sort(columnsSorted, new Comparator<String>() {
+
+            @Override
+            public int compare(String o1, String o2) {
+                return indexDef.columns.get(o1).compareTo(indexDef.columns.get(o2));
+            }
+        });
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("CREATE INDEX ");
+        if (CommonsStringUtils.isStringSet(indexDef.name)) {
+            sql.append(indexDef.name);
+        } else {
+            sql.append(dialect.getNamingConvention().sqlTableIndexName(tableName, columnsSorted));
+        }
+        sql.append(" ON ").append(tableName).append(" (");
+        boolean first = true;
+        for (String column : columnsSorted) {
+            if (first) {
+                first = false;
+            } else {
+                sql.append(", ");
+            }
+            sql.append(column);
+        }
+        sql.append(")");
+        return sql.toString();
     }
 
     private static void addIndexDef(List<IndexDef> indexes, String sqlName, Indexed indexedAnnotation) {
         if ((indexedAnnotation.group() != null) && (indexedAnnotation.group().length > 0)) {
             nextGroup: for (String group : indexedAnnotation.group()) {
                 // find index of the same group
+                String position = "";
                 if (group != null) {
+                    int p = group.indexOf(',');
+                    if (p != -1) {
+                        position = group.substring(p);
+                        group = group.substring(0, p - 1);
+                    }
+
                     for (IndexDef other : indexes) {
                         if (group.equals(other.group)) {
-                            other.columns.add(sqlName);
+                            other.columns.put(sqlName, position);
                             continue nextGroup;
                         }
                     }
@@ -118,13 +156,13 @@ class TableDDL {
                 IndexDef def = new IndexDef();
                 def.name = indexedAnnotation.name();
                 def.group = group;
-                def.columns.add(sqlName);
+                def.columns.put(sqlName, position);
                 indexes.add(def);
             }
         } else {
             IndexDef def = new IndexDef();
             def.name = indexedAnnotation.name();
-            def.columns.add(sqlName);
+            def.columns.put(sqlName, "");
             indexes.add(def);
         }
 

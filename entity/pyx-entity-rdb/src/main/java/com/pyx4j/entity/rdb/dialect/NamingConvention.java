@@ -45,4 +45,6 @@ public interface NamingConvention {
 
     public String sqlChildTableSequenceName(String tableName);
 
+    public String sqlTableIndexName(String tableName, List<String> columns);
+
 }
