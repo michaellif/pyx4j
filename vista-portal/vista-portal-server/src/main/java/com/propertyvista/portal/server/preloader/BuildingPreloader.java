@@ -365,8 +365,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         StringBuilder sb = new StringBuilder();
         sb.append(generate());
         if (!config().minimizePreloadTime) {
-            sb.append("\n");
-            sb.append(importData());
+            //sb.append("\n");
+            //sb.append(importData());
         }
         return sb.toString();
     }
