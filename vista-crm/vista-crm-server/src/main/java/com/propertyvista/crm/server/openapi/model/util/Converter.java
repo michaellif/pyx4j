@@ -279,9 +279,15 @@ public class Converter {
 
         to.streetName().setValue(from.streetName);
         to.streetNumber().setValue(from.streetNumber);
-        to.streetNumberSuffix().setValue(from.streetNumberSuffix);
-        to.streetDirection().setValue(StreetDirection.valueOf(from.streetDirection));
-        to.streetType().setValue(StreetType.valueOf(from.streetType));
+        if (CommonsStringUtils.isStringSet(from.streetNumberSuffix)) {
+            to.streetNumberSuffix().setValue(from.streetNumberSuffix);
+        }
+        if (CommonsStringUtils.isStringSet(from.streetDirection)) {
+            to.streetDirection().setValue(StreetDirection.valueOf(from.streetDirection));
+        }
+        if (CommonsStringUtils.isStringSet(from.streetType)) {
+            to.streetType().setValue(StreetType.valueOf(from.streetType));
+        }
         to.suiteNumber().setValue(from.unitNumber);
         to.city().setValue(from.city);
         to.province().set(SharedData.findProvinceByCode(from.province));
