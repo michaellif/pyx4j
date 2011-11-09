@@ -117,7 +117,7 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
             @Override
             public long getInterval() {
-                return 3 * Consts.MIN2MSEC;
+                return 1 * Consts.MIN2MSEC;
             }
 
             @Override
@@ -127,7 +127,7 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
             @Override
             public long getMaxRequests() {
-                return 400;
+                return 1000;
             }
         };
     }
