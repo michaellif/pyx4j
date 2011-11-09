@@ -42,7 +42,7 @@ public class CommonsGenerator {
 
     static String[] lipsumShort;
 
-    static List<AddressStructured> adresses;
+    private static List<AddressStructured> adresses;
 
     public static String lipsum() {
         if (lipsum == null) {
@@ -141,12 +141,12 @@ public class CommonsGenerator {
     }
 
     public static AddressStructured createAddress() {
-        boolean useNewAddress = false;
+        boolean useNewAddress = true;
         if (useNewAddress) {
             if (adresses == null) {
                 adresses = EntityCSVReciver.create(AddressStructured.class).loadFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
             }
-            return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10));
+            return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).cloneEntity();
         } else {
             return createAddressWrong();
         }
