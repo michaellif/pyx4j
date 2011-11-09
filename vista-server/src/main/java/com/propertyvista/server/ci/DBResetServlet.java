@@ -119,7 +119,7 @@ public class DBResetServlet extends HttpServlet {
                     if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.clear).contains(type)) {
                         RDBUtils.dropAllEntityTables();
                     }
-
+                    CacheService.reset();
                     SchedulerHelper.shutdown();
                     SchedulerHelper.dbReset();
                     SchedulerHelper.init();

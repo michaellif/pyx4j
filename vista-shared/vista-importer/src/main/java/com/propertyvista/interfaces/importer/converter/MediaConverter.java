@@ -181,9 +181,8 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                         thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.file().filename().getValue(), raw, imageTarget);
                         resized.put(uniqueName, thumbnailBlob);
                         log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.file().filename().getValue(), resized.size());
-                    } else {
-                        thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
                     }
+                    thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
                     thumbnailBlob.setPrimaryKey(blobKey);
                     Persistence.service().persist(thumbnailBlob);
                 }

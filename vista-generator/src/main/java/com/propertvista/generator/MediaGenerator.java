@@ -105,9 +105,8 @@ public class MediaGenerator {
                 if (thumbnailBlob == null) {
                     thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().filename().getStringView(), me.getValue(), ImageTarget.Building);
                     resized.put(m.file().filename().getValue(), thumbnailBlob);
-                } else {
-                    thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
                 }
+                thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
                 thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
                 Persistence.service().persist(thumbnailBlob);
                 newData = true;
