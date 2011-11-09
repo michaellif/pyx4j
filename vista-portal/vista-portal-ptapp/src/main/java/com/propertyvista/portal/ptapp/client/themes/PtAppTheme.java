@@ -17,7 +17,6 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -79,7 +78,7 @@ public class PtAppTheme extends VistaTheme {
             }
         });
 
-        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        Style style = new Style((IStyleName) DefaultEntityFolderTheme.StyleName.EntityFolder);
         style.addProperty("width", "690px");
         addStyle(style);
     }

@@ -17,6 +17,7 @@ package com.propertyvista.common.client.ui.decorations;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 /*
@@ -78,7 +79,7 @@ public class VistaDecoratorsFlowPanel extends FlowPanel {
     public WidgetDecorator createDecorator(final CComponent<?, ?> component, double labelWidth, double componentWidth, String componentCaption) {
         WidgetDecorator decorator = new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
         if (readOnlyMode) {
-            decorator.addStyleDependentName(WidgetDecorator.StyleDependent.readOnly.name());
+            decorator.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
         }
         return decorator;
     }

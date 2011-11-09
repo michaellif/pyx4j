@@ -20,13 +20,13 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
@@ -56,10 +56,11 @@ public class PortalTheme extends VistaTheme {
             }
         });
 
+        addTheme(new DefaultDatePickerTheme());
+
         initEntityFolderStyles();
         initTextBoxStyle();
         initCheckBoxStyle();
-        initDatePickerStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initListBoxStyle();
@@ -78,7 +79,7 @@ public class PortalTheme extends VistaTheme {
             }
         });
 
-        Style style = new Style((IStyleName) CEntityFolder.StyleName.EntityFolder);
+        Style style = new Style((IStyleName) DefaultEntityFolderTheme.StyleName.EntityFolder);
         style.addProperty("width", "690px");
         addStyle(style);
     }
