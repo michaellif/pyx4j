@@ -141,7 +141,7 @@ public class CommonsGenerator {
     }
 
     public static AddressStructured createAddress() {
-        boolean useNewAddress = true;
+        boolean useNewAddress = false;
         if (useNewAddress) {
             if (adresses == null) {
                 adresses = EntityCSVReciver.create(AddressStructured.class).loadFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));

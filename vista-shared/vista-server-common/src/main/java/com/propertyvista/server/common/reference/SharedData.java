@@ -15,6 +15,8 @@ package com.propertyvista.server.common.reference;
 
 import java.util.List;
 
+import com.pyx4j.entity.cache.CacheService;
+
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.generator.LocationsGenerator;
@@ -25,35 +27,28 @@ import com.propertyvista.server.common.generator.LocationsGenerator;
 @Deprecated
 public class SharedData {
 
-    private static List<Province> provinces;
-
-    private static List<Country> countries;
-
     public static void init() {
-        if (provinces != null) { // assume that this is already initialized
-            return;
+        if (CacheService.get("provinces") == null) {
+            List<Province> provinces;
+            registerProvinces(provinces = LocationsGenerator.loadProvincesFromFile());
+            registerCountries(LocationsGenerator.createCountries(provinces));
         }
-        provinces = LocationsGenerator.loadProvincesFromFile();
-        countries = LocationsGenerator.createCountries(provinces);
     }
 
     public static void registerProvinces(List<Province> p) {
-        provinces = p;
+        CacheService.put("provinces", p);
     }
 
     public static void registerCountries(List<Country> c) {
-        countries = c;
+        CacheService.put("countries", c);
     }
 
     public static List<Province> getProvinces() {
-        return provinces;
+        return CacheService.get("provinces");
     }
 
     public static Province findProvinceByCode(String code) {
-        if (provinces == null) {
-            throw new IllegalStateException("SharedData is not initialized");
-        }
-        for (Province province : provinces) {
+        for (Province province : getProvinces()) {
             if (province.code().getValue().equals(code)) {
                 return province;
             }
@@ -66,6 +61,7 @@ public class SharedData {
     }
 
     public static Country findCountry(String name) {
+        List<Country> countries = CacheService.get("countries");
         for (Country country : countries) {
             if (country.name().getValue().equals(name)) {
                 return country;
