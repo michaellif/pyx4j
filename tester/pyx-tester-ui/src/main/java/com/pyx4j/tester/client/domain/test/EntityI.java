@@ -76,10 +76,17 @@ public interface EntityI extends IEntity {
     @NotNull
     IPrimitive<Enum1> mandatoryEnum();
 
-    IPrimitive<Date> optionalSingleMonthDatePicker();
+    IPrimitive<Date> optionalDatePicker();
 
     @NotNull
-    IPrimitive<Date> mandatorySingleMonthDatePicker();
+    IPrimitive<Date> mandatoryDatePicker();
+
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> optionalPhone();
+
+    @Editor(type = EditorType.phone)
+    @NotNull
+    IPrimitive<String> mandatoryPhone();
 
     @Owned
     IList<EntityII> entityIIList();
