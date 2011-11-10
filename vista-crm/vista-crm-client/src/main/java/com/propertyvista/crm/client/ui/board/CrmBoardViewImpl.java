@@ -93,8 +93,8 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     }
 
     @Override
-    public void fill(DashboardMetadata dashboardMetadata) {
-        super.fill(dashboardMetadata);
+    public void populate(DashboardMetadata dashboardMetadata) {
+        super.populate(dashboardMetadata);
 
         board.getBoard().addEventHandler(new BoardEvent() {
 

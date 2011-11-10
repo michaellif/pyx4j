@@ -64,7 +64,9 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     @Override
     public void populate() {
-        populate(entityId);
+        if (entityId != null) {
+            populate(entityId);
+        }
     }
 
     @Override
@@ -88,7 +90,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
     }
 
     public void onPopulateSuccess(DashboardMetadata result) {
-        view.fill(result);
+        view.populate(result);
     }
 
     @Override

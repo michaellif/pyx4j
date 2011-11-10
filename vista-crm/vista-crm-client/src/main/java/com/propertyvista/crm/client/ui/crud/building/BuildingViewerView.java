@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.pyx4j.site.client.ui.crud.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
+import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -56,7 +57,7 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
         IListerView.Presenter getConcessionPresenter();
     }
 
-    DashboardView getDashboardView();
+    BuildingDashboardView getDashboardView();
 
     IListerView<FloorplanDTO> getFloorplanListerView();
 

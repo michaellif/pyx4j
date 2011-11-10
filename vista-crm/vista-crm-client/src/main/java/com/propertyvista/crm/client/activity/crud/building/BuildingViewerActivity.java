@@ -179,9 +179,12 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
     @Override
     public void onPopulateSuccess(BuildingDTO result) {
-        super.onPopulateSuccess(result);
 
+        // should be called before call to super, because
+        // BuildingViewerViewImpl.populate sets building filtering!  
         dashboard.populate(result.dashboard());
+
+        super.onPopulateSuccess(result);
 
         // -------------------------------------------------------
 
@@ -224,6 +227,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
     @Override
     public void onStop() {
+        ((AbstractActivity) dashboard).onStop();
         ((AbstractActivity) floorplanLister).onStop();
         ((AbstractActivity) unitLister).onStop();
         ((AbstractActivity) elevatorLister).onStop();

@@ -20,40 +20,52 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.BuildingLister;
+import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
+import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardViewImpl;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> implements ComplexViewerView {
 
-    private final IListerView<BuildingDTO> buildingLister;
+    private final BuildingDashboardView dashboardView = new BuildingDashboardViewImpl();
 
-    private final EmbeddedDashboardPanel dashboardView;
+    private final IListerView<BuildingDTO> buildingLister;
 
     public ComplexViewerViewImpl() {
         super(CrmSiteMap.Properties.Complex.class);
 
         buildingLister = new ListerInternalViewImplBase<BuildingDTO>(new BuildingLister());
-        dashboardView = new EmbeddedDashboardPanel() {
-            @Override
-            protected void onDashboardSelected(DashboardMetadata boardMetadata) {
-                ComplexDTO complex = getForm().getValue();
-                if (complex != null) {
-                    complex.dashboard().set(boardMetadata);
-                }
-                super.onDashboardSelected(boardMetadata);
-            }
-        };
+
+        // set main form here: 
         setForm(new ComplexEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override
     public void populate(ComplexDTO value) {
         super.populate(value);
+
+        // calculate and set current dashboard filtering here:
+        dashboardView.setFiltering(calculateFiltering(value));
+    }
+
+    @Override
+    public BuildingDashboardView getDashboardView() {
+        return dashboardView;
+    }
+
+    @Override
+    public IListerView<BuildingDTO> getBuildingListerView() {
+        return buildingLister;
+    }
+
+    // Internals:
+
+    private IBuildingGadget.FilterData calculateFiltering(ComplexDTO value) {
         IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+
         if (value != null && !value.buildings().isEmpty()) {
             for (Building building : value.buildings()) {
                 filterData.buildings.add(building.getPrimaryKey());
@@ -62,21 +74,6 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
             filterData.buildings.add(new Key(-1l));
         }
 
-        // TODO when enabling dashboard binding to concrete complex: 
-        // don't forget that something like this:
-        //  dashboardView.applyFilteringAndDashboardMetadata(value.dashboard, filterData)
-        // is needed instead of the following method call, setting up filterData will trigger re population of the gadgets
-        // as well as applying filtering.
-        dashboardView.applyFiltering(filterData);
-    }
-
-    @Override
-    public SlaveDashboardView getDashboardView() {
-        return dashboardView;
-    }
-
-    @Override
-    public IListerView<BuildingDTO> getBuildingListerView() {
-        return buildingLister;
+        return filterData;
     }
 }

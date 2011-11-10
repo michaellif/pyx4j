@@ -76,9 +76,9 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
     }
 
     @Override
-    public void fill(DashboardMetadata dashboardMetadata) {
+    public void populate(DashboardMetadata dashboardMetadata) {
         assert (board != null);
-        board.fill(dashboardMetadata);
+        board.populate(dashboardMetadata);
     }
 
     @Override

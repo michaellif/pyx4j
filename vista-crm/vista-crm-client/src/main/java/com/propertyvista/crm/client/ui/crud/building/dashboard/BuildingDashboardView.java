@@ -11,15 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.complex;
+package com.propertyvista.crm.client.ui.crud.building.dashboard;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 
-public interface SlaveDashboardView extends DashboardView {
-    public interface SlavePresenter {
+public interface BuildingDashboardView extends DashboardView {
 
-    }
-
-    void applyFiltering(IBuildingGadget.FilterData filterData);
+    void setFiltering(IBuildingGadget.FilterData filterData);
 }

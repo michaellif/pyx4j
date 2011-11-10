@@ -111,7 +111,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     }
 
     @Override
-    public void fill(DashboardMetadata metadata) {
+    public void populate(DashboardMetadata metadata) {
         dashboardMetadata = metadata;
 
         filling = true; // inhibit event processing while filling the dashboard
@@ -120,15 +120,15 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         board.addEventHandler(new BoardEvent() {
             @Override
             public void onEvent(final Reason reason) {
-                // use a deferred command so that the actual event processing unlinked from event!
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        if (!filling) {
+                if (!filling) {
+                    // use a deferred command so that the actual event processing unlinked from event!
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                        @Override
+                        public void execute() {
                             procesDashboardEvent(reason);
                         }
-                    }
-                });
+                    });
+                }
             }
         });
 
@@ -147,19 +147,13 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
         scroll.setWidget(board);
 
-        // use a deferred command so that browser actually build board DOM and we do not process unnecessary board events!
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                filling = false; // ok, filled already..
-                btnSave.setEnabled(false);
+        filling = false; // ok, filled already..
+        btnSave.setEnabled(false);
 
-                IGadgetIterator it = board.getGadgetIterator();
-                while (it.hasNext()) {
-                    it.next().start(); // allow gadget execution... 
-                }
-            }
-        });
+        IGadgetIterator it = board.getGadgetIterator();
+        while (it.hasNext()) {
+            it.next().start(); // allow gadget execution... 
+        }
     }
 
     public boolean isReadOnly() {

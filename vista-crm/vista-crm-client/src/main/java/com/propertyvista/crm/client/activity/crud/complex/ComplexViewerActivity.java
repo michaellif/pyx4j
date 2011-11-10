@@ -33,6 +33,7 @@ import com.propertyvista.dto.ComplexDTO;
 // TODO possible optimization: when fetching buildings for the lister, propagate these results to the dashboard filter
 
 public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implements ComplexViewerView.Presenter {
+
     private final DashboardViewActivity dashboardViewActivity;
 
     private final IListerView.Presenter buildingListerActivity;
@@ -42,10 +43,12 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
         super((ComplexViewerView) BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
         dashboardViewActivity = new DashboardViewActivity(getView().getDashboardView());
+
         buildingListerActivity = new ListerActivityBase<BuildingDTO>(getView().getBuildingListerView(),
                 (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
-        buildingListerActivity.setPlace(place);
+
         setPlace(place);
+        buildingListerActivity.setPlace(place);
     }
 
     private ComplexViewerView getView() {
@@ -61,9 +64,12 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
 
     @Override
     protected void onPopulateSuccess(ComplexDTO result) {
-        super.onPopulateSuccess(result);
 
+        // should be called before call to super, because
+        // ComplexViewerViewImpl.populate sets building filtering!  
         dashboardViewActivity.populate(result.dashboard());
+
+        super.onPopulateSuccess(result);
 
         buildingListerActivity.setParentFiltering(result.id().getValue());
         buildingListerActivity.populate();

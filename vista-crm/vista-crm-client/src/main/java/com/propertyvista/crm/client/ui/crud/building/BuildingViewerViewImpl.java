@@ -13,25 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.OptionsFilter;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.dashboard.IGadget;
-import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
+import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
+import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
@@ -39,12 +30,8 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
-import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
-import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -79,24 +66,10 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final IListerView<Concession> concessionLister;
 
-    private final DashboardPanel dashboardView = new DashboardPanel(true);
-
-    private final CEntityComboBox<DashboardMetadata> dashboardSelect = new CEntityComboBox<DashboardMetadata>(DashboardMetadata.class);
+    private final BuildingDashboardView dashboardView = new BuildingDashboardViewImpl();
 
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
-
-        dashboardSelect.setWidth("25em");
-        dashboardSelect.addCriterion(PropertyCriterion.eq(dashboardSelect.proto().type(), DashboardType.building));
-        dashboardSelect.addValueChangeHandler(new ValueChangeHandler<DashboardMetadata>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<DashboardMetadata> event) {
-                dashboardView.fill(event.getValue());
-                applyFiltering(form.getValue().getPrimaryKey());
-            }
-        });
-
-        dashboardView.addAction(dashboardSelect.asWidget());
 
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister(/* readOnly */));
 
@@ -118,7 +91,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public DashboardView getDashboardView() {
+    public BuildingDashboardView getDashboardView() {
         return dashboardView;
     }
 
@@ -176,28 +149,18 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     public void populate(final BuildingDTO value) {
         super.populate(value);
 
-        dashboardSelect.setValue(value.dashboard());
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                applyFiltering(value.getPrimaryKey());
-            }
-        });
+        dashboardView.setFiltering(calculateFiltering(value));
     }
 
-    private void applyFiltering(Key buildingId) {
-        IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
-        filterData.buildings.add(buildingId);
+    // Internals:
 
-        if (dashboardView.getBoard() != null) {
-            // notify gadgets:
-            IGadgetIterator it = dashboardView.getBoard().getGadgetIterator();
-            while (it.hasNext()) {
-                IGadget gadget = it.next();
-                if (gadget instanceof IBuildingGadget) {
-                    ((IBuildingGadget) gadget).setFiltering(filterData);
-                }
-            }
+    private IBuildingGadget.FilterData calculateFiltering(BuildingDTO value) {
+        IBuildingGadget.FilterData filterData = new IBuildingGadget.FilterData();
+
+        if (value != null) {
+            filterData.buildings.add(value.getPrimaryKey());
         }
+
+        return filterData;
     }
 }

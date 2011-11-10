@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.complex;
+package com.propertyvista.crm.client.ui.crud.building.dashboard;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -26,32 +26,41 @@ import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
-public class EmbeddedDashboardPanel extends DashboardPanel implements SlaveDashboardView {
+public class BuildingDashboardViewImpl extends DashboardPanel implements BuildingDashboardView {
+
+    private final CEntityComboBox<DashboardMetadata> dashboardSelect = new CEntityComboBox<DashboardMetadata>(DashboardMetadata.class);
 
     private IBuildingGadget.FilterData filterData;
 
-    private final CEntityComboBox<DashboardMetadata> dashboardSelect;
+    public BuildingDashboardViewImpl() {
 
-    public EmbeddedDashboardPanel() {
-
-        dashboardSelect = new CEntityComboBox<DashboardMetadata>(DashboardMetadata.class);
         dashboardSelect.setWidth("25em");
         dashboardSelect.addCriterion(PropertyCriterion.eq(dashboardSelect.proto().type(), DashboardType.building));
         dashboardSelect.addValueChangeHandler(new ValueChangeHandler<DashboardMetadata>() {
             @Override
             public void onValueChange(ValueChangeEvent<DashboardMetadata> event) {
-                onDashboardSelected(event.getValue());
+                BuildingDashboardViewImpl.super.populate(event.getValue());
+                applyFiltering();
             }
         });
-        this.addAction(dashboardSelect.asWidget());
-        this.setSize("100%", "100%");
+
+        addAction(dashboardSelect.asWidget());
+        setSize("100%", "100%");
     }
 
     @Override
-    public void applyFiltering(IBuildingGadget.FilterData filterData) {
+    public void populate(DashboardMetadata metadata) {
+        super.populate(metadata);
+        dashboardSelect.populate(metadata);
+    }
+
+    @Override
+    public void setFiltering(IBuildingGadget.FilterData filterData) {
         this.filterData = filterData;
         applyFiltering();
     }
+
+    // Internals:
 
     private void applyFiltering() {
         if (filterData != null && this.getBoard() != null) {
@@ -63,17 +72,5 @@ public class EmbeddedDashboardPanel extends DashboardPanel implements SlaveDashb
                 }
             }
         }
-    }
-
-    protected void onDashboardSelected(DashboardMetadata boardMetadata) {
-        if (boardMetadata != null) {
-            super.fill(boardMetadata);
-            applyFiltering();
-        }
-    }
-
-    @Override
-    public void fill(DashboardMetadata metadata) {
-        dashboardSelect.setValue(metadata);
     }
 }
