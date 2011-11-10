@@ -121,7 +121,7 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             @Override
             public String intervalLabelFormat(Date start, Date end) {
                 I18n i18n = I18n.get(UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution.class);
-                return i18n.tr(TimeUtils.MONTH_NAMES_SHORT[end.getMonth()]) + "-" + Integer.toString(1900 + end.getYear());
+                return i18n.tr(TimeUtils.MONTH_NAMES_SHORT[start.getMonth()]) + "-" + Integer.toString(1900 + start.getYear());
             }
 
             @SuppressWarnings("deprecation")
