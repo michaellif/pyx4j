@@ -94,9 +94,9 @@ public class ArrearsListerGadget extends ListerGadgetBase<MockupArrear> implemen
 
     @Override
     public void populatePage(int pageNumber) {
-        // TODO move isSuspended() check to the base class
+        // TODO move isRunning() check to the base class
         // TODO isLoading is for avoiding redundant reloads, investigate why they are happening and then remove it if it's possible
-        if (!isSuspended() & !isLoading) {
+        if (isRunning() & !isLoading) {
             final int p = pageNumber;
             isLoading = true;
             service.arrearsList(new AsyncCallback<EntitySearchResult<MockupArrear>>() {

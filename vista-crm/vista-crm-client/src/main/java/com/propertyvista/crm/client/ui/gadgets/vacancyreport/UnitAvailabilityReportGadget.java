@@ -333,7 +333,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
     }
 
     private boolean isEnabled() {
-        return asWidget().isVisible() & !isSuspended();
+        return asWidget().isVisible() & isRunning();
     }
 
     private int getPageNumber() {

@@ -139,7 +139,7 @@ public class AvailabiltySummaryGadget extends GadgetBase implements IBuildingGad
 
     // PRESENTER
     private void populateSummary() {
-        if (isEnabled()) {
+        if (isEnabled() & isRunning()) {
             if (filter == null) {
                 populate(EntityFactory.create(UnitVacancyReportSummaryDTO.class));
             } else {

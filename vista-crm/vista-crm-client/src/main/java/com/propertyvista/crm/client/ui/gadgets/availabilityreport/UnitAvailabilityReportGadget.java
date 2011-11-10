@@ -40,8 +40,8 @@ import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusReportSettings;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusReportSettings;
 
 public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabilityStatusDTO> implements IBuildingGadget {
     //@formatter:off
@@ -128,18 +128,6 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
         gmd.name().setValue(GadgetType.UnitAvailabilityReportMk2.toString());
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getDefaultColumnDescriptors(UnitAvailabilityStatusDTO proto) {
-        return Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()));
-    }
-
     @Override
     protected UnitAvailabilityStatusReportSettings createSettings() {
         UnitAvailabilityStatusReportSettings settings = super.createSettings().clone(UnitAvailabilityStatusReportSettings.class);
@@ -150,9 +138,26 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
     //@formatter:off
     @SuppressWarnings("unchecked")
     @Override
+    protected List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getDefaultColumnDescriptors(UnitAvailabilityStatusDTO proto) {
+        return Arrays.asList(
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost())
+                );
+    }
+
+    
+    @SuppressWarnings("unchecked")
+    @Override
     protected List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getAvailableColumnDescriptors(UnitAvailabilityStatusDTO proto) {
 
-        return Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
+        return Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(
+                proto, proto.propertyCode()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
@@ -173,7 +178,8 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDay()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate()),
                 ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost()));
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost())
+                );
     }
     //@formatter:on
 
@@ -224,7 +230,7 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
     }
 
     private boolean isEnabled() {
-        return asWidget().isVisible() & !isSuspended();
+        return asWidget().isVisible() & isRunning();
     }
 
     // TODO override getSetup() to set the default button

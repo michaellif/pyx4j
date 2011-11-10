@@ -25,9 +25,9 @@ import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 public abstract class GadgetBase implements IGadgetBase {
-    private boolean isSuspended = true;
-
     protected static I18n i18n = I18n.get(GadgetBase.class);
+
+    private boolean isRunning = true;
 
     protected final GadgetMetadata gadgetMetadata;
 
@@ -52,7 +52,7 @@ public abstract class GadgetBase implements IGadgetBase {
 
     /**
      * This method is called in case of null GadgetMetadata in constructor. That means on-the-fly gadget creation (Add Gadget), without storage.
-     * implement it in derived class in order to set meaningful gadget name/description/type/etc...
+     * implement it in derived class in order to set meaningful gadget name/description/type/etc... <br/>
      * Note, that it's called from within constructor!
      */
     protected abstract void selfInit(GadgetMetadata gmd);
@@ -114,7 +114,7 @@ public abstract class GadgetBase implements IGadgetBase {
         return gadgetMetadata;
     }
 
-    /*
+    /**
      * Implement in derived class to represent desired gadget UI.
      */
     @Override
@@ -131,31 +131,31 @@ public abstract class GadgetBase implements IGadgetBase {
     }
 
     // runtime:
-    public boolean isSuspended() {
-        return isSuspended;
+    public boolean isRunning() {
+        return isRunning;
     }
 
     @Override
     public void start() {
-        isSuspended = false;
+        isRunning = true;
         getRefreshTimer().reactivate();
     }
 
     @Override
     public void suspend() {
-        isSuspended = true;
+        isRunning = false;
         getRefreshTimer().deactivate();
     }
 
     @Override
     public void resume() {
-        isSuspended = false;
+        isRunning = true;
         getRefreshTimer().reactivate();
     }
 
     @Override
     public void stop() {
-        isSuspended = true;
+        isRunning = false;
         getRefreshTimer().deactivate();
     }
 
@@ -230,7 +230,7 @@ public abstract class GadgetBase implements IGadgetBase {
         }
 
         /**
-         * Set interval to be used in order to execute the refresh method <code>.executeOnTimer()</code> that have to be overridden in a subclass in order to
+         * Set interval to be used in order to execute {@link GadgetBase#onRefreshTimer()}, that has to be overridden in a subclass in order to
          * provide desired functionality.
          * 
          * @param refreshInterval
@@ -265,7 +265,7 @@ public abstract class GadgetBase implements IGadgetBase {
         }
 
         /**
-         * Shut down the timer: the handlers will not be launched.
+         * Shut down the timer: {@link ListerGadgetBase#onRefreshTimer()} will not be launched
          */
         public void deactivate() {
             timer.cancel();
