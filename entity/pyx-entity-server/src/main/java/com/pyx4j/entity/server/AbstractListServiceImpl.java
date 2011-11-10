@@ -57,7 +57,7 @@ public abstract class AbstractListServiceImpl<E extends IEntity> implements Abst
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria) {
-        if (criteria.getEntityClass().equals(entityClass)) {
+        if (!criteria.getEntityClass().equals(entityClass)) {
             throw new Error("Service " + this.getClass().getName() + " declaration error. " + entityClass + "!=" + criteria.getEntityClass());
         }
         EntitySearchResult<E> result = EntityLister.secureQuery(criteria);

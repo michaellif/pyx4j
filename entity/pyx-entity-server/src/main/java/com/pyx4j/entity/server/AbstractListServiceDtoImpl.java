@@ -113,7 +113,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<DTO>> callback, EntityListCriteria<DTO> dtoCriteria) {
-        if (dtoCriteria.getEntityClass().equals(dtoClass)) {
+        if (!dtoCriteria.getEntityClass().equals(dtoClass)) {
             throw new Error("Service " + this.getClass().getName() + " declaration error. " + dtoClass + "!=" + dtoCriteria.getEntityClass());
         }
         EntityListCriteria<E> criteria = EntityListCriteria.create(dboClass);
