@@ -46,14 +46,16 @@ import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.SortEntity;
 
+//TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
+//TODO somehow use GWT Places in order to store the state instead of clumsy settings
 public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     /**
      * Refresh interval for the list when in development mode in milliseconds (relevant when refreshing is activated)
      */
-    private static final RefreshInterval DEFAULT_REFRESH_INTERVAL = RefreshInterval.Never;
+    protected static final RefreshInterval DEFAULT_REFRESH_INTERVAL = RefreshInterval.Never;
 
-    private static final int DEFAULT_PAGE_SIZE = 10;
+    protected static final int DEFAULT_PAGE_SIZE = 10;
 
     private final EntityListPanel<E> entityListPanel;
 

@@ -21,6 +21,7 @@ import java.util.Comparator;
  * @author ArtyomB
  * 
  */
+// TODO move to more convenient package
 public class ComparableComparator<T extends Comparable> implements Comparator<T> {
 
     @Override
@@ -34,6 +35,7 @@ public class ComparableComparator<T extends Comparable> implements Comparator<T>
         } else if (param2 == null) {
             return 1;
         } else {
+            // TODO consider removing this check in order to increase performance (also remove the try catch part) 
             if (param1 instanceof Comparable & param2 instanceof Comparable) {
                 try {
                     return param1.compareTo(param2);

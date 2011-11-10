@@ -49,6 +49,13 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         TurnoverAnalysisGraph,
 
+        // TODO make the new Availability Gadgets use the normal ENUMs once they have started to work properly
+        UnitAvailabilityReportMk2,
+
+        AvailabilitySummaryMk2,
+
+        TurnoverAnalysisGraphMk2,
+
         ArrearsGadget;
 
         @Override

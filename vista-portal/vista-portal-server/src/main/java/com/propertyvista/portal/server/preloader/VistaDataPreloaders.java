@@ -62,9 +62,15 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new DevelopmentSecurityPreloader());
 
             // DEMO - temporary!!!
+            // Vacancy Report Gadgets related
+            // TODO these are deprecated and soon to be completely replaced by the AvailabilityReport stuff 
             add(new MockupVacancyReportUnitPreloader());
             add(new MockupVacancyReportEventPreloader());
 
+            // Availability Report Gadgets related
+            add(new MockupAvailabilityStatusPreloader());
+
+            // Arrears Report Gadgets related
             add(new MockupTenantPreloader());
         }
 

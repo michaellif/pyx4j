@@ -50,9 +50,15 @@ public class GadgetsFactory {
         GadgetType.BarChartDisplayBuilding,
         GadgetType.PieChartDisplayBuilding,
         GadgetType.GaugeDisplay,
+        
         GadgetType.UnitAvailabilityReport,
         GadgetType.AvailabilitySummary,
         GadgetType.TurnoverAnalysisGraph,
+        
+        GadgetType.UnitAvailabilityReportMk2,
+        GadgetType.AvailabilitySummaryMk2,
+        GadgetType.TurnoverAnalysisGraphMk2,
+
         GadgetType.ArrearsGadget,
     };
     //@formatter:on
@@ -78,12 +84,21 @@ public class GadgetsFactory {
             return new PieChart2DGadget(metaData);
         case GaugeDisplay:
             return new GaugeGadget(metaData);
+
         case UnitAvailabilityReport:
             return new UnitAvailabilityReportGadget(metaData);
         case AvailabilitySummary:
             return new AvailabiltySummaryGadget(metaData);
         case TurnoverAnalysisGraph:
             return new TurnoverAnalysisGraphGadget(metaData);
+
+        case UnitAvailabilityReportMk2:
+            return new com.propertyvista.crm.client.ui.gadgets.availabilityreport.UnitAvailabilityReportGadget(metaData);
+        case AvailabilitySummaryMk2:
+            return new com.propertyvista.crm.client.ui.gadgets.availabilityreport.AvailabiltySummaryGadget(metaData);
+        case TurnoverAnalysisGraphMk2:
+            return new com.propertyvista.crm.client.ui.gadgets.availabilityreport.TurnoverAnalysisGraphGadget(metaData);
+
         case ArrearsGadget:
             return new ArrearsListerGadget(metaData);
         }
