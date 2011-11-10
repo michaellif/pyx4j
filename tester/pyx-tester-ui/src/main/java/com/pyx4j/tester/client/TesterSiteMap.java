@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.shared.meta.SiteMap;
 
-public class TesterSiteMap implements SiteMap {
+public class TesterSiteMap implements SiteMap { 
 
     @NavigationItem(navigLabel = "Landing")
     public static class Landing extends AppPlace {
@@ -52,5 +52,12 @@ public class TesterSiteMap implements SiteMap {
         public static class FormVisibility extends AppPlace {
         }
 
+    }
+
+    public static class NativeWidget extends AppPlace {
+
+        @NavigationItem(navigLabel = "NativeWidgetBasic")
+        public static class NativeWidgetBasic extends AppPlace {
+        }
     }
 }

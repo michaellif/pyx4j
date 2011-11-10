@@ -50,6 +50,10 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
         folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderValidation())));
         tree.addItem(folderRoot);
 
+        TreeItem nativeWidgetRoot = new TreeItem("Native Widgets");
+        nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.NativeWidgetBasic())));
+        tree.addItem(nativeWidgetRoot);
+
         setWidget(tree);
     }
 
