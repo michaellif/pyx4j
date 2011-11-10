@@ -54,7 +54,7 @@ public class EmbeddedDashboardPanel extends DashboardPanel implements SlaveDashb
     }
 
     private void applyFiltering() {
-        if (filterData != null & this.getBoard() != null) {
+        if (filterData != null && this.getBoard() != null) {
             IGadgetIterator it = this.getBoard().getGadgetIterator();
             while (it.hasNext()) {
                 IGadget gadget = it.next();

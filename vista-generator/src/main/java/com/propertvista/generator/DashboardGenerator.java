@@ -30,6 +30,7 @@ public class DashboardGenerator extends Dashboards {
 
         buildingDashboards.add(DefaultBuilding1());
         buildingDashboards.add(DefaultBuilding2());
+        buildingDashboards.add(DefaultBuilding3());
     }
 
     private DashboardMetadata DefaultSystem() {
@@ -155,6 +156,27 @@ public class DashboardGenerator extends Dashboards {
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.TurnoverAnalysisGraph);
         gmd.name().setValue(GadgetType.TurnoverAnalysisGraph.toString() + " Demo");
+        gmd.column().setValue(0);
+
+        dmd.gadgets().add(gmd);
+
+        return dmd;
+    }
+
+    private DashboardMetadata DefaultBuilding3() {
+        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
+        dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        dmd.type().setValue(DashboardType.building);
+        dmd.isShared().setValue(true);
+        dmd.name().setValue("Building Dashboard #3");
+        dmd.description().setValue("Displays some building data");
+        dmd.layoutType().setValue(LayoutType.One);
+
+        GadgetMetadata gmd;
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        gmd.type().setValue(GadgetType.ArrearsGadget);
+        gmd.name().setValue(GadgetType.ArrearsGadget.toString() + " Demo");
         gmd.column().setValue(0);
 
         dmd.gadgets().add(gmd);

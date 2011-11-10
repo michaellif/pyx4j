@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,8 +43,6 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
     private static final String TAB_CAPTION_BUILDINGS = "Buildings";
 
     private final VistaTabLayoutPanel tabPanel;
-
-    private CComboBox<Building> primaryBuildingSelector;
 
     public ComplexEditorForm() {
         this(new CrmEditorsComponentFactory());
