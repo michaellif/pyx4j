@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -49,7 +50,15 @@ public class Converter {
         to.description().setValue(from.description().getValue());
 
         if (!from.media().isEmpty()) {
-            to.mainMedia().setValue(from.media().get(0).getPrimaryKey());
+            for (Media media : from.media()) {
+                if (media.isValuesDetached()) {
+                    Persistence.service().retrieve(media);
+                }
+                if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
+                    to.mainMedia().setValue(media.getPrimaryKey());
+                    break;
+                }
+            }
         }
 
         List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
@@ -118,7 +127,15 @@ public class Converter {
         to.price().max().setValue(maxPrice);
 
         if (!from.media().isEmpty()) {
-            to.mainMedia().setValue(from.media().get(0).getPrimaryKey());
+            for (Media media : from.media()) {
+                if (media.isValuesDetached()) {
+                    Persistence.service().retrieve(media);
+                }
+                if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
+                    to.mainMedia().setValue(media.getPrimaryKey());
+                    break;
+                }
+            }
         }
 
         // List of amenities

@@ -80,8 +80,13 @@ public class PublicMediaServlet extends HttpServlet {
 
         //TODO deserialize key
         Media media = Persistence.service().retrieve(Media.class, new Key(id));
-        if ((media == null) || (media.file().blobKey().isNull())) {
+        if (media == null) {
             log.debug("no media {} {}", id, filename);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            serveNotFound(thumbnailSize, response);
+            return;
+        } else if (media.file().blobKey().isNull()) {
+            log.debug("no media {} {} is not file", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             serveNotFound(thumbnailSize, response);
             return;
