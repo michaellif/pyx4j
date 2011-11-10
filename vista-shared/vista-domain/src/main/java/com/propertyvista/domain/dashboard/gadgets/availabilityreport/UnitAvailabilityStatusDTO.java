@@ -23,13 +23,13 @@ import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
 
 @Transient
 public interface UnitAvailabilityStatusDTO extends UnitAvailabilityStatus {
-    @Caption(name = "Property")
+    @Caption(name = "Days Vacant")
     /** For Vacant units numberOfDays between today and availableForRent date */
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Integer> daysVacant();
 
     /** days vacant * marketRent / 30 */
-    @Caption(name = "Revenue Lost, in $")
+    @Caption(name = "Revenue Lost ($)")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> revenueLost();
