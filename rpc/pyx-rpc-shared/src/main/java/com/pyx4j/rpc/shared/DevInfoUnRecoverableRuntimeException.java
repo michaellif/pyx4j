@@ -38,10 +38,10 @@ public class DevInfoUnRecoverableRuntimeException extends UnRecoverableRuntimeEx
     }
 
     public DevInfoUnRecoverableRuntimeException(Throwable cause) {
-        super(ApplicationMode.DEV + ((cause.getMessage() != null) ? cause.getMessage() : "") + " " + cause.getClass().toString());
+        super(ApplicationMode.DEV + ((cause.getMessage() != null) ? cause.getMessage() : "") + ", Throwable " + cause.getClass().toString());
     }
 
     public DevInfoUnRecoverableRuntimeException(String message, Throwable cause) {
-        super(ApplicationMode.DEV + message + " " + ((cause.getMessage() != null) ? cause.getMessage() : "") + " " + cause.getClass().toString());
+        super(ApplicationMode.DEV + message + " " + ((cause.getMessage() != null) ? cause.getMessage() : "") + ", Throwable " + cause.getClass().toString());
     }
 }
