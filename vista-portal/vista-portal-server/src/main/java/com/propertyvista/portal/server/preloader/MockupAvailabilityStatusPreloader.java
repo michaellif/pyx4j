@@ -124,15 +124,21 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
                 ++statusesCount;
 
                 Persistence.service().retrieve(status.belongsTo());
+                if (!status.moveOutDay().isNull()) {
+                    // TODO actually should be equal to status.belongsTo().availableForRent();
+                    LogicalDate availableFromDay = new LogicalDate(status.moveOutDay().getValue());
+                    availableFromDay.setTime(availableFromDay.getTime() + 24l * 60l * 60l * 1000l);
+                    status.availableFromDay().setValue(availableFromDay);
+                }
                 status.unit().setValue(status.belongsTo().info().number().getValue());
                 status.unitRent().setValue(status.belongsTo().financial().unitRent().isNull() ? 0d : status.belongsTo().financial().unitRent().getValue());
                 status.marketRent()
                         .setValue(status.belongsTo().financial().marketRent().isNull() ? 0d : status.belongsTo().financial().marketRent().getValue());
-                double unitMarketRent = status.marketRent().getValue();
+                double marketRent = status.marketRent().getValue();
                 double unitRent = status.unitRent().getValue();
 
-                double rentDeltaAbsoute = unitMarketRent - unitRent;
-                double rentDeltaRelative = unitMarketRent == 0d ? 0d : rentDeltaAbsoute / unitMarketRent * 100;
+                double rentDeltaAbsoute = marketRent - unitRent;
+                double rentDeltaRelative = marketRent == 0d ? 0d : rentDeltaAbsoute / marketRent * 100;
                 status.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
                 status.rentDeltaRelative().setValue(rentDeltaRelative);
 

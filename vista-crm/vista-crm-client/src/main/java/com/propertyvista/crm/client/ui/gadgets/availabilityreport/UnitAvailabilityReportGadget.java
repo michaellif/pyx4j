@@ -214,8 +214,7 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
                         }
                     },
                     new Vector<Key>(filter.buildings), 
-                    select.occupied, select.vacant, select.notice, select.rented, select.notrented, 
-                    new LogicalDate(filter.fromDate), 
+                    select.occupied, select.vacant, select.notice, select.rented, select.notrented,  
                     new LogicalDate(filter.toDate),
                     new Vector<Sort>(), 
                     pageNumber,

@@ -137,4 +137,13 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> rentedFromDate();
+
+    /**
+     * Used to speed up the {@link UnitAvailabilityStatusDTO#daysVacant()} computation. Should be equal to <code>{@link #moveOutDay()} + 1</code> or actually
+     * {@link AptUnit#availableForRent()}
+     */
+    @Format("MM/dd/yyyy")
+    @CustomComparator(clazz = ComparableComparator.class)
+    IPrimitive<LogicalDate> availableFromDay();
+
 }

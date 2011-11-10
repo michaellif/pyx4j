@@ -46,24 +46,26 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
-
     private static final Object TRANSIENT_PROPERTIES_MUTEX = new Object();
 
     private static TransientPropertySortEngine<UnitAvailabilityStatusDTO> TRANSIENT_PROPERTY_SORT_ENGINE = null;
 
     @Override
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,
-            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate from, LogicalDate to,
-            Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+            boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate to, Vector<Sort> sortingCriteria,
+            int pageNumber, int pageSize) {
         EntitySearchResult<UnitAvailabilityStatusDTO> units = null;
+
+        if (to.equals(new LogicalDate(Long.MAX_VALUE))) {
+            to = new LogicalDate();
+        }
         try {
             // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
             List<Sort> transientSortCriteria = null;
             transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(sortingCriteria);
 
             EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-            // TODO deal with sorting later
-            //criteria.setSorts(sortingCriteria);
+            criteria.setSorts(sortingCriteria);
 
             if (!buildings.isEmpty()) {
                 ArrayList<Building> buildingsList = new ArrayList<Building>();
@@ -91,7 +93,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             for (UnitAvailabilityStatus unitStatus : unfiltered) {
                 Key unitPK = unitStatus.belongsTo().getPrimaryKey();
                 if (!addedUnits.contains(unitPK)) {
-                    queue.add(computeTransientFields(unitStatus, from, to));
+                    queue.add(computeTransientFields(unitStatus, to));
                     addedUnits.add(unitPK);
                 }
             }
@@ -161,9 +163,9 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         if (!buildings.isEmpty()) {
-
             criteria.add(new PropertyCriterion(criteria.proto().buildingBelongsTo(), Restriction.IN, buildings));
         }
+
         criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
         // use descending order of the status date in order to select the most recent statuses first
         criteria.desc(criteria.proto().statusDate().getPath().toString());
@@ -345,30 +347,31 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         callback.onSuccess(result);
     }
 
-    private static UnitAvailabilityStatusDTO computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate fromDate,
-            final LogicalDate toDate) {
+    private static UnitAvailabilityStatusDTO computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate toDate) {
         UnitAvailabilityStatusDTO unitDTO = unitStatus.clone(UnitAvailabilityStatusDTO.class);
         if (isRevenueLost(unitDTO)) {
-            computeDaysVacantAndRevenueLost(unitDTO, fromDate.getTime(), toDate.getTime());
+            computeDaysVacantAndRevenueLost(unitDTO, toDate.getTime());
         }
         return unitDTO;
     }
 
     private static boolean isRevenueLost(final UnitAvailabilityStatusDTO unit) {
+        // TODO review: why the check "(moveOutDay != null)" is performed here? isn't VACANT status a sufficient condition for it? 
         return VacancyStatus.Vacant.equals(unit.vacancyStatus().getValue()) & unit.moveOutDay().getValue() != null;
     }
 
-    private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatusDTO unit, final long startOfTime, final long endOfTime) {
-        // FIXME availableFrom computation MUST be made in the preloader 
-        long availableFrom = 1 + unit.moveOutDay().getValue().getTime();
-        availableFrom = Math.max(startOfTime, availableFrom);
-        long millisecondsVacant = endOfTime - availableFrom;
+    /**
+     * Due to performance considerations this method does the both things together to avoid unnecessary invocation of
+     * {@link UnitAvailabilityStatusDTO#daysVacant()}.
+     */
+    private static void computeDaysVacantAndRevenueLost(final UnitAvailabilityStatusDTO unit, final long reportTime) {
+        long millisecondsVacant = reportTime - unit.availableFromDay().getValue().getTime();
 
         int daysVacant = (int) (millisecondsVacant / (1000 * 60 * 60 * 24)); // some really heavy math :)            
         unit.daysVacant().setValue(daysVacant);
 
-        double unitMarketRent = unit.marketRent().getValue();
-        double revenueLost = daysVacant * unitMarketRent / 30.0;
+        double marketRent = unit.marketRent().getValue();
+        double revenueLost = daysVacant * marketRent / 30.0;
         unit.revenueLost().setValue(revenueLost);
     }
 
