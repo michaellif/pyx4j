@@ -29,9 +29,9 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 
+// TODO probably also must include Tenant Name/Contact Information
 public interface UnitAvailabilityStatus extends IEntity {
 
-    // TODO ask Vlad about @Translatable and @XMLType
     public enum VacancyStatus {
         Vacant, Notice;
 
@@ -65,7 +65,7 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Detached
     AptUnit belongsTo();
 
-    /** This is optimization so with don't have to make additional join while we answer queries */
+    /** This is optimization to avoid additional join while we answer queries */
     @ReadOnly
     @Detached
     Building buildingBelongsTo();
@@ -78,6 +78,7 @@ public interface UnitAvailabilityStatus extends IEntity {
 
     IPrimitive<String> region();
 
+    // TODO not clear where from to get the value of owner() property
     IPrimitive<String> owner();
 
     IPrimitive<String> propertyManagerName();
