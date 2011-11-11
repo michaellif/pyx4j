@@ -35,28 +35,27 @@ public abstract class CAddressSimpleImpl<A extends AddressSimple> extends CEntit
     protected FormFlexPanel internalCreateContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        int row = 0;
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().street1()), 50).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().street2()), 50).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), 15).build());
+        int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street1()), 50).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street2()), 50).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().city()), 15).build());
 
         // Need local variables to avoid extended casting that make the code unreadable
         CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
-        main.setWidget(row++, 0, new DecoratorBuilder(province, 17).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(province, 17).build());
 
         CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
-        main.setWidget(row++, 0, new DecoratorBuilder(country, 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(country, 15).build());
 
         CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
-        main.setWidget(row++, 0, new DecoratorBuilder(postalCode, 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(postalCode, 7).build());
 
         attachFilters(proto(), province, country, postalCode);
 
         return main;
     }
 
-    private void attachFilters(final AddressSimple proto, CComponent<Province, ?> province, CComponent<Country, ?> country,
-            CComponent<String, ?> postalCode) {
+    private void attachFilters(final AddressSimple proto, CComponent<Province, ?> province, CComponent<Country, ?> country, CComponent<String, ?> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 

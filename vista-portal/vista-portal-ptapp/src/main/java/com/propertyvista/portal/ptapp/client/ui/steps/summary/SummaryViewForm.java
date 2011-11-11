@@ -47,16 +47,17 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.tenant.TenantIn.Status;
@@ -103,30 +104,32 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Apartment"))));
-        main.add(new ApartmentView());
+        int row = -1;
 
-        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Term"))));
-        main.add(new LeaseTermView());
+        main.setH1(++row, 0, 1, i18n.tr("Apartment"));
+        main.setWidget(++row, 0, new ApartmentView());
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Tenants"), new PtSiteMap.Tenants())));
-        main.add(inject(proto().tenantList().tenants(), new TenantFolder(false)));
+        main.setH1(++row, 0, 1, i18n.tr("Lease Term"));
+        main.setWidget(++row, 0, new LeaseTermView());
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Full info"), new PtSiteMap.Info())));
-        main.add(inject(proto().tenantsWithInfo(), createTenantView()));
+        main.setH1(++row, 0, 1, i18n.tr("Tenants"), createEditLink(new PtSiteMap.Tenants()));
+        main.setWidget(++row, 0, inject(proto().tenantList().tenants(), new TenantFolder(false)));
 
-        main.add(alignWidth(createHeaderWithEditLink(i18n.tr("Financial"), new PtSiteMap.Financial())));
-        main.add(inject(proto().tenantFinancials(), createFinancialView()));
+        main.setH1(++row, 0, 1, i18n.tr("Full info"), createEditLink(new PtSiteMap.Info()));
+        main.setWidget(++row, 0, inject(proto().tenantsWithInfo(), createTenantView()));
 
-        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Lease Terms"))));
-        main.add(new LeaseTermsCheck());
+        main.setH1(++row, 0, 1, i18n.tr("Financial"), createEditLink(new PtSiteMap.Financial()));
+        main.setWidget(++row, 0, inject(proto().tenantFinancials(), createFinancialView()));
 
-        main.add(inject(proto().charges(), new ChargesViewForm(this)));
+        main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
+        main.setWidget(++row, 0, new LeaseTermsCheck());
 
-        main.add(alignWidth(new VistaHeaderBar(i18n.tr("Digital Signature"))));
-        main.add(new SignatureView());
+        main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(this)));
+
+        main.setH1(++row, 0, 1, i18n.tr("Digital Signature"));
+        main.setWidget(++row, 0, new SignatureView());
 
         return main;
     }
@@ -157,9 +160,10 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         }
     }
 
-    private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
-        Button edit = new Button(i18n.tr("Edit"));
+    private Widget createEditLink(final AppPlace link) {
+        Anchor edit = new Anchor(i18n.tr("Edit"));
         edit.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        edit.getElement().getStyle().setProperty("lineHeight", "2em");
         edit.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         edit.addClickHandler(new ClickHandler() {
 
@@ -175,7 +179,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             }
         });
 
-        return new VistaHeaderBar(captionTxt, edit);
+        return edit;
     }
 
     private static Widget alignWidth(Widget e) {
