@@ -136,7 +136,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         // find picture:
         Persistence.service().retrieve(lease.unit().belongsTo().media());
         for (Media media : lease.unit().belongsTo().media()) {
-            if (Media.Type.file.equals(media.type())
+            if (Media.Type.file == media.type().getValue()
                     && (PublicVisibilityType.tenant == media.visibility().getValue() || PublicVisibilityType.global == media.visibility().getValue())) {
                 aptInfo.picture().set(media);
                 break;
