@@ -314,6 +314,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    /**
+     * This is untested method do not use unless you know what is inside this function!
+     * 
+     * @deprecated do not use unless told to do so!
+     */
+    @Deprecated
+    public <T extends IEntity> void persistListOneLevel(Iterable<T> entityIterable) {
+        persist_TODO_FIX(entityIterable);
+    }
+
     //@Override
     //TODO Fix this to save collection
     public <T extends IEntity> void persist_TODO_FIX(Iterable<T> entityIterable) {
