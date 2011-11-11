@@ -80,7 +80,7 @@ public class PtAppTheme extends VistaTheme {
         });
 
         Style style = new Style((IStyleName) DefaultEntityFolderTheme.StyleName.EntityFolder);
-        style.addProperty("width", "900px");
+        style.addProperty("width", "925px");
         addStyle(style);
     }
 
