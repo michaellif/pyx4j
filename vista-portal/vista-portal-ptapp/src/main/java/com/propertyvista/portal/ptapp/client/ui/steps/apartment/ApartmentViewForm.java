@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -60,7 +61,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        HTML welcome = new HTML("<h4>Welcome [tenant name]!<br>Thank you for choosing [PMC name] for your future home.</h4>");
+        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome") + " " + "[tenant name]" + "!<br>" + i18n.tr("Thank you for choosing") + " " + "[PMC name]"
+                + " " + i18n.tr("for your future home!")));
         welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         int row = -1;
@@ -71,13 +73,9 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
         FormFlexPanel info = new FormFlexPanel();
 
-        int row1 = -1;
-        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
-
-        info.setWidget(++row1, 0, new DecoratorBuilder(inject(proto().bedrooms()), 10).build());
-
-        row1 = 0;
-        info.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().bathrooms()), 10).build());
+        info.setWidget(0, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
+        info.setWidget(1, 0, new DecoratorBuilder(inject(proto().bedrooms()), 10).build());
+        info.setWidget(1, 1, new DecoratorBuilder(inject(proto().bathrooms()), 10).build());
 
         info.getColumnFormatter().setWidth(0, "50%");
         info.getColumnFormatter().setWidth(1, "50%");
