@@ -215,7 +215,7 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
                     },
                     new Vector<Key>(filter.buildings), 
                     select.occupied, select.vacant, select.notice, select.rented, select.notrented,  
-                    new LogicalDate(filter.toDate),
+                    filter.toDate == null ? null : new LogicalDate(filter.toDate),
                     new Vector<Sort>(), 
                     pageNumber,
                     getPageSize());
@@ -232,7 +232,7 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
         return asWidget().isVisible() & isRunning();
     }
 
-    // TODO override getSetup() to set the default button
+    // TODO override getSetup() to allow the set up of the default button
 
     // AUXILLIARY STUFF    
     private UnitSelectionCriteria buttonStateToSelectionCriteria() {

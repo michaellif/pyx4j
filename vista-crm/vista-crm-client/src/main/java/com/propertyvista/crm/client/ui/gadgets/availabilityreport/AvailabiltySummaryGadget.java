@@ -153,7 +153,7 @@ public class AvailabiltySummaryGadget extends GadgetBase implements IBuildingGad
                     public void onFailure(Throwable caught) {
                         reportError(caught);
                     }
-                }, new Vector<Key>(filter.buildings), new LogicalDate(filter.fromDate), new LogicalDate(filter.toDate));
+                }, new Vector<Key>(filter.buildings), filter.toDate == null ? null : new LogicalDate(filter.toDate));
             }
         }
     }

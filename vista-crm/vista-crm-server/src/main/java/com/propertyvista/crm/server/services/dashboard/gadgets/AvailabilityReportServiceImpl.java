@@ -46,9 +46,8 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
-    private static final Object TRANSIENT_PROPERTIES_MUTEX = new Object();
-
-    private static TransientPropertySortEngine<UnitAvailabilityStatusDTO> TRANSIENT_PROPERTY_SORT_ENGINE = null;
+    private static TransientPropertySortEngine<UnitAvailabilityStatusDTO> TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitAvailabilityStatusDTO>(
+            UnitAvailabilityStatusDTO.class);
 
     @Override
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,
@@ -56,13 +55,14 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             int pageNumber, int pageSize) {
         EntitySearchResult<UnitAvailabilityStatusDTO> units = null;
 
-        if (to.equals(new LogicalDate(Long.MAX_VALUE))) {
+        if (to == null) {
             to = new LogicalDate();
         }
+
         try {
             // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
             List<Sort> transientSortCriteria = null;
-            transientSortCriteria = getTransientPropertySortEngine().extractSortCriteriaForTransientProperties(sortingCriteria);
+            transientSortCriteria = TRANSIENT_PROPERTY_SORT_ENGINE.extractSortCriteriaForTransientProperties(sortingCriteria);
 
             EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
             criteria.setSorts(sortingCriteria);
@@ -85,9 +85,10 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
             // +1 is for the times when size() == 0 since it's an illegal argument
             PriorityQueue<UnitAvailabilityStatusDTO> queue = new PriorityQueue<UnitAvailabilityStatusDTO>(unfiltered.size() + 1,
-                    getTransientPropertySortEngine().getComparator(transientSortCriteria));
+                    TRANSIENT_PROPERTY_SORT_ENGINE.getComparator(transientSortCriteria));
 
-            // we use hash map to filter only unit statuses for the requested date 
+            // we use hash map to filter only unit statuses for the requested date
+            // TODO criteria for sorting the results by unit primary key, and then everything else to avoid this
             HashSet<Key> addedUnits = new HashSet<Key>(unfiltered.size());
 
             for (UnitAvailabilityStatus unitStatus : unfiltered) {
@@ -155,9 +156,9 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     @Override
-    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate fromDate, LogicalDate toDate) {
-        if (buildings == null | fromDate == null | toDate == null) {
-            callback.onFailure(new Error("one of the required arguments was not set."));
+    public void summary(AsyncCallback<UnitVacancyReportSummaryDTO> callback, Vector<Key> buildings, LogicalDate toDate) {
+        if (buildings == null) {
+            callback.onFailure(new Error("the set of buildings was not provided."));
             return;
         }
 
@@ -165,7 +166,9 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         if (!buildings.isEmpty()) {
             criteria.add(new PropertyCriterion(criteria.proto().buildingBelongsTo(), Restriction.IN, buildings));
         }
-
+        if (toDate == null) {
+            toDate = new LogicalDate();
+        }
         criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
         // use descending order of the status date in order to select the most recent statuses first
         criteria.desc(criteria.proto().statusDate().getPath().toString());
@@ -187,6 +190,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         int netExposure = 0;
 
         // use hash to mark units, since we need only the last date
+        // TODO use proper sorting by unit PK to avoid the usage of hash 
         HashSet<Key> checkedUnits = new HashSet<Key>(unitStatuses.size());
 
         for (UnitAvailabilityStatus unitStatus : unitStatuses) {
@@ -313,7 +317,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         }
 
         // add last interval that collected some statistics if it did, or we have been explicitly asked for it 
-        if ((total == 0) | (toDate != null)) {
+        if ((total != 0) | (toDate != null)) {
             int turnovers = moveins > 0 ? moveins - 1 : 0;
             result.add(createIntervalStats(intervalStart, intervalEnd, turnovers));
             total += turnovers;
@@ -371,19 +375,6 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         double marketRent = unit.marketRent().getValue();
         double revenueLost = daysVacant * marketRent / 30.0;
         unit.revenueLost().setValue(revenueLost);
-    }
-
-    // FIXME this is redundant and unnecessary: don't remember why I did it, use static final instance instead 
-    private static TransientPropertySortEngine<UnitAvailabilityStatusDTO> getTransientPropertySortEngine() {
-        TransientPropertySortEngine<UnitAvailabilityStatusDTO> sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE;
-        if (sortEngine == null) {
-            synchronized (TRANSIENT_PROPERTIES_MUTEX) {
-                if (sortEngine == null) {
-                    sortEngine = TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
-                }
-            }
-        }
-        return sortEngine;
     }
 
     private static UnitVacancyReportTurnoverAnalysisDTO createIntervalStats(long intervalStart, long intervalEnd, int turnovers) {

@@ -231,7 +231,6 @@ public class TurnoverAnalysisGraphGadget extends GadgetBase implements IBuilding
     @Override
     public void setFiltering(FilterData filterData) {
         this.filter = filterData;
-        // TODO check and set default values
 
         if (filter != null) {
             fillResolutionSelector();
