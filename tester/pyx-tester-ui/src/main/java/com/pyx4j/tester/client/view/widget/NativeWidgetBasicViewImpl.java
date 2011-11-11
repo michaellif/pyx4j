@@ -27,12 +27,21 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 
 public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidgetBasicView {
 
+    private static I18n i18n = I18n.get(NativeWidgetBasicViewImpl.class);
+
     public NativeWidgetBasicViewImpl() {
         setSize("100%", "100");
+
+        FormFlexPanel main = new FormFlexPanel();
+
+        int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Main Form"));
 
         final TextBox textBox = new TextBox();
         Date minDate = new Date(0, 1, 15);
@@ -50,9 +59,10 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
         });
 
-        add(datePicker);
-        add(textBox);
+        main.setWidget(++row, 0, textBox);
+        main.setWidget(++row, 0, datePicker);
 
+        add(main);
     }
 
 }

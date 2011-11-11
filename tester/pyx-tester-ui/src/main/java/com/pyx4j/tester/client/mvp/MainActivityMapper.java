@@ -32,6 +32,7 @@ import com.pyx4j.tester.client.activity.FolderLayoutActivity;
 import com.pyx4j.tester.client.activity.FolderValidationActivity;
 import com.pyx4j.tester.client.activity.FormBasicActivity;
 import com.pyx4j.tester.client.activity.FormVisibilityActivity;
+import com.pyx4j.tester.client.activity.NativeWidgetBasicActivity;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -53,6 +54,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new FormBasicActivity(place);
                 } else if (place instanceof TesterSiteMap.Form.FormVisibility) {
                     activity = new FormVisibilityActivity(place);
+                } else if (place instanceof TesterSiteMap.NativeWidget.NativeWidgetBasic) {
+                    activity = new NativeWidgetBasicActivity(place);
                 }
                 callback.onSuccess(activity);
             }
