@@ -30,7 +30,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader {
+public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     private static final Random RND = new Random(9001l);
 
@@ -53,7 +53,7 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
     private static final long MAX_WAIT_UNTIL_RENO_ENDS = 1000l * 60l * 60l * 24l * 7l;
 
     @Override
-    public String create() {
+    public String createMockup() {
         return generateRandom();
     }
 

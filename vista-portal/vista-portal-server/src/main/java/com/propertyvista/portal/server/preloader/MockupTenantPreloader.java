@@ -20,14 +20,15 @@ import java.util.Random;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrear;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenant;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 /**
@@ -36,7 +37,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
  * @author artyom
  * 
  */
-public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
+public class MockupTenantPreloader extends AbstractMockupPreloader {
 
     private static final Random RND = new Random(9001);
 
@@ -51,81 +52,93 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
     private static final double MAX_PREPAYMENTS = 2000d;
     //@formatter:on
 
+    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
-        if (ApplicationMode.isDevelopment()) {
-            return deleteAll(MockupArrear.class) + "; " + deleteAll(MockupTenant.class);
-        } else {
-            return "This is production";
-        }
+        return deleteAll(MockupArrear.class, MockupTenant.class);
     }
 
     @Override
-    public String create() {
-        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
-            return null;
-        }
+    public String createMockup() {
         int tenantCounter = 0;
         int statusCounter = 0;
 
-        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        List<AptUnit> units = Persistence.service().query(criteria);
+        List<Building> allBuildings = Persistence.service().query(EntityQueryCriteria.create(Building.class));
+        for (Building building : allBuildings) {
+            EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            List<AptUnit> units = Persistence.service().query(criteria);
 
-        final LogicalDate startDate = new LogicalDate();
-        startDate.setYear(106);
-        startDate.setMonth(0);
-        startDate.setDate(1);
-        final LogicalDate endDate = new LogicalDate();
+            final LogicalDate startDate = new LogicalDate();
+            startDate.setYear(106);
+            startDate.setMonth(0);
+            startDate.setDate(1);
+            final LogicalDate endDate = new LogicalDate();
 
-        for (AptUnit unit : units) {
-            LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
-            Persistence.service().retrieve(unit.belongsTo());
-            while (movein.before(endDate)) {
-                LogicalDate moveout = new LogicalDate(movein.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
+            List<MockupTenant> tenants = new ArrayList<MockupTenant>();
+            List<MockupArrear> arrears = new ArrayList<MockupArrear>();
+            int maxArraySize = 1000;
 
-                MockupTenant tenant = EntityFactory.create(MockupTenant.class);
-                tenant.belongsTo().setPrimaryKey(unit.getPrimaryKey());
-                tenant.moveIn().setValue(movein);
-                tenant.moveOut().setValue(moveout);
-                tenant.firstName().setValue(RandomUtil.randomFirstName());
-                tenant.lastName().setValue(RandomUtil.randomLastName());
-                Persistence.service().persist(tenant);
-                ++tenantCounter;
+            for (AptUnit unit : units) {
+                LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
-                // create mockup arrears history
-                LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(movein.getTime()));
-                List<MockupArrear> arrears = new ArrayList<MockupArrear>();
-                while (currentMonth.before(moveout)) {
-                    MockupArrear arrear = EntityFactory.create(MockupArrear.class);
+                // You don't need to load the building again
+                unit.belongsTo().set(building);
 
-                    // FIXME this is doesn't feel right! we cannot store values that belong to properties of other entities that are prone to updates (i.e. tenant's name, building property code, unit number etc.)                    
-                    arrear.belongsTo().setPrimaryKey(tenant.getPrimaryKey());
-                    arrear.firstName().setValue(tenant.firstName().getValue());
-                    arrear.lastName().setValue(tenant.lastName().getValue());
+                while (movein.before(endDate)) {
+                    LogicalDate moveout = new LogicalDate(movein.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
-                    arrear.unit().setPrimaryKey(unit.getPrimaryKey());
-                    arrear.unitNumber().setValue(unit.info().number().getValue());
+                    MockupTenant tenant = EntityFactory.create(MockupTenant.class);
+                    tenant.belongsTo().setPrimaryKey(unit.getPrimaryKey());
+                    tenant.moveIn().setValue(movein);
+                    tenant.moveOut().setValue(moveout);
+                    tenant.firstName().setValue(RandomUtil.randomFirstName());
+                    tenant.lastName().setValue(RandomUtil.randomLastName());
+                    tenants.add(tenant);
+                    ++tenantCounter;
 
-                    arrear.building().setPrimaryKey(unit.belongsTo().getPrimaryKey());
-                    arrear.propertyCode().setValue(unit.belongsTo().propertyCode().getValue());
+                    // create mockup arrears history
+                    LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(movein.getTime()));
+                    while (currentMonth.before(moveout)) {
+                        MockupArrear arrear = EntityFactory.create(MockupArrear.class);
 
-                    arrear.monthAgo().setValue(randomArrear());
-                    arrear.twoMonthsAgo().setValue(randomArrear());
-                    arrear.threeMonthsAgo().setValue(randomArrear());
-                    arrear.overFourMonthsAgo().setValue(randomArrear());
-                    arrear.arBalance().setValue(randomARBalance());
-                    arrear.prepayments().setValue(randomPrepayments());
-                    arrear.totalBalance().setValue(arrear.arBalance().getValue() - arrear.prepayments().getValue());
+                        // FIXME this is doesn't feel right! we cannot store values that belong to properties of other entities that are prone to updates (i.e. tenant's name, building property code, unit number etc.)                    
+                        arrear.belongsTo().setPrimaryKey(tenant.getPrimaryKey());
+                        arrear.firstName().setValue(tenant.firstName().getValue());
+                        arrear.lastName().setValue(tenant.lastName().getValue());
 
-                    arrear.statusTimestamp().setValue(currentMonth);
-                    arrears.add(arrear);
-                    ++statusCounter;
+                        arrear.unit().setPrimaryKey(unit.getPrimaryKey());
+                        arrear.unitNumber().setValue(unit.info().number().getValue());
 
-                    currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
+                        arrear.building().setPrimaryKey(unit.belongsTo().getPrimaryKey());
+                        arrear.propertyCode().setValue(unit.belongsTo().propertyCode().getValue());
+
+                        arrear.monthAgo().setValue(randomArrear());
+                        arrear.twoMonthsAgo().setValue(randomArrear());
+                        arrear.threeMonthsAgo().setValue(randomArrear());
+                        arrear.overFourMonthsAgo().setValue(randomArrear());
+                        arrear.arBalance().setValue(randomARBalance());
+                        arrear.prepayments().setValue(randomPrepayments());
+                        arrear.totalBalance().setValue(arrear.arBalance().getValue() - arrear.prepayments().getValue());
+
+                        arrear.statusTimestamp().setValue(currentMonth);
+                        arrears.add(arrear);
+                        ++statusCounter;
+
+                        currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
+                    }
+                    movein = new LogicalDate(moveout.getTime() + ONE_DAY);
                 }
-                Persistence.service().persist(arrears);
-                movein = new LogicalDate(moveout.getTime() + ONE_DAY);
+
+                if (arrears.size() > maxArraySize) {
+                    persistArray(tenants);
+                    persistArray(arrears);
+                    tenants.clear();
+                    arrears.clear();
+                }
             }
+            persistArray(tenants);
+            persistArray(arrears);
 
         }
 

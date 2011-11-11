@@ -15,7 +15,10 @@ package com.propertyvista.server.ci;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +33,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -58,7 +62,7 @@ public class DBResetServlet extends HttpServlet {
     @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     private static enum ResetType {
 
-        @Translate("Drop All and Preload all demo PMC (~60 seconds)")
+        @Translate("Drop All and Preload all demo PMC (~60 seconds) [No Mockup]")
         all,
 
         @Translate("Drop All and Preload all demo PMC : Mini version for UI Design (~15 seconds)")
@@ -66,6 +70,9 @@ public class DBResetServlet extends HttpServlet {
 
         @Translate("Drop All and Preload all demo PMC : Mockup version  (~5 minutes)")
         allWithMockup,
+
+        @Translate("For All PMC Generate Mockup on top of existing data")
+        allAddMockup,
 
         @Translate("Drop All Tables")
         clear,
@@ -75,6 +82,9 @@ public class DBResetServlet extends HttpServlet {
 
         @Translate("Preload this PMC : Mockup version  (~5 minutes)")
         preloadPmcWithMockup,
+
+        @Translate("Generate Mockup on top of existing data")
+        addPmcMockup,
 
         clearPmc;
 
@@ -124,20 +134,22 @@ public class DBResetServlet extends HttpServlet {
                     buf.append("Requested : '" + type.name() + "' " + type.toString());
                     if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                         RDBUtils.dropAllEntityTables();
+                        SchedulerHelper.shutdown();
+                        SchedulerHelper.dbReset();
+                        SchedulerHelper.init();
                     }
                     CacheService.reset();
-                    SchedulerHelper.shutdown();
-                    SchedulerHelper.dbReset();
-                    SchedulerHelper.init();
 
                     switch (type) {
                     case all:
                     case allWithMockup:
+                    case allAddMockup:
                     case allMini:
                         for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
                             preloadPmc(buf, demoPmc.name(), type);
                         }
                         break;
+                    case addPmcMockup:
                     case preloadPmcWithMockup:
                     case preloadPmc:
                         preloadPmc(buf, NamespaceManager.getNamespace(), type);
@@ -195,15 +207,17 @@ public class DBResetServlet extends HttpServlet {
         Persistence.service().persist(pmc);
 
         NamespaceManager.setNamespace(demoPmcName);
-        buf.append("\n--- Preload  " + demoPmcName + " ---");
+        buf.append("\n--- Preload  " + demoPmcName + " ---\n");
 
-        if (!EnumSet.of(ResetType.all, ResetType.allMini).contains(type)) {
+        if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup).contains(type)) {
             RDBUtils.deleteFromAllEntityTables();
         }
 
         DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
         switch (type) {
         case preloadPmcWithMockup:
+        case addPmcMockup:
+        case allAddMockup:
         case allWithMockup:
             VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
             cfg.mockupData = true;
@@ -214,7 +228,25 @@ public class DBResetServlet extends HttpServlet {
             break;
         }
 
-        buf.append(preloaders.preloadAll());
+        if (type.name().toLowerCase().contains("add")) {
+            Vector<DataPreloaderInfo> dpis = preloaders.getDataPreloaderInfo();
+            Vector<DataPreloaderInfo> dpisRun = new Vector<DataPreloaderInfo>();
+            for (DataPreloaderInfo info : dpis) {
+                info.setParameters((HashMap<String, Serializable>) preloaders.getParametersValues());
+                switch (type) {
+                case allAddMockup:
+                case addPmcMockup:
+                    if (info.getDataPreloaderClassName().contains("Mockup")) {
+                        dpisRun.add(info);
+                        break;
+                    }
+                }
+            }
+
+            buf.append(preloaders.exectutePreloadersCreate(dpisRun));
+        } else {
+            buf.append(preloaders.preloadAll());
+        }
         CacheService.reset();
 
         log.info("Preloaded PMC '{}' {}", demoPmcName, TimeUtils.secSince(pmcStart));

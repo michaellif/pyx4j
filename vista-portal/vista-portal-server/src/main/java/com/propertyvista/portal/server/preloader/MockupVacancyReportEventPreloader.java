@@ -31,7 +31,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportEvent;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 
-public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
+public class MockupVacancyReportEventPreloader extends AbstractMockupPreloader {
 
     private static final String DATA_SOURCE_FILE = "unit-vacancy-report-events.csv";
 
@@ -54,10 +54,7 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
     private static final long MAX_WAIT_UNTIL_RENO_ENDS = 1000l * 60l * 60l * 24l * 7l;
 
     @Override
-    public String create() {
-        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
-            return null;
-        }
+    public String createMockup() {
         return generateRandom();
     }
 

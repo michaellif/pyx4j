@@ -29,7 +29,7 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatu
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus.VacancyStatus;
 
-public class MockupVacancyReportUnitPreloader extends BaseVistaDevDataPreloader {
+public class MockupVacancyReportUnitPreloader extends AbstractMockupPreloader {
 
     public static final String DATA_SOURCE_FILE = "unit-vacancy-report.csv";
 
@@ -43,10 +43,7 @@ public class MockupVacancyReportUnitPreloader extends BaseVistaDevDataPreloader 
     }
 
     @Override
-    public String create() {
-        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
-            return null;
-        }
+    public String createMockup() {
         final HashMap<String, Integer> memberToIndexMap = new HashMap<String, Integer>();
         StringBuilder creationReport = new StringBuilder();
         final int[] units = new int[] { 0 }; // if no boxing come to Muhammad, Muhammad comes to boxing... 
