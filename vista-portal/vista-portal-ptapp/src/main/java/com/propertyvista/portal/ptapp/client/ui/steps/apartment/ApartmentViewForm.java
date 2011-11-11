@@ -36,6 +36,10 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
     private final FormFlexPanel consessionPanel = new FormFlexPanel();
 
+    private final FormFlexPanel includedPanel = new FormFlexPanel();
+
+    private final FormFlexPanel excludedPanel = new FormFlexPanel();
+
     private final FormFlexPanel chargedPanel = new FormFlexPanel();
 
     private final FormFlexPanel petsPanel = new FormFlexPanel();
@@ -97,36 +101,38 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTo()), 8).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitRent()), 8).build());
 
-        main.setH1(++row, 0, 1, i18n.tr("Promotions, Discounts and Concessions"));
-        consessionPanel.setWidget(0, 0, inject(proto().concessions(), new ConcessionsFolder()));
+        consessionPanel.setH1(0, 0, 1, i18n.tr("Promotions, Discounts and Concessions"));
+        consessionPanel.setWidget(1, 0, inject(proto().concessions(), new ConcessionsFolder()));
         main.setWidget(++row, 0, consessionPanel);
 
-        main.setH1(++row, 0, 1, i18n.tr("Included Utilities"));
-        main.setWidget(++row, 0, inject(proto().includedUtilities(), new UtilityFolder()));
+        includedPanel.setH1(0, 0, 1, i18n.tr("Included Utilities"));
+        includedPanel.setWidget(1, 0, inject(proto().includedUtilities(), new UtilityFolder()));
+        main.setWidget(++row, 0, includedPanel);
 
-        main.setH1(++row, 0, 1, i18n.tr("Excluded Utilities"));
-        main.setWidget(++row, 0, inject(proto().externalUtilities(), new UtilityFolder()));
+        excludedPanel.setH1(0, 0, 1, i18n.tr("Excluded Utilities"));
+        excludedPanel.setWidget(1, 0, inject(proto().externalUtilities(), new UtilityFolder()));
+        main.setWidget(++row, 0, excludedPanel);
 
-        main.setH1(++row, 0, 1, i18n.tr("Billed Utilities"));
-        chargedPanel.setWidget(0, 0, inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
+        chargedPanel.setH1(0, 0, 1, i18n.tr("Billed Utilities"));
+        chargedPanel.setWidget(1, 0, inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
         main.setWidget(++row, 0, chargedPanel);
 
         main.setH1(++row, 0, 1, i18n.tr("Add-Ons"));
 
-        main.setH2(++row, 0, 1, i18n.tr("Pets"));
-        petsPanel.setWidget(0, 0, inject(proto().agreedPets(), new FeatureExFolder(true, Feature.Type.pet, this)));
+        petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
+        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), new FeatureExFolder(true, Feature.Type.pet, this)));
         main.setWidget(++row, 0, petsPanel);
 
-        main.setH2(++row, 0, 1, i18n.tr("Parking"));
-        parkingPanel.setWidget(0, 0, inject(proto().agreedParking(), new FeatureExFolder(true, Feature.Type.parking, this)));
+        parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
+        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), new FeatureExFolder(true, Feature.Type.parking, this)));
         main.setWidget(++row, 0, parkingPanel);
 
-        main.setH2(++row, 0, 1, i18n.tr("Storage"));
-        storagePanel.setWidget(0, 0, inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, true)));
+        storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
+        storagePanel.setWidget(1, 0, inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, true)));
         main.setWidget(++row, 0, storagePanel);
 
-        main.setH2(++row, 0, 1, i18n.tr("Other"));
-        otherPanel.setWidget(0, 0, inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
+        otherPanel.setH2(0, 0, 1, i18n.tr("Other"));
+        otherPanel.setWidget(1, 0, inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
         main.setWidget(++row, 0, otherPanel);
 
         return main;
@@ -140,6 +146,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
         //hide/show various panels depend on populated data:
         consessionPanel.setVisible(!value.concessions().isEmpty());
+        includedPanel.setVisible(!value.includedUtilities().isEmpty());
+        excludedPanel.setVisible(!value.externalUtilities().isEmpty());
         chargedPanel.setVisible(!value.agreedUtilities().isEmpty());
 
         petsPanel.setVisible(!value.agreedPets().isEmpty() || !value.availablePets().isEmpty());
