@@ -73,6 +73,9 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Preload this PMC")
         preloadPmc,
 
+        @Translate("Preload this PMC : Mockup version  (~5 minutes)")
+        preloadPmcWithMockup,
+
         clearPmc;
 
         @Override
@@ -135,6 +138,7 @@ public class DBResetServlet extends HttpServlet {
                             preloadPmc(buf, demoPmc.name(), type);
                         }
                         break;
+                    case preloadPmcWithMockup:
                     case preloadPmc:
                         preloadPmc(buf, NamespaceManager.getNamespace(), type);
                         break;
@@ -199,6 +203,7 @@ public class DBResetServlet extends HttpServlet {
 
         DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
         switch (type) {
+        case preloadPmcWithMockup:
         case allWithMockup:
             VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
             cfg.mockupData = true;
