@@ -17,17 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadinessStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
@@ -71,98 +73,100 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
             return null;
         }
-        int statusesCount = 0;
         final LogicalDate start = new LogicalDate();
         start.setYear(106);
         start.setMonth(0);
         start.setDate(1);
         final LogicalDate end = new LogicalDate();
+        ArrayList<IEntity> statuses = new ArrayList<IEntity>();
 
-        for (Key unitPk : getRelevantUnits()) {
-            UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
-            status.statusDate().setValue(start);
-            status.belongsTo().setPrimaryKey(unitPk);
-            while (status.statusDate().getValue().before(end)) {
-                // create a 'new' entity (I hope it works)
-                status.setPrimaryKey(null);
+        UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
+        for (Building building : Persistence.service().query(new EntityQueryCriteria<Building>(Building.class))) {
+            Persistence.service().retrieve(building.complex());
 
-                if (status.vacancyStatus().isNull()) {
-                    notice(status);
+            EntityQueryCriteria<AptUnit> unitCriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+            unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().belongsTo(), building));
 
-                } else if (status.vacancyStatus().getValue().equals(VacancyStatus.Notice)) {
-                    if (status.isScoped().isBooleanTrue()) {
-                        // throw a 'fair' coin in order to decide if someone is going to rent the unit or move out will take place
-                        if ((RND.nextInt(2) == 0)
-                                & (!RentedStatus.Rented.equals(status.rentedStatus().getValue()) & RentReadinessStatus.RentReady.equals(status
-                                        .rentReadinessStatus().getValue()))) {
-                            rented(status);
-                        } else {
-                            moveOut(status);
-                        }
-                    } else { /* notice, but not scoped */
-                        // throw a 'fair' coin in order to decide if someone is going to move out or scoping is going to happen
-                        if ((RND.nextInt(2) == 0)) {
-                            scoped(status);
-                        } else {
-                            moveOut(status);
-                        }
-                    }
-                } else { /* Vacant */
-                    if (status.isScoped().isBooleanTrue()) {
-                        if (RentedStatus.Rented.equals(status.rentedStatus().getValue())) {
-                            moveIn(status);
-                        } else if (RentReadinessStatus.RentReady.equals(status.rentReadinessStatus().getValue())) {
-                            rented(status);
-                        } else if (RentReadinessStatus.NeedsRepairs.equals(status.rentReadinessStatus().getValue())) {
-                            renoInProgress(status);
-                        } else if (RentReadinessStatus.RenoInProgress.equals(status.rentReadinessStatus().getValue())) {
-                            renoFinished(status);
-                        }
-                    } else {
-                        scoped(status);
-                    }
-                }
-                ++statusesCount;
+            for (AptUnit unit : Persistence.service().query(unitCriteria)) {
+                status.statusDate().setValue(start);
+                status.belongsTo().setPrimaryKey(unit.getPrimaryKey());
 
-                Persistence.service().retrieve(status.belongsTo());
-                if (!status.moveOutDay().isNull()) {
-                    // TODO actually should be equal to status.belongsTo().availableForRent();
-                    LogicalDate availableFromDay = new LogicalDate(status.moveOutDay().getValue());
-                    availableFromDay.setTime(availableFromDay.getTime() + 24l * 60l * 60l * 1000l);
-                    status.availableFromDay().setValue(availableFromDay);
-                }
-                status.unit().setValue(status.belongsTo().info().number().getValue());
-                status.unitRent().setValue(status.belongsTo().financial().unitRent().isNull() ? 0d : status.belongsTo().financial().unitRent().getValue());
-                status.marketRent()
-                        .setValue(status.belongsTo().financial().marketRent().isNull() ? 0d : status.belongsTo().financial().marketRent().getValue());
-                double marketRent = status.marketRent().getValue();
-                double unitRent = status.unitRent().getValue();
+                status.unit().setValue(unit.info().number().getValue());
 
+                double unitRent = unit.financial().unitRent().isNull() ? 0d : unit.financial().unitRent().getValue();
+                double marketRent = status.belongsTo().financial().marketRent().isNull() ? 0d : unit.financial().marketRent().getValue();
                 double rentDeltaAbsoute = marketRent - unitRent;
                 double rentDeltaRelative = marketRent == 0d ? 0d : rentDeltaAbsoute / marketRent * 100;
+
+                status.unitRent().setValue(unitRent);
+                status.marketRent().setValue(marketRent);
                 status.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
                 status.rentDeltaRelative().setValue(rentDeltaRelative);
 
-                Persistence.service().retrieve(status.belongsTo().floorplan());
-                status.floorplanName().setValue(status.belongsTo().floorplan().name().getValue());
-                status.floorplanMarketingName().setValue(status.belongsTo().floorplan().marketingName().getValue());
+                Persistence.service().retrieve(unit.floorplan());
+                status.floorplanName().setValue(unit.floorplan().name().getValue());
+                status.floorplanMarketingName().setValue(unit.floorplan().marketingName().getValue());
 
-                Persistence.service().retrieve(status.belongsTo().belongsTo());
-                status.buildingBelongsTo().setPrimaryKey(status.belongsTo().getPrimaryKey());
-                status.buildingName().setValue(status.belongsTo().belongsTo().info().name().getValue());
-                status.propertyCode().setValue(status.belongsTo().belongsTo().propertyCode().getValue());
-                status.propertyManagerName().setValue(status.belongsTo().belongsTo().propertyManager().name().getValue());
+                status.buildingBelongsTo().setPrimaryKey(building.getPrimaryKey());
+                status.buildingName().setValue(building.info().name().getValue());
+                status.propertyCode().setValue(building.propertyCode().getValue());
+                status.propertyManagerName().setValue(building.propertyManager().name().getValue());
+                status.complexName().setValue(building.complex().name().getValue());
 
-                Persistence.service().retrieve(status.belongsTo().belongsTo().complex());
-                status.complexName().setValue(status.belongsTo().belongsTo().complex().name().getValue());
-
-                //status.owner().setValue(status.belongsTo().belongsTo().info())
                 // TODO fill other things
-                Persistence.service().persist(status);
-            } // end of unit status creation loop
 
-        } // end of unit iteration loop
-        return "Created " + statusesCount + " mockup unit statuses for Availability Gadgets";
+                while (status.statusDate().getValue().before(end)) {
+
+                    if (status.vacancyStatus().isNull()) {
+                        notice(status);
+
+                    } else if (status.vacancyStatus().getValue().equals(VacancyStatus.Notice)) {
+                        if (status.isScoped().isBooleanTrue()) {
+                            // throw a 'fair' coin in order to decide if someone is going to rent the unit or move out will take place
+                            if ((RND.nextInt(2) == 0)
+                                    & (!RentedStatus.Rented.equals(status.rentedStatus().getValue()) & RentReadinessStatus.RentReady.equals(status
+                                            .rentReadinessStatus().getValue()))) {
+                                rented(status);
+                            } else {
+                                moveOut(status);
+                            }
+                        } else { /* notice, but not scoped */
+                            // throw a 'fair' coin in order to decide if someone is going to move out or scoping is going to happen
+                            if ((RND.nextInt(2) == 0)) {
+                                scoped(status);
+                            } else {
+                                moveOut(status);
+                            }
+                        }
+                    } else { /* Vacant */
+                        if (status.isScoped().isBooleanTrue()) {
+                            if (RentedStatus.Rented.equals(status.rentedStatus().getValue())) {
+                                moveIn(status);
+                            } else if (RentReadinessStatus.RentReady.equals(status.rentReadinessStatus().getValue())) {
+                                rented(status);
+                            } else if (RentReadinessStatus.NeedsRepairs.equals(status.rentReadinessStatus().getValue())) {
+                                renoInProgress(status);
+                            } else if (RentReadinessStatus.RenoInProgress.equals(status.rentReadinessStatus().getValue())) {
+                                renoFinished(status);
+                            }
+                        } else {
+                            scoped(status);
+                        }
+                    }
+
+                    if (!status.moveOutDay().isNull()) {
+                        // TODO actually should be equal to unit.availableForRent();
+                        LogicalDate availableFromDay = new LogicalDate(status.moveOutDay().getValue());
+                        availableFromDay.setTime(availableFromDay.getTime() + 24l * 60l * 60l * 1000l);
+                        status.availableFromDay().setValue(availableFromDay);
+                    }
+
+                    statuses.add(status.cloneEntity());
+                } // end of unit status creation loop
+            } // end of unit iteration loop
+        } // end of building iteration loop
+        Persistence.service().persist(statuses);
+        return "Created " + statuses.size() + " mockup unit statuses for Availability Gadgets";
     }
 
     private static void notice(UnitAvailabilityStatus status) {
@@ -237,11 +241,6 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
         status.rentedStatus().setValue(RentedStatus.Unrented);
         status.vacancyStatus().setValue(VacancyStatus.Vacant);
-    }
-
-    private static List<Key> getRelevantUnits() {
-        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        return Persistence.service().queryKeys(criteria);
     }
 
     @SuppressWarnings("unused")
