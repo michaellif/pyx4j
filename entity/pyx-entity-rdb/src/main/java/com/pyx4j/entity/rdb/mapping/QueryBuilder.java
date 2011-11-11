@@ -57,6 +57,8 @@ public class QueryBuilder<T extends IEntity> {
 
     private final StringBuilder joinWhereSql = new StringBuilder();
 
+    private final StringBuilder sortsSql = new StringBuilder();
+
     private final boolean multitenant;
 
     private final List<Object> bindParams = new Vector<Object>();
@@ -213,7 +215,6 @@ public class QueryBuilder<T extends IEntity> {
         }
         if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
             log.debug("sort by {}", criteria.getSorts());
-            StringBuilder sortsSql = new StringBuilder();
             sortsSql.append(" ORDER BY ");
             boolean firstOrderBy = true;
             for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
@@ -234,8 +235,6 @@ public class QueryBuilder<T extends IEntity> {
                 }
                 sortsSql.append(' ').append(sort.isDescending() ? "DESC" : "ASC");
             }
-
-            sql.append(sortsSql);
         }
     }
 
@@ -320,7 +319,7 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     String getSQL(String mainTableSqlName) {
-        return getJoins(mainTableSqlName) + getWhere();
+        return getJoins(mainTableSqlName) + getWhere() + getSorts();
     }
 
     @SuppressWarnings("unchecked")
@@ -362,6 +361,10 @@ public class QueryBuilder<T extends IEntity> {
             sqlWhere.append(sql);
             return sqlWhere.toString();
         }
+    }
+
+    private String getSorts() {
+        return sortsSql.toString();
     }
 
 //    String getWhere(String conditions) {
