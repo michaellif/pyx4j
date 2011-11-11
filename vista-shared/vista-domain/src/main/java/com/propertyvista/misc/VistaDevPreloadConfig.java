@@ -20,6 +20,8 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public boolean minimizePreloadTime = false;
 
+    public boolean mockupData = false;
+
     private int maxCustomers = 20;
 
     private int maxPropertyManagers = 10;

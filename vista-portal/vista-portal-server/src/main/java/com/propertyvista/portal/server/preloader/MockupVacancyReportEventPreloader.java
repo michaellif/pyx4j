@@ -32,6 +32,7 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 
 public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader {
+
     private static final String DATA_SOURCE_FILE = "unit-vacancy-report-events.csv";
 
     private static final Random RND = new Random(9001l);
@@ -54,6 +55,9 @@ public class MockupVacancyReportEventPreloader extends BaseVistaDevDataPreloader
 
     @Override
     public String create() {
+        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
+            return null;
+        }
         return generateRandom();
     }
 

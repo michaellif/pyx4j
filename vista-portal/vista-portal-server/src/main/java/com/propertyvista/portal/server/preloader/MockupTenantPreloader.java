@@ -37,6 +37,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
  * 
  */
 public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
+
     private static final Random RND = new Random(9001);
 
     //@formatter:off
@@ -61,6 +62,9 @@ public class MockupTenantPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
+        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
+            return null;
+        }
         int tenantCounter = 0;
         int statusCounter = 0;
 

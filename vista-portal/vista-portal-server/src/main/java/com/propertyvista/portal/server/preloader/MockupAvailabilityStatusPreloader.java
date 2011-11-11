@@ -31,6 +31,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader {
+
     private static final Random RND = new Random(9001l);
 
     private static final long MIN_EVENT_DELTA = 1000l * 60l * 60l * 24l; // one day
@@ -67,7 +68,7 @@ public class MockupAvailabilityStatusPreloader extends BaseVistaDevDataPreloader
 
     @SuppressWarnings("deprecation")
     private String generateRandom() {
-        if ((config().minimizePreloadTime)) {
+        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
             return null;
         }
         int statusesCount = 0;
