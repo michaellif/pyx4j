@@ -232,7 +232,7 @@ public class DBResetServlet extends HttpServlet {
             Vector<DataPreloaderInfo> dpis = preloaders.getDataPreloaderInfo();
             Vector<DataPreloaderInfo> dpisRun = new Vector<DataPreloaderInfo>();
             String mockupClassNamefragment = "Mockup";
-            mockupClassNamefragment = "MockupTenantPreloader";
+            //mockupClassNamefragment = "MockupTenantPreloader";
             for (DataPreloaderInfo info : dpis) {
                 info.setParameters((HashMap<String, Serializable>) preloaders.getParametersValues());
                 switch (type) {

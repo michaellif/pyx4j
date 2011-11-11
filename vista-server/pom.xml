@@ -491,7 +491,7 @@
                                 <goals><goal>run</goal></goals>
                                 <configuration>
                                     <target>
-                                        <get src="${vista-app-ping-url}/o/db-reset?type=all" dest="${project.build.directory}/db-reset.txt" maxtime="600"/>
+                                        <get src="${vista-app-ping-url}/o/db-reset?type=allWithMockup" dest="${project.build.directory}/db-reset.txt" maxtime="600"/>
                                     </target>
                                 </configuration>
                             </execution>
