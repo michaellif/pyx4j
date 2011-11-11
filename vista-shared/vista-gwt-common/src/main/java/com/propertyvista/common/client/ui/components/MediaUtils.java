@@ -24,6 +24,8 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class MediaUtils {
 
+    // TODO: check PublicVisibilityType of the media here and allow/decline display here... 
+
     public static Image createPublicMediaImage(Key mediaId, ThumbnailSize size) {
         if (mediaId == null) {
             return new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + "0/" + size.name() + "."
