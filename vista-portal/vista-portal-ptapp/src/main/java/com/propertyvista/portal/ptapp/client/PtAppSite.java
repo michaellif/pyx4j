@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
-import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
+import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
@@ -52,7 +52,7 @@ public class PtAppSite extends VistaSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new PtSiteMap.Login());
 
-        RootPanel.get().add(new PtAppSiteView());
+        RootPanel.get().add(new PtAppSitePanel());
 
         SessionInactiveDialog.register();
 

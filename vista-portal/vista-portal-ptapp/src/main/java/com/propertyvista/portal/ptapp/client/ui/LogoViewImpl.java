@@ -32,9 +32,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
     }
 
     public LogoViewImpl() {
-        HTML logo = new HTML("<div style='font-size:15px; text-align:center; vertical-align:middle; padding-top:25px; width:900px; color:#E6E6E6'><h1>"
-                + brandedHeader + "</h1><div>");
-        //        logo.setStyleName("logo");
+        HTML logo = new HTML("<div style='font-size:15px; text-align:center; vertical-align:middle; color:#E6E6E6'><h1>" + brandedHeader + "</h1><div>");
         logo.getElement().getStyle().setCursor(Cursor.POINTER);
         logo.addClickHandler(new ClickHandler() {
 
@@ -44,7 +42,6 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
             }
         });
 
-        logo.setSize("300px", "115px");
         setWidget(logo);
     }
 

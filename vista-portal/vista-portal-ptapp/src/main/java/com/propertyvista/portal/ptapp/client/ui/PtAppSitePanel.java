@@ -15,13 +15,12 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
 
@@ -34,44 +33,35 @@ import com.propertyvista.portal.ptapp.client.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.MessageActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.SecondNavigActivityMapper;
 import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
+import com.propertyvista.portal.ptapp.client.themes.PtAppSitePanelTheme;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 
-public class PtAppSiteView extends FlowPanel {
+public class PtAppSitePanel extends FlowPanel {
 
-    public static String DEFAULT_STYLE_PREFIX = "SiteView";
-
-    public static enum StyleSuffix implements IStyleName {
-        Header, MainNavig, Caption, SecondaryNavig, Message, Content, Center, Main, Left, Right, Footer, Display
-    }
-
-    public PtAppSiteView() {
+    public PtAppSitePanel() {
 
         StyleManger.installTheme(new PtAppTheme(), new GainsboroPalette());
 
         EventBus eventBus = AppSite.getEventBus();
 
-        String prefix = DEFAULT_STYLE_PREFIX;
-
-        setStyleName(prefix);
+        setStyleName(PtAppSitePanelTheme.StyleName.SitePanel.name());
 
         //============ Top Panel ============
 
-        FlowPanel headerWrapper = new FlowPanel();
-        headerWrapper.setStyleName(prefix + StyleSuffix.Header);
+        VerticalPanel headerWrapper = new VerticalPanel();
+        headerWrapper.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelHeader.name());
         add(headerWrapper);
 
-        DisplayPanel logoDisplayPanel = new DisplayPanel();
-        logoDisplayPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        headerWrapper.add(logoDisplayPanel);
-
         DisplayPanel actionsDisplayPanel = new DisplayPanel();
-        actionsDisplayPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
         headerWrapper.add(actionsDisplayPanel);
+
+        DisplayPanel logoDisplayPanel = new DisplayPanel();
+        headerWrapper.add(logoDisplayPanel);
 
         //============ Main Navig ============
 
         FlowPanel mainNavigWrapper = new FlowPanel();
-        mainNavigWrapper.setStyleName(prefix + StyleSuffix.MainNavig);
+        mainNavigWrapper.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelMainNavigation.name());
         add(mainNavigWrapper);
 
         DisplayPanel mainNavigDisplayPanel = new DisplayPanel();
@@ -80,57 +70,39 @@ public class PtAppSiteView extends FlowPanel {
         //============ Main ============
 
         SimplePanel centerWrapper = new SimplePanel();
-        centerWrapper.setStyleName(prefix + StyleSuffix.Center);
+        centerWrapper.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelCenter.name());
         add(centerWrapper);
 
         FlowPanel mainWrapper = new FlowPanel();
-        mainWrapper.setStyleName(prefix + StyleSuffix.Main);
+        mainWrapper.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelMain.name());
         centerWrapper.add(mainWrapper);
 
         FlowPanel caption2navigPanel = new FlowPanel();
 
         DisplayPanel captionDisplayPanel = new DisplayPanel();
-        captionDisplayPanel.setStyleName(prefix + StyleSuffix.Caption);
+        captionDisplayPanel.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelCaption.name());
         captionDisplayPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption2navigPanel.add(captionDisplayPanel);
 
         DisplayPanel secondNavigDisplayPanel = new DisplayPanel();
-        secondNavigDisplayPanel.setStyleName(prefix + StyleSuffix.SecondaryNavig);
+        secondNavigDisplayPanel.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelSecondaryNavigation.name());
         secondNavigDisplayPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption2navigPanel.add(secondNavigDisplayPanel);
 
         mainWrapper.add(caption2navigPanel);
 
         DisplayPanel messageDisplayPanel = new DisplayPanel();
-        messageDisplayPanel.setStyleName(prefix + StyleSuffix.Message);
+        messageDisplayPanel.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelMessage.name());
         mainWrapper.add(messageDisplayPanel);
 
         DisplayPanel contentDisplayPanel = new DisplayPanel();
-        contentDisplayPanel.setStyleName(prefix + StyleSuffix.Content);
+        contentDisplayPanel.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelContent.name());
         mainWrapper.add(contentDisplayPanel);
-
-        FlowPanel leftWrapper = new FlowPanel();
-        leftWrapper.setStyleName(prefix + StyleSuffix.Left);
-        add(leftWrapper);
-
-        DisplayPanel left1DisplayPanel = new DisplayPanel();
-        leftWrapper.add(left1DisplayPanel);
-        DisplayPanel left2DisplayPanel = new DisplayPanel();
-        leftWrapper.add(left2DisplayPanel);
-
-        FlowPanel rightWrapper = new FlowPanel();
-        rightWrapper.setStyleName(prefix + StyleSuffix.Right);
-        add(rightWrapper);
-
-        DisplayPanel right1DisplayPanel = new DisplayPanel();
-        rightWrapper.add(right1DisplayPanel);
-        DisplayPanel right2DisplayPanel = new DisplayPanel();
-        rightWrapper.add(right2DisplayPanel);
 
         //============ Footer ============
 
         FlowPanel footerWrapper = new FlowPanel();
-        footerWrapper.setStyleName(prefix + StyleSuffix.Footer);
+        footerWrapper.setStyleName(PtAppSitePanelTheme.StyleName.SitePanelFooter.name());
         footerWrapper.getElement().getStyle().setProperty("clear", "left");
         add(footerWrapper);
 
@@ -158,8 +130,7 @@ public class PtAppSiteView extends FlowPanel {
 
     class DisplayPanel extends SimplePanel {
         DisplayPanel() {
-            String prefix = DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + StyleSuffix.Display);
+            setStyleName(PtAppSitePanelTheme.StyleName.SitePanelDisplay.name());
         }
     }
 }

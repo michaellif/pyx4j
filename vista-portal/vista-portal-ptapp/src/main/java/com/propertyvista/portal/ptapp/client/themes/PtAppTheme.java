@@ -28,12 +28,9 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.PtAppSiteView;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
@@ -61,16 +58,17 @@ public class PtAppTheme extends VistaTheme {
 
         addTheme(new DefaultDatePickerTheme());
 
+        addTheme(new PtAppSitePanelTheme());
+
         initBodyStyles();
         initListBoxStyle();
 
-        initSiteViewStyles();
-        initVistaApartmentViewStyles();
         initVistaSummaryViewStyles();
         initVistaCaptionViewStyles();
         initVistaMainNavigViewStyles();
         initVistaSecondNavigViewStyles();
         initPaymentRadioButtonGroupStyles();
+
     }
 
     protected void initEntityFolderStyles() {
@@ -96,94 +94,10 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("background", "url('" + PortalImages.INSTANCE.bodyBackground().getSafeUri().asString() + "') repeat-x 0 0 #F7F7F7");
         addStyle(style);
 
-    }
-
-    @Override
-    protected void initListBoxStyle() {
-        super.initListBoxStyle();
-        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX) + " option");
-        style.addProperty("background-color", "white");
-        addStyle(style);
-    }
-
-    protected void initSiteViewStyles() {
-        String prefix = PtAppSiteView.DEFAULT_STYLE_PREFIX;
-
-        int minWidth = 930;
-        int maxWidth = 930;
-        int leftColumnWidth = 0;
-        int rightColumnWidth = 0;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("width", "95%");
-        style.addProperty("min-width", minWidth + "px");
-        style.addProperty("max-width", maxWidth + "px");
-        style.addProperty("margin", "0 auto");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Header));
-        style.addProperty("height", "115px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.MainNavig));
-        style.addProperty("width", "100%");
-        style.addProperty("float", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Center));
-        style.addProperty("width", "100%");
-        style.addProperty("float", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Main));
-        style.addProperty("height", "100%");
-        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Caption));
-        style.addProperty("width", "30%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.SecondaryNavig));
-        style.addProperty("width", "70%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Message));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Content));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Left));
-        style.addProperty("float", "left");
-        style.addProperty("width", leftColumnWidth + "px");
-        style.addProperty("margin-left", "-100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Right));
-        style.addProperty("float", "left");
-        style.addProperty("width", rightColumnWidth + "px");
-        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Footer));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
-        style.addProperty("clear", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, PtAppSiteView.StyleSuffix.Display));
-        addStyle(style);
-
         style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColors.OBJECT_TONE4);
         style.addProperty("margin", "0.4em 0 0.4em 0");
-        style.addProperty("width", maxWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX, VistaHeaderBar.StyleSuffix.Caption));
-        style.addProperty("padding", "0.3em 1em 0.4em 1em");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
+        style.addProperty("width", "930px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
@@ -193,24 +107,14 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
         addStyle(style);
-
-        style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
-        style.addProperty("padding-top", "2px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf("logo"));
-        style.addProperty("font-size", "30px");
-        style.addProperty("line-height", "1.2em");
-        style.addProperty("text-align", "center");
-        style.addProperty("vertical-align", "middle");
-        style.addProperty("display", "block");
-        style.addProperty("color", ThemeColors.OBJECT_TONE5);
-        addStyle(style);
-
     }
 
-    protected void initVistaApartmentViewStyles() {
-
+    @Override
+    protected void initListBoxStyle() {
+        super.initListBoxStyle();
+        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX) + " option");
+        style.addProperty("background-color", "white");
+        addStyle(style);
     }
 
     protected void initVistaSummaryViewStyles() {

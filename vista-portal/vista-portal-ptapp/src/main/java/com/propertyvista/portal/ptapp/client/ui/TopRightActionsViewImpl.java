@@ -15,6 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Command;
@@ -59,6 +60,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     public TopRightActionsViewImpl() {
         getElement().getStyle().setFontSize(0.9, Unit.EM);
+        getElement().getStyle().setFloat(Float.RIGHT);
 
         topLinksPanel = new HorizontalPanel();
         topLinksPanel.getElement().getStyle().setMargin(4, Unit.PX);
