@@ -273,13 +273,17 @@ public class TurnoverAnalysisGraphGadget extends GadgetBase implements IBuilding
     }
 
     private boolean isResolutionAcceptable(AnalysisResolution resolution) {
-        long requestedTimerange = filter.toDate.getTime() - filter.fromDate.getTime();
-        for (Tuple<Long, List<AnalysisResolution>> rangeToResolutions : RANGE_TO_ACCEPTED_RESOLUTIONS_MAP) {
-            if (requestedTimerange > rangeToResolutions.car()) {
-                return rangeToResolutions.cdr().contains(resolution);
+        if (filter.toDate == null | filter.fromDate == null) {
+            return resolution == DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX;
+        } else {
+            long requestedTimerange = filter.toDate.getTime() - filter.fromDate.getTime();
+            for (Tuple<Long, List<AnalysisResolution>> rangeToResolutions : RANGE_TO_ACCEPTED_RESOLUTIONS_MAP) {
+                if (requestedTimerange > rangeToResolutions.car()) {
+                    return rangeToResolutions.cdr().contains(resolution);
+                }
             }
+            return false;
         }
-        return false;
     }
 
     private static AnalysisResolution getDefaultResolution(Date from, Date to) {
@@ -395,7 +399,8 @@ public class TurnoverAnalysisGraphGadget extends GadgetBase implements IBuilding
                 public void onSuccess(Vector<UnitVacancyReportTurnoverAnalysisDTO> result) {
                     setTurnoverAnalysisData(result);
                 }
-            }, new Vector<Key>(filter.buildings), new LogicalDate(filter.fromDate), new LogicalDate(filter.toDate), scale);
+            }, new Vector<Key>(filter.buildings), filter.fromDate == null ? null : new LogicalDate(filter.fromDate), filter.toDate == null ? null
+                    : new LogicalDate(filter.toDate), scale);
         }
     }
 }

@@ -237,12 +237,12 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     @Override
     public void turnoverAnalysis(AsyncCallback<Vector<UnitVacancyReportTurnoverAnalysisDTO>> callback, Vector<Key> buildings, LogicalDate fromDate,
             LogicalDate toDate, AnalysisResolution resolution) {
-        if (fromDate == null | toDate == null | resolution == null) {
-            callback.onFailure(new Error("at least one of the required parameters was not set."));
+        if (resolution == null) {
+            callback.onFailure(new Error("resolution is required"));
             return;
         }
-        if (fromDate.after(toDate)) {
-            callback.onFailure(new Error("end date is greater than from date."));
+        if (fromDate != null && toDate != null && fromDate.after(toDate)) {
+            callback.onFailure(new Error("end date is greater than from date"));
             return;
         }
 
@@ -257,8 +257,12 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         // sort the results by unitKey and then date so that we can check data for each unit separately  
         criteria.setSorts(Arrays.asList(new Sort(criteria.proto().belongsTo().getPath().toString(), false), new Sort(criteria.proto().statusDate().getPath()
                 .toString(), false)));
-        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
-        criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN, toDate));
+        if (fromDate != null) {
+            criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
+        }
+        if (toDate != null) {
+            criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
+        }
         if (!buildings.isEmpty()) {
             // FIXME this doesn't work, need to iterate over buildings and sum the results for each building
             criteria.add(new PropertyCriterion(criteria.proto().buildingBelongsTo(), Restriction.IN, buildings));
@@ -266,35 +270,29 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         List<UnitAvailabilityStatus> statuses = Persistence.service().query(criteria);
 
-        long intervalStart = fromDate.getTime();
+        long intervalStart = fromDate == null ? 0 : fromDate.getTime();
         long intervalEnd = resolution.intervalEnd(intervalStart);
         int moveins = 0;
         int total = 0;
 
         Key unitPK = null;
         VacancyStatus prevVacancy = null;
-
+        boolean dontSkipTheFirstEmptyRange = fromDate != null ? true : false;
         Iterator<UnitAvailabilityStatus> i = statuses.iterator();
         while (i.hasNext()) {
             UnitAvailabilityStatus status = i.next();
+            long statusTime = status.statusDate().getValue().getTime();
+            while (statusTime >= intervalEnd) {
+                int turnovers = moveins > 0 ? moveins - 1 : 0;
+                total += turnovers;
+                moveins = 0;
 
-            long eventTime = status.statusDate().getValue().getTime();
-            while (eventTime >= intervalEnd) {
-                if (unitPK != null) {
-                    int turnovers = moveins > 0 ? moveins - 1 : 0;
-
+                if (dontSkipTheFirstEmptyRange | total > 0) {
                     result.add(createIntervalStats(intervalStart, intervalEnd, turnovers));
-
-                    total += turnovers;
-
                     intervalStart = intervalEnd;
                     intervalEnd = resolution.addTo(intervalStart);
-
-                    moveins = 0;
                 } else {
-                    // skip all the first intervals that do not contain events
-                    // TODO optimization: the following two lines must skip to the interval that contains the event
-                    intervalStart = intervalEnd;
+                    intervalStart = resolution.intervalStart(statusTime);
                     intervalEnd = resolution.addTo(intervalStart);
                 }
             }
@@ -314,24 +312,24 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             }
         }
 
-        // check that we had events, then finish with the adding the last interval containing statuses, and intervals for the rest of the queried time range
-        if (unitPK != null) {
+        // add last interval that collected some statistics if it did, or we have been explicitly asked for it 
+        if ((total == 0) | (toDate != null)) {
             int turnovers = moveins > 0 ? moveins - 1 : 0;
             result.add(createIntervalStats(intervalStart, intervalEnd, turnovers));
             total += turnovers;
             intervalStart = intervalEnd;
             intervalEnd = resolution.addTo(intervalStart);
 
-            // now add some more intervals (empty) if needed
-            long queryEndTime = toDate.getTime();
-            while (intervalEnd <= queryEndTime) {
-                result.add(createIntervalStats(intervalStart, intervalEnd, 0));
+            // now add some more intervals (empty) if we were requested to show them
+            if (toDate != null) {
+                Long queryEndTime = toDate.getTime();
+                while (intervalEnd <= queryEndTime) {
+                    result.add(createIntervalStats(intervalStart, intervalEnd, 0));
 
-                intervalStart = intervalEnd;
-                intervalEnd = resolution.addTo(intervalStart);
+                    intervalStart = intervalEnd;
+                    intervalEnd = resolution.addTo(intervalStart);
+                }
             }
-        } else {
-            // TODO think what to show if no statuses at all were found 
         }
 
         if (total > 0) {
