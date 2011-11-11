@@ -31,7 +31,7 @@ public class PtAppSitePanelTheme extends Theme {
         style = new Style(".", PtAppSitePanelTheme.StyleName.SitePanelHeader.name());
         style.addProperty("height", "115px");
         style.addProperty("width", "100%");
-        style.addProperty("background-color", ThemeColors.object1, 0.6);
+        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.7);
         addStyle(style);
 
         style = new Style(".", PtAppSitePanelTheme.StyleName.SitePanelMainNavigation.name());
