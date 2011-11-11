@@ -402,6 +402,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
         revalidate();
 
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
     }
 
     @SuppressWarnings("unchecked")

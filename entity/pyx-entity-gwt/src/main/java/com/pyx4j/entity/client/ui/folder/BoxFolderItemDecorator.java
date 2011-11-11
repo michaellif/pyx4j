@@ -28,12 +28,17 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
@@ -85,16 +90,30 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public void setComponent(final CEntityFolderItem<E> folderItem) {
-        super.setComponent(folderItem);
+    public void setFolderItem(final CEntityFolderItem<E> folderItem) {
+        super.setFolderItem(folderItem);
         contentHolder.setWidget(folderItem.getContainer());
         toolbar.setTitleIcon(folderItem.getIcon());
+        folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.repopulated) {
+                    toolbar.update(expended);
+                }
+            }
+        });
+        folderItem.addValueChangeHandler(new ValueChangeHandler<E>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<E> event) {
+                toolbar.update(expended);
+            }
+        });
     }
 
     public void setExpended(boolean expended) {
         this.expended = expended;
         contentHolder.setVisible(expended);
-        toolbar.onExpended(expended);
+        toolbar.update(expended);
     }
 
     public void setCollapsible(boolean collapsible) {

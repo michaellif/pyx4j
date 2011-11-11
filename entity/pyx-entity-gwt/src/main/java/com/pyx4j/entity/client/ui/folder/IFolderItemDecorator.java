@@ -35,7 +35,7 @@ public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEnt
     HandlerRegistration addRowDownClickHandler(ClickHandler handler);
 
     @Override
-    void setComponent(CEntityFolderItem<E> item);
+    void setFolderItem(CEntityFolderItem<E> item);
 
     void setActionsState(boolean remove, boolean up, boolean down);
 

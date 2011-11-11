@@ -79,6 +79,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         }, ClickEvent.getType());
 
         caption = new Label("");
+        caption.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecoratorCollapsedCaption.name());
 
         titleIcon = new Image();
         titleIcon.getElement().getStyle().setMarginTop(2, Unit.PX);
@@ -88,6 +89,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         captionHolder.add(caption);
 
         add(captionHolder);
+        setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
         setCellWidth(captionHolder, "100%");
 
         imageWarn = new Image(decorator.getImages().warn());
@@ -103,7 +105,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
             actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
         }
 
-        onExpended(decorator.isExpended());
+        update(decorator.isExpended());
 
     }
 
@@ -111,9 +113,9 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         return actionsPanel;
     }
 
-    protected void onExpended(boolean expanded) {
+    protected void update(boolean expanded) {
         if (decorator.getFolderItem() != null && decorator.getFolderItem().getValue() != null) {
-            caption.setText(decorator.getFolderItem().getValue().getStringView());
+            setCaption(decorator.getFolderItem().getValue().getStringView());
         }
         caption.setVisible(!expanded);
         collapseImage.setResource(expanded ? decorator.getImages().collapse() : decorator.getImages().expand());

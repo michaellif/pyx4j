@@ -119,7 +119,7 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
             asWidget().setWidget(createContent());
         } else {
             asWidget().setWidget(decorator);
-            decorator.setComponent(this);
+            decorator.setFolderItem(this);
         }
 
         addValidations();

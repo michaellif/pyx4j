@@ -46,7 +46,9 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         collapsible,
 
-        valid
+        valid,
+
+        repopulated
 
     };
 
