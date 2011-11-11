@@ -61,7 +61,6 @@ public class PtAppSitePanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", PtAppSitePanelTheme.StyleName.SitePanelFooter.name());
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
         style.addProperty("clear", "left");
         style.addProperty("text-align", "center");
         addStyle(style);

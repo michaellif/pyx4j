@@ -21,18 +21,13 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
-import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
-import com.propertyvista.portal.ptapp.client.themes.VillageGreenPalette;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
-import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.shared.CompiledLocale;
@@ -76,19 +71,6 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public PlaceController getPlaceController() {
         return AppSite.getPlaceController();
-    }
-
-    @Override
-    public void setTheme(Theme theme) {
-        switch (theme) {
-        case Gainsboro:
-            StyleManger.installTheme(new PtAppTheme(), new GainsboroPalette());
-            break;
-        case VillageGreen:
-            StyleManger.installTheme(new PtAppTheme(), new VillageGreenPalette());
-            break;
-        }
-
     }
 
     private void obtainAvailableLocales() {

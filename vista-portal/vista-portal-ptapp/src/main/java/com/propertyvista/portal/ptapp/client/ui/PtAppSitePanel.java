@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.ptapp.client.mvp.ActionsActivityMapper;
@@ -32,15 +31,11 @@ import com.propertyvista.portal.ptapp.client.mvp.LogoActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.MainNavigActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.MessageActivityMapper;
 import com.propertyvista.portal.ptapp.client.mvp.SecondNavigActivityMapper;
-import com.propertyvista.portal.ptapp.client.themes.GainsboroPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppSitePanelTheme;
-import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 
 public class PtAppSitePanel extends FlowPanel {
 
     public PtAppSitePanel() {
-
-        StyleManger.installTheme(new PtAppTheme(), new GainsboroPalette());
 
         EventBus eventBus = AppSite.getEventBus();
 

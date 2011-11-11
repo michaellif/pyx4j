@@ -52,11 +52,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private final CHyperlink login;
 
-    private final CHyperlink themes;
-
     private final HorizontalPanel locales;
-
-    private Theme otherTheme = Theme.VillageGreen;
 
     public TopRightActionsViewImpl() {
         getElement().getStyle().setFontSize(0.9, Unit.EM);
@@ -94,21 +90,6 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         login.setValue(i18n.tr("Log In"));
         login.setDebugId(VistaFormsDebugId.Auth_LoginTop);
         topLinksPanel.add(login);
-
-        topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
-
-        themes = new CHyperlink(null, new Command() {
-            @Override
-            public void execute() {
-                presenter.setTheme(otherTheme);
-                otherTheme = (otherTheme == Theme.VillageGreen ? Theme.Gainsboro : Theme.VillageGreen);
-                themes.setValue(otherTheme.name());
-            }
-        });
-        themes.setValue(otherTheme.name());
-
-        themes.setDebugId(new StringDebugId("themes"));
-        topLinksPanel.add(themes);
 
         topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
 

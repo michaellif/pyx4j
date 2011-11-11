@@ -18,6 +18,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -30,6 +31,8 @@ import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
+import com.propertyvista.common.client.theme.VistaPalette;
+import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
@@ -64,6 +67,7 @@ public class PtAppSite extends VistaSite {
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
                 Window.setTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
+                StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
 
                 //TODO
                 ///StyleManger.installTheme(new VistaCrmTheme(), new VistaPalette(descriptor.palette()));
