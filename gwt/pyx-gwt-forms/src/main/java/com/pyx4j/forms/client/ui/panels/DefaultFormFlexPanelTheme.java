@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColors;
 public abstract class DefaultFormFlexPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        FormFlexPanel, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label
+        FormFlexPanel, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelActionWidget
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -54,6 +54,8 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style = new Style(".", StyleName.FormFlexPanelH1);
         style.addProperty("background-color", getBackgroundColor());
         style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH1Label);
@@ -61,32 +63,45 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
+        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH2);
-        style.addProperty("background-color", getBackgroundColor(), 0.9);
+        style.addProperty("border-bottom", "solid 2px");
+        style.addProperty("border-bottom-color", getBackgroundColor(), 1);
         style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH2Label);
-        style.addProperty("color", getBackgroundColor(), 0.05);
+        style.addProperty("color", getBackgroundColor(), 1);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "3px");
         style.addProperty("font-size", "1.2em");
-        style.addProperty("font-style", "italic");
+        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH3);
-        style.addProperty("background-color", getBackgroundColor(), 0.8);
+        style.addProperty("border-bottom", "solid 1px");
+        style.addProperty("border-bottom-color", getBackgroundColor(), 0.6);
         style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH3Label);
-        style.addProperty("color", getBackgroundColor(), 0.05);
+        style.addProperty("color", getBackgroundColor(), 1.3);
         style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "2px");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-style", "italic");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormFlexPanelActionWidget);
+        style.addProperty("float", "right");
+        style.addProperty("margin-right", "20px");
         addStyle(style);
 
     }

@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.panels;
 
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanel;
+import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelActionWidget;
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1;
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1Label;
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH2;
@@ -30,9 +31,11 @@ import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleNa
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelHR;
 
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName;
 
@@ -50,25 +53,45 @@ public class FormFlexPanel extends FlexTable {
     }
 
     public void setH1(int row, int col, int span, String caption) {
-        setHX(row, col, span, caption, FormFlexPanelH1Label, FormFlexPanelH1);
+        setH1(row, col, span, caption, null);
+    }
+
+    public void setH1(int row, int col, int span, String caption, Widget actionWidget) {
+        setHX(row, col, span, caption, actionWidget, FormFlexPanelH1Label, FormFlexPanelH1);
     }
 
     public void setH2(int row, int col, int span, String caption) {
-        setHX(row, col, span, caption, FormFlexPanelH2Label, FormFlexPanelH2);
+        setH2(row, col, span, caption, null);
+    }
+
+    public void setH2(int row, int col, int span, String caption, Widget actionWidget) {
+        setHX(row, col, span, caption, actionWidget, FormFlexPanelH2Label, FormFlexPanelH2);
     }
 
     public void setH3(int row, int col, int span, String caption) {
-        setHX(row, col, span, caption, FormFlexPanelH3Label, FormFlexPanelH3);
+        setH3(row, col, span, caption, null);
     }
 
-    private void setHX(int row, int col, int span, String caption, StyleName labelStyle, StyleName headerStyle) {
+    public void setH3(int row, int col, int span, String caption, Widget actionWidget) {
+        setHX(row, col, span, caption, actionWidget, FormFlexPanelH3Label, FormFlexPanelH3);
+    }
+
+    private void setHX(int row, int col, int span, String caption, Widget actionWidget, StyleName labelStyle, StyleName headerStyle) {
         getFlexCellFormatter().setColSpan(row, col, span);
+        FlowPanel header = new FlowPanel();
+        header.setStyleName(headerStyle.name());
+
         Label label = new Label(caption);
         label.setStyleName(labelStyle.name());
-        SimplePanel header = new SimplePanel();
-        header.setWidget(label);
-        header.setStyleName(headerStyle.name());
+        header.add(label);
+
+        if (actionWidget != null) {
+            SimplePanel actionWidgetHolder = new SimplePanel();
+            actionWidgetHolder.setWidget(actionWidget);
+            actionWidgetHolder.setStyleName(FormFlexPanelActionWidget.name());
+            header.add(actionWidgetHolder);
+        }
+
         super.setWidget(row, 0, header);
     }
-
 }
