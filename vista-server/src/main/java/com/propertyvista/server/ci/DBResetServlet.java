@@ -231,12 +231,14 @@ public class DBResetServlet extends HttpServlet {
         if (type.name().toLowerCase().contains("add")) {
             Vector<DataPreloaderInfo> dpis = preloaders.getDataPreloaderInfo();
             Vector<DataPreloaderInfo> dpisRun = new Vector<DataPreloaderInfo>();
+            String mockupClassNamefragment = "Mockup";
+            mockupClassNamefragment = "MockupTenantPreloader";
             for (DataPreloaderInfo info : dpis) {
                 info.setParameters((HashMap<String, Serializable>) preloaders.getParametersValues());
                 switch (type) {
                 case allAddMockup:
                 case addPmcMockup:
-                    if (info.getDataPreloaderClassName().contains("Mockup")) {
+                    if (info.getDataPreloaderClassName().contains(mockupClassNamefragment)) {
                         dpisRun.add(info);
                         break;
                     }
