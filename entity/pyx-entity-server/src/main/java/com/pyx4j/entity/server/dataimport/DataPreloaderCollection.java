@@ -145,7 +145,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             if (CommonsStringUtils.isStringSet(txt)) {
                 b.append(txt).append('\n');
             }
-            if (start > 10 * Consts.SEC2MSEC) {
+            if (TimeUtils.since(start) > 10 * Consts.SEC2MSEC) {
                 b.append(" !! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
             }
         }
