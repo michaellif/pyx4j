@@ -68,7 +68,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
             // choose only the most recent statuses (we asked the query to sort the results, hence the most recent ones must come first)
             for (MockupArrear arrear : allArrears) {
-                if (alreadyAddedTenants.add(arrear.unit().getPrimaryKey())) {
+                if (alreadyAddedTenants.add(arrear.belongsTo().getPrimaryKey())) {
                     preliminaryResults.add(arrear);
                 }
             }
