@@ -39,7 +39,9 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
@@ -289,6 +291,14 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                 }
                 return super.create(member);
             }
+
+            @Override
+            public IFolderItemDecorator<TenantInfoDTO> createItemDecorator() {
+                BoxFolderItemDecorator<TenantInfoDTO> decorator = (BoxFolderItemDecorator<TenantInfoDTO>) super.createItemDecorator();
+                decorator.setExpended(false);
+                return decorator;
+            }
+
         };
     }
 
@@ -304,6 +314,13 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                     return new FinancialViewForm(new VistaViewersComponentFactory());
                 }
                 return super.create(member);
+            }
+
+            @Override
+            public IFolderItemDecorator<TenantFinancialDTO> createItemDecorator() {
+                BoxFolderItemDecorator<TenantFinancialDTO> decorator = (BoxFolderItemDecorator<TenantFinancialDTO>) super.createItemDecorator();
+                decorator.setExpended(false);
+                return decorator;
             }
         };
     }
