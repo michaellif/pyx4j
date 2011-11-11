@@ -20,10 +20,13 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.misc.VistaDataPreloaderParameter;
+import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.domain.admin.Pmc;
@@ -41,7 +44,17 @@ public class VistaDBReset {
         SchedulerHelper.dbReset();
         log.info("Generating new Data...");
         long start = System.currentTimeMillis();
-        log.info(conf.getDataPreloaders().preloadAll());
+        //log.info(conf.getDataPreloaders().preloadAll());
+
+        DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
+        if ((args != null) && (args.length > 0)) {
+            VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
+            if (args[0].equals("--mockup")) {
+                cfg.mockupData = true;
+                preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
+            }
+        }
+        log.info(preloaders.preloadAll());
 
         NamespaceManager.setNamespace(Pmc.adminNamespace);
         Pmc pmc = EntityFactory.create(Pmc.class);
