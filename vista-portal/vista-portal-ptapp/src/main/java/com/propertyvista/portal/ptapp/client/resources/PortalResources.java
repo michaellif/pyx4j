@@ -20,6 +20,9 @@ public interface PortalResources extends ClientBundleWithLookup {
 
     PortalResources INSTANCE = GWT.create(PortalResources.class);
 
+    @Source("welcomeNotes.html")
+    TextResource welcomeNotes();
+
     @Source("dont_worry.html")
     TextResource dontWorry();
 

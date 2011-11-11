@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -24,6 +26,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -53,7 +56,13 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
+        HTML welcome = new HTML("<h4>Welcome [tenant name]!<br>Thank you for choosing [PMC name] for your future home.</h4>");
+        welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+
         int row = -1;
+        main.setWidget(++row, 0, welcome);
+        main.setWidget(++row, 0, new HTML(PortalResources.INSTANCE.welcomeNotes().getText()));
+
         main.setH1(++row, 0, 1, i18n.tr("General Info"));
 
         FormFlexPanel info = new FormFlexPanel();
