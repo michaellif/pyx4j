@@ -58,11 +58,14 @@ public class DBResetServlet extends HttpServlet {
     @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     private static enum ResetType {
 
-        @Translate("Drop All and Preload all demo PMC")
+        @Translate("Drop All and Preload all demo PMC (~60 seconds)")
         all,
 
-        @Translate("Drop All and Preload all demo PMC : Mini version for UI Design")
+        @Translate("Drop All and Preload all demo PMC : Mini version for UI Design (~15 seconds)")
         allMini,
+
+        @Translate("Drop All and Preload all demo PMC : Mockup version  (~5 minutes)")
+        allWithMockup,
 
         @Translate("Drop All Tables")
         clear,
@@ -116,7 +119,7 @@ public class DBResetServlet extends HttpServlet {
                     buf.append("</table>");
                 } else {
                     buf.append("Requested : '" + type.name() + "' " + type.toString());
-                    if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.clear).contains(type)) {
+                    if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                         RDBUtils.dropAllEntityTables();
                     }
                     CacheService.reset();
@@ -126,6 +129,7 @@ public class DBResetServlet extends HttpServlet {
 
                     switch (type) {
                     case all:
+                    case allWithMockup:
                     case allMini:
                         for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
                             preloadPmc(buf, demoPmc.name(), type);
@@ -194,9 +198,17 @@ public class DBResetServlet extends HttpServlet {
         }
 
         DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
-        if (type == ResetType.allMini) {
+        switch (type) {
+        case allWithMockup:
+            VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
+            cfg.mockupData = true;
+            preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
+            break;
+        case allMini:
             preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), VistaDevPreloadConfig.createUIDesignMini());
+            break;
         }
+
         buf.append(preloaders.preloadAll());
         CacheService.reset();
 
