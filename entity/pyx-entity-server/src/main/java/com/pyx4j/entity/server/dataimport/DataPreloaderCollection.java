@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -138,9 +140,13 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         for (DataPreloader preloader : childPreloaders) {
             preloader.setParametersValues(parameters);
             log.debug("create preloader {}", preloader.getClass());
+            long start = System.currentTimeMillis();
             String txt = preloader.create();
             if (CommonsStringUtils.isStringSet(txt)) {
                 b.append(txt).append('\n');
+            }
+            if (start > 10 * Consts.SEC2MSEC) {
+                b.append(" !! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
             }
         }
         return b.toString();
