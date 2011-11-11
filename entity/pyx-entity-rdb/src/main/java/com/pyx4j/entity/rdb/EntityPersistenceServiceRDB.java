@@ -321,7 +321,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
      */
     @Deprecated
     public <T extends IEntity> void persistListOneLevel(Iterable<T> entityIterable) {
-        persist_TODO_FIX(entityIterable);
+        Connection connection = null;
+        try {
+            if (entityIterable.iterator().hasNext()) {
+                connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
+                T entity = entityIterable.iterator().next();
+                persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow(), false);
+            }
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
     }
 
     //@Override
@@ -332,7 +341,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (entityIterable.iterator().hasNext()) {
                 connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 T entity = entityIterable.iterator().next();
-                persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow());
+                persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow(), true);
             }
         } finally {
             SQLUtils.closeQuietly(connection);
@@ -354,7 +363,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private <T extends IEntity> void persist(Connection connection, TableModel tm, Iterable<T> entityIterable, Date now) {
+    private <T extends IEntity> void persist(Connection connection, TableModel tm, Iterable<T> entityIterable, Date now, boolean returnId) {
         //TODO  //for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) { ... }
         /*
          * for (MemberOperationsMeta member :
@@ -385,7 +394,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
         }
         if (newEntities.size() > 0) {
-            tm.insert(connection, newEntities);
+            if (returnId) {
+                tm.insert(connection, newEntities);
+            } else {
+                tm.insertBulk(connection, newEntities);
+            }
         }
 
         Vector<T> notUpdated = new Vector<T>();

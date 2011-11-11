@@ -768,6 +768,41 @@ public class TableModel {
 
     }
 
+    public <T extends IEntity> boolean insertBulk(Connection connection, Iterable<T> entityIterable) {
+        PreparedStatement stmt = null;
+        int[] vals = null;
+        try {
+            boolean hasKeys = (getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED);
+            stmt = connection.prepareStatement(sqlInsert(!hasKeys));
+            for (T entity : entityIterable) {
+                int parameterIndex = bindPersistParameters(dialect, stmt, entity);
+                if (hasKeys) {
+                    stmt.setLong(parameterIndex, entity.getPrimaryKey().asLong());
+                    parameterIndex++;
+                }
+                if (dialect.isMultitenant()) {
+                    stmt.setString(parameterIndex, NamespaceManager.getNamespace());
+                    parameterIndex++;
+                }
+                stmt.addBatch();
+            }
+            vals = stmt.executeBatch(); // INSERTs
+            for (int i = 0; i < vals.length; i++) {
+                if (vals[i] == 0) {
+                    // not inserted ???
+                }
+            }
+            return true; //good, we reached this without exceptions
+        } catch (SQLException e) {
+            log.error("{} SQL {}", tableName, sqlInsert);
+            log.error("{} SQL Batch Insert error", tableName, e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+
+    }
+
     public <T extends IEntity> void persist(Connection connection, Iterable<T> entityIterable, List<T> notUpdated) {
         PreparedStatement stmt = null;
         int[] vals = null;
