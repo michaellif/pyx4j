@@ -25,6 +25,7 @@ import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.media.Media;
 
 /**
  * For primary - Unit for lease info + price + term
@@ -43,6 +44,8 @@ public interface ApartmentInfoDTO extends IEntity {
 
     // Unit data:
     AddressStructured address();
+
+    Media picture();
 
     // Service Catalogue stuff:
     IList<ServiceItemType> includedUtilities();

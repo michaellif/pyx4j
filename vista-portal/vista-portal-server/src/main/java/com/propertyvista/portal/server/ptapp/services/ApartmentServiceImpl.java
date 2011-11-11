@@ -37,6 +37,8 @@ import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
@@ -121,8 +123,8 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         aptInfo.bathrooms().setValue(lease.unit().floorplan().bathrooms().getStringView());
         if (lease.unit().floorplan().halfBath().getValue() == 1) {
-            aptInfo.bathrooms().setValue(
-                    aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + i18n.tr(" separate WC"));
+            aptInfo.bathrooms()
+                    .setValue(aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + i18n.tr(" separate WC"));
         } else if (lease.unit().floorplan().halfBath().getValue() > 1) {
             aptInfo.bathrooms().setValue(
                     aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + i18n.tr(" separate WCs"));
@@ -130,6 +132,16 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         aptInfo.address().set(lease.unit().belongsTo().info().address().clone(AddressStructured.class));
         aptInfo.address().suiteNumber().setValue(lease.unit().info().number().getValue());
+
+        // find picture:
+        Persistence.service().retrieve(lease.unit().belongsTo().media());
+        for (Media media : lease.unit().belongsTo().media()) {
+            if (Media.Type.file.equals(media.type())
+                    && (PublicVisibilityType.tenant == media.visibility().getValue() || PublicVisibilityType.global == media.visibility().getValue())) {
+                aptInfo.picture().set(media);
+                break;
+            }
+        }
 
         // serviceCatalog processing:
         fillServiceItems(aptInfo, lease.unit().belongsTo(), lease);

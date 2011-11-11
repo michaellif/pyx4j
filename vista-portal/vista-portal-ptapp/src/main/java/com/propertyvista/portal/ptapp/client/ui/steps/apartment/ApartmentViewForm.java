@@ -14,14 +14,17 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
 public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO> {
@@ -39,6 +42,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     private final FormFlexPanel storagePanel = new FormFlexPanel();
 
     private final FormFlexPanel otherPanel = new FormFlexPanel();
+
+    private final SimplePanel pictureHolder = new SimplePanel();
 
     public ApartmentViewForm() {
         super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
@@ -63,12 +68,20 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
         info.getColumnFormatter().setWidth(0, "50%");
         info.getColumnFormatter().setWidth(1, "50%");
-//        info.setWidth("75%");
 
         main.setWidget(++row, 0, info);
 
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+
+        FormFlexPanel apartment = new FormFlexPanel();
+
+        apartment.setWidget(0, 0, inject(proto().address(), new CAddressStructured(false)));
+        apartment.setWidget(0, 1, pictureHolder);
+
+        info.getColumnFormatter().setWidth(0, "40%");
+        info.getColumnFormatter().setWidth(1, "60%");
+
+        main.setWidget(++row, 0, apartment);
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8).build());
@@ -113,6 +126,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     @Override
     public void populate(ApartmentInfoDTO value) {
         super.populate(value);
+
+        pictureHolder.setWidget(MediaUtils.createPublicMediaImage(value.picture().getPrimaryKey(), ThumbnailSize.large));
 
         //hide/show various panels depend on populated data:
         consessionPanel.setVisible(!value.concessions().isEmpty());

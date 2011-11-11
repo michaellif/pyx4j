@@ -37,7 +37,7 @@ public abstract class CrmBoardViewActivity<V extends BoardView> extends BoardVie
     public void onPopulateSuccess(DashboardMetadata result) {
         super.onPopulateSuccess(result);
 
-        // create ListerActivity for building lister if necessary (if we have Building dashboard): 
+        // create ListerActivity for building lister if necessary (if we run Building dashboard): 
         if (view instanceof CrmBoardView && ((CrmBoardView) view).getBuildingListerView() != null) {
             IListerView.Presenter buildingsLister = new ListerActivityBase<Building>(((CrmBoardView) view).getBuildingListerView(),
                     (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);

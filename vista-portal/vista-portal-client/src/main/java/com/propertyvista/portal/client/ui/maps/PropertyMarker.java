@@ -39,7 +39,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.client.MediaUtils;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.MarkerType;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.StyleSuffix;
@@ -172,7 +172,7 @@ public class PropertyMarker extends Marker {
             imageHolder.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardImage);
 
             imageHolder.getElement().getStyle().setProperty("minHeight", ImageConsts.BUILDING_SMALL.height + "px");
-            Image image = MediaUtils.createPublicMediaImage(property.mainMedia(), ThumbnailSize.small);
+            Image image = MediaUtils.createPublicMediaImage(property.mainMedia().getValue(), ThumbnailSize.small);
             image.setPixelSize(ImageConsts.BUILDING_SMALL.width, ImageConsts.BUILDING_SMALL.height);
             image.getElement().getStyle().setProperty("backgroundSize", "100%");
             imageHolder.setWidget(image);
