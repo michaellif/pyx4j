@@ -88,9 +88,13 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             findPreloader: for (DataPreloader preloader : childPreloaders) {
                 if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
                     preloader.setParametersValues(info.getParameters());
+                    long start = System.currentTimeMillis();
                     String txt = preloader.create();
-                    if (txt != null) {
+                    if (CommonsStringUtils.isStringSet(txt)) {
                         b.append(txt).append('\n');
+                    }
+                    if (TimeUtils.since(start) > 1 * Consts.SEC2MSEC) {
+                        b.append(" ! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
                     }
                     break findPreloader;
                 }
@@ -106,7 +110,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
                 if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
                     preloader.setParametersValues(info.getParameters());
                     String txt = preloader.delete();
-                    if (txt != null) {
+                    if (CommonsStringUtils.isStringSet(txt)) {
                         b.append(txt).append('\n');
                     }
                     break findPreloader;
@@ -126,7 +130,10 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
 
     public String preloadAll(boolean print) {
         StringBuilder b = new StringBuilder();
-        b.append(delete()).append('\n');
+        String txt = delete();
+        if (CommonsStringUtils.isStringSet(txt)) {
+            b.append(txt).append('\n');
+        }
         b.append(create());
         if (print) {
             b.append(print());
@@ -145,8 +152,8 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             if (CommonsStringUtils.isStringSet(txt)) {
                 b.append(txt).append('\n');
             }
-            if (TimeUtils.since(start) > 10 * Consts.SEC2MSEC) {
-                b.append(" !! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
+            if (TimeUtils.since(start) > 1 * Consts.SEC2MSEC) {
+                b.append(" ! ").append(preloader.getClass().getSimpleName() + " " + TimeUtils.secSince(start) + "\n");
             }
         }
         return b.toString();
