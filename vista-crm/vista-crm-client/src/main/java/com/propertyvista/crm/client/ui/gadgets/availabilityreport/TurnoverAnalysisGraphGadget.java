@@ -372,7 +372,7 @@ public class TurnoverAnalysisGraphGadget extends GadgetBase implements IBuilding
     }
 
     private boolean isEnabled() {
-        return this.asWidget().isVisible();
+        return this.asWidget().isVisible() & isRunning();
     }
 
     private void reportError(Throwable error) {

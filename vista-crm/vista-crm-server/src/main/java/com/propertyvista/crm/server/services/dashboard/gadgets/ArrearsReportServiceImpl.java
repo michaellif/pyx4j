@@ -49,7 +49,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
             final List<MockupArrear> allArrears = new ArrayList<MockupArrear>();
             if (!buildingPKs.isEmpty()) {
-                // TODO consited make this some other way when it's gonna be possible to make query for set of buildings, i.e. something like: 
+                // TODO make this some other way when it's gonna be possible to make query for set of buildings, i.e. something like: 
                 // criteria.add(PropertyCriterion.in(criteria.proto().belongsTo().belongsTo(), buildings));
                 for (Key pk : buildingPKs) {
                     PropertyCriterion eqPk = PropertyCriterion.eq(criteria.proto().building(), pk);
@@ -63,11 +63,12 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
             final int capacity = allArrears.size() + 1;
             final List<MockupArrear> preliminaryResults = new ArrayList<MockupArrear>(capacity);
+            // TODO use sorting of results instead of HashSet
             final HashSet<Key> alreadyAddedTenants = new HashSet<Key>(capacity);
 
             // choose only the most recent statuses (we asked the query to sort the results, hence the most recent ones must come first)
             for (MockupArrear arrear : allArrears) {
-                if (alreadyAddedTenants.add(arrear.belongsTo().getPrimaryKey())) {
+                if (alreadyAddedTenants.add(arrear.unit().getPrimaryKey())) {
                     preliminaryResults.add(arrear);
                 }
             }

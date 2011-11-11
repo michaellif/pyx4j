@@ -124,7 +124,7 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
     }
 
     private boolean isEnabled() {
-        return form.isVisible();
+        return form.isVisible() & isRunning();
     }
 
     private void reportError(Throwable error) {

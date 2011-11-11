@@ -60,6 +60,9 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
 
     @Override
     public String createMockup() {
+        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
+            return null;
+        }
         int tenantCounter = 0;
         int statusCounter = 0;
 
@@ -103,15 +106,15 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                         MockupArrear arrear = EntityFactory.create(MockupArrear.class);
 
                         // FIXME this is doesn't feel right! we cannot store values that belong to properties of other entities that are prone to updates (i.e. tenant's name, building property code, unit number etc.)                    
-                        arrear.belongsTo().setPrimaryKey(tenant.getPrimaryKey());
+                        arrear.belongsTo().set(tenant);
                         arrear.firstName().setValue(tenant.firstName().getValue());
                         arrear.lastName().setValue(tenant.lastName().getValue());
 
                         arrear.unit().setPrimaryKey(unit.getPrimaryKey());
                         arrear.unitNumber().setValue(unit.info().number().getValue());
 
-                        arrear.building().setPrimaryKey(unit.belongsTo().getPrimaryKey());
-                        arrear.propertyCode().setValue(unit.belongsTo().propertyCode().getValue());
+                        arrear.building().setPrimaryKey(building.getPrimaryKey());
+                        arrear.propertyCode().setValue(building.propertyCode().getValue());
 
                         arrear.monthAgo().setValue(randomArrear());
                         arrear.twoMonthsAgo().setValue(randomArrear());
@@ -122,6 +125,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                         arrear.totalBalance().setValue(arrear.arBalance().getValue() - arrear.prepayments().getValue());
 
                         arrear.statusTimestamp().setValue(currentMonth);
+
                         arrears.add(arrear);
                         ++statusCounter;
 

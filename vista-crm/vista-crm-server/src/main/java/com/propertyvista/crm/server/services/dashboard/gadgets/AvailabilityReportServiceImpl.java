@@ -15,10 +15,12 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.PriorityQueue;
+import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -35,7 +37,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
-import com.propertyvista.crm.server.util.TransientPropertySortEngine;
+import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
@@ -46,14 +48,12 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
-    private static TransientPropertySortEngine<UnitAvailabilityStatusDTO> TRANSIENT_PROPERTY_SORT_ENGINE = new TransientPropertySortEngine<UnitAvailabilityStatusDTO>(
-            UnitAvailabilityStatusDTO.class);
+    private static SortingFactory<UnitAvailabilityStatusDTO> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
 
     @Override
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,
             boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate to, Vector<Sort> sortingCriteria,
             int pageNumber, int pageSize) {
-        EntitySearchResult<UnitAvailabilityStatusDTO> units = null;
 
         if (to == null) {
             to = new LogicalDate();
@@ -61,54 +61,70 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         try {
             // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
-            List<Sort> transientSortCriteria = null;
-            transientSortCriteria = TRANSIENT_PROPERTY_SORT_ENGINE.extractSortCriteriaForTransientProperties(sortingCriteria);
+            //List<Sort> transientSortCriteria = TRANSIENT_PROPERTY_SORT_ENGINE.extractSortCriteriaForTransientProperties(sortingCriteria);
 
             EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-            criteria.setSorts(sortingCriteria);
+            //criteria.setSorts(sortingCriteria);
 
-            if (!buildings.isEmpty()) {
-                ArrayList<Building> buildingsList = new ArrayList<Building>();
-                for (Key pk : buildings) {
-                    Building building = Persistence.service().retrieve(Building.class, pk);
-                    if (building != null) {
-                        buildingsList.add(building);
+//            if (!buildings.isEmpty()) {
+//                ArrayList<Building> buildingsList = new ArrayList<Building>();
+//                for (Key pk : buildings) {
+//                    Building building = Persistence.service().retrieve(Building.class, pk);
+//                    if (building != null) {
+//                        buildingsList.add(building);
+//                    }
+//                }
+//                criteria.add(new PropertyCriterion(criteria.proto().belongsTo().belongsTo(), Restriction.IN, buildingsList));
+//            }
+
+            ArrayList<UnitAvailabilityStatusDTO> allUnitStatuses = new ArrayList<UnitAvailabilityStatusDTO>();
+
+            boolean isBuildingsSetLimited = !buildings.isEmpty();
+            Iterator<Building> buildingIter = null;
+            if (isBuildingsSetLimited) {
+                buildingIter = Persistence.service().retrieve(Building.class, buildings).values().iterator();
+            }
+            while (!isBuildingsSetLimited || buildingIter.hasNext()) {
+                if (buildingIter != null) {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), buildingIter.next()));
+                }
+                criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, to));
+
+                // use descending order of the status date in order to select the most recent statuses first
+                // use unit pk sorting in order to make tacking of already added unit statuses
+                criteria.setSorts(Arrays.asList(new Sort(criteria.proto().belongsTo().getPath().toString(), true), new Sort(criteria.proto().statusDate()
+                        .getPath().toString(), true)));
+                List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
+
+                // we use hash map to filter only unit statuses for the requested date
+                // TODO criteria for sorting the results by unit primary key, and then everything else to avoid this
+                Key pervUnitPK = null;
+                for (UnitAvailabilityStatus unitStatus : unfiltered) {
+                    Key unitPK = unitStatus.belongsTo().getPrimaryKey();
+                    if (!unitPK.equals(pervUnitPK)) {
+                        allUnitStatuses.add(computeTransientFields(unitStatus, to));
+                        pervUnitPK = unitPK;
                     }
                 }
-                criteria.add(new PropertyCriterion(criteria.proto().belongsTo().belongsTo(), Restriction.IN, buildingsList));
-            }
-
-            criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, to));
-            // use descending order of the status date in order to select the most recent statuses first
-            criteria.desc(criteria.proto().statusDate().getPath().toString());
-            List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
-
-            // +1 is for the times when size() == 0 since it's an illegal argument
-            PriorityQueue<UnitAvailabilityStatusDTO> queue = new PriorityQueue<UnitAvailabilityStatusDTO>(unfiltered.size() + 1,
-                    TRANSIENT_PROPERTY_SORT_ENGINE.getComparator(transientSortCriteria));
-
-            // we use hash map to filter only unit statuses for the requested date
-            // TODO criteria for sorting the results by unit primary key, and then everything else to avoid this
-            HashSet<Key> addedUnits = new HashSet<Key>(unfiltered.size());
-
-            for (UnitAvailabilityStatus unitStatus : unfiltered) {
-                Key unitPK = unitStatus.belongsTo().getPrimaryKey();
-                if (!addedUnits.contains(unitPK)) {
-                    queue.add(computeTransientFields(unitStatus, to));
-                    addedUnits.add(unitPK);
+                if (!isBuildingsSetLimited) {
+                    break;
                 }
             }
 
-            Vector<UnitAvailabilityStatusDTO> unitsData = new Vector<UnitAvailabilityStatusDTO>();
+            if (!sortingCriteria.isEmpty()) {
+                Collections.sort(allUnitStatuses, SORTING_FACTORY.createDtoComparator(sortingCriteria));
+            }
 
             int currentPage = 0;
             int currentPagePosition = 0;
             int totalRows = 0;
             boolean hasMoreRows = false;
+            Vector<UnitAvailabilityStatusDTO> unitsStatusPage = new Vector<UnitAvailabilityStatusDTO>();
 
-            while (!queue.isEmpty()) {
-                UnitAvailabilityStatusDTO unit = queue.poll();
-                if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
+            Iterator<UnitAvailabilityStatusDTO> i = allUnitStatuses.iterator();
+            while (i.hasNext()) {
+                UnitAvailabilityStatusDTO unitStatus = i.next();
+                if (isAcceptable(unitStatus, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
                     ++currentPagePosition;
                     ++totalRows;
                     if (currentPagePosition > pageSize) {
@@ -118,26 +134,26 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                     if (currentPage < pageNumber) {
                         continue;
                     } else if (currentPage == pageNumber) {
-                        unitsData.add(unit);
+                        unitsStatusPage.add(unitStatus);
                     } else {
                         hasMoreRows = true;
                         break;
                     }
                 }
             }
-            while (!queue.isEmpty()) {
-                UnitAvailabilityStatusDTO unit = queue.poll();
-                if (isAcceptable(unit, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
+            while (i.hasNext()) {
+                UnitAvailabilityStatusDTO unitStatus = i.next();
+                if (isAcceptable(unitStatus, displayOccupied, displayVacant, displayNotice, displayRented, displayNotRented)) {
                     ++totalRows;
                 }
             }
 
-            units = new EntitySearchResult<UnitAvailabilityStatusDTO>();
-            units.setData(unitsData);
-            units.setTotalRows(totalRows);
-            units.hasMoreData(hasMoreRows);
+            EntitySearchResult<UnitAvailabilityStatusDTO> result = new EntitySearchResult<UnitAvailabilityStatusDTO>();
+            result.setData(unitsStatusPage);
+            result.setTotalRows(totalRows);
+            result.hasMoreData(hasMoreRows);
 
-            callback.onSuccess(units);
+            callback.onSuccess(result);
         } catch (Throwable error) {
             callback.onFailure(new Error(error));
         }
@@ -255,7 +271,6 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         //      the number of times the unit switched hands during the specified interval.
         // 
         // so then it's basically: number of 'moveins' during specified interval minus 1        
-        Vector<UnitVacancyReportTurnoverAnalysisDTO> result = new Vector<UnitVacancyReportTurnoverAnalysisDTO>();
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         // sort the results by unitKey and then date so that we can check data for each unit separately  
@@ -274,53 +289,72 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         List<UnitAvailabilityStatus> statuses = Persistence.service().query(criteria);
 
+        Map<Long, TurnoverStats> statsMap = new HashMap<Long, TurnoverStats>();
+
         long intervalStart = fromDate == null ? 0 : fromDate.getTime();
         long intervalEnd = resolution.intervalEnd(intervalStart);
         int moveins = 0;
         int total = 0;
+        int totalForUnit = 0;
 
         Key unitPK = null;
         VacancyStatus prevVacancy = null;
-        boolean dontSkipTheFirstEmptyRange = fromDate != null ? true : false;
+        boolean skipFirstEmptyRange = fromDate != null ? false : true;
+
         Iterator<UnitAvailabilityStatus> i = statuses.iterator();
         while (i.hasNext()) {
             UnitAvailabilityStatus status = i.next();
+            Key thisUnitPK = status.belongsTo().getPrimaryKey();
+            VacancyStatus vacancy = status.vacancyStatus().getValue();
             long statusTime = status.statusDate().getValue().getTime();
-            while (statusTime >= intervalEnd) {
+
+            if (!thisUnitPK.equals(unitPK)) {
+                unitPK = thisUnitPK;
+                total += totalForUnit;
+                totalForUnit = 0;
+                moveins = 0;
+                prevVacancy = vacancy;
+
+                intervalStart = fromDate == null ? 0 : fromDate.getTime();
+                intervalEnd = resolution.intervalEnd(intervalStart);
+            }
+            if (statusTime >= intervalEnd) {
+                // add new/update interval with the collected statistics
                 int turnovers = moveins > 0 ? moveins - 1 : 0;
-                total += turnovers;
+                totalForUnit += turnovers;
                 moveins = 0;
 
-                if (dontSkipTheFirstEmptyRange | total > 0) {
-                    result.add(createIntervalStats(intervalStart, intervalEnd, turnovers));
-                    intervalStart = intervalEnd;
-                    intervalEnd = resolution.addTo(intervalStart);
-                } else {
+                if (skipFirstEmptyRange & (totalForUnit == 0)) {
+                    // skip to the interval that contains the next event
                     intervalStart = resolution.intervalStart(statusTime);
                     intervalEnd = resolution.addTo(intervalStart);
+                } else {
+                    updateIntervalStats(statsMap, intervalStart, intervalEnd, turnovers);
+                    intervalStart = intervalEnd;
+                    intervalEnd = resolution.addTo(intervalStart);
+
+                    // add new/update intervals with for the ranges that don't contain any statuses
+                    while (statusTime >= intervalEnd) {
+                        updateIntervalStats(statsMap, intervalStart, intervalEnd, 0);
+                        intervalStart = intervalEnd;
+                        intervalEnd = resolution.addTo(intervalStart);
+                    }
                 }
             }
 
-            VacancyStatus vacancy = status.vacancyStatus().getValue();
-            Key thisUnitPK = status.belongsTo().getPrimaryKey();
-            if (thisUnitPK.equals(unitPK)) {
-                if (vacancy != prevVacancy) {
-                    if (vacancy == null) {
-                        ++moveins;
-                    }
-                    prevVacancy = vacancy;
+            if (vacancy != prevVacancy) {
+                if (vacancy == null) {
+                    ++moveins;
                 }
-            } else {
-                unitPK = thisUnitPK;
                 prevVacancy = vacancy;
             }
         }
 
-        // add last interval that collected some statistics if it did, or we have been explicitly asked for it 
-        if ((total != 0) | (toDate != null)) {
+        // update the last interval that collected some statistics if it did, or we have been explicitly asked for it 
+        if ((totalForUnit != 0) | (toDate != null)) {
             int turnovers = moveins > 0 ? moveins - 1 : 0;
-            result.add(createIntervalStats(intervalStart, intervalEnd, turnovers));
-            total += turnovers;
+            updateIntervalStats(statsMap, intervalStart, intervalEnd, turnovers);
+            total += totalForUnit;
             intervalStart = intervalEnd;
             intervalEnd = resolution.addTo(intervalStart);
 
@@ -328,7 +362,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             if (toDate != null) {
                 Long queryEndTime = toDate.getTime();
                 while (intervalEnd <= queryEndTime) {
-                    result.add(createIntervalStats(intervalStart, intervalEnd, 0));
+                    updateIntervalStats(statsMap, intervalStart, intervalEnd, 0);
 
                     intervalStart = intervalEnd;
                     intervalEnd = resolution.addTo(intervalStart);
@@ -336,17 +370,24 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             }
         }
 
+        ArrayList<TurnoverStats> almostResuls = new ArrayList<TurnoverStats>(statsMap.values());
+        Collections.sort(almostResuls);
+        Vector<UnitVacancyReportTurnoverAnalysisDTO> results = new Vector<UnitVacancyReportTurnoverAnalysisDTO>(almostResuls.size());
         if (total > 0) {
-            for (UnitVacancyReportTurnoverAnalysisDTO intervalStats : result) {
-                intervalStats.unitsTurnedOverPct().setValue(((double) intervalStats.unitsTurnedOverAbs().getValue()) / total * 100);
+            for (TurnoverStats stats : almostResuls) {
+                UnitVacancyReportTurnoverAnalysisDTO entityStats = stats.toEntity();
+                entityStats.unitsTurnedOverPct().setValue(((double) stats.turnovers) / total * 100);
+                results.add(entityStats);
             }
         } else {
-            for (UnitVacancyReportTurnoverAnalysisDTO intervalStats : result) {
-                intervalStats.unitsTurnedOverPct().setValue(0d);
+            for (TurnoverStats stats : almostResuls) {
+                UnitVacancyReportTurnoverAnalysisDTO entityStats = stats.toEntity();
+                entityStats.unitsTurnedOverPct().setValue(0.0);
+                results.add(entityStats);
             }
         }
 
-        callback.onSuccess(result);
+        callback.onSuccess(results);
     }
 
     private static UnitAvailabilityStatusDTO computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate toDate) {
@@ -377,11 +418,77 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         unit.revenueLost().setValue(revenueLost);
     }
 
-    private static UnitVacancyReportTurnoverAnalysisDTO createIntervalStats(long intervalStart, long intervalEnd, int turnovers) {
-        UnitVacancyReportTurnoverAnalysisDTO stats = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
-        stats.fromDate().setValue(new LogicalDate(intervalStart));
-        stats.toDate().setValue(new LogicalDate(intervalEnd));
-        stats.unitsTurnedOverAbs().setValue(turnovers);
-        return stats;
+    private static void updateIntervalStats(Map<Long, TurnoverStats> statsMap, long intervalStart, long intervalEnd, int turnovers) {
+        TurnoverStats stats = statsMap.get(intervalStart);
+        if (stats != null) {
+            stats.turnovers += turnovers;
+        } else {
+            statsMap.put(intervalStart, new TurnoverStats(intervalStart, intervalEnd, turnovers));
+        }
+    }
+
+    private static class IntervalStats implements Comparable<IntervalStats> {
+        public final long intervalStart;
+
+        public final long intervalEnd;
+
+        public final int hashCode;
+
+        public IntervalStats(long intervalStart, long intervalEnd) {
+            this.intervalStart = intervalStart;
+            this.intervalEnd = intervalEnd;
+
+            this.hashCode = (int) (intervalStart % Integer.MAX_VALUE); // I hope it's a right way to do it 
+        }
+
+        @Override
+        final public int hashCode() {
+            return hashCode;
+        }
+
+        @Override
+        final public boolean equals(Object obj) {
+            if (obj instanceof IntervalStats) {
+                IntervalStats other = (IntervalStats) obj;
+                return this.intervalStart == other.intervalStart & this.intervalEnd == other.intervalEnd;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        final public int compareTo(IntervalStats o) {
+            // we don't use equals() to avoid instanceof check and casting
+            if (this.intervalStart < o.intervalStart) {
+                return -1;
+            } else if (this.intervalStart > o.intervalStart) {
+                return 1;
+            } else if (this.intervalEnd > o.intervalEnd) {
+                return 1;
+            } else if (this.intervalEnd < o.intervalEnd) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+
+    }
+
+    private static class TurnoverStats extends IntervalStats {
+        public int turnovers;
+
+        public TurnoverStats(long intervalStart, long intervalEnd, int turnovers) {
+            super(intervalStart, intervalEnd);
+            this.turnovers = turnovers;
+        }
+
+        public UnitVacancyReportTurnoverAnalysisDTO toEntity() {
+            UnitVacancyReportTurnoverAnalysisDTO entity = EntityFactory.create(UnitVacancyReportTurnoverAnalysisDTO.class);
+            entity.fromDate().setValue(new LogicalDate(intervalStart));
+            entity.toDate().setValue(new LogicalDate(intervalEnd));
+            entity.unitsTurnedOverAbs().setValue(turnovers);
+            return entity;
+        }
+
     }
 }

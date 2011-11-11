@@ -70,26 +70,36 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Detached
     Building buildingBelongsTo();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> propertyCode();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> buildingName();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> address();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> region();
 
     // TODO not clear where from to get the value of owner() property
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> owner();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> propertyManagerName();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> complexName();
 
     /** {@link AptUnit#info()} -> {@link AptUnitInfo#number()} */
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> unit();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> floorplanName();
 
+    @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> floorplanMarketingName();
 
     @Caption(name = "Vacant/Notice")

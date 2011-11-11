@@ -38,21 +38,23 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     private static final long MIN_EVENT_DELTA = 1000l * 60l * 60l * 24l; // one day
 
-    private static final long MIN_RESIDENCY_TIME = 1000l * 60l * 60l * 24l * 365l; // approx 1 year
+    private static final long MIN_RESIDENCY_TIME = 1000l * 60l * 60l * 24l * 200l; // approx 6 months
 
-    private static final long MAX_RESIDENCY_TIME = 1000l * 60l * 60l * 24l * 365l * 5; // approx 5 years
+    private static final long MAX_RESIDENCY_TIME = 1000l * 60l * 60l * 24l * 365l * 2; // approx 2 years
 
     private static final long MIN_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 30l;
 
-    private static final long MAX_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 60l;
+    private static final long MAX_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 90l;
 
-    private static final long MAX_VACANT_TIME = 1000l * 60l * 60l * 24l * 30l; // approx 1 month
+    private static final long MAX_VACANT_TIME = 1000l * 60l * 60l * 24l * 90l; // approx 3 months
 
     private static final long MAX_WAIT_UNTIL_SCOPED = 1000l * 60l * 60l * 24l * 30l; // 30 DAYS
 
     private static final long MAX_WAIT_UNTIL_RENO_STARTS = 1000l * 60l * 60l * 24l * 7l;
 
     private static final long MAX_WAIT_UNTIL_RENO_ENDS = 1000l * 60l * 60l * 24l * 7l;
+
+    private static final long MAX_WAIT_UNTIL_MOVEIN = 1000l * 60l * 60l * 24l * 7l;
 
     @Override
     public String createMockup() {
@@ -88,6 +90,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().belongsTo(), building));
 
             for (AptUnit unit : Persistence.service().query(unitCriteria)) {
+                status.set(null);
                 status.statusDate().setValue(start);
                 status.belongsTo().setPrimaryKey(unit.getPrimaryKey());
 
@@ -116,6 +119,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 // TODO fill other things
 
                 while (status.statusDate().getValue().before(end)) {
+                    statuses.add(status.cloneEntity());
 
                     if (status.vacancyStatus().isNull()) {
                         notice(status);
@@ -160,12 +164,10 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                         availableFromDay.setTime(availableFromDay.getTime() + 24l * 60l * 60l * 1000l);
                         status.availableFromDay().setValue(availableFromDay);
                     }
-
-                    statuses.add(status.cloneEntity());
                 } // end of unit status creation loop
             } // end of unit iteration loop
         } // end of building iteration loop
-        Persistence.service().persist(statuses);
+        persistArray(statuses);
         return "Created " + statuses.size() + " mockup unit statuses for Availability Gadgets";
     }
 
@@ -192,6 +194,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.rentedFromDate().setValue(null);
         status.moveOutDay().setValue(null);
         status.moveInDay().setValue(null);
+        status.availableFromDay().setValue(null);
     }
 
     private static void scoped(UnitAvailabilityStatus status) {
@@ -215,9 +218,13 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
     private static void rented(UnitAvailabilityStatus status) {
         long minRentedTime;
         long maxRentedTime;
+        LogicalDate moveInDay = null;
         if (VacancyStatus.Notice.equals(status.vacancyStatus().getValue())) {
             minRentedTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
             maxRentedTime = status.moveOutDay().getValue().getTime() - MIN_EVENT_DELTA;
+
+            moveInDay = new LogicalDate(rand(status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA, MAX_VACANT_TIME));
+
         } else { // VacancyStatus == Vacant
             minRentedTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
             maxRentedTime = minRentedTime + MAX_VACANT_TIME;
@@ -226,7 +233,11 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             status.statusDate().setValue((new LogicalDate(rand(minRentedTime, maxRentedTime))));
             status.rentedFromDate().setValue(status.statusDate().getValue());
             status.rentedStatus().setValue(RentedStatus.Rented);
-            LogicalDate moveInDay = new LogicalDate(rand(status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA, MAX_VACANT_TIME));
+            if (moveInDay == null) {
+                moveInDay = new LogicalDate(rand(status.rentedFromDate().getValue().getTime() + MIN_EVENT_DELTA, status.rentedFromDate().getValue().getTime()
+                        + MAX_WAIT_UNTIL_MOVEIN));
+                status.moveOutDay().setValue(null);
+            }
             status.moveInDay().setValue(moveInDay);
         }
     }
