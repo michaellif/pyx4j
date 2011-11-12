@@ -38,6 +38,8 @@ import com.propertyvista.server.common.reference.SharedData;
 
 public class CommonsGenerator {
 
+    private static List<Name> names;
+
     static String[] lipsum;
 
     static String[] lipsumShort;
@@ -94,6 +96,22 @@ public class CommonsGenerator {
 
         person.email().set(createEmail(name));
 
+        return person;
+    }
+
+    public static Name createEmployeeName() {
+
+        if (names == null) {
+            names = EntityCSVReciver.create(Name.class).loadFile(IOUtils.resourceFileName("employee-names.csv", CommonsGenerator.class));
+        }
+        return names.get(DataGenerator.nextInt(names.size(), "names", 10)).cloneEntity(); //doesn't check for duplicate names
+    }
+
+    public static Person createEmployee() {
+        Person person = createPerson();
+
+        Name name = createEmployeeName(); //default person parameters are modified for employees
+        person.name().set(name);
         return person;
     }
 

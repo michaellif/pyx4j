@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -84,7 +84,7 @@ public class OpenApiModelTest {
             Building building2 = Converter.convertBuilding(buildingRS);
             Assert.assertEquals("propertyCode", building.propertyCode().getStringView(), building2.propertyCode().getStringView());
 
-            // TODO we need to 
+            // TODO we need to
             assertEqual("building", building, building2);
         }
     }
@@ -111,7 +111,7 @@ public class OpenApiModelTest {
             log.info("building date {}", buildingRS.info.structureBuildYear);
             buildingsRS.buildings.add(buildingRS);
 
-            Floorplan floorplan = generator.createFloorplan("MyFloorplan");
+            Floorplan floorplan = generator.createFloorplan();
             FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
             buildingRS.floorplans.add(floorplanRS);
             MediaRS mediaRS = Converter.convertMedia(MediaGenerator.createMedia());

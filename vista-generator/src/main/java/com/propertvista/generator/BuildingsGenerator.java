@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -169,7 +169,7 @@ public class BuildingsGenerator {
         return building;
     }
 
-// Mechanicals:    
+// Mechanicals:
     public List<Elevator> createElevators(Building owner, int num) {
         List<Elevator> items = new ArrayList<Elevator>();
         for (int i = 0; i < num; i++) {
@@ -374,30 +374,47 @@ public class BuildingsGenerator {
     public List<FloorplanDTO> createFloorplans(Building building, int num) {
         List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
         for (int i = 0; i < num; i++) {
-            String floorplanName = building.propertyCode().getStringView() + "-" + i;
-            if (i == 1) {
-                floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
-            }
+/*
+ * String floorplanName = building.propertyCode().getStringView() + "-" + i;
+ * if (i == 1) {
+ * floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
+ * }
+ */
 
-            FloorplanDTO floorplan = createFloorplan(floorplanName);
+            FloorplanDTO floorplan = createFloorplan();
             floorplan.building().set(building);
             floorplans.add(floorplan);
         }
         return floorplans;
     }
 
-    public FloorplanDTO createFloorplan(String name) {
+    private static int k = 1; //makes floorplan.name() unique at least within same building, doesn't look like the right way to do it though
+
+    public FloorplanDTO createFloorplan() {
         FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
 
-        floorplan.name().setValue(name);
         floorplan.description().setValue(CommonsGenerator.lipsum());
 
         floorplan.floorCount().setValue(1 + DataGenerator.randomInt(2));
         floorplan.bedrooms().setValue(1 + DataGenerator.randomInt(6));
-        floorplan.dens().setValue(DataGenerator.randomInt(1));
+        floorplan.dens().setValue(DataGenerator.randomInt(2));
         floorplan.bathrooms().setValue(1 + DataGenerator.randomInt(3));
-        floorplan.halfBath().setValue(DataGenerator.randomInt(1));
-        floorplan.marketingName().setValue(floorplan.bedrooms().getStringView() + " Bedroom");
+        floorplan.halfBath().setValue(DataGenerator.randomInt(2));
+        floorplan.marketingName().setValue(floorplan.bedrooms().getStringView() + "-bedroom");
+        floorplan.name().setValue(k + floorplan.bedrooms().getStringView());
+        k++;
+
+        if (floorplan.floorCount().getValue() == 2) {
+            floorplan.marketingName().setValue("Expansive " + floorplan.marketingName().getStringView());
+            floorplan.name().setValue(floorplan.name().getStringView() + "e");
+        } else if (floorplan.bedrooms().getValue() > 4) {
+            floorplan.marketingName().setValue("Luxury " + floorplan.marketingName().getStringView());
+            floorplan.name().setValue(floorplan.name().getStringView() + "l");
+        }
+        if (floorplan.dens().getValue() > 0) {
+            floorplan.marketingName().setValue(floorplan.marketingName().getStringView() + " + den");
+            floorplan.name().setValue(floorplan.name().getStringView() + "-d");
+        }
 
         for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
             FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
