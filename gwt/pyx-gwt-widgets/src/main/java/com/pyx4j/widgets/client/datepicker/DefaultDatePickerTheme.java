@@ -69,6 +69,10 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("padding", "0");
         addStyle(style);
 
+        style = new Style(".", StyleName.DatePickerMonthLabel);
+        style.addProperty("width", "110px");
+        addStyle(style);
+
         style = new Style(".", StyleName.DatePickerMonthSelector, " table");
         style.addProperty("border-collapse", "collapse");
         addStyle(style);

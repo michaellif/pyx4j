@@ -118,7 +118,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
         forwardsYear = new HoldableImage(resource.YearNext(), 300);
         forwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
-        forwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.bottom.name());
+        forwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
         forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
             @Override
