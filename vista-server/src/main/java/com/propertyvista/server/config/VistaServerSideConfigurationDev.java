@@ -65,7 +65,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public boolean isDevelopmentBehavior() {
-        return true;
+        return false;
     }
 
     @Override
