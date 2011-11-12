@@ -53,7 +53,9 @@ public enum DownloadFormat {
 
     BMP("bmp", "Image"),
 
-    JAVA_SERIALIZED("ser", "Java Serialized Object");
+    JAVA_SERIALIZED("ser", "Java Serialized Object"),
+
+    JAR("jar", "Java Archive");
 
     private String[] extensions;
 

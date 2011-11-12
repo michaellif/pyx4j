@@ -43,6 +43,7 @@ public class MimeMap {
         map.put("bmp", "image/bmp");
         map.put("java", "text/plain");
         map.put("zip", "application/zip");
+        map.put("jar", "application/java-archive");
         map.put("tar", "application/x-tar");
         map.put("bin", "application/octet-stream");
         map.put("odt", "application/vnd.oasis.opendocument.text");
