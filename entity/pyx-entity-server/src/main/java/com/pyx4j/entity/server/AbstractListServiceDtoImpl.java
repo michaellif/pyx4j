@@ -62,16 +62,8 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
     protected void enhanceListRetrieved(E entity, DTO dto) {
     }
 
-    protected void enhancePropertyCriterion(EntityListCriteria<E> dbCriteria, PropertyCriterion propertyCriterion) {
-        throw new Error("Unsupported Criterion property " + propertyCriterion.getPropertyName());
-    }
-
-    protected String enhancePropertySorts(EntityListCriteria<E> dbCriteria, Sort sort) {
-        throw new Error("Unsupported Sort property " + sort.getPropertyName());
-    }
-
-    protected String convertPropertyDTOPathToDBO(String path, E dboProto, DTO dtoProto) {
-        return dboProto.getObjectClass().getSimpleName() + path.substring(path.indexOf(Path.PATH_SEPARATOR));
+    protected Path convertPropertyDTOPathToDBOPath(String path, E dboProto, DTO dtoProto) {
+        throw new Error("Unsupported Sort property " + path);
     }
 
     protected void enhanceListCriteria(EntityListCriteria<E> dbCriteria, EntityListCriteria<DTO> dtoCriteria) {
@@ -79,33 +71,24 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
             for (Criterion cr : dtoCriteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                    String path = propertyCriterion.getPropertyName();
-                    if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
-                        String dbObjectPath = convertPropertyDTOPathToDBO(path, dbCriteria.proto(), dtoCriteria.proto());
-                        dbCriteria.add(new PropertyCriterion(dbObjectPath, propertyCriterion.getRestriction(), propertyCriterion.getValue()));
-                    } else {
-                        enhancePropertyCriterion(dbCriteria, propertyCriterion);
+                    Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyName()));
+                    if (path == null) {
+                        path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyName(), dbCriteria.proto(), dtoCriteria.proto());
                     }
+                    dbCriteria.add(new PropertyCriterion(path.toString(), propertyCriterion.getRestriction(), propertyCriterion.getValue()));
                 }
             }
         }
         if ((dtoCriteria.getSorts() != null) && (!dtoCriteria.getSorts().isEmpty())) {
-            // Just copy all Sorts for now. Change to non sortable one that are failing
             for (Sort s : dtoCriteria.getSorts()) {
-                String path = s.getPropertyName();
-
-                if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
-                    path = convertPropertyDTOPathToDBO(path, dbCriteria.proto(), dtoCriteria.proto());
-                } else {
-                    path = enhancePropertySorts(dbCriteria, s);
-                    if (path == null) {
-                        continue;
-                    }
+                Path path = getBoundDboMemberPath(new Path(s.getPropertyName()));
+                if (path == null) {
+                    path = convertPropertyDTOPathToDBOPath(s.getPropertyName(), dbCriteria.proto(), dtoCriteria.proto());
                 }
                 if (s.isDescending()) {
-                    dbCriteria.desc(path);
+                    dbCriteria.desc(path.toString());
                 } else {
-                    dbCriteria.asc(path);
+                    dbCriteria.asc(path.toString());
                 }
             }
         }

@@ -115,6 +115,16 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         }
     }
 
+    public Path getBoundDboMemberPath(Path dtoMemberPath) {
+        init();
+        for (Binding b : binding) {
+            if (b.dtoMemberPath.equals(dtoMemberPath)) {
+                return b.dboMemberPath;
+            }
+        }
+        return null;
+    }
+
     public DTO createDTO(DBO dbo) {
         DTO dto = EntityFactory.create(dtoClass);
         if (copyPrimaryKey) {
