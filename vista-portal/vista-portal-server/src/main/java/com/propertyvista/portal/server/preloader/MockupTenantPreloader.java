@@ -92,59 +92,59 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     LogicalDate moveout = new LogicalDate(movein.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
                     MockupTenant tenant = EntityFactory.create(MockupTenant.class);
-                    tenant.belongsTo().setPrimaryKey(unit.getPrimaryKey());
+                    tenant.belongsTo().set(unit);
                     tenant.moveIn().setValue(movein);
                     tenant.moveOut().setValue(moveout);
                     tenant.firstName().setValue(RandomUtil.randomFirstName());
                     tenant.lastName().setValue(RandomUtil.randomLastName());
                     tenants.add(tenant);
                     ++tenantCounter;
-
-                    // create mockup arrears history
-                    LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(movein.getTime()));
-                    while (currentMonth.before(moveout)) {
-                        MockupArrear arrear = EntityFactory.create(MockupArrear.class);
-
-                        // FIXME this is doesn't feel right! we cannot store values that belong to properties of other entities that are prone to updates (i.e. tenant's name, building property code, unit number etc.)                    
-                        arrear.belongsTo().set(tenant);
-                        arrear.firstName().setValue(tenant.firstName().getValue());
-                        arrear.lastName().setValue(tenant.lastName().getValue());
-
-                        arrear.unit().setPrimaryKey(unit.getPrimaryKey());
-                        arrear.unitNumber().setValue(unit.info().number().getValue());
-
-                        arrear.building().setPrimaryKey(building.getPrimaryKey());
-                        arrear.propertyCode().setValue(building.propertyCode().getValue());
-
-                        arrear.monthAgo().setValue(randomArrear());
-                        arrear.twoMonthsAgo().setValue(randomArrear());
-                        arrear.threeMonthsAgo().setValue(randomArrear());
-                        arrear.overFourMonthsAgo().setValue(randomArrear());
-                        arrear.arBalance().setValue(randomARBalance());
-                        arrear.prepayments().setValue(randomPrepayments());
-                        arrear.totalBalance().setValue(arrear.arBalance().getValue() - arrear.prepayments().getValue());
-
-                        arrear.statusTimestamp().setValue(currentMonth);
-
-                        arrears.add(arrear);
-                        ++statusCounter;
-
-                        currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
-                    }
                     movein = new LogicalDate(moveout.getTime() + ONE_DAY);
                 }
-
-                if (arrears.size() > maxArraySize) {
-                    persistArray(tenants);
-                    persistArray(arrears);
-                    tenants.clear();
-                    arrears.clear();
-                }
-            }
+            } // tenants
             persistArray(tenants);
-            persistArray(arrears);
+            for (MockupTenant tenant : Persistence.service().query(new EntityQueryCriteria<MockupTenant>(MockupTenant.class))) {
 
-        }
+                // create mockup arrears history
+                LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(tenant.moveIn().getValue().getTime()));
+                LogicalDate moveout = tenant.moveOut().getValue();
+                AptUnit unit = tenant.belongsTo();
+                while (currentMonth.before(moveout)) {
+                    MockupArrear arrear = EntityFactory.create(MockupArrear.class);
+
+                    // FIXME this is doesn't feel right! we cannot store values that belong to properties of other entities that are prone to updates (i.e. tenant's name, building property code, unit number etc.)                    
+                    arrear.belongsTo().setPrimaryKey(tenant.getPrimaryKey());
+                    arrear.firstName().setValue(tenant.firstName().getValue());
+                    arrear.lastName().setValue(tenant.lastName().getValue());
+
+                    arrear.unit().setPrimaryKey(unit.getPrimaryKey());
+                    arrear.unitNumber().setValue(unit.info().number().getValue());
+
+                    arrear.building().setPrimaryKey(building.getPrimaryKey());
+                    arrear.propertyCode().setValue(building.propertyCode().getValue());
+
+                    arrear.monthAgo().setValue(randomArrear());
+                    arrear.twoMonthsAgo().setValue(randomArrear());
+                    arrear.threeMonthsAgo().setValue(randomArrear());
+                    arrear.overFourMonthsAgo().setValue(randomArrear());
+                    arrear.arBalance().setValue(randomARBalance());
+                    arrear.prepayments().setValue(randomPrepayments());
+                    arrear.totalBalance().setValue(arrear.arBalance().getValue() - arrear.prepayments().getValue());
+
+                    arrear.statusTimestamp().setValue(currentMonth);
+
+                    arrears.add(arrear);
+                    ++statusCounter;
+
+                    if (arrears.size() > maxArraySize) { // why?
+                        persistArray(arrears);
+                        arrears.clear();
+                    }
+                    currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
+                }
+            } // arrears creation
+            persistArray(arrears);
+        } // buildings iteration
 
         return "Created " + tenantCounter + " mockup tennants and " + statusCounter + " arrear statuses for Arrears Gadget";
     }
