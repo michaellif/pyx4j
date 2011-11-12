@@ -21,8 +21,11 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,6 +35,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.propertyvista.common.client.ui.components.login.LoginForm;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
 
@@ -51,8 +55,13 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        form = new LoginForm(i18n.tr("Login to Your Account"), new Command() {
+        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome to") + "[PMC name]" + "!"));
+        welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
+        HTML loginNotes = new HTML(PortalResources.INSTANCE.loginNotes().getText());
+        loginNotes.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+
+        form = new LoginForm(i18n.tr("Login"), new Command() {
             @Override
             public void execute() {
                 submit();
@@ -72,6 +81,9 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         form.initContent();
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
+
+        add(welcome);
+        add(loginNotes);
         add(form);
     }
 
@@ -144,5 +156,4 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         handlerRegistration.removeHandler();
         devCount = 1;
     }
-
 }

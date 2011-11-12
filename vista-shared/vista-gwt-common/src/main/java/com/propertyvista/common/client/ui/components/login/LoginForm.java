@@ -72,24 +72,6 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         FlowPanel main = new FlowPanel();
         main.add(header);
 
-        if (ApplicationMode.isDevelopment()) {
-            FlowPanel devMessagePanel = new FlowPanel();
-            devMessagePanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
-
-            Anchor touchAnchor = new Anchor("Press 'Ctrl+Q' to login");
-            touchAnchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    onDevLogin(event.getNativeEvent(), 'Q');
-                }
-            });
-            touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
-            devMessagePanel.add(touchAnchor);
-            devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
-            devMessagePanel.getElement().getStyle().setMarginBottom(3, Unit.EM);
-            main.add(devMessagePanel);
-        }
-
         main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
         main.add(new LoginPanelWidgetDecorator(inject(proto().password())));
         main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
@@ -113,6 +95,24 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
             CHyperlink forgotPassword = new CHyperlink(null, retreivePasswordCommand);
             forgotPassword.setValue(i18n.tr("Retrieve Password"));
             main.add(forgotPassword);
+        }
+
+        if (ApplicationMode.isDevelopment()) {
+            FlowPanel devMessagePanel = new FlowPanel();
+            devMessagePanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
+
+            Anchor touchAnchor = new Anchor("Press 'Ctrl+Q' to login");
+            touchAnchor.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    onDevLogin(event.getNativeEvent(), 'Q');
+                }
+            });
+            touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
+            devMessagePanel.add(touchAnchor);
+            devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
+            devMessagePanel.getElement().getStyle().setMarginTop(3, Unit.EM);
+            main.add(devMessagePanel);
         }
 
         return main;
