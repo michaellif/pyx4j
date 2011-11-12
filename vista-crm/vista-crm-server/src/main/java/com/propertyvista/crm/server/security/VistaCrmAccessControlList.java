@@ -81,6 +81,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.server.common.security.SharedUserEntityInstanceAccess;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
@@ -177,6 +178,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Inquiry.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(InquiryCrudService.class));
+
+        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
 // - Service-related:
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Service.class, EntityPermission.ALL));

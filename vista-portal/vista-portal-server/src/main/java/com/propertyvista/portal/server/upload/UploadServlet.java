@@ -39,6 +39,7 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
+@Deprecated
 public class UploadServlet extends UploadAction {
 
     private static final long serialVersionUID = 1L;

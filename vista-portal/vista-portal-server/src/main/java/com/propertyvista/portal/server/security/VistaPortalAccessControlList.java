@@ -44,6 +44,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
@@ -81,6 +82,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ChargesService.class));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(SummaryService.class));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(PaymentService.class));
+        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
         //TODO this service should be granted to a tenant
         grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 

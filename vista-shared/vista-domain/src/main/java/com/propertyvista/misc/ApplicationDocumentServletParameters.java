@@ -18,6 +18,7 @@ import java.util.EnumSet;
 
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 
+@Deprecated
 public interface ApplicationDocumentServletParameters {
 
     /**
