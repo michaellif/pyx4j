@@ -21,12 +21,14 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
@@ -61,8 +63,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome") + " " + "[tenant name]" + "!<br>" + i18n.tr("Thank you for choosing") + " " + "[PMC name]"
-                + " " + i18n.tr("for your future home!")));
+        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome") + " " + ClientContext.getUserVisit().getName() + "!<br>" + i18n.tr("Thank you for choosing")
+                + " " + PtAppSite.pmcName + " " + i18n.tr("for your future home!")));
         welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         int row = -1;

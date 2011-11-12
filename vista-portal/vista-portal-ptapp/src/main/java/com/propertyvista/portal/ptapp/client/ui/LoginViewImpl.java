@@ -35,6 +35,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.propertyvista.common.client.ui.components.login.LoginForm;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
@@ -55,7 +56,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome to") + "[PMC name]" + "!"));
+        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome to") + PtAppSite.pmcName + "!"));
         welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         HTML loginNotes = new HTML(PortalResources.INSTANCE.loginNotes().getText());

@@ -41,6 +41,8 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppSite extends VistaSite {
 
+    static public String pmcName;
+
     private PtAppWizardManager wizardManager;
 
     public PtAppSite() {
@@ -66,7 +68,7 @@ public class PtAppSite extends VistaSite {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
-                Window.setTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
+                Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
                 StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
 
                 //TODO
