@@ -201,17 +201,16 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("border", "1px solid #F0F0F0");
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label.disabled");
+        style = new Style(" .DatePickerGrid .gwt-Label-disabled");
         style.addProperty("color", "#B0B0B0");
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label.heighlighted");
-        style.addProperty("border", "1px solid #D0D0F0");
-        style.addProperty("background-color", ThemeColors.SELECTION);
+        style = new Style(" .DatePickerGrid .gwt-Label-heighlighted");
+        style.addProperty("border", "1px solid #999999");
         style.addProperty("color", ThemeColors.SELECTION_TEXT);
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label.selected");
+        style = new Style(" .DatePickerGrid .gwt-Label-selected");
         style.addProperty("border", "1px solid #E06020");
         addStyle(style);
 

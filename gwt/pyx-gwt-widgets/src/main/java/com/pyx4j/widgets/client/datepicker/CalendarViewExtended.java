@@ -106,6 +106,7 @@ public class CalendarViewExtended extends CalendarView {
 
     private void setDaysOfWeek() {
         Date date = new Date();
+
         for (int i = 1; i <= 7; i++) {
             date.setDate(i);
             int dayOfWeek = date.getDay();
@@ -116,6 +117,7 @@ public class CalendarViewExtended extends CalendarView {
     @Override
     protected void setup() {
         setDaysOfWeek();
+
         for (int i = 0; i < CalendarModel.DAYS_IN_WEEK; i++) {
             int shift = CalendarUtil.getStartingDayOfWeek();
             int dayIdx = i + shift < CalendarModel.DAYS_IN_WEEK ? i + shift : i + shift - CalendarModel.DAYS_IN_WEEK;

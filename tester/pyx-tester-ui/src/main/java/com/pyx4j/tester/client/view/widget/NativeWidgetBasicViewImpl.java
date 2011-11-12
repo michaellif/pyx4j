@@ -43,10 +43,11 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
 
+        Date starting = new Date();
+        Date minDate = new Date(110, 1, 1);
+        Date maxDate = new Date(111, 12, 31);
+
         final TextBox textBox = new TextBox();
-        Date minDate = new Date(0, 1, 15);
-        Date maxDate = new Date(111, 3, 3);
-        Date starting = new Date(110, 2, 10);
 
         DatePickerComposite datePicker = new DatePickerComposite(1, starting, minDate, maxDate, new ArrayList<Date>());
         datePicker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
