@@ -79,12 +79,12 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
             ArrayList<UnitAvailabilityStatusDTO> allUnitStatuses = new ArrayList<UnitAvailabilityStatusDTO>();
 
-            boolean isBuildingsSetLimited = !buildings.isEmpty();
+            boolean isBuidlingsFilterSet = !buildings.isEmpty();
             Iterator<Building> buildingIter = null;
-            if (isBuildingsSetLimited) {
+            if (isBuidlingsFilterSet) {
                 buildingIter = Persistence.service().retrieve(Building.class, buildings).values().iterator();
             }
-            while (!isBuildingsSetLimited || buildingIter.hasNext()) {
+            while (!isBuidlingsFilterSet || (isBuidlingsFilterSet & buildingIter.hasNext())) {
                 if (buildingIter != null) {
                     criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), buildingIter.next()));
                 }
@@ -106,7 +106,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
                         pervUnitPK = unitPK;
                     }
                 }
-                if (!isBuildingsSetLimited) {
+                if (!isBuidlingsFilterSet) {
                     break;
                 }
             }
