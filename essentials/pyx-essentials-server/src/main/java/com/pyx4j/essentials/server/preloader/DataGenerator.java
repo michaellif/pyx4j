@@ -122,6 +122,10 @@ public class DataGenerator {
         return (char) (('A') + random().nextInt('Z' - 'A'));
     }
 
+    public static char randomLetter(char from, char to) {
+        return (char) ((from) + random().nextInt(to - from));
+    }
+
     private static String resourceFileName(String fileName) {
         return DataGenerator.class.getPackage().getName().replace('.', '/') + "/" + fileName;
     }
