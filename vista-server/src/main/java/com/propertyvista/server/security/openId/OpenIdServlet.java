@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.dev.DevSession;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 
@@ -78,6 +79,9 @@ public class OpenIdServlet extends HttpServlet {
         out.println("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
         out.println("<title>Access " + (signIn ? " Restricted" : " Granted") + " </title></head><body>");
         out.println("<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" href=\"" + location + "\">" + message + "</A>");
+        if (signIn) {
+            out.print(IOUtils.getTextResource("login-successful.html", OpenIdServlet.class));
+        }
         out.print("</body></html>");
         out.flush();
     }
