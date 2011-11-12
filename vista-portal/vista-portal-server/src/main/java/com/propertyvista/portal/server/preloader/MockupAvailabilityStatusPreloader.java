@@ -72,9 +72,6 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     @SuppressWarnings("deprecation")
     private String generateRandom() {
-        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
-            return null;
-        }
         final LogicalDate start = new LogicalDate();
         start.setYear(106);
         start.setMonth(0);

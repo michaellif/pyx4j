@@ -86,6 +86,9 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Generate Mockup on top of existing data")
         addPmcMockup,
 
+        @Translate("Generate Mockup on top of existing data - Only MockupTenantPreloader")
+        addPmcMockupTest1,
+
         clearPmc;
 
         @Override
@@ -133,8 +136,8 @@ public class DBResetServlet extends HttpServlet {
                 } else {
                     buf.append("Requested : '" + type.name() + "' " + type.toString());
                     if (EnumSet.of(ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
-                        RDBUtils.dropAllEntityTables();
                         SchedulerHelper.shutdown();
+                        RDBUtils.dropAllEntityTables();
                         SchedulerHelper.dbReset();
                         SchedulerHelper.init();
                     }
@@ -150,6 +153,7 @@ public class DBResetServlet extends HttpServlet {
                         }
                         break;
                     case addPmcMockup:
+                    case addPmcMockupTest1:
                     case preloadPmcWithMockup:
                     case preloadPmc:
                         preloadPmc(buf, NamespaceManager.getNamespace(), type);
@@ -209,7 +213,7 @@ public class DBResetServlet extends HttpServlet {
         NamespaceManager.setNamespace(demoPmcName);
         buf.append("\n--- Preload  " + demoPmcName + " ---\n");
 
-        if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup).contains(type)) {
+        if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
             RDBUtils.deleteFromAllEntityTables();
         }
 
@@ -217,6 +221,7 @@ public class DBResetServlet extends HttpServlet {
         switch (type) {
         case preloadPmcWithMockup:
         case addPmcMockup:
+        case addPmcMockupTest1:
         case allAddMockup:
         case allWithMockup:
             VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
@@ -232,10 +237,11 @@ public class DBResetServlet extends HttpServlet {
             Vector<DataPreloaderInfo> dpis = preloaders.getDataPreloaderInfo();
             Vector<DataPreloaderInfo> dpisRun = new Vector<DataPreloaderInfo>();
             String mockupClassNamefragment = "Mockup";
-            //mockupClassNamefragment = "MockupTenantPreloader";
             for (DataPreloaderInfo info : dpis) {
                 info.setParameters((HashMap<String, Serializable>) preloaders.getParametersValues());
                 switch (type) {
+                case addPmcMockupTest1:
+                    mockupClassNamefragment = "MockupTenantPreloader";
                 case allAddMockup:
                 case addPmcMockup:
                     if (info.getDataPreloaderClassName().contains(mockupClassNamefragment)) {

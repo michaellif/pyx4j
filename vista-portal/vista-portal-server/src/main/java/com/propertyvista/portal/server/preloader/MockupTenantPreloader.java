@@ -60,9 +60,6 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
 
     @Override
     public String createMockup() {
-        if (((config().minimizePreloadTime)) || (!(config().mockupData))) {
-            return null;
-        }
         int tenantCounter = 0;
         int statusCounter = 0;
 
@@ -136,7 +133,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     arrears.add(arrear);
                     ++statusCounter;
 
-                    if (arrears.size() > maxArraySize) { // why?
+                    if (arrears.size() > maxArraySize) { // why? because there are limits on what sql can do, inserting more then 3K records in batch will slow perfomance
                         persistArray(arrears);
                         arrears.clear();
                     }
