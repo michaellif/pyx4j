@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 public class IOUtils {
@@ -120,5 +121,9 @@ public class IOUtils {
 
     public static String resourceFileName(String fileName, Class<?> clazz) {
         return clazz.getPackage().getName().replace('.', '/') + "/" + fileName;
+    }
+
+    public static URL getResource(String fileName, Class<?> clazz) {
+        return Thread.currentThread().getContextClassLoader().getResource(resourceFileName(fileName, clazz));
     }
 }
