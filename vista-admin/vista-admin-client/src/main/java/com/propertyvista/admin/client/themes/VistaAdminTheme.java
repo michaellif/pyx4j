@@ -21,7 +21,7 @@ import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
 import com.propertyvista.admin.client.ui.NavigViewImpl;
@@ -81,6 +81,8 @@ public class VistaAdminTheme extends VistaTheme {
 
         addTheme(new DefaultDatePickerTheme());
 
+        addTheme(new DefaultListerTheme());
+
         initGeneralStyles();
         initBodyStyles();
 
@@ -93,7 +95,6 @@ public class VistaAdminTheme extends VistaTheme {
 
         initVistaTabStyles();
         initVistaDecoratorsPanelStyles();
-        initListerStyles();
         initEntityDataTableStyles();
         initTabPanelStyles();
         initDialogBoxStyles();
@@ -427,50 +428,6 @@ public class VistaAdminTheme extends VistaTheme {
         // internal scroll panel:
         style = new Style(Selector.valueOf(AdminScrollPanel.DEFAULT_STYLE_PREFIX));
         style.addProperty("padding", "1em");
-        addStyle(style);
-    }
-
-    protected void initListerStyles() {
-        String prefix = ListerBase.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.actionsPanel));
-        style.addProperty("background-color", ThemeColors.foreground, 0.20);
-        style.addProperty("color", ThemeColors.foreground);
-        style.addProperty("height", defaultActionBarHeight + "em");
-//        style.addProperty("margin-top", "0.5em");
-//        style.addProperty("margin-bottom", "0.5em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
-        style.addProperty("background-color", ThemeColors.foreground, 0.05);
-        style.addProperty("padding-top", "0.5em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.listPanel));
-        addStyle(style);
-
-        String buttonEx = Selector.valueOf("gwt-Button", ListerBase.StyleSuffix.newItemButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
-        addStyle(style);
-
-        buttonEx = Selector.valueOf("gwt-Button", ListerBase.StyleSuffix.actionButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid #555");
         addStyle(style);
     }
 

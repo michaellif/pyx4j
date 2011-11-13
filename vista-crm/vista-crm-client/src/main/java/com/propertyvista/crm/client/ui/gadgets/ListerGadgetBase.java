@@ -36,8 +36,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.StyleSuffix;
+import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
@@ -118,7 +117,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
         // use the same style as ListerBase
         entityListPanel.setWidth("100%");
-        entityListPanel.setStyleName(ListerBase.DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
+        entityListPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerListPanel.name());
         entityListPanel.getDataTable().setColumnSelector(getAvailableColumnDescriptors(entityListPanel.proto()));
         entityListPanel.getDataTable().setHasColumnClickSorting(true);
         entityListPanel.getDataTable().setHasCheckboxColumn(false);

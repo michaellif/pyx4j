@@ -24,7 +24,7 @@ import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
@@ -58,13 +58,14 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new DefaultDatePickerTheme());
 
+        addTheme(new DefaultListerTheme());
+
         initEntityFolderStyles();
         initTextBoxStyle();
         initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initListBoxStyle();
-        initListerStyles();
         initEntityDataTableStyles();
         initSiteViewStyles();
         initPropertyMarkerStyle();
@@ -139,26 +140,6 @@ public class PortalTheme extends VistaTheme {
 
         }
 
-    }
-
-    protected void initListerStyles() {
-        String prefix = ListerBase.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.actionsPanel));
-        style.addProperty("margin-top", "0.5em");
-        style.addProperty("margin-bottom", "0.5em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.filtersPanel));
-        style.addProperty("padding-top", "0.5em");
-        style.addProperty("background-color", ThemeColors.object1, 0.15);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, ListerBase.StyleSuffix.listPanel));
-        addStyle(style);
     }
 
     protected void initEntityDataTableStyles() {
