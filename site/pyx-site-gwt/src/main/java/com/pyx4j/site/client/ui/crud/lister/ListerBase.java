@@ -48,7 +48,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -74,12 +73,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
-
-    public static String DEFAULT_STYLE_PREFIX = "vista_Lister";
-
-    public static enum StyleSuffix implements IStyleName {
-        actionsPanel, filtersPanel, listPanel, newItemButton, actionButton
-    }
 
     public static enum MementoKeys {
         page, filterData, sortingData
@@ -119,7 +112,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     private IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     public ListerBase(Class<E> clazz) {
-        setStyleName(DEFAULT_STYLE_PREFIX);
+        setStyleName(DefaultListerTheme.StyleSuffix.Lister.name());
 
         listPanel = new EntityListPanel<E>(clazz) {
             @Override
@@ -160,7 +153,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         showColumnSelector(true);
         listPanel.removeUpperActionsBar();
         listPanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
-        listPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.listPanel);
+        listPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerListPanel.name());
         listPanel.getDataTable().setHasCheckboxColumn(false);
         listPanel.getDataTable().setMarkSelectedRow(false);
         listPanel.getDataTable().setAutoColumnsWidth(true);
@@ -168,7 +161,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         // actions & filters:
         actionsPanel = new HorizontalPanel();
-        actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
+        actionsPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerActionsPanel.name());
         actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         actionsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         actionsPanel.setWidth("100%");
@@ -177,7 +170,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         actionsPanel.setVisible(false);
 
         filtersPanel = new HorizontalPanel();
-        filtersPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.filtersPanel);
+        filtersPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerFiltersPanel.name());
         filtersPanel.add(filters = new Filters());
 
         Widget widgetAddApply = createAddApplyPanel();
@@ -231,7 +224,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     }
                 });
                 btnNewItem.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Button, NavigationIDs.ItemDescriptionIDs.Add_New_Item).toString());
-                btnNewItem.addStyleName(btnNewItem.getStylePrimaryName() + StyleSuffix.newItemButton);
+                btnNewItem.addStyleName(DefaultListerTheme.StyleSuffix.ListerButton.name());
             }
         }
     }
