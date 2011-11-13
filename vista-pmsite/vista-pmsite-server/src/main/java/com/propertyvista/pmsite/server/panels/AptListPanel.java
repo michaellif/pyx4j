@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -84,26 +85,23 @@ public class AptListPanel extends Panel {
 
                     @Override
                     protected void populateItem(ListItem<Floorplan> item) {
-                        Floorplan floorPlan = item.getModelObject();
-                        String name = floorPlan.name().getValue();
+                        Floorplan fp = item.getModelObject();
+                        String name = fp.name().getValue();
+                        if (name == null) {
+                            name = fp.bedrooms().getValue() + " " + i18n.tr("Bedroom");
+                        }
+                        item.add(new Label("typeName", name));
 
-                        String info = floorPlan.bedrooms().getValue() + " " + i18n.tr("Bed") + ", " + floorPlan.bathrooms().getValue() + " " + i18n.tr("Bath");
-                        String price = i18n.tr("price not available");
                         Double minPrice = null;
-                        for (AptUnit u : fpUnits.get(floorPlan)) {
+                        for (AptUnit u : fpUnits.get(fp)) {
                             Double _prc = u.financial().marketRent().getValue();
                             if (minPrice == null || minPrice > _prc) {
                                 minPrice = _prc;
                             }
                         }
-                        if (minPrice != null) {
-                            price = i18n.tr("from") + " $" + String.valueOf(Math.round(minPrice));
-                        }
-                        if (name == null) {
-                            name = floorPlan.bedrooms().getValue() + " " + i18n.tr("Bedroom");
-                        }
-                        item.add(new Label("typeName", name));
-                        item.add(new Label("typeInfo", info + ", " + price));
+                        String info = SimpleMessageFormat.format(i18n.tr("{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"), fp
+                                .bedrooms().getValue(), fp.bathrooms().getValue(), minPrice);
+                        item.add(new Label("typeInfo", info));
                     }
                 });
 

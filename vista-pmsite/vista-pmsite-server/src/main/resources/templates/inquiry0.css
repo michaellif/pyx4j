@@ -72,11 +72,27 @@
 	vertical-align:top;
 	color:#777;
 }
+.inquiryFormWrap .inputEntry .inputLabel.altApmnt {
+	display:inline;
+	padding-right:5px;
+}
 .inquiryFormWrap .inputBox {
 	display:inline-block;
 	width:370px;
+	vertical-align:top;
+}
+.inquiryFormWrap .inputEntry input {
+	vertical-align:top;
 }
 .inquiryFormWrap .inputEntry textarea {
+	width:360px;
+}
+.inquiryFormWrap .inputEntry .apmntBox {
+	width:120px;
+	display:inline-block;
+}
+.inquiryFormWrap .inputEntry .captcha {
+	display:inline-block;
 	width:360px;
 }
 .inquiryFormWrap input[type=submit] {
@@ -94,4 +110,15 @@
 }
 .inquiryFormWrap input[type=submit]:hover {
 	background-position: 0 -32px;
+}
+/*
+ * Datepicker style
+ */
+.inquiryFormWrap .inputEntry .ui-datepicker-trigger {
+	background:url(jquery_ui_images/calendar.png) no-repeat;
+	display:inline-block;
+	width:21px; height:20px;
+}
+.ui-datepicker {
+	font-size:10px !important;
 }

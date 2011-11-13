@@ -84,6 +84,10 @@
 .inquiryFormWrap .inputEntry textarea {
 	width:360px;
 }
+.inquiryFormWrap .inputEntry .captcha {
+	display:inline-block;
+	width:360px;
+}
 .inquiryFormWrap input[type=submit] {
 	background: ${object1_100};
 	border: 2px solid ${object1_100};
@@ -97,4 +101,15 @@
 }
 .inquiryFormWrap input[type=submit]:hover {
 	background-position: 0 -32px;
+}
+/*
+ * Datepicker style
+ */
+.inquiryFormWrap .inputEntry .ui-datepicker-trigger {
+	background:url(jquery_ui_images/calendar.png) no-repeat;
+	display:inline-block;
+	width:21px; height:20px;
+}
+.ui-datepicker {
+	font-size:10px !important;
 }

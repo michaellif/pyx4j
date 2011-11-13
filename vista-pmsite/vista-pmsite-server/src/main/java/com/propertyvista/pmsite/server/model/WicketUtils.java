@@ -13,14 +13,21 @@
  */
 package com.propertyvista.pmsite.server.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.StatelessLink;
@@ -29,10 +36,17 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.validator.StringValidator;
+
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.PMSiteApplication;
 
 public class WicketUtils {
+    private static I18n i18n = I18n.get(WicketUtils.class);
+
     /*
      * add/remove single class from component class attribute
      */
@@ -154,6 +168,43 @@ public class WicketUtils {
 
     }
 
+    public static class SimpleRadioGroup<T> extends RadioChoice<T> {
+        private static final long serialVersionUID = 1L;
+
+        private Map<T, String> valueMap;
+
+        public SimpleRadioGroup(String id, IModel<T> model) {
+            super(id);
+            setModel(model);
+            setChoiceRenderer(new ChoiceRenderer<T>() {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public String getDisplayValue(T param) {
+                    String display = valueMap.get(param);
+                    return display == null ? "" : display;
+                }
+
+                @Override
+                public String getIdValue(T param, int paramInt) {
+                    return String.valueOf(param);
+                }
+            });
+
+            valueMap = new HashMap<T, String>();
+        }
+
+        public void addChoice(final T value, final String label) {
+            valueMap.put(value, label);
+        }
+
+        @Override
+        public void onBeforeRender() {
+            setChoices(new ArrayList<T>(valueMap.keySet()));
+            super.onBeforeRender();
+        }
+    }
+
     /*
      * TextTemplateResource is auto-registered in ResourceReferenceRegistry cache
      * by the ResourceReferenceRegistry constructor, if not exist, so no changes will
@@ -204,6 +255,68 @@ public class WicketUtils {
         @Override
         protected CharSequence getURL() {
             return "";
+        }
+    }
+
+    public static class PhoneValidator extends StringValidator {
+        private static final long serialVersionUID = 1L;
+
+        public PhoneValidator(int minDigits, boolean allowExt) {
+
+        }
+
+        @Override
+        protected void onValidate(IValidatable<String> validatable) {
+            final String value = validatable.getValue();
+            // check value format (just as an example)
+            if (!value.matches("\\d{10,15}")) {
+                error(validatable);
+            }
+        }
+    }
+
+    public static class OneRequiredFormValidator extends AbstractFormValidator {
+        private static final long serialVersionUID = 1L;
+
+        FormComponent<?>[] checkList;
+
+        public OneRequiredFormValidator(FormComponent<?>... compList) {
+            for (FormComponent<?> fc : compList) {
+                if (fc == null) {
+                    throw new IllegalArgumentException("FormComponent cannot be null");
+                }
+            }
+            if (compList.length < 2) {
+                throw new IllegalArgumentException("A min of two FormComponents required");
+            }
+            checkList = compList;
+        }
+
+        @Override
+        public FormComponent<?>[] getDependentFormComponents() {
+            return checkList;
+        }
+
+        @Override
+        public void validate(Form<?> form) {
+            boolean valid = false;
+            StringBuffer labels = new StringBuffer();
+            String join = "";
+            for (FormComponent<?> fc : checkList) {
+                if (fc.getConvertedInput() != null) {
+                    valid = true;
+                    break;
+                }
+                labels.insert(0, fc.getLabel().getObject() + join);
+                if (join.equals("")) {
+                    join = " " + i18n.tr("or") + " ";
+                } else {
+                    join = ", ";
+                }
+            }
+            if (!valid) {
+                form.error(SimpleMessageFormat.format(i18n.tr("Either {0} must be provided"), labels), null);
+            }
         }
     }
 }

@@ -24,7 +24,7 @@
 	</div>
 	<div class="inputEntry">
 		<label class="inputLabel"><wicket:i18n>Email Address</wicket:i18n></label>
-		<input type="text" wicket:id="email.address"/>
+		<input type="email" wicket:id="email.address"/>
 	</div>
 	<div class="inputEntry">
 		<label class="inputLabel"><wicket:i18n>Preferred Unit</wicket:i18n></label>
@@ -36,11 +36,19 @@
 	</div>
 	<div class="inputEntry">
 		<label class="inputLabel"><wicket:i18n>Desired Move In Date</wicket:i18n></label>
-		<input type="text" name="movingDate"/>
+		<input type="text" size=8 id="movingDate" wicket:id="movingDate"/>
 	</div>
 	<div class="inputEntry">
 		<label class="inputLabel"><wicket:i18n>Preferred Appointment Time</wicket:i18n></label>
-		<input type="text" name="apmntDateTime"/>		
+		<div class="apmntBox">
+			<input type="text" size=8 id="apmntDate1" wicket:id="apmntDate1"/>
+			<div wicket:id="apmntTime1" class="inputBox apmntTime"/>
+		</div>
+		<label class="inputLabel altApmnt"><wicket:i18n>Second Choice</wicket:i18n></label>
+		<div class="apmntBox">
+			<input type="text" size=8 id="apmntDate2" wicket:id="apmntDate2"/>
+			<div wicket:id="apmntTime2" class="inputBox apmntTime"/>
+		</div>
 	</div>
 	<div class="inputEntry">
 		<label class="inputLabel"><wicket:i18n>How Did You Hear About Us</wicket:i18n>?</label>
@@ -55,8 +63,21 @@
 		<label class="inputLabel"><wicket:i18n>Additional Comments</wicket:i18n></label>
 		<textarea wicket:id="comments" rows="10"></textarea>
 	</div>
+	<!-- div class="inputEntry">
+		<label class="inputLabel"><wicket:i18n>Enter Security Code</wicket:i18n></label>
+		<div class="captcha">
+			<img wicket:id="captchaImg"/> <input type="text" wicket:id="captchaText"/>
+		</div>		
+	</div -->
 	<div class="inputEntry">
 		<input type="submit" wicket:id="inquirySubmit" value="SUBMIT"/>
 	</div>
 </form>
+<script language="javascript">
+$(function() {
+	$("#movingDate").datepicker({showOn:'both'});
+	$("#apmntDate1").datepicker({showOn:'both'});
+	$("#apmntDate2").datepicker({showOn:'both'});
+});
+</script>
 </wicket:panel>

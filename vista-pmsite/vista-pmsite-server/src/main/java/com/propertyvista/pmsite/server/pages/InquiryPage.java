@@ -25,7 +25,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
 import com.propertyvista.pmsite.server.panels.InquiryPanel;
@@ -51,7 +50,7 @@ public class InquiryPage extends BasePage {
 
         // right side - inquiry form
         add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
-        add(new InquiryPanel("inquiryPanel", fp));
+        add(new InquiryPanel("inquiryPanel", null, fp));
     }
 
     @Override
