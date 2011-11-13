@@ -45,22 +45,9 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.IEntity;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
-
-    // CSS style names: 
-    public static String BASE_NAME = "pyx4j_Entity_DataTable";
-
-    public static enum StyleSuffix implements IStyleName {
-        Row, Header, ActionsBar, ColumnSelector, ColumnMenu
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        disabled, selected, hover, even, odd, nodetails
-    }
 
     // Events:
     public interface ItemSelectionHandler {
@@ -115,7 +102,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private List<SortChangeHandler<E>> sortChangeHandlers;
 
     public DataTable() {
-        setStyleName(BASE_NAME);
+        setStyleName(DefaultDataTableTheme.StyleSuffix.DataTable.name());
         DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
 
         this.addClickHandler(new ClickHandler() {
@@ -380,14 +367,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         if (hasColumnSelector()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
             getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
-            getCellFormatter().setStyleName(0, colIndex, BASE_NAME + StyleSuffix.ColumnSelector);
+            getCellFormatter().setStyleName(0, colIndex, DefaultDataTableTheme.StyleSuffix.DataTableColumnSelector.name());
             getCellFormatter().setVerticalAlignment(0, colIndex, HasVerticalAlignment.ALIGN_MIDDLE);
             getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
         }
 
         if (getRowCount() > 0) {
             Element rowElement = getRowFormatter().getElement(0);
-            UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Header);
+            UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableHeader.name());
         }
     }
 
@@ -428,14 +415,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
 
             Element rowElement = getRowFormatter().getElement(rowIndex);
-            UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row);
+            UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name());
             if (rowIndex % 2 == 0) {
-                UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row + "-" + StyleDependent.even.name(), true);
+                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(), true);
             } else {
-                UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row + "-" + StyleDependent.odd.name(), true);
+                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(), true);
             }
             if (!hasDetailsNavigation()) {
-                UIObject.setStyleName(rowElement, BASE_NAME + StyleSuffix.Row + "-" + StyleDependent.nodetails.name(), true);
+                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
             }
 
             ++rowIndex;
@@ -470,7 +457,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     protected void markRow(int row, boolean selected) {
         if (isMarkSelectedRow() && row >= 0) {
             Element previous = getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(previous, BASE_NAME + StyleSuffix.Row + "-" + DataTable.StyleDependent.selected.name(), selected);
+            UIObject.setStyleName(previous, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.selected.name(), selected);
         }
     }
 
@@ -505,7 +492,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
             private final PopupPanel pp = new PopupPanel(true);
             {
-                pp.setStyleName(BASE_NAME + StyleSuffix.ColumnMenu);
+                pp.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableColumnMenu.name());
                 pp.getElement().getStyle().setZIndex(1000);
             }
 
