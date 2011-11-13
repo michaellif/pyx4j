@@ -73,7 +73,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderBoxItemDecorator);
-        style.addProperty("margin", "6px");
+        style.addProperty("margin", "6px 0px");
         style.addProperty("border", "dotted 1px");
         style.addProperty("border-color", getBackgroundColor());
         addStyle(style);
