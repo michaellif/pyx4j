@@ -16,8 +16,9 @@ package com.propertyvista.common.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
+
+import com.pyx4j.site.client.NavigationUri;
 
 import com.propertyvista.shared.CompiledLocale;
 
@@ -28,12 +29,7 @@ public class ClentNavigUtils {
      * Consider http://localhost:8888/vista/ and http://localhost:8888/vista/index.html
      */
     public static String getDeploymentBaseURL() {
-        String url = GWT.getModuleBaseURL();
-        String module = GWT.getModuleName();
-        if (url.endsWith(module + "/")) {
-            url = url.substring(0, url.length() - (module.length() + 1));
-        }
-        return url;
+        return NavigationUri.getDeploymentBaseURL();
     }
 
     public static List<CompiledLocale> obtainAvailableLocales() {
