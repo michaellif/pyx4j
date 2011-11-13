@@ -56,7 +56,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome to") + " " + PtAppSite.pmcName + "!"));
+        HTML welcome = new HTML(HtmlUtils.h3(i18n.tr("Welcome to") + " " + PtAppSite.pmcName + "!"));
         welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         HTML loginNotes = new HTML(PortalResources.INSTANCE.loginNotes().getText());

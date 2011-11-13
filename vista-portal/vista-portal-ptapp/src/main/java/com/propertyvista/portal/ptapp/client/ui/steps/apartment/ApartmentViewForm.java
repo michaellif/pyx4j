@@ -63,7 +63,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        HTML welcome = new HTML(HtmlUtils.h4(i18n.tr("Welcome") + " " + ClientContext.getUserVisit().getName() + "!<br>" + i18n.tr("Thank you for choosing")
+        HTML welcome = new HTML(HtmlUtils.h3(i18n.tr("Welcome") + " " + ClientContext.getUserVisit().getName() + "!<br>" + i18n.tr("Thank you for choosing")
                 + " " + PtAppSite.pmcName + " " + i18n.tr("for your future home!")));
         welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
