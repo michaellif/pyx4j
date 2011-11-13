@@ -31,4 +31,5 @@ public interface TenantSummaryGDO extends IEntity {
     TenantInLease tenantInLease();
 
     TenantScreening tenantScreening();
+
 }

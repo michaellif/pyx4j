@@ -13,11 +13,11 @@
  */
 package com.propertvista.generator;
 
-import gwtupload.server.exceptions.UploadActionException;
-
+import java.io.IOException;
 import java.util.Date;
 import java.util.EnumSet;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,9 +28,9 @@ import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
@@ -67,7 +67,6 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.misc.ApplicationDocumentServletParameters;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -192,65 +191,39 @@ public class PTGenerator {
 
     public ApplicationDocument createApplicationDocument(TenantInLease tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
         assert (tenantInfo.application() != null);
-
+        if (IOUtils.getResource("pt-docs/" + fileName, PTGenerator.class) == null) {
+            throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
+        }
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
         applicationDocument.application().set(tenantInfo.application());
         applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
-
-        String filename = IOUtils.resourceFileName(fileName, PTGenerator.class);
-        try {
-            byte[] data = IOUtils.getResource(filename);
-            if (data == null) {
-                log.error("Could not find picture [{}] in classpath", filename);
-                throw new Error("Could not find picture [" + filename + "] in classpath");
-            } else {
-                applicationDocument.fileSize().setValue((long) data.length);
-                //applicationDocument.dataId().set(createApplicationDocumentData(filename).id());
-                return applicationDocument;
-            }
-        } catch (Exception e) {
-            log.error("Failed to read the file [{}]", filename, e);
-            throw new Error("Failed to read the file [" + filename + "]");
-        }
+        return applicationDocument;
     }
 
-    public ApplicationDocumentData createApplicationDocumentData(TenantInLease tenantInfo, String fileName) {
-        String filename = IOUtils.resourceFileName(fileName, PTGenerator.class);
+    public void attachDocumentData(ApplicationDocument applicationDocument) {
+        String fileName = applicationDocument.filename().getValue();
+        ApplicationDocumentData applicationDocumentData;
         try {
-            byte[] data = IOUtils.getResource(filename);
+            byte[] data = IOUtils.getResource(IOUtils.resourceFileName("pt-docs/" + fileName, PTGenerator.class));
             if (data == null) {
-                log.error("Could not find picture [{}] in classpath", filename);
-                throw new Error("Could not find picture [" + filename + "] in classpath");
+                throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
             }
-
-            int t = fileName.lastIndexOf(".");
-            if (t == -1)
-                throw new IllegalArgumentException("There's no extension in file name:" + fileName);
-            String extension = fileName.substring(t + 1).trim();
-            try {
-                if (!ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS.contains(DownloadFormat.valueByExtension(extension))) {
-                    throw new Exception();
-                }
-            } catch (Exception e) {
-                throw new UploadActionException("Unsupported file extension in file name:" + fileName + ". List of supported extensions: "
-                        + ApplicationDocumentServletParameters.SUPPORTED_FILE_EXTENSIONS);
-            }
-            String contentType = MimeMap.getContentType(extension);
-            if (contentType == null)
-                throw new UploadActionException("Unknown file extension in file name:" + fileName);
-
-            ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
-            //applicationDocumentData.id().setValue(documentId);
-            applicationDocumentData.tenant().set(tenantInfo);
-            applicationDocumentData.application().set(tenantInfo.application());
+            String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
+            applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
+            //TODO VladS security settings !
+            //applicationDocumentData.tenant().set();
+            applicationDocumentData.application().set(applicationDocument.application());
             applicationDocumentData.data().setValue(data);
             applicationDocumentData.contentType().setValue(contentType);
-            return applicationDocumentData;
-        } catch (Exception e) {
-            log.error("Failed to read the file [{}]", filename, e);
-            throw new Error("Failed to read the file [" + filename + "]");
+
+        } catch (IOException e) {
+            throw new Error("Failed to read the file [" + fileName + "]", e);
         }
+
+        Persistence.service().persist(applicationDocumentData);
+        applicationDocument.fileSize().setValue(applicationDocumentData.data().getValue().length);
+        applicationDocument.dataId().set(applicationDocumentData.id());
     }
 
     private void createPets(IList<Pet> pets) {
@@ -450,8 +423,9 @@ public class PTGenerator {
         tenantSummary.tenantScreening().notCanadianCitizen().setValue(RandomUtil.randomBoolean());
         if (tenantSummary.tenantScreening().notCanadianCitizen().isBooleanTrue()) {
             ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
-            //TODO
-            //tenantSummary.tenantScreening().documents().add(createApplicationDocument(pti, "doc-security" + RandomUtil.randomInt(3) + ".jpg", documentType));
+
+            String fileName = "doc-security" + RandomUtil.randomInt(3) + ".jpg";
+            tenantSummary.tenantScreening().documents().add(createApplicationDocument(tenantSummary.tenantInLease(), fileName, documentType));
         } else {
             tenantSummary.tenantScreening().secureIdentifier().setValue("649 951 282");
         }

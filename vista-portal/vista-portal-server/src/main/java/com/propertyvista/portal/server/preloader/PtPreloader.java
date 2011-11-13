@@ -43,8 +43,10 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -211,10 +213,6 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         ApplicationSummaryGDO summary = generator.createSummary(user, Persistence.service().retrieve(AptUnit.class, new Key(1)));
 
         persistFullApplication(summary, generator);
-        //List<ApplicationDocument> adocs = Persistence.service().query(EntityQueryCriteria.create(ApplicationDocument.class));
-        //for(ApplicationDocument adoc : adocs) {
-        //    Persistence.service().persist(generator.createApplicationDocumentData(adoc.filename().getValue(), adoc.id().getValue()));
-        //}
         StringBuilder b = new StringBuilder();
         b.append("Created 1 potential tenant series of data");
         return b.toString();
@@ -231,6 +229,16 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
             tenantSummary.tenantInLease().lease().set(summary.lease());
             Persistence.service().persist(tenantSummary.tenantInLease());
+
+            for (ApplicationDocument applicationDocument : tenantSummary.tenantScreening().documents()) {
+                generator.attachDocumentData(applicationDocument);
+            }
+            for (PersonalIncome income : tenantSummary.tenantScreening().incomes()) {
+                for (ApplicationDocument applicationDocument : income.documents()) {
+                    generator.attachDocumentData(applicationDocument);
+                }
+            }
+
             Persistence.service().persist(tenantSummary.tenantScreening());
 
             summary.lease().tenants().add(tenantSummary.tenantInLease());
@@ -253,34 +261,6 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 //        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));
 //        Persistence.service().persist(summary.charges());
 
-//        for (int i = 0; i < summary.tenantFinancials().size(); i++) {
-//            SummaryPotentialTenantFinancial financial = summary.tenantFinancials().get(i);
-//            PotentialTenantInfo tenant = summary.tenantList().tenants().get(i);
-//
-//            financial.tenantFinancial().id().set(tenant.id());
-//
-//            for (TenantIncome income : financial.tenantFinancial().incomes()) {
-//                for (ApplicationDocument applicationDocument : income.documents()) {
-//                    ApplicationDocumentData applicationDocumentData = generator
-//                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
-//                    Persistence.service().persist(applicationDocumentData);
-//                    applicationDocument.dataId().set(applicationDocumentData.id());
-//                    Persistence.service().persist(applicationDocument);
-//                }
-//            }
-//
-//            Persistence.service().persist(financial.tenantFinancial());
-//
-//            if (tenant.notCanadianCitizen().isBooleanTrue()) {
-//                for (ApplicationDocument applicationDocument : tenant.documents()) {
-//                    ApplicationDocumentData applicationDocumentData = generator
-//                            .createApplicationDocumentData(tenant, applicationDocument.filename().getValue());
-//                    Persistence.service().persist(applicationDocumentData);
-//                    applicationDocument.dataId().set(applicationDocumentData.id());
-//                    Persistence.service().persist(applicationDocument);
-//                }
-//            }
-//        }
     }
 
     @Override

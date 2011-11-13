@@ -19,6 +19,7 @@ import com.propertyvista.admin.server.services.ImportUploadServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadServiceImpl;
 import com.propertyvista.crm.server.services.SiteResourcesUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
+import com.propertyvista.portal.server.ptapp.services.ApplicationDocumentUploadServiceImpl;
 
 @SuppressWarnings("serial")
 public class VistaUploadServlet extends AbstractUploadServlet {
@@ -28,5 +29,6 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         bind(UpdateUploadServiceImpl.class);
         bind(MediaUploadServiceImpl.class);
         bind(SiteResourcesUploadServiceImpl.class);
+        bind(ApplicationDocumentUploadServiceImpl.class);
     }
 }

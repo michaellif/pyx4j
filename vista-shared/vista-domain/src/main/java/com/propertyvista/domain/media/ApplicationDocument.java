@@ -40,6 +40,6 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
 
     IPrimitive<String> filename();
 
-    IPrimitive<Long> fileSize();
+    IPrimitive<Integer> fileSize();
 
 }

@@ -213,7 +213,7 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
                     //TODO deserialize key
                     newDocument.dataId().setValue(new Key(uploader.getServerInfo().message));
                     newDocument.filename().setValue(uploader.getServerInfo().name);
-                    newDocument.fileSize().setValue((long) uploader.getServerInfo().size);
+                    newDocument.fileSize().setValue(uploader.getServerInfo().size);
                     // add new document to the folder-list:
                     getValue().add(newDocument);
                     setValue(getValue());

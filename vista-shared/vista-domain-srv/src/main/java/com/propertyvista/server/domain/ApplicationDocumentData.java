@@ -30,6 +30,8 @@ import com.propertyvista.domain.tenant.Tenant;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
 
+    // TODO VladS  Security: tenant and/or application to be set properly
+
     @Detached
     Tenant tenant();
 

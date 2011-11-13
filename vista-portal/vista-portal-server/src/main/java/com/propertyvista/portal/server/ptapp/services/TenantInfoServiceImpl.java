@@ -40,6 +40,9 @@ public class TenantInfoServiceImpl implements TenantInfoService {
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(r.tenantScreening, dto);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
 
+        // get Detached values
+        Persistence.service().retrieve(dto.documents());
+
         callback.onSuccess(dto);
     }
 

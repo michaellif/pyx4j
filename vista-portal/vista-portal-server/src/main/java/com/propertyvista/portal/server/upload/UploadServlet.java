@@ -35,7 +35,6 @@ import com.pyx4j.essentials.server.download.MimeMap;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.misc.ApplicationDocumentServletParameters;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
@@ -114,9 +113,9 @@ public class UploadServlet extends UploadAction {
             if (tenant == null) {
                 throw new UploadActionException("Unknown tenantId: " + tenantId);
             }
-            if (!tenant.application().id().getValue().equals(PtAppContext.getCurrentUserApplication().id().getValue())) {
-                throw new UploadActionException("Wrong TenantId: " + tenantId);
-            }
+//            if (!tenant.application().id().getValue().equals(PtAppContext.getCurrentUserApplication().id().getValue())) {
+//                throw new UploadActionException("Wrong TenantId: " + tenantId);
+//            }
 
             byte[] data = fileItem.get();
             ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data, contentType, tenant);
