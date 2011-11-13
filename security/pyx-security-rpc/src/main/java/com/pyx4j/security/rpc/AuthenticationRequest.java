@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AuthenticationRequest extends IEntity {
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreMemeber)

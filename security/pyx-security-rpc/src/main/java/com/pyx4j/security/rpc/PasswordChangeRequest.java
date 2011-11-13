@@ -20,6 +20,7 @@
  */
 package com.pyx4j.security.rpc;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -27,9 +28,13 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface PasswordChangeRequest extends IEntity {
+
+    IPrimitive<Key> userPk();
 
     IPrimitive<String> token();
 
@@ -46,6 +51,6 @@ public interface PasswordChangeRequest extends IEntity {
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Confirm new password")
-    IPrimitive<String> newPassword2();
+    IPrimitive<String> newPasswordConfirm();
 
 }
