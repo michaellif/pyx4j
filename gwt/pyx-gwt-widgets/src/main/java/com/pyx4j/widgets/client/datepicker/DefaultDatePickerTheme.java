@@ -37,7 +37,7 @@ public class DefaultDatePickerTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, heighlighted, selected, right, multiple, first, top, bottom, middle
+        disabled, heighlighted, selected, current, right, multiple, first, top, bottom, middle
     }
 
     public DefaultDatePickerTheme() {
@@ -212,6 +212,11 @@ public class DefaultDatePickerTheme extends Theme {
 
         style = new Style(" .DatePickerGrid .gwt-Label-selected");
         style.addProperty("border", "1px solid #E06020");
+        addStyle(style);
+
+        style = new Style(" .DatePickerGrid .gwt-Label-current");
+        //style.addProperty("color", ThemeColors.background);
+        //style.addProperty("background-color", ThemeColors.foreground, 0.1);
         addStyle(style);
 
         style = new Style(" .DatePickerGrid tr.DatePickerGridDaysRow");

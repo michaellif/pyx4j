@@ -121,6 +121,7 @@ public class CalendarViewExtended extends CalendarView {
         for (int i = 0; i < CalendarModel.DAYS_IN_WEEK; i++) {
             int shift = CalendarUtil.getStartingDayOfWeek();
             int dayIdx = i + shift < CalendarModel.DAYS_IN_WEEK ? i + shift : i + shift - CalendarModel.DAYS_IN_WEEK;
+
             grid.setText(0, i, daysOfWeek[dayIdx]);
         }
         //grid.getRowFormatter().setStyleName(0, "datePickerGridDaysRow");

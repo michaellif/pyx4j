@@ -54,9 +54,11 @@ public class DateGrid extends Grid {
         setCellPadding(0);
         setCellSpacing(0);
         setBorderWidth(0);
+
         this.minDate = minDate;
         this.maxDate = maxDate;
         this.disabledDates = disabledDates;
+
         setStyleName(DefaultDatePickerTheme.StyleName.DatePickerGrid.name());
         resize(CalendarModel.WEEKS_IN_MONTH + 1, CalendarModel.DAYS_IN_WEEK);
         drawCells();
@@ -65,6 +67,7 @@ public class DateGrid extends Grid {
     @Override
     protected void onEnsureDebugId(String id) {
         DateCell cell;
+
         for (int row = 1; row < this.numRows; row++) {
             for (int col = 0; col < this.numColumns; col++) {
                 cell = (DateCell) getWidget(row, col);
@@ -75,6 +78,7 @@ public class DateGrid extends Grid {
 
     public void drawCells() {
         DateCell cell;
+
         for (int row = 1; row < this.numRows; row++) {
             for (int col = 0; col < this.numColumns; col++) {
                 cell = new DateCell();
@@ -115,15 +119,23 @@ public class DateGrid extends Grid {
         enableMonth = (enableMonth == 11) ? 0 : enableMonth + 1;
 
         lastDisplayed.setTime(firstDisplayed.getTime());
+        Date current = new Date();
 
         for (int i = 0; i < getNumCells(); i++) {
             DateCell cell = getCell(i);
+
             cell.setDate(lastDisplayed);
             cell.setEnabled(isEnabled(lastDisplayed, enableMonth));
+
             if (selectedDate != null && CalendarUtil.isSameDate(lastDisplayed, selectedDate)) {
                 cell.setSelected(true);
                 selectedCell = cell;
             }
+
+            if (CalendarUtil.isSameDate(lastDisplayed, current)) {
+                cell.setCurrent(true);
+            }
+
             CalendarUtil.addDaysToDate(lastDisplayed, 1);
         }
     }
@@ -178,6 +190,7 @@ public class DateGrid extends Grid {
 
     public void setWidget(int row, int col, DateCell cell) {
         super.setWidget(row, col, cell);
+
         elementToCell.put(cell);
         cellList.add(cell);
     }
@@ -186,6 +199,7 @@ public class DateGrid extends Grid {
         if (selectedCell != null) {
             selectedCell.setSelected(false);
         }
+
         selectedDate = null;
     }
 

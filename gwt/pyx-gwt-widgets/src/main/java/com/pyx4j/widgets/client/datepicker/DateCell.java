@@ -100,6 +100,10 @@ public class DateCell extends Label {
         heighlight(false);
     }
 
+    public final void setCurrent(boolean current) {
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.current.name(), current);
+    }
+
     private void heighlight(boolean isheighlighted) {
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.heighlighted.name(), isheighlighted);
     }

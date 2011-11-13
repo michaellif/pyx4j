@@ -24,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -45,7 +47,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
         Date starting = new Date();
         Date minDate = new Date(110, 1, 1);
-        Date maxDate = new Date(111, 12, 31);
+        Date maxDate = new Date(112, 12, 31);
 
         final TextBox textBox = new TextBox();
 
@@ -60,6 +62,8 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
         });
 
+        Label lbl = new Label("CalendarUtil.getStartingDayOfWeek is: " + new Integer(CalendarUtil.getStartingDayOfWeek()).toString());
+        main.setWidget(++row, 0, lbl);
         main.setWidget(++row, 0, textBox);
         main.setWidget(++row, 0, datePicker);
 
