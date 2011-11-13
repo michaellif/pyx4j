@@ -17,7 +17,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
-import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
@@ -83,6 +83,8 @@ public class VistaAdminTheme extends VistaTheme {
 
         addTheme(new DefaultListerTheme());
 
+        addTheme(new DefaultDataTableTheme());
+
         initGeneralStyles();
         initBodyStyles();
 
@@ -95,7 +97,6 @@ public class VistaAdminTheme extends VistaTheme {
 
         initVistaTabStyles();
         initVistaDecoratorsPanelStyles();
-        initEntityDataTableStyles();
         initTabPanelStyles();
         initDialogBoxStyles();
         initDialogPanelStyles();
@@ -431,65 +432,4 @@ public class VistaAdminTheme extends VistaTheme {
         addStyle(style);
     }
 
-    protected void initEntityDataTableStyles() {
-        String prefix = DataTable.BASE_NAME;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
-        style.addProperty("background-color", ThemeColors.foreground, 1);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
-        style.addProperty("font-weight", "bold");
-        style.addProperty("cursor", "pointer");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector));
-        style.addProperty("background-color", ThemeColors.foreground, 0.6);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        String selectorPrefix = Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector);
-        style = new Style(selectorPrefix + " a:link, " + selectorPrefix + " a:visited, " + selectorPrefix + " a:active");
-        style.addProperty("color", ThemeColors.foreground, 0.1);
-        addStyle(style);
-
-        style = new Style(selectorPrefix + ":hover");
-        style.addProperty("background-color", ThemeColors.foreground, 0.8);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnMenu));
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
-        style.addProperty("color", ThemeColors.foreground, 0.9);
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
-        style.addProperty("padding", "5px 7px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
-        style.addProperty("cursor", "pointer");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
-        style.addProperty("background-color", ThemeColors.foreground, 0.15);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
-        style.addProperty("background-color", "white");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.nodetails));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.selected));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
-        style.addProperty("background-color", ThemeColors.foreground, 0.2);
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
-        addStyle(style);
-    }
 }

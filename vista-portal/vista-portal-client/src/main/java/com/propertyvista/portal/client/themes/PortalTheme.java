@@ -19,7 +19,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
-import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -59,6 +59,7 @@ public class PortalTheme extends VistaTheme {
         addTheme(new DefaultDatePickerTheme());
 
         addTheme(new DefaultListerTheme());
+        addTheme(new DefaultDataTableTheme());
 
         initEntityFolderStyles();
         initTextBoxStyle();
@@ -66,7 +67,6 @@ public class PortalTheme extends VistaTheme {
         initHyperlinkStyle();
         initGroupBoxStyle();
         initListBoxStyle();
-        initEntityDataTableStyles();
         initSiteViewStyles();
         initPropertyMarkerStyle();
         initPaymentRadioButtonGroupStyles();
@@ -140,65 +140,6 @@ public class PortalTheme extends VistaTheme {
 
         }
 
-    }
-
-    protected void initEntityDataTableStyles() {
-        String prefix = DataTable.BASE_NAME;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Header));
-        style.addProperty("background-color", ThemeColors.object1, 0.35);
-        style.addProperty("color", ThemeColors.object1, 0.95);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector));
-        style.addProperty("background-color", ThemeColors.object1, 0.6);
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + " a:link");
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnSelector) + ":hover");
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ColumnMenu));
-        style.addProperty("background-color", ThemeColors.object1, 0.1);
-        style.addProperty("color", ThemeColors.object1, 0.9);
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.9);
-        style.addProperty("padding", "5px 7px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row));
-        style.addProperty("cursor", "pointer");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.even));
-        style.addProperty("background-color", ThemeColors.object1, 0.15);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.odd));
-        style.addProperty("background-color", "white");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.nodetails));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.Row, DataTable.StyleDependent.selected));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, DataTable.StyleSuffix.ActionsBar));
-        style.addProperty("background-color", ThemeColors.object1, 0.3);
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.4);
-        addStyle(style);
     }
 
     private void initPropertyMarkerStyle() {
