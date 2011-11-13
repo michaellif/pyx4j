@@ -89,9 +89,10 @@ public class DateGrid extends Grid {
                         if (selectedCell != null) {
                             selectedCell.setSelected(false);
                         }
+
                         selectedCell = clickedCell;
                         selectedDate = selectedCell.getDate();
-                        selectedCell.setSelected(true);
+                        selectedCell.setSelected(selectedCell.isEnabled());
                     }
                 });
                 setWidget(row, col, cell);
@@ -102,7 +103,7 @@ public class DateGrid extends Grid {
     public void redraw(Date firstDisplayed) {
         Date lastDisplayed = new Date();
         Date enabledDate;
-        int enableMonth;
+        int displayedMonth;
 
         if (selectedCell != null) {
             selectedCell.setSelected(false);
@@ -114,9 +115,9 @@ public class DateGrid extends Grid {
             CalendarUtil.addDaysToDate(firstDisplayed, -7);
         }
 
-        enabledDate = new Date(firstDisplayed.getTime());
-        enableMonth = enabledDate.getMonth();
-        enableMonth = (enableMonth == 11) ? 0 : enableMonth + 1;
+        //enabledDate = new Date(firstDisplayed.getTime());
+        displayedMonth = new Date(firstDisplayed.getTime()).getMonth();
+        displayedMonth = (displayedMonth == 11) ? 0 : displayedMonth + 1;
 
         lastDisplayed.setTime(firstDisplayed.getTime());
         Date current = new Date();
@@ -125,26 +126,20 @@ public class DateGrid extends Grid {
             DateCell cell = getCell(i);
 
             cell.setDate(lastDisplayed);
-            cell.setEnabled(isEnabled(lastDisplayed, enableMonth));
+            cell.setOutOfMonth(lastDisplayed.getMonth() != displayedMonth);
 
             if (selectedDate != null && CalendarUtil.isSameDate(lastDisplayed, selectedDate)) {
                 cell.setSelected(true);
                 selectedCell = cell;
             }
 
-            if (CalendarUtil.isSameDate(lastDisplayed, current)) {
-                cell.setCurrent(true);
-            }
+            cell.setTodayDay(CalendarUtil.isSameDate(lastDisplayed, current));
 
             CalendarUtil.addDaysToDate(lastDisplayed, 1);
         }
     }
 
-    private boolean isEnabled(Date currentDate, int enabledMonth) {
-        if (currentDate.getMonth() != enabledMonth) {
-            return false;
-        }
-
+    private boolean isEnabled(Date currentDate) {
         if (currentDate.before(minDate)) {
             return false;
         }

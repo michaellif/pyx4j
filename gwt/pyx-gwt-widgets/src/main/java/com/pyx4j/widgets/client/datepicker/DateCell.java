@@ -51,15 +51,18 @@ public class DateCell extends Label {
             @Override
             public void onClick(ClickEvent event) {
                 DateCell cell = (DateCell) event.getSource();
-                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), true);
+
+                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), cell.isEnabled());
             }
         });
+
         this.addMouseOverHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                heighlight(true);
+                heighlight(((DateCell) event.getSource()).isEnabled());
             }
         });
+
         this.addMouseOutHandler(new MouseOutHandler() {
             @Override
             public void onMouseOut(MouseOutEvent event) {
@@ -100,8 +103,12 @@ public class DateCell extends Label {
         heighlight(false);
     }
 
-    public final void setCurrent(boolean current) {
-        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.current.name(), current);
+    public final void setTodayDay(boolean istoday) {
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.todayday.name(), istoday);
+    }
+
+    public final void setOutOfMonth(boolean isoutofmonth) {
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.outofmonth.name(), isoutofmonth);
     }
 
     private void heighlight(boolean isheighlighted) {

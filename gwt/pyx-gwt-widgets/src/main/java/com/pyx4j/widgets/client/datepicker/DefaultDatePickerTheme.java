@@ -37,7 +37,7 @@ public class DefaultDatePickerTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, heighlighted, selected, current, right, multiple, first, top, bottom, middle
+        disabled, heighlighted, selected, todayday, outofmonth, right, multiple, first, top, bottom, middle
     }
 
     public DefaultDatePickerTheme() {
@@ -110,9 +110,9 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("top", "-2px");
         addStyle(style);
 
-        style = new Style(" .monthSelectorNavigation.right");
-        style.addProperty("border-right", "1px solid #A8B8B8");
-        addStyle(style);
+        //style = new Style(" .monthSelectorNavigation.right");
+        //style.addProperty("border-right", "1px solid #A8B8B8");
+        //addStyle(style);
 
         style = new Style(" .monthSelectorNavigation");
         style.addProperty("width", "15%");
@@ -138,35 +138,35 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("padding", "4px");
         addStyle(style);
 
-        style = new Style(".", StyleName.DatePickerTodayDay);
-        style.addProperty("border", "1px solid black");
-        style.addProperty("padding", "3px");
-        addStyle(style);
+        //style = new Style(".", StyleName.DatePickerTodayDay);
+        ////style.addProperty("border", "1px solid black");
+        //style.addProperty("padding", "3px");
+        //addStyle(style);
 
-        style = new Style(".", StyleName.DatePickerWeekendDay);
-        style.addProperty("background", "#EEEEEE none repeat scroll 0 0");
-        addStyle(style);
+        //style = new Style(".", StyleName.DatePickerWeekendDay);
+        //style.addProperty("background", "#EEEEEE none repeat scroll 0 0");
+        //addStyle(style);
 
-        style = new Style(".DatePickerDayIsFiller");
-        style.addProperty("color", "#888888");
-        addStyle(style);
+        //style = new Style(".DatePickerDayIsFiller");
+        //style.addProperty("color", "#888888");
+        //addStyle(style);
 
-        style = new Style(".DatePickerDayIsValue");
-        style.addProperty("background", "#AACCEE none repeat scroll 0 0");
-        addStyle(style);
+//        style = new Style(".DatePickerDayIsValue");
+//        style.addProperty("background", "#AACCEE none repeat scroll 0 0");
+//        addStyle(style);
+//
+//        style = new Style(".DatePickerDayIsDisabled");
+//        style.addProperty("color", "#AAAAAA");
+//        style.addProperty("font-style", "italic");
+//        addStyle(style);
 
-        style = new Style(".DatePickerDayIsDisabled");
-        style.addProperty("color", "#AAAAAA");
-        style.addProperty("font-style", "italic");
-        addStyle(style);
-
-        style = new Style(".DatePickerDayIsHighlighted");
-        style.addProperty("background", "#F0E68C none repeat scroll 0 0");
-        addStyle(style);
-
-        style = new Style(".DatePickerDayIsValueAndHighlighted");
-        style.addProperty("background", "#BBDDD9 none repeat scroll 0 0");
-        addStyle(style);
+//        style = new Style(".DatePickerDayIsHighlighted");
+//        style.addProperty("background", "#F0E68C none repeat scroll 0 0");
+//        addStyle(style);
+//
+//        style = new Style(".DatePickerDayIsValueAndHighlighted");
+//        style.addProperty("background", "#BBDDD9 none repeat scroll 0 0");
+//        addStyle(style);
 
         style = new Style("td.DatePickerMonth");
         style.addProperty("color", "blue");
@@ -198,25 +198,33 @@ public class DefaultDatePickerTheme extends Theme {
         addStyle(style);
 
         style = new Style(" .DatePickerGrid .gwt-Label");
-        style.addProperty("border", "1px solid #F0F0F0");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.1);
         addStyle(style);
 
         style = new Style(" .DatePickerGrid .gwt-Label-disabled");
-        style.addProperty("color", "#B0B0B0");
+        style.addProperty("color", ThemeColors.foreground, 0.4);
+        style.addProperty("background-color", ThemeColors.foreground, 0.2);
+        style.addProperty("cursor", "none");
+        addStyle(style);
+
+        style = new Style(" .DatePickerGrid .gwt-Label-outofmonth");
+        style.addProperty("color", ThemeColors.foreground, 0.5);
         addStyle(style);
 
         style = new Style(" .DatePickerGrid .gwt-Label-heighlighted");
-        style.addProperty("border", "1px solid #999999");
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
+        style.addProperty("background-color", ThemeColors.object1, 0.2);
         addStyle(style);
 
         style = new Style(" .DatePickerGrid .gwt-Label-selected");
-        style.addProperty("border", "1px solid #E06020");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.object1);
+        style.addProperty("background-color", ThemeColors.object1, 0.2);
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label-current");
-        //style.addProperty("color", ThemeColors.background);
-        //style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style = new Style(" .DatePickerGrid .gwt-Label-todayday");
+        style.addProperty("color", ThemeColors.object1, 0.0);
+        style.addProperty("background-color", ThemeColors.object1, 0.7);
         addStyle(style);
 
         style = new Style(" .DatePickerGrid tr.DatePickerGridDaysRow");
@@ -224,7 +232,8 @@ public class DefaultDatePickerTheme extends Theme {
         addStyle(style);
 
         style = new Style(" .DatePickerGrid .DatePickerGridDaysRow td");
-        style.addProperty("border-bottom", "1px solid black");
+        style.addProperty("border-bottom", "1px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 1.5);
         style.addProperty("margin-bottom", "5px");
         addStyle(style);
 
