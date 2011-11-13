@@ -73,7 +73,7 @@ public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
         main.add(new HTML());
         main.add(new LoginPanelWidgetDecorator(inject(proto().newPassword())));
         main.add(new HTML());
-        main.add(new LoginPanelWidgetDecorator(inject(proto().newPassword2())));
+        main.add(new LoginPanelWidgetDecorator(inject(proto().newPasswordConfirm())));
 
         Button newPasswordButton = new Button(caption);
         newPasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
