@@ -20,11 +20,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.lister.FilterData;
+import com.pyx4j.site.client.ui.crud.lister.FilterData.Operands;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
@@ -54,6 +57,8 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     private final IListerView.Presenter unitsLister;
 
     private final IListerView.Presenter tenantsLister;
+
+    private LogicalDate leaseFrom, leaseTo;
 
     @SuppressWarnings("unchecked")
     public LeaseEditorActivity(Place place) {
@@ -92,11 +97,19 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         buildingsLister.populate(0);
         tenantsLister.populate(0);
 
+        setSelectedDates(result.leaseFrom().getValue(), result.leaseTo().getValue());
         populateUnitLister(result.selectedBuilding());
+
         fillserviceItems(result);
         fillServiceEligibilityData(result, result.serviceAgreement().serviceItem().item());
 
         super.onPopulateSuccess(result);
+    }
+
+    @Override
+    public void setSelectedDates(LogicalDate from, LogicalDate to) {
+        leaseFrom = from;
+        leaseTo = to;
     }
 
     @Override
@@ -166,6 +179,12 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     public void populateUnitLister(Building selected) {
         if (!selected.isEmpty()) {
             unitsLister.setParentFiltering(selected.getPrimaryKey());
+        }
+        if (leaseFrom != null && leaseTo != null) {
+            List<FilterData> filters = new ArrayList<FilterData>(2);
+            filters.add(new FilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operands.greaterThen, leaseFrom));
+            filters.add(new FilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operands.lessThen, leaseTo));
+            unitsLister.setPreDefinedFilters(filters);
         }
         unitsLister.populate(0);
     }
@@ -255,5 +274,4 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         chargeItem.price().setValue(serviceItem.price().getValue());
         return chargeItem;
     }
-
 }

@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -28,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -105,14 +108,23 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
 
+        HorizontalPanel leaseDatePanel = new HorizontalPanel();
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseFrom()), 8).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseTo()), 8).build());
+        main.setWidget(++row, 0, leaseDatePanel);
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel()), 20).build());
 
         if (isEditable()) {
             HorizontalPanel unitPanel = new HorizontalPanel();
-            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
-            unitPanel.add(new Button(i18n.tr("Select..."), new ClickHandler() {
+            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 24).build());
+            CHyperlink select;
+            unitPanel.add(select = new CHyperlink(new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
+                    LeaseDTO value = getValue();
+                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedDates(value.leaseFrom().getValue(), value
+                            .leaseTo().getValue());
                     new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
                         @Override
                         protected void onClose(SelectUnitBox box) {
@@ -123,6 +135,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     };
                 }
             }));
+            select.setValue(i18n.tr("Select..."));
+            select.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
             main.setWidget(++row, 0, unitPanel);
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
@@ -130,13 +144,19 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8.2).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTo()), 8.2).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 8.2).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 8.2).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actualMoveIn()), 8.2).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actualMoveOut()), 8.2).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 8.2).build());
+        leaseDatePanel = new HorizontalPanel();
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveIn()), 8).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveOut()), 8).build());
+        main.setWidget(++row, 0, leaseDatePanel);
+
+        leaseDatePanel = new HorizontalPanel();
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveIn()), 8).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveOut()), 8).build());
+        main.setWidget(++row, 0, leaseDatePanel);
+
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 8).build());
 
         return new CrmScrollPanel(main);
     }

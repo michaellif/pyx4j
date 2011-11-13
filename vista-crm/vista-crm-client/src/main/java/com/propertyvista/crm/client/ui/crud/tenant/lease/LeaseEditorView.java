@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.crud.IEditorView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
@@ -35,6 +36,8 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
         IListerView.Presenter getUnitPresenter();
 
         IListerView.Presenter getTenantPresenter();
+
+        void setSelectedDates(LogicalDate from, LogicalDate to);
 
         void setSelectedBuilding(Building selected);
 
