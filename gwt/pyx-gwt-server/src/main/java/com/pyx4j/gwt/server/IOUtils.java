@@ -72,7 +72,15 @@ public class IOUtils {
         }
     }
 
+    /**
+     * @deprecated use getBinaryResource
+     */
+    @Deprecated
     public static byte[] getResource(String name) throws IOException {
+        return getBinaryResource(name);
+    }
+
+    public static byte[] getBinaryResource(String name) throws IOException {
         InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
         if (in == null) {
             return null;
@@ -85,6 +93,13 @@ public class IOUtils {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(os);
         }
+    }
+
+    /**
+     * Get binary resource with name relative to package name of the class
+     */
+    public static byte[] getBinaryResource(String fileName, Class<?> clazz) throws IOException {
+        return getBinaryResource(resourceFileName(fileName, clazz));
     }
 
     public static String getTextResource(String name) throws IOException {
@@ -111,6 +126,9 @@ public class IOUtils {
         return sb.toString();
     }
 
+    /**
+     * Get text resource with name relative to package name of the class
+     */
     public static String getTextResource(String fileName, Class<?> clazz) throws IOException {
         return getTextResource(resourceFileName(fileName, clazz));
     }
@@ -119,6 +137,9 @@ public class IOUtils {
         return getTextResource(resourceFileName(fileName, clazz), Charset.forName("UTF-8"));
     }
 
+    /**
+     * Get resource name relative to package name of the class
+     */
     public static String resourceFileName(String fileName, Class<?> clazz) {
         return clazz.getPackage().getName().replace('.', '/') + "/" + fileName;
     }

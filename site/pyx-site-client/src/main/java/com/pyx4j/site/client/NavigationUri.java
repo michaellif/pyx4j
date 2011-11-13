@@ -31,6 +31,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.URL;
 
 import com.pyx4j.site.shared.meta.NavigNode;
@@ -92,6 +93,19 @@ public class NavigationUri {
             }
         }
         return args;
+    }
+
+    /**
+     * Used for inter-modules redirections.
+     * Consider http://localhost:8888/gwt/ and http://localhost:8888/gwt/index.html
+     */
+    public static String getDeploymentBaseURL() {
+        String url = GWT.getModuleBaseURL();
+        String module = GWT.getModuleName();
+        if (url.endsWith(module + "/")) {
+            url = url.substring(0, url.length() - (module.length() + 1));
+        }
+        return url;
     }
 
     public String getPath() {
