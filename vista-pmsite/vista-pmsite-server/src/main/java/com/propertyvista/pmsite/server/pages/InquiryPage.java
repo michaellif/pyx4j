@@ -23,9 +23,11 @@ import templates.TemplateResources;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
 import com.propertyvista.pmsite.server.panels.InquiryPanel;
 
@@ -36,21 +38,35 @@ public class InquiryPage extends BasePage {
 
     public InquiryPage(PageParameters params) {
         super(params);
-        Long planId = null;
+        Long planId = null, propId = null;
         try {
             planId = params.get("fpId").toLong();
-        } catch (Exception e) {
-            throw new RuntimeException();
-//            throw new RestartResponseException(FindAptPage.class);
+        } catch (Exception ignore) {
+            // ignore
+        }
+        try {
+            propId = params.get("propId").toLong();
+        } catch (Exception ignore) {
+            // ignore
         }
 
-        final Floorplan fp = PMSiteContentManager.getFloorplanDetails(planId);
         // left side
-        add(new FloorplanInfoPanel("floorplanInfoPanel", fp));
+        Floorplan fp = null;
+        Building bld = null;
+        if (planId != null) {
+            fp = PMSiteContentManager.getFloorplanDetails(planId);
+            add(new FloorplanInfoPanel("infoPanel", fp));
+        } else if (propId != null) {
+            bld = PMSiteContentManager.getBuildingDetails(propId);
+            add(new BuildingInfoPanel("infoPanel", bld));
+        } else {
+            throw new RuntimeException();
+//          throw new RestartResponseException(FindAptPage.class);
+        }
 
         // right side - inquiry form
         add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
-        add(new InquiryPanel("inquiryPanel", null, fp));
+        add(new InquiryPanel("inquiryPanel", bld, fp));
     }
 
     @Override

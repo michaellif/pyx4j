@@ -184,3 +184,21 @@ a.listingCtlButton {
 #btnViewDetails {
 	background-position:0px -30px;
 }
+.apartmentDetailsWrap .requestBtn {
+    background: url("images/template0/btn.png") no-repeat;
+    background-size: 100% 64px;
+    border: 0;
+    display:inline-block;
+    line-height: 32px;
+    padding:0 8px;
+    margin-left:40px;
+    margin-bottom:20px;
+    color: #000000;
+    font-size: 16px;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    text-decoration:none;
+}
+.apartmentDetailsWrap .requestBtn:hover {
+	background-position:0 -32px;
+}
