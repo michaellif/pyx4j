@@ -41,7 +41,7 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppSite extends VistaSite {
 
-    static public String pmcName;
+    static private String pmcName;
 
     private PtAppWizardManager wizardManager;
 
@@ -122,6 +122,10 @@ public class PtAppSite extends VistaSite {
 
     public static PtAppWizardManager getWizardManager() {
         return ((PtAppSite) instance()).wizardManager;
+    }
+
+    public static String getPmcName() {
+        return pmcName;
     }
 
 }
