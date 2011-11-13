@@ -21,6 +21,7 @@
 package com.pyx4j.security.rpc;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -52,5 +53,13 @@ public interface PasswordChangeRequest extends IEntity {
     @Editor(type = EditorType.password)
     @Caption(name = "Confirm new password")
     IPrimitive<String> newPasswordConfirm();
+
+    /**
+     * Text from image for human verification.
+     */
+    @Caption(name = "Enter the code")
+    @Editor(type = Editor.EditorType.captcha)
+    @NotNull
+    IPrimitive<Pair<String, String>> captcha();
 
 }
