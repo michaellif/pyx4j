@@ -30,12 +30,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
 
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
@@ -56,7 +56,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected static final int DEFAULT_PAGE_SIZE = 10;
 
-    private final EntityListPanel<E> entityListPanel;
+    private final DataTablePanel<E> entityListPanel;
 
     private ListerGadgetBaseSettings settings;
 
@@ -71,7 +71,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             gadgetMetadata.settings().set(settings);
         }
 
-        entityListPanel = new EntityListPanel<E>(entityClass) {
+        entityListPanel = new DataTablePanel<E>(entityClass) {
             @Override
             // although the name doesn't give a clue, this sets the default column descriptors for the EntityListPanelWidget
             public List<ColumnDescriptor<E>> getColumnDescriptors() {

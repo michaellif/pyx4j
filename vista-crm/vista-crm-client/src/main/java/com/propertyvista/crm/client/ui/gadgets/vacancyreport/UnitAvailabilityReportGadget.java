@@ -35,11 +35,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
@@ -56,7 +56,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
     private static final String ALL_BUTTON_CAPTION = "All";
 
-    private EntityListPanel<UnitVacancyStatus> unitListPanel;
+    private DataTablePanel<UnitVacancyStatus> unitListPanel;
 
     private UnitAvailabilityReportSettings settings;
 
@@ -88,7 +88,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
         final List<ColumnDescriptor<UnitVacancyStatus>> defaultColumns = getDefaultColumns();
         final List<ColumnDescriptor<UnitVacancyStatus>> availableColumns = getAvailableColumns();
-        unitListPanel = new EntityListPanel<UnitVacancyStatus>(UnitVacancyStatus.class) {
+        unitListPanel = new DataTablePanel<UnitVacancyStatus>(UnitVacancyStatus.class) {
 
             @Override
             // although the name doesn't give a clue, this sets the default column descriptors for the EntityListPanelWidget
