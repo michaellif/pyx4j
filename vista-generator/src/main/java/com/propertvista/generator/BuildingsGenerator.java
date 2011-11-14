@@ -376,7 +376,7 @@ public class BuildingsGenerator {
 // Floorplans:
     public List<FloorplanDTO> createFloorplans(Building building, int num) {
         List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
-        Set<String> set = new HashSet<String>();
+        Set<String> uniqueFloorplanNames = new HashSet<String>();
 
         for (int i = 0; i < num; i++) {
 /*
@@ -385,14 +385,20 @@ public class BuildingsGenerator {
  * floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
  * }
  */
+            FloorplanDTO floorplan;
+            //produces limited number of names, for large amounts of data could go into infinite loop
+            int attemptCounter = 0;
+            do {
+                attemptCounter++;
+                if (attemptCounter > 10) {
+                    throw new Error("Infinite loop protection");
+                }
+                floorplan = createFloorplan();
+            } while (uniqueFloorplanNames.contains(floorplan.name().getValue()));
 
-            FloorplanDTO floorplan = createFloorplan(); //produces limited number of names, for large amounts of data could go into infinite loop
-            if (set.add(floorplan.name().getValue())) {
-                floorplan.building().set(building);
-                floorplans.add(floorplan);
-            } else {
-                i--;
-            }
+            uniqueFloorplanNames.add(floorplan.name().getValue());
+            floorplan.building().set(building);
+            floorplans.add(floorplan);
 
         }
         return floorplans;
