@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 
 /*
  * RowData defines one row in a Sortable Table
@@ -53,20 +52,13 @@ public class DataTableModel<E extends IEntity> {
 
     private int totalRows;
 
-    private final EntityMeta entityMeta;
-
-    public DataTableModel(EntityMeta entityMeta, List<ColumnDescriptor<E>> columnDescriptors) {
-        this.entityMeta = entityMeta;
+    public DataTableModel(Class<E> clazz, List<ColumnDescriptor<E>> columnDescriptors) {
         this.columnDescriptors = columnDescriptors;
     }
 
     public void close() {
         listenerList.clear();
         data.clear();
-    }
-
-    public String getDebugId() {
-        return entityMeta.getCaption() + " List";
     }
 
     public List<ColumnDescriptor<E>> getColumnDescriptors() {
@@ -100,10 +92,6 @@ public class DataTableModel<E extends IEntity> {
 
     public String getColumnName(int index) {
         return getColumnNames().get(index);
-    }
-
-    public EntityMeta getEntityMeta() {
-        return entityMeta;
     }
 
     /**

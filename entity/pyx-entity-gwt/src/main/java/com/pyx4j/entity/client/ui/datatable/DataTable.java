@@ -129,10 +129,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
 // Data manipulation:
 
-    public DataTableModel<E> getDataTableModel() {
-        return model;
-    }
-
     public void setDataTableModel(DataTableModel<E> model) {
         if (this.model != null) {
             this.model.removeDataTableModelListener(this);
@@ -152,8 +148,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public E getSelectedItem() {
         int selectedRow = getSelectedRow();
-        if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
-            return getDataTableModel().getData().get(selectedRow).getEntity();
+        if (selectedRow >= 0 && selectedRow < model.getData().size()) {
+            return model.getData().get(selectedRow).getEntity();
         }
         return null;
     }
@@ -162,8 +158,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         List<E> selected = new ArrayList<E>();
 
         for (int selectedRow : selectedRows) {
-            if (selectedRow >= 0 && selectedRow < getDataTableModel().getData().size()) {
-                selected.add(getDataTableModel().getData().get(selectedRow).getEntity());
+            if (selectedRow >= 0 && selectedRow < model.getData().size()) {
+                selected.add(model.getData().get(selectedRow).getEntity());
             }
         }
 
@@ -229,7 +225,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     public void setMultiSelect(boolean isMultiSelect) {
         if (isMultiSelect) {
             if (!isMultiSelect()) {
-                selectedRows = new ArrayList<Integer>(getDataTableModel().getPageSize());
+                selectedRows = new ArrayList<Integer>(model.getPageSize());
             }
         } else {
             for (int i : selectedRows) {
@@ -417,17 +413,21 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             Element rowElement = getRowFormatter().getElement(rowIndex);
             UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name());
             if (rowIndex % 2 == 0) {
-                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(), true);
+                UIObject.setStyleName(rowElement,
+                        DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(), true);
             } else {
-                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(), true);
+                UIObject.setStyleName(rowElement,
+                        DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(), true);
             }
             if (!hasDetailsNavigation()) {
-                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
+                UIObject.setStyleName(rowElement,
+                        DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
             }
 
             ++rowIndex;
         }
-        this.ensureDebugId(model.getDebugId());
+        //TODO implement 
+        //this.ensureDebugId(model.getDebugId());
     }
 
     protected void setSelectedRow(int selectedRow) {
@@ -457,7 +457,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     protected void markRow(int row, boolean selected) {
         if (isMarkSelectedRow() && row >= 0) {
             Element previous = getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(previous, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.selected.name(), selected);
+            UIObject.setStyleName(previous, DefaultDataTableTheme.StyleSuffix.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.selected.name(),
+                    selected);
         }
     }
 
@@ -514,7 +515,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                                 selectedColumns.add(availableColumns.get(i));
                             }
                         }
-                        getDataTableModel().setColumnDescriptors(selectedColumns);
+                        model.setColumnDescriptors(selectedColumns);
                         renderTable();
                     }
                 });

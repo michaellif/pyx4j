@@ -31,33 +31,39 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
-    protected final DataTableModel<E> dataTableModel;
-
     private final E entityPrototype;
+
+    protected final DataTableModel<E> dataTableModel;
 
     private final DataTable<E> dataTable;
 
-    private final DataTableActionsBar upperActionsBar;
+    private final DataTableActionsBar topActionsBar;
 
-    private final DataTableActionsBar lowerActionsBar;
+    private final DataTableActionsBar bottomActionsBar;
+
+    private final DataTableFilterPanel<E> filterPanel;
 
     public DataTablePanel(Class<E> clazz) {
         setWidth("100%");
-
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
-        upperActionsBar = new DataTableActionsBar();
-        add(upperActionsBar);
-
-        dataTableModel = new DataTableModel<E>(entityPrototype.getEntityMeta(), getColumnDescriptors());
+        dataTableModel = new DataTableModel<E>(clazz, getColumnDescriptors());
         dataTable = new DataTable<E>(dataTableModel);
+
+        topActionsBar = new DataTableActionsBar();
+        add(topActionsBar);
+
+        filterPanel = new DataTableFilterPanel<E>(this);
+        //add(filterPanel);
+
         add(dataTable);
 
-        lowerActionsBar = new DataTableActionsBar();
-        add(lowerActionsBar);
+        bottomActionsBar = new DataTableActionsBar();
+        add(bottomActionsBar);
 
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");
@@ -69,50 +75,62 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
             }
         });
 
-        upperActionsBar.setDataTableModel(dataTableModel);
-        lowerActionsBar.setDataTableModel(dataTableModel);
+        topActionsBar.setDataTableModel(dataTableModel);
+        bottomActionsBar.setDataTableModel(dataTableModel);
     }
 
     protected abstract void onSelect(int selectedRow);
 
     public void removeUpperActionsBar() {
-        remove(upperActionsBar);
+        remove(topActionsBar);
     }
 
     public void removeLowerActionsBar() {
-        remove(lowerActionsBar);
+        remove(bottomActionsBar);
     }
 
     public abstract List<ColumnDescriptor<E>> getColumnDescriptors();
 
+    public EntityMeta getEntityMeta() {
+        return entityPrototype.getEntityMeta();
+    }
+
+    public E proto() {
+        return entityPrototype;
+    }
+
     public void setPrevActionHandler(ClickHandler prevActionHandler) {
-        upperActionsBar.setPrevActionHandler(prevActionHandler);
-        lowerActionsBar.setPrevActionHandler(prevActionHandler);
+        topActionsBar.setPrevActionHandler(prevActionHandler);
+        bottomActionsBar.setPrevActionHandler(prevActionHandler);
     }
 
     public void setNextActionHandler(ClickHandler nextActionHandler) {
-        upperActionsBar.setNextActionHandler(nextActionHandler);
-        lowerActionsBar.setNextActionHandler(nextActionHandler);
+        topActionsBar.setNextActionHandler(nextActionHandler);
+        bottomActionsBar.setNextActionHandler(nextActionHandler);
     }
 
     public void setPageSizeOptions(List<Integer> pageSizeOptions) {
-        upperActionsBar.setPageSizeOptions(pageSizeOptions);
+        topActionsBar.setPageSizeOptions(pageSizeOptions);
     }
 
     public void setPageSizeActionHandler(ClickHandler clickHandler) {
-        upperActionsBar.setPageSizeActionHandler(clickHandler);
+        topActionsBar.setPageSizeActionHandler(clickHandler);
     }
 
     public Anchor insertUpperActionItem(String name, IDebugId debugId, ClickHandler handler) {
-        return upperActionsBar.insertActionItem(name, debugId, handler);
+        return topActionsBar.insertActionItem(name, debugId, handler);
     }
 
     public Anchor insertLowerActionItem(String name, IDebugId debugId, ClickHandler handler) {
-        return lowerActionsBar.insertActionItem(name, debugId, handler);
+        return bottomActionsBar.insertActionItem(name, debugId, handler);
     }
 
     public DataTable<E> getDataTable() {
         return dataTable;
+    }
+
+    public DataTableModel<E> getDataTableModel() {
+        return dataTableModel;
     }
 
     public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
@@ -127,10 +145,6 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         if (dataTableModel != null) {
             dataTableModel.clearData();
         }
-    }
-
-    public E proto() {
-        return entityPrototype;
     }
 
     public int getPageSize() {

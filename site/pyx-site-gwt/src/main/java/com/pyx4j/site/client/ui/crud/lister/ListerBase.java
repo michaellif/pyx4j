@@ -54,9 +54,9 @@ import com.pyx4j.entity.client.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
-import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
@@ -101,7 +101,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     protected Button btnApply;
 
-    protected final DataTablePanel<E> listPanel;
+    protected final DataTablePanel<E> dataTablePanel;
 
     private Class<? extends NavigNode> editorPage;
 
@@ -120,7 +120,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public ListerBase(Class<E> clazz) {
         setStyleName(DefaultListerTheme.StyleSuffix.Lister.name());
 
-        listPanel = new DataTablePanel<E>(clazz) {
+        dataTablePanel = new DataTablePanel<E>(clazz) {
             @Override
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
                 ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
@@ -139,27 +139,27 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 }
             }
         };
-        listPanel.setPrevActionHandler(new ClickHandler() {
+        dataTablePanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 onPrevPage();
             }
         });
-        listPanel.setNextActionHandler(new ClickHandler() {
+        dataTablePanel.setNextActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 onNextPage();
             }
         });
-        listPanel.getDataTable().setHasCheckboxColumn(true);
-        listPanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+        dataTablePanel.getDataTable().setHasCheckboxColumn(true);
+        dataTablePanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
             @Override
             public void onCheck(boolean isAnyChecked) {
                 setActionsActive(isAnyChecked);
             }
         });
-        listPanel.getDataTable().setHasColumnClickSorting(true);
-        listPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+        dataTablePanel.getDataTable().setHasColumnClickSorting(true);
+        dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
                 getPresenter().populate(getPageNumber());
@@ -167,13 +167,13 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         });
 
         showColumnSelector(true);
-        listPanel.removeUpperActionsBar();
-        listPanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
-        listPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerListPanel.name());
-        listPanel.getDataTable().setHasCheckboxColumn(false);
-        listPanel.getDataTable().setMarkSelectedRow(false);
-        listPanel.getDataTable().setAutoColumnsWidth(true);
-        listPanel.getDataTable().renderTable();
+        dataTablePanel.removeUpperActionsBar();
+        dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
+        dataTablePanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerListPanel.name());
+        dataTablePanel.getDataTable().setHasCheckboxColumn(false);
+        dataTablePanel.getDataTable().setMarkSelectedRow(false);
+        dataTablePanel.getDataTable().setAutoColumnsWidth(true);
+        dataTablePanel.getDataTable().renderTable();
 
         // actions & filters:
         actionsPanel = new HorizontalPanel();
@@ -198,7 +198,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         // put UI bricks together:
         add(actionsPanel);
         add(filtersPanel);
-        add(listPanel);
+        add(dataTablePanel);
         setWidth("100%");
     }
 
@@ -218,10 +218,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         if (itemOpenPlaceClass != null) {
             // item selection stuff:
-            listPanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
+            dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
                 @Override
                 public void onSelect(int selectedRow) {
-                    E item = getListPanel().getDataTable().getSelectedItem();
+                    E item = getDataTablePanel().getDataTable().getSelectedItem();
                     if (item != null) {
                         onItemSelect(item);
                     }
@@ -262,41 +262,41 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public void showColumnSelector(boolean show) {
         if (show) {
             ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-            fillAvailableColumnDescriptors(columnDescriptors, listPanel.proto());
-            listPanel.getDataTable().setColumnSelector(columnDescriptors);
+            fillAvailableColumnDescriptors(columnDescriptors, getDataTablePanel().proto());
+            dataTablePanel.getDataTable().setColumnSelector(columnDescriptors);
         } else {
-            listPanel.getDataTable().setColumnSelector(null);
+            dataTablePanel.getDataTable().setColumnSelector(null);
         }
     }
 
     // selection/checking stuff:
 
     public boolean isSelectable() {
-        return listPanel.getDataTable().isMarkSelectedRow();
+        return dataTablePanel.getDataTable().isMarkSelectedRow();
     }
 
     public void setSelectable(boolean isSelectable) {
-        listPanel.getDataTable().setMarkSelectedRow(isSelectable);
+        dataTablePanel.getDataTable().setMarkSelectedRow(isSelectable);
     }
 
     public boolean isMultiSelect() {
-        return listPanel.getDataTable().isMultiSelect();
+        return dataTablePanel.getDataTable().isMultiSelect();
     }
 
     public void setMultiSelect(boolean isMultiSelect) {
-        listPanel.getDataTable().setMultiSelect(isMultiSelect);
+        dataTablePanel.getDataTable().setMultiSelect(isMultiSelect);
     }
 
     public void releaseSelection() {
-        listPanel.getDataTable().releaseSelection();
+        dataTablePanel.getDataTable().releaseSelection();
     }
 
     public E getSelectedItem() {
-        return listPanel.getDataTable().getSelectedItem();
+        return dataTablePanel.getDataTable().getSelectedItem();
     }
 
     public List<E> getSelectedItems() {
-        return listPanel.getDataTable().getSelectedItems();
+        return dataTablePanel.getDataTable().getSelectedItems();
     }
 
     public void setSelectedItem(E item) {
@@ -309,12 +309,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         }
 
         itemSelectionHandlers.add(handler);
-        listPanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
+        dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
             @Override
             public void onSelect(int selectedRow) {
                 if (itemSelectionHandlers != null) {
                     for (ItemSelectionHandler<E> handler : itemSelectionHandlers) {
-                        handler.onSelect(listPanel.getDataTable().getSelectedItem());
+                        handler.onSelect(dataTablePanel.getDataTable().getSelectedItem());
                     }
                 }
             }
@@ -322,15 +322,15 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     public boolean hasCheckboxColumn() {
-        return listPanel.getDataTable().hasCheckboxColumn();
+        return dataTablePanel.getDataTable().hasCheckboxColumn();
     }
 
     public void setHasCheckboxColumn(boolean hasCheckboxColumn) {
-        listPanel.getDataTable().setHasCheckboxColumn(hasCheckboxColumn);
+        dataTablePanel.getDataTable().setHasCheckboxColumn(hasCheckboxColumn);
     }
 
     public List<E> getCheckedItems() {
-        return listPanel.getDataTable().getCheckedItems();
+        return dataTablePanel.getDataTable().getCheckedItems();
     }
 
     // Memento:
@@ -368,15 +368,15 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getLister().setFiltering(null);
         getLister().setSorting(null);
 
-        getLister().getListPanel().getDataTable().clearTable();
+        getLister().getDataTablePanel().getDataTable().clearTable();
 
         // should be called last:
         getPresenter().populate(0);
     }
 
     // EntityListPanel access:
-    public DataTablePanel<E> getListPanel() {
-        return listPanel;
+    public DataTablePanel<E> getDataTablePanel() {
+        return dataTablePanel;
     }
 
     /**
@@ -390,7 +390,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
      * Note, that it's called from within constructor!
      */
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto) {
-        columnDescriptors.addAll(listPanel.getDataTable().getDataTableModel().getColumnDescriptors());
+        columnDescriptors.addAll(dataTablePanel.getDataTableModel().getColumnDescriptors());
     }
 
     // Actions:
@@ -431,18 +431,18 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     @Override
     public int getPageSize() {
-        return getListPanel().getPageSize();
+        return getDataTablePanel().getPageSize();
     }
 
     @Override
     public int getPageNumber() {
-        return getListPanel().getPageNumber();
+        return getDataTablePanel().getPageNumber();
     }
 
     @Override
     public void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
         setActionsActive(false);
-        getListPanel().populateData(entityes, pageNumber, hasMoreData, totalRows);
+        getDataTablePanel().populateData(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     @Override
@@ -459,11 +459,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public List<Sort> getSorting() {
 
         sorting = new ArrayList<Sort>(2);
-        ColumnDescriptor<E> primarySortColumn = getListPanel().getDataTable().getDataTableModel().getSortColumn();
+        ColumnDescriptor<E> primarySortColumn = getDataTablePanel().getDataTableModel().getSortColumn();
         if (primarySortColumn != null) {
             sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
         }
-        ColumnDescriptor<E> secondarySortColumn = getListPanel().getDataTable().getDataTableModel().getSecondarySortColumn();
+        ColumnDescriptor<E> secondarySortColumn = getDataTablePanel().getDataTableModel().getSecondarySortColumn();
         if (secondarySortColumn != null) {
             sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
         }
@@ -473,20 +473,20 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     @Override
     public void setSorting(List<Sort> sorts) {
 
-        getListPanel().getDataTable().getDataTableModel().setSortColumn(null);
-        getListPanel().getDataTable().getDataTableModel().setSecondarySortColumn(null);
+        getDataTablePanel().getDataTableModel().setSortColumn(null);
+        getDataTablePanel().getDataTableModel().setSecondarySortColumn(null);
 
         if (sorts != null) {
             boolean primarySet = false;
             for (Sort sort : sorts) {
-                for (ColumnDescriptor<E> column : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
+                for (ColumnDescriptor<E> column : getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
                     if (column.getColumnName().compareTo(sort.getPropertyName()) == 0) {
                         column.setSortAscending(!sort.isDescending());
                         if (!primarySet) {
-                            getListPanel().getDataTable().getDataTableModel().setSortColumn(column);
+                            getDataTablePanel().getDataTableModel().setSortColumn(column);
                             primarySet = true;
                         } else {
-                            getListPanel().getDataTable().getDataTableModel().setSecondarySortColumn(column);
+                            getDataTablePanel().getDataTableModel().setSecondarySortColumn(column);
                         }
                     }
                 }
@@ -503,11 +503,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
      * Override in derived class to fill pages with data.
      */
     protected void onPrevPage() {
-        getPresenter().populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() - 1);
+        getPresenter().populate(getDataTablePanel().getDataTableModel().getPageNumber() - 1);
     }
 
     protected void onNextPage() {
-        getPresenter().populate(getListPanel().getDataTable().getDataTableModel().getPageNumber() + 1);
+        getPresenter().populate(getDataTablePanel().getDataTableModel().getPageNumber() + 1);
     }
 
     private void setActionsActive(boolean active) {
@@ -643,7 +643,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 formatCell(wrap);
 
                 Collection<FieldData> fds = new ArrayList<FieldData>();
-                for (ColumnDescriptor<E> cd : getListPanel().getDataTable().getDataTableModel().getColumnDescriptors()) {
+                for (ColumnDescriptor<E> cd : getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
                     fds.add(new FieldData(cd));
                 }
 
@@ -718,7 +718,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             @SuppressWarnings({ "unchecked", "rawtypes" })
             private void setValueHolder(String valuePath, Serializable value) {
 
-                IObject<?> member = getListPanel().proto().getMember(new Path(valuePath));
+                IObject<?> member = getDataTablePanel().proto().getMember(new Path(valuePath));
                 CComponent comp = compFactory.create(member);
                 comp.setValue(value);
                 valueHolder.setWidget(comp);
@@ -747,6 +747,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public void setEditorPageType(Class<? extends NavigNode> editorPage) {
         this.editorPage = editorPage;
         //TODO change Cursor style to arrow
-        listPanel.getDataTable().setHasDetailsNavigation(this.editorPage != null);
+        dataTablePanel.getDataTable().setHasDetailsNavigation(this.editorPage != null);
     }
 }
