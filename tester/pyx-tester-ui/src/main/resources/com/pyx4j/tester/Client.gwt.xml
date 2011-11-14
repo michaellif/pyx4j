@@ -7,11 +7,19 @@
     <inherits name='com.pyx4j.site.GwtSite' />
     
     <inherits name='com.pyx4j.tester.Shared'/>
-    
-    <source path="client"/>
+
+    <inherits name="com.google.gwt.i18n.I18N"/>
+
+    <extend-property name="locale" values="en_US"/>
+    <set-property-fallback name="locale" value="en_US"/>
+    <set-property name="locale" value="en_US"/>
+    <set-configuration-property name="pyx.locale.default" value="en_US"/>
+
+    <source path="client"/>    
     
     <entry-point class='com.pyx4j.tester.client.TesterSite'/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.tester.client.*" />
+   
     
 </module>

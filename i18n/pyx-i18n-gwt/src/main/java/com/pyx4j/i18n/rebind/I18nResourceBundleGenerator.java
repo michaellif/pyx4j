@@ -112,7 +112,12 @@ public class I18nResourceBundleGenerator extends Generator {
         try {
             po = new POFileReader().readResource("translations/" + locale + ".po");
         } catch (IOException e) {
-            logger.log(TreeLogger.ERROR, "Could load locale resources", e);
+            logger.log(TreeLogger.ERROR, "Couldn't load locale resources", e);
+            throw new UnableToCompleteException();
+        }
+
+        if (po == null) {
+            logger.log(TreeLogger.ERROR, "Couldn't find locale resources");
             throw new UnableToCompleteException();
         }
 
