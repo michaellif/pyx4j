@@ -74,7 +74,6 @@ public class TesterTheme extends Theme {
         initMenuBarStyles();
         initTabPanelStyles();
         initDialogBoxStyles();
-        initDialogPanelStyles();
         initGwtButtonStyles();
         initComboBoxStyles();
         initButtonStyles();
@@ -284,30 +283,6 @@ public class TesterTheme extends Theme {
         style.addProperty("opacity", "0.1");
         style.addProperty("filter", "alpha(opacity=10)");
         style.addProperty("z-index", "20");
-        addStyle(style);
-    }
-
-    protected void initDialogPanelStyles() {
-        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog));
-        style.addProperty("background-color", ThemeColors.SELECTION);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Caption));
-        style.addProperty("background", ThemeColors.SELECTION);
-        style.addProperty("filter", "alpha(opacity=95)");
-        style.addProperty("opacity", "0.95");
-        style.addProperty("color", ThemeColors.SELECTION_TEXT);
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Resizer));
-        style.addProperty("background", ThemeColors.SELECTION);
-        style.addProperty("filter", "alpha(opacity=95)");
-        style.addProperty("opacity", "0.95");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Content));
-        style.addProperty("background-color", ThemeColors.TEXT_BACKGROUND);
         addStyle(style);
     }
 

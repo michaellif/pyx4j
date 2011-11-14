@@ -47,8 +47,6 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.CSSClass;
-
 public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMoveHandler, MouseUpHandler, MouseDownHandler {
 
     private static final Logger log = LoggerFactory.getLogger(DialogPanel.class);
@@ -122,7 +120,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
 
     public DialogPanel(boolean autoHide, boolean modal) {
         super(autoHide, modal);
-        setStylePrimaryName(CSSClass.pyx4j_Dialog.name());
+        setStylePrimaryName(DefaultDialogTheme.StyleName.Dialog.name());
 
         getElement().getStyle().setProperty("zIndex", "20");
 
@@ -155,7 +153,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         container.add(contentWidget, DockPanel.CENTER);
         contentWidget.setSize("100%", "100%");
 
-        contentWidget.setStylePrimaryName(CSSClass.pyx4j_Dialog_Content.name());
+        contentWidget.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
         container.setCellHeight(contentWidget, "100%");
 
     }
@@ -176,6 +174,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         updateClientWindowPosition();
         if (resizeHandlerRegistration == null) {
             resizeHandlerRegistration = Window.addResizeHandler(new ResizeHandler() {
+                @Override
                 public void onResize(ResizeEvent event) {
                     updateClientWindowPosition();
                 }
@@ -360,7 +359,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
 
         public CaptionPanel() {
             setWordWrap(false);
-            setStylePrimaryName(CSSClass.pyx4j_Dialog_Caption.name());
+            setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCaption.name());
             setHeight("22px");
             DOM.setStyleAttribute(this.getElement(), "cursor", "move");
 
