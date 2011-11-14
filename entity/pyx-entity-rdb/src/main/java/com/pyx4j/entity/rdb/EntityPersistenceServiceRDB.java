@@ -320,13 +320,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
      * @deprecated do not use unless told to do so!
      */
     @Deprecated
-    public <T extends IEntity> void persistListOneLevel(Iterable<T> entityIterable) {
+    public <T extends IEntity> void persistListOneLevel(Iterable<T> entityIterable, boolean returnId) {
         Connection connection = null;
         try {
             if (entityIterable.iterator().hasNext()) {
                 connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
                 T entity = entityIterable.iterator().next();
-                persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow(), false);
+                persist(connection, tableModel(connection, entity.getEntityMeta()), entityIterable, DateUtils.getRoundedNow(), returnId);
             }
         } finally {
             SQLUtils.closeQuietly(connection);
