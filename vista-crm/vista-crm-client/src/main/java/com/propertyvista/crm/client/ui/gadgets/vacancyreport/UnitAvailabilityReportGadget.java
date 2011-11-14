@@ -96,6 +96,11 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
                 return defaultColumns;
             }
 
+            @Override
+            protected void onSelect(int selectedRow) {
+                //TODO make gadget navigable
+            }
+
         };
         unitListPanel.setPrevActionHandler(new ClickHandler() {
             @Override
