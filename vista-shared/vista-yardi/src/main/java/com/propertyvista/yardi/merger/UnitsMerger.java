@@ -119,8 +119,8 @@ public class UnitsMerger {
         existing.marketing().name().setValue(imported.marketing().name().getValue());
 
         // financial
-        existing.financial().unitRent().setValue(imported.financial().unitRent().getValue());
-        existing.financial().marketRent().setValue(imported.financial().marketRent().getValue());
+        existing.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
+        existing.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
     }
 
     private void merge(AptUnitInfo imported, AptUnitInfo existing) {

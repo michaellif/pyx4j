@@ -94,7 +94,7 @@ public class AptListPanel extends Panel {
 
                         Double minPrice = null;
                         for (AptUnit u : fpUnits.get(fp)) {
-                            Double _prc = u.financial().marketRent().getValue();
+                            Double _prc = u.financial()._marketRent().getValue();
                             if (minPrice == null || minPrice > _prc) {
                                 minPrice = _prc;
                             }

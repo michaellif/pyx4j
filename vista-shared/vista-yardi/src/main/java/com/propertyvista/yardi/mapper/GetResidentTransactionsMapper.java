@@ -106,8 +106,8 @@ public class GetResidentTransactionsMapper {
         unitTo.marketing().name().setValue(unitFrom.getUnit().getMarketingName());
 
         // financial
-        unitTo.financial().unitRent().setValue(info.getUnitRent());
-        unitTo.financial().marketRent().setValue(info.getMarketRent());
+        unitTo.financial()._unitRent().setValue(info.getUnitRent());
+        unitTo.financial()._marketRent().setValue(info.getMarketRent());
 
         model.getAptUnits().add(unitTo);
     }

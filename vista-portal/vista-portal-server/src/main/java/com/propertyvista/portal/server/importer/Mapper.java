@@ -175,7 +175,7 @@ public class Mapper {
         unit.info().number().setValue(availableUnit.getUnitNumber());
         unit.info().area().setValue(availableUnit.getArea());
         unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
-        unit.financial().unitRent().setValue(availableUnit.getRent());
+        unit.financial()._unitRent().setValue(availableUnit.getRent());
 
         // unit.info().floor().setValue(floor);
 

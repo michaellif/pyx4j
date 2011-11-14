@@ -27,11 +27,14 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.Service.Type;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ServiceCatalogGenerator {
 
@@ -134,14 +137,9 @@ public class ServiceCatalogGenerator {
         int count = 0;
         switch (type) {
         case residentialUnit:
-            count = 20;
-            break;
         case residentialShortTermUnit:
-            count = 10;
-            break;
         case commercialUnit:
-            count = 5;
-            break;
+            return new ArrayList<ServiceItem>();
         case roof:
         case garage:
         case storage:
@@ -282,6 +280,53 @@ public class ServiceCatalogGenerator {
                 items.add(RandomUtil.random(allowedItemTypes, "ExcludedUtilities", maxItems));
             }
         }
+
+        return items;
+    }
+
+    private Service getService(ServiceCatalog catalog, Service.Type type) {
+        for (Service service : catalog.services()) {
+            if (service.type().getValue().equals(type)) {
+                return service;
+            }
+        }
+        throw new Error("Service of type " + type + " not found");
+    }
+
+    private List<ServiceItemType> getServiceItemTypes(ServiceCatalog catalog, Service.Type type) {
+        List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
+        for (ServiceItemType itemType : getServiceItemTypes()) {
+            if (type.equals(itemType.serviceType().getValue())) {
+                allowedItemTypes.add(itemType);
+            }
+        }
+        return allowedItemTypes;
+    }
+
+    public List<ServiceItem> createAptUnitServices(ServiceCatalog catalog, AptUnit unit) {
+        Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
+        return createBuildingElementServices(catalog, unit, type);
+    }
+
+    public List<ServiceItem> createBuildingElementServices(ServiceCatalog catalog, BuildingElement buildingElement, Service.Type type) {
+        Service service = getService(catalog, type);
+        List<ServiceItemType> allowedItemTypes = getServiceItemTypes(catalog, type);
+
+        List<ServiceItem> items = new ArrayList<ServiceItem>();
+
+        ServiceItem item = EntityFactory.create(ServiceItem.class);
+        ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
+
+        item.type().set(selectedItem);
+        item.type().name().setValue(selectedItem.getStringView());
+        item.type().serviceType().setValue(selectedItem.serviceType().getValue());
+
+        item.price().setValue(500d + RandomUtil.randomInt(500));
+        item.description().setValue(type.toString() + " description here...");
+        item.element().set(buildingElement);
+
+        service.items().add(item);
+        items.add(item);
 
         return items;
     }

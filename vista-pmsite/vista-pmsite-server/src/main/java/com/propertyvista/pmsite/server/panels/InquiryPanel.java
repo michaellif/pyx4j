@@ -140,7 +140,7 @@ public class InquiryPanel extends Panel {
         for (Floorplan p : PMSiteContentManager.getBuildingFloorplans(bld).keySet()) {
             Double minPrice = null;
             for (AptUnit u : PMSiteContentManager.getBuildingAptUnits(p.building(), p)) {
-                Double _prc = u.financial().marketRent().getValue();
+                Double _prc = u.financial()._marketRent().getValue();
                 if (minPrice == null || minPrice > _prc) {
                     minPrice = _prc;
                 }

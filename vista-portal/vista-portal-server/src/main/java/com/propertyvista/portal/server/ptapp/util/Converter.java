@@ -114,7 +114,7 @@ public class Converter {
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
             for (AptUnit unit : Persistence.service().query(criteria)) {
-                Double _prc = unit.financial().marketRent().getValue();
+                Double _prc = unit.financial()._marketRent().getValue();
                 if (minPrice == null || minPrice > _prc) {
                     minPrice = _prc;
                 }

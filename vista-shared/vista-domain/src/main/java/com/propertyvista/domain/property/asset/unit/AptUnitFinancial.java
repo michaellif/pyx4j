@@ -19,9 +19,15 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface AptUnitFinancial extends IEntity {
 
+    /**
+     * TODO Should be updated when Lease for this Unit is saved.
+     */
     @Format("#0.00")
-    IPrimitive<Double> unitRent();
+    IPrimitive<Double> _unitRent();
 
+    /**
+     * TODO Should be updated when ServiceItem for this Unit is saved.
+     */
     @Format("#0.00")
-    IPrimitive<Double> marketRent();
+    IPrimitive<Double> _marketRent();
 }

@@ -76,7 +76,7 @@ public class FloorplanInfoPanel extends Panel {
         // get price range
         Double minPrice = null, maxPrice = null;
         for (AptUnit u : fpUnits) {
-            Double _prc = u.financial().marketRent().getValue();
+            Double _prc = u.financial()._marketRent().getValue();
             if (minPrice == null || minPrice > _prc) {
                 minPrice = _prc;
             }

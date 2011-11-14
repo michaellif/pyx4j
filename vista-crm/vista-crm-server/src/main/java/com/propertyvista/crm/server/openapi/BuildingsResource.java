@@ -206,8 +206,8 @@ public class BuildingsResource {
                         for (AptUnit u : Persistence.service().query(criteria)) {
                             floorplanRS.unitCount++;
 
-                            floorplanRS.rentFrom = DomainUtil.min(floorplanRS.rentFrom, u.financial().marketRent().getValue());
-                            floorplanRS.rentTo = DomainUtil.max(floorplanRS.rentTo, u.financial().marketRent().getValue());
+                            floorplanRS.rentFrom = DomainUtil.min(floorplanRS.rentFrom, u.financial()._marketRent().getValue());
+                            floorplanRS.rentTo = DomainUtil.max(floorplanRS.rentTo, u.financial()._marketRent().getValue());
                             floorplanRS.sqftFrom = DomainUtil.min(floorplanRS.sqftFrom, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
                             floorplanRS.sqftTo = DomainUtil.max(floorplanRS.sqftTo, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
 

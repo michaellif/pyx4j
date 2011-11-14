@@ -103,7 +103,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             serviceItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
         }
 
-        ServiceCatalogGenerator pmcGenerator = new ServiceCatalogGenerator(serviceItemTypes);
+        ServiceCatalogGenerator serviceCatalogGenerator = new ServiceCatalogGenerator(serviceItemTypes);
 
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         Persistence.service().persist(leaseTerms);
@@ -166,7 +166,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             catalog.belongsTo().set(building);
             Persistence.service().persist(catalog);
 
-            pmcGenerator.createServiceCatalog(catalog);
+            serviceCatalogGenerator.createServiceCatalog(catalog);
 
             Persistence.service().persist(catalog.features());
             Persistence.service().persist(catalog.concessions());
@@ -259,6 +259,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             List<UnitRelatedData> units = generator.createUnits(building, floorplans, config().getNumFloors(), config().getNumUnitsPerFloor());
             unitCount += units.size();
             for (UnitRelatedData unitData : units) {
+
+                List<ServiceItem> serviceItems = serviceCatalogGenerator.createAptUnitServices(catalog, unitData.unit());
+
                 // persist plain internal lists:
 
                 Persistence.service().persist(unitData.unit());
@@ -266,13 +269,13 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 // persist internal lists and with belongness:
                 Persistence.service().persist(unitData.occupancies());
                 Persistence.service().persist(unitData.details());
+                Persistence.service().persist(serviceItems);
             }
 
-            // fill Service Catalog with building elements:
+            // Save the ServiceItem references
+            Persistence.service().persist(catalog.services());
 
-            EntityQueryCriteria<AptUnit> buildingUnitsCriteria = EntityQueryCriteria.create(AptUnit.class);
-            buildingUnitsCriteria.add(PropertyCriterion.eq(buildingUnitsCriteria.proto().belongsTo(), building));
-            List<AptUnit> buildingUnits = Persistence.service().query(buildingUnitsCriteria);
+            // fill Service Catalog with building elements:
 
             EntityQueryCriteria<Parking> buildingParkingsCriteria = EntityQueryCriteria.create(Parking.class);
             buildingParkingsCriteria.add(PropertyCriterion.eq(buildingParkingsCriteria.proto().belongsTo(), building));
@@ -288,14 +291,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             for (Service service : catalog.services()) {
                 switch (service.type().getValue()) {
-                case residentialUnit:
-                case residentialShortTermUnit:
-                case commercialUnit:
-                    for (ServiceItem item : service.items()) {
-                        item.element().set(RandomUtil.random(buildingUnits));
-                        Persistence.service().persist(item);
-                    }
-                    break;
                 case garage:
                     for (ServiceItem item : service.items()) {
                         item.element().set(RandomUtil.random(buildingParkings));

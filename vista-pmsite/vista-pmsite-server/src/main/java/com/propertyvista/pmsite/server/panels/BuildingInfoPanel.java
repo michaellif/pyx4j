@@ -72,7 +72,7 @@ public class BuildingInfoPanel extends Panel {
         final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(bld);
         for (Floorplan fp : fpUnits.keySet()) {
             for (AptUnit u : fpUnits.get(fp)) {
-                Double _prc = u.financial().marketRent().getValue();
+                Double _prc = u.financial()._marketRent().getValue();
                 if (minPrice == null || minPrice > _prc) {
                     minPrice = _prc;
                 }

@@ -183,8 +183,8 @@ public class XmlBeanTest {
 
             // financial
             AptUnitFinancial financial = unit.financial();
-            Assert.assertFalse(financial.unitRent().isNull());
-            Assert.assertFalse(financial.marketRent().isNull());
+            Assert.assertFalse(financial._unitRent().isNull());
+            Assert.assertFalse(financial._marketRent().isNull());
         }
 
         Assert.assertTrue("Has tenants", !mapper.getModel().getTenants().isEmpty());

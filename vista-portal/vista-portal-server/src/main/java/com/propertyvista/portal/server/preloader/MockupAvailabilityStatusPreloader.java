@@ -93,8 +93,8 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
                 status.unit().setValue(unit.info().number().getValue());
 
-                double unitRent = unit.financial().unitRent().isNull() ? 0d : unit.financial().unitRent().getValue();
-                double marketRent = status.belongsTo().financial().marketRent().isNull() ? 0d : unit.financial().marketRent().getValue();
+                double unitRent = unit.financial()._unitRent().isNull() ? 0d : unit.financial()._unitRent().getValue();
+                double marketRent = status.belongsTo().financial()._marketRent().isNull() ? 0d : unit.financial()._marketRent().getValue();
                 double rentDeltaAbsoute = marketRent - unitRent;
                 double rentDeltaRelative = marketRent == 0d ? 0d : rentDeltaAbsoute / marketRent * 100;
 

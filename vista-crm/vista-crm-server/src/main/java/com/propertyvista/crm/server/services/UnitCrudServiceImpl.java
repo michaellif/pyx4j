@@ -56,14 +56,14 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         }
 
         // Fill Unit financial data (transient):  
-        dto.financial().unitRent().setValue(0.0);
-        dto.financial().marketRent().setValue(0.0);
+        dto.financial()._unitRent().setValue(null);
+        dto.financial()._marketRent().setValue(null);
 
         EntityQueryCriteria<ServiceItem> serviceItemCriteria = new EntityQueryCriteria<ServiceItem>(ServiceItem.class);
         serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().element(), in));
         ServiceItem item = Persistence.service().retrieve(serviceItemCriteria);
         if (item != null) {
-            dto.financial().marketRent().setValue(item.price().getValue());
+            dto.financial()._marketRent().setValue(item.price().getValue());
         }
 
         EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
@@ -71,7 +71,7 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         Lease lease = Persistence.service().retrieve(leaseCriteria);
         if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
-            dto.financial().unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
+            dto.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
         }
     }
 

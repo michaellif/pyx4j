@@ -139,8 +139,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().unitRent(), new CNumberLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().marketRent(), new CNumberLabel()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent(), new CNumberLabel()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent(), new CNumberLabel()), 10).build());
 
         return new CrmScrollPanel(main);
     }
