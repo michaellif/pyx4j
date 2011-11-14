@@ -30,7 +30,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
@@ -68,7 +68,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         lease.tenants().clear();
 
         TenantInApplicationListDTO currentTenants = EntityFactory.create(TenantInApplicationListDTO.class);
-        for (TenantInApplicationDTO tenantInApplication : tenants.tenants()) {
+        for (TenantInLeaseDTO tenantInApplication : tenants.tenants()) {
             // Find existing record
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
             tenantInLease.setPrimaryKey(tenantInApplication.getPrimaryKey());
@@ -77,13 +77,13 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
                 if (!tenantInApplication.id().isNull()) {
                     throw new SecurityViolationException("Invalid data access");
                 }
-                tenantInApplication.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.New);
+                tenantInApplication.changeStatus().setValue(TenantInLeaseDTO.ChangeStatus.New);
             } else {
                 existingTenants.remove(idx);
                 Persistence.service().retrieve(tenantInLease);
                 if (!EntityGraph.memebersEquals(tenantInApplication.person().name(), tenantInLease.tenant().person().name(), tenantInApplication.person()
                         .name().firstName(), tenantInApplication.person().name().middleName(), tenantInApplication.person().name().lastName())) {
-                    tenantInApplication.changeStatus().setValue(TenantInApplicationDTO.ChangeStatus.Updated);
+                    tenantInApplication.changeStatus().setValue(TenantInLeaseDTO.ChangeStatus.Updated);
                 }
             }
 

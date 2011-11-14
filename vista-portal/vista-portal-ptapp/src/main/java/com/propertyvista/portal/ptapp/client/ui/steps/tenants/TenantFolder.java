@@ -38,16 +38,14 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
-import com.propertyvista.domain.tenant.TenantIn;
-import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 
-public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
+public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
     public TenantFolder(boolean modifyable) {
-        super(TenantInApplicationDTO.class, modifyable);
+        super(TenantInLeaseDTO.class, modifyable);
     }
 
     @Override
@@ -61,8 +59,8 @@ public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
     }
 
     @Override
-    protected CEntityFolderItem<TenantInApplicationDTO> createItem(boolean first) {
-        CEntityFolderItem<TenantInApplicationDTO> item = super.createItem(first);
+    protected CEntityFolderItem<TenantInLeaseDTO> createItem(boolean first) {
+        CEntityFolderItem<TenantInLeaseDTO> item = super.createItem(first);
         item.setRemovable(!first);
         item.setMovable(!first);
         return item;
@@ -82,12 +80,12 @@ public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
         return columns;
     }
 
-    private class TenantEditor extends CEntityFolderRowEditor<TenantInApplicationDTO> {
+    private class TenantEditor extends CEntityFolderRowEditor<TenantInLeaseDTO> {
 
         private final boolean first = false;
 
         public TenantEditor() {
-            super(TenantInApplicationDTO.class, columns());
+            super(TenantInLeaseDTO.class, columns());
         }
 
         @SuppressWarnings("rawtypes")
@@ -139,7 +137,7 @@ public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
                 get(proto().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                        TenantIn.Status status = getValue().status().getValue();
+                        TenantInLease.Status status = getValue().status().getValue();
                         if ((status == null) || (status == TenantInLease.Status.Dependant)) {
                             if (ValidationUtils.isOlderThen18(event.getValue())) {
                                 boolean currentEditableState = get(proto().status()).isEditable();
@@ -159,9 +157,9 @@ public class TenantFolder extends VistaTableFolder<TenantInApplicationDTO> {
         }
 
         @Override
-        public void populate(TenantInApplicationDTO value) {
+        public void populate(TenantInLeaseDTO value) {
             super.populate(value);
-            boolean applicant = Status.Applicant.equals(value.status().getValue());
+            boolean applicant = TenantInLease.Status.Applicant.equals(value.status().getValue());
             if (!applicant && !value.person().birthDate().isNull()) {
                 if (ValidationUtils.isOlderThen18(value.person().birthDate().getValue())) {
                     enableStatusAndOwnership();

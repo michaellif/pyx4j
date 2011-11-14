@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 
-import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -38,7 +37,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
 
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.status().getValue() == Status.Applicant) {
+        if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
             return true;
         } else {
             return TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18);
@@ -118,7 +117,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     private static void resetPaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {
         charges.paymentSplitCharges().charges().clear();
         for (TenantInLease tenant : tenants) {
-            Status status = tenant.status().getValue();
+            TenantInLease.Status status = tenant.status().getValue();
             log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.tenant().person().birthDate()
                     .getValue());
 
@@ -128,7 +127,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             }
 
             int percentage = 0;
-            if (status == Status.Applicant) {
+            if (status == TenantInLease.Status.Applicant) {
                 percentage = 100;
             }
             TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, 0);

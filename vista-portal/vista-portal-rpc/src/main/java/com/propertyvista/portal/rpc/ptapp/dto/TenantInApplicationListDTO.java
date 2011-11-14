@@ -27,7 +27,7 @@ public interface TenantInApplicationListDTO extends IEntity, IBoundToApplication
 
     @Owned
     @Length(6)
-    IList<TenantInApplicationDTO> tenants();
+    IList<TenantInLeaseDTO> tenants();
 
     //TODO this should be AptUnit property
     @Transient

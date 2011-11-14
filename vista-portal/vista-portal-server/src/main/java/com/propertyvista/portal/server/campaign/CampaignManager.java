@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.callfire.CallFire;
-import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
@@ -40,16 +39,16 @@ public class CampaignManager {
 
     public static void fireEvent(CampaignTrigger trigger, TenantInLeaseListDTO tenants) {
         for (TenantInLease tenantInfo : tenants.tenants()) {
-            Status status = tenantInfo.status().getValue();
+            TenantInLease.Status status = tenantInfo.status().getValue();
 
             switch (trigger) {
             case ApplicationCompleated:
-                if (Status.Applicant.equals(status)) {
+                if (TenantInLease.Status.Applicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
                 break;
             default:
-                if (Status.Applicant.equals(status) || Status.CoApplicant.equals(status)) {
+                if (TenantInLease.Status.Applicant.equals(status) || TenantInLease.Status.CoApplicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
             }

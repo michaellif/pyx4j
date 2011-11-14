@@ -42,7 +42,7 @@ import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
@@ -70,19 +70,19 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
         TenantInApplicationListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
         int num = 0;
-        for (TenantInApplicationDTO tenant : tenants.tenants()) {
+        for (TenantInLeaseDTO tenant : tenants.tenants()) {
             assertTenantRow(D.id(proto(TenantInApplicationListDTO.class).tenants(), num), detach(tenant), (num != 0));
             num++;
         }
 
-        assertNotPresent(D.id(proto(TenantInApplicationListDTO.class).tenants(), num, proto(TenantInApplicationDTO.class).person().name().firstName()));
+        assertNotPresent(D.id(proto(TenantInApplicationListDTO.class).tenants(), num, proto(TenantInLeaseDTO.class).person().name().firstName()));
 
         if (doSave) {
             saveAndContinue();
         }
     }
 
-    protected void assertTenantRow(IDebugId formDebugId, TenantInApplicationDTO tenant, boolean fullInfo) {
+    protected void assertTenantRow(IDebugId formDebugId, TenantInLeaseDTO tenant, boolean fullInfo) {
         assertValueOnForm(formDebugId, tenant.person().name().firstName());
         assertValueOnForm(formDebugId, tenant.person().name().lastName());
         assertValueOnForm(formDebugId, tenant.person().name().middleName());

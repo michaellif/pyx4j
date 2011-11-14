@@ -53,7 +53,7 @@ import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.server.ptapp.util.TenantConverter;
@@ -142,7 +142,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     private void enterTenantsPage(List<TenantSummaryGDO> tenantsSummaryList) {
         int num = 0;
         TenantInApplicationListDTO tenants = TenantTestAdapter.getTenantListEditorDTO(tenantsSummaryList);
-        for (TenantInApplicationDTO tenant : tenants.tenants()) {
+        for (TenantInLeaseDTO tenant : tenants.tenants()) {
             if (num != 0) {
                 selenium.click(D.id(proto(TenantInApplicationListDTO.class).tenants(), FormNavigationDebugId.Form_Add));
             }
@@ -152,7 +152,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         saveAndContinue();
     }
 
-    private void enterTenantRow(IDebugId fromDebugId, TenantInApplicationDTO tenant, boolean fullInfo) {
+    private void enterTenantRow(IDebugId fromDebugId, TenantInLeaseDTO tenant, boolean fullInfo) {
         setValueOnForm(fromDebugId, tenant.person().name().firstName());
         setValueOnForm(fromDebugId, tenant.person().name().lastName());
         setValueOnForm(fromDebugId, tenant.person().name().middleName());

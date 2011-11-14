@@ -22,7 +22,6 @@ import com.pyx4j.forms.client.ui.CCompDebugId;
 import com.pyx4j.selenium.D;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 
@@ -99,7 +98,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDateAndClick(datePickerId(index), calendar);
-        setStatus(index, Status.Dependant);
+        setStatus(index, TenantInLease.Status.Dependant);
         calendar.add(Calendar.YEAR, 10);
         navigateToDateAndClick(datePickerId(index), calendar);
         assertNotEditable(statusId(index));
@@ -110,7 +109,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         navigateToDateAndClick(datePickerId(index), calendar);
         assertEditable(statusId(index));
         assertEditable(ownershipId(index));
-        setStatus(index, Status.Dependant);
+        setStatus(index, TenantInLease.Status.Dependant);
         //TODO 
         //ask anya about this test
         //assertEquals("off", selenium.getValue(ownershipId(index)));
@@ -122,7 +121,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDate(datePickerId(index), calendar);
-        setStatus(index, Status.CoApplicant);
+        setStatus(index, TenantInLease.Status.CoApplicant);
         validateBirthDateLessThen18(index);
     }
 
@@ -164,7 +163,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         selenium.click(lastNameId(index));
     }
 
-    private void setStatus(int index, Status status) {
+    private void setStatus(int index, TenantInLease.Status status) {
         selenium.setValue(statusId(index), status.toString());
     }
 

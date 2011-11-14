@@ -62,7 +62,7 @@ import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.domain.tenant.TenantIn.Status;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialViewForm;
@@ -71,7 +71,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantFolder;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
@@ -424,8 +424,8 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         if (CommonsStringUtils.isEmpty(signature)) {
             return false;
         }
-        for (TenantInApplicationDTO pti : getValue().tenantList().tenants()) {
-            if (pti.status().getValue() == Status.Applicant) {
+        for (TenantInLeaseDTO pti : getValue().tenantList().tenants()) {
+            if (pti.status().getValue() == TenantInLease.Status.Applicant) {
                 return isCombinationMatch(signature, pti.person().name().firstName(), pti.person().name().lastName(), pti.person().name().middleName());
             }
         }

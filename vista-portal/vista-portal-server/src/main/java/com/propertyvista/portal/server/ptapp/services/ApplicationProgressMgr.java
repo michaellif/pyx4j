@@ -23,14 +23,12 @@ import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.domain.tenant.TenantIn;
-import com.propertyvista.domain.tenant.TenantIn.Status;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
 
@@ -47,7 +45,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
 
     public static boolean shouldEnterInformation(TenantInLease tenant) {
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.status().getValue() == Status.Applicant) {
+        if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
             return true;
         }
         if (!tenant.takeOwnership().isBooleanTrue()) {
@@ -67,9 +65,9 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         return (TimeUtils.isOlderThen(birthDate, 18));
     }
 
-    public static boolean shouldEnterInformation(TenantInApplicationDTO tenant, LogicalDate birthDate) {
+    public static boolean shouldEnterInformation(TenantInLeaseDTO tenant, LogicalDate birthDate) {
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.status().getValue() == TenantIn.Status.Applicant) {
+        if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
             return true;
         }
         if (!tenant.takeOwnership().isBooleanTrue()) {
@@ -89,7 +87,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         }
     }
 
-    public static void syncroizeApplicationProgress(List<TenantInApplicationDTO> tenants) {
+    public static void syncroizeApplicationProgress(List<TenantInLeaseDTO> tenants) {
         Application app = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
 
         ApplicationWizardStep infoStep = findWizardStep(app, PtSiteMap.Info.class);
@@ -100,7 +98,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
 
         infoStep.substeps().clear();
         financialStep.substeps().clear();
-        for (TenantInApplicationDTO tenant : tenants) {
+        for (TenantInLeaseDTO tenant : tenants) {
             if (shouldEnterInformation(tenant, tenant.person().birthDate().getValue())) {
                 ApplicationWizardSubstep infoSubstep = merge(tenant, infoSubSteps);
                 infoStep.substeps().add(infoSubstep);
@@ -152,7 +150,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
     }
 
     @SuppressWarnings("unchecked")
-    private static ApplicationWizardSubstep merge(TenantInApplicationDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
+    private static ApplicationWizardSubstep merge(TenantInLeaseDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
 
         ApplicationWizardSubstep step = EntityFactory.create(ApplicationWizardSubstep.class);
         //TODO serialize key.
@@ -168,7 +166,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
                 step.status().set(origStep.status());
 
                 // see if something changed between tenantNew and tenantOrig
-                if ((tenant.changeStatus().getValue() == TenantInApplicationDTO.ChangeStatus.Updated)
+                if ((tenant.changeStatus().getValue() == TenantInLeaseDTO.ChangeStatus.Updated)
                         && (step.status().getValue() == ApplicationWizardStep.Status.complete)) {
                     step.status().setValue(ApplicationWizardStep.Status.invalid);
                 }

@@ -19,15 +19,15 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
 public class TenantConverter {
 
-    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantInApplicationDTO> {
+    public static class TenantEditorConverter extends EntityDtoBinder<TenantInLease, TenantInLeaseDTO> {
 
         public TenantEditorConverter() {
-            super(TenantInLease.class, TenantInApplicationDTO.class);
+            super(TenantInLease.class, TenantInLeaseDTO.class);
         }
 
         @Override

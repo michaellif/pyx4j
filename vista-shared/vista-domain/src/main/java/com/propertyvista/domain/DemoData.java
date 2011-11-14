@@ -15,7 +15,7 @@ package com.propertyvista.domain;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
-import com.propertyvista.domain.tenant.TenantIn.Relationship;
+import com.propertyvista.domain.tenant.TenantInLease.Relationship;
 
 public class DemoData {
 

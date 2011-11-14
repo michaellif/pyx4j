@@ -37,7 +37,7 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -98,7 +98,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         retrieveApplicationEntity(summary.charges(), summary.application());
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
-            for (TenantInApplicationDTO tenant : summary.tenantList().tenants()) {
+            for (TenantInLeaseDTO tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
                     charge.tenantName().set(tenant.person().name());
                     continue loopOverTenantCharge;
