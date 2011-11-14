@@ -45,7 +45,9 @@ public class TenantsGenerator {
     public Tenant createTenant() {
         Tenant item = EntityFactory.create(Tenant.class);
 
-        item.type().setValue(RandomUtil.random(Tenant.Type.values()));
+// TODO currently create just person tenants!         
+        item.type().setValue(Tenant.Type.person);
+//        item.type().setValue(RandomUtil.random(Tenant.Type.values()));
         switch (item.type().getValue()) {
         case person:
             item.person().set(CommonsGenerator.createPerson());

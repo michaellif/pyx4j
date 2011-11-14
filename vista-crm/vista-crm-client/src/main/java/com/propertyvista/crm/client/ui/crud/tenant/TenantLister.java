@@ -31,6 +31,12 @@ public class TenantLister extends ListerBase<TenantDTO> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<TenantDTO>> columnDescriptors, TenantDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.displayName()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+        // TODO: currently we use just person tenant, so we'll display more data for them: 
+//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().birthDate()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().homePhone()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().mobilePhone()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().workPhone()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().email().address()));
     }
 }

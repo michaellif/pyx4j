@@ -56,8 +56,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
                 add(new BuildingPreloader());
             }
             // TODO move to if in pmcData
-            add(new PreloadTenants());
             add(new PtPreloader());
+            add(new PreloadTenants());
 
             add(new DevelopmentSecurityPreloader());
 
