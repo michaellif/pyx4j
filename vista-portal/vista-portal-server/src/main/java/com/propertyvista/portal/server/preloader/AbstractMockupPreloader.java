@@ -31,7 +31,11 @@ public abstract class AbstractMockupPreloader extends BaseVistaDevDataPreloader 
     public abstract String createMockup();
 
     protected <T extends IEntity> void persistArray(Iterable<T> entityIterable) {
-        ((EntityPersistenceServiceRDB) Persistence.service()).persistListOneLevel(entityIterable);
+        ((EntityPersistenceServiceRDB) Persistence.service()).persistListOneLevel(entityIterable, false);
+    }
+
+    protected <T extends IEntity> void persistArrayWithId(Iterable<T> entityIterable) {
+        ((EntityPersistenceServiceRDB) Persistence.service()).persistListOneLevel(entityIterable, true);
     }
 
 }
