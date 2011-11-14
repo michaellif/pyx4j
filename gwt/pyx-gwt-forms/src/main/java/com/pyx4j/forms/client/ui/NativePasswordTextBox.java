@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import com.pyx4j.forms.client.ui.NativeTextBox.StyleDependent;
 import com.pyx4j.widgets.client.PasswordTextBox;
 
 public class NativePasswordTextBox extends PasswordTextBox implements INativeTextComponent<String> {
@@ -77,9 +76,9 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
     @Override
     public void setValid(boolean valid) {
         if (valid) {
-            removeStyleDependentName(StyleDependent.invalid.name());
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         } else if (delegate.getCComponent().isVisited()) {
-            addStyleDependentName(StyleDependent.invalid.name());
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         }
     }
 

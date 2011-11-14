@@ -22,11 +22,9 @@ package com.pyx4j.widgets.client;
 
 public class ListBox extends com.google.gwt.user.client.ui.ListBox {
 
-    public static String DEFAULT_STYLE_PREFIX = "pyx4j_ListBox";
-
     public ListBox() {
         super();
-        setStyleName(DEFAULT_STYLE_PREFIX);
+        setStyleName(DefaultWidgetsTheme.StyleName.ListBox.name());
     }
 
 }

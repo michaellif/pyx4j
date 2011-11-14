@@ -20,16 +20,16 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.commons.css.CSSClass;
 
 public class TextArea extends com.google.gwt.user.client.ui.TextArea implements WatermarkComponent {
 
     private TextWatermark watermark;
 
     public TextArea() {
-        setStyleName(CSSClass.pyx4j_TextBox.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
     }
 
+    @Override
     public void setWatermark(String text) {
         if (watermark == null) {
             watermark = new TextWatermark(this) {

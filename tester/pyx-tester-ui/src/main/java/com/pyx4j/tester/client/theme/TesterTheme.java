@@ -26,15 +26,12 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
-import com.pyx4j.forms.client.ui.NativeComboBox;
-import com.pyx4j.forms.client.ui.NativeTextBox;
+import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class TesterTheme extends Theme {
 
@@ -63,6 +60,8 @@ public class TesterTheme extends Theme {
         });
 
         addTheme(new DefaultDatePickerTheme());
+        addTheme(new DefaultWidgetsTheme());
+        addTheme(new DefaultCCOmponentsTheme());
 
         initGeneralStyles();
         initBodyStyles();
@@ -80,9 +79,7 @@ public class TesterTheme extends Theme {
         initTooltipStyle();
         initTreeStyle();
         initGlassPanelStyle();
-        initTextBoxStyle();
         initCheckBoxStyle();
-        initListBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initPhotoalbomStyle();
@@ -506,80 +503,6 @@ public class TesterTheme extends Theme {
     protected void initCheckBoxStyle() {
         Style style = new Style(CSSClass.pyx4j_CheckBox);
         style.addProperty("margin", "40%");
-        addStyle(style);
-    }
-
-    protected void initTextBoxStyle() {
-
-        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_TextBox));
-
-// TODO check why is it necessary to add /1.4em parameter - it seems that IE9 uses it correctly and shifts TextBox text-line to the bottom,
-//      while all other browsers (Firefox, Chrome) or ignore it or thomehow different calculate text line position.
-//        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
-
-        style.addProperty("font", "12px Arial, Helvetica, sans-serif");
-        style.addProperty("color", ThemeColors.TEXT);
-        style.addProperty("background-color", ThemeColors.background);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.foreground);
-        if (!BrowserType.isIE7()) {
-            style.addProperty("padding", "2px 5px");
-        }
-        style.addProperty("box-sizing", "border-box");
-        style.addProperty("-moz-box-sizing", "border-box");
-        style.addProperty("-webkit-box-sizing", "border-box");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_TextBox, " td");
-        style.addProperty("padding", "0px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, TextBox.StyleDependent.watermark));
-        style.addProperty("color", "gray");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.disabled));
-        style.addProperty("background-color", "lightGray");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.readOnly));
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "none");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.invalid));
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", "#f79494");
-        style.addProperty("background-color", "#f8d8d8");
-        addStyle(style);
-
-    }
-
-    protected void initListBoxStyle() {
-        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.BORDER);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.disabled));
-        style.addProperty("background-color", "lightGray");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.readOnly));
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "none");
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE1);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX, null, NativeComboBox.StyleDependent.invalid));
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", "#f79494");
-        style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
     }
 

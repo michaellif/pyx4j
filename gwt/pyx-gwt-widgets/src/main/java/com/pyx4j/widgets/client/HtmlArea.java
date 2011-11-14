@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.commons.css.CSSClass;
 
 public class HtmlArea extends ScrollPanel implements WatermarkComponent {
 
@@ -42,7 +41,7 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
 
     public HtmlArea() {
         super();
-        setStyleName(CSSClass.pyx4j_TextBox.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
         getElement().getStyle().setPadding(2, Unit.PX);
 
         viewer = new HTML();
@@ -85,6 +84,7 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
         }
     }
 
+    @Override
     public void setWatermark(String text) {
         if (watermark == null) {
             watermark = new TextWatermark(this) {

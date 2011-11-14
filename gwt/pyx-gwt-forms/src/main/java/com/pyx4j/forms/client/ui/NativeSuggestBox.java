@@ -33,7 +33,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 
 import com.pyx4j.commons.css.Selector;
-import com.pyx4j.forms.client.ui.NativeTextBox.StyleDependent;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.SuggestBox;
 import com.pyx4j.widgets.client.TextBox;
 
@@ -51,7 +51,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
         ((TextBox) getWidget()).addFocusHandler(focusHandlerManager);
         ((TextBox) getWidget()).addBlurHandler(focusHandlerManager);
 
-        setStyleName(TextBox.DEFAULT_STYLE_PREFIX);
+        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
         delegate = new NativeTextBoxDelegate<E>(this, cSuggestBox);
         addSelectionHandler(new SelectionHandler() {
             @Override
@@ -66,7 +66,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     public void setEditable(boolean editable) {
         ((TextBox) getWidget()).setEnabled(editable);
         ((TextBox) getWidget()).setReadOnly(!editable);
-        String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
+        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly);
         if (editable) {
             removeStyleDependentName(dependentSuffix);
         } else {
@@ -82,7 +82,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     @Override
     public void setEnabled(boolean enabled) {
         ((TextBox) getWidget()).setEnabled(enabled);
-        String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
+        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled);
         if (enabled) {
             removeStyleDependentName(dependentSuffix);
         } else {
@@ -141,9 +141,9 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     @Override
     public void setValid(boolean valid) {
         if (valid) {
-            removeStyleDependentName(StyleDependent.invalid.name());
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         } else if (delegate.getCComponent().isVisited()) {
-            addStyleDependentName(StyleDependent.invalid.name());
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         }
     }
 

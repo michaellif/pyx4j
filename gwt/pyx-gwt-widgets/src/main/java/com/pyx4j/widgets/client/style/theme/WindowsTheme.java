@@ -36,7 +36,6 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
@@ -67,9 +66,7 @@ public class WindowsTheme extends Theme {
         initTooltipStyle();
         initTreeStyle();
         initGlassPanelStyle();
-        initTextBoxStyle();
         initCheckBoxStyle();
-        initListBoxStyle();
         initDatePickerStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
@@ -494,36 +491,6 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
 
-        addStyle(style);
-    }
-
-    protected void initTextBoxStyle() {
-        Style style = new Style(CSSClass.pyx4j_TextBox);
-        style.addProperty("border-color", ThemeColors.BORDER);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("background-color", "#fff");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_TextBox, " td");
-        style.addProperty("padding", "0px");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_TextBox, "-watermark");
-        style.addProperty("color", "gray");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_TextBox, "[disabled]");
-        style.addProperty("background-color", "#eee");
-        addStyle(style);
-
-    }
-
-    protected void initListBoxStyle() {
-        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX));
-        style.addProperty("border-color", ThemeColors.BORDER);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
         addStyle(style);
     }
 

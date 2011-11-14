@@ -23,12 +23,10 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 
-import com.pyx4j.commons.css.CSSClass;
-
 public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
 
     public RichTextArea() {
-        setStyleName(CSSClass.pyx4j_TextBox.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
         getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         getElement().getStyle().setBorderWidth(1, Unit.PX);
         getElement().getStyle().setBackgroundColor("white");

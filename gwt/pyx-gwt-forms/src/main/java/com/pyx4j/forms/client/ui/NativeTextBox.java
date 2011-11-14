@@ -22,15 +22,10 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.TextBox;
 
 public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E> {
-
-    public static enum StyleDependent implements IStyleDependent {
-        disabled, readOnly, invalid
-    }
 
     private final NativeTextBoxDelegate<E> delegate;
 
@@ -67,7 +62,7 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
+        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled);
         if (enabled) {
             removeStyleDependentName(dependentSuffix);
         } else {
@@ -78,7 +73,7 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     @Override
     public void setEditable(boolean editable) {
         super.setReadOnly(!editable);
-        String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
+        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly);
         if (editable) {
             removeStyleDependentName(dependentSuffix);
         } else {
@@ -112,9 +107,9 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     @Override
     public void setValid(boolean valid) {
         if (valid) {
-            removeStyleDependentName(StyleDependent.invalid.name());
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         } else if (delegate.getCComponent().isVisited()) {
-            addStyleDependentName(StyleDependent.invalid.name());
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         }
     }
 

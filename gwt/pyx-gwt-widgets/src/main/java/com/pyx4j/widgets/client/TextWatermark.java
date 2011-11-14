@@ -26,8 +26,6 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.commons.css.Selector;
-
 public abstract class TextWatermark {
 
     private final WatermarkComponent component;
@@ -85,17 +83,16 @@ public abstract class TextWatermark {
 
     private void show(boolean show) {
         insideShowWatermark = true;
-        String dependentName = Selector.getDependentName(TextBox.StyleDependent.watermark);
         if (show) {
             if (isEmptyText() || getText().equals(watermark)) {
                 setText(watermark);
-                component.addStyleDependentName(dependentName);
+                component.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.watermark.name());
             }
         } else {
             if (isShown()) {
                 setText(null);
             }
-            component.removeStyleDependentName(dependentName);
+            component.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.watermark.name());
         }
         insideShowWatermark = false;
     }

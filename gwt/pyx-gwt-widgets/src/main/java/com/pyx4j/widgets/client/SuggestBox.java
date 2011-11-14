@@ -29,14 +29,12 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
-import com.pyx4j.commons.css.CSSClass;
-
 public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox implements WatermarkComponent {
 
     private TextWatermark watermark;
 
     public SuggestBox() {
-        setStyleName(CSSClass.pyx4j_TextBox.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
     }
 
     public SuggestBox(SuggestOracle oracle, TextBoxBase box) {

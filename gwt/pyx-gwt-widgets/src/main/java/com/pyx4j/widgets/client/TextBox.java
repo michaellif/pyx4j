@@ -20,20 +20,12 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.commons.css.IStyleDependent;
-
 public class TextBox extends com.google.gwt.user.client.ui.TextBox implements WatermarkComponent {
-
-    public static String DEFAULT_STYLE_PREFIX = "pyx4j_TextBox";
-
-    public static enum StyleDependent implements IStyleDependent {
-        watermark
-    }
 
     private TextWatermark watermark;
 
     public TextBox() {
-        setStyleName(DEFAULT_STYLE_PREFIX);
+        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
     }
 
     @Override

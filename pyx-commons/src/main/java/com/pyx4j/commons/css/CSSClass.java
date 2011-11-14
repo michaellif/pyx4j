@@ -50,9 +50,6 @@ public enum CSSClass {
     //CheckBox
     pyx4j_CheckBox,
 
-    //TextBox
-    pyx4j_TextBox,
-
     //Hyperlink
     pyx4j_Hyperlink,
 

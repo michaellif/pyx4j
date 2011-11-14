@@ -20,12 +20,11 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.commons.css.CSSClass;
 
 public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextBox {
 
     public PasswordTextBox() {
-        setStyleName(CSSClass.pyx4j_TextBox.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
     }
 
 }

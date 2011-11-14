@@ -46,8 +46,8 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleSuffix.DataTableHeader);
-        style.addProperty("background-color", ThemeColors.foreground, 1);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColors.foreground, 0.4);
+        style.addProperty("color", ThemeColors.foreground, 0);
         style.addProperty("font-weight", "bold");
         style.addProperty("cursor", "pointer");
         addStyle(style);
@@ -81,7 +81,7 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleSuffix.DataTableRow, "-", StyleDependent.even);
-        style.addProperty("background-color", ThemeColors.foreground, 0.15);
+        style.addProperty("background-color", ThemeColors.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleSuffix.DataTableRow, "-", StyleDependent.odd);
