@@ -63,8 +63,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
         int tenantCounter = 0;
         int statusCounter = 0;
 
-        List<Building> allBuildings = Persistence.service().query(EntityQueryCriteria.create(Building.class));
-        for (Building building : allBuildings) {
+        for (Building building : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
             List<AptUnit> units = Persistence.service().query(criteria);
@@ -75,15 +74,10 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
             startDate.setDate(1);
             final LogicalDate endDate = new LogicalDate();
 
-            List<MockupTenant> tenants = new ArrayList<MockupTenant>();
-            List<MockupArrear> arrears = new ArrayList<MockupArrear>();
-            int maxArraySize = 1000;
+            List<MockupTenant> tenants = new ArrayList<MockupTenant>(3 * units.size());
 
             for (AptUnit unit : units) {
                 LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
-
-                // You don't need to load the building again
-                unit.belongsTo().set(building);
 
                 while (movein.before(endDate)) {
                     LogicalDate moveout = new LogicalDate(movein.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
@@ -100,12 +94,18 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                 }
             } // tenants
             persistArray(tenants);
-            for (MockupTenant tenant : Persistence.service().query(new EntityQueryCriteria<MockupTenant>(MockupTenant.class))) {
+
+            int maxArrearArraySize = 1000;
+            List<MockupArrear> arrears = new ArrayList<MockupArrear>(maxArrearArraySize);
+
+            EntityQueryCriteria<MockupTenant> tenantCriteria = new EntityQueryCriteria<MockupTenant>(MockupTenant.class);
+            tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().belongsTo().belongsTo(), building));
+            for (MockupTenant tenant : Persistence.service().query(tenantCriteria)) {
 
                 // create mockup arrears history
                 LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(tenant.moveIn().getValue().getTime()));
                 LogicalDate moveout = tenant.moveOut().getValue();
-                AptUnit unit = tenant.belongsTo();
+
                 while (currentMonth.before(moveout)) {
                     MockupArrear arrear = EntityFactory.create(MockupArrear.class);
 
@@ -114,8 +114,8 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     arrear.firstName().setValue(tenant.firstName().getValue());
                     arrear.lastName().setValue(tenant.lastName().getValue());
 
-                    arrear.unit().setPrimaryKey(unit.getPrimaryKey());
-                    arrear.unitNumber().setValue(unit.info().number().getValue());
+                    arrear.unit().setPrimaryKey(tenant.belongsTo().getPrimaryKey());
+                    arrear.unitNumber().setValue(tenant.belongsTo().info().number().getValue());
 
                     arrear.building().setPrimaryKey(building.getPrimaryKey());
                     arrear.propertyCode().setValue(building.propertyCode().getValue());
@@ -133,7 +133,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     arrears.add(arrear);
                     ++statusCounter;
 
-                    if (arrears.size() > maxArraySize) { // why? because there are limits on what sql can do, inserting more then 3K records in batch will slow perfomance
+                    if (arrears.size() > maxArrearArraySize) { // why? because there are limits on what sql can do, inserting more then 3K records in batch will slow perfomance
                         persistArray(arrears);
                         arrears.clear();
                     }
