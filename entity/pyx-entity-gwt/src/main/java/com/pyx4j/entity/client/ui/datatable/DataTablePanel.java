@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.essentials.client.crud;
+package com.pyx4j.entity.client.ui.datatable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +28,11 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.DataItem;
-import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
-import com.pyx4j.entity.client.ui.datatable.DataTableActionsBar;
-import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
-public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
+public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     protected final DataTableModel<E> dataTableModel;
 
@@ -49,14 +44,20 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     private final DataTableActionsBar lowerActionsBar;
 
-    public EntityListPanel(Class<E> clazz) {
+    public DataTablePanel(Class<E> clazz) {
         setWidth("100%");
 
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
-        add(upperActionsBar = new DataTableActionsBar());
-        add(dataTable = new DataTable<E>(dataTableModel = new DataTableModel<E>(entityPrototype.getEntityMeta(), getColumnDescriptors())));
-        add(lowerActionsBar = new DataTableActionsBar());
+        upperActionsBar = new DataTableActionsBar();
+        add(upperActionsBar);
+
+        dataTableModel = new DataTableModel<E>(entityPrototype.getEntityMeta(), getColumnDescriptors());
+        dataTable = new DataTable<E>(dataTableModel);
+        add(dataTable);
+
+        lowerActionsBar = new DataTableActionsBar();
+        add(lowerActionsBar);
 
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");

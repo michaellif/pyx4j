@@ -54,13 +54,13 @@ import com.pyx4j.entity.client.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
@@ -101,7 +101,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     protected Button btnApply;
 
-    protected final EntityListPanel<E> listPanel;
+    protected final DataTablePanel<E> listPanel;
 
     private Class<? extends NavigNode> editorPage;
 
@@ -120,7 +120,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public ListerBase(Class<E> clazz) {
         setStyleName(DefaultListerTheme.StyleSuffix.Lister.name());
 
-        listPanel = new EntityListPanel<E>(clazz) {
+        listPanel = new DataTablePanel<E>(clazz) {
             @Override
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
                 ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
@@ -375,7 +375,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     // EntityListPanel access:
-    public EntityListPanel<E> getListPanel() {
+    public DataTablePanel<E> getListPanel() {
         return listPanel;
     }
 
