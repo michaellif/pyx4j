@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.pyx4j.commons.FIFO;
 import com.pyx4j.commons.LogicalDate;
@@ -232,6 +233,21 @@ public class DataGenerator {
         }
         int index = random().nextInt(list.size());
         return list.get(index);
+    }
+
+    public static <T> T random(Set<T> set) {
+        if (set.size() == 0) {
+            return null;
+        }
+        int index = random().nextInt(set.size());
+        int n = 0;
+        for (T en : set) {
+            if (n == index) {
+                return en;
+            }
+            n++;
+        }
+        return null;
     }
 
     public static <T> T random(List<T> list, String duplicatesId, int resultsToRemeber) {
