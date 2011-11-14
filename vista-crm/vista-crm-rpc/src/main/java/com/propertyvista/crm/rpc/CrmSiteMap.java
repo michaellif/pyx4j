@@ -157,14 +157,17 @@ public class CrmSiteMap implements SiteMap {
         public static class TenantInLease extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Application")
-        @NavigationItem(navigLabel = "Applications")
-        public static class Application extends CrudAppPlace {
-        }
-
         @PlaceProperties(caption = "Lease")
         @NavigationItem(navigLabel = "Leases")
         public static class Lease extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Application")
+        @NavigationItem(navigLabel = "Applications")
+        public static class MasterApplication extends CrudAppPlace {
+        }
+
+        public static class Application extends CrudAppPlace {
         }
     }
 
@@ -173,7 +176,7 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Inquiry")
         @NavigationItem(navigLabel = "Inquiry")
         public static class Inquiry extends CrudAppPlace {
-        
+
         }
 
         @PlaceProperties(caption = "Lead")

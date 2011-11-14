@@ -14,12 +14,12 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
 @Transient
-public interface ApplicationDTO extends Application {
+public interface MasterApplicationDTO extends MasterApplication {
 
-    IPrimitive<Integer> stepsCompleted();
+    TenantInLease mainApplicant();
 }

@@ -7,19 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-29
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.dto.ApplicationDTO;
 
-import com.propertyvista.domain.tenant.ptapp.Application;
+public class ApplicationListerViewImpl extends CrmListerViewImplBase<ApplicationDTO> implements ApplicationListerView {
 
-@Transient
-public interface ApplicationDTO extends Application {
-
-    IPrimitive<Integer> stepsCompleted();
+    public ApplicationListerViewImpl() {
+        super(CrmSiteMap.Tenants.Application.class);
+        setLister(new ApplicationLister());
+    }
 }

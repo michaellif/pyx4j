@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-29
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.dto.MasterApplicationDTO;
 
-@Transient
-public interface ApplicationDTO extends Application {
+public interface MasterApplicationListerView extends IListerView<MasterApplicationDTO> {
 
-    IPrimitive<Integer> stepsCompleted();
 }

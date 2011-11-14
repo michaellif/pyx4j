@@ -22,6 +22,18 @@ import com.propertyvista.crm.client.ui.crud.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
@@ -55,6 +67,20 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseViewerViewImpl());
             } else if (LeaseEditorView.class.equals(type)) {
                 map.put(type, new LeaseEditorViewImpl());
+
+            } else if (MasterApplicationListerView.class.equals(type)) {
+                map.put(type, new MasterApplicationListerViewImpl());
+            } else if (MasterApplicationViewerView.class.equals(type)) {
+                map.put(type, new MasterApplicationViewerViewImpl());
+            } else if (MasterApplicationEditorView.class.equals(type)) {
+                map.put(type, new MasterApplicationEditorViewImpl());
+
+            } else if (ApplicationListerView.class.equals(type)) {
+                map.put(type, new ApplicationListerViewImpl());
+            } else if (ApplicationViewerView.class.equals(type)) {
+                map.put(type, new ApplicationViewerViewImpl());
+            } else if (ApplicationEditorView.class.equals(type)) {
+                map.put(type, new ApplicationEditorViewImpl());
             }
         }
         return map.get(type);
