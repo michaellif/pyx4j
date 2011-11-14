@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
@@ -129,6 +131,11 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
     @SuppressWarnings("unchecked")
     public <T extends IEntity> CComponent<T, ?> get(T member) {
         return (CComponent<T, ?>) binder.get((IObject<?>) member);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends IEntity> CComponent<List<T>, ?> get(IList<T> member) {
+        return (CComponent<List<T>, ?>) binder.get((IObject<?>) member);
     }
 
     public <T> CComponent<T, ?> get(IObject<T> member) {
