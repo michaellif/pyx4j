@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
@@ -104,7 +105,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseID()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
 

@@ -48,6 +48,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
@@ -104,6 +105,13 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         fillServiceEligibilityData(result, result.serviceAgreement().serviceItem().item());
 
         super.onPopulateSuccess(result);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<LeaseDTO> callback) {
+        LeaseDTO leaseDTO = EntityFactory.create(LeaseDTO.class);
+        leaseDTO.status().setValue(Lease.Status.Draft);
+        callback.onSuccess(leaseDTO);
     }
 
     @Override
