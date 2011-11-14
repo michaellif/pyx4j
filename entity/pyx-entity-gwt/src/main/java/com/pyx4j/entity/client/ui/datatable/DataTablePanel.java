@@ -65,7 +65,7 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         dataTable.addItemSelectionHandler(new ItemSelectionHandler() {
             @Override
             public void onSelect(int selectedRow) {
-                onSelect(selectedRow);
+                DataTablePanel.this.onSelect(selectedRow);
             }
         });
 
