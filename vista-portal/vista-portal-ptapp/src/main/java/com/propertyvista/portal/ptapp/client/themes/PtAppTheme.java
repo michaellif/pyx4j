@@ -21,7 +21,6 @@ import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
@@ -64,7 +63,6 @@ public class PtAppTheme extends VistaTheme {
         addTheme(new DefaultDialogTheme());
 
         initBodyStyles();
-        initListBoxStyle();
 
         initVistaSummaryViewStyles();
         initVistaCaptionViewStyles();
@@ -109,14 +107,6 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("border-top-color", ThemeColors.OBJECT_TONE4);
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
-        addStyle(style);
-    }
-
-    @Override
-    protected void initListBoxStyle() {
-        super.initListBoxStyle();
-        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX) + " option");
-        style.addProperty("background-color", "white");
         addStyle(style);
     }
 

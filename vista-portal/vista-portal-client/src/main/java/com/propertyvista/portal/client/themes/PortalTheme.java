@@ -21,11 +21,12 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
-import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -61,12 +62,13 @@ public class PortalTheme extends VistaTheme {
         addTheme(new DefaultListerTheme());
         addTheme(new DefaultDataTableTheme());
 
+        addTheme(new DefaultWidgetsTheme());
+        addTheme(new DefaultCCOmponentsTheme());
+
         initEntityFolderStyles();
-        initTextBoxStyle();
         initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
-        initListBoxStyle();
         initSiteViewStyles();
         initPropertyMarkerStyle();
         initPaymentRadioButtonGroupStyles();
@@ -82,14 +84,6 @@ public class PortalTheme extends VistaTheme {
 
         Style style = new Style((IStyleName) DefaultEntityFolderTheme.StyleName.EntityFolder);
         style.addProperty("width", "690px");
-        addStyle(style);
-    }
-
-    @Override
-    protected void initListBoxStyle() {
-        super.initListBoxStyle();
-        Style style = new Style(Selector.valueOf(ListBox.DEFAULT_STYLE_PREFIX) + " option");
-        style.addProperty("background-color", "white");
         addStyle(style);
     }
 
