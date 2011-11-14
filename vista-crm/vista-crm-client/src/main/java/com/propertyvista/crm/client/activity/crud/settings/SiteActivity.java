@@ -40,14 +40,11 @@ public class SiteActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-
         SiteDescriptorCrudService srv = GWT.create(SiteDescriptorCrudService.class);
         srv.retrieveHomeItem(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                CrudAppPlace gotoPlace = AppSite.getHistoryMapper().createPlace(place.getClass());
-                gotoPlace.formViewerPlace(result);
-                AppSite.getPlaceController().goTo(gotoPlace);
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(place.getClass()).formViewerPlace(result));
             }
 
             @Override

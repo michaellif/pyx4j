@@ -20,7 +20,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -37,15 +36,11 @@ public class PageViewerActivity extends ViewerActivityBase<PageDescriptor> imple
 
     @Override
     public void viewChild(Key id) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-        place.formViewerPlace(id);
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(id));
     }
 
     @Override
     public void editNew(Key parentid) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-        place.formNewItemPlace(parentid);
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formNewItemPlace(parentid));
     }
 }

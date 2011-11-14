@@ -20,7 +20,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -38,15 +37,11 @@ public class SiteViewerActivity extends ViewerActivityBase<SiteDescriptorDTO> im
 
     @Override
     public void viewChild(Key id) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class);
-        place.formViewerPlace(id);
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formViewerPlace(id));
     }
 
     @Override
     public void editNew(Key parentid) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class);
-        place.formNewItemPlace(parentid);
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formNewItemPlace(parentid));
     }
 }

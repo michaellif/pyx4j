@@ -28,7 +28,6 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.event.NavigationUpdateEvent;
 import com.propertyvista.crm.client.event.NavigationUpdateHandler;
@@ -156,9 +155,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
-                    CrudAppPlace place = new CrmSiteMap.Report();
-                    place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
-                    folder.addNavigItem(place);
+                    folder.addNavigItem(new CrmSiteMap.Report().formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView()));
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);
@@ -177,9 +174,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
-                    CrudAppPlace place = new CrmSiteMap.Dashboard();
-                    place.formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView());
-                    folder.addNavigItem(place);
+                    folder.addNavigItem(new CrmSiteMap.Dashboard().formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView()));
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);

@@ -31,7 +31,6 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
@@ -130,8 +129,6 @@ public class CrmSite extends VistaSite {
     }
 
     static public Place getSystemFashboardPlace() {
-        CrudAppPlace place = new CrmSiteMap.Dashboard();
-        place.formDashboardPlace(new Key(-1));
-        return place;
+        return new CrmSiteMap.Dashboard().formDashboardPlace(new Key(-1));
     }
 }
