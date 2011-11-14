@@ -58,6 +58,7 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
@@ -375,7 +376,7 @@ public class BuildingsGenerator {
 // Floorplans:
     public List<FloorplanDTO> createFloorplans(Building building, int num) {
         List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
-        Set<String> set = new HashSet<>();
+        Set<String> set = new HashSet<String>();
 
         for (int i = 0; i < num; i++) {
 /*
@@ -470,7 +471,8 @@ public class BuildingsGenerator {
     }
 
     private UnitRelatedData createUnit(Building building, String suiteNumber, int floor, double area, Floorplan floorplan) {
-        UnitRelatedData unit = EntityFactory.create(UnitRelatedData.class);
+        UnitRelatedData data = EntityFactory.create(UnitRelatedData.class);
+        AptUnit unit = data.unit();
         unit.belongsTo().set(building);
 
         unit.info().economicStatus().setValue(RandomUtil.random(AptUnitInfo.EconomicStatus.values()));
@@ -490,21 +492,24 @@ public class BuildingsGenerator {
 
         // info items
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         } else {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+            data.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
+        }
+        for (AptUnitItem detail : data.details()) {
+            detail.belongsTo().set(unit);
         }
 
         Calendar available = new GregorianCalendar();
@@ -519,11 +524,12 @@ public class BuildingsGenerator {
         unit.availableForRent().setValue(new LogicalDate(available.getTime().getTime()));
 
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
+        occupancy.unit().set(unit);
         occupancy.status().setValue(AptUnitOccupancy.Status.available);
         occupancy.dateFrom().setValue(new LogicalDate(available.getTime().getTime()));
         occupancy.dateTo().setValue(new LogicalDate(available.getTime().getTime() + RandomUtil.randomInt()));
         occupancy.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
-        unit.occupancies().add(occupancy);
+        data.occupancies().add(occupancy);
 
         unit.floorplan().set(floorplan);
 
@@ -534,7 +540,7 @@ public class BuildingsGenerator {
             unit.marketing().adBlurbs().add(item);
         }
 
-        return unit;
+        return data;
     }
 
     public static AptUnitItem createUnitDetailItem(AptUnitItem.Type type) {

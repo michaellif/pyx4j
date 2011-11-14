@@ -14,6 +14,7 @@
 package com.propertyvista.server.common.generator;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -21,7 +22,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 @Transient
-public interface UnitRelatedData extends AptUnit {
+public interface UnitRelatedData extends IEntity {
+
+    AptUnit unit();
 
     IList<AptUnitItem> details();
 

@@ -60,7 +60,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
@@ -262,18 +261,11 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             for (UnitRelatedData unitData : units) {
                 // persist plain internal lists:
 
-                AptUnit unit = unitData.clone(AptUnit.class);
-                Persistence.service().persist(unit); // persist real unit here, not DTO!..
+                Persistence.service().persist(unitData.unit());
 
                 // persist internal lists and with belongness:
-                for (AptUnitOccupancy occupancy : unitData.occupancies()) {
-                    occupancy.unit().set(unit);
-                    Persistence.service().persist(occupancy);
-                }
-                for (AptUnitItem detail : unitData.details()) {
-                    detail.belongsTo().set(unit);
-                    Persistence.service().persist(detail);
-                }
+                Persistence.service().persist(unitData.occupancies());
+                Persistence.service().persist(unitData.details());
             }
 
             // fill Service Catalog with building elements:

@@ -34,6 +34,7 @@ import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.building.BuildingInfo.StructureType;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.server.importer.bean.City;
@@ -162,12 +163,12 @@ public class Mapper {
     }
 
     private void createUnit(Property property, AvailableUnit availableUnit, Building building, List<FloorplanDTO> floorplans) {
-        UnitRelatedData unit = EntityFactory.create(UnitRelatedData.class);
-
+        UnitRelatedData data = EntityFactory.create(UnitRelatedData.class);
+        AptUnit unit = data.unit();
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.status().setValue(AptUnitOccupancy.Status.available);
         occupancy.dateFrom().setValue(new LogicalDate(availableUnit.getAvailable().getTime()));
-        unit.occupancies().add(occupancy);
+        data.occupancies().add(occupancy);
         unit.availableForRent().setValue(occupancy.dateFrom().getValue()); // for consistency
 
         unit.belongsTo().set(building);
@@ -189,7 +190,7 @@ public class Mapper {
             log.warn("Could not find floorplan for '{}'", availableUnit.getDescription().trim());
         }
 
-        model.getUnits().add(unit);
+        model.getUnits().add(data);
     }
 
     private FloorplanDTO createFloorplan(Property property, Room room, Building building) {
