@@ -15,7 +15,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.info;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -44,6 +43,7 @@ import com.propertyvista.common.client.ui.components.editors.CPriorAddress;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.misc.BusinessRules;
@@ -255,15 +255,15 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
 
-        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
+        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
-            public boolean isValid(CComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+            public boolean isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                 return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts());
             }
 
             @Override
-            public String getValidationMessage(CComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+            public String getValidationMessage(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                 return i18n.tr("Duplicate contacts specified");
             }
         });

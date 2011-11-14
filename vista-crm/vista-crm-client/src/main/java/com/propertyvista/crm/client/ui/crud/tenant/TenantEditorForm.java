@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.tenant;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -37,6 +36,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
@@ -119,15 +119,15 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<Map<String, Object>>>() {
+        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
-            public boolean isValid(CComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+            public boolean isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                 return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts());
             }
 
             @Override
-            public String getValidationMessage(CComponent<List<Map<String, Object>>, ?> component, List<Map<String, Object>> value) {
+            public String getValidationMessage(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                 return i18n.tr("Duplicate contacts specified");
             }
         });
