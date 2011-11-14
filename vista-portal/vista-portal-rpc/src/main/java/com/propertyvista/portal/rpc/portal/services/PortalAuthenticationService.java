@@ -11,8 +11,8 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.portal.rpc.portal.services;
 
-public interface AuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
+public interface PortalAuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
 
 }

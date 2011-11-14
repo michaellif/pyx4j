@@ -11,11 +11,19 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.portal.server.portal.services;
 
-import com.propertyvista.crm.rpc.services.AuthenticationService;
+import com.pyx4j.security.shared.SecurityController;
+
+import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
-public class AuthenticationServiceImpl extends VistaAuthenticationServicesImpl implements AuthenticationService {
+public class PortalAuthenticationServiceImpl extends VistaAuthenticationServicesImpl implements PortalAuthenticationService {
+
+    @Override
+    protected boolean hasRequiredSiteBehavior() {
+        return SecurityController.checkAnyBehavior(VistaBehavior.TENANT, VistaBehavior.PROSPECTIVE_TENANT, VistaBehavior.GUARANTOR);
+    }
 
 }

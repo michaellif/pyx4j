@@ -30,7 +30,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.ptapp.client.ui.LoginView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
-import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
@@ -72,7 +72,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
         };
 
-        ((AuthenticationService) GWT.create(AuthenticationService.class)).authenticate(callback, request);
+        ((PortalAuthenticationService) GWT.create(PortalAuthenticationService.class)).authenticate(callback, request);
 
     }
 

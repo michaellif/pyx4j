@@ -24,7 +24,7 @@ import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.AppointmentCrudService;
-import com.propertyvista.crm.rpc.services.AuthenticationService;
+import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
@@ -101,7 +101,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(CoreBehavior.DEVELOPER, new AllPermissions());
 
-        grant(new IServiceExecutePermission(AuthenticationService.class));
+        grant(new IServiceExecutePermission(CrmAuthenticationService.class));
 
 // - Dashboard:
         InstanceAccess sharedUserEntityAccess = new SharedUserEntityInstanceAccess();

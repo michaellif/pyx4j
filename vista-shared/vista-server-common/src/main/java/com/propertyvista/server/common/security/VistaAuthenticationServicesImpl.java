@@ -38,10 +38,7 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
-import com.propertyvista.crm.rpc.CrmUserVisit;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
-import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.domain.UserCredential;
 
 public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.AuthenticationServiceImpl {
@@ -50,12 +47,27 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
 
     private static I18n i18n = I18n.get(VistaAuthenticationServicesImpl.class);
 
+    protected abstract boolean hasRequiredSiteBehavior();
+
+    @Override
+    @IgnoreSessionToken
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, String sessionToken) {
+        if (!hasRequiredSiteBehavior()) {
+            VistaLifecycle.endSession();
+        }
+        super.authenticate(callback, sessionToken);
+    }
+
     @Override
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request) {
-        // Begin Session
-        callback.onSuccess(createAuthenticationResponse(beginSession(request)));
-
+        // Try to begin Session
+        String sessionToken = beginSession(request);
+        if (!hasRequiredSiteBehavior()) {
+            VistaLifecycle.endSession();
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+        callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
     public static String beginSession(AuthenticationRequest request) {
@@ -104,16 +116,8 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
     public static String beginSession(User user, UserCredential userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
-        final UserVisit visit;
-        if (behaviors.contains(VistaBehavior.PROSPECTIVE_TENANT)) {
-            visit = new PtUserVisit(user.getPrimaryKey(), user.name().getValue());
-        } else if (behaviors.contains(VistaBehavior.PROPERTY_MANAGER)) {
-            visit = new CrmUserVisit(user.getPrimaryKey(), user.name().getValue());
-        } else {
-            visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
-        }
+        UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
-
         return VistaLifecycle.beginSession(visit, behaviors);
     }
 

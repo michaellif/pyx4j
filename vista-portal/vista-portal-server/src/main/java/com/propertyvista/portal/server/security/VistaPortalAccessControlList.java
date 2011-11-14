@@ -33,9 +33,9 @@ import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInfo;
-import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
@@ -48,6 +48,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadServ
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
+import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
@@ -61,7 +62,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
     public VistaPortalAccessControlList() {
         grant(new IServiceExecutePermission(ActivationService.class));
-        grant(new IServiceExecutePermission(AuthenticationService.class));
+        grant(new IServiceExecutePermission(PortalAuthenticationService.class));
+        grant(new IServiceExecutePermission(PtAuthenticationService.class));
 
         // Old TODO remove
         grant(new ServiceExecutePermission(EntityServices.Query.class));

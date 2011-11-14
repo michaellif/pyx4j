@@ -11,11 +11,19 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.crm.server.services;
 
-import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
+import com.pyx4j.security.shared.SecurityController;
+
+import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
-public class AuthenticationServiceImpl extends VistaAuthenticationServicesImpl implements AuthenticationService {
+public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImpl implements CrmAuthenticationService {
+
+    @Override
+    protected boolean hasRequiredSiteBehavior() {
+        return SecurityController.checkAnyBehavior(VistaBehavior.PROPERTY_MANAGER);
+    }
 
 }

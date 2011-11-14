@@ -35,9 +35,9 @@ import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
-import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class PtAppSite extends VistaSite {
 
@@ -80,7 +80,7 @@ public class PtAppSite extends VistaSite {
     }
 
     private void authenticateAndInit() {
-        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(AuthenticationService.class),
+        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(PtAuthenticationService.class),
                 new DefaultAsyncCallback<Boolean>() {
 
                     @Override

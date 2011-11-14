@@ -31,7 +31,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.AuthenticationService;
+import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
 
@@ -70,7 +70,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             }
 
         };
-        ((AuthenticationService) GWT.create(AuthenticationService.class)).authenticate(callback, request);
+        ((CrmAuthenticationService) GWT.create(CrmAuthenticationService.class)).authenticate(callback, request);
     }
 
     @Override

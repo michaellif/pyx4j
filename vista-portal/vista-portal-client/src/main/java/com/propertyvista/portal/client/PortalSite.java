@@ -31,7 +31,7 @@ import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
-import com.propertyvista.portal.rpc.portal.services.AuthenticationService;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
@@ -69,7 +69,7 @@ public class PortalSite extends VistaSite {
 
         SessionInactiveDialog.register();
 
-        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(AuthenticationService.class),
+        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(PortalAuthenticationService.class),
                 new DefaultAsyncCallback<Boolean>() {
 
                     @Override

@@ -26,7 +26,6 @@ import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.portal.rpc.ptapp.PtUserVisit;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class PtAppContext extends VistaContext {
@@ -35,39 +34,35 @@ public class PtAppContext extends VistaContext {
 
     private static I18n i18n = I18n.get(PtAppContext.class);
 
-    public static void setCurrentUserApplication(Application application) {
+    public static PtVisitAttributes getVisitAttributes() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("no session"));
         }
-        ((PtUserVisit) v.getUserVisit()).setApplicationPrimaryKey(application.getPrimaryKey());
+        PtVisitAttributes attr = (PtVisitAttributes) v.getAttribute("pt-visit");
+        if (attr == null) {
+            attr = new PtVisitAttributes();
+            v.setAttribute("pt-visit", attr);
+        }
+        return attr;
+    }
+
+    public static void setCurrentUserApplication(Application application) {
+        getVisitAttributes().setApplicationPrimaryKey(application.getPrimaryKey());
     }
 
     public static Key getCurrentUserApplicationPrimaryKey() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn())) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
-        }
-        if (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null) {
+        Key key = getVisitAttributes().getApplicationPrimaryKey();
+        if (key == null) {
             log.trace("no application selected");
             throw new UserRuntimeException(i18n.tr("no application selected"));
         }
-        return ((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey();
+        return key;
     }
 
     public static Application getCurrentUserApplication() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn())) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
-        }
-        if (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null) {
-            log.trace("no application selected");
-            throw new UserRuntimeException(i18n.tr("no application selected"));
-        }
-        return Persistence.service().retrieve(Application.class, ((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey());
+        return Persistence.service().retrieve(Application.class, getCurrentUserApplicationPrimaryKey());
     }
 
     public static Key getCurrentUserLeasePrimaryKey() {

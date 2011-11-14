@@ -7,25 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-25
+ * Created on Nov 14, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc;
+package com.propertyvista.portal.server.ptapp;
+
+import java.io.Serializable;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.security.shared.UserVisit;
 
-public class CrmUserVisit extends UserVisit {
+public class PtVisitAttributes implements Serializable {
 
-    private static final long serialVersionUID = 6431065975467798513L;
+    private static final long serialVersionUID = 1L;
 
-    protected CrmUserVisit() {
+    private Key applicationPrimaryKey;
+
+    protected PtVisitAttributes() {
 
     }
 
-    public CrmUserVisit(Key principalPrimaryKey, String name) {
-        super(principalPrimaryKey, name);
+    public Key getApplicationPrimaryKey() {
+        return applicationPrimaryKey;
     }
 
+    public void setApplicationPrimaryKey(Key applicationPrimaryKey) {
+        this.applicationPrimaryKey = applicationPrimaryKey;
+    }
 }
