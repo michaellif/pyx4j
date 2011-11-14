@@ -1,0 +1,38 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Nov 14, 2011
+ * @author ArtyomB
+ * @version $Id$
+ */
+package com.propertyvista.domain.dashboard.gadgets;
+
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.PropertyManager;
+import com.propertyvista.domain.property.asset.Owner;
+
+public interface CommonGadgetColumns extends IEntity {
+    // TODO all these MUST be references (it's just temporary for the DEMO purposes)
+
+    @EmbeddedEntity
+    PropertyManager propertyManger();
+
+    @EmbeddedEntity
+    Portfolio portfolio();
+
+    @EmbeddedEntity
+    Owner owner();
+
+    // TODO what is this?
+    IPrimitive<String> region();
+}

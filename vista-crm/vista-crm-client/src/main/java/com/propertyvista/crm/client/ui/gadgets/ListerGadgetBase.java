@@ -34,10 +34,12 @@ import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
 
+import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.StringHolder;
@@ -60,8 +62,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     private ListerGadgetBaseSettings settings;
 
+    private E proto;
+
     public ListerGadgetBase(GadgetMetadata gmd, Class<E> entityClass) {
         super(gmd);
+        proto = EntityFactory.getEntityPrototype(entityClass);
 
         // validate that we got correct settings class 'cause our subclasses could not be trusted (they may have messed something) 
         if (isSettingsInstanceOk(gadgetMetadata.settings())) {
@@ -166,6 +171,64 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      * Warning: that method this called from within the constructor!
      */
     protected abstract List<ColumnDescriptor<E>> getAvailableColumnDescriptors(E proto);
+
+    protected final E proto() {
+        return proto;
+    }
+
+    /**
+     * Convenience method
+     * 
+     * @param member
+     * @return
+     */
+    protected final ColumnDescriptor<E> columnDescriptor(IObject<?> member) {
+        return columnDescriptorEx(member, null);
+    }
+
+    /**
+     * Convenience method
+     * 
+     * @param member
+     * @return
+     */
+    protected final ColumnDescriptor<E> columnDescriptorEx(IObject<?> member, String title) {
+        if (title == null) {
+            return ColumnDescriptorFactory.createColumnDescriptor(proto(), member);
+        } else {
+            return ColumnDescriptorFactory.createColumnDescriptorEx(proto(), member, title);
+        }
+    }
+
+    /**
+     * Convenience method
+     * 
+     * @param members
+     * @return
+     */
+    protected final List<ColumnDescriptor<E>> columnDescriptors(List<IObject<?>> members) {
+        List<Object> membersAndTitles = new ArrayList<Object>(members.size());
+        for (IObject<?> member : members) {
+            membersAndTitles.add(new Tuple<IObject<?>, String>(member, null));
+        }
+        return columnDescriptorsEx(membersAndTitles);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected final List<ColumnDescriptor<E>> columnDescriptorsEx(List<Object> membersAndTitles) {
+        List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>(membersAndTitles.size());
+        for (Object memberAndTitle : membersAndTitles) {
+            ColumnDescriptor<E> cd;
+            if (memberAndTitle instanceof Tuple) {
+                Tuple<IObject<?>, String> mt = (Tuple<IObject<?>, String>) memberAndTitle;
+                cd = columnDescriptorEx(mt.car(), mt.cdr());
+            } else {
+                cd = columnDescriptor((IObject<?>) memberAndTitle);
+            }
+            columnDescriptors.add(cd);
+        }
+        return columnDescriptors;
+    }
 
     private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings(E proto) {
         if (settings.columnPaths().isEmpty()) {

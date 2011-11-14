@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.vacancyreport.util;
 
-public class Tuple<X, Y> {
+public final class Tuple<X, Y> {
     private final X car;
 
     private final Y cdr;
@@ -29,6 +29,10 @@ public class Tuple<X, Y> {
 
     public Y cdr() {
         return cdr;
+    }
+
+    public static <X, Y> Tuple<X, Y> cons(X car, Y cdr) {
+        return new Tuple<X, Y>(car, cdr);
     }
 
 }

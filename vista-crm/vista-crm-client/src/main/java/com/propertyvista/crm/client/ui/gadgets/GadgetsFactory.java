@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsListerGadget;
+import com.propertyvista.crm.client.ui.gadgets.arrears.OtherArrearsListerGadget;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ParkingArrearsListerGadget;
+import com.propertyvista.crm.client.ui.gadgets.arrears.RentArrearsListerGadget;
+import com.propertyvista.crm.client.ui.gadgets.arrears.TotalArrearsListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.AvailabiltySummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.TurnoverAnalysisGraphGadget;
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.UnitAvailabilityReportGadget;
@@ -59,7 +62,12 @@ public class GadgetsFactory {
         GadgetType.AvailabilitySummaryMk2,
         GadgetType.TurnoverAnalysisGraphMk2,
 
-        GadgetType.ArrearsGadget,
+        GadgetType.RentArrearsGadget,
+        GadgetType.ParkingArrearsGadget,
+        GadgetType.OtherArrearsGadget,
+        GadgetType.TotalArrearsGadget,        
+        GadgetType.ArrearsYOYChart
+        
     };
     //@formatter:on
 
@@ -99,10 +107,19 @@ public class GadgetsFactory {
         case TurnoverAnalysisGraphMk2:
             return new com.propertyvista.crm.client.ui.gadgets.availabilityreport.TurnoverAnalysisGraphGadget(metaData);
 
-        case ArrearsGadget:
-            return new ArrearsListerGadget(metaData);
+        case RentArrearsGadget:
+            return new RentArrearsListerGadget(metaData);
+        case ParkingArrearsGadget:
+            return new ParkingArrearsListerGadget(metaData);
+        case OtherArrearsGadget:
+            return new OtherArrearsListerGadget(metaData);
+        case TotalArrearsGadget:
+            return new TotalArrearsListerGadget(metaData);
+        case ArrearsYOYChart:
+            ;
+        default:
+            return null;
         }
-        return null;
     }
 
     /*

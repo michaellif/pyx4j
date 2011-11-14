@@ -33,6 +33,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
  */
 public interface MockupTenant extends IEntity {
 
+    IPrimitive<String> unitNumber();
+
     IPrimitive<String> firstName();
 
     IPrimitive<String> lastName();

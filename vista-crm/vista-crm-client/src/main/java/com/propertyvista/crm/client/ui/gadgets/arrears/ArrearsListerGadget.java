@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -25,58 +26,86 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrear;
+import com.propertyvista.domain.dashboard.gadgets.arrears.Arrears;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsCompilation;
 
-public class ArrearsListerGadget extends ListerGadgetBase<MockupArrear> implements IBuildingGadget {
+public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrearsCompilation> implements IBuildingGadget {
     private boolean isLoading = false;
 
     private final ArrearsReportService service;
 
-    private FilterData filterData;
+    private final FilterData filterData;
 
     public ArrearsListerGadget(GadgetMetadata gmd) {
-        super(gmd, MockupArrear.class);
+        super(gmd, MockupArrearsCompilation.class);
         service = GWT.create(ArrearsReportService.class);
         filterData = new FilterData();
         filterData.toDate = new Date();
     }
 
-    @SuppressWarnings("unchecked")
+    protected abstract Arrears getArrearsMemberProto();
+
+    private List<ColumnDescriptor<MockupArrearsCompilation>> getArrearsColumns() {
+        List<IObject<?>> members = new ArrayList<IObject<?>>();
+        for (String memberName : getArrearsMemberProto().getEntityMeta().getMemberNames()) {
+            members.add(getArrearsMemberProto().getMember(memberName));
+        }
+        return columnDescriptors(members);
+    }
+
+    //@formatter:off   
     @Override
-    protected List<ColumnDescriptor<MockupArrear>> getDefaultColumnDescriptors(MockupArrear proto) {
-        return Arrays.asList(
-                //
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitNumber()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.firstName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lastName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.monthAgo()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.twoMonthsAgo()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.threeMonthsAgo()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.overFourMonthsAgo()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.arBalance()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.prepayments()));
+    protected List<ColumnDescriptor<MockupArrearsCompilation>> getDefaultColumnDescriptors(MockupArrearsCompilation proto) {
+        List<ColumnDescriptor<MockupArrearsCompilation>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {        
+                proto.unitNumber(),
+                proto.lastName()
+        }));
+        cd.addAll(getArrearsColumns());
+        return cd;               
     }
 
     @Override
-    protected List<ColumnDescriptor<MockupArrear>> getAvailableColumnDescriptors(MockupArrear proto) {
-        return getDefaultColumnDescriptors(proto);
+    protected List<ColumnDescriptor<MockupArrearsCompilation>> getAvailableColumnDescriptors(MockupArrearsCompilation proto) {        
+        List<ColumnDescriptor<MockupArrearsCompilation>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {
+                // building info
+                proto.propertyCode(),
+                proto.buildingName(),
+                proto.complexName(),                
+                
+                proto.unitNumber(),
+                
+                // tenant info                
+                proto.firstName(),
+                proto.lastName(),                                
+        }));
+        cd.addAll(getArrearsColumns());
+        cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {                
+                // address
+                proto.streetNumber(),
+                proto.streetName(),
+                proto.streetType(),
+                proto.city(),
+                Tuple.cons(proto.province(), i18n.tr("Province")),
+                Tuple.cons(proto.country().name(), i18n.tr("Country")),
+                
+                // common gadget stuff
+                Tuple.cons(proto.common().propertyManger().name(), i18n.tr("Property Manager")),
+                Tuple.cons(proto.common().owner().company().name(), i18n.tr("Owner")),
+                proto.common().region(),
+                Tuple.cons(proto.common().portfolio().name(), i18n.tr("Portfolio"))                
+        })));               
+        return cd;
     }
-
-    @Override
-    protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.ArrearsGadget);
-        gmd.name().setValue(GadgetType.ArrearsGadget.toString());
-    }
+    //@formatter:on
 
     @Override
     public Widget asWidget() {
@@ -85,10 +114,6 @@ public class ArrearsListerGadget extends ListerGadgetBase<MockupArrear> implemen
 
     @Override
     public void setFiltering(FilterData filterData) {
-        this.filterData = filterData;
-        if (filterData.toDate == null) {
-            filterData.toDate = new Date();
-        }
         populatePage(0);
     }
 
@@ -96,22 +121,26 @@ public class ArrearsListerGadget extends ListerGadgetBase<MockupArrear> implemen
     public void populatePage(int pageNumber) {
         // TODO move isRunning() check to the base class
         // TODO isLoading is for avoiding redundant reloads, investigate why they are happening and then remove it if it's possible
-        if (isRunning() & !isLoading) {
-            final int p = pageNumber;
-            isLoading = true;
-            service.arrearsList(new AsyncCallback<EntitySearchResult<MockupArrear>>() {
-                @Override
-                public void onSuccess(EntitySearchResult<MockupArrear> result) {
-                    setPageData(result.getData(), p, result.getTotalRows(), result.hasMoreData());
-                    isLoading = false;
-                }
+        if (filterData != null) {
+            if (isRunning() & !isLoading) {
+                final int p = pageNumber;
+                isLoading = true;
+                service.arrearsList(new AsyncCallback<EntitySearchResult<MockupArrearsCompilation>>() {
+                    @Override
+                    public void onSuccess(EntitySearchResult<MockupArrearsCompilation> result) {
+                        setPageData(result.getData(), p, result.getTotalRows(), result.hasMoreData());
+                        isLoading = false;
+                    }
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    isLoading = false;
-                    throw new Error(caught);
-                }
-            }, new Vector<Key>(filterData.buildings), new LogicalDate(filterData.toDate), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        isLoading = false;
+                        throw new Error(caught);
+                    }
+                }, new Vector<Key>(filterData.buildings), new LogicalDate(filterData.toDate), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+            }
+        } else {
+            setPageData(new ArrayList<MockupArrearsCompilation>(1), 0, 0, false);
         }
     }
 }
