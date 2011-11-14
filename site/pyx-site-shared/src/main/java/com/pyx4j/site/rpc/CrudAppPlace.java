@@ -67,46 +67,53 @@ public abstract class CrudAppPlace extends AppPlace {
         this.name = name;
     }
 
-    public void formViewerPlace(Key itemID) {
+    public CrudAppPlace formViewerPlace(Key itemID) {
         setType(Type.viewer);
         putArg(ARG_NAME_ID, itemID.toString());
+        return this;
     }
 
-    public void formViewerPlace(Key itemID, int tabIndex) {
+    public CrudAppPlace formViewerPlace(Key itemID, int tabIndex) {
         formViewerPlace(itemID);
         if (tabIndex >= 0) {
             putArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
+        return this;
     }
 
-    public void formEditorPlace(Key itemID) {
+    public CrudAppPlace formEditorPlace(Key itemID) {
         setType(Type.editor);
         putArg(ARG_NAME_ID, itemID.toString());
+        return this;
     }
 
-    public void formEditorPlace(Key itemID, int tabIndex) {
+    public CrudAppPlace formEditorPlace(Key itemID, int tabIndex) {
         formEditorPlace(itemID);
         if (tabIndex >= 0) {
             putArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
+        return this;
     }
 
-    public void formNewItemPlace(Key parentID) {
+    public CrudAppPlace formNewItemPlace(Key parentID) {
         setType(Type.editor);
         putArg(ARG_NAME_ID, ARG_VALUE_NEW);
         if (parentID != null) {
             putArg(ARG_NAME_PARENT_ID, parentID.toString());
         }
+        return this;
     }
 
-    public void formDashboardPlace(Key itemID) {
+    public CrudAppPlace formDashboardPlace(Key itemID) {
         setType(Type.dashboard);
         putArg(ARG_NAME_ID, itemID.toString());
+        return this;
     }
 
-    public void formDashboardPlace(Key itemID, String name) {
+    public CrudAppPlace formDashboardPlace(Key itemID, String name) {
         setType(Type.dashboard);
         putArg(ARG_NAME_ID, itemID.toString());
         setName(name);
+        return this;
     }
 }

@@ -233,8 +233,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void goToViewer(Key entityID) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(placeClass);
-        place.formViewerPlace(entityID, view.getActiveTab());
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
     }
 }

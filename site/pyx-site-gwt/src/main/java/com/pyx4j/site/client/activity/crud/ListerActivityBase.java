@@ -41,8 +41,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.FilterData;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.FilterData.Operands;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter {
@@ -130,23 +130,17 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(openPlaceClass);
-        place.formViewerPlace(itemID);
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formViewerPlace(itemID));
     }
 
     @Override
     public void edit(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(openPlaceClass);
-        place.formEditorPlace(itemID);
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formEditorPlace(itemID));
     }
 
     @Override
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(openPlaceClass);
-        place.formNewItemPlace(parentID != null ? parentID : this.parentID);
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentID != null ? parentID : this.parentID));
     }
 
     @Override
