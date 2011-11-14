@@ -187,7 +187,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             buildingLister = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
             buildingLister.getLister().setSelectable(false);
             buildingLister.getLister().setHasCheckboxColumn(true);
-            buildingLister.getLister().getListPanel().setPageSize(10);
+            buildingLister.getLister().getDataTablePanel().setPageSize(10);
 
             for (DateIntervals interval : EnumSet.allOf(DateIntervals.class)) {
                 dateIntervals.addItem(interval.toString(), interval.name());

@@ -30,8 +30,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
@@ -75,7 +75,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             @Override
             // although the name doesn't give a clue, this sets the default column descriptors for the EntityListPanelWidget
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
-                return fetchColumnDescriptorsFromSettings(this.proto());
+                return fetchColumnDescriptorsFromSettings(proto());
             }
 
             @Override
@@ -101,7 +101,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             public void onChange(ColumnDescriptor<E> column) {
                 // get the sorting criteria and store it in settings
                 List<Sort> sorting = new ArrayList<Sort>(2);
-                ColumnDescriptor<E> primarySortColumn = entityListPanel.getDataTable().getDataTableModel().getSortColumn();
+                ColumnDescriptor<E> primarySortColumn = entityListPanel.getDataTableModel().getSortColumn();
                 if (primarySortColumn != null) {
                     sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
                 }

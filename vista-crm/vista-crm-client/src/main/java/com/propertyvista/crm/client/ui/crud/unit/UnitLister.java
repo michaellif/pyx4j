@@ -26,12 +26,12 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
 
     public UnitLister() {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class);
-        getListPanel().getDataTable().setHasCheckboxColumn(false);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     public UnitLister(boolean readOnly) {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, readOnly);
-        getListPanel().getDataTable().setHasCheckboxColumn(false);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     @Override

@@ -32,12 +32,12 @@ public class ServiceTypeLister extends ListerBase<ServiceItemType> {
     public ServiceTypeLister() {
         super(ServiceItemType.class, CrmSiteMap.Settings.ServiceItemType.class);
 
-        getListPanel().getDataTable().setHasCheckboxColumn(true);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
         Button btnDelete = new Button(i18n.tr("Delete&nbspChecked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                for (ServiceItemType item : getListPanel().getDataTable().getCheckedItems()) {
+                for (ServiceItemType item : getDataTablePanel().getDataTable().getCheckedItems()) {
                     getPresenter().delete(item.getPrimaryKey());
                 }
             }

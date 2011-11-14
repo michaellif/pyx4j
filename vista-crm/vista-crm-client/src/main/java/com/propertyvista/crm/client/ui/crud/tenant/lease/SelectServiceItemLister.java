@@ -25,8 +25,8 @@ public class SelectServiceItemLister extends ListerBase<ServiceItem> {
 
     public SelectServiceItemLister() {
         super(ServiceItem.class);
-        getListPanel().getDataTable().setMarkSelectedRow(true);
-        getListPanel().setPageSize(5);
+        getDataTablePanel().getDataTable().setMarkSelectedRow(true);
+        getDataTablePanel().setPageSize(5);
     }
 
     @Override

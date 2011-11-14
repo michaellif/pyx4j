@@ -25,8 +25,8 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
 
     public SelectedUnitLister() {
         super(AptUnit.class, null, true);
-        getListPanel().getDataTable().setMarkSelectedRow(true);
-        getListPanel().setPageSize(8);
+        getDataTablePanel().getDataTable().setMarkSelectedRow(true);
+        getDataTablePanel().setPageSize(8);
     }
 
     @Override

@@ -35,8 +35,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -350,11 +350,11 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
     private List<Sort> getUnitStatusListSortingCriteria() {
         List<Sort> sorting = new ArrayList<Sort>(2);
-        ColumnDescriptor<UnitVacancyStatus> primarySortColumn = unitListPanel.getDataTable().getDataTableModel().getSortColumn();
+        ColumnDescriptor<UnitVacancyStatus> primarySortColumn = unitListPanel.getDataTableModel().getSortColumn();
         if (primarySortColumn != null) {
             sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
         }
-        ColumnDescriptor<UnitVacancyStatus> secondarySortColumn = unitListPanel.getDataTable().getDataTableModel().getSecondarySortColumn();
+        ColumnDescriptor<UnitVacancyStatus> secondarySortColumn = unitListPanel.getDataTableModel().getSecondarySortColumn();
         if (secondarySortColumn != null) {
             sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
         }

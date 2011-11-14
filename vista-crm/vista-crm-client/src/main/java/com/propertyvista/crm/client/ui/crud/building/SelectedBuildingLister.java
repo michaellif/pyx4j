@@ -25,8 +25,8 @@ public class SelectedBuildingLister extends ListerBase<Building> {
 
     public SelectedBuildingLister() {
         super(Building.class, null, true);
-        getListPanel().getDataTable().setMarkSelectedRow(true);
-        getListPanel().setPageSize(5);
+        getDataTablePanel().getDataTable().setMarkSelectedRow(true);
+        getDataTablePanel().setPageSize(5);
     }
 
     @Override

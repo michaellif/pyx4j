@@ -26,12 +26,12 @@ public class TenantScreeningLister extends ListerBase<TenantScreening> {
 
     public TenantScreeningLister() {
         super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class);
-        getListPanel().getDataTable().setHasCheckboxColumn(false);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     public TenantScreeningLister(boolean readOnly) {
         super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class, readOnly);
-        getListPanel().getDataTable().setHasCheckboxColumn(false);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     @Override

@@ -25,8 +25,8 @@ public class SelectTenantLister extends ListerBase<Tenant> {
 
     public SelectTenantLister() {
         super(Tenant.class, null, true);
-        getListPanel().getDataTable().setMarkSelectedRow(true);
-        getListPanel().getDataTable().setHasCheckboxColumn(false);
+        getDataTablePanel().getDataTable().setMarkSelectedRow(true);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
     }
 
     @Override

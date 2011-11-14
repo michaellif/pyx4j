@@ -25,8 +25,8 @@ public class SelectFeatrueLister extends ListerBase<Feature> {
 
     public SelectFeatrueLister() {
         super(Feature.class, null, true);
-        getListPanel().getDataTable().setMarkSelectedRow(true);
-        getListPanel().getDataTable().setHasCheckboxColumn(false);
+        getDataTablePanel().getDataTable().setMarkSelectedRow(true);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);
     }
 
