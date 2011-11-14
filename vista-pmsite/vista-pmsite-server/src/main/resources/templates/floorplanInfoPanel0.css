@@ -1,0 +1,38 @@
+.floorplanInfoPanel .pictureBox {
+	width:100%;
+	text-align:center;
+} 
+.floorplanInfoPanel .pictureBox .picture {
+	width:100%;
+}
+.floorplanInfoPanel .pictureBox .gallery {
+	height:50px;
+}
+.floorplanInfoPanel .pictureBox .gallery img {
+	width:57px;
+	height:40px;
+	cursor:pointer;
+}
+.floorplanInfoPanel .pictureBox .gallery span {
+	float:left;
+	margin:5px 0 5px 8px;
+}
+.floorplanInfoPanel .pictureBox .gallery span:first-child {
+	margin-left:0;
+}
+.floorplanInfoPanel .infoBox {
+	width:100%;
+	font-weight:bold;
+	color:#CCC;
+} 
+.floorplanInfoPanel .infoBoxEntry {
+	padding-top:15px;
+} 
+.floorplanInfoPanel .infoBoxEntry .infoBoxCaption {
+	display:block;
+	padding-top:4px;
+}
+.floorplanInfoPanel .infoBoxEntry .infoBoxText {
+	display:block;
+	padding-top:4px;
+}

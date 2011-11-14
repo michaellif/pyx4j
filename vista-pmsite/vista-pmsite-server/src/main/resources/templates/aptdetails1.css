@@ -21,43 +21,6 @@
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
 	border-bottom:1px solid ${foreground_20};
-	}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox {
-	width:100%;
-	text-align:center;
-} 
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .picture {
-	width:100%;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery {
-	height:50px;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery img {
-	width:57px;
-	cursor:pointer;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span {
-	float:left;
-	margin:5px 0 5px 8px;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .pictureBox .gallery span:first-child {
-	margin-left:0;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBox {
-	width:100%;
-	font-weight:bold;
-	color:${foreground_60};
-} 
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry {
-	padding-top:15px;
-} 
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxCaption {
-	display:block;
-	padding-top:4px;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-sidebar .infoBoxEntry .infoBoxText {
-	display:block;
-	padding-top:4px;
 }
 .apartmentDetailsWrap .detailBox {
 	color:${foreground_60};

@@ -300,22 +300,23 @@ public class WicketUtils {
         @Override
         public void validate(Form<?> form) {
             boolean valid = false;
-            StringBuffer labels = new StringBuffer();
-            String join = "";
+            StringBuffer list = new StringBuffer();
+            String first = null;
             for (FormComponent<?> fc : checkList) {
                 if (fc.getConvertedInput() != null) {
                     valid = true;
                     break;
                 }
-                labels.insert(0, fc.getLabel().getObject() + join);
-                if (join.equals("")) {
-                    join = " " + i18n.tr("or") + " ";
-                } else {
-                    join = ", ";
+                if (first == null) {
+                    first = fc.getLabel().getObject();
+                    continue;
+                } else if (list.length() > 0) {
+                    list.insert(0, ", ");
                 }
+                list.insert(0, fc.getLabel().getObject());
             }
             if (!valid) {
-                form.error(SimpleMessageFormat.format(i18n.tr("Either {0} must be provided"), labels), null);
+                form.error(SimpleMessageFormat.format(i18n.tr("Either one of {0} or {1} must be provided"), list, first), null);
             }
         }
     }

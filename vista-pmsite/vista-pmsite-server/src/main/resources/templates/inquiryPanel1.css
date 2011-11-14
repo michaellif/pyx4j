@@ -1,0 +1,53 @@
+.inquiryPanel .inputEntry {
+	padding:10px 0;
+	margin:0 30px;
+}
+.inquiryPanel .inputEntry .inputLabel {
+	display:inline-block;
+	width: 150px;
+	padding-right:20px;
+	text-align:right;
+	vertical-align:top;
+	color:${foreground_40};
+}
+.inquiryPanel .inputEntry .inputLabel.altApmnt {
+	display:inline;
+	padding-right:5px;
+}
+.inquiryPanel .inputBox {
+	display:inline-block;
+	width:370px;
+}
+.inquiryPanel .inputEntry textarea {
+	width:360px;
+}
+.inquiryPanel .inputEntry .apmntBox {
+	width:120px;
+	display:inline-block;
+}
+.inquiryPanel .inputEntry .captcha {
+	display:inline-block;
+	width:360px;
+}
+.inquiryPanel input[type=submit] {
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
+    height: 32px;
+    min-width:128px;
+    padding:0 8px;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+/*
+ * Datepicker style
+ */
+.inquiryPanel .inputEntry .ui-datepicker-trigger {
+	background:url(jquery_ui_images/calendar.png) no-repeat;
+	display:inline-block;
+	width:21px; height:20px;
+}
+.ui-datepicker {
+	font-size:10px !important;
+}

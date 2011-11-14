@@ -48,6 +48,8 @@ public class AptDetailsPage extends BasePage {
 
     private static final I18n i18n = I18n.get(AptDetailsPage.class);
 
+    public static final String LocalizedPageTitle = i18n.tr("Apartment Details");
+
     public AptDetailsPage(PageParameters params) {
         super(params);
 
@@ -113,7 +115,7 @@ public class AptDetailsPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return i18n.tr("Apartment Details");
+        return LocalizedPageTitle;
     }
 
     @Override

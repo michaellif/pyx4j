@@ -16,8 +16,10 @@ package com.propertyvista.pmsite.server.panels;
 import java.util.Arrays;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.EmailTextField;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -29,21 +31,26 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import templates.TemplateResources;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Inquiry;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadioGroup;
-import com.propertyvista.pmsite.server.pages.AptDetailsPage;
-import com.propertyvista.pmsite.server.pages.InquiryPage;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
 
 public class InquiryPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -61,13 +68,48 @@ public class InquiryPanel extends Panel {
         final StatelessForm<IPojo<Inquiry>> form = new StatelessForm<IPojo<Inquiry>>("inquiryForm", model) {
             private static final long serialVersionUID = 1L;
 
+            @SuppressWarnings("unchecked")
             @Override
             public void onSubmit() {
-                if (fp == null) {
-                    setResponsePage(AptDetailsPage.class, new PageParameters().set("propId", bld.id().getValue().asLong()));
-                } else {
-                    setResponsePage(InquiryPage.class, new PageParameters().set("fpId", fp.id().getValue().asLong()));
+                // update model
+                Inquiry inquiry = model.getObject().getEntityValue();
+                // phones
+                String workPhone = ((FormComponent<String>) get("workPhone")).getModelObject();
+                if (workPhone != null && workPhone.length() > 0) {
+                    Phone phone = EntityFactory.create(Phone.class);
+                    phone.type().setValue(Phone.Type.home);
+                    phone.number().setValue(workPhone);
+                    String ext = ((FormComponent<String>) get("workPhone")).getModelObject();
+                    try {
+                        phone.extension().setValue(Integer.valueOf(ext));
+                    } catch (NumberFormatException ignore) {
+                        // do nothing
+                    }
+                    inquiry.phones().add(phone);
                 }
+                String cellPhone = ((FormComponent<String>) get("cellPhone")).getModelObject();
+                if (cellPhone != null && cellPhone.length() > 0) {
+                    Phone phone = EntityFactory.create(Phone.class);
+                    phone.type().setValue(Phone.Type.mobile);
+                    phone.number().setValue(cellPhone);
+                    inquiry.phones().add(phone);
+                }
+                // add current building
+                inquiry.building().id().setValue(bld.id().getValue());
+                // floorplan
+                Long fpId = ((FormComponent<Long>) get("floorPlanList")).getModelObject();
+                if (fpId != null) {
+                    Floorplan floorplan = EntityFactory.create(Floorplan.class);
+                    floorplan.setPrimaryKey(new Key(fpId));
+                    // TODO - Inquiry uses AptUnit instead - cannot populate from floorplan
+                }
+                PageParameters params = new PageParameters();
+                if (fp != null) {
+                    params.set("fpId", fp.id().getValue().asLong());
+                } else {
+                    params.set("propId", bld.id().getValue().asLong());
+                }
+                setResponsePage(InquirySuccessPage.class, params);
             }
 
         };
@@ -129,5 +171,15 @@ public class InquiryPanel extends Panel {
         form.add(new WicketUtils.OneRequiredFormValidator(workPhone, cellPhone, email));
 
         add(form);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
+        String fileCSS = "inquiryPanel" + styleId + ".css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
     }
 }

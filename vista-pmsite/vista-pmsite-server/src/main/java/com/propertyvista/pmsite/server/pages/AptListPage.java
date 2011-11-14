@@ -39,7 +39,6 @@ import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
@@ -52,6 +51,8 @@ public class AptListPage extends BasePage {
     private static final long serialVersionUID = 1L;
 
     private static final I18n i18n = I18n.get(AptListPage.class);
+
+    public static final String LocalizedPageTitle = i18n.tr("Property List");
 
     public enum ViewMode {
         map, list;
@@ -132,7 +133,7 @@ public class AptListPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return i18n.tr("Property List");
+        return LocalizedPageTitle;
     }
 
     @Override

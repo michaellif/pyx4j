@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 22, 2011
- * @author vlads
+ * Created on Nov 14, 2011
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.pmsite.server.pages;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
@@ -30,14 +30,13 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
-import com.propertyvista.pmsite.server.panels.InquiryPanel;
 
-public class InquiryPage extends BasePage {
+public class InquirySuccessPage extends BasePage {
     private static final long serialVersionUID = 1L;
 
-    private static final I18n i18n = I18n.get(InquiryPage.class);
+    private static final I18n i18n = I18n.get(InquirySuccessPage.class);
 
-    public InquiryPage(PageParameters params) {
+    public InquirySuccessPage(PageParameters params) {
         super(params);
         Long planId = null, propId = null;
         try {
@@ -54,31 +53,35 @@ public class InquiryPage extends BasePage {
         // left side
         Floorplan fp = null;
         Building bld = null;
+        BookmarkablePageLink<Void> backLink;
         if (planId != null) {
             fp = PMSiteContentManager.getFloorplanDetails(planId);
             add(new FloorplanInfoPanel("infoPanel", fp));
+            backLink = new BookmarkablePageLink<Void>("backLink", UnitDetailsPage.class, params);
+            backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + UnitDetailsPage.LocalizedPageTitle));
         } else if (propId != null) {
             bld = PMSiteContentManager.getBuildingDetails(propId);
             add(new BuildingInfoPanel("infoPanel", bld));
+            backLink = new BookmarkablePageLink<Void>("backLink", AptDetailsPage.class, params);
+            backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + AptDetailsPage.LocalizedPageTitle));
         } else {
 //          throw new RuntimeException();
             throw new RestartResponseException(FindAptPage.class);
         }
 
-        // right side - inquiry form
-        add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
-        add(new InquiryPanel("inquiryPanel", bld, fp));
+        // right side - Continue button
+        add(backLink);
     }
 
     @Override
     public String getLocalizedPageTitle() {
-        return i18n.tr("Request Appointment");
+        return i18n.tr("Request Appointment Success");
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
-        String fileCSS = "inquiry" + styleId + ".css";
+        String fileCSS = "inquiryok" + styleId + ".css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);

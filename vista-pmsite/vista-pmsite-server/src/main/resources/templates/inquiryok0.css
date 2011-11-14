@@ -1,0 +1,45 @@
+.vista-pmsite-inquirySuccessPage {
+	font-size:14px;
+	color:#CCCCCC;
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-contentWrap {
+	background: url("images/template0/inner_content_bg.png") repeat-x #37393F;
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-content {
+	background: url("images/template0/inner_bg.png") no-repeat;
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 318px;
+	vertical-align: top;
+	padding:20px 16px;
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-main {
+	display: inline-block;
+	width: 605px;
+	vertical-align: top;
+	min-height:600px;
+	background:white;
+	color:#222;
+}
+.vista-pmsite-inquirySuccessPage .inquirySuccessWrap #successNote {
+	font-size:20px;
+	padding:20px;
+}
+.vista-pmsite-inquirySuccessPage .inquirySuccessWrap .backBtn {
+    background: url("images/template0/btn.png") no-repeat;
+    background-size: 100% 64px;
+    border: 0;
+    display:inline-block;
+    line-height: 32px;
+    padding:0 8px;
+    margin-left:40px;
+    color: #000000;
+    font-size: 16px;
+    text-shadow: 0 1px 0 #CCCCCC;
+    text-transform: uppercase;
+    text-decoration:none;
+}
+.vista-pmsite-inquirySuccessPage .inquirySuccessWrap .backBtn:hover {
+	background-position:0 -32px;
+}

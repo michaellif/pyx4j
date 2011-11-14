@@ -1,0 +1,40 @@
+.vista-pmsite-inquirySuccessPage {
+	font-size:14px;
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 318px;
+	vertical-align: top;
+	padding:20px 16px;
+	border-right:1px solid ${foreground_20};
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-main {
+	display: inline-block;
+	width: 605px;
+	vertical-align: top;
+	min-height:600px;
+}
+.vista-pmsite-inquirySuccessPage .vista-pmsite-main .caption2 {
+	border-bottom:1px solid ${foreground_20};
+}
+.vista-pmsite-inquirySuccessPage .inquirySuccessWrap #successNote {
+	font-size:20px;
+	padding:20px;
+}
+.vista-pmsite-inquirySuccessPage .inquirySuccessWrap .backBtn {
+	background: ${contrast1_100};
+	border: 2px solid ${contrast1_120};
+	color: ${contrast1_10};
+    display:inline-block;
+    line-height: 32px;
+    padding:0 8px;
+    margin-left:40px;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-decoration:none;
+}

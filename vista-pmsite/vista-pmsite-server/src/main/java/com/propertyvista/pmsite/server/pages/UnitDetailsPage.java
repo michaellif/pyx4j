@@ -35,7 +35,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
 
@@ -44,6 +43,8 @@ public class UnitDetailsPage extends BasePage {
     private static final long serialVersionUID = 1L;
 
     private static final I18n i18n = I18n.get(UnitDetailsPage.class);
+
+    public static final String LocalizedPageTitle = i18n.tr("Unit Details");
 
     public UnitDetailsPage(PageParameters params) {
         super(params);
@@ -91,7 +92,7 @@ public class UnitDetailsPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return i18n.tr("Unit Details");
+        return LocalizedPageTitle;
     }
 
     @Override

@@ -1,0 +1,37 @@
+.buildingInfoPanel .pictureBox {
+	width:100%;
+	text-align:center;
+} 
+.buildingInfoPanel .pictureBox .picture {
+	width:100%;
+}
+.buildingInfoPanel .pictureBox .gallery {
+	height:50px;
+}
+.buildingInfoPanel .pictureBox .gallery img {
+	width:57px;
+	cursor:pointer;
+}
+.buildingInfoPanel .pictureBox .gallery span {
+	float:left;
+	margin:5px 0 5px 8px;
+}
+.buildingInfoPanel .pictureBox .gallery span:first-child {
+	margin-left:0;
+}
+.buildingInfoPanel .infoBox {
+	width:100%;
+	font-weight:bold;
+	color:${foreground_60};
+} 
+.buildingInfoPanel .infoBoxEntry {
+	padding-top:15px;
+} 
+.buildingInfoPanel .infoBoxEntry .infoBoxCaption {
+	display:block;
+	padding-top:4px;
+}
+.buildingInfoPanel .infoBoxEntry .infoBoxText {
+	display:block;
+	padding-top:4px;
+}

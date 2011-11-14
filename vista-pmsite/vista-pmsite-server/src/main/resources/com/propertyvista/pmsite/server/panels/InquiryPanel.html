@@ -1,78 +1,80 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<form wicket:id="inquiryForm" id="inquiryForm">
-	<div wicket:id="form_messages" />
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Title</wicket:i18n></label>
-		<select wicket:id="name.namePrefix"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>First Name</wicket:i18n></label>
-		<input type="text" wicket:id="name.firstName"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Last Name</wicket:i18n></label>
-		<input type="text" wicket:id="name.lastName"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Work Phone</wicket:i18n></label>
-		<input type="text" wicket:id="workPhone"/> <span>Ext</span> <input type="text" wicket:id="workPhoneExt" style="width:50px"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Cell Phone</wicket:i18n></label>
-		<input type="text" wicket:id="cellPhone"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Email Address</wicket:i18n></label>
-		<input type="email" wicket:id="email.address"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Preferred Unit</wicket:i18n></label>
-		<div wicket:id="floorPlanList" class="inputBox units"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Desired Lease Term</wicket:i18n></label>
-		<div wicket:id="availLeaseTerms" class="inputBox terms"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Desired Move In Date</wicket:i18n></label>
-		<input type="text" size=8 id="movingDate" wicket:id="movingDate"/>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Preferred Appointment Time</wicket:i18n></label>
-		<div class="apmntBox">
-			<input type="text" size=8 id="apmntDate1" wicket:id="apmntDate1"/>
-			<div wicket:id="apmntTime1" class="inputBox apmntTime"/>
+<div class="inquiryPanel">
+	<form wicket:id="inquiryForm" id="inquiryForm">
+		<div wicket:id="form_messages" />
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Title</wicket:i18n></label>
+				<select wicket:id="name.namePrefix"/>
 		</div>
-		<label class="inputLabel altApmnt"><wicket:i18n>Second Choice</wicket:i18n></label>
-		<div class="apmntBox">
-			<input type="text" size=8 id="apmntDate2" wicket:id="apmntDate2"/>
-			<div wicket:id="apmntTime2" class="inputBox apmntTime"/>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>First Name</wicket:i18n></label>
+				<input type="text" wicket:id="name.firstName"/>
 		</div>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>How Did You Hear About Us</wicket:i18n>?</label>
-		<select name="refSource">
-			<option value="Internet">Internet</option>	<option value="Newspaper">Newspaper</option>
-			<option value="Radio">Radio</option>		<option value="Referral">Referral</option>
-			<option value="Import">Import</option>		<option value="Locator Services">Locator Services</option>
-			<option value="Direct Mail">Direct Mail</option>
-		</select>
-	</div>
-	<div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Additional Comments</wicket:i18n></label>
-		<textarea wicket:id="comments" rows="10"></textarea>
-	</div>
-	<!-- div class="inputEntry">
-		<label class="inputLabel"><wicket:i18n>Enter Security Code</wicket:i18n></label>
-		<div class="captcha">
-			<img wicket:id="captchaImg"/> <input type="text" wicket:id="captchaText"/>
-		</div>		
-	</div -->
-	<div class="inputEntry">
-		<input type="submit" wicket:id="inquirySubmit" value="SUBMIT"/>
-	</div>
-</form>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Last Name</wicket:i18n></label>
+				<input type="text" wicket:id="name.lastName"/>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Work Phone</wicket:i18n></label>
+				<input type="text" wicket:id="workPhone"/> <span>Ext</span> <input type="text" wicket:id="workPhoneExt" style="width:50px"/>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Cell Phone</wicket:i18n></label>
+				<input type="text" wicket:id="cellPhone"/>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Email Address</wicket:i18n></label>
+				<input type="email" wicket:id="email.address"/>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Preferred Unit</wicket:i18n></label>
+				<div wicket:id="floorPlanList" class="inputBox units"/>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Desired Lease Term</wicket:i18n></label>
+				<div wicket:id="availLeaseTerms" class="inputBox terms"/>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Desired Move In Date</wicket:i18n></label>
+				<input type="text" size=8 id="movingDate" wicket:id="movingDate"/>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Preferred Appointment Time</wicket:i18n></label>
+				<div class="apmntBox">
+						<input type="text" size=8 id="apmntDate1" wicket:id="apmntDate1"/>
+						<div wicket:id="apmntTime1" class="inputBox apmntTime"/>
+				</div>
+				<label class="inputLabel altApmnt"><wicket:i18n>Second Choice</wicket:i18n></label>
+				<div class="apmntBox">
+						<input type="text" size=8 id="apmntDate2" wicket:id="apmntDate2"/>
+						<div wicket:id="apmntTime2" class="inputBox apmntTime"/>
+				</div>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>How Did You Hear About Us</wicket:i18n>?</label>
+				<select name="refSource">
+						<option value="Internet">Internet</option>		<option value="Newspaper">Newspaper</option>
+						<option value="Radio">Radio</option>				<option value="Referral">Referral</option>
+						<option value="Import">Import</option>				<option value="Locator Services">Locator Services</option>
+						<option value="Direct Mail">Direct Mail</option>
+				</select>
+		</div>
+		<div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Additional Comments</wicket:i18n></label>
+				<textarea wicket:id="comments" rows="10"></textarea>
+		</div>
+		<!-- div class="inputEntry">
+				<label class="inputLabel"><wicket:i18n>Enter Security Code</wicket:i18n></label>
+				<div class="captcha">
+						<img wicket:id="captchaImg"/> <input type="text" wicket:id="captchaText"/>
+				</div>				
+		</div -->
+		<div class="inputEntry">
+				<input type="submit" wicket:id="inquirySubmit" value="SUBMIT"/>
+		</div>
+	</form>
+</div>
 <script language="javascript">
 $(function() {
 	$("#movingDate").datepicker({showOn:'both'});

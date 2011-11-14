@@ -47,6 +47,7 @@ import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.InquiryPage;
+import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
 import com.propertyvista.pmsite.server.pages.InternalErrorPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
@@ -138,6 +139,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         customMount("unitinfo", UnitDetailsPage.class);
         customMount("residents", ResidentsPage.class);
         customMount("inquiry", InquiryPage.class);
+        customMount("inquiryok", InquirySuccessPage.class);
         customMount("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
         customMount("error", InternalErrorPage.class);
 

@@ -17,10 +17,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import templates.TemplateResources;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 
@@ -32,7 +35,9 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
+import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class BuildingInfoPanel extends Panel {
@@ -90,5 +95,15 @@ public class BuildingInfoPanel extends Panel {
             }
         }
         add(new Label("phone", phone));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        int styleId = ((PMSiteWebRequest) getRequest()).getContentManager().getStyleId();
+        String fileCSS = "buildingInfoPanel" + styleId + ".css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
     }
 }
