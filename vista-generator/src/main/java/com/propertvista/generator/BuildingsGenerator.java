@@ -493,6 +493,7 @@ public class BuildingsGenerator {
         unit.info().area().setValue(area);
         unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
 
+        // The values are not set here! See ServiceCatalogGenerator
         //unit.financial()._unitRent().setValue(800. + RandomUtil.randomInt(200));
         //unit.financial()._marketRent().setValue(900. + RandomUtil.randomInt(200));
 

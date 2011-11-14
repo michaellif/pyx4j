@@ -303,9 +303,17 @@ public class ServiceCatalogGenerator {
         return allowedItemTypes;
     }
 
+    public static double createUnitMarketRent(AptUnit unit) {
+        double base = 900.;
+        base += unit.info()._bedrooms().getValue() * 150.0;
+        base += unit.info()._bathrooms().getValue() * 50.0;
+        return base + RandomUtil.randomInt(200);
+    }
+
     public List<ServiceItem> createAptUnitServices(ServiceCatalog catalog, AptUnit unit) {
         Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
         List<ServiceItem> serviceItems = createBuildingElementServices(catalog, unit, type);
+        serviceItems.get(0).price().setValue(createUnitMarketRent(unit));
         unit.financial()._marketRent().set(serviceItems.get(0).price());
         return serviceItems;
 
@@ -324,6 +332,7 @@ public class ServiceCatalogGenerator {
         item.type().name().setValue(selectedItem.getStringView());
         item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
+        // This value may not be used in all cases nad overriden later in generator
         item.price().setValue(500d + RandomUtil.randomInt(500));
         item.description().setValue(type.toString() + " description here...");
         item.element().set(buildingElement);
