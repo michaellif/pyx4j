@@ -305,7 +305,10 @@ public class ServiceCatalogGenerator {
 
     public List<ServiceItem> createAptUnitServices(ServiceCatalog catalog, AptUnit unit) {
         Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
-        return createBuildingElementServices(catalog, unit, type);
+        List<ServiceItem> serviceItems = createBuildingElementServices(catalog, unit, type);
+        unit.financial()._marketRent().set(serviceItems.get(0).price());
+        return serviceItems;
+
     }
 
     public List<ServiceItem> createBuildingElementServices(ServiceCatalog catalog, BuildingElement buildingElement, Service.Type type) {

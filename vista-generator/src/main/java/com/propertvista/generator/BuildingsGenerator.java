@@ -493,8 +493,8 @@ public class BuildingsGenerator {
         unit.info().area().setValue(area);
         unit.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
 
-        unit.financial()._unitRent().setValue(800. + RandomUtil.randomInt(200));
-        unit.financial()._marketRent().setValue(900. + RandomUtil.randomInt(200));
+        //unit.financial()._unitRent().setValue(800. + RandomUtil.randomInt(200));
+        //unit.financial()._marketRent().setValue(900. + RandomUtil.randomInt(200));
 
         // info items
         if (RandomUtil.randomBoolean()) {
