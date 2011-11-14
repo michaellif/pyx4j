@@ -113,9 +113,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseTo()), 8).labelWidth(10).build());
         main.setWidget(++row, 0, leaseDatePanel);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel()), 20).build());
+        main.setWidget(++row, 0, new HTML("&nbsp"));
 
         if (isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel()), 20).build());
+
             HorizontalPanel unitPanel = new HorizontalPanel();
             unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
             CHyperlink select;
@@ -139,6 +141,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             select.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
             main.setWidget(++row, 0, unitPanel);
         } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding()), 20).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
         }
 
