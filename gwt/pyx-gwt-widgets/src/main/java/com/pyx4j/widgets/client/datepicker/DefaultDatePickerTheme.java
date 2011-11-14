@@ -110,6 +110,10 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("top", "-2px");
         addStyle(style);
 
+        style = new Style(".", StyleName.DatePickerYearLabel);
+        style.addProperty("width", "70px");
+        addStyle(style);
+
         //style = new Style(" .monthSelectorNavigation.right");
         //style.addProperty("border-right", "1px solid #A8B8B8");
         //addStyle(style);
