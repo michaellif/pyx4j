@@ -35,6 +35,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
@@ -65,11 +66,14 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.NavigationIDs;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.lister.FilterData.Operands;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
@@ -99,6 +103,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     protected final EntityListPanel<E> listPanel;
 
+    private Class<? extends NavigNode> editorPage;
+
     protected Presenter presenter;
 
     private List<ItemSelectionHandler<E>> itemSelectionHandlers;
@@ -121,6 +127,16 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 ListerBase.this.fillDefaultColumnDescriptors(columnDescriptors, proto());
                 assert !columnDescriptors.isEmpty() : "shouldn't be empty!..";
                 return columnDescriptors;
+            }
+
+            @Override
+            protected void onSelect(int selectedRow) {
+                if (editorPage != null) {
+                    E entity = getDataTable().getSelectedItem();
+                    if (entity != null) {
+                        History.newItem(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()).getPath());
+                    }
+                }
             }
         };
         listPanel.setPrevActionHandler(new ClickHandler() {
@@ -726,5 +742,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 }
             }
         }
+    }
+
+    public void setEditorPageType(Class<? extends NavigNode> editorPage) {
+        this.editorPage = editorPage;
+        //TODO change Cursor style to arrow
+        listPanel.getDataTable().setHasDetailsNavigation(this.editorPage != null);
     }
 }

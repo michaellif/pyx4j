@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -37,17 +36,12 @@ import com.pyx4j.entity.client.ui.datatable.DataTableActionsBar;
 import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.NavigationUri;
-import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.NavigUtils;
 
 public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     protected final DataTableModel<E> dataTableModel;
 
     private final E entityPrototype;
-
-    private Class<? extends NavigNode> editorPage;
 
     private final DataTable<E> dataTable;
 
@@ -70,12 +64,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         dataTable.addItemSelectionHandler(new ItemSelectionHandler() {
             @Override
             public void onSelect(int selectedRow) {
-                if (editorPage != null) {
-                    E entity = dataTable.getSelectedItem();
-                    if (entity != null) {
-                        show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
-                    }
-                }
+                onSelect(selectedRow);
             }
         });
 
@@ -83,17 +72,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         lowerActionsBar.setDataTableModel(dataTableModel);
     }
 
-    public static void show(String path) {
-        History.newItem(path);
-    }
-
-    public static void show(Class<? extends NavigNode> page) {
-        show(NavigUtils.getPageUri(page));
-    }
-
-    public static void show(NavigationUri uri) {
-        show(uri.getPath());
-    }
+    protected abstract void onSelect(int selectedRow);
 
     public void removeUpperActionsBar() {
         remove(upperActionsBar);
@@ -167,12 +146,6 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
         } else {
             throw new RuntimeException("dataTableModel is not set");
         }
-    }
-
-    public void setEditorPageType(Class<? extends NavigNode> editorPage) {
-        this.editorPage = editorPage;
-        //TODO change Cursor style to arrow
-        dataTable.setHasDetailsNavigation(this.editorPage != null);
     }
 
     public String toStringForPrint() {
