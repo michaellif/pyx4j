@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -373,6 +375,8 @@ public class BuildingsGenerator {
 // Floorplans:
     public List<FloorplanDTO> createFloorplans(Building building, int num) {
         List<FloorplanDTO> floorplans = new ArrayList<FloorplanDTO>();
+        Set<String> set = new HashSet<>();
+
         for (int i = 0; i < num; i++) {
 /*
  * String floorplanName = building.propertyCode().getStringView() + "-" + i;
@@ -381,14 +385,17 @@ public class BuildingsGenerator {
  * }
  */
 
-            FloorplanDTO floorplan = createFloorplan();
-            floorplan.building().set(building);
-            floorplans.add(floorplan);
+            FloorplanDTO floorplan = createFloorplan(); //produces limited number of names, for large amounts of data could go into infinite loop
+            if (set.add(floorplan.name().getValue())) {
+                floorplan.building().set(building);
+                floorplans.add(floorplan);
+            } else {
+                i--;
+            }
+
         }
         return floorplans;
     }
-
-    private static int k = 1; //makes floorplan.name() unique at least within same building, doesn't look like the right way to do it though
 
     public FloorplanDTO createFloorplan() {
         FloorplanDTO floorplan = EntityFactory.create(FloorplanDTO.class);
@@ -396,25 +403,13 @@ public class BuildingsGenerator {
         floorplan.description().setValue(CommonsGenerator.lipsum());
 
         floorplan.floorCount().setValue(1 + DataGenerator.randomInt(2));
-        floorplan.bedrooms().setValue(1 + DataGenerator.randomInt(6));
+        floorplan.bedrooms().setValue(DataGenerator.randomInt(7));
         floorplan.dens().setValue(DataGenerator.randomInt(2));
         floorplan.bathrooms().setValue(1 + DataGenerator.randomInt(3));
         floorplan.halfBath().setValue(DataGenerator.randomInt(2));
-        floorplan.marketingName().setValue(floorplan.bedrooms().getStringView() + "-bedroom");
-        floorplan.name().setValue(k + floorplan.bedrooms().getStringView());
-        k++;
-
-        if (floorplan.floorCount().getValue() == 2) {
-            floorplan.marketingName().setValue("Expansive " + floorplan.marketingName().getStringView());
-            floorplan.name().setValue(floorplan.name().getStringView() + "e");
-        } else if (floorplan.bedrooms().getValue() > 4) {
-            floorplan.marketingName().setValue("Luxury " + floorplan.marketingName().getStringView());
-            floorplan.name().setValue(floorplan.name().getStringView() + "l");
-        }
-        if (floorplan.dens().getValue() > 0) {
-            floorplan.marketingName().setValue(floorplan.marketingName().getStringView() + " + den");
-            floorplan.name().setValue(floorplan.name().getStringView() + "-d");
-        }
+        floorplan.marketingName().setValue(createMarketingName(floorplan.bedrooms().getValue(), floorplan.dens().getValue()));
+        floorplan.name().setValue(
+                floorplan.marketingName().getValue() + ' ' + floorplan.bathrooms().getValue() + ' ' + ((char) (1 + DataGenerator.randomInt(5) + 'A')));
 
         for (int i = 0; i < 2 + DataGenerator.randomInt(6); i++) {
             FloorplanAmenity amenity = BuildingsGenerator.createFloorplanAmenity();
@@ -423,6 +418,23 @@ public class BuildingsGenerator {
         }
 
         return floorplan;
+    }
+
+    public String createMarketingName(int bedrooms, int dens) {
+        String marketingName;
+
+        if (bedrooms == 0) {
+            marketingName = "Bachelor";
+        } else if (bedrooms > 4) {
+            marketingName = "Luxury " + bedrooms + "-bedroom";
+        } else {
+            marketingName = bedrooms + "-bedroom";
+        }
+        if (dens > 0) {
+            marketingName = marketingName + " + den";
+        }
+
+        return marketingName;
     }
 
     public static FloorplanAmenity createFloorplanAmenity() {
