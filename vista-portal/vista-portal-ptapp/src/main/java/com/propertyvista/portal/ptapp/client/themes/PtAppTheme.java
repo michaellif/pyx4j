@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
+import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
@@ -59,6 +60,8 @@ public class PtAppTheme extends VistaTheme {
         addTheme(new DefaultDatePickerTheme());
 
         addTheme(new PtAppSitePanelTheme());
+
+        addTheme(new DefaultDialogTheme());
 
         initBodyStyles();
         initListBoxStyle();

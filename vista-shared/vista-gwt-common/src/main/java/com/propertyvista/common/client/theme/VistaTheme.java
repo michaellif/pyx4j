@@ -220,30 +220,6 @@ public class VistaTheme extends Theme {
         addStyle(style);
     }
 
-    protected void initDialogPanelStyles() {
-        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog));
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Caption));
-        style.addProperty("background", ThemeColors.object1, 0.8);
-        style.addProperty("filter", "alpha(opacity=95)");
-        style.addProperty("opacity", "0.95");
-        style.addProperty("color", ThemeColors.object1, 0.2);
-        style.addProperty("font-weight", "bold");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Resizer));
-        style.addProperty("background", ThemeColors.object1, 0.8);
-        style.addProperty("filter", "alpha(opacity=95)");
-        style.addProperty("opacity", "0.95");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_Dialog_Content));
-        style.addProperty("background-color", ThemeColors.background);
-        addStyle(style);
-    }
-
     protected void initTabPanelStyles() {
         Style style = new Style(".gwt-TabLayoutPanel");
         addStyle(style);
