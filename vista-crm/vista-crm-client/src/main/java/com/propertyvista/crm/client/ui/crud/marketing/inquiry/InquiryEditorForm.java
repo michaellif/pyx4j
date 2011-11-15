@@ -68,6 +68,9 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 30).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refSource()), 30).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         main.setH3(++row, 0, 2, proto().phones().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().phones(), new PhoneFolder(isEditable())));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -96,6 +99,9 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().building()), 20).build());
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         }
+
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().leaseTerm()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().movingDate()), 9).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
