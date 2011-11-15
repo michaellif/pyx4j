@@ -143,12 +143,6 @@
                 <version>${pyxVersion}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.pyx4j</groupId>
-                <artifactId>pyx-entity-ria</artifactId>
-                <version>${pyxVersion}</version>
-            </dependency>
-
              <dependency>
                 <groupId>com.pyx4j</groupId>
                 <artifactId>pyx-unit-gwt</artifactId>

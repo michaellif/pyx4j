@@ -104,7 +104,6 @@
         <module>unit/pyx-unit-gwt</module>
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-forms</module>
-        <module>gwt/pyx-gwt-ria</module>
 
         <module>gwt/pyx-gwt-dnd</module>
 
@@ -168,10 +167,6 @@
 
         <module>examples/examples-domain</module>
         <module>examples/examples-site</module>
-
-<!--
-        <module>examples/examples-ria</module>
--->
 
         <module>examples/examples-gae-server</module>
 
