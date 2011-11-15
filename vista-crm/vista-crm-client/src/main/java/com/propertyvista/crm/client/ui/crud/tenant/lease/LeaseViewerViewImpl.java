@@ -37,7 +37,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             }
         });
         createApplicationAction.setValue(i18n.tr("Create Application"));
-        addActionWidget(createApplicationAction.asWidget());
+        addToolbarItem(createApplicationAction.asWidget());
 
         // set main form here: 
         setForm(new LeaseEditorForm(new CrmViewersComponentFactory()));

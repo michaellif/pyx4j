@@ -36,7 +36,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
             }
         });
         upload.setValue("Upload import.xml");
-        addActionButton(upload.asWidget());
+        addToolbarItem(upload.asWidget());
 
         CHyperlink downloadFull = new CHyperlink(new Command() {
             @Override
@@ -45,7 +45,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
             }
         });
         downloadFull.setValue("Download export.xml");
-        addActionButton(downloadFull.asWidget());
+        addToolbarItem(downloadFull.asWidget());
 
         CHyperlink downloadNoImages = new CHyperlink(new Command() {
             @Override
@@ -54,7 +54,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
             }
         });
         downloadNoImages.setValue("Download export.xml (no images)");
-        addActionButton(downloadNoImages.asWidget());
+        addToolbarItem(downloadNoImages.asWidget());
 
     }
 }

@@ -30,8 +30,8 @@ public class CrmTitleBar extends HorizontalPanel {
 
     private final HTML breadcrumbHolder;
 
-    public CrmTitleBar(String caption) {
-        captionHolder = new HTML(caption, false);
+    public CrmTitleBar() {
+        captionHolder = new HTML("", false);
         setStyleName(getStylePrefix());
         captionHolder.setStyleName(getStylePrefix() + StyleSuffix.Caption.name());
         add(captionHolder);

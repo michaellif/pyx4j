@@ -21,6 +21,7 @@ import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
@@ -44,6 +45,8 @@ public class PtAppTheme extends VistaTheme {
     protected void initStyles() {
 
         addTheme(new HorizontalAlignCenterMixin());
+
+        addTheme(new DefaultWidgetsTheme());
 
         addTheme(new DefaultWidgetDecoratorTheme());
 

@@ -70,7 +70,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
     protected static I18n i18n = I18n.get(CrmBoardViewImpl.class);
 
-    protected final CrmTitleBar header = new CrmTitleBar("");
+    protected final CrmTitleBar header = new CrmTitleBar();
 
     protected final SimplePanel filtersPanel = new SimplePanel();
 

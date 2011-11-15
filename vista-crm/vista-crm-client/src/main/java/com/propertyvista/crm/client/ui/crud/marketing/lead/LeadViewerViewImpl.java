@@ -45,7 +45,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
             }
         });
         btnconvert.addStyleName(btnconvert.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
-        addActionWidget(btnconvert);
+        addToolbarItem(btnconvert);
 
         appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());
 

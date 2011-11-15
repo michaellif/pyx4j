@@ -16,41 +16,36 @@ package com.propertyvista.admin.client.ui.crud;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.admin.client.themes.VistaAdminTheme;
-import com.propertyvista.admin.client.ui.decorations.AdminActionsBarDecorator;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 
-    protected final AdminHeaderDecorator header;
-
     protected final String defaultCaption;
 
-    protected final HorizontalPanel actionsPanel;
-
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
+        super(new AdminHeaderDecorator(), new Toolbar(), VistaAdminTheme.defaultHeaderHeight);
 
-        actionsPanel = new HorizontalPanel();
-        actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        actionsPanel.setWidth("100%");
-        actionsPanel.add(new HTML()); // just for %-tage cells alignment...
-        actionsPanel.setSpacing(4);
+        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
+        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption);
 
-        addNorth(header = new AdminHeaderDecorator(defaultCaption), VistaAdminTheme.defaultHeaderHeight);
-        addNorth(new AdminActionsBarDecorator(null, fillActionsPanel()), VistaAdminTheme.defaultActionBarHeight);
+        Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.edit();
+            }
+        });
+        btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.EditButton);
 
-        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
+        addToolbarItem(btnEdit);
+
     }
 
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, AdminEntityForm<E> form) {
@@ -61,24 +56,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
     @Override
     public void populate(E value) {
         super.populate(value);
-        header.setCaption(defaultCaption + " " + value.getStringView());
-    }
-
-    private Widget fillActionsPanel() {
-        Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.edit();
-            }
-        });
-        btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.EditButton);
-        addActionButton(btnEdit);
-        return actionsPanel;
-    }
-
-    protected void addActionButton(Widget action) {
-        actionsPanel.insert(action, 1);
-        actionsPanel.setCellWidth(action, "1%");
+        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
     }
 
 }

@@ -32,8 +32,6 @@ public class ServiceDictionaryViewImpl extends CrmViewerViewImplBase<ServiceItem
         serviceLister = new ListerInternalViewImplBase<ServiceItemType>(new ServiceTypeLister());
         featureLister = new ListerInternalViewImplBase<ServiceItemType>(new FeatureTypeLister());
 
-        remove(actionsWidget);
-
         // set main form here: 
         setForm(new ServiceDictionaryViewForm());
     }

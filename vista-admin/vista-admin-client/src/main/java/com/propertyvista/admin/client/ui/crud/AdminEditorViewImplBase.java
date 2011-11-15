@@ -13,18 +13,11 @@
  */
 package com.propertyvista.admin.client.ui.crud;
 
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -32,14 +25,13 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.admin.client.themes.VistaAdminTheme;
 import com.propertyvista.admin.client.ui.components.AnchorButton;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
-
-    protected final AdminHeaderDecorator header;
 
     protected String defaultCaption;
 
@@ -50,12 +42,48 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
     protected EditMode mode;
 
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        defaultCaption = AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption();
+        super(new AdminHeaderDecorator(), new Toolbar(), VistaAdminTheme.defaultHeaderHeight);
 
-        addNorth(header = new AdminHeaderDecorator(defaultCaption), VistaAdminTheme.defaultHeaderHeight);
-        addSouth(createButtons(), VistaAdminTheme.defaultFooterHeight);
+        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
 
-        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
+        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption);
+
+        Toolbar footer = ((Toolbar) getFooter());
+
+        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
+                presenter.apply();
+            }
+        });
+        footer.addItem(btnApply);
+
+        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
+                presenter.save();
+            }
+        });
+        footer.addItem(btnSave);
+
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.cancel();
+            }
+        });
+        footer.addItem(btnCancel);
+
+        enableButtons(false);
+
     }
 
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrudEntityForm<E> form) {
@@ -79,7 +107,7 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
     @Override
     public void populate(E value) {
         enableButtons(false);
-        header.setCaption(defaultCaption + " " + value.getStringView());
+        ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
         if (EditMode.newItem.equals(mode)) {
             form.setActiveTab(0);
         }
@@ -100,64 +128,6 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
     @Override
     public void onApplySuccess() {
         enableButtons(false);
-    }
-
-    private Widget createButtons() {
-        HorizontalPanel buttons = new HorizontalPanel();
-
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
-                presenter.apply();
-            }
-        });
-
-        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
-                presenter.save();
-            }
-        });
-
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.cancel();
-            }
-        });
-
-        enableButtons(false);
-
-        btnApply.addStyleName(btnSave.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.SaveButton);
-        btnApply.setWidth("7em");
-
-        btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.SaveButton);
-        btnSave.setWidth("7em");
-
-        buttons.add(btnApply);
-        buttons.add(btnSave);
-        buttons.add(btnCancel);
-
-        buttons.setCellWidth(btnCancel, "60px");
-        buttons.setCellHorizontalAlignment(btnCancel, HasHorizontalAlignment.ALIGN_CENTER);
-        buttons.setCellVerticalAlignment(btnCancel, HasVerticalAlignment.ALIGN_MIDDLE);
-        buttons.setSpacing(5);
-
-        SimplePanel wrap = new SimplePanel();
-        wrap.getElement().getStyle().setProperty("borderTop", "1px solid #bbb");
-        buttons.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        buttons.getElement().getStyle().setRight(0, Unit.EM);
-        wrap.setWidget(buttons);
-        wrap.setWidth("100%");
-        return wrap;
     }
 
     protected void enableButtons(boolean enable) {

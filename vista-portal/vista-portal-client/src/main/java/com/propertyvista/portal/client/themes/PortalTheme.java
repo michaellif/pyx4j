@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
@@ -48,6 +48,8 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new HorizontalAlignCenterMixin());
 
+        addTheme(new DefaultWidgetsTheme());
+
         addTheme(new DefaultWidgetDecoratorTheme());
 
         addTheme(new DefaultFormFlexPanelTheme() {
@@ -59,10 +61,9 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new DefaultDatePickerTheme());
 
-        addTheme(new DefaultListerTheme());
+        addTheme(new DefaultSiteCrudPanelsTheme());
         addTheme(new DefaultDataTableTheme());
 
-        addTheme(new DefaultWidgetsTheme());
         addTheme(new DefaultCCOmponentsTheme());
 
         initEntityFolderStyles();

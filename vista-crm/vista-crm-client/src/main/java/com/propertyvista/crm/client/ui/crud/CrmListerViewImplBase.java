@@ -23,10 +23,10 @@ import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 
-    private final CrmTitleBar header;
-
     public CrmListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        addNorth(header = new CrmTitleBar(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption()), VistaCrmTheme.defaultHeaderHeight);
-        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
+        super(new CrmTitleBar(), VistaCrmTheme.defaultHeaderHeight);
+
+        ((CrmTitleBar) getHeader()).setCaption(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption());
+
     }
 }

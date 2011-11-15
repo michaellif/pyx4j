@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -49,7 +48,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             }
         });
         approveAction.setValue(i18n.tr("Approve"));
-        addActionWidget(approveAction.asWidget());
+        addToolbarItem(approveAction.asWidget());
 
         moreInfoAction = new CHyperlink(new Command() {
             @Override
@@ -58,7 +57,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             }
         });
         moreInfoAction.setValue(i18n.tr("More Info"));
-        addActionWidget(moreInfoAction.asWidget());
+        addToolbarItem(moreInfoAction.asWidget());
 
         declineAction = new CHyperlink(new Command() {
             @Override
@@ -67,7 +66,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             }
         });
         declineAction.setValue(i18n.tr("Decline"));
-        addActionWidget(declineAction.asWidget());
+        addToolbarItem(declineAction.asWidget());
         //set main form here: 
         setForm(new MasterApplicationEditorForm(new CrmViewersComponentFactory()));
     }
@@ -77,8 +76,4 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         return applicationLister;
     }
 
-    @Override
-    protected Widget createEditAction() {
-        return null;
-    }
 }

@@ -13,18 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -33,16 +26,15 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.EditorViewImplBase;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
-
-    protected final CrmTitleBar header;
 
     protected String defaultCaption;
 
@@ -53,12 +45,46 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     protected EditMode mode;
 
     public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass) {
+        super(new CrmTitleBar(), new Toolbar(), VistaCrmTheme.defaultHeaderHeight);
+
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
+        ((CrmTitleBar) getHeader()).setCaption(defaultCaption);
 
-        addNorth(header = new CrmTitleBar(defaultCaption), VistaCrmTheme.defaultHeaderHeight);
-        addSouth(createButtons(), VistaCrmTheme.defaultFooterHeight);
+        Toolbar footer = ((Toolbar) getFooter());
 
-        header.setHeight("100%"); // fill all that defaultHeaderHeight!..
+        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
+                presenter.apply();
+            }
+        });
+        footer.addItem(btnApply);
+
+        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
+                presenter.save();
+            }
+        });
+        footer.addItem(btnSave);
+
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.cancel();
+            }
+        });
+        footer.addItem(btnCancel);
+
+        enableButtons(false);
     }
 
     public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form) {
@@ -82,10 +108,10 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     public void populate(E value) {
         enableButtons(false);
         if (EditMode.newItem.equals(mode)) {
-            header.setCaption(defaultCaption + " " + i18n.tr("New Item..."));
+            ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + i18n.tr("New Item..."));
             form.setActiveTab(0);
         } else {
-            header.setCaption(defaultCaption + " " + value.getStringView());
+            ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
         }
 
         super.populate(value);
@@ -104,71 +130,6 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     @Override
     public void onApplySuccess() {
         enableButtons(false);
-    }
-
-    private Widget createButtons() {
-        HorizontalPanel buttons = new HorizontalPanel();
-
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
-                presenter.apply();
-            }
-        });
-
-        btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
-                presenter.save();
-            }
-        });
-
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new ShowPopUpBox<YesNoBox>(new YesNoBox()) {
-                    @Override
-                    protected void onClose(YesNoBox box) {
-                        if (box.getYes()) {
-                            presenter.cancel();
-                        }
-                    }
-                };
-            }
-        });
-
-        enableButtons(false);
-
-        btnApply.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
-        btnApply.setWidth("7em");
-
-        btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
-        btnSave.setWidth("7em");
-
-        buttons.add(btnApply);
-        buttons.add(btnSave);
-        buttons.add(btnCancel);
-
-        buttons.setCellWidth(btnCancel, "60px");
-        buttons.setCellHorizontalAlignment(btnCancel, HasHorizontalAlignment.ALIGN_CENTER);
-        buttons.setCellVerticalAlignment(btnCancel, HasVerticalAlignment.ALIGN_MIDDLE);
-        buttons.setSpacing(5);
-
-        SimplePanel wrap = new SimplePanel();
-        wrap.getElement().getStyle().setProperty("borderTop", "1px solid #bbb");
-        buttons.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        buttons.getElement().getStyle().setRight(0, Unit.EM);
-        wrap.setWidget(buttons);
-        wrap.setWidth("100%");
-        return wrap;
     }
 
     protected void enableButtons(boolean enable) {

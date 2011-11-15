@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
@@ -127,7 +127,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
         // use the same style as ListerBase
         entityListPanel.setWidth("100%");
-        entityListPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerListPanel.name());
+        entityListPanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
         entityListPanel.getDataTable().setColumnSelector(getAvailableColumnDescriptors(entityListPanel.proto()));
         entityListPanel.getDataTable().setHasColumnClickSorting(true);
         entityListPanel.getDataTable().setHasCheckboxColumn(false);

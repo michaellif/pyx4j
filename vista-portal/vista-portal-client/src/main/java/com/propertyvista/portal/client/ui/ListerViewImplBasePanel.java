@@ -19,9 +19,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.crud.lister.FilterData;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
@@ -97,12 +97,12 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public List<FilterData> getFiltering() {
+    public List<DataTableFilterData> getFiltering() {
         return getLister().getFiltering();
     }
 
     @Override
-    public void setFiltering(List<FilterData> filterData) {
+    public void setFiltering(List<DataTableFilterData> filterData) {
         getLister().setFiltering(filterData);
     }
 

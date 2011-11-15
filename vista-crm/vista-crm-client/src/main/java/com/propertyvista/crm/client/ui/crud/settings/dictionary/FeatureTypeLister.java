@@ -17,13 +17,12 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
@@ -34,16 +33,14 @@ public class FeatureTypeLister extends ListerBase<ServiceItemType> {
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
-        Button btnDelete = new Button(i18n.tr("Delete&nbspChecked"), new ClickHandler() {
+        addActionItem(new Button(i18n.tr("Delete&nbspChecked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 for (ServiceItemType item : getDataTablePanel().getDataTable().getCheckedItems()) {
                     getPresenter().delete(item.getPrimaryKey());
                 }
             }
-        });
-        btnDelete.addStyleName(btnDelete.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
-        addActionButton(btnDelete);
+        }));
     }
 
     @Override

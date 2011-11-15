@@ -21,13 +21,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operands;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.FilterData;
-import com.pyx4j.site.client.ui.crud.lister.FilterData.Operands;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
@@ -189,9 +189,9 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             unitsLister.setParentFiltering(selected.getPrimaryKey());
         }
         if (leaseFrom != null && leaseTo != null) {
-            List<FilterData> filters = new ArrayList<FilterData>(2);
-            filters.add(new FilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operands.greaterThen, leaseFrom));
-            filters.add(new FilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operands.lessThen, leaseTo));
+            List<DataTableFilterData> filters = new ArrayList<DataTableFilterData>(2);
+            filters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operands.greaterThen, leaseFrom));
+            filters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operands.lessThen, leaseTo));
             unitsLister.setPreDefinedFilters(filters);
         }
         unitsLister.populate(0);

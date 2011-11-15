@@ -15,9 +15,10 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.List;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.UpdateUploadDialog;
@@ -26,20 +27,21 @@ import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
 
-    private final CHyperlink upload;
+    private final Button upload;
 
     public BuildingListerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
         setLister(new BuildingLister());
 
-        upload = new CHyperlink(new Command() {
+        upload = new Button(i18n.tr("Upload update.xml"), new ClickHandler() {
+
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 UpdateUploadDialog.show();
             }
         });
-        upload.setValue(i18n.tr("Upload update.xml"));
-        lister.addActionButton(upload.asWidget());
+        addActionButton(upload);
+
     }
 
     @Override

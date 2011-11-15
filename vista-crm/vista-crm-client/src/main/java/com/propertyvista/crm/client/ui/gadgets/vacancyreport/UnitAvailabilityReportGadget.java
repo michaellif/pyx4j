@@ -40,7 +40,7 @@ import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
@@ -125,7 +125,7 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
         // use the same style as ListerBase
         unitListPanel.setWidth("100%");
-        unitListPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerListPanel.name());
+        unitListPanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
         unitListPanel.getDataTable().setColumnSelector(availableColumns);
         unitListPanel.getDataTable().setHasColumnClickSorting(true);
         unitListPanel.getDataTable().setHasCheckboxColumn(false);

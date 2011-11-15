@@ -40,6 +40,10 @@ public class AdminHeaderDecorator extends VistaHeaderBar {
         this(caption, (String) null);
     }
 
+    public AdminHeaderDecorator() {
+        this((String) null, (String) null);
+    }
+
     public AdminHeaderDecorator(IObject<?> member, String width) {
         this(member.getMeta().getCaption(), null, width);
     }

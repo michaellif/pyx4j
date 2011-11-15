@@ -21,7 +21,8 @@ import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.site.client.ui.crud.lister.DefaultListerTheme;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -66,6 +67,10 @@ public class VistaCrmTheme extends VistaTheme {
     protected void initStyles() {
         addTheme(new HorizontalAlignCenterMixin());
 
+        addTheme(new DefaultWidgetsTheme());
+
+        addTheme(new DefaultWidgetsTheme());
+
         addTheme(new DefaultWidgetDecoratorTheme());
 
         addTheme(new DefaultFormFlexPanelTheme() {
@@ -85,7 +90,7 @@ public class VistaCrmTheme extends VistaTheme {
         addTheme(new DraggerMixin());
         addTheme(new CrmSitePanelTheme());
         addTheme(new DefaultDatePickerTheme());
-        addTheme(new DefaultListerTheme());
+        addTheme(new DefaultSiteCrudPanelsTheme());
         addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultDialogTheme());
 
