@@ -65,6 +65,17 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             persistTenant(tenant);
         }
 
+        for (int i = 1; i <= config().numUnAssigendTenants; i++) {
+            String email = DemoData.UserType.NEW_TENANT.getEmail(i);
+            User user = UserPreloader.createUser(email, email, null);
+            Tenant tenant = generator.createTenant();
+            tenant.person().email().address().setValue(email);
+            // Update user name
+            user.name().setValue(tenant.person().name().getStringView());
+            Persistence.service().persist(user);
+            persistTenant(tenant);
+        }
+
         // Leads:
         List<Lead> leads = generator.createLeads(config().numLeads);
         for (Lead lead : leads) {

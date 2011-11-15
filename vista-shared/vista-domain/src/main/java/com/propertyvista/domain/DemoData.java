@@ -30,6 +30,8 @@ public class DemoData {
 
         TENANT("t", 3),
 
+        NEW_TENANT("n", 3),
+
         PM("m", 3),
 
         ADMIN("a", 2);
