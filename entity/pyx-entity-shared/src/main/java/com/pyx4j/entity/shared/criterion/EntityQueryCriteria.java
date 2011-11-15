@@ -29,6 +29,7 @@ import com.pyx4j.commons.ICloneable;
 import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 
 /**
  * Representation of a query criterion.
@@ -116,8 +117,16 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         return sort(new Sort(propertyName, false));
     }
 
+    public EntityQueryCriteria<E> asc(IObject<?> member) {
+        return asc(member.getPath().toString());
+    }
+
     public EntityQueryCriteria<E> desc(String propertyName) {
         return sort(new Sort(propertyName, true));
+    }
+
+    public EntityQueryCriteria<E> desc(IObject<?> member) {
+        return desc(member.getPath().toString());
     }
 
     public EntityQueryCriteria<E> sort(Sort sort) {
