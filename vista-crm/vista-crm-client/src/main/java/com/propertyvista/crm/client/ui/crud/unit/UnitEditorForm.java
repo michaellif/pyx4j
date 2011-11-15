@@ -61,7 +61,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 i18n.tr("Occupancies"));
 
         tabPanel.add(createFinancialsTab(), i18n.tr("Financial"));
-        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
+// TODO Hided till further investigation:        
+//        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
         tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setDisableMode(isEditable());
