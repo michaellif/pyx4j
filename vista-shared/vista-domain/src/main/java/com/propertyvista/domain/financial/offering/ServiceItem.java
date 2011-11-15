@@ -24,6 +24,12 @@ import com.propertyvista.domain.property.asset.BuildingElement;
 
 public interface ServiceItem extends IEntity {
 
+// TODO Vlads
+//    @Owner
+//    @Detached
+//    @ReadOnly
+//    ServiceOrFeature serviceOrFeature();
+
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "itemType")

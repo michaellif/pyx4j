@@ -45,8 +45,6 @@ public class PreloadData {
 
     public final static String[] PROVINCES = { "ON", "QC", "NS", "NB", "MB", "BC", "PE", "SK", "AB", "NL" };
 
-    public final static String REGISTRATION_DEFAULT_PROPERTY_CODE = "A740";
-
     public final static String[] STREETS = { "Yonge St", "Dufferin St", "Bathurst St", "John St", "16th Ave", "Steeles Ave W" };
 
 }

@@ -16,6 +16,8 @@ package com.propertvista.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.propertvista.generator.gdo.ApplicationSummaryGDO;
+import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
@@ -23,10 +25,14 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class TenantsGenerator {
 
@@ -58,6 +64,30 @@ public class TenantsGenerator {
         }
 
         return item;
+    }
+
+    public ApplicationSummaryGDO createLease(Tenant tenant, AptUnit selectedUnit) {
+        ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
+
+        // lease:
+        summary.lease().leaseID().setValue(RandomUtil.randomLetters(8));
+
+        // This is actually updated during save to match real unit data
+        summary.lease().type().setValue(Service.Type.residentialUnit);
+
+        summary.lease().status().setValue(Lease.Status.Approved);
+        summary.lease().unit().set(selectedUnit);
+        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2010, 2011));
+        summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2012));
+
+        TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
+        summary.tenants().add(tenantSummary);
+        tenantSummary.tenant().set(tenant);
+        tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
+        tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Applicant);
+        tenantSummary.tenantInLease().lease().set(summary.lease());
+
+        return summary;
     }
 
     public List<Lead> createLeads(int num) {

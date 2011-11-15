@@ -19,17 +19,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.TenantsGenerator;
+import com.propertvista.generator.gdo.ApplicationSummaryGDO;
+import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -54,6 +60,17 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
         TenantsGenerator generator = new TenantsGenerator(config().tenantsGenerationSeed);
 
+        // Get the second building
+        EntityListCriteria<Building> bcriteria = EntityListCriteria.create(Building.class);
+        bcriteria.asc(bcriteria.proto().propertyCode().getPath().toString());
+        bcriteria.setPageSize(1);
+        bcriteria.setPageNumber(1);
+        Building building = Persistence.service().retrieve(bcriteria);
+
+        EntityQueryCriteria<AptUnit> ucriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        ucriteria.add(PropertyCriterion.eq(ucriteria.proto().belongsTo(), building));
+        List<AptUnit> units = Persistence.service().query(ucriteria);
+
         for (int i = 1; i <= config().numTenants; i++) {
             String email = DemoData.UserType.TENANT.getEmail(i);
             User user = UserPreloader.createUser(email, email, VistaBehavior.TENANT);
@@ -63,6 +80,18 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             user.name().setValue(tenant.person().name().getStringView());
             Persistence.service().persist(user);
             persistTenant(tenant);
+
+            if (units.size() <= i) {
+                log.warn("No more units available for PotentialTenants. Change configuration!");
+                break;
+            }
+            ApplicationSummaryGDO summary = generator.createLease(tenant, units.get(i - 1));
+            LeaseHelper.updateLease(summary.lease());
+            Persistence.service().persist(summary.lease());
+            for (TenantSummaryGDO tenantSummary : summary.tenants()) {
+                Persistence.service().persist(tenantSummary.tenantInLease());
+            }
+
         }
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
