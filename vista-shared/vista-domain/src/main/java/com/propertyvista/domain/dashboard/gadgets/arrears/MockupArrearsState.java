@@ -17,10 +17,12 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.dashboard.gadgets.CommonGadgetColumns;
@@ -37,16 +39,26 @@ import com.propertyvista.domain.ref.Province;
  * @author artyom
  * 
  */
-public interface MockupArrearsCompilation extends IEntity {
+public interface MockupArrearsState extends IEntity {
+    public enum LegalStatus {
+        EvictionLetterServed {
+            @Override
+            public String toString() {
+                return I18n.get(MockupArrearsState.class).tr("eviction letter served");
+            }
+        },
+        CourtHearingDate {
+            @Override
+            public String toString() {
+                return I18n.get(MockupArrearsState.class).tr("court hearing date");
+            }
+        }
+    }
+
     /**
      * The time when the status has been taken.
      */
     IPrimitive<LogicalDate> statusTimestamp();
-
-    @Owner
-    @Detached
-    @ReadOnly
-    MockupTenant belongsTo();
 
     // the unit, building, and tenant references here are for search optimization purposes
     @Detached
@@ -60,7 +72,7 @@ public interface MockupArrearsCompilation extends IEntity {
     @EmbeddedEntity
     CommonGadgetColumns common();
 
-    // ARREARS
+    // ARREARS STATUS: 
     @EmbeddedEntity
     Arrears rentArrears();
 
@@ -73,8 +85,15 @@ public interface MockupArrearsCompilation extends IEntity {
     @EmbeddedEntity
     Arrears totalArrears();
 
+    @CustomComparator(clazz = ComparableComparator.class)
+    IPrimitive<LegalStatus> legalStatus();
+
+    @Caption(name = "LMR/Unit Rent, in $")
+    @Format("#0.00")
+    IPrimitive<Double> lmrUnitRentDifference();
+
     // FIXME all the following fields should be just references, but we keep them here for the performance improvements, but this is not RIGHT!
-    // ID
+    // IDENTIFICATION INFO
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> propertyCode();
 
@@ -108,6 +127,11 @@ public interface MockupArrearsCompilation extends IEntity {
     IPrimitive<String> unitNumber();
 
     // TENANT INFORMATION
+    @Owner
+    @Detached
+    @ReadOnly
+    MockupTenant belongsTo();
+
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> firstName();
 

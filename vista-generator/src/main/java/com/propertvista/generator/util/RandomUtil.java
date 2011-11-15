@@ -14,8 +14,11 @@
 package com.propertvista.generator.util;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import com.propertvista.generator.PreloadData;
 
@@ -74,6 +77,33 @@ public class RandomUtil extends DataGenerator {
 
     public static Time randomTime() {
         return new Time(randomInt(86400 * 1000));
+    }
+
+    /**
+     * Take random sample of elements from the list.
+     * 
+     * @param random
+     *            random number generator
+     * @param list
+     *            list that contains the elements
+     * @param sampleSize
+     * @return new allocated list that contains the requested number of elements
+     */
+    public static <T> List<T> randomChoice(Random random, List<T> list, int sampleSize) {
+        List<T> copy = new ArrayList<T>(list);
+
+        if (sampleSize >= copy.size()) {
+            return copy;
+        } else {
+            List<T> result = new ArrayList<T>(sampleSize);
+            final int minIndex = list.size() - sampleSize;
+            for (int lastIndex = list.size() - 1; lastIndex >= minIndex; --lastIndex) {
+                int i = random.nextInt(lastIndex + 1);
+                result.add(copy.get(i));
+                copy.set(i, copy.get(lastIndex));
+            }
+            return result;
+        }
     }
 
 }

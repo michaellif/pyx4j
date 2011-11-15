@@ -23,7 +23,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsCompilation;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
 
 public interface ArrearsReportService extends IService {
 
@@ -36,6 +36,6 @@ public interface ArrearsReportService extends IService {
      * @param when
      *            calculate arrears as on this date.
      */
-    void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsCompilation>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
+    void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
             int pageNumber, int pageSize);
 }

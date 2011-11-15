@@ -31,7 +31,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.company.AssignedBuilding;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.gadgets.arrears.Arrears;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsCompilation;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState.LegalStatus;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenant;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -49,6 +50,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
 
     //@formatter:off
     private static final long ONE_DAY = 1000l * 60l * 60l * 24l;
+    private static final long MIN_LEASE = 24l * 60l * 60l * 1000l * 365l;
     private static final long MAX_LEASE = 24l * 60l * 60l * 1000l * 365l * 3l;
     private static final double MAX_ARREAR = 3000d;
     private static final double MAX_ARBALANCE = 10000d;
@@ -58,22 +60,32 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
     private static final double MAX_PREPAYMENTS = 2000d;
     //@formatter:on
 
+    private static final double LMR_UNIT_RENT_DIFFERENCE_CHANCE = 0.1;
+
+    private static final double LEGAL_STATUS_CHANCE = 0.5;
+
+    private static final List<String> REGIONS = Arrays.asList("GTA", "West", "East");
+
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
-        return deleteAll(MockupArrearsCompilation.class, MockupTenant.class);
+        return deleteAll(MockupArrearsState.class, MockupTenant.class);
     }
 
     @Override
     public String createMockup() {
-        List<MockupTenant> tenants = new ArrayList<MockupTenant>(1);
-        List<MockupArrearsCompilation> arrears = new ArrayList<MockupArrearsCompilation>(1);
+        final int maxArraySize = 2000;
+        List<MockupArrearsState> arrears = new ArrayList<MockupArrearsState>();
+        List<MockupTenant> tenants = new ArrayList<MockupTenant>();
 
+        int tenantsCount = 0;
+        int arrearsCount = 0;
         for (Building building : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
             List<AptUnit> units = Persistence.service().query(criteria);
 
+            // TODO add owner
 //            EntityQueryCriteria<Owner> ownerCriteria = new EntityQueryCriteria<Owner>(Owner.class);
 //            ownerCriteria.add(PropertyCriterion.eq(ownerCriteria.proto().building(), building));
 //            List<Owner> owners = Persistence.service().query(ownerCriteria); 
@@ -95,18 +107,17 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
             }
 
             final LogicalDate startDate = new LogicalDate();
-            startDate.setYear(106);
+            startDate.setYear(108);
             startDate.setMonth(0);
             startDate.setDate(1);
             final LogicalDate endDate = new LogicalDate();
 
-            tenants = new ArrayList<MockupTenant>(3 * units.size());
-
+            List<MockupTenant> buildingTenants = new ArrayList<MockupTenant>(units.size() * 3);
             for (AptUnit unit : units) {
                 LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
                 while (movein.before(endDate)) {
-                    LogicalDate moveout = new LogicalDate(movein.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
+                    LogicalDate moveout = new LogicalDate(movein.getTime() + Math.max(MIN_LEASE, RND.nextLong() % MAX_LEASE));
 
                     MockupTenant tenant = EntityFactory.create(MockupTenant.class);
                     tenant.belongsTo().set(unit);
@@ -115,24 +126,20 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     tenant.moveOut().setValue(moveout);
                     tenant.firstName().setValue(RandomUtil.randomFirstName());
                     tenant.lastName().setValue(RandomUtil.randomLastName());
-                    tenants.add(tenant);
+                    buildingTenants.add(tenant);
 
                     movein = new LogicalDate(moveout.getTime() + ONE_DAY);
                 }
             } // tenants
+            tenants.addAll(buildingTenants);
 
-            arrears = new ArrayList<MockupArrearsCompilation>(tenants.size() * 3 * 12);
-
-            EntityQueryCriteria<MockupTenant> tenantCriteria = new EntityQueryCriteria<MockupTenant>(MockupTenant.class);
-            tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().belongsTo().belongsTo(), building));
-            for (MockupTenant tenant : tenants) {
-
-                // create mockup arrears history
+            // create mockup arrears states for these tenants
+            for (MockupTenant tenant : buildingTenants) {
                 LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(tenant.moveIn().getValue().getTime()));
                 LogicalDate lastMonth = tenant.moveOut().getValue().before(endDate) ? tenant.moveOut().getValue() : endDate;
 
                 while (currentMonth.before(lastMonth)) {
-                    MockupArrearsCompilation arrear = EntityFactory.create(MockupArrearsCompilation.class);
+                    MockupArrearsState arrear = EntityFactory.create(MockupArrearsState.class);
 
                     arrear.statusTimestamp().setValue(currentMonth);
 
@@ -151,7 +158,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     arrear.common().propertyManger().set(building.propertyManager());
                     arrear.common().portfolio().set(portfolio);
                     // TODO set normal value form somewhere
-                    arrear.common().region().setValue("REGION");
+                    arrear.common().region().setValue(randomRegion());
 
                     arrear.streetNumber().setValue(building.info().address().streetNumber().getValue());
                     arrear.streetName().setValue(building.info().address().streetName().getValue());
@@ -168,20 +175,38 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     generateRandomArrears(arrear.parkingArrears());
                     generateRandomArrears(arrear.otherArrears());
                     sumArrears(arrear, Arrays.asList(arrear.rentArrears().getPath(), arrear.parkingArrears().getPath(), arrear.otherArrears().getPath()));
+                    arrear.lmrUnitRentDifference().setValue(randomLmrUnitRentDifference());
+                    if (arrear.totalArrears().totalBalance().getValue() > 0.0) {
+                        arrear.legalStatus().setValue(randomLegalStatus());
+                    }
 
                     arrears.add(arrear);
 
                     currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
                 }
-            } // arrears creation
+            } // arrears creation            
 
         } // buildings iteration
-        persistArrayWithId(tenants);
-        persistArray(arrears);
-        return "Created " + tenants.size() + " mockup tennants and " + arrears.size() + " arrear statuses for Arrears Gadget";
+        final int tenantsSize = tenants.size();
+        for (int i = 0; i < tenantsSize;) {
+            persistArrayWithId(tenants.subList(i, Math.min(tenantsSize, i += maxArraySize)));
+        }
+        final int arrearsSize = arrears.size();
+        for (int i = 0; i < arrearsSize;) {
+            persistArray(arrears.subList(i, Math.min(arrears.size(), i += maxArraySize)));
+        }
+        return "Created " + tenantsSize + " mockup tennants and " + arrearsSize + " arrear statuses for Arrears Gadget";
     }
 
-    private static void sumArrears(MockupArrearsCompilation arrearsCompilation, List<Path> arrearsCategory) {
+    private Double randomLmrUnitRentDifference() {
+        return RND.nextDouble() < LMR_UNIT_RENT_DIFFERENCE_CHANCE ? RND.nextDouble() * MAX_ARREAR * 0.5 : null;
+    }
+
+    private LegalStatus randomLegalStatus() {
+        return RND.nextDouble() < LEGAL_STATUS_CHANCE ? (RND.nextBoolean() ? LegalStatus.EvictionLetterServed : LegalStatus.CourtHearingDate) : null;
+    }
+
+    private static void sumArrears(MockupArrearsState arrearsCompilation, List<Path> arrearsCategory) {
         for (String member : arrearsCompilation.totalArrears().getEntityMeta().getMemberNames()) {
             arrearsCompilation.totalArrears().setMemberValue(member, 0.0);
         }
@@ -205,6 +230,10 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
         arrears.arBalance().setValue(randomARBalance());
         arrears.prepayments().setValue(randomPrepayments());
         arrears.totalBalance().setValue(arrears.arBalance().getValue() - arrears.prepayments().getValue());
+    }
+
+    private static String randomRegion() {
+        return RandomUtil.randomChoice(RND, REGIONS, 1).get(0);
     }
 
     private static double randomArrear() {

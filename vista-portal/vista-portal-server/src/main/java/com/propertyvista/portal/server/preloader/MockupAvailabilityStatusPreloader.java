@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import com.pyx4j.commons.LogicalDate;
@@ -249,20 +248,6 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
         status.rentedStatus().setValue(RentedStatus.Unrented);
         status.vacancyStatus().setValue(VacancyStatus.Vacant);
-    }
-
-    @SuppressWarnings("unused")
-    private static <T> List<T> randomChoice(List<T> list, int howMany) {
-        List<T> copy = new ArrayList<T>(list);
-        List<T> result = new ArrayList<T>(list);
-
-        int minIndex = list.size() - howMany;
-        for (int lastIndex = list.size() - 1; lastIndex >= minIndex; --lastIndex) {
-            int i = RND.nextInt(lastIndex + 1);
-            result.add(copy.get(i));
-            copy.set(i, copy.get(lastIndex));
-        }
-        return copy;
     }
 
     /** return x such that x >= min and x < max */

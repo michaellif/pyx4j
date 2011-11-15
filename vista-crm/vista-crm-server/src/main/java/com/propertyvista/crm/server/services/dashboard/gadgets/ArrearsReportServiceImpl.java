@@ -31,23 +31,24 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsCompilation;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
 
 public class ArrearsReportServiceImpl implements ArrearsReportService {
-    private static final SortingFactory<MockupArrearsCompilation> SORTING_FACTORY = new SortingFactory<MockupArrearsCompilation>(MockupArrearsCompilation.class);
+    private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);
 
     @Override
-    public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsCompilation>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
-            int pageNumber, int pageSize) {
+    public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when,
+            Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
         // TODO don't forget to implement sorting
         try {
-            EntityQueryCriteria<MockupArrearsCompilation> criteria = new EntityQueryCriteria<MockupArrearsCompilation>(MockupArrearsCompilation.class);
+            EntityQueryCriteria<MockupArrearsState> criteria = new EntityQueryCriteria<MockupArrearsState>(MockupArrearsState.class);
             // adjust the order of results in order to select the most recent statuses
             sortingCriteria.add(0, new Sort(criteria.proto().statusTimestamp().getPath().toString(), true));
             criteria.setSorts(sortingCriteria);
+            when = when != null ? when : new LogicalDate();
             criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, when));
 
-            final List<MockupArrearsCompilation> allArrears = new ArrayList<MockupArrearsCompilation>();
+            final List<MockupArrearsState> allArrears = new ArrayList<MockupArrearsState>();
             if (!buildingPKs.isEmpty()) {
                 // TODO make this some other way when it's gonna be possible to make query for set of buildings, i.e. something like: 
                 // criteria.add(PropertyCriterion.in(criteria.proto().belongsTo().belongsTo(), buildings));
@@ -62,12 +63,12 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             }
 
             final int capacity = allArrears.size() + 1;
-            final List<MockupArrearsCompilation> preliminaryResults = new ArrayList<MockupArrearsCompilation>(capacity);
+            final List<MockupArrearsState> preliminaryResults = new ArrayList<MockupArrearsState>(capacity);
             // TODO use sorting of results instead of HashSet
             final HashSet<Key> alreadyAddedTenants = new HashSet<Key>(capacity);
 
             // choose only the most recent statuses (we asked the query to sort the results, hence the most recent ones must come first)
-            for (MockupArrearsCompilation arrear : allArrears) {
+            for (MockupArrearsState arrear : allArrears) {
                 if (alreadyAddedTenants.add(arrear.belongsTo().getPrimaryKey())) {
                     preliminaryResults.add(arrear);
                 }
@@ -78,14 +79,14 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 SORTING_FACTORY.sortDto(preliminaryResults, sortingCriteria);
             }
 
-            Vector<MockupArrearsCompilation> data = new Vector<MockupArrearsCompilation>();
+            Vector<MockupArrearsState> data = new Vector<MockupArrearsState>();
             int totalRows = preliminaryResults.size();
             boolean hasMoreRows = false;
 
             int currentPage = 0;
             int currentPagePosition = 0;
 
-            for (MockupArrearsCompilation arrear : preliminaryResults) {
+            for (MockupArrearsState arrear : preliminaryResults) {
                 ++currentPagePosition;
                 if (currentPagePosition > pageSize) {
                     ++currentPage;
@@ -102,7 +103,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
             }
 
-            EntitySearchResult<MockupArrearsCompilation> result = new EntitySearchResult<MockupArrearsCompilation>();
+            EntitySearchResult<MockupArrearsState> result = new EntitySearchResult<MockupArrearsState>();
             result.setData(data);
             result.setTotalRows(totalRows);
             result.hasMoreData(hasMoreRows);
