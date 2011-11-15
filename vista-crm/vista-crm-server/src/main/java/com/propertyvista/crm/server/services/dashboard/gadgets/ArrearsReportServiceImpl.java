@@ -14,7 +14,6 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -36,16 +35,29 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
 public class ArrearsReportServiceImpl implements ArrearsReportService {
     private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when,
-            Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+    public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sorting,
+            int pageNumber, int pageSize) {
         // TODO don't forget to implement sorting
         try {
             EntityQueryCriteria<MockupArrearsState> criteria = new EntityQueryCriteria<MockupArrearsState>(MockupArrearsState.class);
             // adjust the order of results in order to select the most recent statuses
-            sortingCriteria.add(0, new Sort(criteria.proto().statusTimestamp().getPath().toString(), true));
+            ArrayList<Sort> sortingCriteria = new ArrayList<Sort>();
+            sortingCriteria.add(new Sort(criteria.proto().belongsTo().getPath().toString(), false));
+            sortingCriteria.add(new Sort(criteria.proto().statusTimestamp().getPath().toString(), true));
+            sortingCriteria.addAll(sorting);
             criteria.setSorts(sortingCriteria);
             when = when != null ? when : new LogicalDate();
+            LogicalDate monthAgo = new LogicalDate(when);
+            if (when.getMonth() != 0) {
+                monthAgo.setMonth((11 + when.getMonth() - 1) % 11);
+            } else {
+                monthAgo.setMonth(1);
+                monthAgo.setYear(when.getYear() - 1);
+            }
+            // TODO this is just for demo, IRL it shouldn't look the same at all...
+            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, monthAgo));
             criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, when));
 
             final List<MockupArrearsState> allArrears = new ArrayList<MockupArrearsState>();
@@ -64,28 +76,28 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
             final int capacity = allArrears.size() + 1;
             final List<MockupArrearsState> preliminaryResults = new ArrayList<MockupArrearsState>(capacity);
-            // TODO use sorting of results instead of HashSet
-            final HashSet<Key> alreadyAddedTenants = new HashSet<Key>(capacity);
-
             // choose only the most recent statuses (we asked the query to sort the results, hence the most recent ones must come first)
+            Key previousTenantPk = null;
+
             for (MockupArrearsState arrear : allArrears) {
-                if (alreadyAddedTenants.add(arrear.belongsTo().getPrimaryKey())) {
+                Key thisTenantPk = arrear.belongsTo().getPrimaryKey();
+                if (!thisTenantPk.equals(previousTenantPk)) {
                     preliminaryResults.add(arrear);
+                    previousTenantPk = thisTenantPk;
                 }
             }
 
-            // fix screwed sorting in case of more than one building
-            if (!buildingPKs.isEmpty()) {
-                SORTING_FACTORY.sortDto(preliminaryResults, sortingCriteria);
-            }
+            // TODO make this for for all properties 
+            SORTING_FACTORY.sortDto(preliminaryResults, sorting);
 
-            Vector<MockupArrearsState> data = new Vector<MockupArrearsState>();
+            Vector<MockupArrearsState> pageData = new Vector<MockupArrearsState>();
             int totalRows = preliminaryResults.size();
             boolean hasMoreRows = false;
 
             int currentPage = 0;
             int currentPagePosition = 0;
 
+            // FIXME fix bug with wrong page/totalrows/pagenumber mechanism
             for (MockupArrearsState arrear : preliminaryResults) {
                 ++currentPagePosition;
                 if (currentPagePosition > pageSize) {
@@ -95,7 +107,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 if (currentPage < pageNumber) {
                     continue;
                 } else if (currentPage == pageNumber) {
-                    data.add(arrear);
+                    pageData.add(arrear);
                 } else {
                     hasMoreRows = true;
                     break;
@@ -104,7 +116,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             }
 
             EntitySearchResult<MockupArrearsState> result = new EntitySearchResult<MockupArrearsState>();
-            result.setData(data);
+            result.setData(pageData);
             result.setTotalRows(totalRows);
             result.hasMoreData(hasMoreRows);
             callback.onSuccess(result);
@@ -114,4 +126,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         }
     }
 
+    public void summary(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when,
+            Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+    }
 }
