@@ -109,6 +109,7 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
             stmt.setNull(parameterIndex, sqlTypeKey);
             stmt.setNull(parameterIndex + 1, sqlTypeDiscriminator);
         } else {
+            assert impClasses.containsKey(childEntity.getInstanceValueClass()) : "Unexpected class " + childEntity.getInstanceValueClass() + " " + value;
             stmt.setLong(parameterIndex, primaryKey.asLong());
             DiscriminatorValue discriminator = childEntity.getInstanceValueClass().getAnnotation(DiscriminatorValue.class);
             stmt.setString(parameterIndex + 1, discriminator.value());
