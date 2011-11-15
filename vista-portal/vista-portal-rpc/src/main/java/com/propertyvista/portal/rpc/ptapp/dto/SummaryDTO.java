@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
 

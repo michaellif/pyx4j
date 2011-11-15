@@ -25,11 +25,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 import com.propertyvista.server.common.reference.SharedData;
+import com.propertyvista.server.common.util.TenantConverter;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
 

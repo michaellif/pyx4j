@@ -21,10 +21,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
+import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantConverter;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class TenantInfoServiceImpl implements TenantInfoService {
 

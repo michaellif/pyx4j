@@ -47,17 +47,17 @@ import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.AccountCreationRequest;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter;
 import com.propertyvista.server.common.reference.SharedData;
+import com.propertyvista.server.common.util.TenantConverter;
 
 public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
 

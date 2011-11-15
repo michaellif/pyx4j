@@ -23,5 +23,4 @@ public class ApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<Applic
     public ApplicationCrudServiceImpl() {
         super(Application.class, ApplicationDTO.class);
     }
-
 }

@@ -37,16 +37,16 @@ import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.domain.dto.AptUnitDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.server.ptapp.services.ApplicationProgressMgr;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.server.common.util.TenantConverter;
 
 abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 

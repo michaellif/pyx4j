@@ -32,18 +32,18 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 import com.propertyvista.portal.server.report.SummaryReport;
+import com.propertyvista.server.common.util.TenantConverter;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements SummaryService {
 

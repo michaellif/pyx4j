@@ -17,10 +17,10 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialView;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 
 public class FinancialActivity extends WizardStepWithSubstepsActivity<TenantFinancialDTO, FinancialViewPresenter> implements FinancialViewPresenter {

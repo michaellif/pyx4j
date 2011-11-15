@@ -14,6 +14,7 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -22,4 +23,8 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 public interface MasterApplicationDTO extends MasterApplication {
 
     TenantInLease mainApplicant();
+
+    IList<TenantInfoDTO> tenantsWithInfo();
+
+    IList<TenantFinancialDTO> tenantFinancials();
 }

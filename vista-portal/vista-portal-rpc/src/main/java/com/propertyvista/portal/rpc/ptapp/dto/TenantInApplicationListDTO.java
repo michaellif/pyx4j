@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.dto.TenantInLeaseDTO;
 
 @Transient
 public interface TenantInApplicationListDTO extends IEntity, IBoundToApplication {

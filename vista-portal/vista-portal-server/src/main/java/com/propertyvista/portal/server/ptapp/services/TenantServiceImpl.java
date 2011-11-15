@@ -29,14 +29,14 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter;
-import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantConverter;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
 

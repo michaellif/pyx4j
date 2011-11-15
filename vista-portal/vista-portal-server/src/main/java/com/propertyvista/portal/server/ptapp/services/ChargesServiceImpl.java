@@ -34,8 +34,8 @@ import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 

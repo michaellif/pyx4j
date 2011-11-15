@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.util;
+package com.propertyvista.server.common.util;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
@@ -23,7 +23,6 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class TenantRetriever {
 
@@ -52,7 +51,8 @@ public class TenantRetriever {
 
     public void retrieve(Key tenanInLeasetId, boolean financial) {
         tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenanInLeasetId);
-        if ((tenantInLease == null) || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey()))) {
+        // TODO correct this check:
+        if ((tenantInLease == null) /* || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey())) */) {
             throw new SecurityViolationException("Invalid data access");
         }
 

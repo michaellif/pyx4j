@@ -7,27 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 20, 2011
- * @author vlads
+ * Created on Feb 12, 2011
+ * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto;
+package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.income.IIncomeInfo;
+import com.propertyvista.domain.tenant.income.PersonalAsset;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
 
 @Transient
-public interface TenantInfoDTO extends TenantScreening {
+public interface TenantFinancialDTO extends IEntity {
 
     @ToString
     Person person();
 
-    @Length(3)
-    IList<EmergencyContact> emergencyContacts();
+    IList<PersonalIncome> incomes();
+
+    IList<IIncomeInfo> incomes2();
+
+    IList<PersonalAsset> assets();
+
+    IList<TenantGuarantor> guarantors();
 }

@@ -25,19 +25,19 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
-    private final CHyperlink createApplicationButton;
+    private final CHyperlink createApplicationAction;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
-        createApplicationButton = new CHyperlink(new Command() {
+        createApplicationAction = new CHyperlink(new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) presenter).createMasterApplication();
             }
         });
-        createApplicationButton.setValue(i18n.tr("Create Application"));
-        addActionWidget(createApplicationButton.asWidget());
+        createApplicationAction.setValue(i18n.tr("Create Application"));
+        addActionWidget(createApplicationAction.asWidget());
 
         // set main form here: 
         setForm(new LeaseEditorForm(new CrmViewersComponentFactory()));
@@ -45,7 +45,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     @Override
     public void populate(LeaseDTO value) {
-        createApplicationButton.setVisible(!value.id().isNull() && Lease.Status.Draft.equals(value.status().getValue()));
+        createApplicationAction.setVisible(!value.id().isNull() && Lease.Status.Draft.equals(value.status().getValue()));
         super.populate(value);
     }
 }

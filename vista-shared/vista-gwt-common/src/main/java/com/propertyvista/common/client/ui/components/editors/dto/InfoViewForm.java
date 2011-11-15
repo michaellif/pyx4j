@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.info;
+package com.propertyvista.common.client.ui.components.editors.dto;
 
 import java.util.Date;
 import java.util.List;
@@ -46,8 +46,8 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
+import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInfoDTO;
 
 public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 

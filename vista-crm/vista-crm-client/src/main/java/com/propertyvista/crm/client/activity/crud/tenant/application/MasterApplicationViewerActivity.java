@@ -64,4 +64,22 @@ public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterAp
         ((AbstractActivity) applicationLister).onStop();
         super.onStop();
     }
+
+    @Override
+    public void approve() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void decline() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void moreInfo() {
+        // TODO Auto-generated method stub
+
+    }
 }

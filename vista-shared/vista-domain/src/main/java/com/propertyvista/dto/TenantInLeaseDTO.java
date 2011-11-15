@@ -13,13 +13,26 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.TenantInLease;
 
 @Transient
 public interface TenantInLeaseDTO extends TenantInLease {
 
     IPrimitive<String> displayName();
+
+    public static enum ChangeStatus {
+        New, Updated;
+    }
+
+    // ------------------------------------
+
+    @EmbeddedEntity
+    Person person();
+
+    IPrimitive<ChangeStatus> changeStatus();
 }

@@ -36,7 +36,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.portal.server.ptapp.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantRetriever;
 import com.propertyvista.server.domain.CampaignTrigger;
 
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {

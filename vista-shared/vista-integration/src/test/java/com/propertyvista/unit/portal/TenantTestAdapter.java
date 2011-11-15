@@ -20,7 +20,7 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
-import com.propertyvista.portal.server.ptapp.util.TenantConverter;
+import com.propertyvista.server.common.util.TenantConverter;
 
 public class TenantTestAdapter {
 

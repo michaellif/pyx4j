@@ -66,7 +66,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         header.setCaption(defaultCaption + " " + value.getStringView());
     }
 
-    private Widget fillActionsPanel() {
+    protected Widget createEditAction() {
         Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -74,13 +74,18 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             }
         });
         btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
-        addActionWidget(btnEdit);
-        return actionsPanel;
+        return btnEdit;
     }
 
     protected void addActionWidget(Widget action) {
-        actionsPanel.insert(action, 1);
-        actionsPanel.setCellWidth(action, "1%");
+        if (action != null) {
+            actionsPanel.insert(action, 1);
+            actionsPanel.setCellWidth(action, "1%");
+        }
     }
 
+    private Widget fillActionsPanel() {
+        addActionWidget(createEditAction());
+        return actionsPanel;
+    }
 }

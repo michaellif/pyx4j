@@ -26,6 +26,7 @@ public class ApplicationLister extends ListerBase<ApplicationDTO> {
 
     public ApplicationLister() {
         super(ApplicationDTO.class, CrmSiteMap.Tenants.Application.class);
+
     }
 
     @Override

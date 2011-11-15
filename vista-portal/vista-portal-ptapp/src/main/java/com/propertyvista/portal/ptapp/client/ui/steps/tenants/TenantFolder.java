@@ -40,7 +40,7 @@ import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseDTO;
+import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 

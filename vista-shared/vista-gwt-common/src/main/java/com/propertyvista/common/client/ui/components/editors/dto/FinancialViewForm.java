@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.financial;
+package com.propertyvista.common.client.ui.components.editors.dto;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
-import com.propertyvista.portal.rpc.ptapp.dto.TenantFinancialDTO;
+import com.propertyvista.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 

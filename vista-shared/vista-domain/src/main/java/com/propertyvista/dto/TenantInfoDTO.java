@@ -11,26 +11,23 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto;
+package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantScreening;
 
 @Transient
-public interface TenantInLeaseDTO extends TenantInLease {
+public interface TenantInfoDTO extends TenantScreening {
 
-    public static enum ChangeStatus {
-        New, Updated;
-    }
-
-    // ------------------------------------
-
-    @EmbeddedEntity
+    @ToString
     Person person();
 
-    IPrimitive<ChangeStatus> changeStatus();
+    @Length(3)
+    IList<EmergencyContact> emergencyContacts();
 }
