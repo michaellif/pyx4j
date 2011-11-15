@@ -25,6 +25,9 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.User;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Tenant;
@@ -51,8 +54,14 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
         TenantsGenerator generator = new TenantsGenerator(config().tenantsGenerationSeed);
 
-        List<Tenant> tenants = generator.createTenants(config().numTenants);
-        for (Tenant tenant : tenants) {
+        for (int i = 1; i <= config().numTenants; i++) {
+            String email = DemoData.UserType.TENANT.getEmail(i);
+            User user = UserPreloader.createUser(email, email, VistaBehavior.TENANT);
+            Tenant tenant = generator.createTenant();
+            tenant.person().email().address().setValue(email);
+            // Update user name
+            user.name().setValue(tenant.person().name().getStringView());
+            Persistence.service().persist(user);
             persistTenant(tenant);
         }
 
@@ -75,7 +84,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Created ").append(tenants.size()).append(" tenants");
+        sb.append("Created ").append(config().numTenants).append(" tenants");
         return sb.toString();
     }
 
@@ -98,10 +107,6 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
     public void persistTenant(Tenant tenant) {
         switch (tenant.type().getValue()) {
-        case person:
-            log.debug("Persisting tenant {}", tenant.person().name());
-            Persistence.service().persist(tenant.person());
-            break;
         case company:
             log.debug("Persisting tenant {}", tenant.company().name());
             CmpanyVendorPersistHelper.persistCompany(tenant.company());

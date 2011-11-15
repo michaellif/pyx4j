@@ -75,7 +75,7 @@ public final class VistaDevPreloadConfig implements Serializable {
         VistaDevPreloadConfig config = new VistaDevPreloadConfig();
         config.maxPropertyManagers = 1;
         config.maxAdmin = 1;
-        config.numResidentialBuildings = 1;
+        config.numResidentialBuildings = 2;
         config.numPotentialTenants = 1;
         config.numTenants = 3;
         config.numTenantsInLease = 2;

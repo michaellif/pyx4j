@@ -15,12 +15,15 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertvista.generator.PTGenerator;
+import com.propertvista.generator.PreloadData;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.RandomUtil;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -56,6 +59,8 @@ import com.propertyvista.server.domain.ApplicationDocumentData;
 
 public class PtPreloader extends BaseVistaDevDataPreloader {
 
+    private final static Logger log = LoggerFactory.getLogger(PtPreloader.class);
+
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
@@ -71,19 +76,35 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     public String create() {
 
         PTGenerator generator = new PTGenerator(config());
-        for (int i = 1; i <= config().numTenants; i++) {
+
+        EntityQueryCriteria<Building> bcriteria = EntityQueryCriteria.create(Building.class);
+        bcriteria.add(PropertyCriterion.eq(bcriteria.proto().propertyCode(), PreloadData.REGISTRATION_DEFAULT_PROPERTY_CODE));
+        Building building = Persistence.service().retrieve(bcriteria);
+
+        EntityQueryCriteria<AptUnit> ucriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        ucriteria.add(PropertyCriterion.eq(ucriteria.proto().belongsTo(), building));
+        List<AptUnit> units = Persistence.service().query(ucriteria);
+
+        int numCreated = 0;
+        for (int i = 1; i <= config().numPotentialTenants; i++) {
+            if (units.size() <= i) {
+                log.warn("No more units available for PotentialTenants. Change configuration!");
+                break;
+            }
+
             String email = DemoData.UserType.PTENANT.getEmail(i);
             User user = UserPreloader.createUser(email, email, VistaBehavior.PROSPECTIVE_TENANT);
-            ApplicationSummaryGDO summary = generator.createSummary(user, Persistence.service().retrieve(AptUnit.class, new Key(1)));
+            ApplicationSummaryGDO summary = generator.createSummary(user, units.get(i - 1));
 
             // Update user name
             Persistence.service().persist(user);
             //TODO create users for CoApplicants
             persistFullApplication(summary, generator);
+            numCreated++;
         }
 
         StringBuilder b = new StringBuilder();
-        b.append("Created " + config().numTenants + " potential tenants");
+        b.append("Created " + numCreated + " potential tenants");
         return b.toString();
     }
 

@@ -97,7 +97,10 @@ public class PTGenerator {
 
         // lease:
         summary.lease().leaseID().setValue(RandomUtil.randomLetters(8));
+
+        // This is actually update during save to match real unit data
         summary.lease().type().setValue(Service.Type.residentialUnit);
+
 //        summary.lease().type().setValue(RandomUtil.randomEnum(Service.Type.class));
         summary.lease().status().setValue(Lease.Status.Draft);
         summary.lease().unit().set(selectedUnit);

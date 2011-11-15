@@ -93,9 +93,9 @@ public class BuildingsGenerator {
 
         // organization contacts - not many fields there at the moment, will do
         // this later
-        String propertyCode = "A" + String.valueOf(counter);
+        String propertyCode = "B" + String.valueOf(counter);
         if (counter == 0) {
-            // UI is looking for this building, see references!
+            // Generators are looking for this building, see references!
             propertyCode = PreloadData.REGISTRATION_DEFAULT_PROPERTY_CODE;
         }
 

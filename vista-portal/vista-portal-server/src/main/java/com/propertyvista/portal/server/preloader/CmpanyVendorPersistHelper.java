@@ -16,7 +16,6 @@ package com.propertyvista.portal.server.preloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.company.Company;
@@ -26,23 +25,9 @@ import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.property.vendor.Warranty;
 
-public class CmpanyVendorPersistHelper extends BaseVistaDevDataPreloader {
+public abstract class CmpanyVendorPersistHelper {
 
     private final static Logger log = LoggerFactory.getLogger(CmpanyVendorPersistHelper.class);
-
-    @Override
-    public String delete() {
-        if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Company.class);
-        } else {
-            return "This is production";
-        }
-    }
-
-    @Override
-    public String create() {
-        return "";
-    }
 
     public static void persistCompany(Company company) {
         log.debug("Persisting company");
@@ -58,7 +43,6 @@ public class CmpanyVendorPersistHelper extends BaseVistaDevDataPreloader {
             Persistence.service().persist(contacts.contactList());
         }
         Persistence.service().persist(company.contacts());
-        Persistence.service().persist(company);
     }
 
     public static void persistVendor(Vendor vendor) {
