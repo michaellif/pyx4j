@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -96,7 +97,7 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
         bottomActionsBar.setDataTableModel(dataTableModel);
 
-        topActionsBar.addItem(new Button(i18n.tr("Filter"), new ClickHandler() {
+        topActionsBar.getToolbar().addItem(new Button(i18n.tr("Filter"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 filterPanel.setVisible(true);
@@ -125,7 +126,8 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void setAddActionHandler(ClickHandler addActionHandler) {
-        topActionsBar.addItem(new Button(i18n.tr("Add"), addActionHandler));
+        topActionsBar.getToolbar().insertSeparator(0);
+        topActionsBar.getToolbar().insertItem(new Button(new Image(EntityFolderImages.INSTANCE.addHover()), i18n.tr("Add"), addActionHandler), 0, false);
     }
 
     public void setFilterActionHandler(ClickHandler filterActionHandler) {
@@ -149,7 +151,7 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void addUpperActionItem(Widget widget) {
-        topActionsBar.addItem(widget);
+        topActionsBar.getToolbar().addItem(widget);
     }
 
     public DataTable<E> getDataTable() {

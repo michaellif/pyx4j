@@ -104,13 +104,14 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleSuffix.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button);
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.05);
-        style.addGradient(ThemeColors.foreground, 0.05, ThemeColors.foreground, 0.05);
+        style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        style.addProperty("color", ThemeColors.foreground, 0.9);
+        style.addProperty("height", "20px");
+        style.addGradient(ThemeColors.foreground, 0, ThemeColors.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".", StyleSuffix.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0);
         addStyle(style);
     }
 }

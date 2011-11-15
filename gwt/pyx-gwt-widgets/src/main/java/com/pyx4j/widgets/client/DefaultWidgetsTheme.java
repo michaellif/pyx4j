@@ -30,7 +30,9 @@ import com.pyx4j.widgets.client.util.BrowserType;
 public class DefaultWidgetsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TextBox, ListBox, Button, ButtonContainer, ButtonContent, ButtonImage, ButtonText
+        TextBox, ListBox, Toolbar, ToolbarSeparator,
+
+        Button, ButtonContainer, ButtonContent, ButtonImage, ButtonText
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -45,6 +47,7 @@ public class DefaultWidgetsTheme extends Theme {
         initTextBoxStyle();
         initListBoxStyle();
         initButtonStyle();
+        initToolbarStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -104,6 +107,17 @@ public class DefaultWidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
         style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
+        addStyle(style);
+
+    }
+
+    protected void initToolbarStyle() {
+        Style style = new Style(".", StyleName.ToolbarSeparator);
+        style.addProperty("border-left", "1px solid");
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.5);
+        style.addProperty("margin-left", "8px");
+        style.addProperty("height", "20px");
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
     }

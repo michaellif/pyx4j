@@ -23,13 +23,13 @@ package com.pyx4j.widgets.client.actionbar;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class BarSeparator extends SimplePanel {
 
     public BarSeparator() {
         super(DOM.createSpan());
-        setStyleName(CSSClass.pyx4j_BarSeparator.name());
+        setStyleName(DefaultWidgetsTheme.StyleName.ToolbarSeparator.name());
         getElement().setInnerHTML("&nbsp;");
     }
 

@@ -21,7 +21,6 @@
 package com.pyx4j.entity.client.ui.datatable;
 
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -49,8 +48,8 @@ public class DataTableTopActionsBar extends SimplePanel implements DataTableMode
         model.addDataTableModelListener(this);
     }
 
-    public void addItem(Widget widget) {
-        toolbar.addItem(widget);
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 
     @Override

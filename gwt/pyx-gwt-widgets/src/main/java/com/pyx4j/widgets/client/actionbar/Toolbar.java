@@ -25,6 +25,8 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+
 /**
  * @author michaellif
  * 
@@ -32,14 +34,19 @@ import com.google.gwt.user.client.ui.Widget;
 public class Toolbar extends FlowPanel {
 
     public Toolbar() {
+        setStyleName(DefaultWidgetsTheme.StyleName.Toolbar.name());
     }
 
     public void addItem(Widget widget) {
-        addItem(widget, false);
+        insertItem(widget, getWidgetCount(), false);
     }
 
     public void addItem(Widget widget, boolean floatRight) {
-        add(widget);
+        insertItem(widget, getWidgetCount(), floatRight);
+    }
+
+    public void insertItem(Widget widget, int beforeIndex, boolean floatRight) {
+        insert(widget, beforeIndex);
         widget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         widget.getElement().getStyle().setMarginLeft(6, Unit.PX);
 
@@ -48,9 +55,9 @@ public class Toolbar extends FlowPanel {
         }
     }
 
-    public void addSeparator() {
+    public void insertSeparator(int beforeIndex) {
         BarSeparator separator = new BarSeparator();
-        add(separator);
+        insert(separator, beforeIndex);
     }
 
 }
