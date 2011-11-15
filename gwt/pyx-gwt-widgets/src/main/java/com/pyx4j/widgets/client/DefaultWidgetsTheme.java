@@ -30,11 +30,11 @@ import com.pyx4j.widgets.client.util.BrowserType;
 public class DefaultWidgetsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TextBox, ListBox
+        TextBox, ListBox, Button, ButtonContainer, ButtonContent, ButtonImage, ButtonText
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark
+        watermark, hover, disabled, pushed
     }
 
     public DefaultWidgetsTheme() {
@@ -44,6 +44,7 @@ public class DefaultWidgetsTheme extends Theme {
     protected void initStyles() {
         initTextBoxStyle();
         initListBoxStyle();
+        initButtonStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -83,6 +84,26 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        addStyle(style);
+
+    }
+
+    protected void initButtonStyle() {
+        Style style = new Style(".", StyleName.Button);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        style.addProperty("padding", "0 3px");
+        style.addProperty("display", "inline-block");
+        style.addGradient(ThemeColors.foreground, 0, ThemeColors.foreground, 0.2);
+        addStyle(style);
+
+        style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
+        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0);
+        addStyle(style);
+
+        style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
         addStyle(style);
 
     }

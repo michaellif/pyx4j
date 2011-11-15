@@ -28,11 +28,13 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
-
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel implements IListerView<E> {
 
@@ -40,18 +42,23 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     protected ListerBase<E> lister = null;
 
-    public ListerViewImplBase() {
-        super(Unit.EM);
-    }
+    private final Toolbar toolbar;
 
-    public ListerViewImplBase(ListerBase<E> lister) {
-        super(Unit.EM);
-        setLister(lister);
-    }
+    private final Widget header;
 
     public ListerViewImplBase(Widget header, double size) {
         super(Unit.EM);
+        this.header = header;
         addNorth(header, size);
+
+        toolbar = new Toolbar();
+        toolbar.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Toolbar.name());
+        addNorth(toolbar, size);
+
+    }
+
+    public Widget getHeader() {
+        return header;
     }
 
     /*
@@ -102,12 +109,12 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     }
 
     @Override
-    public List<FilterData> getFiltering() {
+    public List<DataTableFilterData> getFiltering() {
         return getLister().getFiltering();
     }
 
     @Override
-    public void setFiltering(List<FilterData> filterData) {
+    public void setFiltering(List<DataTableFilterData> filterData) {
         getLister().setFiltering(filterData);
     }
 
@@ -134,5 +141,9 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     @Override
     public void restoreState() {
         getLister().restoreState();
+    }
+
+    public void addActionButton(Widget widget) {
+        toolbar.addItem(widget);
     }
 }

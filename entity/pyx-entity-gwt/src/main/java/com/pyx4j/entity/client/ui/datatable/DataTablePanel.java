@@ -23,17 +23,26 @@ package com.pyx4j.entity.client.ui.datatable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterItem;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
+
+    protected static I18n i18n = I18n.get(DataTableFilterItem.class);
 
     private final E entityPrototype;
 
@@ -41,28 +50,36 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     private final DataTable<E> dataTable;
 
-    private final DataTableActionsBar topActionsBar;
+    private final DataTableTopActionsBar topActionsBar;
 
-    private final DataTableActionsBar bottomActionsBar;
+    private final DataTableBottomActionsBar bottomActionsBar;
 
     private final DataTableFilterPanel<E> filterPanel;
 
+    private WidgetsImages images;
+
     public DataTablePanel(Class<E> clazz) {
+        this(clazz, EntityFolderImages.INSTANCE);
+    }
+
+    public DataTablePanel(Class<E> clazz, WidgetsImages images) {
+        this.images = images;
         setWidth("100%");
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
         dataTableModel = new DataTableModel<E>(clazz, getColumnDescriptors());
         dataTable = new DataTable<E>(dataTableModel);
 
-        topActionsBar = new DataTableActionsBar();
+        topActionsBar = new DataTableTopActionsBar();
         add(topActionsBar);
 
         filterPanel = new DataTableFilterPanel<E>(this);
-        //add(filterPanel);
+        filterPanel.setVisible(false);
+        add(filterPanel);
 
         add(dataTable);
 
-        bottomActionsBar = new DataTableActionsBar();
+        bottomActionsBar = new DataTableBottomActionsBar();
         add(bottomActionsBar);
 
         dataTable.setWidth("100%");
@@ -76,17 +93,25 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         });
 
         topActionsBar.setDataTableModel(dataTableModel);
+
         bottomActionsBar.setDataTableModel(dataTableModel);
+
+        topActionsBar.addItem(new Button(i18n.tr("Filter"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                filterPanel.setVisible(true);
+            }
+        }));
     }
 
     protected abstract void onSelect(int selectedRow);
 
-    public void removeUpperActionsBar() {
-        remove(topActionsBar);
+    public void swtVisibleTopActionsBar(boolean visible) {
+        topActionsBar.setVisible(visible);
     }
 
-    public void removeLowerActionsBar() {
-        remove(bottomActionsBar);
+    public void swtVisibleBottomActionsBar(boolean visible) {
+        bottomActionsBar.setVisible(visible);
     }
 
     public abstract List<ColumnDescriptor<E>> getColumnDescriptors();
@@ -99,30 +124,32 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         return entityPrototype;
     }
 
+    public void setAddActionHandler(ClickHandler addActionHandler) {
+        topActionsBar.addItem(new Button(i18n.tr("Add"), addActionHandler));
+    }
+
+    public void setFilterActionHandler(ClickHandler filterActionHandler) {
+        filterPanel.setFilterActionHandler(filterActionHandler);
+    }
+
     public void setPrevActionHandler(ClickHandler prevActionHandler) {
-        topActionsBar.setPrevActionHandler(prevActionHandler);
         bottomActionsBar.setPrevActionHandler(prevActionHandler);
     }
 
     public void setNextActionHandler(ClickHandler nextActionHandler) {
-        topActionsBar.setNextActionHandler(nextActionHandler);
         bottomActionsBar.setNextActionHandler(nextActionHandler);
     }
 
     public void setPageSizeOptions(List<Integer> pageSizeOptions) {
-        topActionsBar.setPageSizeOptions(pageSizeOptions);
+        bottomActionsBar.setPageSizeOptions(pageSizeOptions);
     }
 
     public void setPageSizeActionHandler(ClickHandler clickHandler) {
-        topActionsBar.setPageSizeActionHandler(clickHandler);
+        bottomActionsBar.setPageSizeActionHandler(clickHandler);
     }
 
-    public Anchor insertUpperActionItem(String name, IDebugId debugId, ClickHandler handler) {
-        return topActionsBar.insertActionItem(name, debugId, handler);
-    }
-
-    public Anchor insertLowerActionItem(String name, IDebugId debugId, ClickHandler handler) {
-        return bottomActionsBar.insertActionItem(name, debugId, handler);
+    public void addUpperActionItem(Widget widget) {
+        topActionsBar.addItem(widget);
     }
 
     public DataTable<E> getDataTable() {
@@ -173,5 +200,21 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         } else {
             throw new RuntimeException("dataTableModel is not set");
         }
+    }
+
+    public WidgetsImages getImages() {
+        return images;
+    }
+
+    public List<DataTableFilterData> getFilterData() {
+        return filterPanel.getFilterData();
+    }
+
+    public void setFilterData(List<DataTableFilterData> filterData) {
+        filterPanel.setFilterData(filterData);
+    }
+
+    public void setFiltersVisible(boolean visible) {
+        filterPanel.setVisible(visible);
     }
 }

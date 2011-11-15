@@ -28,20 +28,8 @@ public class EditorViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
 
     protected IEditorView.Presenter presenter;
 
-    public EditorViewImplBase() {
-        super();
-    }
-
-    public EditorViewImplBase(CrudEntityForm<E> form) {
-        super(form);
-    }
-
-    public EditorViewImplBase(Widget header, double size) {
-        super(header, size);
-    }
-
-    public EditorViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
-        super(header, size, form);
+    public EditorViewImplBase(Widget header, Widget footer, double size) {
+        super(header, footer, size);
     }
 
     @Override

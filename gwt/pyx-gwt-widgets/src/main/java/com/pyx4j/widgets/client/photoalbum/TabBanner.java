@@ -51,8 +51,6 @@ public class TabBanner extends AbsolutePanel {
 
     private final int height;
 
-    private final String buttonStyle;
-
     private int currentIndex = -1;
 
     private ControlPanel controlPanel;
@@ -65,14 +63,13 @@ public class TabBanner extends AbsolutePanel {
 
     private final boolean runOnInit;
 
-    public TabBanner(int width, int height, String buttonStyle) {
-        this(width, height, buttonStyle, 0, true);
+    public TabBanner(int width, int height) {
+        this(width, height, 0, true);
     }
 
-    public TabBanner(int width, int height, String buttonStyle, int initPosition, boolean runOnInit) {
+    public TabBanner(int width, int height, int initPosition, boolean runOnInit) {
         this.width = width;
         this.height = height;
-        this.buttonStyle = buttonStyle;
         this.initPosition = initPosition;
         this.runOnInit = runOnInit;
         items = new ArrayList<BannerItem>();
@@ -205,7 +202,7 @@ public class TabBanner extends AbsolutePanel {
 
             setWidth("100%");
             for (int i = 0; i < items.size(); i++) {
-                Button itemAction = new Button(items.get(i).getTabCaption(), buttonStyle);
+                Button itemAction = new Button(items.get(i).getTabCaption());
                 itemActionList.add(itemAction);
                 add(itemAction);
                 setCellHorizontalAlignment(itemAction, ALIGN_CENTER);

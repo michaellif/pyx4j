@@ -20,61 +20,33 @@
  */
 package com.pyx4j.site.client.ui.crud.lister;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.CriteriaEditableComponentFactory;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.client.NavigationUri;
-import com.pyx4j.site.client.resources.SiteImages;
-import com.pyx4j.site.client.ui.crud.lister.FilterData.Operands;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.NavigUtils;
-import com.pyx4j.widgets.client.ImageButton;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
 
@@ -91,16 +63,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     protected static I18n i18n = I18n.get(ListerBase.class);
 
-    protected Button btnNewItem;
-
-    protected final HorizontalPanel actionsPanel;
-
-    protected final HorizontalPanel filtersPanel;
-
-    protected final Filters filters;
-
-    protected Button btnApply;
-
     protected final DataTablePanel<E> dataTablePanel;
 
     private Class<? extends NavigNode> editorPage;
@@ -115,10 +77,8 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private List<Sort> sorting;
 
-    private IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
-
     public ListerBase(Class<E> clazz) {
-        setStyleName(DefaultListerTheme.StyleSuffix.Lister.name());
+        setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Lister.name());
 
         dataTablePanel = new DataTablePanel<E>(clazz) {
             @Override
@@ -139,6 +99,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 }
             }
         };
+
+        dataTablePanel.setFilterActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().populate(0);
+            }
+        });
+
         dataTablePanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -167,37 +135,13 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         });
 
         showColumnSelector(true);
-        dataTablePanel.removeUpperActionsBar();
         dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
-        dataTablePanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerListPanel.name());
+        dataTablePanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
         dataTablePanel.getDataTable().renderTable();
 
-        // actions & filters:
-        actionsPanel = new HorizontalPanel();
-        actionsPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerActionsPanel.name());
-        actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        actionsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        actionsPanel.setWidth("100%");
-        actionsPanel.add(new HTML()); // just for %-tage cells alignment...
-        actionsPanel.setSpacing(4);
-        actionsPanel.setVisible(false);
-
-        filtersPanel = new HorizontalPanel();
-        filtersPanel.setStyleName(DefaultListerTheme.StyleSuffix.ListerFiltersPanel.name());
-        filtersPanel.add(filters = new Filters());
-
-        Widget widgetAddApply = createAddApplyPanel();
-        filtersPanel.add(widgetAddApply);
-        filtersPanel.setCellWidth(widgetAddApply, "25%");
-        filtersPanel.setCellVerticalAlignment(widgetAddApply, HasVerticalAlignment.ALIGN_BOTTOM);
-        filtersPanel.setWidth("100%");
-
-        // put UI bricks together:
-        add(actionsPanel);
-        add(filtersPanel);
         add(dataTablePanel);
         setWidth("100%");
     }
@@ -230,33 +174,15 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
             // new item stuff:
             if (allowAddNew) {
-                actionsPanel.setVisible(true);
-                actionsPanel.add(btnNewItem = new Button(i18n.tr("Add")));
-                actionsPanel.setCellWidth(btnNewItem, "1%");
-                btnNewItem.addClickHandler(new ClickHandler() {
+                dataTablePanel.setAddActionHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         onItemNew();
                     }
                 });
-                btnNewItem.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Button, NavigationIDs.ItemDescriptionIDs.Add_New_Item).toString());
-                btnNewItem.addStyleName(DefaultListerTheme.StyleSuffix.ListerButton.name());
             }
+
         }
-    }
-
-    public void addActionButton(Widget action) {
-        actionsPanel.setVisible(true);
-        actionsPanel.insert(action, 1);
-        actionsPanel.setCellWidth(action, "1%");
-    }
-
-    public void setComFactory(IEditableComponentFactory comFactory) {
-        this.compFactory = comFactory;
-    }
-
-    public void setFiltersVisible(boolean visible) {
-        filtersPanel.setVisible(visible);
     }
 
     public void showColumnSelector(boolean show) {
@@ -321,6 +247,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         });
     }
 
+    public void addActionItem(Widget widget) {
+        dataTablePanel.addUpperActionItem(widget);
+    }
+
     public boolean hasCheckboxColumn() {
         return dataTablePanel.getDataTable().hasCheckboxColumn();
     }
@@ -348,12 +278,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     @Override
     public void restoreState() {
         int pageNumber = 0;
-        List<FilterData> filters = null;
+        List<DataTableFilterData> filters = null;
         List<Sort> sorts = null;
 
         if (getMemento().mayRestore()) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
-            filters = (List<FilterData>) getMemento().getObject(MementoKeys.filterData.name());
+            filters = (List<DataTableFilterData>) getMemento().getObject(MementoKeys.filterData.name());
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
@@ -377,6 +307,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     // EntityListPanel access:
     public DataTablePanel<E> getDataTablePanel() {
         return dataTablePanel;
+    }
+
+    public void setFiltersVisible(boolean b) {
+        dataTablePanel.setFiltersVisible(b);
     }
 
     /**
@@ -446,13 +380,13 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     @Override
-    public List<FilterData> getFiltering() {
-        return filters.getFiltersData();
+    public List<DataTableFilterData> getFiltering() {
+        return dataTablePanel.getFilterData();
     }
 
     @Override
-    public void setFiltering(List<FilterData> filterData) {
-        filters.setFiltersData(filterData);
+    public void setFiltering(List<DataTableFilterData> filterData) {
+        dataTablePanel.setFilterData(filterData);
     }
 
     @Override
@@ -511,242 +445,20 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     private void setActionsActive(boolean active) {
-        for (Widget w : actionsPanel) {
-            if (!w.equals(btnNewItem) && w instanceof FocusWidget) {
-                ((FocusWidget) w).setEnabled(active);
-            }
-        }
+        //TODO
+//        for (Widget w : actionsPanel) {
+//            if (!w.equals(btnNewItem) && w instanceof FocusWidget) {
+//                ((FocusWidget) w).setEnabled(active);
+//            }
+//        }
     }
 
 // Internals: ------------------------------------------------------------------------------------------   
-
-    private Widget createAddApplyPanel() {
-
-        ImageButton btnAdd = new ImageButton(SiteImages.INSTANCE.add(), SiteImages.INSTANCE.addHover());
-        btnAdd.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                filters.addFilter();
-                btnApply.setEnabled(filters.getFilterCount() > 0);
-            }
-        });
-        HTML lblAdd = new HTML(i18n.tr("Add filter..."));
-
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getPresenter().populate(0);
-            }
-        });
-        btnApply.setEnabled(false);
-
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-
-        panel.add(btnAdd);
-        btnAdd.getElement().getStyle().setMarginTop(0.3, Unit.EM);
-
-        panel.add(lblAdd);
-        lblAdd.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
-
-        panel.add(btnApply);
-        btnApply.getElement().getStyle().setMarginLeft(1, Unit.EM);
-        btnApply.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
-
-        return panel;
-    }
-
-    // ------------------------------------------------
-
-    protected class Filters extends FlowPanel {
-
-        public Filters() {
-            setWidth("100%");
-        }
-
-        public void addFilter() {
-            add(new Filter());
-        }
-
-        public int getFilterCount() {
-            return getWidgetCount();
-        }
-
-        @SuppressWarnings("unchecked")
-        public List<FilterData> getFiltersData() {
-            ArrayList<FilterData> filters = new ArrayList<FilterData>();
-
-            for (Widget w : this) {
-                if (w instanceof ListerBase.Filters.Filter) {
-                    filters.add(((Filter) w).getFilterData());
-                }
-            }
-
-            return filters;
-        }
-
-        public void setFiltersData(List<FilterData> filterData) {
-            clear();
-
-            if (filterData != null) {
-                Filter filter;
-                for (FilterData item : filterData) {
-                    add(filter = new Filter());
-                    filter.setFilterData(item);
-                }
-            }
-        }
-
-        private class Filter extends HorizontalPanel {
-
-            protected final CComboBox<FieldData> fieldsList = new CComboBox<FieldData>(true);
-
-            protected final CComboBox<Operands> operandsList = new CComboBox<Operands>(true);
-
-            protected final SimplePanel valueHolder = new SimplePanel();
-
-            private class FieldData {
-                private final ColumnDescriptor<E> cd;
-
-                public FieldData(ColumnDescriptor<E> cd) {
-                    this.cd = cd;
-                }
-
-                public String getPath() {
-                    return cd.getColumnName();
-                }
-
-                @Override
-                public String toString() {
-                    return cd.getColumnTitle();
-                }
-            }
-
-            Filter() {
-                Image btnDel = new ImageButton(SiteImages.INSTANCE.del(), SiteImages.INSTANCE.delHover(), i18n.tr("Remove filter"));
-                btnDel.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        Filters.this.remove(Filter.this);
-                        if (filters.getFilterCount() == 0) {
-                            btnApply.setEnabled(false);
-                            getPresenter().populate(0);
-                        }
-                    }
-                });
-
-                SimplePanel wrap = new SimplePanel();
-                wrap.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                wrap.getElement().getStyle().setPaddingLeft(1.3, Unit.EM);
-                wrap.setWidget(btnDel);
-                add(wrap);
-                formatCell(wrap);
-
-                Collection<FieldData> fds = new ArrayList<FieldData>();
-                for (ColumnDescriptor<E> cd : getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
-                    fds.add(new FieldData(cd));
-                }
-
-                fieldsList.setOptions(fds);
-                if (!fds.isEmpty()) {
-                    fieldsList.setValue(fds.iterator().next());
-                    setValueHolder(fieldsList.getValue().getPath());
-                } else {
-                    operandsList.setOptions(EnumSet.allOf(Operands.class));
-                    operandsList.setValue(Operands.is);
-                }
-                fieldsList.addValueChangeHandler(new ValueChangeHandler<FieldData>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<FieldData> event) {
-                        setValueHolder(event.getValue().getPath());
-                    }
-                });
-                fieldsList.setWidth("100%");
-
-                add(fieldsList);
-                setCellWidth(fieldsList, "40%");
-                formatCell(fieldsList.asWidget());
-
-                operandsList.setWidth("100%");
-
-                add(operandsList);
-                setCellWidth(operandsList, "20%");
-                formatCell(operandsList.asWidget());
-
-                valueHolder.setWidth("100%");
-
-                add(valueHolder);
-                setCellWidth(valueHolder, "40%");
-                formatCell(valueHolder);
-
-                setWidth("100%");
-            }
-
-            @SuppressWarnings("rawtypes")
-            public FilterData getFilterData() {
-                String path = null;
-                if (fieldsList.getValue() != null) {
-                    path = fieldsList.getValue().getPath();
-                }
-                Operands operand = operandsList.getValue();
-                Serializable value = (Serializable) ((CComponent) ((INativeEditableComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
-
-                return new FilterData(path, operand, value);
-            }
-
-            public void setFilterData(FilterData filterData) {
-                Collection<FieldData> fds = fieldsList.getOptions();
-                for (FieldData fd : fds) {
-                    if (fd.getPath().compareTo(filterData.getMemberPath()) == 0) {
-                        fieldsList.setValue(fd);
-                        operandsList.setValue(filterData.getOperand());
-                        setValueHolder(filterData.getMemberPath(), filterData.getValue());
-                        break;
-                    }
-                }
-            }
-
-            private void formatCell(Widget w) {
-                Element cell = DOM.getParent(w.getElement());
-                cell.getStyle().setPaddingRight(1.5, Unit.EM);
-            }
-
-            private void setValueHolder(String valuePath) {
-                setValueHolder(valuePath, null);
-            }
-
-            @SuppressWarnings({ "unchecked", "rawtypes" })
-            private void setValueHolder(String valuePath, Serializable value) {
-
-                IObject<?> member = getDataTablePanel().proto().getMember(new Path(valuePath));
-                CComponent comp = compFactory.create(member);
-                comp.setValue(value);
-                valueHolder.setWidget(comp);
-
-                operandsList.setOptions(EnumSet.allOf(Operands.class));
-                operandsList.setValue(Operands.is);
-
-                // correct operands list:
-                Class<?> valueClass = member.getValueClass();
-                if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
-
-                    operandsList.removeOption(Operands.like);
-                    operandsList.removeOption(Operands.greaterThen);
-                    operandsList.removeOption(Operands.lessThen);
-
-                } else if (valueClass.equals(String.class)) {
-
-                    operandsList.removeOption(Operands.greaterThen);
-                    operandsList.removeOption(Operands.lessThen);
-
-                }
-            }
-        }
-    }
 
     public void setEditorPageType(Class<? extends NavigNode> editorPage) {
         this.editorPage = editorPage;
         //TODO change Cursor style to arrow
         dataTablePanel.getDataTable().setHasDetailsNavigation(this.editorPage != null);
     }
+
 }

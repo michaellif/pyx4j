@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements IFormView<E> {
 
@@ -39,25 +40,43 @@ public class ViewImplBase<E extends IEntity> extends DockLayoutPanel implements 
 
     protected CrudEntityForm<E> form;
 
+    private Widget header;
+
+    private Widget footer;
+
+    private Toolbar toolbar;
+
     private final IMemento memento = new MementoImpl();
 
-    public ViewImplBase() {
-        super(Unit.EM);
-    }
-
-    public ViewImplBase(CrudEntityForm<E> form) {
-        this();
-        setForm(form);
-    }
-
     public ViewImplBase(Widget header, double size) {
-        this();
-        addNorth(header, size);
+        this(header, null, size);
     }
 
-    public ViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
-        this(header, size);
-        setForm(form);
+    public ViewImplBase(Widget header, Widget footer, double size) {
+        super(Unit.EM);
+        this.header = header;
+        addNorth(header, size);
+
+        toolbar = new Toolbar();
+        toolbar.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Toolbar.name());
+        addNorth(toolbar, size);
+
+        if (footer != null) {
+            this.footer = footer;
+            addSouth(footer, size);
+        }
+    }
+
+    public Widget getHeader() {
+        return header;
+    }
+
+    public Widget getFooter() {
+        return footer;
+    }
+
+    public void addToolbarItem(Widget widget) {
+        toolbar.addItem(widget);
     }
 
     /*

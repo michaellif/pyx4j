@@ -23,10 +23,10 @@ package com.pyx4j.site.client.ui.crud.lister;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.ui.crud.IView;
-import com.pyx4j.site.client.ui.crud.IView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public interface IListerView<E extends IEntity> extends IView<E> {
@@ -35,9 +35,9 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void setParentFiltering(Key parentID);
 
-        List<FilterData> getPreDefinedFilters();
+        List<DataTableFilterData> getPreDefinedFilters();
 
-        void setPreDefinedFilters(List<FilterData> filters);
+        void setPreDefinedFilters(List<DataTableFilterData> filters);
 
         void populate(int pageNumber);
 
@@ -62,9 +62,9 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows);
 
-    List<FilterData> getFiltering();
+    List<DataTableFilterData> getFiltering();
 
-    void setFiltering(List<FilterData> filterData);
+    void setFiltering(List<DataTableFilterData> filterData);
 
     List<Sort> getSorting();
 

@@ -49,6 +49,8 @@ public class TesterTheme extends Theme {
             }
         });
 
+        addTheme(new DefaultWidgetsTheme());
+
         addTheme(new DefaultWidgetDecoratorTheme());
 
         addTheme(new DefaultFormFlexPanelTheme() {
@@ -60,7 +62,6 @@ public class TesterTheme extends Theme {
         });
 
         addTheme(new DefaultDatePickerTheme());
-        addTheme(new DefaultWidgetsTheme());
         addTheme(new DefaultCCOmponentsTheme());
 
         initGeneralStyles();

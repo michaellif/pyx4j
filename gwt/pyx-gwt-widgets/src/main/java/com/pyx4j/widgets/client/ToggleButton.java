@@ -41,7 +41,7 @@ public class ToggleButton extends Button {
     }
 
     public ToggleButton(Image image, final String text) {
-        super(image, text, new ToggleButtonFacesHandler());
+        super(new ToggleButtonFacesHandler(), image, text);
     }
 
     public boolean isChecked() {

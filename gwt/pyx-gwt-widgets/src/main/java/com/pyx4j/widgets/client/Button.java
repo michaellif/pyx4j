@@ -34,8 +34,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ButtonBase;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.commons.css.CSSClass;
-
 public class Button extends ButtonBase {
 
     private final Element container;
@@ -54,41 +52,27 @@ public class Button extends ButtonBase {
         this((Image) null, text);
     }
 
-    public Button(String text, String stylePrefix) {
-        this(null, text, stylePrefix);
-    }
-
     public Button(String text, ClickHandler handler) {
         this((Image) null, text);
         this.addClickHandler(handler);
     }
 
-    public Button(Image image, final String text, String stylePrefix) {
-        this(image, text, new ButtonFacesHandler(), stylePrefix);
+    public Button(Image image, String text, ClickHandler handler) {
+        this(image, text);
+        this.addClickHandler(handler);
     }
 
     public Button(Image image, final String text) {
-        this(image, text, new ButtonFacesHandler());
+        this(new ButtonFacesHandler(), image, text);
     }
 
-    public Button(Image image, final String text, ButtonFacesHandler facesHandler) {
-        this(image, text, facesHandler, null);
-    }
-
-    protected Button(Image image, final String text, ButtonFacesHandler facesHandler, String stylePrefix) {
+    protected Button(ButtonFacesHandler facesHandler, Image image, final String text) {
         super(DOM.createDiv());
 
-        if (stylePrefix == null) {
-            stylePrefix = CSSClass.pyx4j_Button.name();
-        }
-
-        getElement().getStyle().setProperty("outline", "none");
-        getElement().getStyle().setProperty("display", "inline-block");
-
-        setStylePrimaryName(getElement(), stylePrefix);
+        setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Button.name());
 
         container = DOM.createSpan();
-        setStylePrimaryName(container, stylePrefix + "Container");
+        setStylePrimaryName(container, DefaultWidgetsTheme.StyleName.ButtonContainer.name());
 
         buttonFacesHandler = facesHandler;
 
@@ -107,13 +91,13 @@ public class Button extends ButtonBase {
         content.getStyle().setProperty("verticalAlign", "middle");
         content.getStyle().setProperty("height", "100%");
 
-        setStylePrimaryName(content, stylePrefix + "Content");
+        setStylePrimaryName(content, DefaultWidgetsTheme.StyleName.ButtonContent.name());
 
         if (image != null) {
             Element imageElem = image.getElement();
             imageElem.getStyle().setProperty("verticalAlign", "middle");
             imageElem.getStyle().setProperty("display", "inline-block");
-            setStylePrimaryName(imageElem, stylePrefix + "Image");
+            setStylePrimaryName(imageElem, DefaultWidgetsTheme.StyleName.ButtonImage.name());
             content.appendChild(imageElem);
         }
         if (text != null) {
@@ -122,7 +106,7 @@ public class Button extends ButtonBase {
             textElem.getStyle().setProperty("verticalAlign", "middle");
             textElem.getStyle().setProperty("display", "inline-block");
             content.appendChild(textElem);
-            setStylePrimaryName(textElem, stylePrefix + "Text");
+            setStylePrimaryName(textElem, DefaultWidgetsTheme.StyleName.ButtonText.name());
         }
 
         getElement().appendChild(container);
@@ -166,14 +150,14 @@ public class Button extends ButtonBase {
         public void enable(boolean flag) {
             enabled = flag;
             if (flag) {
-                button.removeStyleDependentName("disabled");
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
                 if (mouseOver) {
                     onMouseOver(null);
                 }
             } else {
-                button.addStyleDependentName("disabled");
-                button.removeStyleDependentName("pushed");
-                button.removeStyleDependentName("hover");
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
             }
         }
 
@@ -181,8 +165,8 @@ public class Button extends ButtonBase {
         public void onMouseOver(MouseOverEvent event) {
             mouseOver = true;
             if (isEnabled()) {
-                button.removeStyleDependentName("pushed");
-                button.addStyleDependentName("hover");
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
             }
         }
 
@@ -190,24 +174,24 @@ public class Button extends ButtonBase {
         public void onMouseOut(MouseOutEvent event) {
             mouseOver = false;
             if (isEnabled()) {
-                button.removeStyleDependentName("hover");
-                button.removeStyleDependentName("pushed");
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
         }
 
         @Override
         public void onMouseDown(MouseDownEvent event) {
             if (isEnabled()) {
-                button.removeStyleDependentName("hover");
-                button.addStyleDependentName("pushed");
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
         }
 
         @Override
         public void onMouseUp(MouseUpEvent event) {
             if (isEnabled()) {
-                button.removeStyleDependentName("pushed");
-                button.addStyleDependentName("hover");
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
             }
         }
 

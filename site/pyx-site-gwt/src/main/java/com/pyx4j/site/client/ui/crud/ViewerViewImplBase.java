@@ -28,20 +28,8 @@ public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> imple
 
     protected IViewerView.Presenter presenter;
 
-    public ViewerViewImplBase() {
-        super();
-    }
-
-    public ViewerViewImplBase(CrudEntityForm<E> form) {
-        super(form);
-    }
-
-    public ViewerViewImplBase(Widget header, double size) {
-        super(header, size);
-    }
-
-    public ViewerViewImplBase(Widget header, double size, CrudEntityForm<E> form) {
-        super(header, size, form);
+    public ViewerViewImplBase(Widget header, Widget footer, double size) {
+        super(header, footer, size);
     }
 
     @Override

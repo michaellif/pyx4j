@@ -25,6 +25,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultDataTableTheme extends Theme {
 
@@ -97,6 +98,18 @@ public class DefaultDataTableTheme extends Theme {
 
         style = new Style(".", StyleSuffix.DataTableActionsBar);
         style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addProperty("padding", "6px");
+        style.addProperty("background-color", ThemeColors.foreground, 0.05);
+        addStyle(style);
+
+        style = new Style(".", StyleSuffix.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.05);
+        style.addGradient(ThemeColors.foreground, 0.05, ThemeColors.foreground, 0.05);
+        addStyle(style);
+
+        style = new Style(".", StyleSuffix.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
         style.addProperty("border-color", ThemeColors.foreground, 0.3);
         addStyle(style);
     }
