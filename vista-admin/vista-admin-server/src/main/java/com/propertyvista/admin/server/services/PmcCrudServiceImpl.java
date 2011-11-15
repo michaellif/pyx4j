@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -37,7 +36,6 @@ import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
-import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.UserPreloader;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -90,9 +88,8 @@ public class PmcCrudServiceImpl implements PmcCrudService {
         UserPreloader.createUser(pmc.email().getValue(), pmc.password().getValue(), VistaBehavior.PROPERTY_MANAGER);
 
         if (ApplicationMode.isDevelopment()) {
-            VistaDevPreloadConfig config = VistaDevPreloadConfig.createDefault();
-            for (int i = 1; i <= config.getMaxPropertyManagers(); i++) {
-                String email = DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN;
+            for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
+                String email = DemoData.UserType.PM.getEmail(i);
                 UserPreloader.createUser(email, email, VistaBehavior.PROPERTY_MANAGER);
             }
         }

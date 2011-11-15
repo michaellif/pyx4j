@@ -26,7 +26,6 @@ import com.propertvista.generator.gdo.TenantSummaryGDO;
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -41,7 +40,6 @@ import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -52,7 +50,6 @@ import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.Tenant.Type;
@@ -69,9 +66,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.reference.SharedData;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.ApplicationDocumentData;
-import com.propertyvista.server.domain.UserCredential;
 
 public class PTGenerator {
 
@@ -81,15 +76,14 @@ public class PTGenerator {
 
     private final VistaDevPreloadConfig config;
 
-    // TODO this seed might be an optional thing (come from config)
-    public PTGenerator(long seed, VistaDevPreloadConfig config) {
-        DataGenerator.setRandomSeed(seed);
+    public PTGenerator(VistaDevPreloadConfig config) {
+        this.seed = config.ptGenerationSeed;
+        DataGenerator.setRandomSeed(config.ptGenerationSeed);
         this.config = config;
-        this.seed = seed;
     }
 
     public User createUser(int number) {
-        String email = DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(number) + DemoData.USERS_DOMAIN;
+        String email = DemoData.UserType.PTENANT.getEmail(number);
         User user = EntityFactory.create(User.class);
         user.name().setValue(email.substring(0, email.indexOf('@')));
         user.email().setValue(email);
@@ -154,11 +148,11 @@ public class PTGenerator {
 
         populateAddress(employer.address());
 
-        employer.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
-        employer.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
+        employer.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
+        employer.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
         employer.supervisorPhone().setValue(RandomUtil.randomPhone());
         employer.monthlyAmount().set(DomainUtil.createMoney(1000d + RandomUtil.randomInt(4000)));
-        employer.position().setValue(RandomUtil.random(DemoData.OCCUPATIONS));
+        employer.position().setValue(RandomUtil.random(PreloadData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);
         int endYear = startYear + 1 + RandomUtil.randomInt(8);
@@ -174,11 +168,11 @@ public class PTGenerator {
 
         populateAddress(selfEmpl.address());
 
-        selfEmpl.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
-        selfEmpl.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
+        selfEmpl.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
+        selfEmpl.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
         selfEmpl.supervisorPhone().setValue(RandomUtil.randomPhone());
         selfEmpl.monthlyAmount().set(DomainUtil.createMoney(1000d + RandomUtil.randomInt(4000)));
-        selfEmpl.position().setValue(RandomUtil.random(DemoData.OCCUPATIONS));
+        selfEmpl.position().setValue(RandomUtil.random(PreloadData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);
         int endYear = startYear + 1 + RandomUtil.randomInt(8);
@@ -205,7 +199,7 @@ public class PTGenerator {
         String fileName = applicationDocument.filename().getValue();
         ApplicationDocumentData applicationDocumentData;
         try {
-            byte[] data = IOUtils.getResource(IOUtils.resourceFileName("pt-docs/" + fileName, PTGenerator.class));
+            byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, PTGenerator.class);
             if (data == null) {
                 throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
             }
@@ -238,9 +232,9 @@ public class PTGenerator {
         for (int i = 0; i < maxPets; i++) {
             Pet pet = EntityFactory.create(Pet.class);
 
-            pet.name().setValue(RandomUtil.random(DemoData.PET_NAMES));
-            pet.color().setValue(RandomUtil.random(DemoData.PET_COLORS));
-            pet.breed().setValue(RandomUtil.random(DemoData.PET_BREEDS));
+            pet.name().setValue(RandomUtil.random(PreloadData.PET_NAMES));
+            pet.color().setValue(RandomUtil.random(PreloadData.PET_COLORS));
+            pet.breed().setValue(RandomUtil.random(PreloadData.PET_BREEDS));
 
             if (RandomUtil.randomBoolean()) {
                 pet.weightUnit().setValue(WeightUnit.kg);
@@ -273,8 +267,8 @@ public class PTGenerator {
 
             vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
             vehicle.year().setValue(RandomUtil.randomYear(1992, 2012));
-            vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
-            vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
+            vehicle.make().setValue(RandomUtil.random(PreloadData.CAR_MAKES));
+            vehicle.model().setValue(RandomUtil.random(PreloadData.CAR_MODELS));
             vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
             vehicle.country().set(vehicle.province().country());
 
@@ -284,7 +278,7 @@ public class PTGenerator {
 
     public void populateAddress(AddressSimple address) {
 
-        String line1 = 100 + RandomUtil.randomInt(10000) + " " + RandomUtil.random(DemoData.STREETS);
+        String line1 = 100 + RandomUtil.randomInt(10000) + " " + RandomUtil.random(PreloadData.STREETS);
 
         address.street1().setValue(line1);
         address.street2().setValue("");
@@ -293,7 +287,7 @@ public class PTGenerator {
         address.province().set(province);
         address.country().set(province.country());
 
-        address.city().setValue(RandomUtil.random(DemoData.CITIES));
+        address.city().setValue(RandomUtil.random(PreloadData.CITIES));
 
         // for now we support only two countries
         if (address.country().name().getValue().toLowerCase().startsWith("c")) {
@@ -309,7 +303,7 @@ public class PTGenerator {
         address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
         address.streetNumberSuffix().setValue("");
 
-        address.streetName().setValue(RandomUtil.random(DemoData.STREETS));
+        address.streetName().setValue(RandomUtil.random(PreloadData.STREETS));
         address.streetType().setValue(RandomUtil.random(StreetType.values()));
         address.streetDirection().setValue(RandomUtil.random(StreetDirection.values()));
 
@@ -317,7 +311,7 @@ public class PTGenerator {
         address.province().set(province);
         address.country().set(province.country());
 
-        address.city().setValue(RandomUtil.random(DemoData.CITIES));
+        address.city().setValue(RandomUtil.random(PreloadData.CITIES));
         address.county().setValue("");
 
         // for now we support only two countries
@@ -340,13 +334,13 @@ public class PTGenerator {
 
         address.phone().set(CommonsGenerator.createPhone());
         address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
-        address.managerName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
+        address.managerName().setValue("Mr. " + DataGenerator.randomLastName());
 
         return address;
     }
 
     private void createTenantList(User user, IList<TenantSummaryGDO> list) {
-        int maxTenants = config.getNumPotentialTenants();
+        int maxTenants = config.numTenantsInLease;
         if (Math.abs(this.seed) > 1000) {
             maxTenants = 1 + RandomUtil.randomInt(5);
         }
@@ -387,24 +381,13 @@ public class PTGenerator {
 
         // Tenant as person
         tenantSummary.tenant().type().setValue(Type.person);
-        Person person = tenantSummary.tenant().person();
-        person.name().firstName().setValue(DataGenerator.randomFirstName());
-        person.name().lastName().setValue(DataGenerator.randomLastName());
-        if (index == 0) {
-            person.name().middleName().setValue("");
-        } else {
-            person.name().middleName().setValue(RandomUtil.randomInt(100) % 7 == 0 ? "M" : "");
-        }
-
-        person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
-        person.homePhone().set(CommonsGenerator.createPhone());
-        person.mobilePhone().set(CommonsGenerator.createPhone());
-        person.workPhone().set(CommonsGenerator.createPhone());
-
-        person.email().set(CommonsGenerator.createEmail(person.name()));
+        tenantSummary.tenant().person().set(CommonsGenerator.createPerson());
 
         if (index == 0) {
-            person.email().address().setValue(user.email().getValue());
+            tenantSummary.tenant().person().name().namePrefix().setValue("");
+            tenantSummary.tenant().person().name().middleName().setValue("");
+            tenantSummary.tenant().person().email().address().setValue(user.email().getValue());
+            user.name().setValue(tenantSummary.tenant().person().name().getStringView());
         }
 
         EmergencyContact ec1 = createEmergencyContact();
@@ -503,19 +486,4 @@ public class PTGenerator {
 
     }
 
-    public static User createUser() {
-        User user = EntityFactory.create(User.class);
-        user.name().setValue("Gregory Holmes");
-        user.email().setValue("gregory@221b.com");
-
-        UserCredential credential = EntityFactory.create(UserCredential.class);
-        credential.setPrimaryKey(user.getPrimaryKey());
-
-        credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword("london"));
-        credential.enabled().setValue(Boolean.TRUE);
-        credential.behavior().setValue(VistaBehavior.PROSPECTIVE_TENANT);
-
-        return user;
-    }
 }

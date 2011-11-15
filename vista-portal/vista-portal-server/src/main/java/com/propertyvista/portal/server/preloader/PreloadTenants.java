@@ -25,7 +25,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Tenant;
@@ -50,15 +49,15 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
 
-        TenantsGenerator generator = new TenantsGenerator(DemoData.TENANTS_GENERATION_SEED);
+        TenantsGenerator generator = new TenantsGenerator(config().tenantsGenerationSeed);
 
-        List<Tenant> tenants = generator.createTenants(config().getNumTenants());
+        List<Tenant> tenants = generator.createTenants(config().numTenants);
         for (Tenant tenant : tenants) {
             persistTenant(tenant);
         }
 
         // Leads:
-        List<Lead> leads = generator.createLeads(config().getNumLeads());
+        List<Lead> leads = generator.createLeads(config().numLeads);
         for (Lead lead : leads) {
             Persistence.service().persist(lead);
 

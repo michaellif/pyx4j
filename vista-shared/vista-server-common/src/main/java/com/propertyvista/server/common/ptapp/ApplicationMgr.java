@@ -16,11 +16,16 @@ package com.propertyvista.server.common.ptapp;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class ApplicationMgr {
@@ -42,5 +47,24 @@ public class ApplicationMgr {
         progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
         progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
         return progress;
+    }
+
+    public static MasterApplication createMasterApplication(Lease lease) {
+        lease.status().setValue(Lease.Status.ApplicationInProgress);
+        MasterApplication ma = EntityFactory.create(MasterApplication.class);
+        ma.lease().set(lease);
+        Persistence.service().retrieve(lease.tenants());
+        for (TenantInLease tenantInLease : lease.tenants()) {
+            if (TenantInLease.Status.Applicant == tenantInLease.status().getValue()) {
+                Application a = EntityFactory.create(Application.class);
+                a.belongsTo().set(ma);
+                a.steps().addAll(ApplicationMgr.createApplicationProgress());
+                a.user().set(tenantInLease.tenant().user());
+                a.lease().set(ma.lease());
+                ma.applications().add(a);
+                break;
+            }
+        }
+        return ma;
     }
 }

@@ -100,7 +100,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
                 //counters.add(new BuildingImporter().persist(building, imagesBaseFolder, true));
                 counters.add(new BuildingUpdater().updateData(building, mediaConfig));
 
-                if ((config().minimizePreloadTime) && (counters.buildings > config().getNumResidentialBuildings())) {
+                if ((config().minimizePreloadTime) && (counters.buildings > config().numResidentialBuildings)) {
                     break;
                 }
             }

@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.yardi.bean.resident.ResidentTransactions;
 import com.propertyvista.yardi.mapper.GetResidentTransactionsMapper;
 import com.propertyvista.yardi.merger.UnitsMerger;

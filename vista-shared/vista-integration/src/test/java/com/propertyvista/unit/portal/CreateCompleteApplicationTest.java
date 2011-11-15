@@ -93,7 +93,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         assertNoMessages();
 
         log.info("execute flow with seed {}", seed);
-        PTGenerator generator = new PTGenerator(seed, VistaDevPreloadConfig.createTest());
+        VistaDevPreloadConfig config = VistaDevPreloadConfig.createTest();
+        config.ptGenerationSeed = seed;
+        PTGenerator generator = new PTGenerator(config);
         User user = createTestUser();
         ApplicationSummaryGDO summary = generator.createSummary(user, null);
 

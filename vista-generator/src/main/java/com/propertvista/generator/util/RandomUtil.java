@@ -17,11 +17,12 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.propertvista.generator.PreloadData;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.person.Name;
 
 public class RandomUtil extends DataGenerator {
@@ -68,7 +69,7 @@ public class RandomUtil extends DataGenerator {
 
     public static String randomPersonEmail(Name person) {
         return person.firstName().getStringView().toLowerCase() + "." + person.lastName().getStringView().toLowerCase() + "@"
-                + DataGenerator.random(DemoData.EMAIL_DOMAINS);
+                + DataGenerator.random(PreloadData.EMAIL_DOMAINS);
     }
 
     public static Time randomTime() {

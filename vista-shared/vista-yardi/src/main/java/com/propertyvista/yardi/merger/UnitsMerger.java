@@ -26,7 +26,7 @@ import com.pyx4j.commons.Key;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
-import com.propertyvista.server.common.generator.Model;
+import com.propertyvista.yardi.Model;
 
 public class UnitsMerger {
     private final static Logger log = LoggerFactory.getLogger(UnitsMerger.class);

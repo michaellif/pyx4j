@@ -51,7 +51,7 @@ public class PortalServicesTest extends VistaDBTestBase {
      * Create application. Do full life cycle test from the beginning.
      */
     public void testFullLifecycle() {
-        PTGenerator generator = new PTGenerator(500l, VistaDevPreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(VistaDevPreloadConfig.createTest());
 
         final String email = BusinessDataGenerator.createEmail();
         HappyPath.step1createAccount(email);

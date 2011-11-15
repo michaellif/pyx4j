@@ -18,6 +18,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.propertyvista.domain.DemoData;
 
 public class BusinessDataGenerator {
+
     public static String createEmail() {
         String email = DataGenerator.randomLastName().toLowerCase() + DataGenerator.randomInt(Integer.MAX_VALUE) + DemoData.USERS_DOMAIN;
         return email;

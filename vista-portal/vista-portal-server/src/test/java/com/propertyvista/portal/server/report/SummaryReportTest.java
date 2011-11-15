@@ -73,9 +73,9 @@ public class SummaryReportTest extends ReportsTestBase {
 
     private static SummaryDTO retreiveSummary() {
         EntityQueryCriteria<User> userCriteria = EntityQueryCriteria.create(User.class);
-        userCriteria.add(PropertyCriterion.eq(userCriteria.proto().name(), DemoData.PRELOADED_USERNAME));
+        userCriteria.add(PropertyCriterion.eq(userCriteria.proto().name(), DemoData.UserType.PTENANT.getEmail(0)));
         User devUser = Persistence.service().retrieve(userCriteria);
-        Assert.assertNotNull("devUser " + DemoData.PRELOADED_USERNAME, devUser);
+        Assert.assertNotNull("devUser " + DemoData.UserType.PTENANT.getEmail(0), devUser);
 
         EntityQueryCriteria<Application> applicationCriteria = EntityQueryCriteria.create(Application.class);
         applicationCriteria.add(PropertyCriterion.eq(applicationCriteria.proto().user(), devUser));
@@ -96,7 +96,7 @@ public class SummaryReportTest extends ReportsTestBase {
     }
 
     private static SummaryDTO retreiveSummaryTodo() throws IOException {
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, VistaDevPreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(VistaDevPreloadConfig.createTest());
         // Application application = generator.createApplication(PTGenerator.createUser());
         SummaryDTO summary = null;//TODOgenerator.createSummary(application, null);
         return summary;

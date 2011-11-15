@@ -34,19 +34,25 @@ public class VistaDataGeneratorTest extends TestCase {
         final long seed1 = 250;
 
         SharedData.init();
-        PTGenerator generator1 = new PTGenerator(seed1, VistaDevPreloadConfig.createTest());
+        VistaDevPreloadConfig config = VistaDevPreloadConfig.createTest();
+        config.ptGenerationSeed = 250;
+        PTGenerator generator1 = new PTGenerator(config);
         User user1 = generator1.createUser(1);
 
         ApplicationSummaryGDO summary1 = generator1.createSummary(user1, null);
 
         // Do some other data generation
-        PTGenerator generatorX = new PTGenerator(System.currentTimeMillis(), VistaDevPreloadConfig.createTest());
+        VistaDevPreloadConfig configX = VistaDevPreloadConfig.createTest();
+        configX.ptGenerationSeed = System.currentTimeMillis();
+        PTGenerator generatorX = new PTGenerator(configX);
         User userX = generatorX.createUser(1);
         generatorX.createSummary(userX, null);
 
         SharedData.init();
 
-        PTGenerator generator2 = new PTGenerator(seed1, VistaDevPreloadConfig.createTest());
+        VistaDevPreloadConfig config2 = VistaDevPreloadConfig.createTest();
+        config2.ptGenerationSeed = System.currentTimeMillis();
+        PTGenerator generator2 = new PTGenerator(config2);
         User user2 = generator2.createUser(1);
         ApplicationSummaryGDO summary2 = generator2.createSummary(user2, null);
 

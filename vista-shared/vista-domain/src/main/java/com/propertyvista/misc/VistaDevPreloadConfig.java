@@ -15,46 +15,54 @@ package com.propertyvista.misc;
 
 import java.io.Serializable;
 
+import com.propertyvista.domain.DemoData;
+
 @SuppressWarnings("serial")
 public final class VistaDevPreloadConfig implements Serializable {
+
+    public long ptGenerationSeed = 100;
+
+    public long buildingsGenerationSeed = 100;
+
+    public long tenantsGenerationSeed = 100;
 
     public boolean minimizePreloadTime = false;
 
     public boolean mockupData = false;
 
-    private int maxCustomers = 20;
+    public int maxPropertyManagers = DemoData.UserType.PM.getDefaultMax();
 
-    private int maxPropertyManagers = 10;
+    public int maxAdmin = DemoData.UserType.ADMIN.getDefaultMax();
 
-    private int maxAdmin = 2;
+    public int numTenants = DemoData.UserType.TENANT.getDefaultMax();
 
-    private int numResidentialBuildings = 15;
+    public int numPotentialTenants = DemoData.UserType.PTENANT.getDefaultMax();
 
-    private int numLeads = 5;
+    public int numTenantsInLease = 2;
 
-    private int numTenants = 10;
+    public int numResidentialBuildings = 15;
 
-    private int numPotentialTenants = 4;
+    public int numLeads = 5;
 
-    private int numFloors = 4;
+    public int numFloors = 4;
 
-    private int numFloorplans = 5;
+    public int numFloorplans = 5;
 
-    private int numParkings = 1;
+    public int numParkings = 1;
 
-    private int numParkingSpots = 128;
+    public int numParkingSpots = 128;
 
-    private int numLockerAreas = 2;
+    public int numLockerAreas = 2;
 
-    private int numLockers = 35;
+    public int numLockers = 35;
 
-    private int numUnitsPerFloor = 4;
+    public int numUnitsPerFloor = 4;
 
-    private int numElevators = 3;
+    public int numElevators = 3;
 
-    private int numBoilers = 2;
+    public int numBoilers = 2;
 
-    private int numRoofs = 1;
+    public int numRoofs = 1;
 
     private VistaDevPreloadConfig() {
     }
@@ -65,174 +73,38 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public static VistaDevPreloadConfig createTest() {
         VistaDevPreloadConfig config = new VistaDevPreloadConfig();
-        config.setMaxCustomers(2);
-        config.setMaxPropertyManagers(2);
-        config.setMaxAdmin(1);
-        config.setNumResidentialBuildings(1);
-        config.setNumTenants(3);
-        config.setNumPotentialTenants(2);
-        config.setNumFloors(2);
-        config.setNumFloorplans(2);
-        config.setNumParkings(1);
-        config.setNumParkingSpots(3);
-        config.setNumLockerAreas(1);
-        config.setNumLockers(2);
-        config.setNumUnitsPerFloor(2);
+        config.maxPropertyManagers = 1;
+        config.maxAdmin = 1;
+        config.numResidentialBuildings = 1;
+        config.numPotentialTenants = 1;
+        config.numTenants = 3;
+        config.numTenantsInLease = 2;
+        config.numFloors = 2;
+        config.numFloorplans = 2;
+        config.numParkings = 1;
+        config.numParkingSpots = 3;
+        config.numLockerAreas = 1;
+        config.numLockers = 2;
+        config.numUnitsPerFloor = 2;
         return config;
     }
 
     public static VistaDevPreloadConfig createUIDesignMini() {
         VistaDevPreloadConfig config = new VistaDevPreloadConfig();
-        config.setMaxCustomers(2);
-        config.setMaxPropertyManagers(2);
-        config.setMaxAdmin(1);
-        config.setNumResidentialBuildings(10);
-        config.setNumTenants(4);
-        config.setNumPotentialTenants(2);
-        config.setNumFloors(2);
-        config.setNumFloorplans(2);
-        config.setNumParkings(1);
-        config.setNumParkingSpots(3);
-        config.setNumLockerAreas(1);
-        config.setNumLockers(2);
-        config.setNumUnitsPerFloor(2);
+        config.maxAdmin = 1;
+        config.numResidentialBuildings = 10;
+        config.numTenants = 1;
+        config.numPotentialTenants = 1;
+        config.numTenantsInLease = 2;
+        config.numFloors = 2;
+        config.numFloorplans = 2;
+        config.numParkings = 1;
+        config.numParkingSpots = 3;
+        config.numLockerAreas = 1;
+        config.numLockers = 2;
+        config.numUnitsPerFloor = 2;
         config.minimizePreloadTime = true;
         return config;
     }
 
-    public int getMaxCustomers() {
-        return maxCustomers;
-    }
-
-    public void setMaxCustomers(int maxCustomers) {
-        this.maxCustomers = maxCustomers;
-    }
-
-    public int getNumResidentialBuildings() {
-        return numResidentialBuildings;
-    }
-
-    public void setNumResidentialBuildings(int numResidentialBuildings) {
-        this.numResidentialBuildings = numResidentialBuildings;
-    }
-
-    public int getNumLeads() {
-        return numLeads;
-    }
-
-    public void setNumLeads(int numLeads) {
-        this.numLeads = numLeads;
-    }
-
-    public int getNumTenants() {
-        return numTenants;
-    }
-
-    public void setNumTenants(int numTenants) {
-        this.numTenants = numTenants;
-    }
-
-    public int getNumPotentialTenants() {
-        return numPotentialTenants;
-    }
-
-    public void setNumPotentialTenants(int numPotentialTenants) {
-        this.numPotentialTenants = numPotentialTenants;
-    }
-
-    public int getNumFloors() {
-        return numFloors;
-    }
-
-    public void setNumFloors(int numFloors) {
-        this.numFloors = numFloors;
-    }
-
-    public int getNumFloorplans() {
-        return numFloorplans;
-    }
-
-    public void setNumFloorplans(int numFloorplans) {
-        this.numFloorplans = numFloorplans;
-    }
-
-    public int getNumElevators() {
-        return numElevators;
-    }
-
-    public void setNumElevators(int numElevators) {
-        this.numElevators = numElevators;
-    }
-
-    public int getNumBoilers() {
-        return numBoilers;
-    }
-
-    public void setNumBoilers(int numBoilers) {
-        this.numBoilers = numBoilers;
-    }
-
-    public int getNumRoofs() {
-        return numRoofs;
-    }
-
-    public void setNumRoofs(int numRoofs) {
-        this.numRoofs = numRoofs;
-    }
-
-    public int getNumParkings() {
-        return numParkings;
-    }
-
-    public void setNumParkings(int numParkings) {
-        this.numParkings = numParkings;
-    }
-
-    public int getNumParkingSpots() {
-        return numParkingSpots;
-    }
-
-    public void setNumParkingSpots(int numParkingSpots) {
-        this.numParkingSpots = numParkingSpots;
-    }
-
-    public int getNumLockerAreas() {
-        return numLockerAreas;
-    }
-
-    public void setNumLockerAreas(int numLockerAreas) {
-        this.numLockerAreas = numLockerAreas;
-    }
-
-    public int getNumLockers() {
-        return numLockers;
-    }
-
-    public void setNumLockers(int numLockers) {
-        this.numLockers = numLockers;
-    }
-
-    public int getNumUnitsPerFloor() {
-        return numUnitsPerFloor;
-    }
-
-    public void setNumUnitsPerFloor(int numUnitsPerFloor) {
-        this.numUnitsPerFloor = numUnitsPerFloor;
-    }
-
-    public int getMaxPropertyManagers() {
-        return maxPropertyManagers;
-    }
-
-    public void setMaxPropertyManagers(int maxPropertyManagers) {
-        this.maxPropertyManagers = maxPropertyManagers;
-    }
-
-    public int getMaxAdmin() {
-        return maxAdmin;
-    }
-
-    public void setMaxAdmin(int maxAdmin) {
-        this.maxAdmin = maxAdmin;
-    }
 }

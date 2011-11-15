@@ -73,7 +73,7 @@ public class OpenApiModelTest {
 
     @Test
     public void testConvert() {
-        BuildingsGenerator generator = new BuildingsGenerator();
+        BuildingsGenerator generator = new BuildingsGenerator(0);
         List<Building> buildings = generator.createBuildings(10);
 
         for (Building building : buildings) {
@@ -101,7 +101,7 @@ public class OpenApiModelTest {
     @Test
     public void testXmlBuildingsMarshall() throws Exception {
 
-        BuildingsGenerator generator = new BuildingsGenerator();
+        BuildingsGenerator generator = new BuildingsGenerator(0);
         List<Building> buildings = generator.createBuildings(1);
 
         BuildingsRS buildingsRS = new BuildingsRS();

@@ -19,19 +19,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.server.mail.Mail;
-import com.pyx4j.server.mail.MailDeliveryStatus;
-import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.User;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceFeature;
@@ -39,13 +33,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
-import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
-import com.propertyvista.server.common.security.UserAccessUtils;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
@@ -162,42 +153,28 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
-        lease.status().setValue(Lease.Status.ApplicationInProgress);
-
-        MasterApplication ma = EntityFactory.create(MasterApplication.class);
-        ma.lease().set(lease);
-
         Persistence.service().retrieve(lease.tenants());
-        User user = null;
-        for (TenantInLease tenantInLease : lease.tenants()) {
-            if (TenantInLease.Status.Applicant == tenantInLease.status().getValue()) {
-                Application a = EntityFactory.create(Application.class);
-                a.belongsTo().set(ma);
-                a.steps().addAll(ApplicationMgr.createApplicationProgress());
-                a.user().set(tenantInLease.tenant().user());
-                a.lease().set(ma.lease());
-                user = tenantInLease.tenant().user();
-                ma.applications().add(a);
-                break;
-            }
-        }
-        Persistence.service().merge(ma);
-        Persistence.service().merge(lease);
 
-        if (user != null) {
-            Persistence.service().retrieve(user);
-            String token = UserAccessUtils.createAccessToken(user, 5);
+        MasterApplication ma = ApplicationMgr.createMasterApplication(lease);
 
-            MailMessage m = new MailMessage();
-            m.setTo(user.email().getValue());
-            m.setSender(MessageTemplates.getSender());
-            m.setSubject(i18n.tr("Property Vista application"));
-            m.setHtmlBody(MessageTemplates.createMasterApplicationInvitationEmail(user.name().getValue(), token));
+        Persistence.service().persist(ma);
+        Persistence.service().persist(lease);
 
-            if (MailDeliveryStatus.Success != Mail.send(m)) {
-                throw new UserRuntimeException(i18n.tr("Mail Service is temporary unavailable, try again later"));
-            }
-        }
+        //TODO Move sendmail to separate function
+//        if ((false) && (user != null)) {
+//            Persistence.service().retrieve(user);
+//            String token = UserAccessUtils.createAccessToken(user, 5);
+//
+//            MailMessage m = new MailMessage();
+//            m.setTo(user.email().getValue());
+//            m.setSender(MessageTemplates.getSender());
+//            m.setSubject(i18n.tr("Property Vista application"));
+//            m.setHtmlBody(MessageTemplates.createMasterApplicationInvitationEmail(user.name().getValue(), token));
+//
+//            if (MailDeliveryStatus.Success != Mail.send(m)) {
+//                throw new UserRuntimeException(i18n.tr("Mail Service is temporary unavailable, try again later"));
+//            }
+//        }
 
         callback.onSuccess(null);
     }

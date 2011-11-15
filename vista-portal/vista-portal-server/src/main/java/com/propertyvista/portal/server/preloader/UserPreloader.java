@@ -18,7 +18,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -35,22 +34,13 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(UserPreloader.class);
 
-    private int userCount;
-
-    private int custCount;
-
-    private User createUser(String email, VistaBehavior behavior) {
-        userCount++;
-        return createUser(email, email, behavior);
-    }
-
     public static User createUser(String email, String password, VistaBehavior behavior) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
             List<User> users = Persistence.service().query(criteria);
             if (users.size() != 0) {
-                log.debug("User alredy exists");
+                log.debug("User already exists");
                 return users.get(0);
             }
         }
@@ -76,37 +66,12 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-
-        createUser("michael.lifschitz@gmail.com", VistaBehavior.ADMIN);
-        createUser("skarzhevskyy@gmail.com", VistaBehavior.ADMIN);
-
-        if (ApplicationMode.isDevelopment()) {
-
-            for (int i = 1; i <= config().getMaxAdmin(); i++) {
-                createUser(DemoData.CRM_ADMIN_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.ADMIN);
-            }
-
-            for (int i = 1; i <= config().getMaxPropertyManagers(); i++) {
-                createUser(DemoData.CRM_PROPERTY_MANAGER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROPERTY_MANAGER);
-            }
-
-            for (int i = 1; i <= config().getMaxCustomers(); i++) {
-                switch (custCount % 3) {
-                case 0:
-                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROSPECTIVE_TENANT);
-                    break;
-                case 1:
-                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROSPECTIVE_TENANT);
-                    break;
-                case 2:
-                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.PROSPECTIVE_TENANT);
-                    break;
-                }
-                custCount++;
-
-            }
+        int userCount = 0;
+        for (int i = 1; i <= config().maxPropertyManagers; i++) {
+            String email = DemoData.UserType.PM.getEmail(i);
+            UserPreloader.createUser(email, email, VistaBehavior.PROPERTY_MANAGER);
+            userCount++;
         }
-
         return "Created " + userCount + " Users";
     }
 

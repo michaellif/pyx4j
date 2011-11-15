@@ -134,8 +134,9 @@ public class SignInPanel extends Panel {
             add(new Button("signIn").add(AttributeModifier.replace("value", i18n.tr("Sign In"))));
 
             if (ApplicationMode.isDevelopment()) {
-                Label devNotes = new Label("signInHint", "*)This application is running in <b>DEVELOPMENT</b> mode.<br/><i>Username and password are both \""
-                        + DemoData.getDemoCustemerEmail(1) + "\"</i>");
+                Label devNotes = new Label("signInHint",
+                        "*)This application is running in <b>DEVELOPMENT</b> mode.<br/><i>Username and password are both<br/>\""
+                                + DemoData.UserType.TENANT.getEmail(1) + "\" or \"" + DemoData.UserType.PTENANT.getEmail(1) + "\"</i>");
                 devNotes.setEscapeModelStrings(false);
                 add(devNotes);
             }

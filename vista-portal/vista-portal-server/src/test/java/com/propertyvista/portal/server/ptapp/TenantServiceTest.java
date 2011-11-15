@@ -73,7 +73,7 @@ public class TenantServiceTest extends VistaDBTestBase {
     public void testLoadAndSave() {
         happyPath();
 
-        PTGenerator generator = new PTGenerator(10l, VistaDevPreloadConfig.createTest());
+        PTGenerator generator = new PTGenerator(VistaDevPreloadConfig.createTest());
 
         TenantInLeaseListDTO tenantList = HappyPath.step4createTenants();
         // PotentialTenantList tenantList2 = generator.createPotentialTenantList(application);

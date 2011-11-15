@@ -15,87 +15,46 @@ package com.propertyvista.domain;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
-import com.propertyvista.domain.tenant.TenantInLease.Relationship;
-
 public class DemoData {
 
     public static enum DemoPmc {
         vista, star, redridge, rockville;
     }
 
-    public final static int PT_GENERATION_SEED = 100;
-
-    public final static int BUILDINGS_GENERATION_SEED = 100;
-
-    public final static int TENANTS_GENERATION_SEED = 100;
-
-    public final static String CRM_ADMIN_USER_PREFIX = "a";
-
-    public final static String CRM_CUSTOMER_USER_PREFIX = "cust";
-
-    public final static String CRM_PROPERTY_MANAGER_USER_PREFIX = "pm";
-
+    //We need E-mail delivery during tests. All E-mails goes to us!
     public final static String USERS_DOMAIN = "@pyx4j.com";
 
-    public final static String PRELOADED_USERNAME = "cust001";
+    public static enum UserType {
 
-    public final static String REGISTRATION_DEFAULT_PROPERTY_CODE = "740";
+        PTENANT("p", 3),
 
-    public final static String REGISTRATION_DEFAULT_UNIT_ID = "1";
+        TENANT("t", 3),
 
-    public final static String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";
+        PM("m", 3),
 
-    public final static Relationship[] RELATIONSHIPS = { Relationship.Spouse, Relationship.Daughter, Relationship.Son, Relationship.Mother,
-            Relationship.Father, Relationship.Aunt, Relationship.Uncle, Relationship.Grandfather, Relationship.Grandmother, Relationship.Other };
+        ADMIN("a", 2);
 
-    public final static String[] PET_BREEDS = { "Colly", "German Sheppard", "Schnautzer", "Labrador" };
+        private final String namePrefix;
 
-    public final static String[] PET_COLORS = { "White", "Brown", "Black", "Yellow" };
+        private final int defaultMax;
 
-    public final static String[] PET_NAMES = { "Rover", "Max", "Buddy", "Rocky", "Bear", "Jack", "Toby", "Lucky", "Shadow", "Tucker" };
+        UserType(String namePrefix, int defaultMax) {
+            this.namePrefix = namePrefix;
+            this.defaultMax = defaultMax;
+        }
 
-    public final static String[] STREETS = { "Yonge St", "Dufferin St", "Bathurst St", "John St", "16th Ave", "Steeles Ave W" };
+        public String getNamePrefix() {
+            return namePrefix;
+        }
 
-    public final static String[] NAME_PREFIX = { "Mr", "Mrs", "Ms", "Dr" };
+        public int getDefaultMax() {
+            return defaultMax;
+        }
 
-    public final static String[] NAME_SUFFIX = { "Phd", "MSc", "MBA" };
+        public String getEmail(int number) {
+            return getNamePrefix() + CommonsStringUtils.d000(number) + DemoData.USERS_DOMAIN;
+        }
 
-    public final static String[] FIRST_NAMES = { "John", "Jim", "Bob", "Alex", "Chris", "Jack", "Jill", "Anna", "Bob", "Mark", "Jeff", "Peter", "Neil",
-            "Joseph" };
-
-    public final static String[] LAST_NAMES = { "Johnson", "Pollson", "Smith", "Woodsmith", "Black", "Smirnov", "Thomson", "Nelson", "McKindle", "Ritchie",
-            "Jobs", "Ellison" };
-
-    public final static String[] EMAIL_DOMAINS = { "gmail.com", "gmail.ca", "rogers.com", "yahoo.ca", "yahoo.com", "me.com" };
-
-    public final static String[] CITIES = { "Toronto", "Vancouver", "Montreal", "Quebec", "Richmond Hill", "New Market", "Thornhill", "Scarborough",
-            "North York" };
-
-    public final static String[] PROVINCES = { "ON", "QC", "NS", "NB", "MB", "BC", "PE", "SK", "AB", "NL" };
-
-    public final static String[] CAR_MAKES = { "Toyota", "BMW", "Honda", "Ford", "Nissan", "Jaguar", "Lexus" };
-
-    public final static String[] CAR_MODELS = { "Sienna", "LS300", "Protege", "M5", "M3", "Viper" };
-
-    public final static String[] OCCUPATIONS = { "Java Developer", "Tester", "QA", "Manager", "Project Manager", "VP", "Director", "Pilot" };
-
-    public final static String[] COMPANY_ROLES = { "Sales", "Technical", "Help Desk" };
-
-    public final static String[] CONTACT_ROLES = { "Administrator", "Support", "Tech" };
-
-    public final static String[] EMPLOYER_NAMES = { "IBM", "Oracle", "Sun", "Dell", "Apple", "Microsoft", "HP", "TD Bank", "CIBC", "BMO", "RBC", "Manulife",
-            "Sunlife" };
-
-    //    public final static IncomeType[] INCOME_SOURCES = { IncomeType.pension, IncomeType.unemployment, IncomeType.retired, IncomeType.odsp, IncomeType.dividends,
-    //            IncomeType.other };
-    //
-    //    public final static EmploymentTypes[] EMPLOYMENT_TYPES = { EmploymentTypes.none, EmploymentTypes.fulltime, EmploymentTypes.parttime,
-    //            EmploymentTypes.selfemployed, EmploymentTypes.seasonallyEmployed, EmploymentTypes.socialServices, EmploymentTypes.student };
-    //
-    //    public final static AssetType[] ASSETS = { AssetType.bankAccounts, AssetType.realEstateProperties, AssetType.insurancePolicies, AssetType.shares,
-    //            AssetType.unitTrusts, AssetType.businesses, AssetType.cars, AssetType.other };
-
-    public static String getDemoCustemerEmail(int number) {
-        return DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(number) + DemoData.USERS_DOMAIN;
     }
+
 }

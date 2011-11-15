@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.server.common.generator.Model;
+import com.propertyvista.yardi.Model;
 import com.propertyvista.yardi.bean.mits.Customer;
 import com.propertyvista.yardi.bean.mits.Information;
 import com.propertyvista.yardi.bean.resident.Property;

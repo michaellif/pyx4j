@@ -15,13 +15,14 @@ package com.propertvista.generator.util;
 
 import java.util.List;
 
+import com.propertvista.generator.PreloadData;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
@@ -63,19 +64,19 @@ public class CommonsGenerator {
     public static Name createName() {
         Name name = EntityFactory.create(Name.class);
 
-        if (RandomUtil.randomInt() % 3 == 0) {
-            name.namePrefix().setValue(RandomUtil.random(DemoData.NAME_PREFIX));
+        if (RandomUtil.randomInt() % 5 == 0) {
+            name.namePrefix().setValue(RandomUtil.random(PreloadData.NAME_PREFIX));
         }
 
-        name.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
-        name.lastName().setValue(RandomUtil.random(DemoData.LAST_NAMES));
+        name.firstName().setValue(DataGenerator.randomFirstName());
+        name.lastName().setValue(DataGenerator.randomLastName());
 
         if (RandomUtil.randomInt() % 10 == 0) {
-            name.middleName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
+            name.middleName().setValue(DataGenerator.randomLetters(1));
         }
 
         if (RandomUtil.randomInt() % 15 == 0) {
-            name.nameSuffix().setValue(RandomUtil.random(DemoData.NAME_SUFFIX));
+            name.nameSuffix().setValue(RandomUtil.random(PreloadData.NAME_SUFFIX));
         }
 
 //        IPrimitive<String> maidenName();
@@ -100,7 +101,6 @@ public class CommonsGenerator {
     }
 
     public static Name createEmployeeName() {
-
         if (names == null) {
             names = EntityCSVReciver.create(Name.class).loadFile(IOUtils.resourceFileName("employee-names.csv", CommonsGenerator.class));
         }
@@ -177,11 +177,11 @@ public class CommonsGenerator {
         address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
         address.streetNumberSuffix().setValue("");
 
-        address.streetName().setValue(RandomUtil.random(DemoData.STREETS));
+        address.streetName().setValue(RandomUtil.random(PreloadData.STREETS));
         address.streetType().setValue(RandomUtil.random(StreetType.values()));
         address.streetDirection().setValue(RandomUtil.random(StreetDirection.values()));
 
-        address.city().setValue(RandomUtil.random(DemoData.CITIES));
+        address.city().setValue(RandomUtil.random(PreloadData.CITIES));
         address.county().setValue("");
 
         Province province = RandomUtil.random(SharedData.getProvinces());

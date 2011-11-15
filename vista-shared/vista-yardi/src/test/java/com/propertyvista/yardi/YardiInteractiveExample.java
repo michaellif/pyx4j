@@ -27,7 +27,6 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.common.generator.Model;
 import com.propertyvista.server.common.reference.SharedData;
 
 public class YardiInteractiveExample {

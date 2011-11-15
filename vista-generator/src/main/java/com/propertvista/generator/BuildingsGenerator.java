@@ -22,9 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.propertvista.generator.gdo.AptUnitGDO;
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
@@ -37,7 +35,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Email;
@@ -65,21 +62,11 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.PropertyProfile;
-import com.propertyvista.server.common.generator.UnitRelatedData;
 
 public class BuildingsGenerator {
 
-    private final static Logger log = LoggerFactory.getLogger(BuildingsGenerator.class);
-
-    private final long seed;
-
-    public BuildingsGenerator() {
-        this(DemoData.BUILDINGS_GENERATION_SEED);
-    }
-
     public BuildingsGenerator(long seed) {
         DataGenerator.setRandomSeed(seed);
-        this.seed = seed;
     }
 
     public List<Building> createBuildings(int numBuildings) {
@@ -109,7 +96,7 @@ public class BuildingsGenerator {
         String propertyCode = "A" + String.valueOf(counter);
         if (counter == 0) {
             // UI is looking for this building, see references!
-            propertyCode = DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE;
+            propertyCode = PreloadData.REGISTRATION_DEFAULT_PROPERTY_CODE;
         }
 
         // property profile TODO - nobody is using this property profile right
@@ -456,8 +443,8 @@ public class BuildingsGenerator {
     }
 
 // Units:
-    public List<UnitRelatedData> createUnits(Building building, List<FloorplanDTO> floorplans, int numFloors, int numUnitsPerFloor) {
-        List<UnitRelatedData> units = new ArrayList<UnitRelatedData>();
+    public List<AptUnitGDO> createUnits(Building building, List<FloorplanDTO> floorplans, int numFloors, int numUnitsPerFloor) {
+        List<AptUnitGDO> units = new ArrayList<AptUnitGDO>();
         // now create units for the building
         for (int floor = 1; floor < numFloors + 1; floor++) {
             // for each floor we want to create the same number of units
@@ -469,15 +456,15 @@ public class BuildingsGenerator {
                     throw new IllegalStateException("No floorplan");
                 }
                 double uarea = CommonsGenerator.randomFromRange(CommonsGenerator.createRange(1200d, 2600d));
-                UnitRelatedData unit = createUnit(building, suiteNumber, floor, uarea, floorplan);
+                AptUnitGDO unit = createUnit(building, suiteNumber, floor, uarea, floorplan);
                 units.add(unit);
             }
         }
         return units;
     }
 
-    private UnitRelatedData createUnit(Building building, String suiteNumber, int floor, double area, Floorplan floorplan) {
-        UnitRelatedData data = EntityFactory.create(UnitRelatedData.class);
+    private AptUnitGDO createUnit(Building building, String suiteNumber, int floor, double area, Floorplan floorplan) {
+        AptUnitGDO data = EntityFactory.create(AptUnitGDO.class);
         AptUnit unit = data.unit();
         unit.belongsTo().set(building);
 

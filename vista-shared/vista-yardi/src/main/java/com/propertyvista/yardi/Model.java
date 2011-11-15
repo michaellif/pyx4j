@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.server.common.generator;
+package com.propertyvista.yardi;
 
 import java.util.ArrayList;
 import java.util.List;

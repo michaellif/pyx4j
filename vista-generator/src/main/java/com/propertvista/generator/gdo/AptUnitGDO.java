@@ -11,18 +11,20 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.server.common.generator;
+package com.propertvista.generator.gdo;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 @Transient
-public interface UnitRelatedData extends IEntity {
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface AptUnitGDO extends IEntity {
 
     AptUnit unit();
 

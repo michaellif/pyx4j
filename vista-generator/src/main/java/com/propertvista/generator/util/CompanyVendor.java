@@ -13,9 +13,10 @@
  */
 package com.propertvista.generator.util;
 
+import com.propertvista.generator.PreloadData;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
@@ -30,9 +31,10 @@ import com.propertyvista.domain.property.vendor.WarrantyItem;
 public class CompanyVendor {
 
     public static Company createCompany() {
+
         Company company = EntityFactory.create(Company.class);
 
-        company.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
+        company.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
             company.addresses().add(CommonsGenerator.createAddress());
@@ -107,7 +109,7 @@ public class CompanyVendor {
     private static OrganizationContacts createOrganizationContacts() {
         OrganizationContacts contacts = EntityFactory.create(OrganizationContacts.class);
 
-        contacts.companyRole().name().setValue(RandomUtil.random(DemoData.COMPANY_ROLES));
+        contacts.companyRole().name().setValue(RandomUtil.random(PreloadData.COMPANY_ROLES));
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             OrganizationContact contact = createOrganizationContact();
@@ -119,10 +121,10 @@ public class CompanyVendor {
     private static OrganizationContact createOrganizationContact() {
         OrganizationContact contact = EntityFactory.create(OrganizationContact.class);
 
-        contact.description().setValue(RandomUtil.random(DemoData.CONTACT_ROLES));
+        contact.description().setValue(RandomUtil.random(PreloadData.CONTACT_ROLES));
 
         contact.person().set(CommonsGenerator.createEmployee().clone(Employee.class));
-        contact.person().title().setValue(RandomUtil.random(DemoData.CONTACT_ROLES));
+        contact.person().title().setValue(RandomUtil.random(PreloadData.CONTACT_ROLES));
         contact.person().description().setValue("Employee description here...");
 
         return contact;

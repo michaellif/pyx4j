@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.CEntityEditor;
@@ -123,32 +122,27 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
     }
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
-        String devLoginUserPrefix = null;
-        int max = config.getMaxCustomers();
+        DemoData.UserType type = null;
         switch (nativeKeyCode) {
-        case 'A':
-            devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
-            break;
         case 'Q':
-            devLoginUserPrefix = DemoData.CRM_CUSTOMER_USER_PREFIX;
+            type = DemoData.UserType.PTENANT;
             break;
         }
-        if (devLoginUserPrefix != null) {
+        if (type != null) {
             if (devKey != nativeKeyCode) {
                 devCount = 1;
             } else {
                 devCount++;
-                if (devCount > max) {
+                if (devCount > type.getDefaultMax()) {
                     devCount = 1;
                 }
             }
             devKey = nativeKeyCode;
-            String devLogin = devLoginUserPrefix + CommonsStringUtils.d000(devCount) + DemoData.USERS_DOMAIN;
+            String devLogin = type.getEmail(devCount);
             event.preventDefault();
             form.get(form.proto().email()).setValue(devLogin);
             form.get(form.proto().password()).setValue(devLogin);
         }
-
     }
 
     @Override

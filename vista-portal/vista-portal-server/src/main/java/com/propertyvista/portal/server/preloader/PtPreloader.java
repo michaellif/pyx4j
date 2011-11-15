@@ -15,9 +15,6 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
@@ -34,9 +31,9 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.User;
+import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -50,44 +47,14 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
-import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
-import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
-import com.propertyvista.portal.server.ptapp.services.ApplicationDebug;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
 public class PtPreloader extends BaseVistaDevDataPreloader {
-
-    private final static Logger log = LoggerFactory.getLogger(PtPreloader.class);
-
-    private User user;
-
-    //    private Application application;
-
-    //    private void loadEmployer(IncomeInfoEmployer employer, StringBuilder sb) {
-    //        sb.append(" Employer: ").append(employer.name().getStringView());
-    //        sb.append(" \t").append(employer.starts().getStringView()).append(" - ").append(employer.ends().getStringView());
-    //
-    //        sb.append(" Supervisor: ").append(employer.supervisorName().getStringView());
-    //        sb.append(" at ").append(employer.supervisorPhone().getStringView());
-    //
-    //        sb.append(", Monthly salary ").append(employer.monthlyAmount().getValue());
-    //        sb.append(", Poisiton ").append(employer.position().getStringView());
-    //
-    //        sb.append(", \tAddress: ");
-    //        loadAddress(employer, sb);
-    //    }
-
-    public static void loadAddress(AddressSimple address, StringBuilder sb) {
-        sb.append(address.street1().getValue());
-        sb.append(", ").append(address.city().getStringView());
-        sb.append(", ").append(address.province().getStringView());
-        sb.append(" ").append(address.postalCode().getStringView());
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -100,51 +67,25 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         }
     }
 
-    private User loadUser(String name) {
-        EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().name(), name));
-        user = Persistence.service().retrieve(criteria);
-        return user;
+    @Override
+    public String create() {
+
+        PTGenerator generator = new PTGenerator(config());
+        for (int i = 1; i <= config().numTenants; i++) {
+            String email = DemoData.UserType.PTENANT.getEmail(i);
+            User user = UserPreloader.createUser(email, email, VistaBehavior.PROSPECTIVE_TENANT);
+            ApplicationSummaryGDO summary = generator.createSummary(user, Persistence.service().retrieve(AptUnit.class, new Key(1)));
+
+            // Update user name
+            Persistence.service().persist(user);
+            //TODO create users for CoApplicants
+            persistFullApplication(summary, generator);
+        }
+
+        StringBuilder b = new StringBuilder();
+        b.append("Created " + config().numTenants + " potential tenants");
+        return b.toString();
     }
-
-    private Application loadApplication() {
-        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
-        assert (user != null);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
-
-        Application application = Persistence.service().retrieve(criteria);
-        return application;
-    }
-
-    //    private void loadApplicationProgress(StringBuilder sb) {
-    //        EntityQueryCriteria<ApplicationProgress> criteria = EntityQueryCriteria.create(ApplicationProgress.class);
-    //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-    //
-    //        ApplicationProgress progress = Persistence.service().retrieve(criteria);
-    //        if (progress == null) {
-    //            throw new IllegalStateException("Could not find progress for application");
-    //        }
-    //
-    //        sb.append(progress.steps().size()).append(" steps\n");
-    //        for (ApplicationWizardStep step : progress.steps()) {
-    //            sb.append("\t");
-    //            sb.append(step.placeId().getStringView());
-    //            sb.append("\n");
-    //        }
-    //    }
-
-    //    private void loadUnitSelection(StringBuilder sb) {
-    //        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-    //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-    //        UnitSelection unitSelection = Persistence.service().retrieve(criteria);
-    //
-    //        ApartmentServicesImpl apartmentServices = new ApartmentServicesImpl();
-    //        apartmentServices.loadAvailableUnits(unitSelection);
-    //
-    //        //        building = unitSelection.selectedUnit().building();
-    //
-    //        sb.append(VistaDataPrinter.print(unitSelection));
-    //    }
 
     private void updateLease(Lease lease) {
         Building building = lease.unit().belongsTo();
@@ -152,7 +93,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         Persistence.service().retrieve(building);
         Persistence.service().retrieve(building.serviceCatalog());
 
-        // update service catalogue double-reference lists:
+        // update service catalog double-reference lists:
         EntityQueryCriteria<Service> serviceCriteria = EntityQueryCriteria.create(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), building.serviceCatalog()));
         List<Service> services = Persistence.service().query(serviceCriteria);
@@ -204,20 +145,6 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         return chargeItem;
     }
 
-    @Override
-    public String create() {
-        user = loadUser(DemoData.PRELOADED_USERNAME);
-
-        PTGenerator generator = new PTGenerator(DemoData.PT_GENERATION_SEED, VistaDevPreloadConfig.createTest());
-
-        ApplicationSummaryGDO summary = generator.createSummary(user, Persistence.service().retrieve(AptUnit.class, new Key(1)));
-
-        persistFullApplication(summary, generator);
-        StringBuilder b = new StringBuilder();
-        b.append("Created 1 potential tenant series of data");
-        return b.toString();
-    }
-
     private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator) {
 
         updateLease(summary.lease());
@@ -244,17 +171,9 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             summary.lease().tenants().add(tenantSummary.tenantInLease());
         }
 
+        MasterApplication ma = ApplicationMgr.createMasterApplication(summary.lease());
+
         Persistence.service().persist(summary.lease());
-
-        MasterApplication ma = EntityFactory.create(MasterApplication.class);
-        ma.lease().set(summary.lease());
-
-        Application a = EntityFactory.create(Application.class);
-        a.steps().addAll(ApplicationMgr.createApplicationProgress());
-        a.user().set(user);
-        a.lease().set(ma.lease());
-        ma.applications().add(a);
-
         Persistence.service().persist(ma);
 
 //TODO
@@ -263,18 +182,4 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
     }
 
-    @Override
-    public String print() {
-        StringBuilder sb = new StringBuilder();
-
-        Application application = loadApplication();
-        ApplicationDebug.dumpApplicationSummary(application);
-
-        sb.append("\n\n---------------------------- USER -----------------------------------\n");
-        sb.append(VistaDataPrinter.print(user));
-
-        sb.append(ApplicationDebug.printApplicationSummary(application));
-
-        return sb.toString();
-    }
 }
