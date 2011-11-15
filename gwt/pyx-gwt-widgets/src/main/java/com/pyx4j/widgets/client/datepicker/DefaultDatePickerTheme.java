@@ -37,7 +37,7 @@ public class DefaultDatePickerTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, heighlighted, selected, todayday, outofmonth, right, multiple, first, top, bottom, middle
+        disabled, heighlighted, selected, todayday, outofmonth, empty, right, multiple, first, top, bottom, middle
     }
 
     public DefaultDatePickerTheme() {
@@ -214,6 +214,11 @@ public class DefaultDatePickerTheme extends Theme {
 
         style = new Style(" .DatePickerGrid .gwt-Label-outofmonth");
         style.addProperty("color", ThemeColors.foreground, 0.5);
+        addStyle(style);
+
+        style = new Style(" .DatePickerGrid .gwt-Label-empty");
+        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(" .DatePickerGrid .gwt-Label-heighlighted");

@@ -74,7 +74,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
         // Set up backwards.
         backwards = new Image(resource.MonthPrevious());
         backwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
-        backwards.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
+        backwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         backwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -85,7 +85,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
 
         forwards = new Image(resource.MonthNext());
         forwards.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
-        forwards.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
+        forwards.addStyleName(DefaultDatePickerTheme.StyleDependent.middle.name());
         forwards.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

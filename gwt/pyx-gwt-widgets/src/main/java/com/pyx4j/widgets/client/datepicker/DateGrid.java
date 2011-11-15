@@ -86,13 +86,16 @@ public class DateGrid extends Grid {
                     @Override
                     public void onClick(ClickEvent event) {
                         DateCell clickedCell = (DateCell) event.getSource();
-                        if (selectedCell != null) {
-                            selectedCell.setSelected(false);
-                        }
 
-                        selectedCell = clickedCell;
-                        selectedDate = selectedCell.getDate();
-                        selectedCell.setSelected(selectedCell.isEnabled());
+                        if (!clickedCell.isEmpty()) {
+                            if (selectedCell != null) {
+                                selectedCell.setSelected(false);
+                            }
+
+                            selectedCell = clickedCell;
+                            selectedDate = selectedCell.getDate();
+                            selectedCell.setSelected(selectedCell.isEnabled());
+                        }
                     }
                 });
                 setWidget(row, col, cell);
@@ -110,30 +113,42 @@ public class DateGrid extends Grid {
             selectedCell = null;
         }
 
-        if (firstDisplayed.getDate() == 1) {
-            // show one empty week if date is Monday is the first in month.
-            CalendarUtil.addDaysToDate(firstDisplayed, -7);
-        }
+//        if (firstDisplayed.getDate() == 1) {
+//            // show one empty week if date is Monday is the first in month.
+//            CalendarUtil.addDaysToDate(firstDisplayed, -7);
+//        }
 
         //enabledDate = new Date(firstDisplayed.getTime());
         displayedMonth = new Date(firstDisplayed.getTime()).getMonth();
-        displayedMonth = (displayedMonth == 11) ? 0 : displayedMonth + 1;
+
+        if (firstDisplayed.getDate() != 1) {
+            displayedMonth = (displayedMonth == 11) ? 0 : displayedMonth + 1;
+        }
 
         lastDisplayed.setTime(firstDisplayed.getTime());
         Date current = new Date();
+        boolean lastrowempty = false;
 
         for (int i = 0; i < getNumCells(); i++) {
             DateCell cell = getCell(i);
 
-            cell.setDate(lastDisplayed);
-            cell.setOutOfMonth(lastDisplayed.getMonth() != displayedMonth);
-
-            if (selectedDate != null && CalendarUtil.isSameDate(lastDisplayed, selectedDate)) {
-                cell.setSelected(true);
-                selectedCell = cell;
+            if (i >= 35 && lastDisplayed.getMonth() != displayedMonth /* && firstDisplayed.getDate() == 1 */) {
+                lastrowempty = true;
             }
 
-            cell.setTodayDay(CalendarUtil.isSameDate(lastDisplayed, current));
+            if (!lastrowempty) {
+                cell.setDate(lastDisplayed);
+                cell.setOutOfMonth(lastDisplayed.getMonth() != displayedMonth);
+
+                if (selectedDate != null && CalendarUtil.isSameDate(lastDisplayed, selectedDate)) {
+                    cell.setSelected(true);
+                    selectedCell = cell;
+                }
+
+                cell.setTodayDay(CalendarUtil.isSameDate(lastDisplayed, current));
+            } else {
+                cell.setEmpty();
+            }
 
             CalendarUtil.addDaysToDate(lastDisplayed, 1);
         }

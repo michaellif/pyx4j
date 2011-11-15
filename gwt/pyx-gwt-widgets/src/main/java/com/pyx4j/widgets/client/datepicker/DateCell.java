@@ -52,14 +52,16 @@ public class DateCell extends Label {
             public void onClick(ClickEvent event) {
                 DateCell cell = (DateCell) event.getSource();
 
-                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), cell.isEnabled());
+                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), cell.isEnabled() && !cell.isEmpty());
             }
         });
 
         this.addMouseOverHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                heighlight(((DateCell) event.getSource()).isEnabled());
+                DateCell cell = (DateCell) event.getSource();
+
+                heighlight(cell.isEnabled() && !cell.isEmpty());
             }
         });
 
@@ -86,6 +88,7 @@ public class DateCell extends Label {
 
     public void setDate(Date date) {
         this.date = new Date(date.getTime());
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.empty.name(), false);
         redraw();
     }
 
@@ -111,13 +114,32 @@ public class DateCell extends Label {
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.outofmonth.name(), isoutofmonth);
     }
 
+    public final void setEmpty() {
+        this.date = null;
+
+        setSelected(false);
+        setTodayDay(false);
+        setOutOfMonth(false);
+        setEnabled(true);
+
+        this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.empty.name(), true);
+        redraw();
+    }
+
+    public boolean isEmpty() {
+        return this.date == null;
+    }
+
     private void heighlight(boolean isheighlighted) {
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.heighlighted.name(), isheighlighted);
     }
 
     private void redraw() {
-        DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DAY);
-        String label = format.format(date);
-        this.setText(label);
+        if (!isEmpty()) {
+            DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DAY);
+            String label = format.format(date);
+            this.setText(label);
+        } else
+            this.getElement().setInnerHTML("&nbsp;");
     }
 }
