@@ -25,6 +25,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @Transient
 public interface PropertySearchCriteria extends IEntity {
 
+    static final com.pyx4j.i18n.shared.I18n i18n = com.pyx4j.i18n.shared.I18n.get(PropertySearchCriteria.class);
+
     public enum SearchType {
         city, proximity;
     }
@@ -36,8 +38,6 @@ public interface PropertySearchCriteria extends IEntity {
     public static enum PriceRange {
 
         Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
-
-        private static final com.pyx4j.i18n.shared.I18n i18n = com.pyx4j.i18n.shared.I18n.get(PriceRange.class);
 
         private final Integer minPrice;
 
@@ -71,8 +71,6 @@ public interface PropertySearchCriteria extends IEntity {
 
     public static enum BedroomRange {
         Any(null, null), One(1, 1), OneOrMore(1), Two(2, 2), TwoOrMore(2), Three(3, 3), ThreeOrMore(3), Four(4, 4), FourOrMore(4);
-
-        private static final com.pyx4j.i18n.shared.I18n i18n = com.pyx4j.i18n.shared.I18n.get(BedroomRange.class);
 
         private final Integer minBeds;
 
