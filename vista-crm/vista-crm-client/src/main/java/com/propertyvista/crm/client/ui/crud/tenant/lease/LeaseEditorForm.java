@@ -13,13 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -31,7 +29,6 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -40,6 +37,7 @@ import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -110,8 +108,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new HTML("&nbsp"));
 
         HorizontalPanel leaseDatePanel = new HorizontalPanel();
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseFrom()), 8).build());
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseTo()), 8).labelWidth(10).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseTo()), 9).labelWidth(10).build());
         main.setWidget(++row, 0, leaseDatePanel);
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
@@ -121,25 +119,23 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             HorizontalPanel unitPanel = new HorizontalPanel();
             unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
-            CHyperlink select;
-            unitPanel.add(select = new CHyperlink(new Command() {
+
+            unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
-                public void execute() {
+                public void onClick(ClickEvent event) {
                     LeaseDTO value = getValue();
                     ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedDates(value.leaseFrom().getValue(), value
                             .leaseTo().getValue());
                     new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
                         @Override
                         protected void onClose(SelectUnitBox box) {
-                            if (box.getSelectedUnit() != null) {
-                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedUnit());
+                            if (box.getSelectedItem() != null) {
+                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
                             }
                         }
                     };
                 }
             }));
-            select.setValue(i18n.tr("Select..."));
-            select.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
             main.setWidget(++row, 0, unitPanel);
         } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding()), 20).build());
@@ -149,18 +145,18 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new HTML("&nbsp"));
 
         leaseDatePanel = new HorizontalPanel();
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveIn()), 8).build());
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveOut()), 8).labelWidth(10).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).labelWidth(10).build());
         main.setWidget(++row, 0, leaseDatePanel);
 
         leaseDatePanel = new HorizontalPanel();
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveIn()), 8).build());
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveOut()), 8).labelWidth(10).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveOut()), 9).labelWidth(10).build());
         main.setWidget(++row, 0, leaseDatePanel);
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 8).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 9).build());
 
         return new CrmScrollPanel(main);
     }
@@ -236,7 +232,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private class SelectUnitBox extends OkCancelBox {
 
-        private AptUnit selectedUnit;
+        private AptUnit selectedItem;
 
         public SelectUnitBox() {
             super("Unit Selection");
@@ -247,8 +243,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             okButton.setEnabled(false);
             ((LeaseEditorView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
                 @Override
-                public void onSelect(AptUnit selectedItem) {
-                    selectedUnit = selectedItem;
+                public void onSelect(AptUnit selected) {
+                    selectedItem = selected;
                     okButton.setEnabled(true);
                 }
             });
@@ -269,11 +265,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         @Override
         protected void onCancel() {
-            selectedUnit = null;
+            selectedItem = null;
         }
 
-        protected AptUnit getSelectedUnit() {
-            return selectedUnit;
+        protected AptUnit getSelectedItem() {
+            return selectedItem;
         }
     }
 

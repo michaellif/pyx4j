@@ -13,8 +13,14 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.InquiryCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.Inquiry;
 import com.propertyvista.dto.InquiryDTO;
 
@@ -22,5 +28,26 @@ public class InquiryCrudServiceImpl extends GenericCrudServiceDtoImpl<Inquiry, I
 
     public InquiryCrudServiceImpl() {
         super(Inquiry.class, InquiryDTO.class);
+    }
+
+    @Override
+    protected void enhanceDTO(Inquiry in, InquiryDTO dto, boolean fromList) {
+        super.enhanceDTO(in, dto, fromList);
+        if (!fromList) {
+            Persistence.service().retrieve(dto.phones());
+        }
+    }
+
+    @Override
+    protected void persistDBO(Inquiry dbo, InquiryDTO in) {
+        Persistence.service().merge(dbo.phones());
+        super.persistDBO(dbo, in);
+    }
+
+    @Override
+    public void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key id) {
+        Floorplan item = Persistence.service().retrieve(Floorplan.class, id);
+        Persistence.service().retrieve(item.building());
+        callback.onSuccess(item);
     }
 }

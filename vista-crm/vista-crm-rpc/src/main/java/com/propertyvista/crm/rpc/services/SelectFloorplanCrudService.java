@@ -13,15 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.dto.InquiryDTO;
 
-public interface InquiryCrudService extends AbstractCrudService<InquiryDTO> {
-
-    public void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key id);
+public interface SelectFloorplanCrudService extends AbstractCrudService<Floorplan> {
 }
