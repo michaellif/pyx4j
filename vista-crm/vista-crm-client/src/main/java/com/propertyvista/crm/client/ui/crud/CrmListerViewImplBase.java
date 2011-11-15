@@ -27,6 +27,5 @@ public class CrmListerViewImplBase<E extends IEntity> extends ListerViewImplBase
         super(new CrmTitleBar(), VistaCrmTheme.defaultHeaderHeight);
 
         ((CrmTitleBar) getHeader()).setCaption(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption());
-
     }
 }

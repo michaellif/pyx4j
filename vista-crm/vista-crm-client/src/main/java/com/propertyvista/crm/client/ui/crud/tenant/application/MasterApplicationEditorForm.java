@@ -13,7 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
@@ -21,19 +25,25 @@ import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 
 public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplicationDTO> {
+
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public MasterApplicationEditorForm() {
         this(new CrmEditorsComponentFactory());
@@ -45,17 +55,79 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
 
     @Override
     public IsWidget createContent() {
+
+        tabPanel.add(createGeneralTab(), i18n.tr("Details"));
+        tabPanel.add(createInfoTab(), i18n.tr("Info"));
+        tabPanel.add(createFinancilaTab(), i18n.tr("Financial"));
+
+        tabPanel.setDisableMode(isEditable());
+        tabPanel.setSize("100%", "100%");
+        return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
+    }
+
+    private Widget createGeneralTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().leaseID()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().type()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().status(), new CEnumLabel()), 15).build());
 
-        main.setH1(++row, 0, 1, i18n.tr("Full info"));
-        main.setWidget(++row, 0, inject(proto().tenantsWithInfo(), createTenantView()));
+        main.setWidget(++row, 0, new HTML("&nbsp"));
 
-        main.setH1(++row, 0, 1, i18n.tr("Financial"));
-        main.setWidget(++row, 0, inject(proto().tenantFinancials(), createFinancialView()));
+        HorizontalPanel leaseDatePanel = new HorizontalPanel();
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().lease().leaseFrom()), 8).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().lease().leaseTo()), 8).labelWidth(10).build());
+        main.setWidget(++row, 0, leaseDatePanel);
 
-        return main;
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().unit().belongsTo()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().unit()), 20).build());
+
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+
+        leaseDatePanel = new HorizontalPanel();
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().lease().expectedMoveIn()), 8).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().lease().expectedMoveOut()), 8).labelWidth(10).build());
+        main.setWidget(++row, 0, leaseDatePanel);
+
+        leaseDatePanel = new HorizontalPanel();
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().lease().actualMoveIn()), 8).build());
+        leaseDatePanel.add(new DecoratorBuilder(inject(proto().lease().actualMoveOut()), 8).labelWidth(10).build());
+        main.setWidget(++row, 0, leaseDatePanel);
+
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().signDate()), 8).build());
+
+        return new CrmScrollPanel(main);
+    }
+
+    private Widget createInfoTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().tenantsWithInfo(), createTenantView()));
+
+        return new CrmScrollPanel(main);
+    }
+
+    private Widget createFinancilaTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().tenantFinancials(), createFinancialView()));
+
+        return new CrmScrollPanel(main);
     }
 
     private CEntityFolder<TenantInfoDTO> createTenantView() {

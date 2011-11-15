@@ -31,21 +31,26 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     protected final String defaultCaption;
 
     public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass) {
+        this(placeClass, false);
+    }
+
+    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, boolean viewOnly) {
         super(new CrmTitleBar(), new Toolbar(), VistaCrmTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         ((CrmTitleBar) getHeader()).setCaption(defaultCaption);
 
-        Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.edit();
-            }
-        });
-        btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
+        if (!viewOnly) {
+            Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.edit();
+                }
+            });
+            btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.EditButton);
 
-        addToolbarItem(btnEdit);
-
+            addToolbarItem(btnEdit);
+        }
     }
 
     public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form) {

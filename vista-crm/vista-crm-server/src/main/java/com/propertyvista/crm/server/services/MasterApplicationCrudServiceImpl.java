@@ -38,10 +38,12 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         super.enhanceDTO(in, dto, fromList);
 
         Persistence.service().retrieve(dto.lease());
-        Persistence.service().retrieve(dto.lease().tenants());
+        if (!fromList) {
+            Persistence.service().retrieve(dto.lease().unit());
+            Persistence.service().retrieve(dto.lease().unit().belongsTo());
+        }
 
         TenantRetriever.UpdateLeaseTenants(dto.lease());
-
         for (TenantInLease tenantInLease : dto.lease().tenants()) {
             Persistence.service().retrieve(tenantInLease);
 

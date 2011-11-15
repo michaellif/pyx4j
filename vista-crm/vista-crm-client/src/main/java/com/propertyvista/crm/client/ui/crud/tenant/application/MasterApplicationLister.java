@@ -25,7 +25,7 @@ import com.propertyvista.dto.MasterApplicationDTO;
 public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
     public MasterApplicationLister() {
-        super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class);
+        super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class, true);
     }
 
     @Override
