@@ -14,6 +14,7 @@
 package com.propertyvista.pmsite.server.panels;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -35,6 +36,7 @@ import templates.TemplateResources;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -79,7 +81,7 @@ public class InquiryPanel extends Panel {
                     Phone phone = EntityFactory.create(Phone.class);
                     phone.type().setValue(Phone.Type.home);
                     phone.number().setValue(workPhone);
-                    String ext = ((FormComponent<String>) get("workPhone")).getModelObject();
+                    String ext = ((FormComponent<String>) get("workPhoneExt")).getModelObject();
                     try {
                         phone.extension().setValue(Integer.valueOf(ext));
                     } catch (NumberFormatException ignore) {
@@ -99,10 +101,10 @@ public class InquiryPanel extends Panel {
                 // floorplan
                 Long fpId = ((FormComponent<Long>) get("floorPlanList")).getModelObject();
                 if (fpId != null) {
-                    Floorplan floorplan = EntityFactory.create(Floorplan.class);
-                    floorplan.setPrimaryKey(new Key(fpId));
-                    // TODO - Inquiry uses AptUnit instead - cannot populate from floorplan
+                    inquiry.floorplan().id().setValue(new Key(fpId));
                 }
+                inquiry.created().setValue(new Date());
+                Persistence.service().persist(inquiry);
                 PageParameters params = new PageParameters();
                 if (fp != null) {
                     params.set("fpId", fp.id().getValue().asLong());
@@ -151,15 +153,16 @@ public class InquiryPanel extends Panel {
         }
         form.add(radioGroup.setEscapeModelStrings(false));
         // lease term
-        form.add(new RadioChoice<Inquiry.LeaseTerm>("availLeaseTerms", new Model<Inquiry.LeaseTerm>(), Arrays.asList(Inquiry.LeaseTerm.values())));
+        form.add(new RadioChoice<Inquiry.LeaseTerm>("leaseTerm", Arrays.asList(Inquiry.LeaseTerm.values())));
         // moving date
-        form.add(new TextField<String>("movingDate", new Model<String>()));
+        form.add(new TextField<String>("movingDate"));
         // apmnt date / time
-        String[] aptTimes = { i18n.tr("Morning"), i18n.tr("Afternoon"), i18n.tr("Evening") };
-        form.add(new TextField<String>("apmntDate1", new Model<String>()));
-        form.add(new RadioChoice<String>("apmntTime1", new Model<String>(), Arrays.asList(aptTimes)));
-        form.add(new TextField<String>("apmntDate2", new Model<String>()));
-        form.add(new RadioChoice<String>("apmntTime2", new Model<String>(), Arrays.asList(aptTimes)));
+        form.add(new TextField<Date>("appointmentDate1"));
+        form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime1", Arrays.asList(Inquiry.DayPart.values())));
+        form.add(new TextField<Date>("appointmentDate2"));
+        form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime2", Arrays.asList(Inquiry.DayPart.values())));
+        // ref source
+        form.add(new WicketUtils.DropDownList<Inquiry.RefSource>("refSource", Arrays.asList(Inquiry.RefSource.values()), false, false));
         // comments
         form.add(new TextArea<String>("comments"));
         // captcha

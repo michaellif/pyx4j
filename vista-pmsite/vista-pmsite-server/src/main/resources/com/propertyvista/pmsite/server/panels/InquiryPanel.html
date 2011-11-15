@@ -33,7 +33,7 @@
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel"><wicket:i18n>Desired Lease Term</wicket:i18n></label>
-				<div wicket:id="availLeaseTerms" class="inputBox terms"/>
+				<div wicket:id="leaseTerm" class="inputBox terms"/>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel"><wicket:i18n>Desired Move In Date</wicket:i18n></label>
@@ -42,23 +42,18 @@
 		<div class="inputEntry">
 				<label class="inputLabel"><wicket:i18n>Preferred Appointment Time</wicket:i18n></label>
 				<div class="apmntBox">
-						<input type="text" size=8 id="apmntDate1" wicket:id="apmntDate1"/>
-						<div wicket:id="apmntTime1" class="inputBox apmntTime"/>
+						<input type="text" size=8 wicket:id="appointmentDate1" id="apmntDate1"/>
+						<div wicket:id="appointmentTime1" class="inputBox apmntTime"/>
 				</div>
 				<label class="inputLabel altApmnt"><wicket:i18n>Second Choice</wicket:i18n></label>
 				<div class="apmntBox">
-						<input type="text" size=8 id="apmntDate2" wicket:id="apmntDate2"/>
-						<div wicket:id="apmntTime2" class="inputBox apmntTime"/>
+						<input type="text" size=8 wicket:id="appointmentDate2" id="apmntDate2"/>
+						<div wicket:id="appointmentTime2" class="inputBox apmntTime"/>
 				</div>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel"><wicket:i18n>How Did You Hear About Us</wicket:i18n>?</label>
-				<select name="refSource">
-						<option value="Internet">Internet</option>		<option value="Newspaper">Newspaper</option>
-						<option value="Radio">Radio</option>				<option value="Referral">Referral</option>
-						<option value="Import">Import</option>				<option value="Locator Services">Locator Services</option>
-						<option value="Direct Mail">Direct Mail</option>
-				</select>
+				<select wicket:id="refSource"/>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel"><wicket:i18n>Additional Comments</wicket:i18n></label>

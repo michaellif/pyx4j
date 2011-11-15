@@ -21,6 +21,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -56,6 +57,7 @@ public class InquiryPage extends BasePage {
         Building bld = null;
         if (planId != null) {
             fp = PMSiteContentManager.getFloorplanDetails(planId);
+            Persistence.service().retrieve(fp.building());
             add(new FloorplanInfoPanel("infoPanel", fp));
         } else if (propId != null) {
             bld = PMSiteContentManager.getBuildingDetails(propId);

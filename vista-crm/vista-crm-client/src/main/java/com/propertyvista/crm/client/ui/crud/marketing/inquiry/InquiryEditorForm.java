@@ -50,7 +50,7 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().building()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().unit()), 15).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan()), 15).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

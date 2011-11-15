@@ -13,8 +13,12 @@
  */
 package com.propertyvista.domain.tenant;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -25,8 +29,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public interface Inquiry extends IEntity {
 
@@ -66,18 +70,58 @@ public interface Inquiry extends IEntity {
         }
     }
 
+    @I18n
+    public enum DayPart {
+        Morning, Afternoon, Evening;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    public enum RefSource {
+        Internet, Newspaper, Radio, Referral, Import, Locator_Services, Direct_Mail;
+
+        private static final com.pyx4j.i18n.shared.I18n i18n = com.pyx4j.i18n.shared.I18n.get(Inquiry.RefSource.class);
+
+        @Override
+        public String toString() {
+            return i18n.tr(name().replace("_", " "));
+        }
+    }
+
+    @EmbeddedEntity
     @ToString(index = 0)
     Name name();
 
+    @Owned
+    @Detached
     IList<Phone> phones();
 
     @EmbeddedEntity
     Email email();
+
+    IPrimitive<LeaseTerm> leaseTerm();
+
+    IPrimitive<Date> movingDate();
+
+    IPrimitive<Date> appointmentDate1();
+
+    IPrimitive<DayPart> appointmentTime1();
+
+    IPrimitive<Date> appointmentDate2();
+
+    IPrimitive<DayPart> appointmentTime2();
+
+    IPrimitive<String> refSource();
 
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> comments();
 
     Building building();
 
-    AptUnit unit();
+    Floorplan floorplan();
+
+    IPrimitive<Date> created();
 }
