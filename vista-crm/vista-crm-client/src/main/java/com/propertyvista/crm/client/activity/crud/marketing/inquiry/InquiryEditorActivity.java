@@ -17,7 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -103,5 +105,12 @@ public class InquiryEditorActivity extends EditorActivityBase<InquiryDTO> implem
             unitsLister.setParentFiltering(selected.getPrimaryKey());
         }
         unitsLister.populate(0);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<InquiryDTO> callback) {
+        InquiryDTO entity = EntityFactory.create(entityClass);
+        entity.created().setValue(new LogicalDate());
+        callback.onSuccess(entity);
     }
 }

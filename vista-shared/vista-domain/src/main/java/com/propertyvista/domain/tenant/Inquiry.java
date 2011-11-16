@@ -13,8 +13,7 @@
  */
 package com.propertyvista.domain.tenant;
 
-import java.util.Date;
-
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -95,22 +94,29 @@ public interface Inquiry extends IEntity {
     @ToString(index = 0)
     Name name();
 
+    @Deprecated
     @Owned
     @Detached
     IList<Phone> phones();
+
+    @EmbeddedEntity
+    Phone phone1();
+
+    @EmbeddedEntity
+    Phone phone2();
 
     @EmbeddedEntity
     Email email();
 
     IPrimitive<LeaseTerm> leaseTerm();
 
-    IPrimitive<Date> movingDate();
+    IPrimitive<LogicalDate> movingDate();
 
-    IPrimitive<Date> appointmentDate1();
+    IPrimitive<LogicalDate> appointmentDate1();
 
     IPrimitive<DayPart> appointmentTime1();
 
-    IPrimitive<Date> appointmentDate2();
+    IPrimitive<LogicalDate> appointmentDate2();
 
     IPrimitive<DayPart> appointmentTime2();
 
@@ -123,5 +129,5 @@ public interface Inquiry extends IEntity {
 
     Floorplan floorplan();
 
-    IPrimitive<Date> created();
+    IPrimitive<LogicalDate> created();
 }

@@ -35,6 +35,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import templates.TemplateResources;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -103,7 +104,7 @@ public class InquiryPanel extends Panel {
                 if (fpId != null) {
                     inquiry.floorplan().id().setValue(new Key(fpId));
                 }
-                inquiry.created().setValue(new Date());
+                inquiry.created().setValue(new LogicalDate());
                 Persistence.service().persist(inquiry);
                 PageParameters params = new PageParameters();
                 if (fp != null) {

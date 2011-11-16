@@ -31,20 +31,6 @@ public class InquiryCrudServiceImpl extends GenericCrudServiceDtoImpl<Inquiry, I
     }
 
     @Override
-    protected void enhanceDTO(Inquiry in, InquiryDTO dto, boolean fromList) {
-        super.enhanceDTO(in, dto, fromList);
-        if (!fromList) {
-            Persistence.service().retrieve(dto.phones());
-        }
-    }
-
-    @Override
-    protected void persistDBO(Inquiry dbo, InquiryDTO in) {
-        Persistence.service().merge(dbo.phones());
-        super.persistDBO(dbo, in);
-    }
-
-    @Override
     public void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key id) {
         Floorplan item = Persistence.service().retrieve(Floorplan.class, id);
         Persistence.service().retrieve(item.building());

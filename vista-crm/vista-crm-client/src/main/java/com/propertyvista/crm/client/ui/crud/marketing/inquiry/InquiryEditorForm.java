@@ -17,19 +17,18 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
-import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -63,18 +62,27 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
             get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
-            row += 2;
         }
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
-//        main.setH3(++row, 0, 2, proto().phones().getMeta().getCaption());
-//        main.setWidget(++row, 0, inject(proto().phones(), new PhoneFolder(isEditable())));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phones(), new PhoneFolder(isEditable())), 30).build());
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone1()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone2()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 20).build());
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 30).build());
+        main.setBR(++row, 0, 1);
+        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refSource()), 30).build());
+
+        main.setBR(++row, 0, 1);
+        if (!isEditable()) {
+            main.setBR(++row, 0, 1);
+            main.setBR(++row, 0, 1);
+        }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 65).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created(), new CDateLabel()), 9).build());
 
         row = -1;
         if (isEditable()) {
@@ -103,6 +111,14 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
 
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().leaseTerm()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().movingDate()), 9).build());
+
+        main.setBR(++row, 1, 1);
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate1()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime1()), 9).build());
+
+        main.setBR(++row, 1, 1);
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate2()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime2()), 9).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
