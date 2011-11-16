@@ -19,6 +19,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -93,7 +94,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             // first, find the tenant (matching by first name and last name)
             TenantInLease tenant2 = null;
             for (TenantInLease currTenant : tenants2) {
-                if (currTenant.id().equals(tenant1.id())) {
+                if (EqualsHelper.equals(currTenant.getPrimaryKey(), tenant1.getPrimaryKey())) {
                     tenant2 = currTenant;
                     continue;
                 }
