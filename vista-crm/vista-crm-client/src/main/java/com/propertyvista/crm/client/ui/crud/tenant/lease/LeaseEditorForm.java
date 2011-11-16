@@ -158,6 +158,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 9).build());
 
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
+
         return new CrmScrollPanel(main);
     }
 
