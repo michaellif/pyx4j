@@ -36,8 +36,17 @@ public class InquiryLister extends ListerBase<Inquiry> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplan()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTerm()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.movingDate()));
+    }
+
+    @Override
+    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<Inquiry>> columnDescriptors, Inquiry proto) {
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplan()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTerm()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.movingDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.appointmentDate1()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.appointmentDate2()));
-
     }
 }
