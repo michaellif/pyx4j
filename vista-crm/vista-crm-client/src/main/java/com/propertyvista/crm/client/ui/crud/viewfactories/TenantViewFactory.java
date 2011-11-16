@@ -47,7 +47,7 @@ import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningView
 
 public class TenantViewFactory extends ViewFactoryBase {
 
-    public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
+    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (TenantListerView.class.equals(type)) {
                 map.put(type, new TenantListerViewImpl());
@@ -83,6 +83,11 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new ApplicationEditorViewImpl());
             }
         }
-        return map.get(type);
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }

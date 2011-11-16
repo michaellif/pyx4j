@@ -22,7 +22,4 @@ public abstract class ViewFactoryBase {
 
     protected static HashMap<Class<? extends IView<? extends IEntity>>, IView<? extends IEntity>> map = new HashMap<Class<? extends IView<? extends IEntity>>, IView<? extends IEntity>>();
 
-    public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
-        return map.get(type);
-    }
 }

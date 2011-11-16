@@ -28,8 +28,7 @@ public class BoilerEditorActivity extends EditorActivityBase<BoilerDTO> {
 
     @SuppressWarnings("unchecked")
     public BoilerEditorActivity(Place place) {
-        super((BoilerEditorView) BuildingViewFactory.instance(BoilerEditorView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class),
-                BoilerDTO.class);
+        super(BuildingViewFactory.instance(BoilerEditorView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class), BoilerDTO.class);
         setPlace(place);
     }
 }

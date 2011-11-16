@@ -33,7 +33,7 @@ import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeViewe
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
-    public static IView<? extends IEntity> instance(Class<? extends IView<? extends IEntity>> type) {
+    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (SiteViewer.class.equals(type)) {
                 map.put(type, new SiteViewerImpl());
@@ -54,6 +54,11 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new ServiceTypeEditorViewImpl());
             }
         }
-        return map.get(type);
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }
