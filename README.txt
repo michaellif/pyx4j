@@ -33,6 +33,12 @@ maven profiles used in build:
     * gwtct
         Compile Test GWT modules to Javascript.
 
+    * i18n
+        Extract text catalogs
+
+    * i18n,i18n-auto
+        Extract text catalogs and create automatic translations using Google trnanslate
+
     * caledon-tests
         Enable caledon tests
 

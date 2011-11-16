@@ -67,7 +67,7 @@ class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                 }
             };
         } else {
-            MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You can't add more then " + maxCount + i18n.tr(" items here!")));
+            MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You can't add more then {1} items here!", maxCount));
         }
     }
 }

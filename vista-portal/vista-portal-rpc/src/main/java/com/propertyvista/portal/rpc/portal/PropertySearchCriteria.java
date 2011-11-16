@@ -64,12 +64,13 @@ public interface PropertySearchCriteria extends IEntity {
         @Override
         public String toString() {
             Integer maxPrice = getMaxPrice();
-            String format = "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - ${1}}}";
+            final String format = "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - ${1}}}";
             return i18n.tr(format, minPrice, maxPrice);
         }
     }
 
     public static enum BedroomRange {
+
         Any(null, null), One(1, 1), OneOrMore(1), Two(2, 2), TwoOrMore(2), Three(3, 3), ThreeOrMore(3), Four(4, 4), FourOrMore(4);
 
         private final Integer minBeds;
@@ -95,14 +96,16 @@ public interface PropertySearchCriteria extends IEntity {
 
         @Override
         public String toString() {
-            String format = "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}";
+            final String format = "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}";
             return i18n.tr(format, minBeds, maxBeds);
         }
     }
 
     @I18n
     public static enum BedroomChoice {
+
         Any(0), One(1), Two(2), Three(3), Four(4);
+
         Integer beds = 0;
 
         private BedroomChoice(Integer beds) {
@@ -128,7 +131,9 @@ public interface PropertySearchCriteria extends IEntity {
 
     @I18n
     public static enum BathroomChoice {
+
         Any(0), One(1), Two(2), Three(3), Four(4), Five(5);
+
         Integer bath = 0;
 
         private BathroomChoice(Integer bath) {
@@ -154,6 +159,7 @@ public interface PropertySearchCriteria extends IEntity {
 
     @I18n
     public static enum AmenityType {
+
         Elevator, Fitness, Parking, Pool, Garage;
 
         @Override
