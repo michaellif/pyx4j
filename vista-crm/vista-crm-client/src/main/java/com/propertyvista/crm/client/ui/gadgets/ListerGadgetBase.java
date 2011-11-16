@@ -83,10 +83,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 return fetchColumnDescriptorsFromSettings(proto());
             }
 
-            @Override
-            protected void onSelect(int selectedRow) {
-                //TODO make gadget navigable
-            }
         };
         entityListPanel.setPrevActionHandler(new ClickHandler() {
             @Override
