@@ -53,6 +53,11 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style.addProperty("width", "100%");
         addStyle(style);
 
+        style = new Style(".", StyleName.EntityFolder, "-", StyleDependent.readOnly);
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", ThemeColors.foreground, 1);
+        addStyle(style);
+
         style = new Style(".", StyleName.EntityFolder, " img");
         style.addProperty("display", "block");
         addStyle(style);
@@ -150,7 +155,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolder, "-", StyleDependent.readOnly, " .", StyleName.EntityFolderTableHeaderLabel);
-        style.addProperty("color", ThemeColors.foreground, 0.8);
+        style.addProperty("color", ThemeColors.foreground, 0.5);
         addStyle(style);
 
     }

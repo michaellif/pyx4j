@@ -76,13 +76,14 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         topActionsBar = new DataTableTopActionsBar();
         add(topActionsBar);
 
-        filterPanel = new DataTableFilterPanel<E>(this);
-        filterPanel.setVisible(false);
-        add(filterPanel);
+        filterButton = new Button(i18n.tr("Filter"));
 
-        add(dataTable);
+        filterPanel = new DataTableFilterPanel<E>(this);
 
         bottomActionsBar = new DataTableBottomActionsBar();
+
+        add(filterPanel);
+        add(dataTable);
         add(bottomActionsBar);
 
         dataTable.setWidth("100%");
@@ -96,23 +97,25 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         });
 
         topActionsBar.setDataTableModel(dataTableModel);
-
-        bottomActionsBar.setDataTableModel(dataTableModel);
-
-        filterButton = new Button(i18n.tr("Filter"));
+        topActionsBar.getToolbar().addItem(filterButton);
 
         filterButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
 
                 if (filterButton.isEnabled() && !filterPanel.isVisible()) {
-                    filterPanel.open();
-                    filterButton.setEnabled(false);
+                    filterPanel.setVisible(true);
                 }
             }
         });
 
-        topActionsBar.getToolbar().addItem(filterButton);
+        bottomActionsBar.setDataTableModel(dataTableModel);
+
+        filterPanel.setVisible(false);
+    }
+
+    public Button getFilterButton() {
+        return filterButton;
     }
 
     protected abstract void onSelect(int selectedRow);

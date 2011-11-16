@@ -44,6 +44,8 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     private static I18n i18n = I18n.get(DataTableFilterPanel.class);
 
+    private final DataTablePanel<E> dataTablePanel;
+
     private final DataTableFilterGrid<E> grid;
 
     private final Button btnApply;
@@ -51,6 +53,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     private final Button btnClose;
 
     public DataTableFilterPanel(DataTablePanel<E> dataTablePanel) {
+        this.dataTablePanel = dataTablePanel;
 
         setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilter.name());
 
@@ -87,7 +90,6 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         btnApply = new Button(i18n.tr("Apply"));
         btnApply.getElement().getStyle().setMarginLeft(1, Unit.EM);
         btnApply.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
-        btnApply.setEnabled(false);
         buttonsPanel.add(btnApply);
 
         btnClose = new Button(i18n.tr("Close"));
@@ -142,8 +144,13 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         grid.setFiltersData(filterData);
     }
 
-    public void open() {
-        setVisible(true);
-        grid.addFilter(new DataTableFilterItem<E>(grid));
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        dataTablePanel.getFilterButton().setEnabled(!visible);
+        if (visible) {
+            grid.addFilter(new DataTableFilterItem<E>(grid));
+
+        }
     }
 }
