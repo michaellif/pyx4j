@@ -33,8 +33,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.IEditorView;
-import com.pyx4j.site.client.ui.crud.IEditorView.EditMode;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditorView.EditMode;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class EditorActivityBase<E extends IEntity> extends AbstractActivity implements IEditorView.Presenter {

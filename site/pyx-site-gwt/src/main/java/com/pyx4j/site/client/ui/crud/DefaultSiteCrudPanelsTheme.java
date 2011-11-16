@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Toolbar, Lister, ListerActionsPanel, ListerFiltersPanel, ListerListPanel
+        Lister, ActionsPanel, ListerFiltersPanel, ListerListPanel
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -42,18 +42,22 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
     }
 
     private void initToolbarStyles() {
-        Style style = new Style(".", StyleName.Toolbar);
-        style.addProperty("padding-top", "0.5em");
+        Style style = new Style(".", DefaultWidgetsTheme.StyleName.Toolbar);
         addStyle(style);
 
-        style = new Style(".", StyleName.Toolbar, " .", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.05);
-        style.addProperty("color", ThemeColors.foreground, 0.05);
-        style.addGradient(ThemeColors.foreground, 0.7, ThemeColors.foreground, 0.9);
+        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("padding", "2px 12px");
+        style.addGradient(ThemeColors.foreground, 1, ThemeColors.foreground, 2);
+        style.addProperty("font-size", "11px");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("-moz-border-radius", "5px");
         addStyle(style);
 
-        style = new Style(".", StyleName.Toolbar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
+        style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
         style.addProperty("border-color", ThemeColors.foreground, 0.3);
         addStyle(style);
     }
@@ -63,10 +67,8 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         Style style = new Style(".", StyleName.Lister);
         addStyle(style);
 
-        style = new Style(".", StyleName.ListerActionsPanel);
-        style.addProperty("background-color", ThemeColors.foreground, 0.20);
-        style.addProperty("color", ThemeColors.foreground);
-        style.addProperty("height", "3em");
+        style = new Style(".", StyleName.ActionsPanel);
+        style.addProperty("padding", "6px");
         addStyle(style);
 
         style = new Style(".", StyleName.ListerFiltersPanel);

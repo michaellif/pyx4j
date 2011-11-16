@@ -14,31 +14,53 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Created on 2011-05-17
+ * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.crud.form;
 
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class ViewerViewImplBase<E extends IEntity> extends ViewImplBase<E> implements IViewerView<E> {
+public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IEditorView<E> {
 
-    protected IViewerView.Presenter presenter;
+    protected IEditorView.Presenter presenter;
 
-    public ViewerViewImplBase(Widget header, Widget footer, double size) {
+    public EditorViewImplBase(Widget header, Widget footer, double size) {
         super(header, footer, size);
     }
 
     @Override
-    public void setPresenter(IViewerView.Presenter presenter) {
+    public void setPresenter(IEditorView.Presenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public IViewerView.Presenter getPresenter() {
+    public IEditorView.Presenter getPresenter() {
         return presenter;
+    }
+
+    @Override
+    public void setEditMode(EditMode mode) {
+    }
+
+    @Override
+    public E getValue() {
+        return form.getValue();
+    }
+
+    @Override
+    public void onApplySuccess() {
+    }
+
+    @Override
+    public void onSaveSuccess() {
+    }
+
+    @Override
+    public boolean onSaveFail(Throwable caught) {
+        return false;
     }
 }

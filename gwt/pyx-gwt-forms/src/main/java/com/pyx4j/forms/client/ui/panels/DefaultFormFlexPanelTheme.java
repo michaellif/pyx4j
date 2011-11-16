@@ -52,15 +52,14 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH1);
-        style.addProperty("background-color", getBackgroundColor());
+        style.addProperty("background-color", getBackgroundColor(), 0.4);
         style.addProperty("margin", "6px 0 4px 0");
         style.addProperty("display", "inline-block");
         style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH1Label);
-        style.addProperty("color", getBackgroundColor(), 0.05);
-        style.addShadow(ThemeColors.foreground, "1px 1px 0");
+        style.addProperty("color", getBackgroundColor(), 0);
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
         style.addProperty("float", "left");
@@ -76,7 +75,6 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormFlexPanelH2Label);
         style.addProperty("color", getBackgroundColor(), 1);
-        style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "3px");
         style.addProperty("font-size", "1.2em");
         style.addProperty("float", "left");
@@ -92,7 +90,6 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormFlexPanelH3Label);
         style.addProperty("color", getBackgroundColor(), 1.3);
-        style.addShadow(ThemeColors.foreground, "1px 1px 0");
         style.addProperty("padding", "2px");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-style", "italic");

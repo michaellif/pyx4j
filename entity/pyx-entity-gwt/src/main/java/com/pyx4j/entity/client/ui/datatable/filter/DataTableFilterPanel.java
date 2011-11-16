@@ -25,7 +25,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -36,6 +35,7 @@ import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ImageButton;
 
 public class DataTableFilterPanel<E extends IEntity> extends DockPanel {

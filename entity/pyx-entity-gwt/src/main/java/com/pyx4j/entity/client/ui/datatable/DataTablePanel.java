@@ -127,7 +127,9 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setAddActionHandler(ClickHandler addActionHandler) {
         topActionsBar.getToolbar().insertSeparator(0);
-        topActionsBar.getToolbar().insertItem(new Button(new Image(EntityFolderImages.INSTANCE.addHover()), i18n.tr("Add"), addActionHandler), 0, false);
+        topActionsBar.getToolbar().insertItem(
+                new Button(new Image(EntityFolderImages.INSTANCE.addHover()), i18n.tr("New") + " " + entityPrototype.getEntityMeta().getCaption(),
+                        addActionHandler), 0, false);
     }
 
     public void setFilterActionHandler(ClickHandler filterActionHandler) {

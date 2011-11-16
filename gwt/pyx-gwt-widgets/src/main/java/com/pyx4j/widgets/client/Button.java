@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.ButtonElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -126,6 +127,14 @@ public class Button extends ButtonBase {
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         buttonFacesHandler.enable(enabled);
+    }
+
+    public void click() {
+        getButtonElement().click();
+    }
+
+    protected ButtonElement getButtonElement() {
+        return ((ButtonElement) getElement().cast());
     }
 
     static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler {

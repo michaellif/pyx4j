@@ -26,6 +26,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -51,9 +52,12 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
         this.header = header;
         addNorth(header, size);
 
+        SimplePanel actionsBar = new SimplePanel();
+        actionsBar.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ActionsPanel.name());
+
         toolbar = new Toolbar();
-        toolbar.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Toolbar.name());
-        addNorth(toolbar, size);
+        actionsBar.setWidget(toolbar);
+        addNorth(actionsBar, 3);
 
     }
 
@@ -144,6 +148,6 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     }
 
     public void addActionButton(Widget widget) {
-        toolbar.addItem(widget);
+        toolbar.addItem(widget, true);
     }
 }

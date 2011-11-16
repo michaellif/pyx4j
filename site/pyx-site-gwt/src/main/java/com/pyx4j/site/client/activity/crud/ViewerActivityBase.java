@@ -32,7 +32,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class ViewerActivityBase<E extends IEntity> extends AbstractActivity implements IViewerView.Presenter {

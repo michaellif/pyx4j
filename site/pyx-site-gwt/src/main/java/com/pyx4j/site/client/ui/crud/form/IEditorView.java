@@ -18,9 +18,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.crud.form;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IView;
+import com.pyx4j.site.client.ui.crud.IView.Presenter;
 
 public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
