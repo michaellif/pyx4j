@@ -21,6 +21,8 @@ import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+
 public class VistaTheme extends Theme {
 
     public VistaTheme() {
@@ -243,7 +245,7 @@ public class VistaTheme extends Theme {
         style.addProperty("border-top", "1px solid");
         style.addProperty("border-top-color", ThemeColors.foreground, 0.6);
         style.addProperty("background", ThemeColors.object1, 1);
-        style.addProperty("color", "white");
+        style.addProperty("color", ThemeColors.foreground, 0);
         style.addProperty("display", "inline-block");
         style.addProperty("position", "relative");
         addStyle(style);
@@ -252,6 +254,13 @@ public class VistaTheme extends Theme {
         style.addProperty("cursor", "default");
         style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.30);
         style.addProperty("color", "#333");
+        addStyle(style);
+
+        String prefix = VistaTabLayoutPanel.TAB_DIASBLED_STYLE;
+        style = new Style(Selector.valueOf(prefix));
+//            style.addProperty("background-color", ThemeColor.DISABLED_TEXT_BACKGROUND);
+        style.addProperty("color", ThemeColors.foreground, 0.2);
+        style.addProperty("cursor", "default");
         addStyle(style);
 
     }

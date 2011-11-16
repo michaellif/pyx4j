@@ -37,7 +37,6 @@ import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 
 public class VistaAdminTheme extends VistaTheme {
@@ -96,7 +95,6 @@ public class VistaAdminTheme extends VistaTheme {
         initButtonStylesEx();
         initHeadersStyle();
 
-        initVistaTabStyles();
         initVistaDecoratorsPanelStyles();
         initTabPanelStyles();
         initDialogBoxStyles();
@@ -396,16 +394,6 @@ public class VistaAdminTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, AdminActionsBarDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
-        addStyle(style);
-    }
-
-    protected void initVistaTabStyles() {
-        String prefix = VistaTabLayoutPanel.TAB_DIASBLED_STYLE;
-
-        Style style = new Style(Selector.valueOf(prefix));
-//        style.addProperty("background-color", ThemeColor.DISABLED_TEXT_BACKGROUND);
-        style.addProperty("color", ThemeColors.foreground, 0.55);
-        style.addProperty("cursor", "default");
         addStyle(style);
     }
 

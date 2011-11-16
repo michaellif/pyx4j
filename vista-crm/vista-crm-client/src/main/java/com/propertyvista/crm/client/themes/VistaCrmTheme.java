@@ -31,7 +31,6 @@ import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
@@ -105,7 +104,6 @@ public class VistaCrmTheme extends VistaTheme {
         initHeadersStyle();
 
         initSectionSeparatorStyle();
-        initVistaTabStyles();
         initVistaDecoratorsPanelStyles();
         initDashboardView();
         initDashboardReport();
@@ -469,16 +467,6 @@ public class VistaCrmTheme extends VistaTheme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-    }
-
-    protected void initVistaTabStyles() {
-        String prefix = VistaTabLayoutPanel.TAB_DIASBLED_STYLE;
-
-        Style style = new Style(Selector.valueOf(prefix));
-//        style.addProperty("background-color", ThemeColor.DISABLED_TEXT_BACKGROUND);
-        style.addProperty("color", ThemeColors.foreground, 0.55);
-        style.addProperty("cursor", "default");
-        addStyle(style);
     }
 
     protected void initVistaDecoratorsPanelStyles() {
