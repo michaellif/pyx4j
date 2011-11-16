@@ -179,6 +179,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().persist(building.media());
             }
 
+// TODO : let's leave dashboard empty - in runtime the first Building dashboard will be used by default!
 //            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
 
             Persistence.service().merge(building);
