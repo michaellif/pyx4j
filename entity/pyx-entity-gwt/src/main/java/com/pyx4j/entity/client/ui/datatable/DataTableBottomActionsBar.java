@@ -62,7 +62,7 @@ public class DataTableBottomActionsBar extends HorizontalPanel implements DataTa
     private ClickHandler pageSizeClickHandler;
 
     public DataTableBottomActionsBar() {
-        setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableActionsBar.name());
+        setStyleName(DefaultDataTableTheme.StyleName.DataTableActionsBar.name());
         setWidth("100%");
         HorizontalPanel contentPanel = new HorizontalPanel();
         add(contentPanel);

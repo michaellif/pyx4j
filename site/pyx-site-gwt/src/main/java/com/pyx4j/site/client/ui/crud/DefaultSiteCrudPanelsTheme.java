@@ -24,6 +24,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultSiteCrudPanelsTheme extends Theme {
@@ -65,6 +66,10 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style.addProperty("padding", "6px");
         addStyle(style);
 
+        style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("padding", "6px");
+        addStyle(style);
+
     }
 
     protected void initListerStyles() {
@@ -84,6 +89,13 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ListerListPanel);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ListerListPanel, " .", DefaultDataTableTheme.StyleName.DataTable);
+        style.addProperty("border-left", "1px solid");
+        style.addProperty("border-right", "1px solid");
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-right-color", ThemeColors.foreground, 0.4);
         addStyle(style);
 
     }

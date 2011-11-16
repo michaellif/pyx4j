@@ -55,7 +55,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     public DataTableFilterPanel(DataTablePanel<E> dataTablePanel) {
         this.dataTablePanel = dataTablePanel;
 
-        setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilter.name());
+        setStyleName(DefaultDataTableTheme.StyleName.DataTableFilter.name());
 
         final Widget addButtonWidget = createAddButton();
 
@@ -72,15 +72,15 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
                 setExpanded(visible);
             }
         };
-        header.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilterHeader.name());
+        header.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterHeader.name());
 
         add(header, DockPanel.NORTH);
         grid = new DataTableFilterGrid<E>(dataTablePanel);
-        grid.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilterMain.name());
+        grid.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterMain.name());
 
         add(grid, DockPanel.CENTER);
 
-        footer.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilterFooter.name());
+        footer.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterFooter.name());
 
         HorizontalPanel buttonsPanel = new HorizontalPanel();
         footer.setWidget(buttonsPanel);

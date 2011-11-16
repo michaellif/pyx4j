@@ -34,7 +34,7 @@ public class DataTableTopActionsBar extends SimplePanel implements DataTableMode
     private final Toolbar toolbar;
 
     public DataTableTopActionsBar() {
-        setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableActionsBar.name());
+        setStyleName(DefaultDataTableTheme.StyleName.DataTableActionsBar.name());
 
         toolbar = new Toolbar();
         setWidget(toolbar);
