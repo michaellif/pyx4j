@@ -59,7 +59,11 @@ public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel impleme
     public FormViewImplBase(Widget header, Widget footer, double size) {
         super(Unit.EM);
         this.header = header;
-        addNorth(header, size);
+        SimplePanel headerHolder = new SimplePanel();
+        headerHolder.setWidget(header);
+        headerHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Header.name());
+
+        addNorth(headerHolder, size);
 
         SimplePanel actionsBar = new SimplePanel();
         actionsBar.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ActionsPanel.name());
@@ -70,7 +74,12 @@ public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel impleme
 
         if (footer != null) {
             this.footer = footer;
-            addSouth(footer, size);
+
+            SimplePanel footerHolder = new SimplePanel();
+            footerHolder.setWidget(footer);
+            footerHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Footer.name());
+
+            addSouth(footerHolder, size);
         }
     }
 

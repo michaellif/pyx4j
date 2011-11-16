@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Lister, ActionsPanel, ListerFiltersPanel, ListerListPanel
+        ActionsPanel, Lister, ListerFiltersPanel, ListerListPanel, Header, Footer
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -42,10 +42,8 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
     }
 
     private void initToolbarStyles() {
-        Style style = new Style(".", DefaultWidgetsTheme.StyleName.Toolbar);
-        addStyle(style);
 
-        style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        Style style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.05);
         style.addProperty("color", ThemeColors.foreground, 0);
@@ -60,6 +58,13 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
         style.addProperty("border-color", ThemeColors.foreground, 0.3);
         addStyle(style);
+
+        style = new Style(".", StyleName.Footer, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("border-top", "4px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addProperty("padding", "6px");
+        addStyle(style);
+
     }
 
     protected void initListerStyles() {
