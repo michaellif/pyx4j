@@ -55,21 +55,48 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         }
     }
 
+    private class AptUnitSource {
+
+        // Get the second building, initially
+        int buildingNo = 1;
+
+        int unitNo = 0;
+
+        List<AptUnit> units = null;
+
+        AptUnit next() {
+            if ((units == null) || (units.size() == unitNo)) {
+                nextBuilding();
+            }
+            return units.get(unitNo++);
+        }
+
+        void nextBuilding() {
+            unitNo = 0;
+            EntityListCriteria<Building> bcriteria = EntityListCriteria.create(Building.class);
+            bcriteria.asc(bcriteria.proto().propertyCode().getPath().toString());
+            bcriteria.setPageSize(1);
+            bcriteria.setPageNumber(buildingNo++);
+            Building building = Persistence.service().retrieve(bcriteria);
+            if (building == null) {
+                throw new Error("No more building and units available for PotentialTenants. Change configuration!");
+            }
+
+            EntityQueryCriteria<AptUnit> ucriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+            ucriteria.add(PropertyCriterion.eq(ucriteria.proto().belongsTo(), building));
+            units = Persistence.service().query(ucriteria);
+            if (units.size() == 0) {
+                nextBuilding();
+            }
+        }
+    }
+
     @Override
     public String create() {
 
         TenantsGenerator generator = new TenantsGenerator(config().tenantsGenerationSeed);
 
-        // Get the second building
-        EntityListCriteria<Building> bcriteria = EntityListCriteria.create(Building.class);
-        bcriteria.asc(bcriteria.proto().propertyCode().getPath().toString());
-        bcriteria.setPageSize(1);
-        bcriteria.setPageNumber(1);
-        Building building = Persistence.service().retrieve(bcriteria);
-
-        EntityQueryCriteria<AptUnit> ucriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        ucriteria.add(PropertyCriterion.eq(ucriteria.proto().belongsTo(), building));
-        List<AptUnit> units = Persistence.service().query(ucriteria);
+        AptUnitSource aptUnitSource = new AptUnitSource();
 
         for (int i = 1; i <= config().numTenants; i++) {
             String email = DemoData.UserType.TENANT.getEmail(i);
@@ -81,11 +108,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             Persistence.service().persist(user);
             persistTenant(tenant);
 
-            if (units.size() <= i) {
-                log.warn("No more units available for PotentialTenants. Change configuration!");
-                break;
-            }
-            ApplicationSummaryGDO summary = generator.createLease(tenant, units.get(i - 1));
+            ApplicationSummaryGDO summary = generator.createLease(tenant, aptUnitSource.next());
             LeaseHelper.updateLease(summary.lease());
             Persistence.service().persist(summary.lease());
             for (TenantSummaryGDO tenantSummary : summary.tenants()) {

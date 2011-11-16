@@ -77,7 +77,8 @@ public class TenantsGenerator {
 
         summary.lease().status().setValue(Lease.Status.Approved);
         summary.lease().unit().set(selectedUnit);
-        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2010, 2011));
+        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2001, 2010));
+        summary.lease().signDate().setValue(summary.lease().leaseFrom().getValue());
         summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2012));
 
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
