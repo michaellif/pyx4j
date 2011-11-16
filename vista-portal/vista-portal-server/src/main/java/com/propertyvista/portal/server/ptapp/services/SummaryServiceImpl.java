@@ -25,6 +25,7 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
@@ -36,6 +37,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.ServletMapping;
+import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
@@ -75,7 +77,6 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         return createSummaryDTO(summary);
     }
 
-    @SuppressWarnings("unchecked")
     public SummaryDTO createSummaryDTO(Summary dbo) {
 
         SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
@@ -105,6 +106,9 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
                 }
             }
         }
+
+        // This should be taken from building policy
+        summary.leaseTerms().set(Persistence.service().retrieve(EntityQueryCriteria.create(LeaseTerms.class)));
 
         return summary;
     }
