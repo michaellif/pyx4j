@@ -48,10 +48,13 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     @Override
     protected void enhanceDTO(Lease in, LeaseDTO dto, boolean fromList) {
+
+        Persistence.service().retrieve(dto.unit());
+        Persistence.service().retrieve(dto.unit().belongsTo());
+
         if (!fromList) {
             // load detached entities:
             Persistence.service().retrieve(dto.documents());
-            Persistence.service().retrieve(dto.unit());
             if (!dto.unit().isNull()) {
                 // fill selected building by unit:
                 dto.selectedBuilding().set(dto.unit().belongsTo());

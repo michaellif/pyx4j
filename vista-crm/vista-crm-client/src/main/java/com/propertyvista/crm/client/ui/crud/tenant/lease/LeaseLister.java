@@ -32,27 +32,35 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<LeaseDTO>> columnDescriptors, LeaseDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseID()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseFrom()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTo()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.signDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
 
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
     }
 
     @Override
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<LeaseDTO>> columnDescriptors, LeaseDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseID()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseFrom()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTo()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.expectedMoveIn()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.expectedMoveOut()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.actualMoveIn()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.actualMoveOut()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutNotice()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.signDate()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
     }
 }
