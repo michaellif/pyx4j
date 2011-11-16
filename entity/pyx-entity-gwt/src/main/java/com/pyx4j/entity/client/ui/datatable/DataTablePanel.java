@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterPanel;
@@ -89,13 +88,6 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");
 
-        dataTable.addItemSelectionHandler(new ItemSelectionHandler() {
-            @Override
-            public void onSelect(int selectedRow) {
-                DataTablePanel.this.onSelect(selectedRow);
-            }
-        });
-
         topActionsBar.setDataTableModel(dataTableModel);
         topActionsBar.getToolbar().addItem(filterButton);
 
@@ -117,8 +109,6 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
     public Button getFilterButton() {
         return filterButton;
     }
-
-    protected abstract void onSelect(int selectedRow);
 
     public void swtVisibleTopActionsBar(boolean visible) {
         topActionsBar.setVisible(visible);

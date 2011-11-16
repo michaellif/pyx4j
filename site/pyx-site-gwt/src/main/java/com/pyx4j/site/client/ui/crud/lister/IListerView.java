@@ -48,6 +48,7 @@ public interface IListerView<E extends IEntity> extends IView<E> {
         void editNew(Class<? extends CrudAppPlace> openPlaceClass, Key parentID);
 
         void delete(Key itemID);
+
     }
 
     void setPresenter(Presenter presenter);

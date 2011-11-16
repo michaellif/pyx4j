@@ -26,7 +26,6 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -40,13 +39,11 @@ import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.NavigUtils;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
 
@@ -87,16 +84,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 ListerBase.this.fillDefaultColumnDescriptors(columnDescriptors, proto());
                 assert !columnDescriptors.isEmpty() : "shouldn't be empty!..";
                 return columnDescriptors;
-            }
-
-            @Override
-            protected void onSelect(int selectedRow) {
-                if (editorPage != null) {
-                    E entity = getDataTable().getSelectedItem();
-                    if (entity != null) {
-                        History.newItem(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()).getPath());
-                    }
-                }
             }
         };
 
@@ -451,14 +438,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 //                ((FocusWidget) w).setEnabled(active);
 //            }
 //        }
-    }
-
-// Internals: ------------------------------------------------------------------------------------------   
-
-    public void setEditorPageType(Class<? extends NavigNode> editorPage) {
-        this.editorPage = editorPage;
-        //TODO change Cursor style to arrow
-        dataTablePanel.getDataTable().setHasDetailsNavigation(this.editorPage != null);
     }
 
 }
