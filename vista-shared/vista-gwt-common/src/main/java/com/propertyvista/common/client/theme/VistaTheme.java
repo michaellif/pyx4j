@@ -223,7 +223,7 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-top", "0.5em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("border-bottom", "4px solid");
-        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.35);
+        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab");
