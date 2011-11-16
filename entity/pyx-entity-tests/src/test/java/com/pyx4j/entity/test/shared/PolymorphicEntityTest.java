@@ -20,12 +20,16 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.util.List;
+import java.util.Vector;
+
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.OwnedByDiferentOwners;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntityDTO;
 
@@ -69,5 +73,34 @@ public class PolymorphicEntityTest extends InitializerTestCase {
         assertTrue("Member instanceOf ConcreteEntity", entDTO.refference().isInstanceOf(Concrete2Entity.class));
         assertTrue("Member instanceOf Base2Entity its base", entDTO.refference().isInstanceOf(Base2Entity.class));
         assertTrue("Member instanceOf Base1Entity its base", entDTO.refference().isInstanceOf(Base1Entity.class));
+    }
+
+    public void testOwnerAssignment() {
+        {
+            Concrete2Entity master = EntityFactory.create(Concrete2Entity.class);
+
+            OwnedByDiferentOwners child = EntityFactory.create(OwnedByDiferentOwners.class);
+            master.ownedItem().set(child);
+            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerRefference().getValueClass());
+            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerRefference().getInstanceValueClass());
+        }
+
+        {
+            Concrete2Entity master = EntityFactory.create(Concrete2Entity.class);
+            OwnedByDiferentOwners child = EntityFactory.create(OwnedByDiferentOwners.class);
+            master.ownedItems().add(child);
+            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerRefference().getValueClass());
+            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerRefference().getInstanceValueClass());
+        }
+
+        {
+            Concrete2Entity master = EntityFactory.create(Concrete2Entity.class);
+            OwnedByDiferentOwners child = EntityFactory.create(OwnedByDiferentOwners.class);
+            List<OwnedByDiferentOwners> childern = new Vector<OwnedByDiferentOwners>();
+            childern.add(child);
+            master.ownedItems().addAll(childern);
+            Assert.assertEquals("owner is abstract class", Base1Entity.class, child.ownerRefference().getValueClass());
+            Assert.assertEquals("Proper class", Concrete2Entity.class, child.ownerRefference().getInstanceValueClass());
+        }
     }
 }

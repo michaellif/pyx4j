@@ -253,11 +253,15 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             throw new ClassCastException("Entity expects EntityValueMap as value");
         }
         if (delegateValue) {
-            ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
+            Map<String, Object> ownerValue = ((SharedEntityHandler) getOwner()).ensureValue();
+            ownerValue.put(getFieldName(), value);
             // ensure @Owner value is set properly.
             String ownerMemberName = getEntityMeta().getOwnerMemberName();
             if ((ownerMemberName != null) && (value != null) && (getMeta().isOwnedRelationships())) {
-                value.put(ownerMemberName, getOwner().getValue());
+                value.put(ownerMemberName, ownerValue);
+                if (!this.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
+                    ownerValue.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
+                }
             }
         } else {
             this.data = value;

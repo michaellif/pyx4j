@@ -81,7 +81,11 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         // ensure @Owner value is set properly.
         String ownerMemberName = entity.getEntityMeta().getOwnerMemberName();
         if ((ownerMemberName != null) && (value != null) && (getMeta().isOwnedRelationships())) {
-            value.put(ownerMemberName, getOwner().getValue());
+            Map<String, Object> ownerValue = ((SharedEntityHandler) getOwner()).ensureValue();
+            value.put(ownerMemberName, ownerValue);
+            if (!entity.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
+                ownerValue.put(IEntity.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
+            }
         }
 
         return value;
