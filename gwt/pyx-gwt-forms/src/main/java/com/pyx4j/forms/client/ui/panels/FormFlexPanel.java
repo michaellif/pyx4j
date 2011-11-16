@@ -46,10 +46,13 @@ public class FormFlexPanel extends FlexTable {
     }
 
     public void setHR(int row, int col, int span) {
+        setBR(row, col, span);
+        super.getWidget(row, col).setStyleName(FormFlexPanelHR.name());
+    }
+
+    public void setBR(int row, int col, int span) {
         getFlexCellFormatter().setColSpan(row, col, span);
-        HTML header = new HTML("&nbsp;");
-        header.setStyleName(FormFlexPanelHR.name());
-        super.setWidget(row, 0, header);
+        super.setWidget(row, col, new HTML("&nbsp;"));
     }
 
     public void setH1(int row, int col, int span, String caption) {
