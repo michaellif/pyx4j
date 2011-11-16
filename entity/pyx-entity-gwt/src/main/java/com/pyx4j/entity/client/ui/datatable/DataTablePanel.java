@@ -59,6 +59,8 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     private WidgetsImages images;
 
+    private Button filterButton;
+
     public DataTablePanel(Class<E> clazz) {
         this(clazz, EntityFolderImages.INSTANCE);
     }
@@ -97,12 +99,20 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
         bottomActionsBar.setDataTableModel(dataTableModel);
 
-        topActionsBar.getToolbar().addItem(new Button(i18n.tr("Filter"), new ClickHandler() {
+        filterButton = new Button(i18n.tr("Filter"));
+
+        filterButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                filterPanel.setVisible(true);
+
+                if (filterButton.isEnabled() && !filterPanel.isVisible()) {
+                    filterPanel.open();
+                    filterButton.setEnabled(false);
+                }
             }
-        }));
+        });
+
+        topActionsBar.getToolbar().addItem(filterButton);
     }
 
     protected abstract void onSelect(int selectedRow);

@@ -56,14 +56,16 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
         final Widget addButtonWidget = createAddButton();
 
+        final SimplePanel footer = new SimplePanel();
+
         DataTableFilterHeader header = new DataTableFilterHeader(dataTablePanel.getImages()) {
             @Override
             protected void onCollapse() {
                 super.onCollapse();
                 boolean visible = !grid.isVisible();
                 grid.setVisible(visible);
-                btnApply.setVisible(visible);
                 addButtonWidget.setVisible(visible);
+                footer.setVisible(visible);
                 setExpanded(visible);
             }
         };
@@ -75,7 +77,6 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
         add(grid, DockPanel.CENTER);
 
-        SimplePanel footer = new SimplePanel();
         footer.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilterFooter.name());
 
         HorizontalPanel buttonsPanel = new HorizontalPanel();
@@ -139,5 +140,10 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     public void setFilterData(List<DataTableFilterData> filterData) {
         grid.setFiltersData(filterData);
+    }
+
+    public void open() {
+        setVisible(true);
+        grid.addFilter(new DataTableFilterItem<E>(grid));
     }
 }

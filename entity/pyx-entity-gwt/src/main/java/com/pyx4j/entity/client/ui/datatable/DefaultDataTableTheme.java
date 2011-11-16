@@ -116,6 +116,10 @@ public class DefaultDataTableTheme extends Theme {
         style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0);
         addStyle(style);
 
+        style = new Style(".", StyleSuffix.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
+        addStyle(style);
+
         style = new Style(".", StyleSuffix.DataTableFilter);
         style.addProperty("background-color", ThemeColors.object1, 0.2);
         style.addProperty("width", "100%");
