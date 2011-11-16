@@ -30,7 +30,9 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultDataTableTheme extends Theme {
 
     public static enum StyleSuffix implements IStyleName {
-        DataTable, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableColumnSelector, DataTableColumnMenu
+        DataTable, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableColumnSelector, DataTableColumnMenu,
+
+        DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -113,5 +115,24 @@ public class DefaultDataTableTheme extends Theme {
         style = new Style(".", StyleSuffix.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
         style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0);
         addStyle(style);
+
+        style = new Style(".", StyleSuffix.DataTableFilter);
+        style.addProperty("background-color", ThemeColors.object1, 0.2);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleSuffix.DataTableFilterHeader, ", ", " .", StyleSuffix.DataTableFilterFooter);
+        style.addProperty("background-color", ThemeColors.object1, 0.4);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(" .", StyleSuffix.DataTableFilterFooter);
+        style.addProperty("padding", "6px");
+        addStyle(style);
+
+        style = new Style(".", StyleSuffix.DataTableFilterMain);
+        style.addProperty("padding", "6px");
+        addStyle(style);
+
     }
 }

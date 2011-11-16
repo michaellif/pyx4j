@@ -29,10 +29,12 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
+import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -50,9 +52,11 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     public DataTableFilterPanel(DataTablePanel<E> dataTablePanel) {
 
+        setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilter.name());
+
         final Widget addButtonWidget = createAddButton();
 
-        add(new DataTableFilterHeader(dataTablePanel.getImages()) {
+        DataTableFilterHeader header = new DataTableFilterHeader(dataTablePanel.getImages()) {
             @Override
             protected void onCollapse() {
                 super.onCollapse();
@@ -62,13 +66,22 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
                 addButtonWidget.setVisible(visible);
                 setExpanded(visible);
             }
-        }, DockPanel.NORTH);
+        };
+        header.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilterHeader.name());
+
+        add(header, DockPanel.NORTH);
         grid = new DataTableFilterGrid<E>(dataTablePanel);
+        grid.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilterMain.name());
 
         add(grid, DockPanel.CENTER);
 
+        SimplePanel footer = new SimplePanel();
+        footer.setStyleName(DefaultDataTableTheme.StyleSuffix.DataTableFilterFooter.name());
+
         HorizontalPanel buttonsPanel = new HorizontalPanel();
-        add(buttonsPanel, DockPanel.SOUTH);
+        footer.setWidget(buttonsPanel);
+
+        add(footer, DockPanel.SOUTH);
 
         btnApply = new Button(i18n.tr("Apply"));
         btnApply.getElement().getStyle().setMarginLeft(1, Unit.EM);

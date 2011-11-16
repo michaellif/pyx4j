@@ -42,7 +42,6 @@ public class DataTableFilterHeader extends HorizontalPanel {
 
     public DataTableFilterHeader(WidgetsImages images) {
         this.images = images;
-        setWidth("100%");
 
         SimplePanel collapseImageHolder = new SimplePanel();
         collapseImageHolder.getElement().getStyle().setPadding(2, Unit.PX);
