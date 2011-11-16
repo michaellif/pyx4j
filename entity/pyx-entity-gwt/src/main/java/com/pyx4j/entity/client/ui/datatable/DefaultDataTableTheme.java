@@ -131,7 +131,7 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(" .", StyleSuffix.DataTableFilterFooter);
-        style.addProperty("padding", "6px");
+        style.addProperty("padding", "6px 0");
         addStyle(style);
 
         style = new Style(".", StyleSuffix.DataTableFilterMain);
