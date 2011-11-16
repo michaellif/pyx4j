@@ -59,9 +59,10 @@ public class AptListPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Building> item) {
                 Building propInfo = item.getModelObject();
+                Long propId = propInfo.getPrimaryKey().asLong();
                 // PropertyDetailsDTO
                 item.add(new SimpleImage("picture", PMSiteContentManager.getFistVisibleMediaImgUrl(propInfo.media(), ThumbnailSize.small)));
-                item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add("propId", propInfo.id().getValue())));
+                item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add("propId", propId)));
                 item.add(new JSActionLink("aptMapview", "display_map()", false));
                 AddressStructured addr = propInfo.info().address();
                 String addrFmt = "";

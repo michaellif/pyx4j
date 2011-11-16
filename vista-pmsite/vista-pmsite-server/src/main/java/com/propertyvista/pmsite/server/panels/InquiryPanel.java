@@ -48,6 +48,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
@@ -108,9 +109,9 @@ public class InquiryPanel extends Panel {
                 Persistence.service().persist(inquiry);
                 PageParameters params = new PageParameters();
                 if (fp != null) {
-                    params.set("fpId", fp.id().getValue().asLong());
+                    params.set(PMSiteApplication.ParamNameFloorplan, fp.id().getValue().asLong());
                 } else {
-                    params.set("propId", bld.id().getValue().asLong());
+                    params.set(PMSiteApplication.ParamNameBuilding, bld.id().getValue().asLong());
                 }
                 setResponsePage(InquirySuccessPage.class, params);
             }

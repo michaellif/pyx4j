@@ -28,6 +28,7 @@ import com.google.gwt.maps.client.impl.MarkerImpl;
 import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -105,6 +106,10 @@ public class PropertyMarker extends Marker {
         mapWidget.getInfoWindow().open(this, bubble);
     }
 
+    public native String getDetailsUrl()/*-{
+		return $wnd.getAptDetailsUrl();
+    }-*/;
+
     public class PropertyCard extends DockPanel {
 
         private final Anchor viewDetailsItem;
@@ -155,10 +160,7 @@ public class PropertyMarker extends Marker {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    //TODO navigation done bypassing activities. Not sure if this is correct
-//                    AppPlace place = new PortalSiteMap.FindApartment.ApartmentDetails();
-//                    place.putArg(PortalSiteMap.ARG_PROPERTY_ID, property.id().getValue().toString());
-//                    AppSite.getPlaceController().goTo(place);
+                    Window.Location.replace(getDetailsUrl() + "=" + property.getPrimaryKey().asLong());
                 }
             });
             content.add(viewDetailsItem);

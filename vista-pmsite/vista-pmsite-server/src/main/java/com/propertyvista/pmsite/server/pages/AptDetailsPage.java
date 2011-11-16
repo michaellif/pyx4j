@@ -35,6 +35,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
@@ -55,7 +56,7 @@ public class AptDetailsPage extends BasePage {
 
         Long propId = null;
         try {
-            propId = params.get("propId").toLong();
+            propId = params.get(PMSiteApplication.ParamNameBuilding).toLong();
         } catch (Exception e) {
             throw new RestartResponseException(FindAptPage.class);
         }
@@ -98,7 +99,8 @@ public class AptDetailsPage extends BasePage {
                     price = "from $" + String.valueOf(Math.round(minPrice));
                 }
                 item.add(new Label("price", price));
-                item.add(new BookmarkablePageLink<Void>("unitDetails", UnitDetailsPage.class, new PageParameters().add("fpId", floorPlan.id().getValue())));
+                item.add(new BookmarkablePageLink<Void>("unitDetails", UnitDetailsPage.class, new PageParameters().add(PMSiteApplication.ParamNameFloorplan,
+                        floorPlan.id().getValue())));
             }
         });
         add(new Label("description", propInfo.marketing().description().getValue()));

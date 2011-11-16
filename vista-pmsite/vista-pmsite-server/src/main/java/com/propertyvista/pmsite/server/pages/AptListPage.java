@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
@@ -128,7 +129,10 @@ public class AptListPage extends BasePage {
         }
         jsAptListModeInfo += "\n}\n";
         add(new Label("jsAptListModeInfo", jsAptListModeInfo).setEscapeModelStrings(false));
-
+        // js method to return aptDetails url
+        CharSequence url = getRequestCycle().urlFor(AptDetailsPage.class, new PageParameters().add(PMSiteApplication.ParamNameBuilding, ""));
+        String jsAptDetailsUrl = "\n" + "function getAptDetailsUrl() { return '" + url.toString() + "'; }\n";
+        add(new Label("jsAptDetailsUrl", jsAptDetailsUrl).setEscapeModelStrings(false));
     }
 
     @Override

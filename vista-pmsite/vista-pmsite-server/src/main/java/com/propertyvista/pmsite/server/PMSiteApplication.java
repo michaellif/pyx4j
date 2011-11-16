@@ -13,6 +13,9 @@
  */
 package com.propertyvista.pmsite.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.IRequestCycleProvider;
@@ -57,11 +60,31 @@ import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
 
-    public static String LocaleParamName = "lang";
-
     private Exception internalError;
 
     private final String[] persistParams = { "gwt.codesvr" };
+
+    public static String ParamNameLang = "lang";
+
+    public static String ParamNameBuilding = "propId";
+
+    public static String ParamNameFloorplan = "fpId";
+
+    private static final Map<String, Class<? extends Page>> MountMap = new HashMap<String, Class<? extends Page>>();
+
+    static {
+        MountMap.put("", LandingPage.class);
+        MountMap.put("signin", SignInPage.class);
+        MountMap.put("findapt", FindAptPage.class);
+        MountMap.put("aptlist", AptListPage.class);
+        MountMap.put("aptinfo", AptDetailsPage.class);
+        MountMap.put("unitinfo", UnitDetailsPage.class);
+        MountMap.put("residents", ResidentsPage.class);
+        MountMap.put("inquiry", InquiryPage.class);
+        MountMap.put("inquiryok", InquirySuccessPage.class);
+        MountMap.put("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
+        MountMap.put("error", InternalErrorPage.class);
+    }
 
     // custom mapper - supports locale in url and persistent params in dev mode
     private class PMSiteLocalizedMapper extends MountedMapper {
@@ -78,8 +101,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             }
             Request request = RequestCycle.get().getRequest();
             // but don't override lang if already set in the parameters
-            if (newParams.get(LocaleParamName).isEmpty()) {
-                newParams.set(LocaleParamName, ((PMSiteWebRequest) request).getSiteLocale().lang().getValue().name());
+            if (newParams.get(ParamNameLang).isEmpty()) {
+                newParams.set(ParamNameLang, ((PMSiteWebRequest) request).getSiteLocale().lang().getValue().name());
             }
             // DEVELOPMENT MODE: support persistent params
             if (ApplicationMode.isDevelopment()) {
@@ -99,7 +122,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         protected UrlInfo parseRequest(Request request) {
             final UrlInfo info = super.parseRequest(request);
             if (info != null && info.getPageParameters() != null) {
-                final StringValue lang = info.getPageParameters().get(LocaleParamName);
+                final StringValue lang = info.getPageParameters().get(ParamNameLang);
                 if (!lang.isEmpty()) {
                     ((PMSiteWebRequest) request).setSiteLocale(lang.toString());
                 }
@@ -115,7 +138,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     }
 
     private <T extends Page> void customMount(final String path, Class<T> pageClass) {
-        String localizedPath = "#{" + LocaleParamName + "}/" + path;
+        String localizedPath = "#{" + ParamNameLang + "}/" + path;
         mount(new PMSiteLocalizedMapper(localizedPath, pageClass));
     }
 
@@ -131,17 +154,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         getPageSettings().addComponentResolver(new I18nMessageResolver());
 //        getMarkupSettings().setStripWicketTags(true);
 
-        customMount("", LandingPage.class);
-        customMount("signin", SignInPage.class);
-        customMount("findapt", FindAptPage.class);
-        customMount("aptlist", AptListPage.class);
-        customMount("aptinfo", AptDetailsPage.class);
-        customMount("unitinfo", UnitDetailsPage.class);
-        customMount("residents", ResidentsPage.class);
-        customMount("inquiry", InquiryPage.class);
-        customMount("inquiryok", InquirySuccessPage.class);
-        customMount("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
-        customMount("error", InternalErrorPage.class);
+        // mount site urls
+        for (String path : MountMap.keySet()) {
+            Class<? extends Page> pageClass = MountMap.get(path);
+            customMount(path, pageClass);
+        }
 
         // set exception listener to provide custom error handling
         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
@@ -182,6 +199,20 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     public static PMSiteApplication get() {
         return (PMSiteApplication) WebApplication.get();
+    }
+
+    public static String getAptDetailsPagePath(Long propId, String lang) {
+        for (String path : MountMap.keySet()) {
+            Class<? extends Page> pageClass = MountMap.get(path);
+            if (AptDetailsPage.class.equals(pageClass)) {
+                Url url = Url.parse(path);
+                url.addQueryParameter(ParamNameBuilding, propId);
+                url.addQueryParameter(ParamNameLang, lang);
+                return url.toString();
+            }
+        }
+
+        return null;
     }
 
     @Override

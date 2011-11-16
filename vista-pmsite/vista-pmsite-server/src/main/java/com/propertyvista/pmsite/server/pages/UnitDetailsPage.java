@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -51,7 +52,7 @@ public class UnitDetailsPage extends BasePage {
 
         Long planId = null;
         try {
-            planId = params.get("fpId").toLong();
+            planId = params.get(PMSiteApplication.ParamNameFloorplan).toLong();
         } catch (Exception e) {
             throw new RuntimeException();
 //            throw new RestartResponseException(FindAptPage.class);

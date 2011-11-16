@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -42,12 +43,12 @@ public class InquiryPage extends BasePage {
         super(params);
         Long planId = null, propId = null;
         try {
-            planId = params.get("fpId").toLong();
+            planId = params.get(PMSiteApplication.ParamNameFloorplan).toLong();
         } catch (Exception ignore) {
             // ignore
         }
         try {
-            propId = params.get("propId").toLong();
+            propId = params.get(PMSiteApplication.ParamNameBuilding).toLong();
         } catch (Exception ignore) {
             // ignore
         }

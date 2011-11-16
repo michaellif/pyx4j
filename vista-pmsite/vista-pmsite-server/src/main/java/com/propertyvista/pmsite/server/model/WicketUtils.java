@@ -230,7 +230,7 @@ public class WicketUtils {
         private static final long serialVersionUID = 1L;
 
         public LocalizedPageLink(final String wicketId, final Class<? extends Page> pageClass, final PageParameters params, final String lang) {
-            super(wicketId, pageClass, new PageParameters(params).set(PMSiteApplication.LocaleParamName, lang));
+            super(wicketId, pageClass, new PageParameters(params).set(PMSiteApplication.ParamNameLang, lang));
         }
     }
 
