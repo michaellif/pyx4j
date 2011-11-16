@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -62,14 +63,18 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
             get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
+            row += 2;
         }
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
+//        main.setH3(++row, 0, 2, proto().phones().getMeta().getCaption());
+//        main.setWidget(++row, 0, inject(proto().phones(), new PhoneFolder(isEditable())));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phones(), new PhoneFolder(isEditable())), 30).build());
+
+        main.setWidget(++row, 0, new HTML("&nbsp"));
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 30).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refSource()), 30).build());
-
-        main.setH3(++row, 0, 2, proto().phones().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().phones(), new PhoneFolder(isEditable())));
 
         row = -1;
         if (isEditable()) {
