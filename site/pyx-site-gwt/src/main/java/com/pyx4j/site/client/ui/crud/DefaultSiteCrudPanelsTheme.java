@@ -65,6 +65,8 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
     protected void initListerStyles() {
 
         Style style = new Style(".", StyleName.Lister);
+        style.addProperty("width", "100%");
+        style.addProperty("padding", "6px");
         addStyle(style);
 
         style = new Style(".", StyleName.ActionsPanel);

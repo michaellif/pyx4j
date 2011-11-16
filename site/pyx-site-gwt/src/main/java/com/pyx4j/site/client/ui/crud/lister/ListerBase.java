@@ -143,7 +143,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         dataTablePanel.getDataTable().renderTable();
 
         add(dataTablePanel);
-        setWidth("100%");
+
     }
 
     public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
