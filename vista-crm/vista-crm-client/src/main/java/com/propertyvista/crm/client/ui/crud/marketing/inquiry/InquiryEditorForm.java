@@ -82,7 +82,7 @@ public class InquiryEditorForm extends CrmEntityForm<InquiryDTO> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created(), new CDateLabel()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate(), new CDateLabel()), 9).build());
 
         row = -1;
         if (isEditable()) {

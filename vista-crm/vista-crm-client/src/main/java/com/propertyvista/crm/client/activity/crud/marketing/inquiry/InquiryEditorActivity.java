@@ -110,7 +110,7 @@ public class InquiryEditorActivity extends EditorActivityBase<InquiryDTO> implem
     @Override
     protected void createNewEntity(AsyncCallback<InquiryDTO> callback) {
         InquiryDTO entity = EntityFactory.create(entityClass);
-        entity.created().setValue(new LogicalDate());
+        entity.createDate().setValue(new LogicalDate());
         callback.onSuccess(entity);
     }
 }
