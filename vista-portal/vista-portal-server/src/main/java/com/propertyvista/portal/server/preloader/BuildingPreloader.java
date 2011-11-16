@@ -22,8 +22,8 @@ import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.Dashboards;
 import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.ServiceCatalogGenerator;
-import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.gdo.AptUnitGDO;
+import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -179,7 +179,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().persist(building.media());
             }
 
-            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
+//            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
 
             Persistence.service().merge(building);
 
