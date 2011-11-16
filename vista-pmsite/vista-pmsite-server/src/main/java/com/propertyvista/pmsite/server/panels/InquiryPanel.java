@@ -104,7 +104,7 @@ public class InquiryPanel extends Panel {
                 if (fpId != null) {
                     inquiry.floorplan().id().setValue(new Key(fpId));
                 }
-                inquiry.created().setValue(new LogicalDate());
+                inquiry.createDate().setValue(new LogicalDate());
                 Persistence.service().persist(inquiry);
                 PageParameters params = new PageParameters();
                 if (fp != null) {
