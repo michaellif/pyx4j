@@ -51,7 +51,22 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
 
     protected abstract Arrears getArrearsMemberProto();
 
-    private List<ColumnDescriptor<MockupArrearsState>> getArrearsStatusColumns() {
+    //@formatter:off  
+    private List<ColumnDescriptor<MockupArrearsState>> getDefaultArrearsStatusColumns() {
+        Arrears proto = getArrearsMemberProto();
+        return columnDescriptorsEx(Arrays.asList(new Object[] {
+            proto.thisMonth(),
+            proto.monthAgo(),
+            proto.twoMonthsAgo(),
+            proto.threeMonthsAgo(),
+            proto.overFourMonthsAgo(),
+            proto.totalBalance(),
+            proto.prepayments(),
+            
+        }));
+    }
+    
+    private List<ColumnDescriptor<MockupArrearsState>> getAvailableArrearsStatusColumns() {
         List<IObject<?>> members = new ArrayList<IObject<?>>();
         for (String memberName : getArrearsMemberProto().getEntityMeta().getMemberNames()) {
             members.add(getArrearsMemberProto().getMember(memberName));
@@ -59,14 +74,13 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
         return columnDescriptors(members);
     }
 
-    //@formatter:off   
     @Override
     protected List<ColumnDescriptor<MockupArrearsState>> getDefaultColumnDescriptors(MockupArrearsState proto) {
         List<ColumnDescriptor<MockupArrearsState>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {        
                 proto.unitNumber(),
                 proto.lastName()
         }));
-        cd.addAll(getArrearsStatusColumns());
+        cd.addAll(getDefaultArrearsStatusColumns());
         cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {
                 proto.legalStatus(),
                 proto.lmrUnitRentDifference()                
@@ -92,7 +106,7 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
                 proto.legalStatus(),
                 proto.lmrUnitRentDifference()                
         }));        
-        cd.addAll(getArrearsStatusColumns());
+        cd.addAll(getAvailableArrearsStatusColumns());
         cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {                
                 // address
                 proto.streetNumber(),

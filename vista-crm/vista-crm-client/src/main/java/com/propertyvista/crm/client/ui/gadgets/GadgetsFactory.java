@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.OtherArrearsListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ParkingArrearsListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.RentArrearsListerGadget;
@@ -66,7 +67,8 @@ public class GadgetsFactory {
         GadgetType.ParkingArrearsGadget,
         GadgetType.OtherArrearsGadget,
         GadgetType.TotalArrearsGadget,        
-        GadgetType.ArrearsYOYChart
+        GadgetType.ArrearsSummaryGadget,
+        GadgetType.ArrearsYOYChart,
         
     };
     //@formatter:on
@@ -115,8 +117,10 @@ public class GadgetsFactory {
             return new OtherArrearsListerGadget(metaData);
         case TotalArrearsGadget:
             return new TotalArrearsListerGadget(metaData);
+        case ArrearsSummaryGadget:
+            return new ArrearsSummaryGadget(metaData);
         case ArrearsYOYChart:
-            ;
+            return null;
         default:
             return null;
         }
@@ -151,6 +155,7 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Occupancy/Vacancy Summary...";
         case TurnoverAnalysisGraph:
             return "Gadget intended to demonstrate Unit Turnover graph...";
+            // TODO add description for all gadgets
         case ArrearsGadget:
             return "Gadget intended to demonstrate Tenant's arrears...";
         }

@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.company.AssignedBuilding;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.gadgets.arrears.Arrears;
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState.LegalStatus;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenant;
@@ -69,7 +71,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
-        return deleteAll(MockupArrearsState.class, MockupTenant.class);
+        return deleteAll(MockupArrearsState.class, MockupTenant.class, ArrearsSummary.class);
     }
 
     @Override
@@ -77,6 +79,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
         final int maxArraySize = 2000;
         List<MockupArrearsState> arrears = new ArrayList<MockupArrearsState>();
         List<MockupTenant> tenants = new ArrayList<MockupTenant>();
+        List<ArrearsSummary> buildingArrears = new ArrayList<ArrearsSummary>();
 
         int tenantsCount = 0;
         int arrearsCount = 0;
@@ -133,6 +136,8 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
             } // tenants
             tenants.addAll(buildingTenants);
 
+            HashMap<LogicalDate, ArrearsSummary> monthToBuildingArrearsMap = new HashMap<LogicalDate, ArrearsSummary>();
+
             // create mockup arrears states for these tenants
             for (MockupTenant tenant : buildingTenants) {
                 LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(tenant.moveIn().getValue().getTime()));
@@ -182,10 +187,33 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
 
                     arrears.add(arrear);
 
+                    if (!monthToBuildingArrearsMap.containsKey(currentMonth)) {
+                        ArrearsSummary summary = EntityFactory.create(ArrearsSummary.class);
+                        summary.statusTimestamp().setValue(currentMonth);
+                        summary.belongsTo().set(building);
+
+                        summary.thisMonth().setValue(0.0);
+                        summary.monthAgo().setValue(0.0);
+                        summary.twoMonthsAgo().setValue(0.0);
+                        summary.threeMonthsAgo().setValue(0.0);
+                        summary.overFourMonthsAgo().setValue(0.0);
+                        summary.totalBalance().setValue(0.0);
+                        summary.arBalance().setValue(0.0);
+                        monthToBuildingArrearsMap.put(currentMonth, summary);
+                    }
+                    ArrearsSummary summary = monthToBuildingArrearsMap.get(currentMonth);
+                    summary.thisMonth().setValue(summary.thisMonth().getValue() + arrear.totalArrears().thisMonth().getValue());
+                    summary.monthAgo().setValue(summary.monthAgo().getValue() + arrear.totalArrears().monthAgo().getValue());
+                    summary.twoMonthsAgo().setValue(summary.twoMonthsAgo().getValue() + arrear.totalArrears().twoMonthsAgo().getValue());
+                    summary.threeMonthsAgo().setValue(summary.threeMonthsAgo().getValue() + arrear.totalArrears().threeMonthsAgo().getValue());
+                    summary.overFourMonthsAgo().setValue(summary.overFourMonthsAgo().getValue() + arrear.totalArrears().overFourMonthsAgo().getValue());
+                    summary.totalBalance().setValue(summary.totalBalance().getValue() + arrear.totalArrears().totalBalance().getValue());
+                    summary.arBalance().setValue(summary.arBalance().getValue() + arrear.totalArrears().arBalance().getValue());
+
                     currentMonth = new LogicalDate(AnalysisResolution.Month.addTo(currentMonth));
                 }
-            } // arrears creation            
-
+            } // arrears creation
+            buildingArrears.addAll(monthToBuildingArrearsMap.values());
         } // buildings iteration
         final int tenantsSize = tenants.size();
         for (int i = 0; i < tenantsSize;) {
@@ -195,7 +223,9 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
         for (int i = 0; i < arrearsSize;) {
             persistArray(arrears.subList(i, Math.min(arrears.size(), i += maxArraySize)));
         }
-        return "Created " + tenantsSize + " mockup tennants and " + arrearsSize + " arrear statuses for Arrears Gadget";
+        persistArray(buildingArrears);
+        return "Created " + tenantsSize + " mockup tennants, " + arrearsSize + " unit arrear statuses, " + buildingArrears.size()
+                + " building arrear statuses for Arrears Gadget";
     }
 
     private Double randomLmrUnitRentDifference() {

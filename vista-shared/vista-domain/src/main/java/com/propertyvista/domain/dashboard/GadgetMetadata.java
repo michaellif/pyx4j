@@ -66,7 +66,9 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         TotalArrearsGadget,
 
-        ArrearsYOYChart;
+        ArrearsYOYChart,
+
+        ArrearsSummaryGadget;
 
         @Override
         public String toString() {
