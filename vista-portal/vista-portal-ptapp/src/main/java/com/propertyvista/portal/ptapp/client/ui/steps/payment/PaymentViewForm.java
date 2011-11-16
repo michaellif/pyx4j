@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -49,9 +50,6 @@ import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -87,29 +85,29 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(new VistaHeaderBar(proto().applicationCharges()));
-        main.add(inject(proto().applicationCharges().charges(), new ChargeLineFolder(isEditable())));
+        int row = -1;
 
-        VistaLineSeparator sp = new VistaLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-        sp.getElement().getStyle().setMarginLeft(1, Unit.EM);
-        main.add(sp);
+        main.setH1(++row, 0, 1, i18n.tr(proto().applicationCharges().getMeta().getCaption()));
+
+        main.setWidget(++row, 0, inject(proto().applicationCharges().charges(), new ChargeLineFolder(isEditable())));
 
         FlowPanel applicationFeePanel = new FlowPanel();
         applicationFeePanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().label()), "300px"));
         applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().amount()), "100px", "right"));
-        main.add(applicationFeePanel);
+        main.setWidget(++row, 0, applicationFeePanel);
 
         HorizontalPanel info = new HorizontalPanel();
         info.getElement().getStyle().setMarginTop(1, Unit.EM);
         info.add(new Image(PortalImages.INSTANCE.userMessageInfo()));
         info.add(new HTML(PortalResources.INSTANCE.paymentApprovalNotes().getText()));
         info.getElement().getStyle().setMarginBottom(1, Unit.EM);
-        main.add(info);
+        main.setWidget(++row, 0, info);
 
-        main.add(new VistaHeaderBar(proto().type()));
+        main.setH1(++row, 0, 1, i18n.tr(proto().type().getMeta().getCaption()));
+
         CRadioGroupEnum<PaymentType> radioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, CRadioGroup.Layout.VERTICAL);
         radioGroup.setStylePrefix(PAYMENT_BUTTONS_STYLE_PREFIX);
 
@@ -144,7 +142,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
             paymentTypeImagesPanel.add(holder);
         }
         paymentTypeImagesPanel.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-        main.add(paymentTypeImagesPanel);
+        main.setWidget(++row, 0, paymentTypeImagesPanel);
 
         CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), radioGroup);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -185,15 +183,16 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
         instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
 
-        main.add(paymentType);
-        main.add(paymentFeesPanel);
-        main.add(instrumentsPanel);
+        main.setWidget(++row, 0, paymentType);
+        main.setWidget(++row, 0, paymentFeesPanel);
+        main.setWidget(++row, 0, instrumentsPanel);
 
         setPaymentTableVisibility(0);
 
-        main.add(new VistaHeaderBar(proto().billingAddress()));
+        main.setH1(++row, 0, 1, i18n.tr(proto().billingAddress().getMeta().getCaption()));
+
         CCheckBox sameAsCurrent = (CCheckBox) inject(proto().sameAsCurrent());
-        main.add(sameAsCurrent, 12);
+        main.setWidget(++row, 0, sameAsCurrent);
         sameAsCurrent.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -201,20 +200,19 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
             }
         });
 
-        main.add(inject(proto().billingAddress(), new CAddressStructured()));
+        main.setWidget(++row, 0, inject(proto().billingAddress(), new CAddressStructured()));
 
-        main.add(inject(proto().phone()), 12);
+        main.setWidget(++row, 0, inject(proto().phone()));
 
-        main.add(new VistaHeaderBar(i18n.tr("Pre-Authorized Payment")));
+        main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
+
         HorizontalPanel preauthorisedNotes = new HorizontalPanel();
         preauthorisedNotes.add(new HTML(PortalResources.INSTANCE.paymentPreauthorisedNotes_VISA().getText()));
-        main.add(preauthorisedNotes);
+        main.setWidget(++row, 0, preauthorisedNotes);
 
-        main.add(inject(proto().preauthorised()), 12);
+        main.setWidget(++row, 0, inject(proto().preauthorised()));
 
-        main.add(new HTML(PortalResources.INSTANCE.paymentTermsNotes().getText()));
-
-        main.setWidth("900px");
+        main.setWidget(++row, 0, new HTML(PortalResources.INSTANCE.paymentTermsNotes().getText()));
 
         return main;
     }

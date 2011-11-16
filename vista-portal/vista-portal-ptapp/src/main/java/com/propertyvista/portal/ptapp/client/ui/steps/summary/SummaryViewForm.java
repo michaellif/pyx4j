@@ -402,6 +402,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
             signature.getElement().getStyle().setPaddingLeft(1.5, Unit.EM);
             signature.setHeight("3em");
+            edit.inheritContainerAccessRules(false);
             add(alignWidth(signature));
 
             // validation:
