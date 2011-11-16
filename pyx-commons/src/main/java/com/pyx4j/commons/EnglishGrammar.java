@@ -79,7 +79,10 @@ public class EnglishGrammar {
                     currentWord = new StringBuilder();
                     wordStart = true;
                 }
-                b.append(' ');
+                // Ignore first _ in the name 
+                if (b.length() != 0) {
+                    b.append(' ');
+                }
             } else if (Character.isDigit(c)) {
                 if ((!wordStart) || (!currentWordIsNumbers)) {
                     if (currentWord.length() > 0) {
