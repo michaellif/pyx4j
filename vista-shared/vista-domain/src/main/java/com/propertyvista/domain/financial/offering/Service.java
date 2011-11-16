@@ -16,22 +16,21 @@ package com.propertyvista.domain.financial.offering;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("Type: {0}, Name: {1}")
-public interface Service extends IEntity {
+@DiscriminatorValue("service")
+public interface Service extends Product {
 
     @I18n
     @XmlType(name = "ServiceType")
@@ -57,15 +56,6 @@ public interface Service extends IEntity {
         }
     }
 
-// ----------------------------------------------
-
-    @Owner
-    @Detached
-    @ReadOnly
-    ServiceCatalog catalog();
-
-// ----------------------------------------------
-
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "serviceType")
@@ -76,10 +66,6 @@ public interface Service extends IEntity {
 
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
-
-    @Owned
-    @Detached
-    IList<ServiceItem> items();
 
     IPrimitive<DepositType> depositType();
 

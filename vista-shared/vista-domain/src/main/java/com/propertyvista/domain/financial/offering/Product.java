@@ -7,39 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 22, 2011
- * @author michaellif
+ * Created on Nov 15, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.property.asset.BuildingElement;
-
-public interface ServiceItem extends IEntity {
+@Inheritance
+@AbstractEntity
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface Product extends IEntity {
 
     @Owner
     @Detached
     @ReadOnly
-    Product product();
+    ServiceCatalog catalog();
 
-    @NotNull
-    @ToString(index = 0)
-    @MemberColumn(name = "itemType")
-    ServiceItemType type();
-
-    IPrimitive<Double> price();
-
-    IPrimitive<String> description();
-
+    @Owned
     @Detached
-    BuildingElement element();
+    IList<ServiceItem> items();
 }
