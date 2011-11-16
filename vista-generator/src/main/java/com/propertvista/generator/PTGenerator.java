@@ -372,7 +372,13 @@ public class PTGenerator {
         } else {
             tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);
         }
-        tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(TenantInLease.Relationship.class));
+
+        if (index == 0) {
+            // TODO set null when UI is fixed
+            tenantSummary.tenantInLease().relationship().setValue(TenantInLease.Relationship.Other);
+        } else {
+            tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(TenantInLease.Relationship.class));
+        }
 
 // TODO check %-ge correctness bettween tenants here:        
         tenantSummary.tenantInLease().percentage().setValue(RandomUtil.randomInt(100));

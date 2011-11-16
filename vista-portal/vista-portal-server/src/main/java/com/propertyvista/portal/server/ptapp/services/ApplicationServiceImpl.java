@@ -22,6 +22,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.tenant.Tenant;
@@ -33,6 +35,8 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
+
+    private static I18n i18n = I18n.get(ApplicationServiceImpl.class);
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 
@@ -68,9 +72,13 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
         Application application;
         {
+            // TODO verify application status
             EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
             application = Persistence.service().retrieve(criteria);
+            if (application == null) {
+                throw new UserRuntimeException(i18n.tr("You have no applications assigned"));
+            }
         }
 
         PtAppContext.setCurrentUserApplication(application);
