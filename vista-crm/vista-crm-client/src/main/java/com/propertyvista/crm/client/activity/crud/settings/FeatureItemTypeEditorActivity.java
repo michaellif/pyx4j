@@ -40,6 +40,6 @@ public class FeatureItemTypeEditorActivity extends EditorActivityBase<ServiceIte
     protected void createNewEntity(AsyncCallback<ServiceItemType> callback) {
         ServiceItemType entity = EntityFactory.create(entityClass);
         entity.type().setValue(ServiceItemType.Type.feature);
-        super.createNewEntity(callback);
+        callback.onSuccess(entity);
     }
 }

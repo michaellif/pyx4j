@@ -40,6 +40,6 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
     protected void createNewEntity(AsyncCallback<PageDescriptor> callback) {
         PageDescriptor entity = EntityFactory.create(entityClass);
         entity.type().setValue(Type.staticContent);
-        super.createNewEntity(callback);
+        callback.onSuccess(entity);
     }
 }

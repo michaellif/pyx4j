@@ -109,9 +109,9 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     protected void createNewEntity(AsyncCallback<LeaseDTO> callback) {
-        LeaseDTO leaseDTO = EntityFactory.create(LeaseDTO.class);
-        leaseDTO.status().setValue(Lease.Status.Draft);
-        callback.onSuccess(leaseDTO);
+        LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
+        entity.status().setValue(Lease.Status.Draft);
+        callback.onSuccess(entity);
     }
 
     @Override
