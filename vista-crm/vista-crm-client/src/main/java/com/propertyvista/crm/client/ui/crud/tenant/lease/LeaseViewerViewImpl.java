@@ -28,7 +28,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     private final CHyperlink createApplicationAction;
 
     public LeaseViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Lease.class);
+        super(CrmSiteMap.Tenants.Lease.class, new LeaseEditorForm(new CrmViewersComponentFactory()));
 
         createApplicationAction = new CHyperlink(new Command() {
             @Override
@@ -38,9 +38,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         });
         createApplicationAction.setValue(i18n.tr("Create Application"));
         addToolbarItem(createApplicationAction.asWidget());
-
-        // set main form here: 
-        setForm(new LeaseEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override

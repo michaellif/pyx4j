@@ -21,9 +21,6 @@ import com.propertyvista.dto.ApplicationDTO;
 public class ApplicationViewerViewImpl extends CrmViewerViewImplBase<ApplicationDTO> implements ApplicationViewerView {
 
     public ApplicationViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
-
-        //set main form here: 
-        setForm(new ApplicationEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Tenants.Tenant.class, new ApplicationEditorForm(new CrmViewersComponentFactory()));
     }
 }

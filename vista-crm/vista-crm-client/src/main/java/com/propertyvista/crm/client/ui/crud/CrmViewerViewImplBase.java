@@ -57,6 +57,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         setForm(form);
     }
 
+    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form, boolean viewOnly) {
+        this(placeClass, viewOnly);
+        setForm(form);
+    }
+
     @Override
     public void populate(E value) {
         super.populate(value);
