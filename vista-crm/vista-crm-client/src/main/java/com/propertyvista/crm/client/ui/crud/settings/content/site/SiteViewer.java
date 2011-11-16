@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.dto.SiteDescriptorDTO;
 

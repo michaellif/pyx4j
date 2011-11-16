@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.offering.Concession;

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.offering.ServiceItemType;

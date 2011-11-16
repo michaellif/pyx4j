@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.site.client.ui.crud.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.dto.BoilerDTO;
 

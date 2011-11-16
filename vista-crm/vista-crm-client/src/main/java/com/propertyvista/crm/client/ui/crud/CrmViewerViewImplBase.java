@@ -18,10 +18,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.ViewerViewImplBase;
+import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
@@ -35,7 +34,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     }
 
     public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, boolean viewOnly) {
-        super(new CrmTitleBar(), new Toolbar(), VistaCrmTheme.defaultHeaderHeight);
+        super(new CrmTitleBar(), null, VistaCrmTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         ((CrmTitleBar) getHeader()).setCaption(defaultCaption);

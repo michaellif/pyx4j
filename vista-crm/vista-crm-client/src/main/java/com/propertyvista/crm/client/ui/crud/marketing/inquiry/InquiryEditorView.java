@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.inquiry;
 
-import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.property.asset.Floorplan;

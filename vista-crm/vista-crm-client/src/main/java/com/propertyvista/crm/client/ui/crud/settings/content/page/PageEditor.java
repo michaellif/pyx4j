@@ -26,7 +26,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
-import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.domain.site.PageDescriptor;
 

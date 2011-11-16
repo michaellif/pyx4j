@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.admin.client.ui.administration.MaintenanceView;
 import com.propertyvista.admin.client.viewfactories.AdministrationVeiwFactory;

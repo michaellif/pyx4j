@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import com.pyx4j.site.client.ui.crud.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.dto.MasterApplicationDTO;
 

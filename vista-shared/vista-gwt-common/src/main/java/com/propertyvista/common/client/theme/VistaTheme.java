@@ -237,12 +237,12 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-right", "10px");
         style.addProperty("padding-left", "10px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColors.foreground, 1.1);
+        style.addProperty("border-right-color", ThemeColors.foreground, 0.6);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.foreground, 1.1);
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.6);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.foreground, 1.1);
-        style.addProperty("background", ThemeColors.foreground);
+        style.addProperty("border-top-color", ThemeColors.foreground, 0.6);
+        style.addProperty("background", ThemeColors.object1, 1);
         style.addProperty("color", "white");
         style.addProperty("display", "inline-block");
         style.addProperty("position", "relative");
