@@ -31,6 +31,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface TenantInLease extends IBoundToApplication {
 
     @I18n
