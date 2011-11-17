@@ -190,6 +190,13 @@ public class SimpleMessageFormat {
                     }
 
                 }
+            } else if (formatType.equals("duration")) {
+                if (arg == null) {
+                    formatedArg = "";
+                } else {
+                    long duration = Double.valueOf(toDouble(arg)).longValue();
+                    formatedArg = TimeUtils.durationFormat(duration);
+                }
             } else if (formatType.equals("date")) {
                 formatedArg = SimpleDateFormatImpl.format(formatStyle, (Date) arg);
             } else if (formatType.equals("time")) {
