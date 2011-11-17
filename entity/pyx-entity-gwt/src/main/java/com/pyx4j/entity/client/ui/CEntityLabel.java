@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 
-public class CEntityLabel extends CAbstractLabel<IEntity> {
+public class CEntityLabel<E extends IEntity> extends CAbstractLabel<E> {
 
     public CEntityLabel() {
         this(null);
@@ -32,10 +32,10 @@ public class CEntityLabel extends CAbstractLabel<IEntity> {
 
     public CEntityLabel(String title) {
         super(title);
-        this.setFormat(new IFormat<IEntity>() {
+        this.setFormat(new IFormat<E>() {
 
             @Override
-            public String format(IEntity value) {
+            public String format(E value) {
                 if (value != null) {
                     return value.getStringView();
                 } else {
@@ -44,10 +44,17 @@ public class CEntityLabel extends CAbstractLabel<IEntity> {
             }
 
             @Override
-            public IEntity parse(String string) {
+            public E parse(String string) {
                 return null;
             }
         });
     }
 
+    /**
+     * Allow presentation update of the same entity when setValue is called
+     */
+    @Override
+    public boolean isValuesEquals(E value1, E value2) {
+        return value1 == value2;
+    }
 }

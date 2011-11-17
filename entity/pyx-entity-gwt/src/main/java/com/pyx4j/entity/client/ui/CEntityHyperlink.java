@@ -27,16 +27,16 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CAbstractHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 
-public class CEntityHyperlink extends CAbstractHyperlink<IEntity> {
+public class CEntityHyperlink<E extends IEntity> extends CAbstractHyperlink<E> {
 
     private final String uriPrefix;
 
     // set default formatting (kind of common constructor):
     {
         setWordWrap(true);
-        this.setFormat(new IFormat<IEntity>() {
+        this.setFormat(new IFormat<E>() {
             @Override
-            public String format(IEntity value) {
+            public String format(E value) {
                 if (value != null) {
                     return value.getStringView();
                 } else {
@@ -45,7 +45,7 @@ public class CEntityHyperlink extends CAbstractHyperlink<IEntity> {
             }
 
             @Override
-            public IEntity parse(String string) {
+            public E parse(String string) {
                 return null;
             }
         });
@@ -73,5 +73,13 @@ public class CEntityHyperlink extends CAbstractHyperlink<IEntity> {
 
     protected String getEntityHistoryToken(IEntity value) {
         return uriPrefix + value.getPrimaryKey();
+    }
+
+    /**
+     * Allow presentation update of the same entity when setValue is called
+     */
+    @Override
+    public boolean isValuesEquals(E value1, E value2) {
+        return value1 == value2;
     }
 }
