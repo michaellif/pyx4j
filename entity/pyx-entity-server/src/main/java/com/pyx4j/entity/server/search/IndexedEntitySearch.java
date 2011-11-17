@@ -323,7 +323,12 @@ public class IndexedEntitySearch<E extends IEntity> {
                 }
             } else if (mm.isEntity()) {
                 Indexed index = mm.getAnnotation(Indexed.class);
-                Key pk = ((IEntity) me.getValue()).getPrimaryKey();
+                Key pk;
+                if (me.getValue() instanceof Key) {
+                    pk = (Key) me.getValue();
+                } else {
+                    pk = ((IEntity) me.getValue()).getPrimaryKey();
+                }
                 if ((index != null) && (index.global() != 0)) {
                     inMemoryFilters.add(new EntityInMemoryFilter(path, pk));
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global()) + pk));
