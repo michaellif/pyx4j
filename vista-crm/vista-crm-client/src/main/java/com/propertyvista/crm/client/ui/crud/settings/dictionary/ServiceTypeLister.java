@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -44,8 +45,10 @@ public class ServiceTypeLister extends ListerBase<ServiceItemType> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<ServiceItemType>> columnDescriptors, ServiceItemType proto) {
+    protected List<ColumnDescriptor<ServiceItemType>> getDefaultColumnDescriptors(ServiceItemType proto) {
+        List<ColumnDescriptor<ServiceItemType>> columnDescriptors = new ArrayList<ColumnDescriptor<ServiceItemType>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.serviceType()));
+        return columnDescriptors;
     }
 }

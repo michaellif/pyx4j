@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -30,7 +31,8 @@ public class SelectedBuildingLister extends ListerBase<Building> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
+    protected List<ColumnDescriptor<Building>> getDefaultColumnDescriptors(Building proto) {
+        List<ColumnDescriptor<Building>> columnDescriptors = new ArrayList<ColumnDescriptor<Building>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));
@@ -43,11 +45,13 @@ public class SelectedBuildingLister extends ListerBase<Building> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
+        return columnDescriptors;
 
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<Building>> columnDescriptors, Building proto) {
+    protected List<ColumnDescriptor<Building>> getAvailableColumnDescriptors(Building proto) {
+        List<ColumnDescriptor<Building>> columnDescriptors = new ArrayList<ColumnDescriptor<Building>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));
@@ -78,5 +82,6 @@ public class SelectedBuildingLister extends ListerBase<Building> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().website()));
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.contacts().email().address(), i18n.tr("Email")));
+        return columnDescriptors;
     }
 }

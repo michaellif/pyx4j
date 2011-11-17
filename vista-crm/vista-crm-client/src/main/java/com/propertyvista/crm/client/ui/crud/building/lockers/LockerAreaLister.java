@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,9 +36,11 @@ public class LockerAreaLister extends ListerBase<LockerAreaDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<LockerAreaDTO>> columnDescriptors, LockerAreaDTO proto) {
+    protected List<ColumnDescriptor<LockerAreaDTO>> getDefaultColumnDescriptors(LockerAreaDTO proto) {
+        List<ColumnDescriptor<LockerAreaDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LockerAreaDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.levels()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.totalLockers()));
+        return columnDescriptors;
     }
 }

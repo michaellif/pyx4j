@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,8 +30,10 @@ public class ParkingSpotLister extends ListerBase<ParkingSpot> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<ParkingSpot>> columnDescriptors, ParkingSpot proto) {
+    protected List<ColumnDescriptor<ParkingSpot>> getDefaultColumnDescriptors(ParkingSpot proto) {
+        List<ColumnDescriptor<ParkingSpot>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingSpot>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+        return columnDescriptors;
     }
 }

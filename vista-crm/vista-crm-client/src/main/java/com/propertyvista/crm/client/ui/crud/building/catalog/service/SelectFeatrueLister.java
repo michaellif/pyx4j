@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -31,10 +32,12 @@ public class SelectFeatrueLister extends ListerBase<Feature> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Feature>> columnDescriptors, Feature proto) {
+    protected List<ColumnDescriptor<Feature>> getDefaultColumnDescriptors(Feature proto) {
+        List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isMandatory()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isRecurring()));
+        return columnDescriptors;
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -46,7 +47,8 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
+    protected List<ColumnDescriptor<BuildingDTO>> getDefaultColumnDescriptors(BuildingDTO proto) {
+        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
 
@@ -63,10 +65,12 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().lastAppraisalValue()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<BuildingDTO>> columnDescriptors, BuildingDTO proto) {
+    protected List<ColumnDescriptor<BuildingDTO>> getAvailableColumnDescriptors(BuildingDTO proto) {
+        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
@@ -109,5 +113,6 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().currency()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
+        return columnDescriptors;
     }
 }

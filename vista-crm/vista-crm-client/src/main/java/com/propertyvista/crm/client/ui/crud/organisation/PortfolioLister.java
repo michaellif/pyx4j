@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -33,8 +34,11 @@ public class PortfolioLister extends ListerBase<Portfolio> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Portfolio>> columnDescriptors, Portfolio proto) {
+    protected List<ColumnDescriptor<Portfolio>> getDefaultColumnDescriptors(Portfolio proto) {
+        List<ColumnDescriptor<Portfolio>> columnDescriptors = new ArrayList<ColumnDescriptor<Portfolio>>();
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
+        return columnDescriptors;
     }
 }

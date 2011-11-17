@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,10 +36,12 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
+    protected List<ColumnDescriptor<AptUnitDTO>> getDefaultColumnDescriptors(AptUnitDTO proto) {
+        List<ColumnDescriptor<AptUnitDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(),
+                i18n.tr("Floorplan Marketing Name")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
@@ -50,13 +53,16 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial()._marketRent()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.availableForRent()));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
+    protected List<ColumnDescriptor<AptUnitDTO>> getAvailableColumnDescriptors(AptUnitDTO proto) {
+        List<ColumnDescriptor<AptUnitDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(),
+                i18n.tr("Floorplan Marketing Name")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().economicStatus()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
@@ -70,5 +76,6 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial()._marketRent()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.availableForRent()));
+        return columnDescriptors;
     }
 }

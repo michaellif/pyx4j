@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -34,7 +35,8 @@ public class ConcessionLister extends ListerBase<Concession> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Concession>> columnDescriptors, Concession proto) {
+    protected List<ColumnDescriptor<Concession>> getDefaultColumnDescriptors(Concession proto) {
+        List<ColumnDescriptor<Concession>> columnDescriptors = new ArrayList<ColumnDescriptor<Concession>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.term()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.value()));
@@ -42,5 +44,6 @@ public class ConcessionLister extends ListerBase<Concession> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.effectiveDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.expirationDate()));
+        return columnDescriptors;
     }
 }

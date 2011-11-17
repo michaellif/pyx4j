@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,12 +30,14 @@ public class LeadLister extends ListerBase<Lead> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Lead>> columnDescriptors, Lead proto) {
+    protected List<ColumnDescriptor<Lead>> getDefaultColumnDescriptors(Lead proto) {
+        List<ColumnDescriptor<Lead>> columnDescriptors = new ArrayList<ColumnDescriptor<Lead>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.term()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplan()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.createDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
+        return columnDescriptors;
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.floorplan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,7 +36,8 @@ public class FloorplanLister extends ListerBase<FloorplanDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<FloorplanDTO>> columnDescriptors, FloorplanDTO proto) {
+    protected List<ColumnDescriptor<FloorplanDTO>> getDefaultColumnDescriptors(FloorplanDTO proto) {
+        List<ColumnDescriptor<FloorplanDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<FloorplanDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorCount()));
@@ -43,5 +45,6 @@ public class FloorplanLister extends ListerBase<FloorplanDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dens()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.counters()._unitCount()));
+        return columnDescriptors;
     }
 }

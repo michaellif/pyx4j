@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,10 +36,12 @@ public class BoilerLister extends ListerBase<BoilerDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<BoilerDTO>> columnDescriptors, BoilerDTO proto) {
+    protected List<ColumnDescriptor<BoilerDTO>> getDefaultColumnDescriptors(BoilerDTO proto) {
+        List<ColumnDescriptor<BoilerDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BoilerDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.make()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.model()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.build()));
+        return columnDescriptors;
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -30,7 +31,8 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnit>> columnDescriptors, AptUnit proto) {
+    protected List<ColumnDescriptor<AptUnit>> getDefaultColumnDescriptors(AptUnit proto) {
+        List<ColumnDescriptor<AptUnit>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnit>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().area()));
@@ -38,11 +40,14 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info()._bathrooms()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(),
+                i18n.tr("Floorplan Marketing Name")));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<AptUnit>> columnDescriptors, AptUnit proto) {
+    protected List<ColumnDescriptor<AptUnit>> getAvailableColumnDescriptors(AptUnit proto) {
+        List<ColumnDescriptor<AptUnit>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnit>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().economicStatus()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
@@ -55,6 +60,8 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial()._marketRent()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(),
+                i18n.tr("Floorplan Marketing Name")));
+        return columnDescriptors;
     }
 }

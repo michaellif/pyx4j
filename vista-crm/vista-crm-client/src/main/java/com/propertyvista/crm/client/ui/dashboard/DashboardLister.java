@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,9 +36,11 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<DashboardMetadata>> columnDescriptors, DashboardMetadata proto) {
+    protected List<ColumnDescriptor<DashboardMetadata>> getDefaultColumnDescriptors(DashboardMetadata proto) {
+        List<ColumnDescriptor<DashboardMetadata>> columnDescriptors = new ArrayList<ColumnDescriptor<DashboardMetadata>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
+        return columnDescriptors;
     }
 }

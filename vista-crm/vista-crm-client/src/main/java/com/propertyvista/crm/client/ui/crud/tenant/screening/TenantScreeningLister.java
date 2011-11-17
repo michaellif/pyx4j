@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,10 +36,12 @@ public class TenantScreeningLister extends ListerBase<TenantScreening> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<TenantScreening>> columnDescriptors, TenantScreening proto) {
+    protected List<ColumnDescriptor<TenantScreening>> getDefaultColumnDescriptors(TenantScreening proto) {
+        List<ColumnDescriptor<TenantScreening>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantScreening>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.screeningDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.driversLicense()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.secureIdentifier()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.notCanadianCitizen()));
+        return columnDescriptors;
     }
 }

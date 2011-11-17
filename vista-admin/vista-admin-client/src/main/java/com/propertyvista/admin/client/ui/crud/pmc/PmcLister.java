@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,8 +30,10 @@ public class PmcLister extends ListerBase<PmcDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<PmcDTO>> columnDescriptors, PmcDTO proto) {
+    protected List<ColumnDescriptor<PmcDTO>> getDefaultColumnDescriptors(PmcDTO proto) {
+        List<ColumnDescriptor<PmcDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<PmcDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dnsName()));
+        return columnDescriptors;
     }
 }

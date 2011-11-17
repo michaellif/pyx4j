@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,11 +30,13 @@ public class ShowingLister extends ListerBase<Showing> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Showing>> columnDescriptors, Showing proto) {
+    protected List<ColumnDescriptor<Showing>> getDefaultColumnDescriptors(Showing proto) {
+        List<ColumnDescriptor<Showing>> columnDescriptors = new ArrayList<ColumnDescriptor<Showing>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.result()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.reason()));
+        return columnDescriptors;
     }
 }

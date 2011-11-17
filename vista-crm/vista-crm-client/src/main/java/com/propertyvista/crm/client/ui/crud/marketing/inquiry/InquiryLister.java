@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.inquiry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,17 +30,20 @@ public class InquiryLister extends ListerBase<Inquiry> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Inquiry>> columnDescriptors, Inquiry proto) {
+    protected List<ColumnDescriptor<Inquiry>> getDefaultColumnDescriptors(Inquiry proto) {
+        List<ColumnDescriptor<Inquiry>> columnDescriptors = new ArrayList<ColumnDescriptor<Inquiry>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplan()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTerm()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.movingDate()));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<Inquiry>> columnDescriptors, Inquiry proto) {
+    protected List<ColumnDescriptor<Inquiry>> getAvailableColumnDescriptors(Inquiry proto) {
+        List<ColumnDescriptor<Inquiry>> columnDescriptors = new ArrayList<ColumnDescriptor<Inquiry>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building()));
@@ -48,5 +52,6 @@ public class InquiryLister extends ListerBase<Inquiry> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.movingDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.appointmentDate1()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.appointmentDate2()));
+        return columnDescriptors;
     }
 }

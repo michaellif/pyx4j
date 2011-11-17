@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,11 +30,13 @@ public class ComplexLister extends ListerBase<ComplexDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<ComplexDTO>> columnDescriptors, ComplexDTO proto) {
+    protected List<ColumnDescriptor<ComplexDTO>> getDefaultColumnDescriptors(ComplexDTO proto) {
+        List<ColumnDescriptor<ComplexDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ComplexDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         // TODO: enable when we know to deal with filtering (case all this info comes from primary building)
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().streetName()));
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().city()));
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().province()));
+        return columnDescriptors;
     }
 }

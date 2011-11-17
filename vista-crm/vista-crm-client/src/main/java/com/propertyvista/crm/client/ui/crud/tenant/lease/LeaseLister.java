@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,7 +30,8 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<LeaseDTO>> columnDescriptors, LeaseDTO proto) {
+    protected List<ColumnDescriptor<LeaseDTO>> getDefaultColumnDescriptors(LeaseDTO proto) {
+        List<ColumnDescriptor<LeaseDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LeaseDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo().propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
 
@@ -41,11 +43,12 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.signDate()));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<LeaseDTO>> columnDescriptors, LeaseDTO proto) {
-
+    protected List<ColumnDescriptor<LeaseDTO>> getAvailableColumnDescriptors(LeaseDTO proto) {
+        List<ColumnDescriptor<LeaseDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LeaseDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo().propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
 
@@ -63,5 +66,6 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.signDate()));
+        return columnDescriptors;
     }
 }

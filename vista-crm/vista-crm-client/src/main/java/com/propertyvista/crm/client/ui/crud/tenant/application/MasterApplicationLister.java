@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,7 +30,8 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors, MasterApplicationDTO proto) {
+    protected List<ColumnDescriptor<MasterApplicationDTO>> getDefaultColumnDescriptors(MasterApplicationDTO proto) {
+        List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<MasterApplicationDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().type()));
 
@@ -48,10 +50,12 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseTo()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().status()));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors, MasterApplicationDTO proto) {
+    protected List<ColumnDescriptor<MasterApplicationDTO>> getAvailableColumnDescriptors(MasterApplicationDTO proto) {
+        List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<MasterApplicationDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().type()));
 
@@ -86,5 +90,6 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.decidedBy()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.decisionDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.decisionReason()));
+        return columnDescriptors;
     }
 }

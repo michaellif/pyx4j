@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.floorplan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -30,7 +31,8 @@ public class SelectedFloorplanLister extends ListerBase<Floorplan> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<Floorplan>> columnDescriptors, Floorplan proto) {
+    protected List<ColumnDescriptor<Floorplan>> getDefaultColumnDescriptors(Floorplan proto) {
+        List<ColumnDescriptor<Floorplan>> columnDescriptors = new ArrayList<ColumnDescriptor<Floorplan>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorCount()));
@@ -38,10 +40,12 @@ public class SelectedFloorplanLister extends ListerBase<Floorplan> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bedrooms()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<Floorplan>> columnDescriptors, Floorplan proto) {
+    protected List<ColumnDescriptor<Floorplan>> getAvailableColumnDescriptors(Floorplan proto) {
+        List<ColumnDescriptor<Floorplan>> columnDescriptors = new ArrayList<ColumnDescriptor<Floorplan>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
 
@@ -52,5 +56,6 @@ public class SelectedFloorplanLister extends ListerBase<Floorplan> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.halfBath()));
+        return columnDescriptors;
     }
 }

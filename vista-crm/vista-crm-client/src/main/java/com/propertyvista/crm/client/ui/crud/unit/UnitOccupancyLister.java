@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -34,11 +35,13 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnitOccupancy>> columnDescriptors, AptUnitOccupancy proto) {
+    protected List<ColumnDescriptor<AptUnitOccupancy>> getDefaultColumnDescriptors(AptUnitOccupancy proto) {
+        List<ColumnDescriptor<AptUnitOccupancy>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitOccupancy>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dateFrom()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dateTo()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.offMarket()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
+        return columnDescriptors;
     }
 }

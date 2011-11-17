@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,8 +36,10 @@ public class RoofLister extends ListerBase<RoofDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<RoofDTO>> columnDescriptors, RoofDTO proto) {
+    protected List<ColumnDescriptor<RoofDTO>> getDefaultColumnDescriptors(RoofDTO proto) {
+        List<ColumnDescriptor<RoofDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<RoofDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.year()));
+        return columnDescriptors;
     }
 }

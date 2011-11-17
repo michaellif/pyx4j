@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -35,16 +36,19 @@ public class ElevatorLister extends ListerBase<ElevatorDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<ElevatorDTO>> columnDescriptors, ElevatorDTO proto) {
+    protected List<ColumnDescriptor<ElevatorDTO>> getDefaultColumnDescriptors(ElevatorDTO proto) {
+        List<ColumnDescriptor<ElevatorDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ElevatorDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.make()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.model()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.build()));
+        return columnDescriptors;
     }
 
     @Override
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<ElevatorDTO>> columnDescriptors, ElevatorDTO proto) {
+    protected List<ColumnDescriptor<ElevatorDTO>> getAvailableColumnDescriptors(ElevatorDTO proto) {
+        List<ColumnDescriptor<ElevatorDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ElevatorDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.make()));
@@ -54,5 +58,6 @@ public class ElevatorLister extends ListerBase<ElevatorDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().expiration()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().renewal()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.warranty().type()));
+        return columnDescriptors;
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -28,12 +29,13 @@ public class MaintenanceLister extends ListerBase<MaintenanceRequestDTO> {
     }
 
     @Override
-    protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<MaintenanceRequestDTO>> columnDescriptors, MaintenanceRequestDTO proto) {
+    protected List<ColumnDescriptor<MaintenanceRequestDTO>> getDefaultColumnDescriptors(MaintenanceRequestDTO proto) {
+        List<ColumnDescriptor<MaintenanceRequestDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<MaintenanceRequestDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.maintenanceType()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.problemDescription()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.updated()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-
+        return columnDescriptors;
     }
 
 }
