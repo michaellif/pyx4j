@@ -82,4 +82,10 @@ public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterAp
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void cancelApp() {
+        // TODO Auto-generated method stub
+
+    }
 }

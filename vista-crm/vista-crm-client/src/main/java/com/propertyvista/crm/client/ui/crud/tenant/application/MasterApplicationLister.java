@@ -30,10 +30,64 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors, MasterApplicationDTO proto) {
+//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().type()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit().belongsTo().propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.mainApplicant().tenant().person().name(), proto.mainApplicant()
                 .getMeta().getCaption()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseID()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().type()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfCoApplicants()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfGuarantors()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentPrice()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.createDate()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseFrom()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseTo()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().status()));
+    }
+
+    @Override
+    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors, MasterApplicationDTO proto) {
+//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().type()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit().belongsTo().propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.mainApplicant().tenant().person().name(), proto.mainApplicant()
+                .getMeta().getCaption()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfOccupants()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfCoApplicants()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfGuarantors()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentPrice()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.parkingPrice()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.otherPrice()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.discounts()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.createDate()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseFrom()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseTo()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().status()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().expectedMoveIn()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().expectedMoveOut()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().actualMoveIn()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().actualMoveOut()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().moveOutNotice()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.percenrtageApproved()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.suggestedDecision()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.decidedBy()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.decisionDate()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.decisionReason()));
     }
 }

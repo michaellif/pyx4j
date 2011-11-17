@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
@@ -105,15 +106,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
+        main.setBR(++row, 0, 1);
         HorizontalPanel leaseDatePanel = new HorizontalPanel();
         leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
         leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseTo()), 9).labelWidth(10).build());
         main.setWidget(++row, 0, leaseDatePanel);
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
+        main.setBR(++row, 0, 1);
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel()), 20).build());
 
@@ -142,8 +141,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
         }
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
+        main.setBR(++row, 0, 1);
         leaseDatePanel = new HorizontalPanel();
         leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
         leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).labelWidth(10).build());
@@ -154,13 +152,14 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveOut()), 9).labelWidth(10).build());
         main.setWidget(++row, 0, leaseDatePanel);
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
+        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 9).build());
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
+        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
+
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate(), new CDateLabel()), 9).build());
 
         return new CrmScrollPanel(main);
     }

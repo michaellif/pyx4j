@@ -30,6 +30,9 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<LeaseDTO>> columnDescriptors, LeaseDTO proto) {
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo().propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseID()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
 
@@ -38,13 +41,14 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.signDate()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
     }
 
     @Override
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<LeaseDTO>> columnDescriptors, LeaseDTO proto) {
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo().propertyCode()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseID()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
 
@@ -59,8 +63,5 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.signDate()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit().belongsTo()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
     }
 }

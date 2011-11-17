@@ -17,12 +17,15 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Status;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
+import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantRetriever;
 
@@ -38,24 +41,53 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         super.enhanceDTO(in, dto, fromList);
 
         Persistence.service().retrieve(dto.lease());
-        if (!fromList) {
-            Persistence.service().retrieve(dto.lease().unit());
-            Persistence.service().retrieve(dto.lease().unit().belongsTo());
-        }
+        Persistence.service().retrieve(dto.lease().unit());
+        Persistence.service().retrieve(dto.lease().unit().belongsTo());
 
         TenantRetriever.UpdateLeaseTenants(dto.lease());
+        dto.numberOfOccupants().setValue(dto.lease().tenants().size());
+        dto.numberOfCoApplicants().setValue(0);
+        dto.numberOfGuarantors().setValue(0);
+
         for (TenantInLease tenantInLease : dto.lease().tenants()) {
             Persistence.service().retrieve(tenantInLease);
 
             if (tenantInLease.status().getValue() == Status.Applicant) {
                 dto.mainApplicant().set(tenantInLease);
+            } else if (tenantInLease.status().getValue() == Status.CoApplicant) {
+                dto.numberOfCoApplicants().setValue(dto.numberOfCoApplicants().getValue() + 1);
             }
 
-            TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
-
-            dto.tenantsWithInfo().add(createTenantInfoDTO(tr));
-            dto.tenantFinancials().add(createTenantFinancialDTO(tr));
+            if (!fromList) {
+                TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
+                dto.tenantsWithInfo().add(createTenantInfoDTO(tr));
+                dto.tenantFinancials().add(createTenantFinancialDTO(tr));
+            }
         }
+
+        // calculate price adjustments:
+        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().serviceAgreement().serviceItem());
+
+        dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem().adjustedPrice().getValue());
+        dto.parkingPrice().setValue(0.);
+        dto.otherPrice().setValue(0.);
+        dto.deposit().setValue(0.);
+
+        for (ChargeItem item : dto.lease().serviceAgreement().featureItems()) {
+            PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
+            if (item.item().product() instanceof Feature) {
+                switch (((Feature) item.item().product()).type().getValue()) {
+                case parking:
+                    dto.parkingPrice().setValue(dto.parkingPrice().getValue() + item.adjustedPrice().getValue());
+                    break;
+
+                default:
+                    dto.otherPrice().setValue(dto.otherPrice().getValue() + item.adjustedPrice().getValue());
+                }
+            }
+        }
+
+        dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
     }
 
     // internal helpers:

@@ -30,6 +30,8 @@ public interface MasterApplicationViewerView extends IViewerView<MasterApplicati
         void decline();
 
         void moreInfo();
+
+        void cancelApp();
     }
 
     IListerView<ApplicationDTO> getApplicationsView();

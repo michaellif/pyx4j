@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -119,4 +120,7 @@ public interface Lease extends IEntity {
     @Detached
     // should be loaded in service when necessary!..
     IList<Document> documents();
+
+    @ReadOnly
+    IPrimitive<LogicalDate> createDate();
 }

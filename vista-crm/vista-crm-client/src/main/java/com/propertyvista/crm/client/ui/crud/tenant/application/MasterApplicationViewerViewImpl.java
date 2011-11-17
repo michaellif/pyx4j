@@ -35,6 +35,8 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
     private final CHyperlink declineAction;
 
+    private final CHyperlink cancelAction;
+
     public MasterApplicationViewerViewImpl() {
         super(CrmSiteMap.Tenants.MasterApplication.class, true);
 
@@ -67,6 +69,15 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         });
         declineAction.setValue(i18n.tr("Decline"));
         addToolbarItem(declineAction.asWidget());
+
+        cancelAction = new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                ((MasterApplicationViewerView.Presenter) presenter).cancelApp();
+            }
+        });
+        cancelAction.setValue(i18n.tr("Cancel"));
+        addToolbarItem(cancelAction.asWidget());
 
         //set main form here: 
         setForm(new MasterApplicationEditorForm(new CrmViewersComponentFactory()));
