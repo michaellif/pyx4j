@@ -63,8 +63,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @SuppressWarnings("unchecked")
     public LeaseEditorActivity(Place place) {
-        super((LeaseEditorView) TenantViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class),
-                LeaseDTO.class);
+        super(TenantViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
 
         buildingsLister = new ListerActivityBase<Building>(((LeaseEditorView) view).getBuildingListerView(),
                 (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
@@ -110,6 +109,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     @Override
     protected void createNewEntity(AsyncCallback<LeaseDTO> callback) {
         LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
+        entity.createDate().setValue(new LogicalDate());
         entity.status().setValue(Lease.Status.Draft);
         callback.onSuccess(entity);
     }

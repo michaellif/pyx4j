@@ -119,9 +119,10 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         complexes.add(generator.createComplex("Complex #2"));
         complexes.add(generator.createComplex("Complex #3"));
 
-        for (Complex complex : complexes) {
-            complex.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
-        }
+// TODO : let's leave dashboard empty - in runtime the first Building dashboard will be used by default!
+//        for (Complex complex : complexes) {
+//            complex.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));
+//        }
 
         Persistence.service().persist(complexes);
 

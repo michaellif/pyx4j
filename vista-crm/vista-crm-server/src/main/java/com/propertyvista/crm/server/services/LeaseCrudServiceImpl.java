@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -159,6 +160,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         Persistence.service().retrieve(lease.tenants());
 
         MasterApplication ma = ApplicationMgr.createMasterApplication(lease);
+        ma.createDate().setValue(new LogicalDate());
 
         Persistence.service().persist(ma);
         Persistence.service().persist(lease);

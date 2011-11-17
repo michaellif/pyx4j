@@ -13,12 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
@@ -66,15 +68,25 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 15).build());
+        if (isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
+        } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Person")).build());
+            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            get(proto().person().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
+            main.setBR(++row, 0, 1);
+        }
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().informedFrom()), 10).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().moveInDate()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
 
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().rent().min()), 5).customLabel(i18n.tr("Min rent")).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().rent().max()), 5).customLabel(i18n.tr("Max rent")).build());
@@ -84,15 +96,16 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().baths()), 4).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorplan()), 15).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 57).build());
+        main.setBR(++row, 0, 2);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 65).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setH1(++row, 0, 2, "");
+        main.setHR(++row, 0, 2);
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().source()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().assignedTo()), 20).build());
         row -= 2;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createDate()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createDate()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
