@@ -18,13 +18,13 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
 @Transient
 public interface MasterApplicationDTO extends MasterApplication {
 
-    TenantInLease mainApplicant();
+    Tenant mainApplicant();
 
     IPrimitive<Integer> numberOfOccupants();
 

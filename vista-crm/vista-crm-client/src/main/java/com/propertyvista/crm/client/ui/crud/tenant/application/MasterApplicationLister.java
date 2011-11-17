@@ -36,8 +36,7 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit().belongsTo().propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.mainApplicant().tenant().person().name(), proto.mainApplicant()
-                .getMeta().getCaption()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.mainApplicant()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfCoApplicants()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfGuarantors()));
 
@@ -59,9 +58,7 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit().belongsTo().propertyCode()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.mainApplicant().tenant().person().name(), proto.mainApplicant()
-                .getMeta().getCaption()));
-
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.mainApplicant()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfOccupants()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfCoApplicants()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.numberOfGuarantors()));

@@ -88,13 +88,14 @@ public interface TenantInLease extends IBoundToApplication {
 
     @NotNull
     @ReadOnly
+    @ToString(index = 0)
     Tenant tenant();
 
-    @ToString(index = 0)
+    @ToString(index = 1)
     @NotNull
     IPrimitive<Relationship> relationship();
 
-    @ToString(index = 1)
+    @ToString(index = 2)
     @NotNull
     IPrimitive<Status> status();
 

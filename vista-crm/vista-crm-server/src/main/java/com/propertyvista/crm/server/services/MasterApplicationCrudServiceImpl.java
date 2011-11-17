@@ -53,7 +53,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             Persistence.service().retrieve(tenantInLease);
 
             if (tenantInLease.status().getValue() == Status.Applicant) {
-                dto.mainApplicant().set(tenantInLease);
+                dto.mainApplicant().set(tenantInLease.tenant());
             } else if (tenantInLease.status().getValue() == Status.CoApplicant) {
                 dto.numberOfCoApplicants().setValue(dto.numberOfCoApplicants().getValue() + 1);
             }
