@@ -14,8 +14,10 @@
 package com.propertyvista.pmsite.server.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
@@ -27,6 +29,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -36,9 +39,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.DateConverter;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -317,6 +323,43 @@ public class WicketUtils {
             }
             if (!valid) {
                 form.error(SimpleMessageFormat.format(i18n.tr("Either one of {0} or {1} must be provided"), list, first), null);
+            }
+        }
+    }
+
+    public static class DateInput extends TextField<LogicalDate> {
+        private static final long serialVersionUID = 1L;
+
+        public class LogicalDateConverter implements IConverter<LogicalDate> {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            @SuppressWarnings("deprecation")
+            public String convertToString(LogicalDate value, Locale locale) {
+                return new DateConverter().convertToString(new Date(value.getYear(), value.getMonth(), value.getDate()), locale);
+            }
+
+            @Override
+            public LogicalDate convertToObject(String value, Locale locale) {
+                return new LogicalDate(new DateConverter().convertToObject(value, locale));
+            }
+        }
+
+        public DateInput(String id, IModel<LogicalDate> model) {
+            super(id, model);
+        }
+
+        public DateInput(String id) {
+            super(id);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public final <C> IConverter<C> getConverter(Class<C> clazz) {
+            if (LogicalDate.class.isAssignableFrom(clazz)) {
+                return (IConverter<C>) new LogicalDateConverter();
+            } else {
+                return super.getConverter(clazz);
             }
         }
     }

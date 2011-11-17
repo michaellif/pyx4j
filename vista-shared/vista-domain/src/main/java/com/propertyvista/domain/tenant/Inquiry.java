@@ -95,11 +95,6 @@ public interface Inquiry extends IEntity {
     @ToString(index = 0)
     Name name();
 
-    @Deprecated
-    @Owned
-    @Detached
-    IList<Phone> phones();
-
     @EmbeddedEntity
     Phone phone1();
 

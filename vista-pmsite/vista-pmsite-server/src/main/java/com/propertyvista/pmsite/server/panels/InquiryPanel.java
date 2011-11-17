@@ -14,7 +14,6 @@
 package com.propertyvista.pmsite.server.panels;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -65,8 +64,10 @@ public class InquiryPanel extends Panel {
         super(id);
 
         final Building bld = (fp == null ? building : fp.building());
-        Inquiry entity = EntityFactory.create(Inquiry.class);
-        IPojo<Inquiry> pojo = ServerEntityFactory.getPojo(entity);
+        Inquiry inquiry = EntityFactory.create(Inquiry.class);
+        inquiry.phone1().type().setValue(Phone.Type.home);
+        inquiry.phone2().type().setValue(Phone.Type.mobile);
+        IPojo<Inquiry> pojo = ServerEntityFactory.getPojo(inquiry);
         final CompoundPropertyModel<IPojo<Inquiry>> model = new CompoundPropertyModel<IPojo<Inquiry>>(pojo);
 
         final StatelessForm<IPojo<Inquiry>> form = new StatelessForm<IPojo<Inquiry>>("inquiryForm", model) {
@@ -77,27 +78,25 @@ public class InquiryPanel extends Panel {
             public void onSubmit() {
                 // update model
                 Inquiry inquiry = model.getObject().getEntityValue();
-                // phones
-                String workPhone = ((FormComponent<String>) get("workPhone")).getModelObject();
-                if (workPhone != null && workPhone.length() > 0) {
-                    Phone phone = EntityFactory.create(Phone.class);
-                    phone.type().setValue(Phone.Type.home);
-                    phone.number().setValue(workPhone);
-                    String ext = ((FormComponent<String>) get("workPhoneExt")).getModelObject();
-                    try {
-                        phone.extension().setValue(Integer.valueOf(ext));
-                    } catch (NumberFormatException ignore) {
-                        // do nothing
-                    }
-                    inquiry.phones().add(phone);
-                }
-                String cellPhone = ((FormComponent<String>) get("cellPhone")).getModelObject();
-                if (cellPhone != null && cellPhone.length() > 0) {
-                    Phone phone = EntityFactory.create(Phone.class);
-                    phone.type().setValue(Phone.Type.mobile);
-                    phone.number().setValue(cellPhone);
-                    inquiry.phones().add(phone);
-                }
+/*
+ * // phones
+ * String workPhone = ((FormComponent<String>) get("workPhone")).getModelObject();
+ * if (workPhone != null && workPhone.length() > 0) {
+ * inquiry.phone1().type().setValue(Phone.Type.home);
+ * inquiry.phone1().number().setValue(workPhone);
+ * String ext = ((FormComponent<String>) get("workPhoneExt")).getModelObject();
+ * try {
+ * inquiry.phone1().extension().setValue(Integer.valueOf(ext));
+ * } catch (NumberFormatException ignore) {
+ * // do nothing
+ * }
+ * }
+ * String cellPhone = ((FormComponent<String>) get("cellPhone")).getModelObject();
+ * if (cellPhone != null && cellPhone.length() > 0) {
+ * inquiry.phone2().type().setValue(Phone.Type.mobile);
+ * inquiry.phone2().number().setValue(cellPhone);
+ * }
+ */
                 // add current building
                 inquiry.building().id().setValue(bld.id().getValue());
                 // floorplan
@@ -127,10 +126,10 @@ public class InquiryPanel extends Panel {
         form.add(new RequiredTextField<String>("name.firstName").setLabel(new Model<String>(i18n.tr("First Name"))));
         form.add(new RequiredTextField<String>("name.lastName").setLabel(new Model<String>(i18n.tr("Last Name"))));
         // phone
-        TextField<String> workPhone = new TextField<String>("workPhone", new Model<String>());
+        TextField<String> workPhone = new TextField<String>("phone1.number");
         form.add(workPhone.setLabel(new Model<String>(i18n.tr("Work Phone"))));
-        form.add(new TextField<String>("workPhoneExt", new Model<String>()));
-        TextField<String> cellPhone = new TextField<String>("cellPhone", new Model<String>());
+        form.add(new TextField<String>("phone1.extension"));
+        TextField<String> cellPhone = new TextField<String>("phone2.number");
         form.add(cellPhone.setLabel(new Model<String>(i18n.tr("Cell Phone"))));
         // email
         EmailTextField email = new EmailTextField("email.address");
@@ -157,11 +156,11 @@ public class InquiryPanel extends Panel {
         // lease term
         form.add(new RadioChoice<Inquiry.LeaseTerm>("leaseTerm", Arrays.asList(Inquiry.LeaseTerm.values())));
         // moving date
-        form.add(new TextField<String>("movingDate"));
+        form.add(new WicketUtils.DateInput("movingDate"));
         // apmnt date / time
-        form.add(new TextField<Date>("appointmentDate1"));
+        form.add(new WicketUtils.DateInput("appointmentDate1"));
         form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime1", Arrays.asList(Inquiry.DayPart.values())));
-        form.add(new TextField<Date>("appointmentDate2"));
+        form.add(new WicketUtils.DateInput("appointmentDate2"));
         form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime2", Arrays.asList(Inquiry.DayPart.values())));
         // ref source
         form.add(new WicketUtils.DropDownList<Inquiry.RefSource>("refSource", Arrays.asList(Inquiry.RefSource.values()), false, false));
