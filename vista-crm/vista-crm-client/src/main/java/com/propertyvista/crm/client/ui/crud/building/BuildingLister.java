@@ -62,7 +62,7 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().lastAppraisalDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().lastAppraisalValue()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().centralHeat()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.contacts().website()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.contacts().email().address(), i18n.tr("Email")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.contacts().email().address(), i18n.tr("Email")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().dateAcquired()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().purchasePrice()));
@@ -108,6 +108,6 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().lastAppraisalValue()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial().currency()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.marketing().name(), i18n.tr("Marketing Name")));
     }
 }

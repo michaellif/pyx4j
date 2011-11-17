@@ -37,8 +37,8 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingCode()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
@@ -55,8 +55,8 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
     @Override
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<AptUnitDTO>> columnDescriptors, AptUnitDTO proto) {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingCode()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptorEx(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(), i18n.tr("Floorplan Marketing Name")));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().economicStatus()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));

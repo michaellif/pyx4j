@@ -192,7 +192,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         if (title == null) {
             return ColumnDescriptorFactory.createColumnDescriptor(proto(), member);
         } else {
-            return ColumnDescriptorFactory.createColumnDescriptorEx(proto(), member, title);
+            return ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), member, title);
         }
     }
 
