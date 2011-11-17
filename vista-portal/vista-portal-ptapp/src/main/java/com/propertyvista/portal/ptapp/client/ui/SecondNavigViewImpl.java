@@ -113,7 +113,7 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
 
             this.place = AppSite.getHistoryMapper().getPlace(token);
 
-            place.putArg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
+            place.arg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
 
             label = new Label(substep.name().getValue());
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());

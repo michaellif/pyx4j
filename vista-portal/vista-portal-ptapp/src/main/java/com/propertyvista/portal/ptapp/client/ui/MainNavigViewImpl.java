@@ -123,7 +123,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             this.place = AppSite.getHistoryMapper().getPlace(step.placeId().getValue());
             if (step.substeps().size() > 0) {
                 ApplicationWizardSubstep substep = step.substeps().get(0);
-                place.putArg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
+                place.arg(PtSiteMap.STEP_ARG_NAME, substep.placeArgument().getStringView());
             }
             label = new Label(presenter.getNavigLabel(place));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());

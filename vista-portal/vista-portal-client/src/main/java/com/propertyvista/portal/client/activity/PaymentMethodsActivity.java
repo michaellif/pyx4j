@@ -78,7 +78,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     @Override
     public void editPaymentMethod(PaymentMethodDTO paymentmethod) {
         AppPlace place = new PaymentMethods.EditPaymentMethod();
-        place.putArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentmethod.id().getValue().toString());
+        place.arg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentmethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
 
     }

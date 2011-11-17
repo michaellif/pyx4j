@@ -173,7 +173,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             public void onClick(ClickEvent event) {
                 if (link.getClass().equals(PtSiteMap.Info.class) || link.getClass().equals(PtSiteMap.Financial.class)) {
                     if (!getValue().tenantList().tenants().isEmpty()) {
-                        link.putArg(PtSiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
+                        link.arg(PtSiteMap.STEP_ARG_NAME, getValue().tenantList().tenants().get(0).getPrimaryKey().toString());
                     }
                 }
 
