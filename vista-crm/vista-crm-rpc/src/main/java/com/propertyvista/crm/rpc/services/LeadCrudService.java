@@ -18,10 +18,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeadCrudService extends AbstractCrudService<Lead> {
+
+    public void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key id);
 
     void convertToLease(AsyncCallback<Lease> callback, Key entityId);
 }

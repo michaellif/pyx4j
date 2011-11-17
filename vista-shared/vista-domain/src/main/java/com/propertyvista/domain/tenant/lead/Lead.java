@@ -17,7 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,28 +25,17 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface Lead extends IEntity {
 
     @I18n
-    public enum InformedFrom {
-
-        internet,
-
-        newspaper,
-
-        radio,
-
-        tv,
-
-        mail,
-
-        referral,
-
-        other;
+    public enum RefSource {
+        Internet, Newspaper, Radio, Referral, TV, Import, LocatorServices, DirectMail, Other;
 
         @Override
         public String toString() {
@@ -55,7 +44,7 @@ public interface Lead extends IEntity {
     }
 
     @I18n
-    public enum Term {
+    public enum LeaseTerm {
 
         @Translate("6 months")
         months6,
@@ -75,9 +64,8 @@ public interface Lead extends IEntity {
     }
 
     @I18n
-    public enum Source {
-
-        toBeProvided;
+    public enum DayPart {
+        Morning, Afternoon, Evening;
 
         @Override
         public String toString() {
@@ -106,47 +94,45 @@ public interface Lead extends IEntity {
     @EmbeddedEntity
     Person person();
 
-    @Caption(name = "How did you hear about us")
-    IPrimitive<InformedFrom> informedFrom();
-
     @Caption(name = "Desired move-in date")
-    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveInDate();
-
-    @Caption(name = "Desired Monthly Rent Range: MIN and MAX")
-    @EmbeddedEntity
-    RangeGroup rent();
 
     @ToString(index = 1)
     @Caption(name = "Desired Lease Length")
-    IPrimitive<Term> term();
+    IPrimitive<LeaseTerm> leaseTerm();
 
-    @Caption(name = "Desired bedrooms")
-    IPrimitive<Integer> beds();
+    Building building();
 
-    @Caption(name = "Desired Bathrooms")
-    IPrimitive<Integer> baths();
-
-    @Caption(name = "Interested in Floorplan")
     Floorplan floorplan();
 
     @Caption(name = "Questions/Comments")
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> comments();
 
+    @Caption(name = "How did you hear about us")
+    IPrimitive<RefSource> refSource();
+
+    // Preferred appointments:
+
+    IPrimitive<LogicalDate> appointmentDate1();
+
+    IPrimitive<DayPart> appointmentTime1();
+
+    IPrimitive<LogicalDate> appointmentDate2();
+
+    IPrimitive<DayPart> appointmentTime2();
+
     // === Internals:
-    IPrimitive<Source> source();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> createDate();
-
-    IPrimitive<String> assignedTo();
+    Employee agent();
 
     IPrimitive<Status> status();
 
-// double reference - currently use just back reference from Appointment itself.
-//    IList<Appointment> appointments();
+    Lease lease();
 
-    // === Internals:    
-    IPrimitive<Boolean> convertedToLease();
+    @ReadOnly
+    IPrimitive<LogicalDate> createDate();
+
+// double reference - currently use just back reference from Appointment itself.
+//  IList<Appointment> appointments();
 }

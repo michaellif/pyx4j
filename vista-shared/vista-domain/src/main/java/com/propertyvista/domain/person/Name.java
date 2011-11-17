@@ -18,8 +18,21 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface Name extends IEntity {
+
+    @I18n
+    public enum Title {
+
+        Mr, Mrs, Ms, Miss, Dr;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @ToString(index = 1)
     IPrimitive<String> namePrefix();

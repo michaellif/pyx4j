@@ -19,7 +19,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
@@ -38,11 +39,11 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
         passwordAction = new CHyperlink(new Command() {
             @Override
             public void execute() {
-                new ShowPopUpBox<ActionBox>(new ActionBox()) {
+                new ShowPopUpBox<NewPasswordBox>(new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit()))) {
                     @Override
-                    protected void onClose(ActionBox box) {
+                    protected void onClose(NewPasswordBox box) {
                         if (box.isOk()) {
-                            ((EmployeeEditorView.Presenter) presenter).changePassword(box.getOldPassword(), box.getNewPassword());
+                            ((EmployeeEditorView.Presenter) presenter).changePassword(box.getOldPassword(), box.getNewPassword1());
                         }
                     }
                 };
@@ -52,14 +53,19 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
         addToolbarItem(passwordAction.asWidget());
     }
 
-    private class ActionBox extends OkCancelBox {
+    private class NewPasswordBox extends OkCancelBox {
 
-        private final CTextField oldPassword = new CTextField();
+        private final CPasswordTextField oldPassword = new CPasswordTextField();
 
-        private final CTextField newPassword = new CTextField();
+        private final CPasswordTextField newPassword1 = new CPasswordTextField();
 
-        public ActionBox() {
+        private final CPasswordTextField newPassword2 = new CPasswordTextField();
+
+        private final boolean showOldPassword;
+
+        public NewPasswordBox(boolean showOldPassword) {
             super(i18n.tr("Change password"));
+            this.showOldPassword = showOldPassword;
             setContent(createContent());
         }
 
@@ -68,14 +74,20 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
 
             VerticalPanel content = new VerticalPanel();
 
-            content.add(new HTML(i18n.tr("Enter old password:")));
-            content.add(oldPassword);
+            if (showOldPassword) {
+                content.add(new HTML(i18n.tr("Enter old password:")));
+                content.add(oldPassword);
+            }
 
             content.add(new HTML(i18n.tr("Enter new password:")));
-            content.add(newPassword);
+            content.add(newPassword1);
+
+            content.add(new HTML(i18n.tr("Confirm new password:")));
+            content.add(newPassword2);
 
             oldPassword.setWidth("100%");
-            newPassword.setWidth("100%");
+            newPassword1.setWidth("100%");
+            newPassword2.setWidth("100%");
 
             content.setWidth("100%");
             return content.asWidget();
@@ -84,7 +96,7 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
 
         @Override
         public boolean isOk() {
-            return (super.isOk() && !oldPassword.getValue().isEmpty() && !newPassword.getValue().isEmpty());
+            return (super.isOk() && !oldPassword.getValue().isEmpty() && !newPassword1.getValue().isEmpty() && !newPassword2.getValue().isEmpty());
         }
 
         @Override
@@ -96,8 +108,12 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
             return oldPassword.getValue();
         }
 
-        protected String getNewPassword() {
-            return newPassword.getValue();
+        protected String getNewPassword1() {
+            return newPassword1.getValue();
+        }
+
+        protected String getNewPassword2() {
+            return newPassword2.getValue();
         }
     }
 }

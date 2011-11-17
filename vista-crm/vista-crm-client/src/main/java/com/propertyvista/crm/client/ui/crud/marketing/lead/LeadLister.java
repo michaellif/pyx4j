@@ -34,7 +34,7 @@ public class LeadLister extends ListerBase<Lead> {
         List<ColumnDescriptor<Lead>> columnDescriptors = new ArrayList<ColumnDescriptor<Lead>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.term()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTerm()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplan()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.createDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));

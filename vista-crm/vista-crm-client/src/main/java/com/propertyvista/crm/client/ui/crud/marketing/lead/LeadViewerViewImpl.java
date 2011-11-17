@@ -15,10 +15,10 @@ package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
@@ -38,7 +38,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     public LeadViewerViewImpl() {
         super(Marketing.Lead.class);
 
-        btnconvert = new Button(i18n.tr("Convert&nbspto&nbspLease"), new ClickHandler() {
+        btnconvert = new Button(i18n.tr("Convert to Lease"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ((LeadViewerView.Presenter) presenter).convertToLease();
@@ -55,7 +55,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public void populate(Lead value) {
-        btnconvert.setVisible(!value.convertedToLease().isBooleanTrue());
+        btnconvert.setVisible(value.lease().isEmpty());
         super.populate(value);
     }
 

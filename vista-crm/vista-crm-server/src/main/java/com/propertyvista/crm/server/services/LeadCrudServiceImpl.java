@@ -25,6 +25,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.crm.rpc.services.LeadCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -45,10 +46,17 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
     }
 
     @Override
+    public void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key id) {
+        Floorplan item = Persistence.service().retrieve(Floorplan.class, id);
+        Persistence.service().retrieve(item.building());
+        callback.onSuccess(item);
+    }
+
+    @Override
     public void convertToLease(AsyncCallback<Lease> callback, Key entityId) {
 
         Lead lead = Persistence.service().retrieve(dboClass, entityId);
-        if (lead.convertedToLease().isBooleanTrue()) {
+        if (!lead.lease().isNull()) {
             callback.onFailure(new UserRuntimeException("The Lead is converted to Lease already!"));
         } else {
             Tenant tenant = EntityFactory.create(Tenant.class);
@@ -76,7 +84,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 //            Persistence.service().merge(lease);
 
             // mark Lead as converted:
-            lead.convertedToLease().setValue(true);
+            lead.lease().set(lease);
             Persistence.service().merge(lead);
 
             callback.onSuccess(lease);

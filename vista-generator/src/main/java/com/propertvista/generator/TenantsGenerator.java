@@ -101,21 +101,14 @@ public class TenantsGenerator {
 
     public Lead createLead() {
         Lead item = EntityFactory.create(Lead.class);
+        item.createDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+        item.status().setValue(Lead.Status.active);
 
         item.person().set(CommonsGenerator.createPerson());
-        item.informedFrom().setValue(RandomUtil.randomEnum(Lead.InformedFrom.class));
         item.moveInDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
-        item.rent().min().setValue(800 + RandomUtil.randomDouble(100));
-        item.rent().max().setValue(900 + RandomUtil.randomDouble(100));
-        item.term().setValue(RandomUtil.randomEnum(Lead.Term.class));
-        item.beds().setValue(1 + RandomUtil.randomInt(3));
-        item.baths().setValue(1 + RandomUtil.randomInt(2));
+        item.leaseTerm().setValue(RandomUtil.randomEnum(Lead.LeaseTerm.class));
         item.comments().setValue(CommonsGenerator.lipsum());
-
-        item.source().setValue(RandomUtil.randomEnum(Lead.Source.class));
-        item.createDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
-        item.assignedTo().setValue(CommonsGenerator.createName().getStringView());
-        item.status().setValue(RandomUtil.randomEnum(Lead.Status.class));
+        item.refSource().setValue(RandomUtil.randomEnum(Lead.RefSource.class));
 
         return item;
     }
