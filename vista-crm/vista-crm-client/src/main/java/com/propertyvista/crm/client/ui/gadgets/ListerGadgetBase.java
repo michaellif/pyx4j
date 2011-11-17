@@ -130,6 +130,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         entityListPanel.getDataTable().setMarkSelectedRow(false);
         entityListPanel.getDataTable().setAutoColumnsWidth(true);
         entityListPanel.getDataTable().renderTable();
+        entityListPanel.setFiltersVisible(false);
+
         // TODO enable filters when they can be persisted
 
         entityListPanel.addAttachHandler(new AttachEvent.Handler() {
