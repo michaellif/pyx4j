@@ -131,6 +131,23 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
+    @Override
+    public void refresh() {
+        if (!isNewEntity()) {
+            service.retrieve(new AsyncCallback<E>() {
+                @Override
+                public void onSuccess(E result) {
+                    onPopulateSuccess(result);
+                }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+            }, entityID);
+        }
+    }
+
     /**
      * Descendants may override this method to perform some initialization.
      * 
@@ -235,4 +252,5 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     protected void goToViewer(Key entityID) {
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
     }
+
 }
