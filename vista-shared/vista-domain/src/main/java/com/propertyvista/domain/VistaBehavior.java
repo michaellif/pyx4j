@@ -27,6 +27,8 @@ public enum VistaBehavior implements Behavior {
 
     PROPERTY_MANAGER,
 
+    PROPERTY_EMPLOYEE,
+
     PRODUCTION_SUPPORT,
 
     ADMIN,
