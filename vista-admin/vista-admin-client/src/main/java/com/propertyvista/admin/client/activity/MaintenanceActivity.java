@@ -74,6 +74,11 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
     }
 
     @Override
+    public void refresh() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
     public void apply() {
         trySave(true);
     }
