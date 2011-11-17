@@ -79,9 +79,22 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         String val;
         if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityID = new Key(val);
+            // Validate argument
+            try {
+                entityID.asLong();
+            } catch (NumberFormatException e) {
+                entityID = null;
+            }
+
         }
         if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
             parentID = new Key(val);
+            // Validate argument
+            try {
+                parentID.asLong();
+            } catch (NumberFormatException e) {
+                parentID = null;
+            }
         }
         if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
             tabIndex = Integer.parseInt(val);
