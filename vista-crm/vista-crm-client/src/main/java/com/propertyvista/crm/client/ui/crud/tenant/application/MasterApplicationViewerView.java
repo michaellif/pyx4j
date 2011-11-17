@@ -25,13 +25,13 @@ public interface MasterApplicationViewerView extends IViewerView<MasterApplicati
 
         IListerView.Presenter getScreeningPresenter();
 
-        void approve();
+        void approve(MasterApplicationDTO application);
 
-        void decline();
+        void decline(MasterApplicationDTO application);
 
-        void moreInfo();
+        void moreInfo(MasterApplicationDTO application);
 
-        void cancelApp();
+        void cancelApp(MasterApplicationDTO application);
     }
 
     IListerView<ApplicationDTO> getApplicationsView();

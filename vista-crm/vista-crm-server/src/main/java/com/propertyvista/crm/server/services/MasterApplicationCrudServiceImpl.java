@@ -95,6 +95,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
 
         // TODO: currently - just some smockup stuff:
+        dto.deposit().setValue(100 + RandomUtil.randomDouble(1000));
         dto.percenrtageApproved().setValue(RandomUtil.randomDouble(100));
         dto.suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
 

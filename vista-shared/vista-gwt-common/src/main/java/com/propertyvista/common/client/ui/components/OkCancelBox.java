@@ -42,6 +42,8 @@ public abstract class OkCancelBox extends DialogPanel {
 
     protected Button cancelButton;
 
+    protected boolean isCanceled = false;
+
     public OkCancelBox(String caption) {
         this(caption, false);
     }
@@ -111,5 +113,10 @@ public abstract class OkCancelBox extends DialogPanel {
      * Override for some meaningful action.
      */
     protected void onCancel() {
+        isCanceled = true;
+    }
+
+    public boolean isOk() {
+        return !isCanceled;
     }
 }
