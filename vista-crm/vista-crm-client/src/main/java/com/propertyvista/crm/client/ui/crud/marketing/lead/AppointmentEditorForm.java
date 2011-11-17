@@ -72,9 +72,9 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 9).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agent()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().phone()), 15).customLabel(i18n.tr("Agent Phone")).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().email()), 15).customLabel(i18n.tr("Agent Email")).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agent()), 20).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().phone()), 20).customLabel(i18n.tr("Agent Phone")).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().email()), 20).customLabel(i18n.tr("Agent Email")).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
@@ -104,6 +105,11 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 55).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CLabel()), 15).build());
+
         row = -1;
         if (isEditable()) {
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().building(), new CEntityLabel()), 20).build());
