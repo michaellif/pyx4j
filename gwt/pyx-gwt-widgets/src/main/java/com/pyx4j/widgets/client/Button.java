@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ButtonBase;
 import com.google.gwt.user.client.ui.Image;
 
@@ -114,6 +115,15 @@ public class Button extends ButtonBase {
         container.appendChild(content);
 
     }
+
+    @Override
+    public void onBrowserEvent(Event event) {
+        if (isEnabled()) {
+            super.onBrowserEvent(event);
+        } else {
+            event.stopPropagation();
+        }
+    };
 
     public void setCaption(String html) {
         textElem.setInnerHTML(html);
