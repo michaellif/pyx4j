@@ -39,6 +39,11 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
 
     @Override
     protected void enhanceRetrieve(Lead entity, boolean fromList) {
+        if (!entity.floorplan().isNull()) {
+            Persistence.service().retrieve(entity.floorplan().building());
+            entity.building().set(entity.floorplan().building());
+        }
+
         if (fromList) {
             // just clear unnecessary data before serialisation: 
             entity.comments().setValue(null);

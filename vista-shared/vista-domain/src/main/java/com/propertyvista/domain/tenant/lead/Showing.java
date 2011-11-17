@@ -83,7 +83,6 @@ public interface Showing extends IEntity {
     Building building();
 
     @NotNull
-    @Detached
     AptUnit unit();
 
     IPrimitive<Status> status();

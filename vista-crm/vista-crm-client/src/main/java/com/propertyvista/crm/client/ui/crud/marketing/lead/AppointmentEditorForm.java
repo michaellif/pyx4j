@@ -66,10 +66,10 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date()), 8).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().time()), 6).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 8).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().time()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 9).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agent()), 15).build());

@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.contact.Phone;
 
 public interface Appointment extends IEntity {
@@ -66,7 +67,7 @@ public interface Appointment extends IEntity {
 
     IPrimitive<String> address();
 
-    IPrimitive<String> agent();
+    Employee agent();
 
     @EmbeddedEntity
     Phone phone();

@@ -31,9 +31,6 @@ public class ShowingCrudServiceImpl extends GenericCrudServiceImpl<Showing> impl
 
     @Override
     protected void enhanceRetrieve(Showing entity, boolean fromList) {
-        super.enhanceRetrieve(entity, fromList);
-
-        Persistence.service().retrieve(entity.unit());
         if (!entity.unit().isNull()) {
             Persistence.service().retrieve(entity.unit().belongsTo());
             entity.building().set(entity.unit().belongsTo());

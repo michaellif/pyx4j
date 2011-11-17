@@ -105,10 +105,18 @@ public class TenantsGenerator {
         item.status().setValue(Lead.Status.active);
 
         item.person().set(CommonsGenerator.createPerson());
+
         item.moveInDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.leaseTerm().setValue(RandomUtil.randomEnum(Lead.LeaseTerm.class));
+
         item.comments().setValue(CommonsGenerator.lipsum());
         item.refSource().setValue(RandomUtil.randomEnum(Lead.RefSource.class));
+
+        item.appointmentDate1().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+        item.appointmentTime1().setValue(RandomUtil.randomEnum(Lead.DayPart.class));
+
+        item.appointmentDate2().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+        item.appointmentTime2().setValue(RandomUtil.randomEnum(Lead.DayPart.class));
 
         return item;
     }
@@ -127,7 +135,6 @@ public class TenantsGenerator {
         item.date().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.time().setValue(RandomUtil.randomTime());
         item.address().setValue("Appointment address here...");
-        item.agent().setValue(CommonsGenerator.createName().getStringView());
         item.phone().set(CommonsGenerator.createPhone());
         item.email().setValue(RandomUtil.randomLetters(5).toLowerCase() + "@sympatico.ca");
         item.status().setValue(RandomUtil.randomEnum(Appointment.Status.class));

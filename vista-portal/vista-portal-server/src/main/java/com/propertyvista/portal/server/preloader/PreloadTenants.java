@@ -33,6 +33,7 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -129,32 +130,33 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             persistTenant(tenant);
         }
 
-        EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
-        List<Floorplan> floorplans = Persistence.service().query(criteria);
+        List<Floorplan> floorplans = Persistence.service().query(EntityQueryCriteria.create(Floorplan.class));
+        List<Employee> employees = Persistence.service().query(EntityQueryCriteria.create(Employee.class));
 
         // Leads:
         List<Lead> leads = generator.createLeads(config().numLeads);
         for (Lead lead : leads) {
-
             lead.floorplan().set(RandomUtil.random(floorplans));
             lead.building().set(lead.floorplan().building());
 
+            lead.agent().set(RandomUtil.random(employees));
+
             Persistence.service().persist(lead);
 
-            EntityQueryCriteria<AptUnit> criteria1 = EntityQueryCriteria.create(AptUnit.class);
-            criteria1.add(PropertyCriterion.eq(criteria1.proto().floorplan(), lead.floorplan()));
-            List<AptUnit> units = Persistence.service().query(criteria1);
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), lead.floorplan()));
+            List<AptUnit> units = Persistence.service().query(criteria);
 
             List<Appointment> apps = generator.createAppointments(1 + RandomUtil.randomInt(3));
             for (Appointment app : apps) {
                 app.lead().set(lead);
+                app.agent().set(RandomUtil.random(employees));
 
                 Persistence.service().persist(app);
 
                 List<Showing> shws = generator.createShowings(1 + RandomUtil.randomInt(3));
                 for (Showing shw : shws) {
                     shw.unit().set(RandomUtil.random(units));
-                    shw.building().set(shw.unit().belongsTo());
                     shw.appointment().set(app);
 
                     Persistence.service().persist(shw);

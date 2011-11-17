@@ -19,6 +19,8 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -101,8 +103,11 @@ public interface Lead extends IEntity {
     @Caption(name = "Desired Lease Length")
     IPrimitive<LeaseTerm> leaseTerm();
 
+    @Transient
+    // calculated from selected unit below!
     Building building();
 
+    @NotNull
     Floorplan floorplan();
 
     @Caption(name = "Questions/Comments")
