@@ -25,6 +25,7 @@ import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
 import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -55,34 +56,14 @@ public class AppPlace extends Place {
     public AppPlace() {
     }
 
-    public AppPlace withArg(String key, String value) {
-        this.putArg(key, value);
+    public AppPlace arg(String key, String... value) {
+        if (args == null) {
+            args = new HashMap<String, List<String>>();
+        }
+        List<String> valuesLists = new ArrayList<String>();
+        valuesLists.addAll(Arrays.asList(value));
+        args.put(key, valuesLists);
         return this;
-    }
-
-    public void putArg(String key, String value) {
-        if (args == null) {
-            args = new HashMap<String, List<String>>();
-        }
-        args.put(key, new ArrayList<String>());
-        args.get(key).add(value);
-    }
-
-    public void addArg(String key, String value) {
-        if (args == null) {
-            args = new HashMap<String, List<String>>();
-        }
-        if (!args.containsKey(key)) {
-            args.put(key, new ArrayList<String>());
-        }
-        args.get(key).add(value);
-    }
-
-    public void putAllArgs(Map<String, List<String>> map) {
-        if (args == null) {
-            args = new HashMap<String, List<String>>();
-        }
-        this.args.putAll(map);
     }
 
     public void parseArgs(String queryString) {

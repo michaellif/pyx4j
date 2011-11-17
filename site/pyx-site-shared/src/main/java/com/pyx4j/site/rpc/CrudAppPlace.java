@@ -52,7 +52,7 @@ public abstract class CrudAppPlace extends AppPlace {
     }
 
     public void setType(Type type) {
-        putArg(ARG_NAME_CRUD_TYPE, type.name());
+        arg(ARG_NAME_CRUD_TYPE, type.name());
     }
 
     public Type getType() {
@@ -69,50 +69,50 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public CrudAppPlace formViewerPlace(Key itemID) {
         setType(Type.viewer);
-        putArg(ARG_NAME_ID, itemID.toString());
+        arg(ARG_NAME_ID, itemID.toString());
         return this;
     }
 
     public CrudAppPlace formViewerPlace(Key itemID, int tabIndex) {
         formViewerPlace(itemID);
         if (tabIndex >= 0) {
-            putArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
+            arg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
         return this;
     }
 
     public CrudAppPlace formEditorPlace(Key itemID) {
         setType(Type.editor);
-        putArg(ARG_NAME_ID, itemID.toString());
+        arg(ARG_NAME_ID, itemID.toString());
         return this;
     }
 
     public CrudAppPlace formEditorPlace(Key itemID, int tabIndex) {
         formEditorPlace(itemID);
         if (tabIndex >= 0) {
-            putArg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
+            arg(ARG_NAME_TAB_IDX, String.valueOf(tabIndex));
         }
         return this;
     }
 
     public CrudAppPlace formNewItemPlace(Key parentID) {
         setType(Type.editor);
-        putArg(ARG_NAME_ID, ARG_VALUE_NEW);
+        arg(ARG_NAME_ID, ARG_VALUE_NEW);
         if (parentID != null) {
-            putArg(ARG_NAME_PARENT_ID, parentID.toString());
+            arg(ARG_NAME_PARENT_ID, parentID.toString());
         }
         return this;
     }
 
     public CrudAppPlace formDashboardPlace(Key itemID) {
         setType(Type.dashboard);
-        putArg(ARG_NAME_ID, itemID.toString());
+        arg(ARG_NAME_ID, itemID.toString());
         return this;
     }
 
     public CrudAppPlace formDashboardPlace(Key itemID, String name) {
         setType(Type.dashboard);
-        putArg(ARG_NAME_ID, itemID.toString());
+        arg(ARG_NAME_ID, itemID.toString());
         setName(name);
         return this;
     }
