@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -29,7 +28,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@ToStringFormat("{0} (Beds: {1} Baths: {2})")
 public interface Floorplan extends IEntity {
 
     @Owner
@@ -49,14 +47,12 @@ public interface Floorplan extends IEntity {
     IPrimitive<Integer> floorCount();
 
     @NotNull
-    @ToString(index = 1)
     @Caption(name = "Beds")
     IPrimitive<Integer> bedrooms();
 
     IPrimitive<Integer> dens();
 
     @NotNull
-    @ToString(index = 2)
     @Caption(name = "Baths")
     IPrimitive<Integer> bathrooms();
 
