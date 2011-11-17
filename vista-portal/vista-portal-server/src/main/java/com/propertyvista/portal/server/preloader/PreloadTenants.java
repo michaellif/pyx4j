@@ -154,12 +154,14 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
                 Persistence.service().persist(app);
 
-                List<Showing> shws = generator.createShowings(1 + RandomUtil.randomInt(3));
-                for (Showing shw : shws) {
-                    shw.unit().set(RandomUtil.random(units));
-                    shw.appointment().set(app);
+                if (!units.isEmpty()) {
+                    List<Showing> shws = generator.createShowings(1 + RandomUtil.randomInt(3));
+                    for (Showing shw : shws) {
+                        shw.unit().set(RandomUtil.random(units));
+                        shw.appointment().set(app);
 
-                    Persistence.service().persist(shw);
+                        Persistence.service().persist(shw);
+                    }
                 }
             }
         }
