@@ -110,11 +110,11 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
         return filterButton;
     }
 
-    public void swtVisibleTopActionsBar(boolean visible) {
+    public void setVisibleTopActionsBar(boolean visible) {
         topActionsBar.setVisible(visible);
     }
 
-    public void swtVisibleBottomActionsBar(boolean visible) {
+    public void setVisibleBottomActionsBar(boolean visible) {
         bottomActionsBar.setVisible(visible);
     }
 
