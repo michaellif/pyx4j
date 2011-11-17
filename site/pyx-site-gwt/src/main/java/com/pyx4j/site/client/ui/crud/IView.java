@@ -30,8 +30,6 @@ public interface IView<E extends IEntity> extends IsWidget {
 
     public interface Presenter {
 
-        void setPlace(Place place);
-
         void populate();
     }
 

@@ -59,7 +59,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private Key parentID;
 
-    public ListerActivityBase(IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
+    public ListerActivityBase(Place place, IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -69,10 +69,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         this.service = service;
         this.entityClass = entityClass;
         view.setPresenter(this);
-    }
 
-    @Override
-    public void setPlace(Place place) {
         view.getMemento().setCurrentPlace(place);
     }
 

@@ -53,7 +53,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Class<? extends CrudAppPlace> placeClass;
 
-    public EditorActivityBase(IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+    public EditorActivityBase(Place place, IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -63,10 +63,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         this.service = service;
         this.entityClass = entityClass;
         view.setPresenter(this);
+        setPlace(place);
     }
 
-    @Override
-    public void setPlace(Place place) {
+    private void setPlace(Place place) {
         entityID = null;
         parentID = null;
         tabIndex = -1;

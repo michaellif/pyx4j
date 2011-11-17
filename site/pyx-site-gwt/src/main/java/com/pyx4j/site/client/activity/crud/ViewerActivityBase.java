@@ -47,7 +47,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Class<? extends CrudAppPlace> placeClass;
 
-    public ViewerActivityBase(IViewerView<E> view, AbstractCrudService<E> service) {
+    public ViewerActivityBase(Place place, IViewerView<E> view, AbstractCrudService<E> service) {
 // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -55,10 +55,11 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         this.view = view;
         this.service = service;
         view.setPresenter(this);
+
+        setPlace(place);
     }
 
-    @Override
-    public void setPlace(Place place) {
+    private void setPlace(Place place) {
         entityId = null;
         tabIndex = -1;
 
