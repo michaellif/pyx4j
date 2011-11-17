@@ -13,15 +13,20 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.propertvista.generator.util.RandomUtil;
+
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Status;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication.Decision;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -88,6 +93,18 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
+
+        // TODO: currently - just some smockup stuff:
+        dto.percenrtageApproved().setValue(RandomUtil.randomDouble(100));
+        dto.suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
+
+        if (dto.suggestedDecision().getValue() != Decision.Pending) {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            dto.decidedBy().set(RandomUtil.random(Persistence.service().query(criteria)));
+
+            dto.decisionDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+            dto.decisionReason().setValue("Decided according current application state and Equifax check results");
+        }
     }
 
     // internal helpers:

@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -55,6 +56,7 @@ public interface MasterApplication extends IEntity {
     @Owned
     IList<Application> applications();
 
+    @Format("#0.00")
     @Caption(name = "% Rent Approved (based on Equifax check)")
     IPrimitive<Double> percenrtageApproved();
 

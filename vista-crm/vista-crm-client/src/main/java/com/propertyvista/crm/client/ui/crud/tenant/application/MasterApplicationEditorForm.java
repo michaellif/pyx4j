@@ -114,11 +114,11 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percenrtageApproved(), new CEntityLabel()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().suggestedDecision()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percenrtageApproved()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().suggestedDecision()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decidedBy()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionDate()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionReason()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionReason()), 40).build());
 
         return new CrmScrollPanel(main);
     }
