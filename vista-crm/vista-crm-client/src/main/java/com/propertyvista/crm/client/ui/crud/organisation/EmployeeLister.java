@@ -21,21 +21,17 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public class EmployeeLister extends ListerBase<Employee> {
+public class EmployeeLister extends ListerBase<EmployeeDTO> {
 
     public EmployeeLister() {
-        super(Employee.class, CrmSiteMap.Organization.Employee.class);
-    }
-
-    public EmployeeLister(boolean readOnly) {
-        super(Employee.class, CrmSiteMap.Organization.Employee.class, readOnly);
+        super(EmployeeDTO.class, CrmSiteMap.Organization.Employee.class);
     }
 
     @Override
-    protected List<ColumnDescriptor<Employee>> getDefaultColumnDescriptors(Employee proto) {
-        List<ColumnDescriptor<Employee>> columnDescriptors = new ArrayList<ColumnDescriptor<Employee>>();
+    protected List<ColumnDescriptor<EmployeeDTO>> getDefaultColumnDescriptors(EmployeeDTO proto) {
+        List<ColumnDescriptor<EmployeeDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<EmployeeDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.title()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name().firstName()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name().lastName()));

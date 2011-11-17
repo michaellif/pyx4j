@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeViewerView extends IViewerView<Employee> {
+public interface EmployeeViewerView extends IViewerView<EmployeeDTO> {
 
 }

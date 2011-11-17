@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeCrudService extends AbstractCrudService<Employee> {
+public interface EmployeeCrudService extends AbstractCrudService<EmployeeDTO> {
 }

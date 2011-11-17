@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<Employee> implements EmployeeViewerView {
+public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
 
     public EmployeeViewerViewImpl() {
         super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm(new CrmViewersComponentFactory()));

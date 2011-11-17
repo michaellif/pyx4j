@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeListerView extends IListerView<Employee> {
+public interface EmployeeListerView extends IListerView<EmployeeDTO> {
 
 }

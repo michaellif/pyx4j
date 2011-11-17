@@ -21,14 +21,19 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.organisation.EmployeeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.EmployeeCrudService;
-import com.propertyvista.domain.company.Employee;
 
-public class EmployeeEditorActivity extends EditorActivityBase<Employee> {
+public class EmployeeEditorActivity extends EditorActivityBase<EmployeeDTO> implements EmployeeEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public EmployeeEditorActivity(Place place) {
-        super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<Employee>) GWT.create(EmployeeCrudService.class),
-                Employee.class);
+        super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
+                EmployeeDTO.class);
+    }
+
+    @Override
+    public void changePassword(String old, String newOne) {
+        // TODO Auto-generated method stub
     }
 }

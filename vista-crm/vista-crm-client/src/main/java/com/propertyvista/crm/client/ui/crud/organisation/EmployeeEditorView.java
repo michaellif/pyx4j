@@ -15,8 +15,12 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeEditorView extends IEditorView<Employee> {
+public interface EmployeeEditorView extends IEditorView<EmployeeDTO> {
 
+    interface Presenter extends IEditorView.Presenter {
+
+        void changePassword(String old, String newOne);
+    }
 }

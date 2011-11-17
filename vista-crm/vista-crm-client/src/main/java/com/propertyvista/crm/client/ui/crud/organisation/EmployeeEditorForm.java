@@ -16,11 +16,12 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -33,20 +34,20 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.domain.company.AssignedPortfolio;
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.ManagedEmployee;
 
-public class EmployeeEditorForm extends CrmEntityForm<Employee> {
+public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public EmployeeEditorForm() {
-        super(Employee.class, new CrmEditorsComponentFactory());
+        super(EmployeeDTO.class, new CrmEditorsComponentFactory());
     }
 
     public EmployeeEditorForm(IEditableComponentFactory factory) {
-        super(Employee.class, factory);
+        super(EmployeeDTO.class, factory);
     }
 
     @Override
@@ -66,26 +67,34 @@ public class EmployeeEditorForm extends CrmEntityForm<Employee> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
+        main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().maidenName()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().nameSuffix()), 5).build());
+        if (isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().maidenName()), 20).build());
+        } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Employee")).build());
+            get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
+        }
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 8.2).build());
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
+        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 25).build());
 
-        main.setWidget(++row, 0, new HTML("&nbsp"));
-
+        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
+
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().behavior()), 20).build());
 
         return new CrmScrollPanel(main);
     }

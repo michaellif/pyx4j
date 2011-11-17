@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public class EmployeeListerViewImpl extends CrmListerViewImplBase<Employee> implements EmployeeListerView {
+public class EmployeeListerViewImpl extends CrmListerViewImplBase<EmployeeDTO> implements EmployeeListerView {
 
     public EmployeeListerViewImpl() {
         super(CrmSiteMap.Organization.Employee.class);

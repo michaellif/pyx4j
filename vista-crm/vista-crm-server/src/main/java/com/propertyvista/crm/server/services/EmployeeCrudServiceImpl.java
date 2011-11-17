@@ -15,22 +15,23 @@ package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.EmployeeCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.company.Employee;
 
-public class EmployeeCrudServiceImpl extends GenericCrudServiceImpl<Employee> implements EmployeeCrudService {
+public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee, EmployeeDTO> implements EmployeeCrudService {
 
     public EmployeeCrudServiceImpl() {
-        super(Employee.class);
+        super(Employee.class, EmployeeDTO.class);
     }
 
     @Override
-    protected void enhanceRetrieve(Employee entity, boolean fromList) {
+    protected void enhanceDTO(Employee in, EmployeeDTO dto, boolean fromList) {
         if (!fromList) {
             // Load detached data:
-            Persistence.service().retrieve(entity.portfolios());
-            Persistence.service().retrieve(entity.employees());
+            Persistence.service().retrieve(dto.portfolios());
+            Persistence.service().retrieve(dto.employees());
         }
     }
 }
