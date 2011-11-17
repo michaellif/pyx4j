@@ -22,7 +22,6 @@ package com.pyx4j.gwt.commons;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
@@ -57,11 +56,11 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
 
     protected void selectError(final Throwable caught, final String errorCode) {
         Throwable cause = caught;
-        while ((cause instanceof UmbrellaException)
+        while ((cause instanceof com.google.web.bindery.event.shared.UmbrellaException)
                 || ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause))) {
-            if (cause instanceof UmbrellaException) {
+            if (cause instanceof com.google.web.bindery.event.shared.UmbrellaException) {
                 try {
-                    cause = ((UmbrellaException) cause).getCauses().iterator().next();
+                    cause = ((com.google.web.bindery.event.shared.UmbrellaException) cause).getCauses().iterator().next();
                 } catch (Throwable ignore) {
                     break;
                 }

@@ -58,7 +58,7 @@ public class Key implements java.io.Serializable {
      * 
      * @exception NumberFormatException if the string representation does not contain a parsable <code>long</code>.
      */
-    public long asLong() {
+    public long asLong() throws NumberFormatException {
         if (longValue == 0) {
             longValue = Long.valueOf(value);
         }

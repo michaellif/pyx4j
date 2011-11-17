@@ -171,7 +171,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected boolean isNewEntity() {
-        return (entityID.toString().equals(CrudAppPlace.ARG_VALUE_NEW));
+        return (entityID == null);
     }
 
     public void onPopulateSuccess(E result) {
