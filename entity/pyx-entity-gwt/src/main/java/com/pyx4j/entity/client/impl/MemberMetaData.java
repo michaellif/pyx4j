@@ -42,7 +42,8 @@ public class MemberMetaData {
 
     public Class<?> valueClass;
 
-    public Class<? extends IObject<?>> objectClass;
+    @SuppressWarnings("rawtypes")
+    public Class<? extends IObject> objectClass;
 
     public ObjectClassType objectClassType;
 

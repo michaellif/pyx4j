@@ -101,7 +101,8 @@ public interface MemberMeta {
      * 
      * @return IList, ISet, IPrimitive, or extends IEntity
      */
-    public Class<? extends IObject<?>> getObjectClass();
+    @SuppressWarnings("rawtypes")
+    public Class<? extends IObject> getObjectClass();
 
     public ObjectClassType getObjectClassType();
 

@@ -60,9 +60,9 @@ public class ClientMemberMetaImpl implements MemberMeta {
      * Generic constructor
      */
     public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
-            Class<? extends IObject<?>> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber, boolean persistenceTransient,
-            boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed, int stringLength,
-            String format, boolean useMessageFormat, String nullString) {
+            @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
+            boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed,
+            int stringLength, String format, boolean useMessageFormat, String nullString) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -172,7 +172,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
     }
 
     @Override
-    public Class<? extends IObject<?>> getObjectClass() {
+    public Class<? extends IObject> getObjectClass() {
         return data.objectClass;
     }
 

@@ -74,7 +74,8 @@ public class MemberMetaImpl implements MemberMeta {
 
     private final Class<?> valueClass;
 
-    private final Class<? extends IObject<?>> objectClass;
+    @SuppressWarnings("rawtypes")
+    private final Class<? extends IObject> objectClass;
 
     private final ObjectClassType objectClassType;
 
@@ -253,8 +254,9 @@ public class MemberMetaImpl implements MemberMeta {
         return Number.class.isAssignableFrom(valueClass);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
-    public Class<? extends IObject<?>> getObjectClass() {
+    public Class<? extends IObject> getObjectClass() {
         return objectClass;
     }
 

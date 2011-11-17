@@ -28,7 +28,6 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
@@ -137,8 +136,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     protected abstract MemberMeta createMemberMeta(String memberName);
 
     private static MemberMeta primaryKeyMeta = new ClientMemberMetaImpl(IEntity.PRIMARY_KEY, i18n.tr("Id"), "", "", com.pyx4j.commons.Key.class,
-            (Class<? extends IObject<?>>) com.pyx4j.entity.shared.IPrimitive.class, ObjectClassType.Primitive, false, false, false, false, false, false, false,
-            false, -1, null, false, "");
+            com.pyx4j.entity.shared.IPrimitive.class, ObjectClassType.Primitive, false, false, false, false, false, false, false, false, -1, null, false, "");
 
     @Override
     public MemberMeta getMemberMeta(String memberName) {
