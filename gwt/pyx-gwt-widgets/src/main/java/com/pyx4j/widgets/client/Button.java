@@ -42,6 +42,8 @@ public class Button extends ButtonBase {
 
     private final Element content;
 
+    private Element imageElem;
+
     private Element textElem;
 
     private final ButtonFacesHandler buttonFacesHandler;
@@ -96,7 +98,7 @@ public class Button extends ButtonBase {
         setStylePrimaryName(content, DefaultWidgetsTheme.StyleName.ButtonContent.name());
 
         if (image != null) {
-            Element imageElem = image.getElement();
+            imageElem = image.getElement();
             imageElem.getStyle().setProperty("verticalAlign", "middle");
             imageElem.getStyle().setProperty("display", "inline-block");
             setStylePrimaryName(imageElem, DefaultWidgetsTheme.StyleName.ButtonImage.name());
@@ -137,6 +139,12 @@ public class Button extends ButtonBase {
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         buttonFacesHandler.enable(enabled);
+    }
+
+    public void setImageVisible(boolean visible) {
+        if (imageElem != null) {
+            setVisible(imageElem, visible);
+        }
     }
 
     public void click() {
