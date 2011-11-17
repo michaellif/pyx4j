@@ -77,8 +77,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         dataTablePanel = new DataTablePanel<E>(clazz) {
             @Override
             public List<ColumnDescriptor<E>> getColumnDescriptors() {
-                ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-                ListerBase.this.fillDefaultColumnDescriptors(columnDescriptors, proto());
+                List<ColumnDescriptor<E>> columnDescriptors = ListerBase.this.getDefaultColumnDescriptors(proto());
                 assert !columnDescriptors.isEmpty() : "shouldn't be empty!..";
                 return columnDescriptors;
             }
@@ -171,8 +170,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     public void showColumnSelector(boolean show) {
         if (show) {
-            ArrayList<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-            fillAvailableColumnDescriptors(columnDescriptors, getDataTablePanel().proto());
+            List<ColumnDescriptor<E>> columnDescriptors = getAvailableColumnDescriptors(getDataTablePanel().proto());
             dataTablePanel.getDataTable().setColumnSelector(columnDescriptors);
         } else {
             dataTablePanel.getDataTable().setColumnSelector(null);
@@ -301,14 +299,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
      * Implement in derived class to set default table columns set.
      * Note, that it's called from within constructor!
      */
-    protected abstract void fillDefaultColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto);
+    protected abstract List<ColumnDescriptor<E>> getDefaultColumnDescriptors(E proto);
 
     /**
      * Override in derived class to set available table columns set.
      * Note, that it's called from within constructor!
      */
-    protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors, E proto) {
-        columnDescriptors.addAll(dataTablePanel.getDataTableModel().getColumnDescriptors());
+    protected List<ColumnDescriptor<E>> getAvailableColumnDescriptors(E proto) {
+        return dataTablePanel.getDataTableModel().getColumnDescriptors();
     }
 
     // Actions:
