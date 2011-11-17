@@ -39,14 +39,12 @@ public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterAp
 
     @SuppressWarnings("unchecked")
     public MasterApplicationViewerActivity(Place place) {
-        super(TenantViewFactory.instance(MasterApplicationViewerView.class), (AbstractCrudService<MasterApplicationDTO>) GWT
+        super(place, TenantViewFactory.instance(MasterApplicationViewerView.class), (AbstractCrudService<MasterApplicationDTO>) GWT
                 .create(MasterApplicationCrudService.class));
 
-        applicationLister = new ListerActivityBase<ApplicationDTO>(((MasterApplicationViewerView) view).getApplicationsView(),
+        applicationLister = new ListerActivityBase<ApplicationDTO>(place, ((MasterApplicationViewerView) view).getApplicationsView(),
                 (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class), ApplicationDTO.class);
 
-        setPlace(place);
-        applicationLister.setPlace(place);
     }
 
     @Override

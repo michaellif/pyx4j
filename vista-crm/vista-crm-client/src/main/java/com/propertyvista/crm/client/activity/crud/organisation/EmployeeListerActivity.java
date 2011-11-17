@@ -28,8 +28,7 @@ public class EmployeeListerActivity extends ListerActivityBase<Employee> {
 
     @SuppressWarnings("unchecked")
     public EmployeeListerActivity(Place place) {
-        super((EmployeeListerView) OrganizationViewFactory.instance(EmployeeListerView.class), (AbstractCrudService<Employee>) GWT
-                .create(EmployeeCrudService.class), Employee.class);
-        setPlace(place);
+        super(place, OrganizationViewFactory.instance(EmployeeListerView.class), (AbstractCrudService<Employee>) GWT.create(EmployeeCrudService.class),
+                Employee.class);
     }
 }

@@ -39,13 +39,11 @@ public class LeadViewerActivity extends ViewerActivityBase<Lead> implements Lead
 
     @SuppressWarnings("unchecked")
     public LeadViewerActivity(Place place) {
-        super((LeadViewerView) MarketingViewFactory.instance(LeadViewerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
+        super(place, MarketingViewFactory.instance(LeadViewerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
 
-        appointmentsLister = new ListerActivityBase<Appointment>(((LeadViewerView) view).getAppointmentsListerView(),
+        appointmentsLister = new ListerActivityBase<Appointment>(place, ((LeadViewerView) view).getAppointmentsListerView(),
                 (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class), Appointment.class);
 
-        setPlace(place);
-        appointmentsLister.setPlace(place);
     }
 
     @Override

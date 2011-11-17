@@ -76,50 +76,38 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(Place place) {
-        super((BuildingViewerView) BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT
-                .create(BuildingCrudService.class));
+        super(place, BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
 
         dashboard = new DashboardViewActivity(((BuildingViewerView) view).getDashboardView());
 
-        floorplanLister = new ListerActivityBase<FloorplanDTO>(((BuildingViewerView) view).getFloorplanListerView(),
+        floorplanLister = new ListerActivityBase<FloorplanDTO>(place, ((BuildingViewerView) view).getFloorplanListerView(),
                 (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class);
 
-        unitLister = new ListerActivityBase<AptUnitDTO>(((BuildingViewerView) view).getUnitListerView(),
+        unitLister = new ListerActivityBase<AptUnitDTO>(place, ((BuildingViewerView) view).getUnitListerView(),
                 (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class), AptUnitDTO.class);
 
-        elevatorLister = new ListerActivityBase<ElevatorDTO>(((BuildingViewerView) view).getElevatorListerView(),
+        elevatorLister = new ListerActivityBase<ElevatorDTO>(place, ((BuildingViewerView) view).getElevatorListerView(),
                 (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class), ElevatorDTO.class);
 
-        boilerLister = new ListerActivityBase<BoilerDTO>(((BuildingViewerView) view).getBoilerListerView(),
+        boilerLister = new ListerActivityBase<BoilerDTO>(place, ((BuildingViewerView) view).getBoilerListerView(),
                 (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class), BoilerDTO.class);
 
-        roofLister = new ListerActivityBase<RoofDTO>(((BuildingViewerView) view).getRoofListerView(),
+        roofLister = new ListerActivityBase<RoofDTO>(place, ((BuildingViewerView) view).getRoofListerView(),
                 (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class), RoofDTO.class);
 
-        parkingLister = new ListerActivityBase<ParkingDTO>(((BuildingViewerView) view).getParkingListerView(),
+        parkingLister = new ListerActivityBase<ParkingDTO>(place, ((BuildingViewerView) view).getParkingListerView(),
                 (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class), ParkingDTO.class);
 
-        lockerAreaLister = new ListerActivityBase<LockerAreaDTO>(((BuildingViewerView) view).getLockerAreaListerView(),
+        lockerAreaLister = new ListerActivityBase<LockerAreaDTO>(place, ((BuildingViewerView) view).getLockerAreaListerView(),
                 (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class);
 
-        serviceLister = new ListerActivityBase<Service>(((BuildingViewerView) view).getServiceListerView(),
+        serviceLister = new ListerActivityBase<Service>(place, ((BuildingViewerView) view).getServiceListerView(),
                 (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class);
-        featureLister = new ListerActivityBase<Feature>(((BuildingViewerView) view).getFeatureListerView(),
+        featureLister = new ListerActivityBase<Feature>(place, ((BuildingViewerView) view).getFeatureListerView(),
                 (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
-        concessionLister = new ListerActivityBase<Concession>(((BuildingViewerView) view).getConcessionListerView(),
+        concessionLister = new ListerActivityBase<Concession>(place, ((BuildingViewerView) view).getConcessionListerView(),
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
 
-        setPlace(place);
-        floorplanLister.setPlace(place);
-        unitLister.setPlace(place);
-        elevatorLister.setPlace(place);
-        boilerLister.setPlace(place);
-        roofLister.setPlace(place);
-        parkingLister.setPlace(place);
-        lockerAreaLister.setPlace(place);
-        serviceLister.setPlace(place);
-        featureLister.setPlace(place);
-        concessionLister.setPlace(place);
     }
 
     @Override

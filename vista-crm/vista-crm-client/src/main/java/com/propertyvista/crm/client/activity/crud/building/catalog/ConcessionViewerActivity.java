@@ -28,8 +28,6 @@ public class ConcessionViewerActivity extends ViewerActivityBase<Concession> {
 
     @SuppressWarnings("unchecked")
     public ConcessionViewerActivity(Place place) {
-        super((ConcessionViewerView) UnitViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT
-                .create(ConcessionCrudService.class));
-        setPlace(place);
+        super(place, UnitViewFactory.instance(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class));
     }
 }

@@ -28,8 +28,8 @@ public class ComplexEditorAcitvity extends EditorActivityBase<ComplexDTO> implem
 
     @SuppressWarnings("unchecked")
     public ComplexEditorAcitvity(Place place) {
-        super((ComplexEditorView) BuildingViewFactory.instance(ComplexEditorView.class),
-                (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class), ComplexDTO.class);
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(ComplexEditorView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class),
+                ComplexDTO.class);
+
     }
 }

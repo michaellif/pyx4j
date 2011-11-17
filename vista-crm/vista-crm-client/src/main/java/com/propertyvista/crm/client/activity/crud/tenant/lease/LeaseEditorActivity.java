@@ -63,18 +63,17 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @SuppressWarnings("unchecked")
     public LeaseEditorActivity(Place place) {
-        super(TenantViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
+        super(place, TenantViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
 
-        buildingsLister = new ListerActivityBase<Building>(((LeaseEditorView) view).getBuildingListerView(),
+        buildingsLister = new ListerActivityBase<Building>(place, ((LeaseEditorView) view).getBuildingListerView(),
                 (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
 
-        unitsLister = new ListerActivityBase<AptUnit>(((LeaseEditorView) view).getUnitListerView(),
+        unitsLister = new ListerActivityBase<AptUnit>(place, ((LeaseEditorView) view).getUnitListerView(),
                 (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
 
-        tenantsLister = new ListerActivityBase<Tenant>(((LeaseEditorView) view).getTenantListerView(),
+        tenantsLister = new ListerActivityBase<Tenant>(place, ((LeaseEditorView) view).getTenantListerView(),
                 (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class), Tenant.class);
 
-        setPlace(place);
     }
 
     @Override

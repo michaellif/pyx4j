@@ -40,14 +40,13 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
 
     @SuppressWarnings("unchecked")
     public ServiceDictionaryViewActivity(Place place) {
-        this.view = (ServiceDictionaryView) SettingsViewFactory.instance(ServiceDictionaryView.class);
+        this.view = SettingsViewFactory.instance(ServiceDictionaryView.class);
 
-        serviceLister = new ListerActivityBase<ServiceItemType>(view.getServiceListerView(),
+        serviceLister = new ListerActivityBase<ServiceItemType>(place, view.getServiceListerView(),
                 (AbstractCrudService<ServiceItemType>) GWT.create(ServiceItemTypeCrudService.class), ServiceItemType.class);
-        featureLister = new ListerActivityBase<ServiceItemType>(view.getFeatureListerView(),
+        featureLister = new ListerActivityBase<ServiceItemType>(place, view.getFeatureListerView(),
                 (AbstractCrudService<ServiceItemType>) GWT.create(FeatureItemTypeCrudService.class), ServiceItemType.class);
 
-        setPlace(place);
     }
 
     @Override
@@ -61,12 +60,6 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
         ((AbstractActivity) serviceLister).onStop();
         ((AbstractActivity) featureLister).onStop();
         super.onStop();
-    }
-
-    @Override
-    public void setPlace(Place place) {
-        serviceLister.setPlace(place);
-        serviceLister.setPlace(place);
     }
 
     @Override

@@ -28,8 +28,7 @@ public class ElevatorEditorActivity extends EditorActivityBase<ElevatorDTO> {
 
     @SuppressWarnings("unchecked")
     public ElevatorEditorActivity(Place place) {
-        super((ElevatorEditorView) BuildingViewFactory.instance(ElevatorEditorView.class), (AbstractCrudService<ElevatorDTO>) GWT
-                .create(ElevatorCrudService.class), ElevatorDTO.class);
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(ElevatorEditorView.class), (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class),
+                ElevatorDTO.class);
     }
 }

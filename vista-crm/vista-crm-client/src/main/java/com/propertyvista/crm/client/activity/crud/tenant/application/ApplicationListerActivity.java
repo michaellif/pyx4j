@@ -28,9 +28,8 @@ public class ApplicationListerActivity extends ListerActivityBase<ApplicationDTO
 
     @SuppressWarnings("unchecked")
     public ApplicationListerActivity(Place place) {
-        super((ApplicationListerView) TenantViewFactory.instance(ApplicationListerView.class), (AbstractCrudService<ApplicationDTO>) GWT
-                .create(ApplicationCrudService.class), ApplicationDTO.class);
-        setPlace(place);
+        super(place, TenantViewFactory.instance(ApplicationListerView.class), (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class),
+                ApplicationDTO.class);
     }
 
 }

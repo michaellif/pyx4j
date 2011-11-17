@@ -28,8 +28,8 @@ public class DashboardManagementActivity extends ListerActivityBase<DashboardMet
 
     @SuppressWarnings("unchecked")
     public DashboardManagementActivity(Place place) {
-        super((DashboardManagement) DashboardViewFactory.instance(DashboardManagement.class), (AbstractCrudService<DashboardMetadata>) GWT
+        super(place, (DashboardManagement) DashboardViewFactory.instance(DashboardManagement.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
-        setPlace(place);
+
     }
 }

@@ -28,8 +28,7 @@ public class PortfolioListerActivity extends ListerActivityBase<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioListerActivity(Place place) {
-        super((PortfolioListerView) OrganizationViewFactory.instance(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT
-                .create(PortfolioCrudService.class), Portfolio.class);
-        setPlace(place);
+        super(place, OrganizationViewFactory.instance(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class),
+                Portfolio.class);
     }
 }

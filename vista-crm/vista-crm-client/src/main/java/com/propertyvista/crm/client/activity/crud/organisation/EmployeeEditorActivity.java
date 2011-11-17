@@ -28,8 +28,7 @@ public class EmployeeEditorActivity extends EditorActivityBase<Employee> {
 
     @SuppressWarnings("unchecked")
     public EmployeeEditorActivity(Place place) {
-        super((EmployeeEditorView) OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<Employee>) GWT
-                .create(EmployeeCrudService.class), Employee.class);
-        setPlace(place);
+        super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<Employee>) GWT.create(EmployeeCrudService.class),
+                Employee.class);
     }
 }

@@ -28,8 +28,7 @@ public class UnitOccupancyEditorActivity extends EditorActivityBase<AptUnitOccup
 
     @SuppressWarnings("unchecked")
     public UnitOccupancyEditorActivity(Place place) {
-        super((UnitOccupancyEditorView) UnitViewFactory.instance(UnitOccupancyEditorView.class), (AbstractCrudService<AptUnitOccupancy>) GWT
+        super(place, UnitViewFactory.instance(UnitOccupancyEditorView.class), (AbstractCrudService<AptUnitOccupancy>) GWT
                 .create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
-        setPlace(place);
     }
 }

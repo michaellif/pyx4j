@@ -28,8 +28,6 @@ public class ElevatorViewerActivity extends ViewerActivityBase<ElevatorDTO> {
 
     @SuppressWarnings("unchecked")
     public ElevatorViewerActivity(Place place) {
-        super((ElevatorViewerView) BuildingViewFactory.instance(ElevatorViewerView.class), (AbstractCrudService<ElevatorDTO>) GWT
-                .create(ElevatorCrudService.class));
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(ElevatorViewerView.class), (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class));
     }
 }

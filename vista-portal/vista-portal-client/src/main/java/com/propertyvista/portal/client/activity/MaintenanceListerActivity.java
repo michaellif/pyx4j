@@ -33,9 +33,8 @@ public class MaintenanceListerActivity extends ListerActivityBase<MaintenanceReq
 
     @SuppressWarnings("unchecked")
     public MaintenanceListerActivity(Place place) {
-        super((MaintenanceListerView) PortalViewFactory.instance(MaintenanceListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
+        super(place, (MaintenanceListerView) PortalViewFactory.instance(MaintenanceListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceRequestCrudService.class), MaintenanceRequestDTO.class);
-        setPlace(place);
     }
 
     @Override

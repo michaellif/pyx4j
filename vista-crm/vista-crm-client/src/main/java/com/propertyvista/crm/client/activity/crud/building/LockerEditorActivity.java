@@ -28,8 +28,7 @@ public class LockerEditorActivity extends EditorActivityBase<Locker> {
 
     @SuppressWarnings("unchecked")
     public LockerEditorActivity(Place place) {
-        super((LockerEditorView) BuildingViewFactory.instance(LockerEditorView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class),
-                Locker.class);
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(LockerEditorView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
+
     }
 }

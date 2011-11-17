@@ -28,8 +28,7 @@ public class FloorplanEditorActivity extends EditorActivityBase<FloorplanDTO> im
 
     @SuppressWarnings("unchecked")
     public FloorplanEditorActivity(Place place) {
-        super((FloorplanEditorView) BuildingViewFactory.instance(FloorplanEditorView.class), (AbstractCrudService<FloorplanDTO>) GWT
-                .create(FloorplanCrudService.class), FloorplanDTO.class);
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(FloorplanEditorView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class),
+                FloorplanDTO.class);
     }
 }

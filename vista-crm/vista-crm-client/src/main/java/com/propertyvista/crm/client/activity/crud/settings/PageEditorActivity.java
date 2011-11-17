@@ -31,9 +31,8 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
 
     @SuppressWarnings("unchecked")
     public PageEditorActivity(Place place) {
-        super((PageEditor) SettingsViewFactory.instance(PageEditor.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class),
+        super(place, SettingsViewFactory.instance(PageEditor.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class),
                 PageDescriptor.class);
-        setPlace(place);
     }
 
     @Override

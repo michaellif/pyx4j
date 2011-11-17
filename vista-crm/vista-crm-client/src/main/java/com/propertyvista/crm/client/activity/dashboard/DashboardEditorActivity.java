@@ -38,9 +38,9 @@ public class DashboardEditorActivity extends EditorActivityBase<DashboardMetadat
 
     @SuppressWarnings("unchecked")
     public DashboardEditorActivity(Place place) {
-        super((DashboardEditor) DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
+        super(place, (DashboardEditor) DashboardViewFactory.instance(DashboardEditor.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
-        setPlace(place);
+
     }
 
     @Override

@@ -28,8 +28,7 @@ public class UnitOccupancyViewerActivity extends ViewerActivityBase<AptUnitOccup
 
     @SuppressWarnings("unchecked")
     public UnitOccupancyViewerActivity(Place place) {
-        super((UnitOccupancyViewerView) UnitViewFactory.instance(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancy>) GWT
+        super(place, UnitViewFactory.instance(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancy>) GWT
                 .create(UnitOccupancyCrudService.class));
-        setPlace(place);
     }
 }

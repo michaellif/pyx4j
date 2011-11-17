@@ -28,8 +28,7 @@ public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO
 
     @SuppressWarnings("unchecked")
     public ApplicationEditorActivity(Place place) {
-        super((ApplicationEditorView) TenantViewFactory.instance(ApplicationEditorView.class), (AbstractCrudService<ApplicationDTO>) GWT
-                .create(ApplicationCrudService.class), ApplicationDTO.class);
-        setPlace(place);
+        super(place, TenantViewFactory.instance(ApplicationEditorView.class), (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class),
+                ApplicationDTO.class);
     }
 }

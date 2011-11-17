@@ -28,7 +28,6 @@ public class RoofViewerActivity extends ViewerActivityBase<RoofDTO> {
 
     @SuppressWarnings("unchecked")
     public RoofViewerActivity(Place place) {
-        super((RoofViewerView) BuildingViewFactory.instance(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
     }
 }

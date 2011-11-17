@@ -30,8 +30,7 @@ public class PageViewerActivity extends ViewerActivityBase<PageDescriptor> imple
 
     @SuppressWarnings("unchecked")
     public PageViewerActivity(Place place) {
-        super((PageViewer) SettingsViewFactory.instance(PageViewer.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class));
-        setPlace(place);
+        super(place, SettingsViewFactory.instance(PageViewer.class), (AbstractCrudService<PageDescriptor>) GWT.create(PageDescriptorCrudService.class));
     }
 
     @Override

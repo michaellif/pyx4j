@@ -35,13 +35,11 @@ public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implem
 
     @SuppressWarnings("unchecked")
     public ParkingViewerActivity(Place place) {
-        super((ParkingViewerView) BuildingViewFactory.instance(ParkingViewerView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class));
+        super(place, BuildingViewFactory.instance(ParkingViewerView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class));
 
-        spotLister = new ListerActivityBase<ParkingSpot>(((ParkingViewerView) view).getSpotView(),
+        spotLister = new ListerActivityBase<ParkingSpot>(place, ((ParkingViewerView) view).getSpotView(),
                 (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class), ParkingSpot.class);
 
-        setPlace(place);
-        spotLister.setPlace(place);
     }
 
     @Override

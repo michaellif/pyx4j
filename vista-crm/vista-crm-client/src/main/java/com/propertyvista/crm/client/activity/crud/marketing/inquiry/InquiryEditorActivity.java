@@ -43,16 +43,15 @@ public class InquiryEditorActivity extends EditorActivityBase<InquiryDTO> implem
 
     @SuppressWarnings("unchecked")
     public InquiryEditorActivity(Place place) {
-        super((InquiryEditorView) MarketingViewFactory.instance(InquiryEditorView.class), (AbstractCrudService<InquiryDTO>) GWT
-                .create(InquiryCrudService.class), InquiryDTO.class);
+        super(place, MarketingViewFactory.instance(InquiryEditorView.class), (AbstractCrudService<InquiryDTO>) GWT.create(InquiryCrudService.class),
+                InquiryDTO.class);
 
-        buildingsLister = new ListerActivityBase<Building>(((InquiryEditorView) view).getBuildingListerView(),
+        buildingsLister = new ListerActivityBase<Building>(place, ((InquiryEditorView) view).getBuildingListerView(),
                 (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
 
-        unitsLister = new ListerActivityBase<Floorplan>(((InquiryEditorView) view).getFloorplanListerView(),
+        unitsLister = new ListerActivityBase<Floorplan>(place, ((InquiryEditorView) view).getFloorplanListerView(),
                 (AbstractCrudService<Floorplan>) GWT.create(SelectFloorplanCrudService.class), Floorplan.class);
 
-        setPlace(place);
     }
 
     @Override

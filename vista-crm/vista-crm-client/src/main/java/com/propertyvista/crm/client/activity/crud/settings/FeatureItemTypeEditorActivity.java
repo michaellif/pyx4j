@@ -31,9 +31,8 @@ public class FeatureItemTypeEditorActivity extends EditorActivityBase<ServiceIte
 
     @SuppressWarnings("unchecked")
     public FeatureItemTypeEditorActivity(Place place) {
-        super((ServiceTypeEditorView) SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ServiceItemType>) GWT
+        super(place, SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(FeatureItemTypeCrudService.class), ServiceItemType.class);
-        setPlace(place);
     }
 
     @Override

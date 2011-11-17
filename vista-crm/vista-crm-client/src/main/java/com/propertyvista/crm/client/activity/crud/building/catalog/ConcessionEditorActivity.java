@@ -28,8 +28,7 @@ public class ConcessionEditorActivity extends EditorActivityBase<Concession> {
 
     @SuppressWarnings("unchecked")
     public ConcessionEditorActivity(Place place) {
-        super((ConcessionEditorView) UnitViewFactory.instance(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT
-                .create(ConcessionCrudService.class), Concession.class);
-        setPlace(place);
+        super(place, UnitViewFactory.instance(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class),
+                Concession.class);
     }
 }

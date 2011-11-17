@@ -28,8 +28,6 @@ public class ApplicationViewerActivity extends ViewerActivityBase<ApplicationDTO
 
     @SuppressWarnings("unchecked")
     public ApplicationViewerActivity(Place place) {
-        super((ApplicationViewerView) TenantViewFactory.instance(ApplicationViewerView.class), (AbstractCrudService<ApplicationDTO>) GWT
-                .create(ApplicationCrudService.class));
-        setPlace(place);
+        super(place, TenantViewFactory.instance(ApplicationViewerView.class), (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class));
     }
 }

@@ -28,8 +28,7 @@ public class LockerAreaEditorActivity extends EditorActivityBase<LockerAreaDTO> 
 
     @SuppressWarnings("unchecked")
     public LockerAreaEditorActivity(Place place) {
-        super((LockerAreaEditorView) BuildingViewFactory.instance(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT
-                .create(LockerAreaCrudService.class), LockerAreaDTO.class);
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class),
+                LockerAreaDTO.class);
     }
 }

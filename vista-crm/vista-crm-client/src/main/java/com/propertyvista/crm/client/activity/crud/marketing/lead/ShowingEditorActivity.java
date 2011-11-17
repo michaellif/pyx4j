@@ -41,16 +41,14 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
 
     @SuppressWarnings("unchecked")
     public ShowingEditorActivity(Place place) {
-        super((ShowingEditorView) MarketingViewFactory.instance(ShowingEditorView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class),
-                Showing.class);
+        super(place, MarketingViewFactory.instance(ShowingEditorView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class), Showing.class);
 
-        buildingsLister = new ListerActivityBase<Building>(((ShowingEditorView) view).getBuildingListerView(),
+        buildingsLister = new ListerActivityBase<Building>(place, ((ShowingEditorView) view).getBuildingListerView(),
                 (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
 
-        unitsLister = new ListerActivityBase<AptUnit>(((ShowingEditorView) view).getUnitListerView(),
+        unitsLister = new ListerActivityBase<AptUnit>(place, ((ShowingEditorView) view).getUnitListerView(),
                 (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
 
-        setPlace(place);
     }
 
     @Override

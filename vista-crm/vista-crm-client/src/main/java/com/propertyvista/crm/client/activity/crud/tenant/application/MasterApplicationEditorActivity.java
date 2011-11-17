@@ -28,8 +28,7 @@ public class MasterApplicationEditorActivity extends EditorActivityBase<MasterAp
 
     @SuppressWarnings("unchecked")
     public MasterApplicationEditorActivity(Place place) {
-        super((MasterApplicationEditorView) TenantViewFactory.instance(MasterApplicationEditorView.class), (AbstractCrudService<MasterApplicationDTO>) GWT
+        super(place, TenantViewFactory.instance(MasterApplicationEditorView.class), (AbstractCrudService<MasterApplicationDTO>) GWT
                 .create(MasterApplicationCrudService.class), MasterApplicationDTO.class);
-        setPlace(place);
     }
 }

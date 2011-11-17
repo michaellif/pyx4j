@@ -41,16 +41,14 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
 
     @SuppressWarnings("unchecked")
     public ServiceEditorActivity(Place place) {
-        super((ServiceEditorView) MarketingViewFactory.instance(ServiceEditorView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class),
-                Service.class);
+        super(place, MarketingViewFactory.instance(ServiceEditorView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class);
 
-        featureLister = new ListerActivityBase<Feature>(((ServiceEditorView) view).getFeatureListerView(),
+        featureLister = new ListerActivityBase<Feature>(place, ((ServiceEditorView) view).getFeatureListerView(),
                 (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
 
-        concessionLister = new ListerActivityBase<Concession>(((ServiceEditorView) view).getConcessionListerView(),
+        concessionLister = new ListerActivityBase<Concession>(place, ((ServiceEditorView) view).getConcessionListerView(),
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
 
-        setPlace(place);
     }
 
     @Override

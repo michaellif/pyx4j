@@ -37,13 +37,11 @@ public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implemen
 
     @SuppressWarnings("unchecked")
     public TenantViewerActivity(Place place) {
-        super((TenantViewerView) TenantViewFactory.instance(TenantViewerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
+        super(place, TenantViewFactory.instance(TenantViewerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
 
-        screeningLister = new ListerActivityBase<TenantScreening>(((TenantViewerView) view).getScreeningListerView(),
+        screeningLister = new ListerActivityBase<TenantScreening>(place, ((TenantViewerView) view).getScreeningListerView(),
                 (AbstractCrudService<TenantScreening>) GWT.create(TenantScreeningCrudService.class), TenantScreening.class);
 
-        setPlace(place);
-        screeningLister.setPlace(place);
     }
 
     @Override

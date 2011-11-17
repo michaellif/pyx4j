@@ -30,9 +30,8 @@ public class SiteEditorActivity extends EditorActivityBase<SiteDescriptorDTO> im
 
     @SuppressWarnings("unchecked")
     public SiteEditorActivity(Place place) {
-        super((SiteEditor) SettingsViewFactory.instance(SiteEditor.class),
-                (AbstractCrudService<SiteDescriptorDTO>) GWT.create(SiteDescriptorCrudService.class), SiteDescriptorDTO.class);
-        setPlace(place);
+        super(place, SettingsViewFactory.instance(SiteEditor.class), (AbstractCrudService<SiteDescriptorDTO>) GWT.create(SiteDescriptorCrudService.class),
+                SiteDescriptorDTO.class);
     }
 
     @Override

@@ -35,6 +35,8 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 
     protected Key entityId;
 
+    protected Place place;
+
     public BoardViewActivity(V view, Place place) {
         this.view = view;
         assert (view != null);
@@ -45,6 +47,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
     }
 
     public void setPlace(Place place) {
+        this.place = place;
         entityId = null;
 
         String val;
@@ -52,6 +55,10 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         if ((val = ((AppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityId = new Key(val);
         }
+    }
+
+    public Place getPlace() {
+        return place;
     }
 
     protected abstract BoardMetadataServiceBase getService();

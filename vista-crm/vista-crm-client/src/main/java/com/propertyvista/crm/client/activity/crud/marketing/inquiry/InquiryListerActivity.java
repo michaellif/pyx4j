@@ -28,9 +28,7 @@ public class InquiryListerActivity extends ListerActivityBase<Inquiry> {
 
     @SuppressWarnings("unchecked")
     public InquiryListerActivity(Place place) {
-        super((InquiryListerView) MarketingViewFactory.instance(InquiryListerView.class), (AbstractCrudService<Inquiry>) GWT.create(InquiryCrudService.class),
-                Inquiry.class);
-        setPlace(place);
+        super(place, MarketingViewFactory.instance(InquiryListerView.class), (AbstractCrudService<Inquiry>) GWT.create(InquiryCrudService.class), Inquiry.class);
     }
 
 }

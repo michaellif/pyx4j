@@ -36,14 +36,11 @@ public class AppointmentViewerActivity extends ViewerActivityBase<Appointment> i
 
     @SuppressWarnings("unchecked")
     public AppointmentViewerActivity(Place place) {
-        super((AppointmentViewerView) MarketingViewFactory.instance(AppointmentViewerView.class), (AbstractCrudService<Appointment>) GWT
-                .create(AppointmentCrudService.class));
+        super(place, MarketingViewFactory.instance(AppointmentViewerView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class));
 
-        showingsLister = new ListerActivityBase<Showing>(((AppointmentViewerView) view).getShowingsListerView(),
+        showingsLister = new ListerActivityBase<Showing>(place, ((AppointmentViewerView) view).getShowingsListerView(),
                 (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class), Showing.class);
 
-        setPlace(place);
-        showingsLister.setPlace(place);
     }
 
     @Override

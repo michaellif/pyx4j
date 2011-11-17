@@ -31,9 +31,7 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
 
     @SuppressWarnings("unchecked")
     public TenantEditorActivity(Place place) {
-        super((TenantEditorView) TenantViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
-                TenantDTO.class);
-        setPlace(place);
+        super(place, TenantViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class), TenantDTO.class);
     }
 
     @Override

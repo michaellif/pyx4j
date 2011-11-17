@@ -35,14 +35,11 @@ public class LockerAreaViewerActivity extends ViewerActivityBase<LockerAreaDTO> 
 
     @SuppressWarnings("unchecked")
     public LockerAreaViewerActivity(Place place) {
-        super((LockerAreaViewerView) BuildingViewFactory.instance(LockerAreaViewerView.class), (AbstractCrudService<LockerAreaDTO>) GWT
-                .create(LockerAreaCrudService.class));
+        super(place, BuildingViewFactory.instance(LockerAreaViewerView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class));
 
-        lockerLister = new ListerActivityBase<Locker>(((LockerAreaViewerView) view).getLockerView(),
+        lockerLister = new ListerActivityBase<Locker>(place, ((LockerAreaViewerView) view).getLockerView(),
                 (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
 
-        setPlace(place);
-        lockerLister.setPlace(place);
     }
 
     @Override

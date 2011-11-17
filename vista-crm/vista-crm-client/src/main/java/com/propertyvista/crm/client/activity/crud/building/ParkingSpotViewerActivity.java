@@ -28,9 +28,8 @@ public class ParkingSpotViewerActivity extends ViewerActivityBase<ParkingSpot> {
 
     @SuppressWarnings("unchecked")
     public ParkingSpotViewerActivity(Place place) {
-        super((ParkingSpotViewerView) BuildingViewFactory.instance(ParkingSpotViewerView.class), (AbstractCrudService<ParkingSpot>) GWT
-                .create(ParkingSpotCrudService.class));
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(ParkingSpotViewerView.class), (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class));
+
     }
 
 }

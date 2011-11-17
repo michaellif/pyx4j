@@ -28,8 +28,8 @@ public class BuildingListerActivity extends ListerActivityBase<BuildingDTO> {
 
     @SuppressWarnings("unchecked")
     public BuildingListerActivity(Place place) {
-        super((BuildingListerView) BuildingViewFactory.instance(BuildingListerView.class), (AbstractCrudService<BuildingDTO>) GWT
-                .create(BuildingCrudService.class), BuildingDTO.class);
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(BuildingListerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class),
+                BuildingDTO.class);
+
     }
 }

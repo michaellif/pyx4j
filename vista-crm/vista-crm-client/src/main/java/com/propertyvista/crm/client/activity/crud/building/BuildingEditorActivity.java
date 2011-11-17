@@ -28,8 +28,8 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> impl
 
     @SuppressWarnings("unchecked")
     public BuildingEditorActivity(Place place) {
-        super((BuildingEditorView) BuildingViewFactory.instance(BuildingEditorView.class), (AbstractCrudService<BuildingDTO>) GWT
-                .create(BuildingCrudService.class), BuildingDTO.class);
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(BuildingEditorView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class),
+                BuildingDTO.class);
+
     }
 }

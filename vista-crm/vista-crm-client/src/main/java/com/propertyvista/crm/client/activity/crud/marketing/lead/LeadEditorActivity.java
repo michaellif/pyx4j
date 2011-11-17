@@ -28,7 +28,6 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> {
 
     @SuppressWarnings("unchecked")
     public LeadEditorActivity(Place place) {
-        super((LeadEditorView) MarketingViewFactory.instance(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
-        setPlace(place);
+        super(place, MarketingViewFactory.instance(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
     }
 }

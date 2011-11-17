@@ -28,8 +28,7 @@ public class FeatureItemTypeViewerActivity extends ViewerActivityBase<ServiceIte
 
     @SuppressWarnings("unchecked")
     public FeatureItemTypeViewerActivity(Place place) {
-        super((ServiceTypeViewerView) SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ServiceItemType>) GWT
+        super(place, SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(FeatureItemTypeCrudService.class));
-        setPlace(place);
     }
 }

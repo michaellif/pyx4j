@@ -28,8 +28,7 @@ public class TenantScreeningViewerActivity extends ViewerActivityBase<TenantScre
 
     @SuppressWarnings("unchecked")
     public TenantScreeningViewerActivity(Place place) {
-        super((TenantScreeningViewerView) TenantViewFactory.instance(TenantScreeningViewerView.class), (AbstractCrudService<TenantScreening>) GWT
+        super(place, TenantViewFactory.instance(TenantScreeningViewerView.class), (AbstractCrudService<TenantScreening>) GWT
                 .create(TenantScreeningCrudService.class));
-        setPlace(place);
     }
 }

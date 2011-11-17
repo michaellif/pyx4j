@@ -28,8 +28,6 @@ public class EmployeeViewerActivity extends ViewerActivityBase<Employee> {
 
     @SuppressWarnings("unchecked")
     public EmployeeViewerActivity(Place place) {
-        super((EmployeeViewerView) OrganizationViewFactory.instance(EmployeeViewerView.class), (AbstractCrudService<Employee>) GWT
-                .create(EmployeeCrudService.class));
-        setPlace(place);
+        super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), (AbstractCrudService<Employee>) GWT.create(EmployeeCrudService.class));
     }
 }

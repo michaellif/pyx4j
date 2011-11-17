@@ -40,15 +40,13 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
 
     @SuppressWarnings("unchecked")
     public ComplexViewerActivity(Place place) {
-        super((ComplexViewerView) BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
+        super(place, BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
         dashboardViewActivity = new DashboardViewActivity(getView().getDashboardView());
 
-        buildingListerActivity = new ListerActivityBase<BuildingDTO>(getView().getBuildingListerView(),
+        buildingListerActivity = new ListerActivityBase<BuildingDTO>(place, getView().getBuildingListerView(),
                 (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class), BuildingDTO.class);
 
-        setPlace(place);
-        buildingListerActivity.setPlace(place);
     }
 
     private ComplexViewerView getView() {

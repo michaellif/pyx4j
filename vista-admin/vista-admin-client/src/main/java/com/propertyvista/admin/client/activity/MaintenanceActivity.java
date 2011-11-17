@@ -54,11 +54,6 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
     }
 
     @Override
-    public void setPlace(Place place) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void populate() {
         service.getSystemMaintenanceState(new AsyncCallback<SystemMaintenanceState>() {
             @Override

@@ -31,9 +31,7 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
     @SuppressWarnings("unchecked")
     public FeatureEditorActivity(Place place) {
-        super((FeatureEditorView) MarketingViewFactory.instance(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class),
-                Feature.class);
-        setPlace(place);
+        super(place, MarketingViewFactory.instance(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
     }
 
     @Override

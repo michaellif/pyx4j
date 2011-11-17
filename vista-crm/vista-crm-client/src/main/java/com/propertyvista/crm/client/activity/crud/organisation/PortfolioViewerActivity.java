@@ -28,8 +28,6 @@ public class PortfolioViewerActivity extends ViewerActivityBase<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioViewerActivity(Place place) {
-        super((PortfolioViewerView) OrganizationViewFactory.instance(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT
-                .create(PortfolioCrudService.class));
-        setPlace(place);
+        super(place, OrganizationViewFactory.instance(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
     }
 }

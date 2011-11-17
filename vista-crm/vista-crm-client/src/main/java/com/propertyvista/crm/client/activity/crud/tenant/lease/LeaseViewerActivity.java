@@ -31,8 +31,7 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
 
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(Place place) {
-        super((LeaseViewerView) TenantViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
-        setPlace(place);
+        super(place, TenantViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
     }
 
     @Override

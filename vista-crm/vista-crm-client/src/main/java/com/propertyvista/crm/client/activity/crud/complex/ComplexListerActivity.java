@@ -29,8 +29,7 @@ public class ComplexListerActivity extends ListerActivityBase<ComplexDTO> {
 
     @SuppressWarnings("unchecked")
     public ComplexListerActivity(Place place) {
-        super((IListerView<ComplexDTO>) BuildingViewFactory.instance(ComplexListerView.class), (AbstractCrudService<ComplexDTO>) GWT
+        super(place, (IListerView<ComplexDTO>) BuildingViewFactory.instance(ComplexListerView.class), (AbstractCrudService<ComplexDTO>) GWT
                 .create(ComplexCrudService.class), ComplexDTO.class);
-        setPlace(place);
     }
 }

@@ -28,8 +28,6 @@ public class FloorplanViewerActivity extends ViewerActivityBase<FloorplanDTO> im
 
     @SuppressWarnings("unchecked")
     public FloorplanViewerActivity(Place place) {
-        super((FloorplanViewerView) BuildingViewFactory.instance(FloorplanViewerView.class), (AbstractCrudService<FloorplanDTO>) GWT
-                .create(FloorplanCrudService.class));
-        setPlace(place);
+        super(place, BuildingViewFactory.instance(FloorplanViewerView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
     }
 }

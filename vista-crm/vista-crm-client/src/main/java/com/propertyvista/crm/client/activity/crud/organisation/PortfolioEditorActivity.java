@@ -28,8 +28,7 @@ public class PortfolioEditorActivity extends EditorActivityBase<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioEditorActivity(Place place) {
-        super((PortfolioEditorView) OrganizationViewFactory.instance(PortfolioEditorView.class), (AbstractCrudService<Portfolio>) GWT
-                .create(PortfolioCrudService.class), Portfolio.class);
-        setPlace(place);
+        super(place, OrganizationViewFactory.instance(PortfolioEditorView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class),
+                Portfolio.class);
     }
 }

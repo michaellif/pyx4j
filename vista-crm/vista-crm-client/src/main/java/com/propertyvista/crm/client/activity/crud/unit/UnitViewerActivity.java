@@ -40,17 +40,14 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
 
     @SuppressWarnings("unchecked")
     public UnitViewerActivity(Place place) {
-        super((UnitViewerView) UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
+        super(place, UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
 
-        unitItemsLister = new ListerActivityBase<AptUnitItem>(((UnitViewerView) view).getUnitItemsListerView(),
+        unitItemsLister = new ListerActivityBase<AptUnitItem>(place, ((UnitViewerView) view).getUnitItemsListerView(),
                 (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
 
-        OccupanciesLister = new ListerActivityBase<AptUnitOccupancy>(((UnitViewerView) view).getOccupanciesListerView(),
+        OccupanciesLister = new ListerActivityBase<AptUnitOccupancy>(place, ((UnitViewerView) view).getOccupanciesListerView(),
                 (AbstractCrudService<AptUnitOccupancy>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
 
-        setPlace(place);
-        unitItemsLister.setPlace(place);
-        OccupanciesLister.setPlace(place);
     }
 
     @Override

@@ -28,8 +28,7 @@ public class AppointmentEditorActivity extends EditorActivityBase<Appointment> {
 
     @SuppressWarnings("unchecked")
     public AppointmentEditorActivity(Place place) {
-        super((AppointmentEditorView) MarketingViewFactory.instance(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT
-                .create(AppointmentCrudService.class), Appointment.class);
-        setPlace(place);
+        super(place, MarketingViewFactory.instance(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class),
+                Appointment.class);
     }
 }

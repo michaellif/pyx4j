@@ -28,7 +28,6 @@ public class ShowingViewerActivity extends ViewerActivityBase<Showing> {
 
     @SuppressWarnings("unchecked")
     public ShowingViewerActivity(Place place) {
-        super((ShowingViewerView) MarketingViewFactory.instance(ShowingViewerView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class));
-        setPlace(place);
+        super(place, MarketingViewFactory.instance(ShowingViewerView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class));
     }
 }
