@@ -39,6 +39,9 @@ public abstract class AbstractListServiceImpl<E extends IEntity> implements Abst
         this.entityClass = entityClass;
     }
 
+    /**
+     * This function is empty no need to call when you override this method
+     */
     protected void enhanceListRetrieved(E entity) {
     }
 
