@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextArea;
@@ -176,6 +177,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             currentValue.suggestedDecision().setValue(decision);
             currentValue.decidedBy().set(employee.getValue());
             currentValue.decisionReason().setValue(reason.getValue());
+            currentValue.decisionDate().setValue(new LogicalDate());
             return currentValue;
         }
     }
