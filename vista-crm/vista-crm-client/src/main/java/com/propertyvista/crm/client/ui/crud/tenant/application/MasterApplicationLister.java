@@ -30,7 +30,7 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
     @Override
     protected void fillDefaultColumnDescriptors(List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors, MasterApplicationDTO proto) {
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().type()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit().belongsTo().propertyCode()));
@@ -52,7 +52,7 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
     @Override
     protected void fillAvailableColumnDescriptors(List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors, MasterApplicationDTO proto) {
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().type()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().unit().belongsTo().propertyCode()));
