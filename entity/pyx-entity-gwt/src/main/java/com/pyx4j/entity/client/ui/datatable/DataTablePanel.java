@@ -222,6 +222,6 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void setFiltersVisible(boolean visible) {
-        filterPanel.setVisible(visible);
+        filterButton.setVisible(visible);
     }
 }

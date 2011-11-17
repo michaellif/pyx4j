@@ -291,10 +291,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         return dataTablePanel;
     }
 
-    public void setFiltersVisible(boolean b) {
-        dataTablePanel.setFiltersVisible(b);
-    }
-
     /**
      * Implement in derived class to set default table columns set.
      * Note, that it's called from within constructor!
