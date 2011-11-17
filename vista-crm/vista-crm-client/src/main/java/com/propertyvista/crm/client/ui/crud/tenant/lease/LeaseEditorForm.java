@@ -18,11 +18,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
@@ -31,7 +29,6 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
@@ -40,11 +37,10 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.financial.offering.ServiceItem;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -125,11 +121,12 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     LeaseDTO value = getValue();
                     ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedDates(value.leaseFrom().getValue(), value
                             .leaseTo().getValue());
-                    new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
+                    new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox(((LeaseEditorView) getParentView()).getBuildingListerView(),
+                            ((LeaseEditorView) getParentView()).getUnitListerView())) {
                         @Override
                         protected void onClose(SelectUnitBox box) {
-                            if (box.getSelectedItem() != null) {
-                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
+                            if (box.isOk()) {
+                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedUnit());
                             }
                         }
                     };
@@ -186,7 +183,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
         serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 50).build());
         if (isEditable()) {
-            serviceItemPanel.add(new Button("Select...", new ClickHandler() {
+            serviceItemPanel.add(new AnchorButton("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
@@ -195,7 +192,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         new ShowPopUpBox<SelectServiceItemBox>(new SelectServiceItemBox()) {
                             @Override
                             protected void onClose(SelectServiceItemBox box) {
-                                if (box.getSelectedItem() != null) {
+                                if (box.isOk()) {
                                     ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
                                 }
                             }
@@ -232,50 +229,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
 //
 // Selection Boxes:
-
-    private class SelectUnitBox extends OkCancelBox {
-
-        private AptUnit selectedItem;
-
-        public SelectUnitBox() {
-            super("Unit Selection");
-            setContent(createContent());
-        }
-
-        protected Widget createContent() {
-            okButton.setEnabled(false);
-            ((LeaseEditorView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
-                @Override
-                public void onSelect(AptUnit selected) {
-                    selectedItem = selected;
-                    okButton.setEnabled(true);
-                }
-            });
-
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building") + ":"));
-            vPanel.add(((LeaseEditorView) getParentView()).getBuildingListerView().asWidget());
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit") + ":"));
-            vPanel.add(((LeaseEditorView) getParentView()).getUnitListerView().asWidget());
-            vPanel.setWidth("100%");
-            return vPanel;
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("900px", "500px");
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedItem = null;
-        }
-
-        protected AptUnit getSelectedItem() {
-            return selectedItem;
-        }
-    }
-
     private class SelectServiceItemBox extends OkCancelBox {
 
         private CComboBox<ServiceItem> combo;
@@ -292,6 +245,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             if (!getValue().selectedServiceItems().isEmpty()) {
                 okButton.setEnabled(true);
+
                 combo = new CComboBox<ServiceItem>() {
                     @Override
                     public String getItemName(ServiceItem o) {
@@ -307,10 +261,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ServiceItem> event) {
-                        okButton.setEnabled(event.getValue() != null);
+                        okButton.setEnabled((selectedItem = event.getValue()) != null);
                     }
                 });
                 combo.setWidth("100%");
+
                 return combo.asWidget();
             } else {
                 return new HTML(i18n.tr("There are no Service Items"));
@@ -324,14 +279,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         @Override
-        protected boolean onOk() {
-            selectedItem = combo.getValue();
-            return super.onOk();
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedItem = null;
+        public boolean isOk() {
+            return (super.onOk() && selectedItem != null);
         }
 
         protected ServiceItem getSelectedItem() {

@@ -118,9 +118,9 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
+                    new ShowPopUpBox<SelectFloorplanBox>(new SelectFloorplanBox()) {
                         @Override
-                        protected void onClose(SelectUnitBox box) {
+                        protected void onClose(SelectFloorplanBox box) {
                             if (box.getSelectedItem() != null) {
                                 ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(box.getSelectedItem());
                             }
@@ -162,11 +162,11 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     //
     //Selection Boxes:
 
-    private class SelectUnitBox extends OkCancelBox {
+    private class SelectFloorplanBox extends OkCancelBox {
 
         private Floorplan selectedItem;
 
-        public SelectUnitBox() {
+        public SelectFloorplanBox() {
             super("Building/Floorplan Selection");
             setContent(createContent());
         }

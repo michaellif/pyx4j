@@ -17,22 +17,17 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
+import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 public class ShowingEditorForm extends CrmEntityForm<Showing> {
@@ -58,10 +53,11 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
             unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox()) {
+                    new ShowPopUpBox<SelectUnitBox>(new SelectUnitBox(((ShowingEditorView) getParentView()).getBuildingListerView(),
+                            ((ShowingEditorView) getParentView()).getUnitListerView())) {
                         @Override
                         protected void onClose(SelectUnitBox box) {
-                            if (box.getSelectedUnit() != null) {
+                            if (box.isOk()) {
                                 ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedUnit());
                             }
                         }
@@ -82,51 +78,5 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
-    }
-
-    //
-    // Selection Boxes:
-    //
-    private class SelectUnitBox extends OkCancelBox {
-
-        private AptUnit selectedUnit;
-
-        public SelectUnitBox() {
-            super("Unit Selection");
-            setContent(createContent());
-        }
-
-        protected Widget createContent() {
-            okButton.setEnabled(false);
-            ((ShowingEditorView) getParentView()).getUnitListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
-                @Override
-                public void onSelect(AptUnit selectedItem) {
-                    selectedUnit = selectedItem;
-                    okButton.setEnabled(true);
-                }
-            });
-
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building") + ":"));
-            vPanel.add(((ShowingEditorView) getParentView()).getBuildingListerView().asWidget());
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Unit") + ":"));
-            vPanel.add(((ShowingEditorView) getParentView()).getUnitListerView().asWidget());
-            vPanel.setWidth("100%");
-            return vPanel;
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("900px", "500px");
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedUnit = null;
-        }
-
-        protected AptUnit getSelectedUnit() {
-            return selectedUnit;
-        }
     }
 }
