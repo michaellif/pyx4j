@@ -14,6 +14,7 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,12 +33,16 @@ public interface MasterApplicationDTO extends MasterApplication {
 
     IPrimitive<Integer> numberOfGuarantors();
 
+    @Format("#0.00")
     IPrimitive<Double> rentPrice();
 
+    @Format("#0.00")
     IPrimitive<Double> parkingPrice();
 
+    @Format("#0.00")
     IPrimitive<Double> otherPrice();
 
+    @Format("#0.00")
     IPrimitive<Double> deposit();
 
     @Caption(name = "Promotions/Discounts")
