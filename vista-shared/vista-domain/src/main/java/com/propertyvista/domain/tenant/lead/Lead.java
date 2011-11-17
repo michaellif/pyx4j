@@ -96,11 +96,11 @@ public interface Lead extends IEntity {
     @EmbeddedEntity
     Person person();
 
-    @Caption(name = "Desired move-in date")
+    @Caption(name = "Move-in date")
     IPrimitive<LogicalDate> moveInDate();
 
     @ToString(index = 1)
-    @Caption(name = "Desired Lease Length")
+    @Caption(name = "Lease Length")
     IPrimitive<LeaseTerm> leaseTerm();
 
     @Transient
