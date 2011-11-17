@@ -133,7 +133,7 @@ public class EntityMetaWriter {
         final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
         List<String> businessEqualMemberNames = new Vector<String>();
 
-        List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType);
+        List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType, true);
 
         String ownerMemberName = null;
 

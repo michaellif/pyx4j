@@ -103,15 +103,18 @@ class ContextHelper {
         return numberType == valueClass.getSuperclass();
     }
 
-    List<JMethod> getAllEntityMethods(JClassType interfaceType) {
+    List<JMethod> getAllEntityMethods(JClassType interfaceType, boolean forMetadata) {
         Set<String> uniqueNames = new HashSet<String>();
         List<JMethod> allMethods = new Vector<JMethod>();
-        getAllEntityMethods(interfaceType, uniqueNames, allMethods);
+        getAllEntityMethods(interfaceType, uniqueNames, allMethods, forMetadata);
         return allMethods;
     }
 
-    void getAllEntityMethods(JClassType interfaceType, Set<String> uniqueNames, List<JMethod> allMethods) {
+    void getAllEntityMethods(JClassType interfaceType, Set<String> uniqueNames, List<JMethod> allMethods, boolean forMetadata) {
         for (JMethod method : interfaceType.getMethods()) {
+            if (!forMetadata && IEntity.PRIMARY_KEY.equals(method.getName())) {
+                continue;
+            }
             if (isEntityMember(method) && !uniqueNames.contains(method.getName())) {
                 allMethods.add(method);
                 uniqueNames.add(method.getName());
@@ -121,7 +124,7 @@ class ContextHelper {
             if ((impls == iEnentityInterfaceType) || (impls == iObjectInterfaceType)) {
                 continue;
             } else {
-                getAllEntityMethods(impls, uniqueNames, allMethods);
+                getAllEntityMethods(impls, uniqueNames, allMethods, forMetadata);
             }
         }
     }

@@ -73,8 +73,18 @@ public class EntityOperationsMeta {
 
     EntityOperationsMeta(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
         mainEntityMeta = entityMeta;
-        build(dialect, dialect.getNamingConvention(), entityMeta, GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()), null, null, entityMeta);
+        String path = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass());
+        build(dialect, dialect.getNamingConvention(), entityMeta, path, null, null, entityMeta);
         this.mappings = mappings;
+
+        // Create meta for PK
+        {
+            MemberMeta memberMeta = entityMeta.getMemberMeta(IEntity.PRIMARY_KEY);
+            ValueAdapter valueAdapter = createValueAdapter(dialect, memberMeta);
+            MemberOperationsMeta member = new MemberOperationsMeta(new EntityMemberDirectAccess(IEntity.PRIMARY_KEY), valueAdapter, IEntity.PRIMARY_KEY,
+                    memberMeta, path + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR);
+            membersByPath.put(member.getMemberPath(), member);
+        }
     }
 
     public EntityMeta entityMeta() {

@@ -118,7 +118,7 @@ public class EntityHandlerWriter {
         writer.println("}");
 
         // Create all members
-        List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType);
+        List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType, false);
         if (optimizeForJS) {
             writer.println();
 

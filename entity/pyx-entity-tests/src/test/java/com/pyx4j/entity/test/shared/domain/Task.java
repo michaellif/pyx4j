@@ -22,7 +22,9 @@ package com.pyx4j.entity.test.shared.domain;
 
 import java.util.Date;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -32,6 +34,10 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 @Table(prefix = "test")
 //@Cached
 public interface Task extends IEntity {
+
+    @Override
+    @Caption(name = "Task Id")
+    IPrimitive<Key> id();
 
     IPrimitive<Boolean> finished();
 

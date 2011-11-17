@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -57,6 +58,20 @@ public class EntityMetaTest extends InitializerTestCase {
         MemberMeta setMemberMeta = emp.tasks().getMeta();
         assertEquals("ISet Meta valueClass", Task.class, setMemberMeta.getValueClass());
         assertEquals("ISet Meta valueClass", ObjectClassType.EntitySet, setMemberMeta.getObjectClassType());
+    }
+
+    public void testPrimaryKeyDeclaration() {
+        EntityMeta metaRegular = EntityFactory.getEntityMeta(Employee.class);
+
+        assertFalse("has PK member", metaRegular.getMemberNames().contains(IEntity.PRIMARY_KEY));
+        MemberMeta memberMetaRegular = metaRegular.getMemberMeta(IEntity.PRIMARY_KEY);
+        assertEquals("caption", "Id", memberMetaRegular.getCaption());
+
+        EntityMeta metaOverride = EntityFactory.getEntityMeta(Task.class);
+
+        assertFalse("has PK member", metaOverride.getMemberNames().contains(IEntity.PRIMARY_KEY));
+        MemberMeta memberMetaOverride = metaOverride.getMemberMeta(IEntity.PRIMARY_KEY);
+        assertEquals("caption", "Task Id", memberMetaOverride.getCaption());
     }
 
     @Transient
