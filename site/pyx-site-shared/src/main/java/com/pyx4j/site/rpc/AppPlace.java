@@ -55,6 +55,11 @@ public class AppPlace extends Place {
     public AppPlace() {
     }
 
+    public AppPlace withArg(String key, String value) {
+        this.putArg(key, value);
+        return this;
+    }
+
     public void putArg(String key, String value) {
         if (args == null) {
             args = new HashMap<String, List<String>>();
