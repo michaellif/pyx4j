@@ -359,6 +359,10 @@ public class PTGenerator {
     private TenantSummaryGDO createTenantSummary(User user, int index) {
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
 
+        // Tenant as person, first to have the same random names
+        tenantSummary.tenant().type().setValue(Type.person);
+        tenantSummary.tenant().person().set(CommonsGenerator.createPerson());
+
         // Join the objects
         tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
         tenantSummary.tenantScreening().tenant().set(tenantSummary.tenant());
@@ -389,10 +393,6 @@ public class PTGenerator {
             tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);
         }
         tenantSummary.tenantInLease().takeOwnership().setValue(RandomUtil.randomBoolean());
-
-        // Tenant as person
-        tenantSummary.tenant().type().setValue(Type.person);
-        tenantSummary.tenant().person().set(CommonsGenerator.createPerson());
 
         if (index == 0) {
             tenantSummary.tenant().person().name().namePrefix().setValue("");

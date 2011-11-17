@@ -20,7 +20,7 @@ import com.propertyvista.domain.DemoData;
 @SuppressWarnings("serial")
 public final class VistaDevPreloadConfig implements Serializable {
 
-    public long ptGenerationSeed = 100;
+    public long ptGenerationSeed = 105;
 
     public long buildingsGenerationSeed = 100;
 
