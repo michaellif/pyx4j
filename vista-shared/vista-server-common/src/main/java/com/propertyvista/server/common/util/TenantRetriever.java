@@ -15,6 +15,7 @@ package com.propertyvista.server.common.util;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
@@ -59,6 +60,9 @@ public class TenantRetriever {
         EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
         tenantScreening = Persistence.service().retrieve(criteria);
+        if (tenantScreening == null) {
+            tenantScreening = EntityFactory.create(TenantScreening.class);
+        }
 
         if (financial) {
             Persistence.service().retrieve(tenantScreening.documents());
