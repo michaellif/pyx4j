@@ -57,9 +57,6 @@ import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.inquiry.InquiryEditorActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.inquiry.InquiryListerActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.inquiry.InquiryViewerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentListerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentViewerActivity;
@@ -328,7 +325,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-// - Tenant-related:
                 } else if (place instanceof Marketing.Lead) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -368,6 +364,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+// - Tenant-related:
                 } else if (place instanceof CrmSiteMap.Tenants.Tenant) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
@@ -430,18 +427,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof Marketing.Inquiry) {
-                    switch (((CrudAppPlace) place).getType()) {
-                    case editor:
-                        activity = new InquiryEditorActivity(place);
-                        break;
-                    case viewer:
-                        activity = new InquiryViewerActivity(place);
-                        break;
-                    case lister:
-                        activity = new InquiryListerActivity(place);
-                        break;
-                    }
 // - Organisation-related:
                 } else if (place instanceof CrmSiteMap.Organization.Employee) {
                     switch (((CrudAppPlace) place).getType()) {

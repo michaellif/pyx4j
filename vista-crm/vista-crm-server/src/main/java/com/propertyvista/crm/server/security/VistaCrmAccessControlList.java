@@ -24,14 +24,13 @@ import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.AppointmentCrudService;
-import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
+import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.rpc.services.FloorplanCrudService;
-import com.propertyvista.crm.rpc.services.InquiryCrudService;
 import com.propertyvista.crm.rpc.services.LeadCrudService;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
@@ -72,7 +71,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.tenant.Inquiry;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
@@ -175,9 +173,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Application.class, EntityPermission.ALL));
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ApplicationCrudService.class));
-
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Inquiry.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(InquiryCrudService.class));
 
         grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 

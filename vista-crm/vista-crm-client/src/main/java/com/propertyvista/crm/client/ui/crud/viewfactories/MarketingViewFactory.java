@@ -28,12 +28,6 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEdit
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerView;
 import com.propertyvista.crm.client.ui.crud.building.catalog.service.ServiceViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryEditorView;
-import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryListerView;
-import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryViewerView;
-import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorView;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentListerView;
@@ -69,13 +63,6 @@ public class MarketingViewFactory extends ViewFactoryBase {
                 map.put(type, new ConcessionViewerViewImpl());
             } else if (ConcessionEditorView.class.equals(type)) {
                 map.put(type, new ConcessionEditorViewImpl());
-
-            } else if (InquiryListerView.class.equals(type)) {
-                map.put(type, new InquiryListerViewImpl());
-            } else if (InquiryViewerView.class.equals(type)) {
-                map.put(type, new InquiryViewerViewImpl());
-            } else if (InquiryEditorView.class.equals(type)) {
-                map.put(type, new InquiryEditorViewImpl());
 
             } else if (LeadListerView.class.equals(type)) {
                 map.put(type, new LeadListerViewImpl());

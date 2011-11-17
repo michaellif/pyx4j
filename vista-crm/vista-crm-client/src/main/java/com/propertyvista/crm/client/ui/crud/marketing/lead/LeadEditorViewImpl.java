@@ -20,7 +20,6 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.SelectedFloorplanLister;
-import com.propertyvista.crm.client.ui.crud.marketing.inquiry.InquiryEditorView;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,7 +38,7 @@ public class LeadEditorViewImpl extends CrmEditorViewImplBase<Lead> implements L
         buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
             @Override
             public void onSelect(Building selectedItem) {
-                ((InquiryEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
+                ((LeadEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
             }
         });
         floorplanLister = new ListerInternalViewImplBase<Floorplan>(new SelectedFloorplanLister(/* readOnly */));
