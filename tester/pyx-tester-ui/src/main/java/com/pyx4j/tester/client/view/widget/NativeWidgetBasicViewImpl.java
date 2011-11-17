@@ -65,8 +65,10 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
         main.setWidget(++row, 0, textBox);
         main.setWidget(++row, 0, datePicker);
 
-        //DatePickerComposite datePickerMulti = new DatePickerComposite(2, starting, minDate, maxDate, new ArrayList<Date>());
-        //main.setWidget(++row, 0, datePickerMulti);
+        main.setHR(++row, 0, 1);
+
+        DatePickerComposite datePickerMulti = new DatePickerComposite(3, starting, minDate, maxDate, new ArrayList<Date>());
+        main.setWidget(++row, 0, datePickerMulti);
 
         add(main);
     }

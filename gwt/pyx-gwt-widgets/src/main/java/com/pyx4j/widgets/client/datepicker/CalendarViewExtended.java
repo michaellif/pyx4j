@@ -45,8 +45,8 @@ public class CalendarViewExtended extends CalendarView {
 
     private final String[] daysOfWeek = new String[7];
 
-    public CalendarViewExtended(Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
-        grid = new DateGrid(minDate, maxDate, disabledDates);
+    public CalendarViewExtended(Date minDate, Date maxDate, ArrayList<Date> disabledDates, boolean inMultiple) {
+        grid = new DateGrid(minDate, maxDate, disabledDates, inMultiple);
         grid.addClickHandler(new ClickHandler() {
 
             @Override

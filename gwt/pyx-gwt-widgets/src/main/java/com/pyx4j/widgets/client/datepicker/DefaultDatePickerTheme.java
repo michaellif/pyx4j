@@ -31,9 +31,9 @@ public class DefaultDatePickerTheme extends Theme {
     public static enum StyleName implements IStyleName {
         DatePickerMultyMonth, DatePickerGrid, DatePickerMonthSelector, DatePickerGridDaysRow, DatePickerNavigation,
 
-        DatePickerMonthLabel, DatePickerYearLabel, DatePickerYearNavigation,
+        DatePickerMonthLabel, DatePickerYearLabel, DatePickerMonthYearLabel, DatePickerYearNavigation, monthSelectorNavigation,
 
-        DatePickerDay, DatePickerWeekdayLabel, DatePickerWeekendLabel, DatePickerTodayDay, DatePickerWeekendDay
+        DatePickerDay, DatePickerWeekdayLabel, DatePickerWeekendLabel, DatePickerTodayDay, DatePickerWeekendDay, DatePickerMonth, DatePickerNextButton, DatePickerPreviousButton;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -67,6 +67,7 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("width", "100%");
         style.addProperty("margin", "0");
         style.addProperty("padding", "0");
+        style.addProperty("height", "25px");
         addStyle(style);
 
         style = new Style(".", StyleName.DatePickerMonthLabel);
@@ -114,11 +115,15 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("width", "70px");
         addStyle(style);
 
+        style = new Style(".", StyleName.DatePickerMonthYearLabel);
+        style.addProperty("width", "200px");
+        addStyle(style);
+
         //style = new Style(" .monthSelectorNavigation.right");
         //style.addProperty("border-right", "1px solid #A8B8B8");
         //addStyle(style);
 
-        style = new Style(" .monthSelectorNavigation");
+        style = new Style(" .", StyleName.monthSelectorNavigation);
         style.addProperty("width", "15%");
         addStyle(style);
 
@@ -172,7 +177,7 @@ public class DefaultDatePickerTheme extends Theme {
 //        style.addProperty("background", "#BBDDD9 none repeat scroll 0 0");
 //        addStyle(style);
 
-        style = new Style("td.DatePickerMonth");
+        style = new Style("td.", StyleName.DatePickerMonth);
         style.addProperty("color", "blue");
         style.addProperty("font-size", "70%");
         style.addProperty("font-weight", "bold");
@@ -180,7 +185,7 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         addStyle(style);
 
-        style = new Style(".DatePickerPreviousButton, .DatePickerNextButton");
+        style = new Style(".", StyleName.DatePickerPreviousButton, " .", StyleName.DatePickerNextButton);
         style.addProperty("color", "blue");
         style.addProperty("cursor", "pointer");
         style.addProperty("font-size", "120%");
@@ -201,46 +206,46 @@ public class DefaultDatePickerTheme extends Theme {
         style.addProperty("padding", "10px");
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label");
+        style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.1);
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label-disabled");
+        style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-disabled");
         style.addProperty("color", ThemeColors.foreground, 0.4);
         style.addProperty("background-color", ThemeColors.foreground, 0.2);
         style.addProperty("cursor", "none");
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label-outofmonth");
+        style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-outofmonth");
         style.addProperty("color", ThemeColors.foreground, 0.5);
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label-empty");
+        style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-empty");
         style.addProperty("color", ThemeColors.foreground, 0.1);
         style.addProperty("cursor", "default");
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label-heighlighted");
+        style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-heighlighted");
         style.addProperty("background-color", ThemeColors.object1, 0.2);
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label-selected");
+        style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-selected");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.object1);
         style.addProperty("background-color", ThemeColors.object1, 0.2);
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .gwt-Label-todayday");
+        style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-todayday");
         style.addProperty("color", ThemeColors.object1, 0.0);
         style.addProperty("background-color", ThemeColors.object1, 0.7);
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid tr.DatePickerGridDaysRow");
+        style = new Style(" .", StyleName.DatePickerGrid, " tr.DatePickerGridDaysRow");
         style.addProperty("height", "20px");
         addStyle(style);
 
-        style = new Style(" .DatePickerGrid .DatePickerGridDaysRow td");
+        style = new Style(" .", StyleName.DatePickerGrid, " .", StyleName.DatePickerGridDaysRow, " td");
         style.addProperty("border-bottom", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 1.5);
         style.addProperty("margin-bottom", "5px");
@@ -271,11 +276,11 @@ public class DefaultDatePickerTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DatePickerMultyMonth, " .monthSelectorMonthLabel");
-        style.addProperty("width", "35%");
+        style.addProperty("width", "110px");
         addStyle(style);
 
         style = new Style(".", StyleName.DatePickerMultyMonth, " .monthSelectorYearLabel");
-        style.addProperty("width", "25%");
+        style.addProperty("width", "80px");
         addStyle(style);
 
         style = new Style(".", StyleName.DatePickerMultyMonth, " .monthSelectorYearNavigation");

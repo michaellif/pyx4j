@@ -35,7 +35,9 @@ public enum DatePickerIDs implements IDebugId {
 
     MonthSelectorLabel_Month,
 
-    MonthSelectorLabel_Year;
+    MonthSelectorLabel_Year,
+
+    MonthSelectorLabel_MonthYear;
 
     @Override
     public String debugId() {

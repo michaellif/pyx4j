@@ -110,7 +110,7 @@ public class DateCell extends Label {
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.todayday.name(), istoday);
     }
 
-    public final void setOutOfMonth(boolean isoutofmonth) {
+    public final void setOutOfDisplayMonth(boolean isoutofmonth) {
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.outofmonth.name(), isoutofmonth);
     }
 
@@ -119,7 +119,7 @@ public class DateCell extends Label {
 
         setSelected(false);
         setTodayDay(false);
-        setOutOfMonth(false);
+        setOutOfDisplayMonth(false);
         setEnabled(true);
 
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.empty.name(), true);

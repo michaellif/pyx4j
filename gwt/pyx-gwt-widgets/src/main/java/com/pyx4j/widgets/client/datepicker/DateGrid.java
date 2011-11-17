@@ -50,7 +50,9 @@ public class DateGrid extends Grid {
 
     private final ElementMapperImpl<DateCell> elementToCell = new ElementMapperImpl<DateCell>();
 
-    protected DateGrid(Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
+    private final boolean inMultiple;
+
+    protected DateGrid(Date minDate, Date maxDate, ArrayList<Date> disabledDates, boolean inMultiple) {
         setCellPadding(0);
         setCellSpacing(0);
         setBorderWidth(0);
@@ -58,6 +60,7 @@ public class DateGrid extends Grid {
         this.minDate = minDate;
         this.maxDate = maxDate;
         this.disabledDates = disabledDates;
+        this.inMultiple = inMultiple;
 
         setStyleName(DefaultDatePickerTheme.StyleName.DatePickerGrid.name());
         resize(CalendarModel.WEEKS_IN_MONTH + 1, CalendarModel.DAYS_IN_WEEK);
@@ -113,12 +116,6 @@ public class DateGrid extends Grid {
             selectedCell = null;
         }
 
-//        if (firstDisplayed.getDate() == 1) {
-//            // show one empty week if date is Monday is the first in month.
-//            CalendarUtil.addDaysToDate(firstDisplayed, -7);
-//        }
-
-        //enabledDate = new Date(firstDisplayed.getTime());
         displayedMonth = new Date(firstDisplayed.getTime()).getMonth();
 
         if (firstDisplayed.getDate() != 1) {
@@ -126,28 +123,20 @@ public class DateGrid extends Grid {
         }
 
         lastDisplayed.setTime(firstDisplayed.getTime());
-        Date current = new Date();
-        boolean lastrowempty = false;
 
         for (int i = 0; i < getNumCells(); i++) {
             DateCell cell = getCell(i);
 
-            if (i >= 35 && lastDisplayed.getMonth() != displayedMonth /* && firstDisplayed.getDate() == 1 */) {
-                lastrowempty = true;
-            }
-
-            if (!lastrowempty) {
+            if ((this.inMultiple || (i >= ((this.numRows - 1) * this.numColumns - 7))) && lastDisplayed.getMonth() != displayedMonth) {
+                cell.setEmpty();
+            } else {
                 cell.setDate(lastDisplayed);
-                cell.setOutOfMonth(lastDisplayed.getMonth() != displayedMonth);
+                cell.setOutOfDisplayMonth(lastDisplayed.getMonth() != displayedMonth);
 
                 if (selectedDate != null && CalendarUtil.isSameDate(lastDisplayed, selectedDate)) {
                     cell.setSelected(true);
                     selectedCell = cell;
                 }
-
-                cell.setTodayDay(CalendarUtil.isSameDate(lastDisplayed, current));
-            } else {
-                cell.setEmpty();
             }
 
             CalendarUtil.addDaysToDate(lastDisplayed, 1);

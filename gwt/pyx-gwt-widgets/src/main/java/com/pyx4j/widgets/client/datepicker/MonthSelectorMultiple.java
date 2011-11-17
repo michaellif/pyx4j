@@ -28,8 +28,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 
@@ -38,6 +38,8 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
     private Image backwards;
 
     private Image forwards;
+
+    private Label lblMonthYear;
 
     private final int previousColumn = 0;
 
@@ -60,11 +62,10 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
     @Override
     protected void refresh() {
         if (this.model != null) {
-            Date currentDate = this.model.getCurrentMonth();
-            HTML monthWidget = new HTML(getMonthFormatter().format(currentDate) + " " + geYearFormatter().format(currentDate));
-
-            monthWidget.setStyleName("headerCenter");
-            grid.setWidget(0, monthColumn, monthWidget);
+            Date current = this.model.getCurrentMonth();
+            if (current != null && lblMonthYear != null) {
+                lblMonthYear.setText(getMonthFormatter().format(current) + " " + geYearFormatter().format(current));
+            }
         }
     }
 
@@ -96,8 +97,13 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
 
         grid = new Grid(1, 3);
 
+        lblMonthYear = new Label();
+        lblMonthYear.ensureDebugId(DatePickerIDs.MonthSelectorLabel_MonthYear.debugId());
+        grid.setWidget(0, monthColumn, lblMonthYear);
+        grid.getCellFormatter().addStyleName(0, monthColumn, DefaultDatePickerTheme.StyleName.DatePickerMonthYearLabel.name());
+
         grid.setStyleName(DefaultDatePickerTheme.StyleName.DatePickerMonthSelector.name());
-        grid.addStyleName(DefaultDatePickerTheme.StyleDependent.multiple.name());
+        //grid.addStyleName(DefaultDatePickerTheme.StyleDependent.multiple.name());
         initWidget(grid);
     }
 

@@ -85,10 +85,22 @@ public class DatePickerComposite extends Composite implements HasHandlers {
     public Date selectedField;
 
     public DatePickerComposite() {
-        this(1, new Date(), new Date(0, 1, 1), new Date(200, 1, 1), new ArrayList<Date>());
+        Date todayDate = new Date();
+
+        Date minDate = new Date(todayDate.getTime());
+        CalendarUtil.addMonthsToDate(minDate, -12);
+
+        Date maxDate = new Date(todayDate.getTime());
+        CalendarUtil.addMonthsToDate(maxDate, 12);
+
+        this.init(1, todayDate, minDate, maxDate, new ArrayList<Date>());
     }
 
     public DatePickerComposite(int numberOfMonths, Date starting, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
+        this.init(numberOfMonths, starting, minDate, maxDate, disabledDates);
+    }
+
+    private void init(int numberOfMonths, Date starting, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
         DatePickerExtended picker;
         this.disabledDates = disabledDates;
         this.minDate = minDate;
