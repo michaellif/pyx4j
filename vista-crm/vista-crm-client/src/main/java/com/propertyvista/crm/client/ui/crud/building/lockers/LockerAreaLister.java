@@ -27,12 +27,12 @@ public class LockerAreaLister extends ListerBase<LockerAreaDTO> {
 
     public LockerAreaLister() {
         super(LockerAreaDTO.class, CrmSiteMap.Properties.LockerArea.class);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     public LockerAreaLister(boolean readOnly) {
         super(LockerAreaDTO.class, CrmSiteMap.Properties.LockerArea.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

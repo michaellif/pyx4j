@@ -27,12 +27,12 @@ public class FloorplanLister extends ListerBase<FloorplanDTO> {
 
     public FloorplanLister() {
         super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     public FloorplanLister(boolean readOnly) {
         super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

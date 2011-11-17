@@ -31,7 +31,7 @@ public class ServiceLister extends ListerBase<Service> {
 
     public ServiceLister(boolean readOnly) {
         super(Service.class, CrmSiteMap.Properties.Service.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

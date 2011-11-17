@@ -27,12 +27,12 @@ public class ParkingLister extends ListerBase<ParkingDTO> {
 
     public ParkingLister() {
         super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     public ParkingLister(boolean readOnly) {
         super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ConcessionLister extends ListerBase<Concession> {
 
     public ConcessionLister(boolean readOnly) {
         super(Concession.class, CrmSiteMap.Properties.Concession.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

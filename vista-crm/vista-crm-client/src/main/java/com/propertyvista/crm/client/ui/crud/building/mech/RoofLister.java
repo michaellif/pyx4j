@@ -27,12 +27,12 @@ public class RoofLister extends ListerBase<RoofDTO> {
 
     public RoofLister() {
         super(RoofDTO.class, CrmSiteMap.Properties.Roof.class);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     public RoofLister(boolean readOnly) {
         super(RoofDTO.class, CrmSiteMap.Properties.Roof.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

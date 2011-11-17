@@ -27,12 +27,12 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
 
     public DashboardLister() {
         super(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     public DashboardLister(boolean readOnly) {
         super(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

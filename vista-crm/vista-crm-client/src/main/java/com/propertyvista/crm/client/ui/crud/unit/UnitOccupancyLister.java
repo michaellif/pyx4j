@@ -26,12 +26,12 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
     public UnitOccupancyLister() {
         super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     public UnitOccupancyLister(boolean readOnly) {
         super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override

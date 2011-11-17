@@ -31,7 +31,7 @@ public class FeatureLister extends ListerBase<Feature> {
 
     public FeatureLister(boolean readOnly) {
         super(Feature.class, CrmSiteMap.Properties.Feature.class, readOnly);
-        setFiltersVisible(false);
+        getDataTablePanel().setFiltersVisible(false);
     }
 
     @Override
