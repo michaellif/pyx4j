@@ -58,8 +58,8 @@ public class ColumnDescriptorFactory {
 
 // custom titled column creation:
 
-    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptorEx(E meta, IObject<?> member, String title) {
-        return createTitledColumnDescriptor(meta, member, title, ColumnDescriptor.DFAULT_WIDTH, false);
+    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title) {
+        return createTitledColumnDescriptor(meta, member, title, ColumnDescriptor.DEFAULT_WIDTH, false);
     }
 
     public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width) {

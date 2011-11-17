@@ -22,7 +22,7 @@ package com.pyx4j.entity.client.ui.datatable;
 
 public class ColumnDescriptor<E> {
 
-    public static final String DFAULT_WIDTH = "100px";
+    public static final String DEFAULT_WIDTH = "100px";
 
     private final String columnName;
 
@@ -39,7 +39,7 @@ public class ColumnDescriptor<E> {
     private boolean wordWrap = true;
 
     public ColumnDescriptor(String columnName, String columnTitle) {
-        this(columnName, columnTitle, DFAULT_WIDTH);
+        this(columnName, columnTitle, DEFAULT_WIDTH);
     }
 
     public ColumnDescriptor(String columnName, String columnTitle, String width) {
@@ -47,7 +47,7 @@ public class ColumnDescriptor<E> {
     }
 
     public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, boolean sortAscending) {
-        this(columnName, columnTitle, sortable, sortAscending, DFAULT_WIDTH);
+        this(columnName, columnTitle, sortable, sortAscending, DEFAULT_WIDTH);
     }
 
     public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, boolean sortAscending, String width) {
