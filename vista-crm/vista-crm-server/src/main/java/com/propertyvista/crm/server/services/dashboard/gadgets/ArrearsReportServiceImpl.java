@@ -14,7 +14,7 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -24,16 +24,17 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
+import com.propertyvista.crm.server.util.SeqUtils;
 import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
+import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class ArrearsReportServiceImpl implements ArrearsReportService {
     private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);
@@ -129,64 +130,34 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void summary(AsyncCallback<EntitySearchResult<ArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sorting,
             int pageNumber, int pageSize) {
         try {
+            EntityQueryCriteria<ArrearsSummary> criteria = new EntityQueryCriteria<ArrearsSummary>(ArrearsSummary.class);
+            if (!buildingPKs.isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
 
-            List<ArrearsSummary> summaryArrears = new ArrayList<ArrearsSummary>();
-            Iterator<Key> buildings = buildingPKs.iterator();
-
-            while (buildingPKs.isEmpty() | buildings.hasNext()) {
-                EntityQueryCriteria<ArrearsSummary> criteria = new EntityQueryCriteria<ArrearsSummary>(ArrearsSummary.class);
-                if (!buildingPKs.isEmpty()) {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), buildings.next()));
-                }
-                List<Sort> sortingCriteria = new ArrayList<Sort>();
-                sortingCriteria.add(new Sort(criteria.proto().statusTimestamp().getPath().toString(), true));
-                sortingCriteria.addAll(sorting);
-                criteria.setSorts(sortingCriteria);
-
-                when = when != null ? when : new LogicalDate();
-                LogicalDate monthAgo = new LogicalDate(when);
-                if (when.getMonth() != 0) {
-                    monthAgo.setMonth((11 + when.getMonth() - 1) % 11);
-                } else {
-                    monthAgo.setMonth(1);
-                    monthAgo.setYear(when.getYear() - 1);
-                }
-                // TODO this is just for demo, IRL it shouldn't look the same at all...
-                criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, monthAgo));
-                criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, when));
-                summaryArrears.addAll(Persistence.service().query(criteria));
-                if (buildingPKs.isEmpty()) {
-                    break;
-                }
             }
-            Key pervBuildingKey = null;
-            ArrearsSummary summary = EntityFactory.create(ArrearsSummary.class);
-            summary.thisMonth().setValue(0.0);
-            summary.monthAgo().setValue(0.0);
-            summary.twoMonthsAgo().setValue(0.0);
-            summary.threeMonthsAgo().setValue(0.0);
-            summary.overFourMonthsAgo().setValue(0.0);
-            summary.totalBalance().setValue(0.0);
-            summary.arBalance().setValue(0.0);
+            criteria.setSorts(sorting);
+            when = when != null ? when : new LogicalDate();
+            when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
 
-            for (ArrearsSummary arrears : summaryArrears) {
-                Key thisBuildingKey = arrears.belongsTo().getPrimaryKey();
-                if (!thisBuildingKey.equals(pervBuildingKey)) {
-                    pervBuildingKey = thisBuildingKey;
-                    summary.thisMonth().setValue(summary.thisMonth().getValue() + arrears.thisMonth().getValue());
-                    summary.monthAgo().setValue(summary.monthAgo().getValue() + arrears.monthAgo().getValue());
-                    summary.twoMonthsAgo().setValue(summary.twoMonthsAgo().getValue() + arrears.twoMonthsAgo().getValue());
-                    summary.threeMonthsAgo().setValue(summary.threeMonthsAgo().getValue() + arrears.threeMonthsAgo().getValue());
-                    summary.overFourMonthsAgo().setValue(summary.overFourMonthsAgo().getValue() + arrears.overFourMonthsAgo().getValue());
-                    summary.totalBalance().setValue(summary.totalBalance().getValue() + arrears.totalBalance().getValue());
-                    summary.arBalance().setValue(summary.arBalance().getValue() + arrears.arBalance().getValue());
-                }
-            }
+            List<ArrearsSummary> buildingMonthlyArrears = Persistence.service().query(criteria);
+
+            //@formatter:off
+            SeqUtils.Sum<ArrearsSummary> sum = new SeqUtils.Sum<ArrearsSummary>(ArrearsSummary.class,                    
+                    Arrays.asList(
+                        criteria.proto().thisMonth().getPath(),
+                        criteria.proto().monthAgo().getPath(),
+                        criteria.proto().twoMonthsAgo().getPath(),
+                        criteria.proto().threeMonthsAgo().getPath(),
+                        criteria.proto().overFourMonthsAgo().getPath(),
+                        criteria.proto().arBalance().getPath())
+            );            
+            //@formatter:on
+            ArrearsSummary summary = SeqUtils.foldl(sum, buildingMonthlyArrears);
 
             EntitySearchResult<ArrearsSummary> result = new EntitySearchResult<ArrearsSummary>();
             result.setData(new Vector<ArrearsSummary>(1));
