@@ -95,7 +95,7 @@ public abstract class DataTablePanel<E extends IEntity> extends VerticalPanel {
             @Override
             public void onClick(ClickEvent event) {
 
-                if (filterButton.isEnabled() && !filterPanel.isVisible()) {
+                if (!filterPanel.isVisible()) {
                     filterPanel.setVisible(true);
                 }
             }

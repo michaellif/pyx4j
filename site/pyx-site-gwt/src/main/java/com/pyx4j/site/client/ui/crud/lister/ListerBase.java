@@ -43,7 +43,6 @@ import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.shared.meta.NavigNode;
 
 public abstract class ListerBase<E extends IEntity> extends VerticalPanel implements IListerView<E> {
 
@@ -61,8 +60,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     protected static I18n i18n = I18n.get(ListerBase.class);
 
     protected final DataTablePanel<E> dataTablePanel;
-
-    private Class<? extends NavigNode> editorPage;
 
     protected Presenter presenter;
 
