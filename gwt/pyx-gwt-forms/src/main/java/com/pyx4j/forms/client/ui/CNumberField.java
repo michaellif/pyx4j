@@ -72,7 +72,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
     }
 
     protected String dataTypeName() {
-        return i18n.tr("numeric");
+        return i18n.tr("Numeric");
     }
 
     class NumberFieldRangeValidator extends TextBoxParserValidator<E> {
@@ -82,7 +82,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         private final E to;
 
         public NumberFieldRangeValidator(E from, E to) {
-            super(i18n.tr("{0} should be in range between {1} and {2}", dataTypeName(), from, to));
+            super(i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
             this.from = from;
             this.to = to;
         }

@@ -95,13 +95,13 @@ public abstract class AbstractUploadServlet extends HttpServlet {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
-            out.println(i18n.tr("no session"));
+            out.println(i18n.tr("No Session"));
             return;
         }
         UploadDeferredProcess process = null;
         try {
             if (!ServletFileUpload.isMultipartContent(request)) {
-                out.println(i18n.tr("Invalid request type"));
+                out.println(i18n.tr("Invalid Request Type"));
                 return;
             }
             String serviceClassId = request.getPathInfo().substring(1);

@@ -37,7 +37,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 import com.pyx4j.i18n.shared.I18n;
 
-
 /**
  * This class Injects reCAPTCHA Client API code.
  * 
@@ -101,9 +100,9 @@ public class CaptchaComposite extends SimplePanel {
         Image help = new Image(ImageFactory.getImages().recaptchaHelp());
         buttons.add(help);
 
-        refresh.setTitle(i18n.tr("Get a new challenge"));
-        toAudio.setTitle(i18n.tr("Get an audio challenge"));
-        toText.setTitle(i18n.tr("Get a visual challenge"));
+        refresh.setTitle(i18n.tr("Get A New Challenge"));
+        toAudio.setTitle(i18n.tr("Get An Audio Challenge"));
+        toText.setTitle(i18n.tr("Get A Visual Challenge"));
         help.setTitle(i18n.tr("Help"));
 
         toText.setStyleName("recaptcha_only_if_audio");
@@ -190,7 +189,7 @@ public class CaptchaComposite extends SimplePanel {
 
     public native void setFocus()
     /*-{
-		$wnd.Recaptcha.focus_response_field();
+    	$wnd.Recaptcha.focus_response_field();
     }-*/;
 
     public String getValueResponse() {
@@ -203,22 +202,22 @@ public class CaptchaComposite extends SimplePanel {
 
     public native String getValueChallenge()
     /*-{
-		return $wnd.Recaptcha.get_challenge();
+    	return $wnd.Recaptcha.get_challenge();
     }-*/;
 
     private native void switchToImage()
     /*-{
-		$wnd.Recaptcha.switch_type('image');
+    	$wnd.Recaptcha.switch_type('image');
     }-*/;
 
     private native void switchToAudio()
     /*-{
-		$wnd.Recaptcha.switch_type('audio');
+    	$wnd.Recaptcha.switch_type('audio');
     }-*/;
 
     private native void showhelp()
     /*-{
-		$wnd.Recaptcha.showhelp();
+    	$wnd.Recaptcha.showhelp();
     }-*/;
 
     /**
@@ -237,8 +236,8 @@ public class CaptchaComposite extends SimplePanel {
 
             @Override
             public native boolean isLoaded() /*-{
-		return typeof $wnd.Recaptcha != "undefined";
-    }-*/;
+                                             return typeof $wnd.Recaptcha != "undefined";
+                                             }-*/;
 
         }, new Runnable() {
 
@@ -256,19 +255,19 @@ public class CaptchaComposite extends SimplePanel {
 
     private native void createChallengeImpl()
     /*-{
-		$wnd.Recaptcha
-				.create(
-						@com.pyx4j.widgets.client.CaptchaComposite::publicKey,
-						this.@com.pyx4j.widgets.client.CaptchaComposite::divName,
-						{
-							theme : "custom",
-							custom_theme_widget : this.@com.pyx4j.widgets.client.CaptchaComposite::divName
-						});
+    	$wnd.Recaptcha
+    			.create(
+    					@com.pyx4j.widgets.client.CaptchaComposite::publicKey,
+    					this.@com.pyx4j.widgets.client.CaptchaComposite::divName,
+    					{
+    						theme : "custom",
+    						custom_theme_widget : this.@com.pyx4j.widgets.client.CaptchaComposite::divName
+    					});
     }-*/;
 
     private native void destroyCaptcha()
     /*-{
-		$wnd.Recaptcha.destroy();
+    	$wnd.Recaptcha.destroy();
     }-*/;
 
     public void createNewChallenge() {
@@ -280,7 +279,7 @@ public class CaptchaComposite extends SimplePanel {
 
     public native void createNewChallengeImpl()
     /*-{
-		$wnd.Recaptcha.reload();
+    	$wnd.Recaptcha.reload();
     }-*/;
 
     @Override

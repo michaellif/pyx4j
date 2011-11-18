@@ -20,7 +20,6 @@
  */
 package com.pyx4j.essentials.client;
 
-
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -64,22 +63,22 @@ public class SessionInactiveDialog implements SessionInactiveHandler {
         }
         shown = true;
 
-        String title = timeout ? i18n.tr("Session inactive") : i18n.tr("Your session has been terminated");
+        String title = timeout ? i18n.tr("Session Inactive") : i18n.tr("Your Session Has Been Terminated");
         String reasonMessage;
 
         if (timeout) {
-            reasonMessage = i18n.tr("You have been logged out due to inactivity.");
+            reasonMessage = i18n.tr("Your Session Has Timed Out. Please Sign In To Continue");
         } else {
-            reasonMessage = i18n.tr("Your session has been terminated." + "\nOnly one Application session can be active in a browser.");
+            reasonMessage = i18n.tr("Your Session Has Been Terminated." + "\nOnly One Application Session Can Be Active At The Same Time");
         }
 
         reasonMessage += "\n\n" + i18n.tr("Please login again.") + "\n";
 
         if (!timeout) {
-            reasonMessage += "\n" + i18n.tr("Open another browser instance to keep multiple active sessions.");
+            reasonMessage += "\n" + i18n.tr("Please Open Another Browser Window If You Want To Keep Multiple Sessions Active");
         } else {
             reasonMessage += "\n"
-                    + i18n.tr("Session duration {0}, inactive for {1}", TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()),
+                    + i18n.tr("Session Duration {0}, Inactive For {1}", TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()),
                             TimeUtils.minutesSince(SessionMonitor.getSessionInactiveTime()));
         }
 

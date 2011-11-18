@@ -406,7 +406,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             tm.persist(connection, updEntities, notUpdated);
             if (notUpdated.size() > 0) {
                 for (T entity : notUpdated) {
-                    //these entities have PKs assigned, that's how they selected to be updEntities. 
+                    //these entities have PKs assigned, that's how they selected to be updEntities.
                     if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
                         insert(connection, tm, entity, now);
                     } else {
@@ -516,13 +516,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
         if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
             log.debug("Timestamp " + updatedTs + " change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
-            throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", tm.entityMeta().getCaption()));
+            throw new ConcurrentUpdateException(i18n.tr("{0} Updated Externally", tm.entityMeta().getCaption()));
         }
         String createdTs = tm.entityMeta().getCreatedTimestampMember();
         if (createdTs != null) {
             if (!EqualsHelper.equals(entity.getMemberValue(createdTs), baseEntity.getMemberValue(createdTs))) {
                 log.debug("Timestamp " + createdTs + " change {} -> {}", baseEntity.getMemberValue(createdTs), entity.getMemberValue(createdTs));
-                throw new SecurityViolationException("Permission denied");
+                throw new SecurityViolationException("Permission Denied");
             }
         }
         return applyModifications(connection, tm, baseEntity, entity);
@@ -815,7 +815,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorRefference != null) {
             log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
-            // TODO   
+            // TODO
         }
         try {
             final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria);

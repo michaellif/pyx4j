@@ -112,9 +112,9 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
                 return true;
             }
         };
-        String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
-                + "\n Do you want to refresh the page now?");
-        MessageDialog.show(i18n.tr("System error"), message, Type.Error, optYesNo);
+        String message = i18n.tr("We Updated Our Application\nIn Order To Continue Using This Application You Need To Refresh The Page"
+                + "\nDo You Want To Refresh The Page Now?");
+        MessageDialog.show(i18n.tr("System Error"), message, Type.Error, optYesNo);
     }
 
     @Override
@@ -124,19 +124,19 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     @Override
     protected void showThrottle() {
-        MessageDialog.show(i18n.tr("We're sorry"), i18n
-                .tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
-                        + "To protect our users, we can't process your request at this time"), Type.Error, new ShowOnceDialogOptions());
+        MessageDialog.show(i18n.tr("We're Sorry"), i18n
+                .tr("We're Sorry But Your Requests Look Similar To Automated Requests Initiated By Computer Virus Or Spyware Applications. "
+                        + "To Protect Our Users, We Can't Process Your Request At This Time"), Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
     protected void showUnauthorized() {
-        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This session has been terminated"), Type.Error, new ShowOnceDialogOptions());
+        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This Session Has Been Terminated"), Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
     protected void showInternetConnectionError() {
-        showWarning(i18n.tr("Please make sure you are connected to Internet"));
+        showWarning(i18n.tr("Please Make Sure You Are Connected To The Internet"));
 
     }
 
@@ -175,7 +175,7 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
         + "describing the steps taken prior to the error.\n")
 
-        + ((sessionClosed) ? "\n" + i18n.tr("This session has been terminated to prevent data corruption.") : "")
+        + ((sessionClosed) ? "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption") : "")
 
         + detailsMessage, Type.Error, new ShowOnceDialogOptions());
     }

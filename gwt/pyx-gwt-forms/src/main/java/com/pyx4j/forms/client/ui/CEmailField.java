@@ -47,7 +47,7 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
         super(title);
         this.setMandatory(mandatory);
         setFormat(new EmailFormat());
-        addValueValidator(new TextBoxParserValidator<String>(i18n.tr("Not a valid e-mail")));
+        addValueValidator(new TextBoxParserValidator<String>(i18n.tr("Not A Valid Email")));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
                 return null; // empty value case
             }
             if (!string.matches(EMAIL_REGEXPR)) {
-                throw new ParseException(i18n.tr("Not a valid e-mail"), 0);
+                throw new ParseException(i18n.tr("Not A Valid Email"), 0);
             }
             return string;
         }

@@ -119,7 +119,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, Nati
 
             @Override
             public void onFailure() {
-                callback.onFailure(new UnrecoverableClientWarning(i18n.tr("We are unable to find location")));
+                callback.onFailure(new UnrecoverableClientWarning(i18n.tr("We Are Unable To Find This Location")));
             }
         });
 

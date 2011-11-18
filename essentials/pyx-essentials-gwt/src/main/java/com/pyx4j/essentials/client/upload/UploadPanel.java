@@ -186,7 +186,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         String message = "n/a";
         switch (error) {
         case NoFileSelected:
-            message = i18n.tr("The file name must not be empty");
+            message = i18n.tr("The File Name Cannot Be Empty");
             break;
         case UnSupportedExtension:
             message = i18n.tr("Unsupported Extension ''{0}''", args);
@@ -195,7 +195,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
             message = args;
             break;
         }
-        MessageDialog.error(i18n.tr("Upload error"), message);
+        MessageDialog.error(i18n.tr("Upload Error"), message);
     }
 
     protected boolean isFileValid() {

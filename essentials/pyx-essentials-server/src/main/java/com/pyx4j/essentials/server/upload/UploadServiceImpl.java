@@ -95,7 +95,7 @@ public abstract class UploadServiceImpl<E extends IEntity> implements UploadServ
                 extension = extension.toLowerCase(Locale.ENGLISH);
             }
             if (!extensions.contains(extension)) {
-                throw new UserRuntimeException(i18n.tr("Unsupported file type {0}", extension));
+                throw new UserRuntimeException(i18n.tr("Unsupported File Type {0}", extension));
             }
         }
     }

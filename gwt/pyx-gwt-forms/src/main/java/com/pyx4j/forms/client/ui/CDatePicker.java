@@ -101,7 +101,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
     static class DateFormat implements IFormat<Date> {
 
-        private static DateTimeFormat parser = DateTimeFormat.getFormat(i18n.tr("MM/dd/yy"));
+        private static DateTimeFormat parser = DateTimeFormat.getFormat(defaultDateFormat);
 
         private static DateTimeFormat formatter = DateTimeFormat.getFormat(defaultDateFormat);
 
@@ -118,7 +118,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
             try {
                 return parser.parseStrict(string.replace('-', '/'));
             } catch (IllegalArgumentException e) {
-                throw new ParseException("Invalid date format. Use MM/dd/yyyy format", 0);
+                throw new ParseException("Invalid date format. Use MM/DD/YYYY format", 0);
             }
         }
     }

@@ -49,7 +49,7 @@ public abstract class AbstractAntiBot {
         }
         if (ab.isCaptchaRequired(email)) {
             if ((challengeResponse == null) || CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
-                throw new ChallengeVerificationRequired(i18n.tr("Human verification required"));
+                throw new ChallengeVerificationRequired(i18n.tr("Human Verification Is Required"));
             }
             ab.assertCaptcha(challengeResponse.getA(), challengeResponse.getB());
         }

@@ -31,7 +31,7 @@ public class CIntegerField extends CNumberField<Integer> {
     }
 
     public CIntegerField(String title) {
-        super(title, i18n.tr("Should be an integer"));
+        super(title, i18n.tr("Should Be An Integer"));
     }
 
     @Override

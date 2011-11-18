@@ -54,11 +54,11 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
             captchaResponse = rc.checkAnswer(Context.getRequestRemoteAddr(), challenge, response);
         } catch (ReCaptchaException e) {
             log.error("Error", e);
-            throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA connection failed"));
+            throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA Connection Failed"));
         }
         if (!captchaResponse.isValid()) {
             if ("incorrect-captcha-sol".equals(captchaResponse.getErrorMessage())) {
-                throw new UserRuntimeException(i18n.tr("The CAPTCHA solution was incorrect"));
+                throw new UserRuntimeException(i18n.tr("The CAPTCHA Solution You Entered Was Incorrect"));
             } else {
                 throw new RuntimeExceptionSerializable(captchaResponse.getErrorMessage());
             }

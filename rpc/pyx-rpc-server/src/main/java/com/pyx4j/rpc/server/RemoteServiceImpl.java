@@ -165,7 +165,7 @@ public class RemoteServiceImpl implements RemoteService {
                             throw new DevInfoUnRecoverableRuntimeException(e);
                         } else {
                             // Don't show the actual error to customers.
-                            throw new UnRecoverableRuntimeException(i18n.tr("System error, contact support"));
+                            throw new UnRecoverableRuntimeException(i18n.tr("System Error. Please Contact Support"));
                         }
                     }
                 }

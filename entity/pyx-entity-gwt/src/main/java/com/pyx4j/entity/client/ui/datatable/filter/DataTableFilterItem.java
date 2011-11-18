@@ -85,7 +85,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
     public DataTableFilterItem(final DataTableFilterGrid<E> parent) {
         this.parent = parent;
-        Image btnDel = new ImageButton(EntityFolderImages.INSTANCE.del(), EntityFolderImages.INSTANCE.delHover(), i18n.tr("Remove filter"));
+        Image btnDel = new ImageButton(EntityFolderImages.INSTANCE.del(), EntityFolderImages.INSTANCE.delHover(), i18n.tr("Remove Filter"));
         btnDel.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

@@ -44,12 +44,12 @@ public class PopupWindow {
         }
 
         public final native boolean isClosed() /*-{
-			return this.closed;
-        }-*/;
+                                               return this.closed;
+                                               }-*/;
 
         public final native String getName() /*-{
-			return this.name;
-        }-*/;
+                                             return this.name;
+                                             }-*/;
 
     }
 
@@ -58,20 +58,20 @@ public class PopupWindow {
     }
 
     public static native int windowScreenLeft() /*-{
-		return $wnd.screenLeft != undefined ? $wnd.screenLeft : $wnd.screenX;
-    }-*/;
+                                                return $wnd.screenLeft != undefined ? $wnd.screenLeft : $wnd.screenX;
+                                                }-*/;
 
     public static native int windowScreenTop() /*-{
-		return $wnd.screenTop != undefined ? $wnd.screenTop : $wnd.screenY;
-    }-*/;
+                                               return $wnd.screenTop != undefined ? $wnd.screenTop : $wnd.screenY;
+                                               }-*/;
 
     public static native String windowName() /*-{
-		return $wnd.name;
-    }-*/;
+                                             return $wnd.name;
+                                             }-*/;
 
     public static native PopupWindowHandle openPopupWindow(String url, String name, String features) /*-{
-		return $wnd.open(url, name, features);
-    }-*/;
+                                                                                                     return $wnd.open(url, name, features);
+                                                                                                     }-*/;
 
     /**
      * Opens Popup in the center of parent browser
@@ -92,8 +92,8 @@ public class PopupWindow {
         PopupWindowHandle windowHandle = openPopupWindow(url, "", features.toString());
         if ((windowHandle == null) || (windowHandle.isClosed())) {
             // Detect blocked popup not working in Chrome
-            MessageDialog.error(i18n.tr("Popup window blocked"), i18n.tr("Your browser prevented this application from opening pop-up window\n"
-                    + "Please disable your pop-up blocker for this application"));
+            MessageDialog.error(i18n.tr("Popup window blocked"), i18n.tr("Your Browser Prevented This Application From Opening A Popup Window\n"
+                    + "Please Disable Your Popup Blocker For The Application To Fucntion Properly"));
             return null;
         } else {
             return windowHandle;
@@ -101,14 +101,14 @@ public class PopupWindow {
     }
 
     public native static String getUserAgent() /*-{
-		return $wnd.navigator.userAgent;
-    }-*/;
+                                               return $wnd.navigator.userAgent;
+                                               }-*/;
 
     private static native void registerCallbacks() /*-{
-		$wnd.popupWindowSelectionMade = function(sel) {
-			@com.pyx4j.widgets.client.PopupWindow::popupWindowSelectionMade(Ljava/lang/String;)(sel);
-		}
-    }-*/;
+                                                   $wnd.popupWindowSelectionMade = function(sel) {
+                                                   @com.pyx4j.widgets.client.PopupWindow::popupWindowSelectionMade(Ljava/lang/String;)(sel);
+                                                   }
+                                                   }-*/;
 
     private static void popupWindowSelectionMade(String selectionValue) {
         if (eventBus != null) {
