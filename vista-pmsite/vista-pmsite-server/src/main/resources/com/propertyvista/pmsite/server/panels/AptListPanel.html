@@ -1,6 +1,6 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-	<div class="listing_mapview" id="vista.aptmap" wicket:id="gwtInclude"/>
+	<div class="listing_mapview" id="vista.aptlistmap" wicket:id="gwtInclude"/>
 	
 	<div class="listing_listview" wicket:id="aptResultList">
 		<div class="listingEntry" wicket:id="aptListItem">
@@ -35,4 +35,13 @@
 			</div>
 		</div>
 	</div>
+	<div class="aptInfoMapModal" id="vista.aptinfomap" wicket:id="gwtMapModal"/>
+	<script language="javascript">
+		function showLocation(lat, lng) {
+			var map = document.getElementById('vista.aptinfomap');
+			if (! map) return;
+			popup_open(map);
+			try { locateOnMap(lat, lng) } catch (err_ignore) { }
+		}
+	</script>
 </wicket:panel>

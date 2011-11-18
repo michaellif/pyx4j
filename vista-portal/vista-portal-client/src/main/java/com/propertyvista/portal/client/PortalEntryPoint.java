@@ -20,10 +20,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.pyx4j.gwt.geo.GoogleAPI;
 
 import com.propertyvista.portal.client.ui.maps.PropertyMapController;
+import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
 
 public class PortalEntryPoint implements EntryPoint {
 
-    public static final String APT_MAP_INSERTION_ID = "vista.aptmap";
+    public static final String APTLIST_MAP_INSERTION_ID = "vista.aptlistmap";
+
+    public static final String APTINFO_MAP_INSERTION_ID = "vista.aptinfomap";
 
     @Override
     public void onModuleLoad() {
@@ -35,8 +38,14 @@ public class PortalEntryPoint implements EntryPoint {
             GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
         }
 
-        if (RootPanel.get(APT_MAP_INSERTION_ID) != null) {
-            RootPanel.get(APT_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
+        if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
+            RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
+            if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
+                PropertyMapWidget map = PropertyMapWidget.get();
+                RootPanel.get(APTINFO_MAP_INSERTION_ID).add(map);
+                map.setSize("300px", "300px");
+                map.loadMap();
+            }
         } else {
             new PortalSite().onModuleLoad();
         }

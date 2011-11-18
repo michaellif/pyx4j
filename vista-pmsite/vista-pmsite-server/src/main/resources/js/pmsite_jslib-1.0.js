@@ -91,3 +91,49 @@ var ClientPref = {
 		Cookie.setCookie(this.myCookie, prefStr);
 	}
 }
+/*
+ * Opens modal popup with a semi-transparent screen
+ */
+function popup_open(elt, opts) {
+	var style = {
+			clsPopupScreen: 'popup_screen',
+			clsPopupFrame: 'popup_frame',
+			clsCloseButton: 'popup_close',
+			idCloseButton:  'popup_close',
+			displayHide: 'none',
+			displayShow: 'block'
+	}
+	if (opts && opts.display) {
+		opts.display.hide && (style.displayHide = opts.display.hide);
+		opts.display.show && (style.displayShow = opts.display.show);
+	}
+
+    var scr = document.createElement('div');
+    scr.setAttribute('class', style.clsPopupScreen);
+    var div = document.createElement('div');
+    div.setAttribute('class', style.clsPopupFrame);
+    div.setAttribute('style', 'position:fixed; top:200px; left:40%');
+    var eltP = elt.parentNode;
+    div.appendChild(elt);
+    elt.setAttribute('style', 'display:' + style.displayShow);
+    var but = document.createElement('div');
+    but.setAttribute('id', style.idCloseButton);
+    but.setAttribute('class', style.clsCloseButton);
+    div.appendChild(but);
+
+    var frm = document.body;
+    but.onclick = function() {
+        elt.setAttribute('style', 'display:' + style.displayHide);
+    	eltP || (eltP = frm);
+    	eltP.appendChild(elt);
+   		frm.removeChild(div);
+   		frm.removeChild(scr);
+    };
+    if (elt.tagName == 'IMG') {
+        elt.onload = function() {frm.appendChild(scr); frm.appendChild(div);};
+    } else {
+        frm.appendChild(scr); frm.appendChild(div);
+    }
+
+    return false;
+}

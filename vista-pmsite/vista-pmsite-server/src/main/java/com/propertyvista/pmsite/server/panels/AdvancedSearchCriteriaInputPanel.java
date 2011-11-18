@@ -98,10 +98,10 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new WicketUtils.DropDownList<PropertySearchCriteria.BedroomChoice>("maxBeds", Arrays.asList(PropertySearchCriteria.BedroomChoice.values()), true,
                 false));
         // bathrooms
-        add(new WicketUtils.DropDownList<PropertySearchCriteria.BathroomChoice>("minBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values()), true,
-                false));
-        add(new WicketUtils.DropDownList<PropertySearchCriteria.BathroomChoice>("maxBath", Arrays.asList(PropertySearchCriteria.BathroomChoice.values()), true,
-                false));
+        add(new WicketUtils.DropDownList<PropertySearchCriteria.BathroomChoice>("minBaths", Arrays.asList(PropertySearchCriteria.BathroomChoice.values()),
+                true, false));
+        add(new WicketUtils.DropDownList<PropertySearchCriteria.BathroomChoice>("maxBaths", Arrays.asList(PropertySearchCriteria.BathroomChoice.values()),
+                true, false));
         // price
         add(new TextField<Integer>("minPrice").add(new MinimumValidator<Integer>(100)));
         add(new TextField<Integer>("maxPrice").add(new MinimumValidator<Integer>(100)));

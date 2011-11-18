@@ -32,7 +32,7 @@ public class MapDialog extends Dialog {
             }
         });
 
-        PropertyMapWidget map = new PropertyMapWidget();
+        PropertyMapWidget map = PropertyMapWidget.get();
         map.populate(property);
         map.setSize("300px", "300px");
 

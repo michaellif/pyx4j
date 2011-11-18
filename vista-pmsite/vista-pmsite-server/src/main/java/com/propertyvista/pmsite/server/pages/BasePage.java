@@ -78,6 +78,7 @@ public abstract class BasePage extends WebPage {
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);
         response.renderCSSReference(new CssResourceReference(TemplateResources.class, "jquery-ui-1.8.16.custom.css"));
+        response.renderCSSReference(new CssResourceReference(TemplateResources.class, "pmsite_jslib-1.0.css"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-ui-1.8.16.custom.min.js"));
         response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));

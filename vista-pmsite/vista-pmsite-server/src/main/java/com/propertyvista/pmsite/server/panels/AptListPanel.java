@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -28,6 +29,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -63,7 +65,8 @@ public class AptListPanel extends Panel {
                 // PropertyDetailsDTO
                 item.add(new SimpleImage("picture", PMSiteContentManager.getFistVisibleMediaImgUrl(propInfo.media(), ThumbnailSize.small)));
                 item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add("propId", propId)));
-                item.add(new JSActionLink("aptMapview", "display_map()", false));
+                GeoPoint pt = propInfo.info().address().location().getValue();
+                item.add(new JSActionLink("aptMapview", "showLocation(" + pt.getLat() + ", " + pt.getLng() + ")", false));
                 AddressStructured addr = propInfo.info().address();
                 String addrFmt = "";
                 if (addr != null) {
@@ -125,5 +128,8 @@ public class AptListPanel extends Panel {
         }
         add(aptMap);
         add(aptList);
+        // add modal map widget
+        add(new GwtInclude("gwtMapModal").add(AttributeModifier.replace("style", "position:absolute;left:-100%")));
+
     }
 }

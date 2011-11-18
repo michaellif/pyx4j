@@ -51,6 +51,7 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
+import com.propertyvista.pmsite.server.model.WicketUtils.DateInput;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadioGroup;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
@@ -78,25 +79,6 @@ public class InquiryPanel extends Panel {
             public void onSubmit() {
                 // update model
                 Inquiry inquiry = model.getObject().getEntityValue();
-/*
- * // phones
- * String workPhone = ((FormComponent<String>) get("workPhone")).getModelObject();
- * if (workPhone != null && workPhone.length() > 0) {
- * inquiry.phone1().type().setValue(Phone.Type.home);
- * inquiry.phone1().number().setValue(workPhone);
- * String ext = ((FormComponent<String>) get("workPhoneExt")).getModelObject();
- * try {
- * inquiry.phone1().extension().setValue(Integer.valueOf(ext));
- * } catch (NumberFormatException ignore) {
- * // do nothing
- * }
- * }
- * String cellPhone = ((FormComponent<String>) get("cellPhone")).getModelObject();
- * if (cellPhone != null && cellPhone.length() > 0) {
- * inquiry.phone2().type().setValue(Phone.Type.mobile);
- * inquiry.phone2().number().setValue(cellPhone);
- * }
- */
                 // add current building
                 inquiry.building().id().setValue(bld.id().getValue());
                 // floorplan
@@ -114,7 +96,6 @@ public class InquiryPanel extends Panel {
                 }
                 setResponsePage(InquirySuccessPage.class, params);
             }
-
         };
 
         // add Error Message panel
@@ -156,11 +137,11 @@ public class InquiryPanel extends Panel {
         // lease term
         form.add(new RadioChoice<Inquiry.LeaseTerm>("leaseTerm", Arrays.asList(Inquiry.LeaseTerm.values())));
         // moving date
-        form.add(new WicketUtils.DateInput("movingDate"));
+        form.add(new DateInput("movingDate"));
         // apmnt date / time
-        form.add(new WicketUtils.DateInput("appointmentDate1"));
+        form.add(new DateInput("appointmentDate1"));
         form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime1", Arrays.asList(Inquiry.DayPart.values())));
-        form.add(new WicketUtils.DateInput("appointmentDate2"));
+        form.add(new DateInput("appointmentDate2"));
         form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime2", Arrays.asList(Inquiry.DayPart.values())));
         // ref source
         form.add(new WicketUtils.DropDownList<Inquiry.RefSource>("refSource", Arrays.asList(Inquiry.RefSource.values()), false, false));
@@ -171,7 +152,7 @@ public class InquiryPanel extends Panel {
 //        form.add(new TextField<String>("captchaText", new Model<String>()).add(AttributeModifier.replace("size", "6")));
 
         form.add(new Button("inquirySubmit").add(AttributeModifier.replace("value", i18n.tr("Submit"))));
-
+        // make sure that either workPhone, cellPhone or email is provided
         form.add(new WicketUtils.OneRequiredFormValidator(workPhone, cellPhone, email));
 
         add(form);
