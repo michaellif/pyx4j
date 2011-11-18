@@ -45,7 +45,6 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
     private static SortingFactory<UnitAvailabilityStatusDTO> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
@@ -54,60 +53,30 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>> callback, Vector<Key> buildings, boolean displayOccupied,
             boolean displayVacant, boolean displayNotice, boolean displayRented, boolean displayNotRented, LogicalDate to, Vector<Sort> sortingCriteria,
             int pageNumber, int pageSize) {
-
-        if (to == null) {
-            to = new LogicalDate();
-        }
-
         try {
-            // some of the fields in records are transient (in the IEntity sense), hence we have to extract them from the criteria and sorts the results for ourselves
-            //List<Sort> transientSortCriteria = TRANSIENT_PROPERTY_SORT_ENGINE.extractSortCriteriaForTransientProperties(sortingCriteria);
-
             EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-            //criteria.setSorts(sortingCriteria);
-
-//            if (!buildings.isEmpty()) {
-//                ArrayList<Building> buildingsList = new ArrayList<Building>();
-//                for (Key pk : buildings) {
-//                    Building building = Persistence.service().retrieve(Building.class, pk);
-//                    if (building != null) {
-//                        buildingsList.add(building);
-//                    }
-//                }
-//                criteria.add(new PropertyCriterion(criteria.proto().belongsTo().belongsTo(), Restriction.IN, buildingsList));
-//            }
 
             ArrayList<UnitAvailabilityStatusDTO> allUnitStatuses = new ArrayList<UnitAvailabilityStatusDTO>();
-
-            boolean isBuidlingsFilterSet = !buildings.isEmpty();
-            Iterator<Building> buildingIter = null;
-            if (isBuidlingsFilterSet) {
-                buildingIter = Persistence.service().retrieve(Building.class, buildings).values().iterator();
+            if (!buildings.isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().buildingBelongsTo(), buildings));
             }
-            while (!isBuidlingsFilterSet || (isBuidlingsFilterSet & buildingIter.hasNext())) {
-                if (buildingIter != null) {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), buildingIter.next()));
-                }
-                criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, to));
+            if (to == null) {
+                to = new LogicalDate();
+            }
+            criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, to));
 
-                // use descending order of the status date in order to select the most recent statuses first
-                // use unit pk sorting in order to make tacking of already added unit statuses
-                criteria.setSorts(Arrays.asList(new Sort(criteria.proto().belongsTo().getPath().toString(), true), new Sort(criteria.proto().statusDate()
-                        .getPath().toString(), true)));
-                List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
+            // use descending order of the status date in order to select the most recent statuses first
+            // use unit pk sorting in order to make tacking of already added unit statuses
+            criteria.setSorts(Arrays.asList(new Sort(criteria.proto().belongsTo().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+                    .toString(), true)));
+            List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
 
-                // we use hash map to filter only unit statuses for the requested date
-                // TODO criteria for sorting the results by unit primary key, and then everything else to avoid this
-                Key pervUnitPK = null;
-                for (UnitAvailabilityStatus unitStatus : unfiltered) {
-                    Key unitPK = unitStatus.belongsTo().getPrimaryKey();
-                    if (!unitPK.equals(pervUnitPK)) {
-                        allUnitStatuses.add(computeTransientFields(unitStatus, to));
-                        pervUnitPK = unitPK;
-                    }
-                }
-                if (!isBuidlingsFilterSet) {
-                    break;
+            Key pervUnitPK = null;
+            for (UnitAvailabilityStatus unitStatus : unfiltered) {
+                Key thisUnitPK = unitStatus.belongsTo().getPrimaryKey();
+                if (!thisUnitPK.equals(pervUnitPK)) {
+                    allUnitStatuses.add(computeTransientFields(unitStatus, to));
+                    pervUnitPK = thisUnitPK;
                 }
             }
 
@@ -180,7 +149,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         if (!buildings.isEmpty()) {
-            criteria.add(new PropertyCriterion(criteria.proto().buildingBelongsTo(), Restriction.IN, buildings));
+            criteria.add(PropertyCriterion.in(criteria.proto().buildingBelongsTo(), buildings));
         }
         if (toDate == null) {
             toDate = new LogicalDate();
@@ -270,7 +239,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         // Definition: TURNOVER
         //      the number of times the unit switched hands during the specified interval.
         // 
-        // so then it's basically: number of 'moveins' during specified interval minus 1        
+        // so then it's basically: number of 'moveins' during specified period minus 1        
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         // sort the results by unitKey and then date so that we can check data for each unit separately  
@@ -283,8 +252,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
         }
         if (!buildings.isEmpty()) {
-            // FIXME this doesn't work, need to iterate over buildings and sum the results for each building
-            criteria.add(new PropertyCriterion(criteria.proto().buildingBelongsTo(), Restriction.IN, buildings));
+            criteria.add(PropertyCriterion.in(criteria.proto().buildingBelongsTo(), buildings));
         }
 
         List<UnitAvailabilityStatus> statuses = Persistence.service().query(criteria);

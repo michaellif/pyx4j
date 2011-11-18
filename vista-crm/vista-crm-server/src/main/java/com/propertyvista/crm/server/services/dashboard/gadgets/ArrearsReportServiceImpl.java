@@ -56,25 +56,16 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
             criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
 
-            final List<MockupArrearsState> allArrears = new ArrayList<MockupArrearsState>();
             if (!buildingPKs.isEmpty()) {
-                // TODO make this some other way when it's gonna be possible to make query for set of buildings, i.e. something like: 
-                // criteria.add(PropertyCriterion.in(criteria.proto().belongsTo().belongsTo(), buildings));
-                for (Key pk : buildingPKs) {
-                    PropertyCriterion eqPk = PropertyCriterion.eq(criteria.proto().building(), pk);
-                    criteria.add(eqPk);
-                    allArrears.addAll(Persistence.service().query(criteria));
-                    criteria.getFilters().remove(eqPk);
-                }
-            } else {
-                allArrears.addAll(Persistence.service().query(criteria));
+                criteria.add(PropertyCriterion.in(criteria.proto().belongsTo().belongsTo(), buildingPKs));
             }
+            final List<MockupArrearsState> allArrears = Persistence.service().query(criteria);
 
-            final int capacity = allArrears.size() + 1;
+            final int capacity = allArrears.size() + 1; // add 1 in to avoid failure if the result set size is 0           
             final List<MockupArrearsState> preliminaryResults = new ArrayList<MockupArrearsState>(capacity);
+
             // choose only the most recent statuses (we asked the query to sort the results, hence the most recent ones must come first)
             Key previousTenantPk = null;
-
             for (MockupArrearsState arrear : allArrears) {
                 Key thisTenantPk = arrear.belongsTo().getPrimaryKey();
                 if (!thisTenantPk.equals(previousTenantPk)) {
@@ -128,7 +119,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             EntityQueryCriteria<ArrearsSummary> criteria = new EntityQueryCriteria<ArrearsSummary>(ArrearsSummary.class);
             if (!buildingPKs.isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
-
             }
             criteria.setSorts(sorting);
             when = when != null ? when : new LogicalDate();
@@ -164,21 +154,18 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo) {
         try {
             if (yearsAgo < 1) {
                 throw new Error("sorry, but you need to provide number of years that at least greater than zero");
             }
             final LogicalDate when = new LogicalDate();
-            // FIXME correct intervalEnd for year to point to dec 31 instead of the next year
             final LogicalDate lastDay = new LogicalDate(AnalysisResolution.Year.intervalEnd(when.getTime()));
-            final LogicalDate firstDay = new LogicalDate(AnalysisResolution.Year.intervalStart(lastDay.getTime()));
-            firstDay.setYear(firstDay.getYear() - yearsAgo);
+            final LogicalDate firstDay = yearsAgo(yearsAgo, lastDay);
+
             EntityQueryCriteria<ArrearsSummary> criteria = new EntityQueryCriteria<ArrearsSummary>(ArrearsSummary.class);
             if (!buildingPKs.isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
-
             }
             //@formatter:off
             List<Sort> sorting = Arrays.asList(
@@ -187,7 +174,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             //@formatter:on
             criteria.setSorts(sorting);
             criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, firstDay));
-            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, lastDay));
+            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN, lastDay));
 
             List<ArrearsSummary> buildingMonthlyArrears = Persistence.service().query(criteria);
 
@@ -201,8 +188,9 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 comparison.get(monthlyArrears.timestamp.getMonth()).add(monthlyArrears);
             }
 
+            // prepare the result: if by some accident data for some months is missing, fill in the blanks with NAN values
+            // also: we don't have to send the dates to the server because the date marks are implied by the result
             Vector<Vector<Double>> result = new Vector<Vector<Double>>();
-            // if by some accident data for some months is missing, fill in the blanks with NAN values;           
             for (Vector<ArBalanceHolder> monthlyComparison : comparison.values()) {
                 Vector<Double> monthlyComparisonResult = new Vector<Double>();
                 int prevYear = firstDay.getYear();
@@ -226,6 +214,13 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         } catch (Throwable error) {
             callback.onFailure(error);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private static LogicalDate yearsAgo(int yearsAgo, LogicalDate day) {
+        final LogicalDate firstDay = new LogicalDate(AnalysisResolution.Year.intervalStart(day.getTime()));
+        firstDay.setYear(firstDay.getYear() - yearsAgo);
+        return firstDay;
     }
 
     private static List<ArBalanceHolder> computeSummariesPerEachMonth(List<ArrearsSummary> buildingMonthlyArrears) {
