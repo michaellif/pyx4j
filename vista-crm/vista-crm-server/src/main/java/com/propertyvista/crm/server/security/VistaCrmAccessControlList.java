@@ -195,6 +195,13 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
         grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.class, "*"));
 
+        // All other roles have everything the same
+        for (VistaBehavior b : VistaBehavior.getCrmBehaviors()) {
+            if (b != VistaBehavior.PROPERTY_MANAGER) {
+                grant(b, VistaBehavior.PROPERTY_MANAGER);
+            }
+        }
+
         freeze();
     }
 }

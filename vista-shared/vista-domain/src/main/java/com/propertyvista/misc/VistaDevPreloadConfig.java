@@ -32,6 +32,8 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public int maxPropertyManagers = DemoData.UserType.PM.getDefaultMax();
 
+    public int maxPropertyManagementEmployee = DemoData.UserType.EMP.getDefaultMax();
+
     public int maxAdmin = DemoData.UserType.ADMIN.getDefaultMax();
 
     public int numTenants = DemoData.UserType.TENANT.getDefaultMax() + 50;

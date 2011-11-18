@@ -101,21 +101,27 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
             FlowPanel devMessagePanel = new FlowPanel();
             devMessagePanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
 
-            Anchor touchAnchor = new Anchor("Press 'Ctrl+Q' to login");
-            touchAnchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    onDevLogin(event.getNativeEvent(), 'Q');
-                }
-            });
-            touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
-            devMessagePanel.add(touchAnchor);
+            for (final String[] message : devLogins()) {
+                Anchor touchAnchor = new Anchor(message[0]);
+                touchAnchor.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        onDevLogin(event.getNativeEvent(), message[1].charAt(0));
+                    }
+                });
+                touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
+                devMessagePanel.add(touchAnchor);
+            }
             devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
             devMessagePanel.getElement().getStyle().setMarginTop(3, Unit.EM);
             main.add(devMessagePanel);
         }
 
         return main;
+    }
+
+    protected String[][] devLogins() {
+        return new String[][] { { "Press 'Ctrl+Q' to login", "Q" } };
     }
 
     protected void onDevLogin(NativeEvent event, int nativeKeyCode) {

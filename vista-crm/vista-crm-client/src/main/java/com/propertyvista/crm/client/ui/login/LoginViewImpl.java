@@ -65,6 +65,11 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             protected void onDevLogin(NativeEvent event, int nativeKeyCode) {
                 setDevLoginValues(event, nativeKeyCode);
             }
+
+            @Override
+            protected String[][] devLogins() {
+                return new String[][] { { "Press 'Ctrl+Q' to login as PM", "Q" }, { "Press 'Ctrl+E' to login as Employee", "E" } };
+            }
         };
 
         form.initContent();
@@ -114,6 +119,9 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         switch (nativeKeyCode) {
         case 'Q':
             type = DemoData.UserType.PM;
+            break;
+        case 'E':
+            type = DemoData.UserType.EMP;
             break;
         }
         if (type != null) {

@@ -13,6 +13,10 @@
  */
 package com.propertyvista.domain;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Vector;
+
 import com.pyx4j.security.shared.Behavior;
 
 public enum VistaBehavior implements Behavior {
@@ -25,12 +29,36 @@ public enum VistaBehavior implements Behavior {
 
     GUARANTOR,
 
-    PROPERTY_MANAGER,
+    PROPERTY_MANAGER(true),
 
-    PROPERTY_EMPLOYEE,
+    PROPERTY_EMPLOYEE(true),
 
-    PRODUCTION_SUPPORT,
+    PRODUCTION_SUPPORT(true),
 
-    ADMIN,
+    ADMIN;
+
+    private final boolean crmUser;
+
+    VistaBehavior() {
+        crmUser = false;
+    }
+
+    VistaBehavior(boolean crmUser) {
+        this.crmUser = crmUser;
+    }
+
+    public boolean isCrmUser() {
+        return crmUser;
+    }
+
+    public static List<VistaBehavior> getCrmBehaviors() {
+        List<VistaBehavior> c = new Vector<VistaBehavior>();
+        for (VistaBehavior b : EnumSet.allOf(VistaBehavior.class)) {
+            if (b.isCrmUser()) {
+                c.add(b);
+            }
+        }
+        return c;
+    }
 
 }

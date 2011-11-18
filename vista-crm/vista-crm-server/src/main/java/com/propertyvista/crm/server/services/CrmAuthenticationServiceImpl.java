@@ -23,7 +23,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
 
     @Override
     protected boolean hasRequiredSiteBehavior() {
-        return SecurityController.checkAnyBehavior(VistaBehavior.PROPERTY_MANAGER);
+        return SecurityController.checkAnyBehavior(VistaBehavior.getCrmBehaviors());
     }
 
 }

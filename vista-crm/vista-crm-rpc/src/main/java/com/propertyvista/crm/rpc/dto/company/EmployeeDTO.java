@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.dto.company;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,6 +27,7 @@ import com.propertyvista.domain.company.Employee;
 @Transient
 public interface EmployeeDTO extends Employee {
 
+    @ReadOnly
     IPrimitive<Boolean> enabled();
 
     @Caption(name = "Role")

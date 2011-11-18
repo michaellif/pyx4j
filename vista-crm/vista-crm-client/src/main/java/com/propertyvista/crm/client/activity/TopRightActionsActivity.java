@@ -22,6 +22,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.ContextChangeEvent;
+import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
@@ -54,6 +56,15 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
                 updateAuthenticatedView();
             }
         });
+
+        eventBus.addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
+
+            @Override
+            public void onContextChange(ContextChangeEvent event) {
+                updateAuthenticatedView();
+            }
+        });
+
         obtainAvailableLocales();
     }
 

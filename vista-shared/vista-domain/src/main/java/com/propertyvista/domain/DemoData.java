@@ -34,6 +34,8 @@ public class DemoData {
 
         PM("m", 3),
 
+        EMP("e", 10),
+
         ADMIN("a", 2);
 
         private final String namePrefix;
