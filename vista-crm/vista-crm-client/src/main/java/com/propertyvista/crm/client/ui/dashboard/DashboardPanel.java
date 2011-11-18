@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -111,7 +111,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
         public LayoutsSet() {
             setDefaultImages();
 
-            layout1.setTitle(i18n.tr("Switch layout"));
+            layout1.setTitle(i18n.tr("Switch Layout"));
             layout1.getElement().getStyle().setCursor(Cursor.POINTER);
             layout1.addClickHandler(new ClickHandler() {
                 @Override
@@ -120,7 +120,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                 }
             });
 
-            layout12.setTitle(i18n.tr("Switch layout"));
+            layout12.setTitle(i18n.tr("Switch Layout"));
             layout12.getElement().getStyle().setCursor(Cursor.POINTER);
             layout12.addClickHandler(new ClickHandler() {
                 @Override
@@ -129,7 +129,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                 }
             });
 
-            layout21.setTitle(i18n.tr("Switch layout"));
+            layout21.setTitle(i18n.tr("Switch Layout"));
             layout21.getElement().getStyle().setCursor(Cursor.POINTER);
             layout21.addClickHandler(new ClickHandler() {
                 @Override
@@ -138,7 +138,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                 }
             });
 
-            layout22.setTitle(i18n.tr("Switch layout"));
+            layout22.setTitle(i18n.tr("Switch Layout"));
             layout22.getElement().getStyle().setCursor(Cursor.POINTER);
             layout22.addClickHandler(new ClickHandler() {
                 @Override
@@ -147,7 +147,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                 }
             });
 
-            layout3.setTitle(i18n.tr("Switch layout"));
+            layout3.setTitle(i18n.tr("Switch Layout"));
             layout3.getElement().getStyle().setCursor(Cursor.POINTER);
             layout3.addClickHandler(new ClickHandler() {
                 @Override

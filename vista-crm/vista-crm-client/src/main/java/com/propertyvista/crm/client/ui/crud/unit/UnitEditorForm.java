@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -58,10 +58,10 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget()),
                 i18n.tr("Details"));
         tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget()),
-                i18n.tr("Occupancies"));
+                i18n.tr("Occupancy"));
 
         tabPanel.add(createFinancialsTab(), i18n.tr("Financial"));
-// TODO Hided till further investigation:        
+// TODO Hided till further investigation:
 //        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
         tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 

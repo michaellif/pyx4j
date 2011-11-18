@@ -38,7 +38,7 @@ public interface PaymentMethod extends IEntity {
     @MemberColumn(name = "prim")
     IPrimitive<Boolean> primary();
 
-    @Caption(name = "Payment types")
+    @Caption(name = "Payment Types")
     @Editor(type = EditorType.radiogroup)
     @MemberColumn(name = "paymentType")
     IPrimitive<PaymentType> type();

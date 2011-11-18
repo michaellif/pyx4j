@@ -33,7 +33,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 public interface UnitAvailabilityStatus extends IEntity {
 
     public enum VacancyStatus {
-        Vacant, Notice;
+        Vacant,
+
+        Notice;
 
         @Override
         public String toString() {

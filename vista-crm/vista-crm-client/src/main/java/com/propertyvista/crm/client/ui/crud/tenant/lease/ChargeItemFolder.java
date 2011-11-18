@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -50,7 +50,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
     @Override
     protected void addItem() {
         if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
-            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Service Item first!"));
+            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
             new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
                 @Override
@@ -106,7 +106,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 //                    }
 
                 for (ServiceItem item : parent.getValue().selectedFeatureItems()) {
-//  TODO not sure if we need duplicate item check here:                
+//  TODO not sure if we need duplicate item check here:
 //                        if (!alreadySelected.contains(item)) {
                     list.addItem(item.getStringView());
                     list.setValue(list.getItemCount() - 1, item.id().toString());
@@ -121,7 +121,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                     return new HTML(i18n.tr("All Features have already been selected!"));
                 }
             } else {
-                return new HTML(i18n.tr("There are no features for this service!"));
+                return new HTML(i18n.tr("There Are No Features For This Service"));
             }
         }
 

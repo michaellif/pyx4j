@@ -116,7 +116,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                 extension = extension.toLowerCase(Locale.ENGLISH);
             }
             if (!extensions.contains(extension)) {
-                return i18n.tr("Unsupported Media file ''{0}'' extension ''{1}''", dto.uri().getValue(), extension);
+                return i18n.tr("Unsupported Media File Type ''{0}'' Extension ''{1}''", dto.uri().getValue(), extension);
             }
         }
         return null;
@@ -157,7 +157,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                 if (mediaConfig.ignoreMissingMedia) {
                     return;
                 } else {
-                    throw new UserRuntimeException(i18n.tr("Unsupported Media file ''{0}'' extension ''{1}''", dto.uri().getValue(), extension));
+                    throw new UserRuntimeException(i18n.tr("Unsupported Media File Type ''{0}'' Extension ''{1}''", dto.uri().getValue(), extension));
                 }
             }
             dbo.file().filename().setValue(file.getName());

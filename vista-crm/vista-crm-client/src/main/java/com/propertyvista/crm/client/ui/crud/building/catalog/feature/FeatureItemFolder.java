@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -89,7 +89,7 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
                             for (ServiceItemType item : parent.getValue().catalog().includedUtilities()) {
                                 if (item.equals(event.getValue())) {
                                     MessageDialog.warn(VistaTableFolder.i18n.tr("Note"),
-                                            VistaTableFolder.i18n.tr("The selected Utility Type is included in price!"));
+                                            VistaTableFolder.i18n.tr("The Selected Utility Type Is Included In The Price"));
                                 }
                             }
 

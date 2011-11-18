@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,7 +12,6 @@
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.components.cms;
-
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -40,7 +39,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     @SuppressWarnings("unchecked")
     public FileUploadDialog() {
-        dialog = new Dialog(i18n.tr("Upload Image file"), this);
+        dialog = new Dialog(i18n.tr("Upload Image File"), this);
 
         uploadPanel = new UploadPanel<IEntity>((UploadService<IEntity>) GWT.create(MediaUploadService.class)) {
 

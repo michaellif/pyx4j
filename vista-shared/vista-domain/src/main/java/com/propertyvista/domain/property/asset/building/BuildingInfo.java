@@ -49,6 +49,7 @@ public interface BuildingInfo extends IEntity {
 
         military,
 
+        @Translate("Parking/Storage")
         parking_storage,
 
         other;

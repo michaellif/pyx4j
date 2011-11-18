@@ -103,7 +103,7 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
-    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     public static enum BedroomChoice {
 
         Any(0), One(1), Two(2), Three(3), Four(4);
@@ -171,7 +171,7 @@ public interface PropertySearchCriteria extends IEntity {
     }
 
     @NotNull
-    @Caption(name = "SEARCH BY")
+    @Caption(name = "Search By")
     IPrimitive<SearchType> searchType();
 
     IPrimitive<String> city();

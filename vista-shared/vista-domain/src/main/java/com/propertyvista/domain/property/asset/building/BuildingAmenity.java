@@ -99,7 +99,7 @@ public interface BuildingAmenity extends Amenity {
 
         racquetball,
 
-        recRoom,
+        recreationalRoom,
 
         sauna,
 
@@ -115,6 +115,7 @@ public interface BuildingAmenity extends Amenity {
 
         transportation,
 
+        @Translate("TV Lounge")
         tvLounge,
 
         vintage,

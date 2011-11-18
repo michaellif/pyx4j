@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -44,15 +44,15 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showReloadApplication() {
-        String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
-                + "\nPlease refresh the page now!");
+        String message = i18n.tr("We Updated Our Application\nIn Order To Continue Using This Application You Need To Refresh The Page"
+                + "\nPlease Refresh The Page Now");
         showMessage(message, UserMessageType.FAILURE);
     }
 
     @Override
     protected void showUnauthorized() {
         ClientContext.terminateSession();
-        showMessage(i18n.tr("This session has been terminated"), UserMessageType.FAILURE);
+        showMessage(i18n.tr("This Session Has Been Terminated"), UserMessageType.FAILURE);
 
     }
 
@@ -63,8 +63,8 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showThrottle() {
-        showMessage(i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
-                + "To protect our users, we can't process your request at this time"), UserMessageType.FAILURE);
+        showMessage(i18n.tr("We're Sorry But Your Requests Look Similar To Automated Requests Initiated By Computer Virus Or Spyware Applications. "
+                + "To Protect Our Users, We Can't Process Your Request At This Time"), UserMessageType.FAILURE);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         + "describing the steps taken prior to the error.\n")
 
-        + ((sessionClosed) ? "\n" + i18n.tr("This session has been terminated to prevent data corruption.") : "")
+        + ((sessionClosed) ? "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption") : "")
 
         + detailsMessage;
 

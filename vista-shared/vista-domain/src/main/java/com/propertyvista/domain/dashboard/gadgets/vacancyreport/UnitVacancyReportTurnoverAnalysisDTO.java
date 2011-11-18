@@ -17,6 +17,7 @@ import java.sql.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -254,12 +255,14 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
     /**
      * @return number of units turned over during time interval <code>[{@link #fromDate()}, {@link #toDate()})</code>.
      */
+    @Caption(name = "Number Of Units Turned Over")
     IPrimitive<Integer> unitsTurnedOverAbs();
 
     /**
      * @return percentage of units turned over during time interval <code>[{@link #fromDate()}, {@link #toDate()})</code> relative to overall number of units
      *         turned over during the time interval specified in a query.
      */
+    @Caption(name = "Percentage Of Units Turned Over")
     IPrimitive<Double> unitsTurnedOverPct();
 
 }

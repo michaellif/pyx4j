@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -109,7 +109,7 @@ public class ImageResizer {
                 if (verifImageOnly) {
                     log.error("Unable to read the image ''{}''", file.getAbsolutePath());
                 } else {
-                    throw new UserRuntimeException(i18n.tr("Unable to read the image ''{0}''", file.getAbsolutePath()));
+                    throw new UserRuntimeException(i18n.tr("Unable To Read The Image ''{0}''", file.getAbsolutePath()));
                 }
             }
             if (!verifImageOnly) {
@@ -118,7 +118,7 @@ public class ImageResizer {
         } catch (IOException e) {
             log.error("Unable to read the image ''{}''", file.getAbsolutePath(), e);
             if (!verifImageOnly) {
-                throw new UserRuntimeException(i18n.tr("Unable to resample the image ''{0}''", file.getAbsolutePath()));
+                throw new UserRuntimeException(i18n.tr("Unable To Resample The Image ''{0}''", file.getAbsolutePath()));
             }
         } finally {
             IOUtils.closeQuietly(in);

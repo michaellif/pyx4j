@@ -168,7 +168,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the future");
+                return i18n.tr("The Date Chosen Cannot Be Today's Date Or A Date In The Future");
             }
         });
 
@@ -181,11 +181,11 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the past");
+                return i18n.tr("The Date Chosen Cannot Be Today's Date Or A Date In The Past");
             }
         });
 
-        // ------------------------------------------------------------------------------------------------        
+        // ------------------------------------------------------------------------------------------------
 
         @SuppressWarnings("unchecked")
         final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().previousAddress()));
@@ -198,7 +198,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the future");
+                return i18n.tr("The Date Chosen Cannot Be Today's Date Or A Date In The Future");
             }
         });
 
@@ -219,7 +219,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
 
-        // ------------------------------------------------------------------------------------------------        
+        // ------------------------------------------------------------------------------------------------
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
 
@@ -230,7 +230,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The date cannot be equal today or in the future");
+                return i18n.tr("The Date Chosen Cannot Be Today's Date Or A Date In The Future");
             }
         });
 

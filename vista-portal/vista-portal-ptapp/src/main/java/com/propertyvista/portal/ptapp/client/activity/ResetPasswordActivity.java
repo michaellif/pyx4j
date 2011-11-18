@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -61,7 +61,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         token = Window.Location.getParameter(ActivationService.PASSWORD_TOKEN);
         if (CommonsStringUtils.isEmpty(token)) {
-            PtAppSite.instance().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
+            PtAppSite.instance().showMessageDialog(i18n.tr("The URL You Tried To Use Is Either Incorrect Or No Longer Valid"), i18n.tr("Error"),
                     i18n.tr("Log In"), new Command() {
                         @Override
                         public void execute() {

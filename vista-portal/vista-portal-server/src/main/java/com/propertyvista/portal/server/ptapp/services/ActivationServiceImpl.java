@@ -115,7 +115,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         MailMessage m = new MailMessage();
         m.setTo(user.email().getValue());
         m.setSender(MessageTemplates.getSender());
-        m.setSubject(i18n.tr("Property Vista password reset"));
+        m.setSubject(i18n.tr("Property Vista Password Reset"));
         m.setHtmlBody(MessageTemplates.createPasswordResetEmail(user.name().getValue(), token));
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
@@ -159,7 +159,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
             throw new RuntimeException(i18n.tr("Invalid Request"));
         }
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Token has expired"));
+            throw new RuntimeExceptionSerializable(i18n.tr("Token Has Expired"));
         }
         cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         cr.accessKey().setValue(null);

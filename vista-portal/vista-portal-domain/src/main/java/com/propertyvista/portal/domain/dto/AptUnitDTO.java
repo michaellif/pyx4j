@@ -30,7 +30,7 @@ import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 @Deprecated
 public interface AptUnitDTO extends IEntity {
 
-    IPrimitive<Key> selectedUnitId();
+    IPrimitive<Key> selectedUnitID();
 
     @Caption(name = "Type")
     IPrimitive<String> unitType();
@@ -39,7 +39,7 @@ public interface AptUnitDTO extends IEntity {
      * Square ft. size of unit
      */
     @Format("#0.#")
-    @Caption(name = "Sq. Ft")
+    @Caption(name = "Sq. Feet")
     IPrimitive<Double> area();
 
     /**

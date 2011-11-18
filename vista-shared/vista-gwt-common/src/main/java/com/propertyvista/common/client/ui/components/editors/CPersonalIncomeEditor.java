@@ -184,7 +184,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
 
             @Override
             public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The start date cannot be equal or after end date");
+                return i18n.tr("The Start Date Cannot Be Equal To The End Date Or After It");
             }
         });
 
@@ -199,7 +199,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
 
             @Override
             public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The end date cannot be before of equal to start date");
+                return i18n.tr("The End Date Chosen Cannot Be The Same As The Start Date Or Before It");
             }
         });
 

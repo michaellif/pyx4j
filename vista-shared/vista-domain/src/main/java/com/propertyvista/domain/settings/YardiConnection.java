@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,10 +24,10 @@ public interface YardiConnection extends IEntity {
         SQL, Oracle
     }
 
-    @Caption(name = "Web service URL")
+    @Caption(name = "Web Service URL")
     IPrimitive<String> serveviceURL();
 
-    @Caption(name = "Web service User")
+    @Caption(name = "Web Service User")
     IPrimitive<String> username();
 
     @Caption(name = "Password")

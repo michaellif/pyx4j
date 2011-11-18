@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -35,7 +35,7 @@ public class VistaContext {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
             log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
+            throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
         return v.getUserVisit().getPrincipalPrimaryKey();
     }
@@ -44,7 +44,7 @@ public class VistaContext {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
             log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("no session"));
+            throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
         User user = EntityFactory.create(User.class);
         user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());

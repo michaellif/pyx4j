@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -61,7 +61,7 @@ public class FileUploadHyperlink extends CAbstractHyperlink<File> {
             public String format(File value) {
                 if (editable) {
                     if (value.blobKey().isNull()) {
-                        return i18n.tr("Upload Image file");
+                        return i18n.tr("Upload Image File");
                     } else {
                         return i18n.tr("{0}; Upload new file", value.filename().getStringView());
                     }

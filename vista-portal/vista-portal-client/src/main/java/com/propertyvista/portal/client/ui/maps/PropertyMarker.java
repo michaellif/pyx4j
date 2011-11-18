@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -107,8 +107,8 @@ public class PropertyMarker extends Marker {
     }
 
     public native String getDetailsUrl()/*-{
-		return $wnd.getAptDetailsUrl();
-    }-*/;
+                                        return $wnd.getAptDetailsUrl();
+                                        }-*/;
 
     public class PropertyCard extends DockPanel {
 
@@ -186,7 +186,7 @@ public class PropertyMarker extends Marker {
                 item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftLabel);
                 left.add(item);
             } else {
-                item = new Label(i18n.tr("Starting from"));
+                item = new Label(i18n.tr("Starting From"));
                 item.setStyleName(PropertiesMapWidget.PROPERTY_CARD_STYLE_PREFIX + StyleSuffix.CardLeftLabel);
                 left.add(item);
                 item = new Label("$" + property.price().min().getStringView());

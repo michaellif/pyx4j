@@ -84,7 +84,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
                     FormFlexPanel panel = new FormFlexPanel();
 
                     int row = -1;
-                    panel.setH3(++row, 0, 2, i18n.tr("Vehicle data"));
+                    panel.setH3(++row, 0, 2, i18n.tr("Vehicle Data"));
 
                     panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 5).build());
                     panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 10).build());

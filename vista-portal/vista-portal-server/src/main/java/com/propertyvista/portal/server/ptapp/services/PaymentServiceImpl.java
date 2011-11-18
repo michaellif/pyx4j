@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -79,7 +79,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
                 && ("2011".equals(payment.creditCard().cardNumber().getValue()))) {
             // Ok
         } else {
-            throw new UserRuntimeException(i18n.tr("Your card has been declined"));
+            throw new UserRuntimeException(i18n.tr("Your Card Has Been Declined"));
         }
 
         callback.onSuccess(payment);

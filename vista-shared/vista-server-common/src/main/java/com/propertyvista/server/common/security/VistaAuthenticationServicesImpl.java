@@ -88,7 +88,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
             if (AbstractAntiBot.authenticationFailed(email)) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too many failed Log In attempts"));
+                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
@@ -105,7 +105,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
             log.info("Invalid password for user {}", email);
             if (AbstractAntiBot.authenticationFailed(email)) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too many failed Log In attempts"));
+                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }

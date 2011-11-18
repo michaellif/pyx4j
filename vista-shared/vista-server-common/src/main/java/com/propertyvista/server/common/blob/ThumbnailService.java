@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -100,7 +100,7 @@ public class ThumbnailService {
         try {
             BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(originalContent));
             if (inputImage == null) {
-                throw new UserRuntimeException(i18n.tr("Unable to read the image ''{0}''", fileName));
+                throw new UserRuntimeException(i18n.tr("Unable To Read The Image ''{0}''", fileName));
             }
             blob.xsmall().setValue(resample(fileName, inputImage, params, xsmall));
             blob.small().setValue(resample(fileName, inputImage, params, small));
@@ -108,7 +108,7 @@ public class ThumbnailService {
             blob.large().setValue(resample(fileName, inputImage, params, large));
         } catch (IOException e) {
             log.error("Error", e);
-            throw new UserRuntimeException(i18n.tr("Unable to resample the image ''{0}''", fileName));
+            throw new UserRuntimeException(i18n.tr("Unable To Resample The Image ''{0}''", fileName));
         }
         return blob;
     }

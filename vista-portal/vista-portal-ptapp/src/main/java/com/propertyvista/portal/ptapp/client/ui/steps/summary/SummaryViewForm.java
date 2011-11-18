@@ -370,7 +370,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
                 @Override
                 public String getValidationMessage(CComponent<Boolean, ?> component, Boolean value) {
-                    return i18n.tr("You should agree to terms");
+                    return i18n.tr("You Must Agree To The Terms And Conditions To Continue");
                 }
             });
         }

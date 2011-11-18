@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -187,7 +187,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 @Override
                 public void onClick(ClickEvent event) {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
-                        MessageDialog.warn(i18n.tr("Warning"), i18n.tr("Select Building/Unit first!"));
+                        MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Building/Unit First"));
                     } else {
                         new ShowPopUpBox<SelectServiceItemBox>(new SelectServiceItemBox()) {
                             @Override
@@ -268,7 +268,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                 return combo.asWidget();
             } else {
-                return new HTML(i18n.tr("There are no Service Items"));
+                return new HTML(i18n.tr("There Are No Service Items"));
             }
 
         }
