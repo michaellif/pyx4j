@@ -61,8 +61,7 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
             proto.threeMonthsAgo(),
             proto.overFourMonthsAgo(),
             proto.totalBalance(),
-            proto.prepayments(),
-            
+            proto.prepayments()
         }));
     }
     
@@ -100,14 +99,14 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
                 
                 // tenant info                
                 proto.firstName(),
-                proto.lastName(),
-                
-                // arrears status
-                proto.legalStatus(),
-                proto.lmrUnitRentDifference()                
+                proto.lastName()
         }));        
         cd.addAll(getAvailableArrearsStatusColumns());
-        cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {                
+        cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {
+                // arrears status
+                proto.legalStatus(),
+                proto.lmrUnitRentDifference(),                
+
                 // address
                 proto.streetNumber(),
                 proto.streetName(),
@@ -120,8 +119,7 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
                 Tuple.cons(proto.common().propertyManger().name(), i18n.tr("Property Manager")),
                 Tuple.cons(proto.common().owner().company().name(), i18n.tr("Owner")),
                 proto.common().region(),
-                //Tuple.cons(proto.common().portfolio().name(), i18n.tr("Portfolio"))
-                proto.common().portfolio()                
+                Tuple.cons(proto.common().portfolio().name(), i18n.tr("Portfolio"))
         })));               
         return cd;
     }
