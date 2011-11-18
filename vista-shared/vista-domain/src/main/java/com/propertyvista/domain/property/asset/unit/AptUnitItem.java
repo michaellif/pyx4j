@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -155,7 +155,7 @@ public interface AptUnitItem extends IEntity {
 
     IPrimitive<FlooringType> flooringType();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> flooringInstallDate();
 
     @Format("#0.00")
@@ -163,7 +163,7 @@ public interface AptUnitItem extends IEntity {
 
     IPrimitive<CounterTopType> counterTopType();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> counterTopInstallDate();
 
     @Format("#0.00")
@@ -171,7 +171,7 @@ public interface AptUnitItem extends IEntity {
 
     IPrimitive<CabinetsType> cabinetsType();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> cabinetsInstallDate();
 
     @Format("#0.00")

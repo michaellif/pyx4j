@@ -47,7 +47,7 @@ public class ContentActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof Residents.PersonalInfo) {
+                if (place instanceof Residents.PersonalInformation) {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);

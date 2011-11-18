@@ -30,7 +30,7 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
@@ -44,14 +44,14 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     private final static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PaymentInfo> callback, Key tenantId) {
+    public void retrieve(AsyncCallback<PaymentInformation> callback, Key tenantId) {
         log.debug("Retrieving PaymentInfo for tenant {}", tenantId);
-        EntityQueryCriteria<PaymentInfo> criteria = EntityQueryCriteria.create(PaymentInfo.class);
+        EntityQueryCriteria<PaymentInformation> criteria = EntityQueryCriteria.create(PaymentInformation.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        PaymentInfo payment = secureRetrieve(criteria);
+        PaymentInformation payment = secureRetrieve(criteria);
         if (payment == null) {
             log.debug("Creating new payment");
-            payment = EntityFactory.create(PaymentInfo.class);
+            payment = EntityFactory.create(PaymentInformation.class);
             payment.type().setValue(PaymentType.Echeck);
             payment.preauthorised().setValue(Boolean.TRUE);
 
@@ -63,7 +63,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     }
 
     @Override
-    public void save(AsyncCallback<PaymentInfo> callback, PaymentInfo payment) {
+    public void save(AsyncCallback<PaymentInformation> callback, PaymentInformation payment) {
         //        log.info("Saving charges\n{}", PrintUtil.print(summary));
 
         saveApplicationEntity(payment);
@@ -85,7 +85,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         callback.onSuccess(payment);
     }
 
-    private void retrievePaymentInfo(PaymentInfo paymentInfo) {
+    private void retrievePaymentInfo(PaymentInformation paymentInfo) {
         // TODO VladS find a better way to retrieve just monthlyCharges
         Charges charges = EntityFactory.create(Charges.class);
         retrieveApplicationEntity(charges);

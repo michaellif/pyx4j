@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,7 +25,7 @@ import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-// TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready 
+// TODO don't forget to rename to DTO and enable the @Transient annotation when it's ready
 // @Transient
 public interface UnitVacancyStatus extends IEntity {
 
@@ -119,19 +119,19 @@ public interface UnitVacancyStatus extends IEntity {
 
     /** {@link AptUnit#availableForRent()} - 1 */
     @Transient
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveOutDay();
 
     /** Applicable only for rented */
     @Transient
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveInDay();
 
     /** Applicable only for rented; maybe different than move out date */
     @Transient
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> rentedFromDate();
 
@@ -149,12 +149,12 @@ public interface UnitVacancyStatus extends IEntity {
 
     /** this is hack to use the lister service interface */
     @Transient
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> fromDate();
 
     /** this is hack to use the lister service interface */
     @Transient
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> toDate();
 
 }

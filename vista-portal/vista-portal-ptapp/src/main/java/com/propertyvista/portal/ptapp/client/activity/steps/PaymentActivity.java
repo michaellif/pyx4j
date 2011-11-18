@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 
-public class PaymentActivity extends WizardStepActivity<PaymentInfo, PaymentPresenter> implements PaymentPresenter {
+public class PaymentActivity extends WizardStepActivity<PaymentInformation, PaymentPresenter> implements PaymentPresenter {
 
     public PaymentActivity(AppPlace place) {
-        super((PaymentView) WizardStepsViewFactory.instance(PaymentView.class), PaymentInfo.class, (PaymentService) GWT.create(PaymentService.class));
+        super((PaymentView) WizardStepsViewFactory.instance(PaymentView.class), PaymentInformation.class, (PaymentService) GWT.create(PaymentService.class));
         withPlace(place);
     }
 

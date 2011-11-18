@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -36,22 +36,22 @@ public class AccessKey {
 
         public TokenParser(String base64Token) {
             if (base64Token == null) {
-                throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
             }
 
             String token = new String(Base64.decodeBase64(base64Token), Charset.forName("ISO-8859-1"));
 
             if (CommonsStringUtils.isEmpty(token)) {
-                throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
             }
             int idx = token.indexOf('|');
             if (idx <= 4) {
-                throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
             }
             email = token.substring(0, idx);
             accessKey = token.substring(idx + 1);
             if (accessKey.length() != ACCESS_KEY_LEN) {
-                throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
             }
             validateAccessKey(accessKey);
         }
@@ -69,10 +69,10 @@ public class AccessKey {
 
     public static void validateAccessKey(String accessKey) {
         if ((accessKey == null) || (accessKey.length() != ACCESS_KEY_LEN)) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+            throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
         }
         if (!accessKey.matches("[a-z]{" + ACCESS_KEY_LEN + "}?")) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+            throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
         }
     }
 

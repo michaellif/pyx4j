@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,7 +12,6 @@
  * @version $Id$
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
-
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -54,7 +53,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
             @Override
             public String getValidationMessage(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
-                return i18n.tr("Duplicate tenants specified");
+                return i18n.tr("Duplicate Tenants Specified");
             }
         });
 
@@ -69,7 +68,7 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
             @Override
             public String getValidationMessage(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
-                return i18n.tr("Exceeded number of allowed tenants");
+                return i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants");
             }
         });
     }

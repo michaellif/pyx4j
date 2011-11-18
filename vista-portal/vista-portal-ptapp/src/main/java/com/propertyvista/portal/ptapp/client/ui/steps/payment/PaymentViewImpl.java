@@ -16,11 +16,11 @@ package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
 
-public class PaymentViewImpl extends WizardStepViewImpl<PaymentInfo, PaymentPresenter> implements PaymentView {
+public class PaymentViewImpl extends WizardStepViewImpl<PaymentInformation, PaymentPresenter> implements PaymentView {
 
     private static I18n i18n = I18n.get(PaymentViewImpl.class);
 

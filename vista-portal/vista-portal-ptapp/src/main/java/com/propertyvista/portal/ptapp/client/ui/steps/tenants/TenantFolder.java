@@ -138,7 +138,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                         TenantInLease.Status status = getValue().status().getValue();
-                        if ((status == null) || (status == TenantInLease.Status.Dependant)) {
+                        if ((status == null) || (status == TenantInLease.Status.Dependent)) {
                             if (ValidationUtils.isOlderThen18(event.getValue())) {
                                 boolean currentEditableState = get(proto().status()).isEditable();
                                 enableStatusAndOwnership();
@@ -190,7 +190,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
         }
 
         private void setMandatoryDependant() {
-            get(proto().status()).setValue(TenantInLease.Status.Dependant);
+            get(proto().status()).setValue(TenantInLease.Status.Dependent);
             get(proto().status()).setEditable(false);
 
             get(proto().takeOwnership()).setValue(true);

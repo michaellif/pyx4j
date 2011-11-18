@@ -306,7 +306,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             assertStudentForm(D.id(formDebugId, income.studentIncome()), detach(income.studentIncome()));
             break;
         default:
-            assertIncomeForm(D.id(formDebugId, income.otherIncomeInfo()), detach(income.otherIncomeInfo()));
+            assertIncomeForm(D.id(formDebugId, income.otherIncomeInformation()), detach(income.otherIncomeInformation()));
             break;
         }
     }

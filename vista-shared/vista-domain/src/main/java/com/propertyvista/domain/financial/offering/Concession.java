@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("Type: {0}, Value: {1}")
@@ -34,6 +35,7 @@ public interface Concession extends IEntity {
 
     @I18n
     @XmlType(name = "ConcessionType")
+    @I18nComment("Concession Type")
     enum Type {
         promotionalItem, percentageOff, monetaryOff, free;
 
@@ -119,9 +121,9 @@ public interface Concession extends IEntity {
 
     IPrimitive<String> approvedBy();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> effectiveDate();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> expirationDate();
 }

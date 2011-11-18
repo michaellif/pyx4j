@@ -1034,7 +1034,7 @@ msgstr "Numéro de la carte"
 
 #: com/propertyvista/portal/client/ui/residents/NewPaymentMethodForm.java:248
 #: com/propertyvista/portal/ptapp/client/ui/steps/payment/PaymentViewForm.java:349
-msgid "Card expiry should be a future date"
+msgid "Expiration date should be a future date"
 msgstr "Expiration de la carte doit être une date future"
 
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:174

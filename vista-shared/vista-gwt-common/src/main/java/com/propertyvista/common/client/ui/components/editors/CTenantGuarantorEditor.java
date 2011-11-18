@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -92,7 +92,7 @@ public class CTenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuara
 
             @Override
             public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("Guarantor should be at least 18 years old");
+                return i18n.tr("Guarantor Should Be At Least 18 Years Old");
             }
         });
     }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -100,7 +100,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
     public String verify(MediaIO dto) {
         if (dto.mediaType().isNull()) {
-            return i18n.tr("Media type is empty");
+            return i18n.tr("Media Type Is Empty");
         }
         switch (dto.mediaType().getValue()) {
         case file:
@@ -132,7 +132,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             if (mediaConfig.ignoreMissingMedia) {
                 return;
             } else {
-                throw new UserRuntimeException(i18n.tr("Media type is empty"));
+                throw new UserRuntimeException(i18n.tr("Media Type Is Empty"));
             }
         }
         switch (dto.mediaType().getValue()) {
@@ -196,7 +196,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
             break;
         case youTube:
             if (!dto.uri().getValue().matches("[a-zA-Z0-9_-]{11}")) {
-                throw new UserRuntimeException(i18n.tr("Invalid YouTube VideoID ''{0}''", dto.uri().getValue()));
+                throw new UserRuntimeException(i18n.tr("Invalid YouTube Video ID ''{0}''", dto.uri().getValue()));
             }
             dbo.type().setValue(Media.Type.youTube);
             dbo.youTubeVideoID().setValue(dto.uri().getValue());

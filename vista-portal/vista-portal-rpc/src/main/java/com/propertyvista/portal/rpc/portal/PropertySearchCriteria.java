@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
@@ -69,6 +70,7 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
+    @I18nComment("Number Of Bedrooms")
     public static enum BedroomRange {
 
         Any(null, null), One(1, 1), OneOrMore(1), Two(2, 2), TwoOrMore(2), Three(3, 3), ThreeOrMore(3), Four(4, 4), FourOrMore(4);
@@ -101,7 +103,7 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
-    @I18n
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     public static enum BedroomChoice {
 
         Any(0), One(1), Two(2), Three(3), Four(4);
@@ -129,7 +131,7 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
-    @I18n
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     public static enum BathroomChoice {
 
         Any(0), One(1), Two(2), Three(3), Four(4), Five(5);
@@ -184,9 +186,9 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitive<BedroomChoice> maxBeds();
 
-    IPrimitive<BathroomChoice> minBath();
+    IPrimitive<BathroomChoice> minBaths();
 
-    IPrimitive<BathroomChoice> maxBath();
+    IPrimitive<BathroomChoice> maxBaths();
 
     IPrimitive<Integer> minPrice();
 

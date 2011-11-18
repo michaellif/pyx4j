@@ -40,7 +40,7 @@ public class PortalSiteMap implements SiteMap {
 
         @PlaceProperties(caption = "Personal Info")
         @NavigationItem(navigLabel = "Personal Info")
-        public static class PersonalInfo extends AppPlace {
+        public static class PersonalInformation extends AppPlace {
         }
 
         @PlaceProperties(caption = "Maintenance")

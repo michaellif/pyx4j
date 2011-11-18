@@ -33,7 +33,7 @@ import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
@@ -110,7 +110,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantFinancialDTO.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(SummaryDTO.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(PaymentInfo.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(PaymentInformation.class, applicationEntityAccess, CRUD));
         //TODO this service should be granted to a tenant
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(MaintenanceRequestDTO.class, applicationEntityAccess, CRUD));
 

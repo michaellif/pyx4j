@@ -98,7 +98,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDateAndClick(datePickerId(index), calendar);
-        setStatus(index, TenantInLease.Status.Dependant);
+        setStatus(index, TenantInLease.Status.Dependent);
         calendar.add(Calendar.YEAR, 10);
         navigateToDateAndClick(datePickerId(index), calendar);
         assertNotEditable(statusId(index));
@@ -109,7 +109,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         navigateToDateAndClick(datePickerId(index), calendar);
         assertEditable(statusId(index));
         assertEditable(ownershipId(index));
-        setStatus(index, TenantInLease.Status.Dependant);
+        setStatus(index, TenantInLease.Status.Dependent);
         //TODO 
         //ask anya about this test
         //assertEquals("off", selenium.getValue(ownershipId(index)));

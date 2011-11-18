@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,7 +22,7 @@ import com.propertyvista.domain.financial.Currency;
 
 public interface BuildingFinancial extends IEntity {
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> dateAcquired();
 
     @Format("#0.00")
@@ -31,7 +31,7 @@ public interface BuildingFinancial extends IEntity {
     @Format("#0.00")
     IPrimitive<Double> marketPrice();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> lastAppraisalDate();
 
     @Format("#0.00")

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -39,7 +39,7 @@ public interface AptUnitDTO extends IEntity {
      * Square ft. size of unit
      */
     @Format("#0.#")
-    @Caption(name = "Sq F")
+    @Caption(name = "Sq. Ft")
     IPrimitive<Double> area();
 
     /**
@@ -67,7 +67,7 @@ public interface AptUnitDTO extends IEntity {
     @Caption(name = "Deposit")
     IPrimitive<Double> requiredDeposit();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     @Caption(name = "Available")
     IPrimitive<LogicalDate> availableForRent();
 
@@ -83,7 +83,7 @@ public interface AptUnitDTO extends IEntity {
 
     IPrimitiveSet<String> amenities();
 
-    IPrimitive<String> infoDetails();
+    IPrimitive<String> informationDetails();
 
     IPrimitive<String> concessions();
 

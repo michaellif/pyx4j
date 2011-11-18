@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -130,7 +130,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 HorizontalPanel main = new HorizontalPanel();
                 for (EntityFolderColumnDescriptor column : columns) {
                     CComponent<?, ?> component = createCell(column);
-                    // Don't show relation and takeOwnership 
+                    // Don't show relation and takeOwnership
                     if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
                         component.setVisible(false);
                     }
@@ -206,13 +206,13 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 }
             });
 
-            if (!first) { // all this stuff isn't for primary applicant:  
+            if (!first) { // all this stuff isn't for primary applicant:
                 get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                         TenantInLease.Status status = getValue().status().getValue();
-                        if ((status == null) || (status == TenantInLease.Status.Dependant)) {
+                        if ((status == null) || (status == TenantInLease.Status.Dependent)) {
                             if (ValidationUtils.isOlderThen18(event.getValue())) {
                                 boolean currentEditableState = get(proto().status()).isEditable();
                                 enableStatusAndOwnership();
@@ -231,7 +231,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         }
 
         private void setMandatoryDependant() {
-            get(proto().status()).setValue(TenantInLease.Status.Dependant);
+            get(proto().status()).setValue(TenantInLease.Status.Dependent);
             get(proto().status()).setEditable(false);
 
 //                get(proto().takeOwnership()).setValue(true);

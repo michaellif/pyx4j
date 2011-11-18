@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -90,28 +90,28 @@ public interface Lease extends IEntity {
     IList<TenantInLease> tenants();
 
     // Dates:
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> leaseFrom();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> leaseTo();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> expectedMoveIn();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> expectedMoveOut();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> actualMoveIn();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> actualMoveOut();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> moveOutNotice();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> signDate();
 
     @EmbeddedEntity

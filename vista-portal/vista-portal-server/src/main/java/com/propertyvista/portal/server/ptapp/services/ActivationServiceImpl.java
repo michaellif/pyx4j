@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -64,7 +64,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         // Match the given string with the pattern
         Matcher m = p.matcher(email);
 
-        // check whether match is found 
+        // check whether match is found
         boolean matchFound = m.matches();
         if (!matchFound) {
             return false;
@@ -96,13 +96,13 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue().toLowerCase()));
         List<User> users = Persistence.service().query(criteria);
         if (users.size() == 0) {
-            throw new UserRuntimeException(i18n.tr("E-mail not registered"));
+            throw new UserRuntimeException(i18n.tr("Email Not Registered"));
         }
         User user = users.get(0);
 
         UserCredential credential = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
         if (credential == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid login/password")); // TODO is this a correct message?
+            throw new UserRuntimeException(i18n.tr("Invalid Login Or Password")); // TODO is this a correct message?
         }
         credential.accessKey().setValue(AccessKey.createAccessKey());
         Calendar expire = new GregorianCalendar();
@@ -119,7 +119,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         m.setHtmlBody(MessageTemplates.createPasswordResetEmail(user.name().getValue(), token));
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service is temporary unavailable, try again later"));
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
         log.debug("pwd change token {} is sent to {}", token, user.email().getValue());
 
@@ -143,20 +143,20 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         criteria.add(PropertyCriterion.eq(userMeta.email(), token.email));
         List<User> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+            throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
         }
         User user = users.get(0);
 
         UserCredential cr = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
         if (cr == null) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Invalid user account, contact support"));
+            throw new RuntimeExceptionSerializable(i18n.tr("Invalid User Account. Please Contact Support"));
         }
         if (!cr.enabled().isBooleanTrue()) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Your account is suspended"));
+            throw new RuntimeExceptionSerializable(i18n.tr("Your Account Is Suspended"));
         }
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
             AbstractAntiBot.authenticationFailed(token.email);
-            throw new RuntimeException(i18n.tr("Invalid request"));
+            throw new RuntimeException(i18n.tr("Invalid Request"));
         }
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {
             throw new RuntimeExceptionSerializable(i18n.tr("Token has expired"));

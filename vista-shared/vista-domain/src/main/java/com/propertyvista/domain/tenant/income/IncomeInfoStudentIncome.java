@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.Money;
 
 @DiscriminatorValue("student")
+@Caption(name = "Income Information Student Income")
 public interface IncomeInfoStudentIncome extends IIncomeInfo {
 
     public enum FundingChoice {
@@ -55,18 +56,18 @@ public interface IncomeInfoStudentIncome extends IIncomeInfo {
     AddressStructured address();
 
     @Override
-    @Caption(name = "Gross monthly amount")
+    @Caption(name = "Gross Monthly Amount")
     @NotNull
     Money monthlyAmount();
 
     @Override
     @Caption(name = "Program Start")
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> starts();
 
     @Override
     @Caption(name = "Program (Planned) to be completed on")
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> ends();
 
     @Caption(name = "Program")

@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services;
 
-import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 
-public interface PaymentService extends AbstractWizardService<PaymentInfo> {
+public interface PaymentService extends AbstractWizardService<PaymentInformation> {
 
 }

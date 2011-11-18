@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -151,7 +151,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, TenantFinancialDTO.class, null);
         assertEntityPermission(false, Charges.class, null);
         assertEntityPermission(false, Summary.class, null);
-        assertEntityPermission(false, PaymentInfo.class, null);
+        assertEntityPermission(false, PaymentInformation.class, null);
     }
 
     @Test
@@ -171,7 +171,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(true, TenantFinancialDTO.class, application);
         assertEntityPermission(true, Charges.class, application);
         assertEntityPermission(true, Summary.class, application);
-        assertEntityPermission(true, PaymentInfo.class, application);
+        assertEntityPermission(true, PaymentInformation.class, application);
 
         Application application2 = EntityFactory.create(Application.class);
         application2.setPrimaryKey(new Key(-252));
@@ -182,7 +182,7 @@ public class VistaAccessControlListTest {
         assertEntityPermission(false, TenantFinancialDTO.class, application2);
         assertEntityPermission(false, Charges.class, application2);
         assertEntityPermission(false, Summary.class, application2);
-        assertEntityPermission(false, PaymentInfo.class, application2);
+        assertEntityPermission(false, PaymentInformation.class, application2);
     }
 
 }

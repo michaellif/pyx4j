@@ -350,7 +350,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
             enterStudentForm(D.id(formDebugId, income.studentIncome()), detach(income.studentIncome()));
             break;
         default:
-            enterIncomeForm(D.id(formDebugId, income.otherIncomeInfo()), detach(income.otherIncomeInfo()));
+            enterIncomeForm(D.id(formDebugId, income.otherIncomeInformation()), detach(income.otherIncomeInformation()));
             break;
         }
     }

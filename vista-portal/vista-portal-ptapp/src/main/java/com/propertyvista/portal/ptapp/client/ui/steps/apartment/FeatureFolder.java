@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -75,7 +75,7 @@ class FeatureFolder extends VistaTableFolder<ChargeItem> {
     protected void removeItem(final CEntityFolderItem<ChargeItem> item) {
         if (!item.getValue().adjustments().isEmpty()) {
             MessageDialog.confirm(i18n.tr("Warning!"),
-                    i18n.tr("By removing this item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Runnable() {
+                    i18n.tr("By removing the selected item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Runnable() {
                         @Override
                         public void run() {
                             unconditionalRemoveItem(item);

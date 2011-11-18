@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -40,7 +41,7 @@ public interface Charges extends IEntity, IBoundToApplication {
     @Owned
     ChargeLineList oneTimeCharges();
 
-    // TODO add Pro-Rated duration,fraction information for calulation to be posible 
+    // TODO add Pro-Rated duration,fraction information for calulation to be posible
     @Owned
     ChargeLineList proratedCharges();
 
@@ -50,6 +51,7 @@ public interface Charges extends IEntity, IBoundToApplication {
 
     //Calculated base on percentage and total monthly payable. ChargesSharedCalculation.calculateCharges
     @Owned
+    @Caption(name = "Payment Charges Split")
     TenantChargeList paymentSplitCharges();
 
     // We need this here so that calculation library can figure out pro-rated charges

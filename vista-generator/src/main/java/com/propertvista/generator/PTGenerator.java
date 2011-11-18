@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -376,7 +376,7 @@ public class PTGenerator {
         } else if (index == 2) {
             tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.CoApplicant);
         } else {
-            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);
+            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependent);
         }
 
         if (index == 0) {
@@ -386,11 +386,11 @@ public class PTGenerator {
             tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(TenantInLease.Relationship.class));
         }
 
-// TODO check %-ge correctness bettween tenants here:        
+// TODO check %-ge correctness bettween tenants here:
         tenantSummary.tenantInLease().percentage().setValue(RandomUtil.randomInt(100));
 
         if (EnumSet.of(TenantInLease.Relationship.Daughter, TenantInLease.Relationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {
-            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependant);
+            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependent);
         }
         tenantSummary.tenantInLease().takeOwnership().setValue(RandomUtil.randomBoolean());
 

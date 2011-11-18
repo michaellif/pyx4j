@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -45,7 +45,7 @@ public interface TenantScreening extends IEntity {
     @ReadOnly
     Tenant tenant();
 
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> screeningDate();
 
     /**
@@ -71,11 +71,13 @@ public interface TenantScreening extends IEntity {
     @Owned
     @Detached
     @Length(3)
+    @Caption(name = "Income")
     IList<PersonalIncome> incomes();
 
     @Owned
     @Length(3)
     @Transient
+    @Caption(name = "Income (Other)")
     IList<IIncomeInfo> incomes2();
 
     @Owned

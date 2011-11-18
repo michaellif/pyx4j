@@ -78,7 +78,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
         main.setWidget(++row, 0, inject(proto().selfEmployed(), createSelfEmployedEditor()));
         main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
-        main.setWidget(++row, 0, inject(proto().otherIncomeInfo(), createOtherIncomeInfoEditor()));
+        main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
 
         if (isEditable()) {
             main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income)));
@@ -107,7 +107,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
         get(proto().selfEmployed()).setVisible(false);
         get(proto().studentIncome()).setVisible(false);
         get(proto().socialServices()).setVisible(false);
-        get(proto().otherIncomeInfo()).setVisible(false);
+        get(proto().otherIncomeInformation()).setVisible(false);
         if (fileUpload != null) {
             fileUpload.setVisible(false);
         }
@@ -147,7 +147,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                 break;
             default:
                 @SuppressWarnings("rawtypes")
-                CEntityEditor comp = (CEntityEditor) get(proto().otherIncomeInfo());
+                CEntityEditor comp = (CEntityEditor) get(proto().otherIncomeInformation());
                 comp.setVisible(true);
                 applyOtherLables(incomeSource, comp);
             }

@@ -26,6 +26,7 @@ import com.propertyvista.domain.media.Document;
 public interface Contract extends IEntity {
 
     @ToString(index = 1)
+    @Caption(name = "Contract Number")
     IPrimitive<String> contractID();
 
     @ToString(index = 2)
@@ -37,12 +38,12 @@ public interface Contract extends IEntity {
 
     @Caption(name = "Start Date")
     @MemberColumn(name = "contractStart")
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> start();
 
     @Caption(name = "Expiry Date")
     @MemberColumn(name = "contractEnd")
-    @Format("MM/dd/yyyy")
+    @Format("MM/DD/YYYY")
     IPrimitive<LogicalDate> end();
 
     Document document();

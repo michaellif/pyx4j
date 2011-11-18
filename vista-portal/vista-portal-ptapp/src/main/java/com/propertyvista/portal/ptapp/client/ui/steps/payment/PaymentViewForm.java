@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -57,11 +57,11 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.portal.domain.ptapp.PaymentInfo;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
-public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
+public class PaymentViewForm extends CEntityEditor<PaymentInformation> {
 
     private static I18n i18n = I18n.get(PaymentViewForm.class);
 
@@ -80,7 +80,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
     }
 
     public PaymentViewForm() {
-        super(PaymentInfo.class, new VistaEditorsComponentFactory());
+        super(PaymentInformation.class, new VistaEditorsComponentFactory());
     }
 
     @Override
@@ -276,7 +276,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
     }
 
     @Override
-    public void populate(PaymentInfo value) {
+    public void populate(PaymentInformation value) {
         super.populate(value);
         setInstrumentsVisibility(value.type().getValue());
         setAsCurrentAddress(value.sameAsCurrent().getValue());
@@ -345,7 +345,7 @@ public class PaymentViewForm extends CEntityEditor<PaymentInfo> {
 
                         @Override
                         public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                            return i18n.tr("Card expiry should be a future date");
+                            return i18n.tr("Expiration date should be a future date");
                         }
                     });
                 }
