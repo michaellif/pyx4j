@@ -105,4 +105,10 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
             }
         }, criteria);
     }
+
+    @Override
+    protected boolean isFilterRequired() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

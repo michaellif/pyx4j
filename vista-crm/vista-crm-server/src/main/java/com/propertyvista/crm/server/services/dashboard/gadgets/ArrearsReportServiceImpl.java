@@ -25,6 +25,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -41,8 +42,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);
 
     @Override
-    public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sorting,
-            int pageNumber, int pageSize) {
+    public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Criterion> customCriteria, Vector<Key> buildingPKs,
+            LogicalDate when, Vector<Sort> sorting, int pageNumber, int pageSize) {
         try {
             EntityQueryCriteria<MockupArrearsState> criteria = new EntityQueryCriteria<MockupArrearsState>(MockupArrearsState.class);
             // adjust the order of results in order to select the most recent statuses
@@ -58,6 +59,10 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
             if (!buildingPKs.isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().belongsTo().belongsTo(), buildingPKs));
+            }
+            for (Criterion c : customCriteria) {
+                // TODO add checking for validity
+                criteria.add(c);
             }
             final List<MockupArrearsState> allArrears = Persistence.service().query(criteria);
 

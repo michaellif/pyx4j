@@ -289,4 +289,10 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
     }
     //@formatter:on
 
+    @Override
+    protected boolean isFilterRequired() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
@@ -37,8 +38,8 @@ public interface ArrearsReportService extends IService {
      * @param when
      *            calculate arrears as on this date.
      */
-    void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
-            int pageNumber, int pageSize);
+    void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Criterion> customCriteria, Vector<Key> buildingPKs,
+            LogicalDate when, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
     void summary(AsyncCallback<EntitySearchResult<ArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
             int pageNumber, int pageSize);

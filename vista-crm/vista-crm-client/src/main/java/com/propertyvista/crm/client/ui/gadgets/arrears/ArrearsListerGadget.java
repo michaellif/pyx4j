@@ -25,9 +25,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
@@ -50,6 +54,11 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
     }
 
     protected abstract Arrears getArrearsMemberProto();
+
+    @Override
+    protected boolean isFilterRequired() {
+        return true;
+    }
 
     //@formatter:off  
     private List<ColumnDescriptor<MockupArrearsState>> getDefaultArrearsStatusColumns() {
@@ -156,11 +165,38 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
                         isLoading = false;
                         throw new Error(caught);
                     }
-                }, new Vector<Key>(filterData.buildings), filterData.toDate == null ? null : new LogicalDate(filterData.toDate),
+                }, getCustomCriteria(), new Vector<Key>(filterData.buildings), filterData.toDate == null ? null : new LogicalDate(filterData.toDate),
                         new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
             }
         } else {
             setPageData(new ArrayList<MockupArrearsState>(1), 0, 0, false);
         }
     }
+
+    private Vector<Criterion> getCustomCriteria() {
+        Vector<Criterion> customCriteria = new Vector<Criterion>();
+        for (DataTableFilterData filterData : getListerFilterData()) {
+            if (filterData.isFilterOK()) {
+                switch (filterData.getOperand()) {
+                case is:
+                    customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.EQUAL, filterData.getValue()));
+                    break;
+                case isNot:
+                    customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.NOT_EQUAL, filterData.getValue()));
+                    break;
+                case like:
+                    customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.RDB_LIKE, filterData.getValue()));
+                    break;
+                case greaterThen:
+                    customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.GREATER_THAN, filterData.getValue()));
+                    break;
+                case lessThen:
+                    customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.LESS_THAN, filterData.getValue()));
+                    break;
+                }
+            }
+        }
+        return customCriteria;
+    }
+
 }

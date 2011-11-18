@@ -32,12 +32,12 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
 import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
@@ -58,7 +58,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     protected static final int DEFAULT_PAGE_SIZE = 10;
 
-    private final DataTablePanel<E> entityListPanel;
+    private final DataTablePanel<E> dataTablePanel;
 
     private ListerGadgetBaseSettings settings;
 
@@ -76,35 +76,35 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             gadgetMetadata.settings().set(settings);
         }
 
-        entityListPanel = new DataTablePanel<E>(entityClass);
-        entityListPanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings(proto()));
-
-        entityListPanel.setPrevActionHandler(new ClickHandler() {
+        dataTablePanel = new DataTablePanel<E>(entityClass);
+        dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings(proto()));
+        dataTablePanel.setFilterActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                populateList();
+            }
+        });
+        dataTablePanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 prevListPage();
             }
         });
-        entityListPanel.setNextActionHandler(new ClickHandler() {
-
+        dataTablePanel.setNextActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 nextListPage();
             }
         });
-        entityListPanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+        dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
                 // get the sorting criteria and store it in settings
                 List<Sort> sorting = new ArrayList<Sort>(2);
-                ColumnDescriptor<E> primarySortColumn = entityListPanel.getDataTableModel().getSortColumn();
+                ColumnDescriptor<E> primarySortColumn = dataTablePanel.getDataTableModel().getSortColumn();
                 if (primarySortColumn != null) {
                     sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
                 }
-//                ColumnDescriptor<E> secondarySortColumn = entityListPanel.getDataTable().getDataTableModel().getSecondarySortColumn();
-//                if (secondarySortColumn != null) {
-//                    sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
-//                }
                 settings.sorting().clear();
                 for (Sort sort : sorting) {
                     SortEntity sortEntity = SortToEntity(sort);
@@ -116,20 +116,15 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         });
         // FIXME add handler for column selection (store the selected columns in settings)
 
-        // use the same style as ListerBase
-        entityListPanel.setWidth("100%");
-        entityListPanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
-        entityListPanel.getDataTable().setColumnSelector(getAvailableColumnDescriptors(entityListPanel.proto()));
-        entityListPanel.getDataTable().setHasColumnClickSorting(true);
-        entityListPanel.getDataTable().setHasCheckboxColumn(false);
-        entityListPanel.getDataTable().setMarkSelectedRow(false);
-        entityListPanel.getDataTable().setAutoColumnsWidth(true);
-        entityListPanel.getDataTable().renderTable();
-        entityListPanel.setFilterEnabled(false);
-
-        // TODO enable filters when they can be persisted
-
-        entityListPanel.addAttachHandler(new AttachEvent.Handler() {
+        dataTablePanel.setWidth("100%");
+        dataTablePanel.setFilterEnabled(isFilterRequired());
+        dataTablePanel.getDataTable().setColumnSelector(getAvailableColumnDescriptors(dataTablePanel.proto()));
+        dataTablePanel.getDataTable().setHasColumnClickSorting(true);
+        dataTablePanel.getDataTable().setHasCheckboxColumn(false);
+        dataTablePanel.getDataTable().setMarkSelectedRow(false);
+        dataTablePanel.getDataTable().setAutoColumnsWidth(true);
+        dataTablePanel.getDataTable().renderTable();
+        dataTablePanel.addAttachHandler(new AttachEvent.Handler() {
             @Override
             public void onAttachOrDetach(AttachEvent event) {
                 if (event.isAttached()) {
@@ -145,6 +140,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             }
         });
     }
+
+    protected abstract boolean isFilterRequired();
 
     /**
      * Implement in derived class to fill the page via {@link #setPageData(List, int, int, boolean)}.
@@ -285,7 +282,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     }
 
     protected IsWidget getListerWidget() {
-        return entityListPanel;
+        return dataTablePanel;
+    }
+
+    protected List<DataTableFilterData> getListerFilterData() {
+        return dataTablePanel.getFilterData();
     }
 
     public int getPageSize() {
@@ -326,8 +327,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         if (data.size() == 0 & pageNumber > 0) {
             prevListPage();
         } else {
-            entityListPanel.setPageSize(settings.pageSize().getValue());
-            entityListPanel.populateData(data, pageNumber, hasMoreData, totalRows);
+            dataTablePanel.setPageSize(settings.pageSize().getValue());
+            dataTablePanel.populateData(data, pageNumber, hasMoreData, totalRows);
         }
     }
 
