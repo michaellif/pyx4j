@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.util.List;
+import java.util.Vector;
 
 import junit.framework.Assert;
 
@@ -64,6 +65,27 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             List<Employee> empsSortedAsc = srv.query(criteria);
             Assert.assertEquals("result set size", 2, empsSortedAsc.size());
             Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp2.getPrimaryKey());
+        }
+    }
+
+    public void testCriterionIN() {
+        String setId = uniqueString();
+        Vector<Employee> emps = new Vector<Employee>();
+        final int dataSize = 3;
+        for (int i = 0; i < dataSize; i++) {
+            Employee emp = EntityFactory.create(Employee.class);
+            emp.firstName().setValue(uniqueString());
+            emp.workAddress().streetName().setValue(setId);
+            srv.persist(emp);
+            emps.add(emp);
+        }
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.in(criteria.proto().id(), emps));
+
+            List<Employee> empsRetrived = srv.query(criteria);
+            Assert.assertEquals("result set size", dataSize, empsRetrived.size());
         }
     }
 }

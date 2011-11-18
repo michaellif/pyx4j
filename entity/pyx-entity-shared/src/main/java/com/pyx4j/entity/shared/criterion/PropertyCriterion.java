@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IObject;
@@ -64,6 +65,10 @@ public class PropertyCriterion implements Criterion {
 
     public static PropertyCriterion ne(IObject<?> member, Serializable value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EQUAL, value);
+    }
+
+    public static PropertyCriterion in(IObject<?> member, Collection<?> values) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.IN, (Serializable) values);
     }
 
     public static PropertyCriterion in(IObject<?> member, Serializable... value) {
