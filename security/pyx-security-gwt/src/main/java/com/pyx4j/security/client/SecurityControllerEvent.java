@@ -37,9 +37,6 @@ public class SecurityControllerEvent extends GwtEvent<SecurityControllerHandler>
     }
 
     public static Type<SecurityControllerHandler> getType() {
-        if (TYPE == null) {
-            TYPE = new Type<SecurityControllerHandler>();
-        }
         return TYPE;
     }
 

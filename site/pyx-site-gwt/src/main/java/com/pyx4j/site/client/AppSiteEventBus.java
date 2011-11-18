@@ -26,7 +26,10 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.client.ContextChangeEvent;
+import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.shared.Behavior;
 
@@ -36,12 +39,22 @@ public class AppSiteEventBus extends SimpleEventBus {
         super();
 
         ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
+
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
                 fireEvent(new SecurityControllerEvent(event.getValue()));
             }
+
         });
 
+        ClientContext.addContextChangeHandler(new ContextChangeHandler() {
+
+            @Override
+            public void onContextChange(ContextChangeEvent event) {
+                fireEvent(event);
+
+            }
+        });
     }
 
 }

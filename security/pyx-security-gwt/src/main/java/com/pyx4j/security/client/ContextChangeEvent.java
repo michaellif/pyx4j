@@ -30,12 +30,10 @@ public class ContextChangeEvent extends GwtEvent<ContextChangeHandler> {
 
     private final Object value;
 
-    /**
-     * Creates the event.
-     * 
-     * @param value
-     *            the value
-     */
+    public static Type<ContextChangeHandler> getType() {
+        return TYPE;
+    }
+
     public ContextChangeEvent(String attributeName, Object value) {
         this.attributeName = attributeName;
         this.value = value;
