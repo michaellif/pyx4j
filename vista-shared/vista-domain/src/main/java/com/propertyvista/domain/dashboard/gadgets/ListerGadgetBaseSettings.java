@@ -59,16 +59,18 @@ public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
         }
     };
 
-    public IPrimitive<RefreshInterval> refreshInterval();
+    IPrimitive<RefreshInterval> refreshInterval();
 
-    public IPrimitive<Integer> pageSize();
+    IPrimitive<Integer> pageSize();
 
-    public IPrimitive<Integer> pageNumber();
-
-    @Owned
-    public IList<StringHolder> columnPaths();
+    IPrimitive<Integer> pageNumber();
 
     @Owned
-    public IList<SortEntity> sorting();
+    IList<StringHolder> columnPaths();
 
+    @Owned
+    IList<StringHolder> columnTitles();
+
+    @Owned
+    IList<SortEntity> sorting();
 }

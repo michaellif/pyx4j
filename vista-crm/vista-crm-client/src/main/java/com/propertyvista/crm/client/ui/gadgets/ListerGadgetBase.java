@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -77,7 +78,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         }
 
         dataTablePanel = new DataTablePanel<E>(entityClass);
-        dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings(proto()));
+        dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
         dataTablePanel.setFilterActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -110,7 +111,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                     SortEntity sortEntity = SortToEntity(sort);
                     settings.sorting().add(sortEntity);
                 }
-
                 populateList();
             }
         });
@@ -220,22 +220,31 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         return columnDescriptors;
     }
 
-    private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings(E proto) {
+    private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings() {
+        // FIXME remove the next line when the stringholder string duplication is solved
+        ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
+
         if (settings.columnPaths().isEmpty()) {
-            List<ColumnDescriptor<E>> descriptors = getDefaultColumnDescriptors(proto);
+            List<ColumnDescriptor<E>> descriptors = getDefaultColumnDescriptors(proto());
             for (ColumnDescriptor<E> columnDescriptor : descriptors) {
-                StringHolder columnName = EntityFactory.create(StringHolder.class);
-                columnName.stringValue().setValue(columnDescriptor.getColumnName());
-                settings.columnPaths().add(columnName);
+                StringHolder columnPath = EntityFactory.create(StringHolder.class);
+                StringHolder columnTitle = EntityFactory.create(StringHolder.class);
+                columnPath.stringValue().setValue(columnDescriptor.getColumnName());
+                columnTitle.stringValue().setValue(columnDescriptor.getColumnTitle());
+                //columnDescriptor.getWidth();
+                settings.columnPaths().add(columnPath);
+                settings.columnTitles().add(columnTitle);
             }
         }
         List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-        for (StringHolder columnName : settings.columnPaths()) {
-            ColumnDescriptor<E> columnDescriptor = ColumnDescriptorFactory.createColumnDescriptor(proto,
-                    proto.getMember(new Path(columnName.stringValue().getValue())));
+        Iterator<StringHolder> paths = settings.columnPaths().iterator();
+        Iterator<StringHolder> titles = settings.columnTitles().iterator();
+        while (paths.hasNext()) {
+            Path propertyPath = new Path(paths.next().stringValue().getValue());
+            String title = titles.next().stringValue().getValue();
+            ColumnDescriptor<E> columnDescriptor = columnDescriptorEx(proto().getMember(propertyPath), title);
             columnDescriptors.add(columnDescriptor);
         }
-
         return columnDescriptors;
     }
 
