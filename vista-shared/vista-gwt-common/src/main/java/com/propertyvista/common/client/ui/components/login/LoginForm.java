@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui.components.login;
 import static com.pyx4j.commons.HtmlUtils.h2;
 
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -110,6 +111,8 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
                     }
                 });
                 touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
+                touchAnchor.getElement().getStyle().setDisplay(Display.BLOCK);
+
                 devMessagePanel.add(touchAnchor);
             }
             devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
