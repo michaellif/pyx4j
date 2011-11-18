@@ -41,17 +41,50 @@ import com.propertyvista.domain.ref.Province;
  */
 public interface MockupArrearsState extends IEntity {
     public enum LegalStatus {
+        Clean {
+            @Override
+            public String toString() {
+                return tr("Clean");
+            }
+        },
+
+        FirstMissedPaymentLetterServed {
+            @Override
+            public String toString() {
+                return tr("1st Missed Payment Letter Served");
+            }
+        },
+
+        SecondMissedPaymentLetterServed {
+            @Override
+            public String toString() {
+                return tr("2nd Missed Payment Letter Served");
+            }
+        },
+
+        ThirdMissedPaymentLetterServed {
+            @Override
+            public String toString() {
+                return tr("3rd Missed Payment Letter Served");
+            }
+        },
+
         EvictionLetterServed {
             @Override
             public String toString() {
-                return I18n.get(MockupArrearsState.class).tr("eviction letter served");
+                return tr("Eviction Letter Served");
             }
         },
+
         CourtHearingDate {
             @Override
             public String toString() {
-                return I18n.get(MockupArrearsState.class).tr("court hearing date");
+                return tr("Court Hearing Date");
             }
+        };
+
+        public String tr(String translatableString) {
+            return I18n.get(LegalStatus.class).tr(translatableString);
         }
     }
 
@@ -116,9 +149,11 @@ public interface MockupArrearsState extends IEntity {
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> city();
 
-    // TODO special comparator
+    // TODO special comparator 
+    @EmbeddedEntity
     Province province();
 
+    @EmbeddedEntity
     // TODO special comparator
     Country country();
 

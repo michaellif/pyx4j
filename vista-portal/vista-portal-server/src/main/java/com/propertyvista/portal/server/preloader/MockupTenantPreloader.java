@@ -51,6 +51,8 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
     private static final Random RND = new Random(9001);
 
     //@formatter:off
+    private static final List<LegalStatus> LEGAL_STATUSES = Arrays.asList(LegalStatus.values());
+    
     private static final long ONE_DAY = 1000l * 60l * 60l * 24l;
     private static final long MIN_LEASE = 24l * 60l * 60l * 1000l * 365l;
     private static final long MAX_LEASE = 24l * 60l * 60l * 1000l * 365l * 3l;
@@ -60,11 +62,11 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
     private static final double HAS_ARREAR_CHANCE = 0.2;
     private static final double HAS_PREPAYMENT_CHANCE = 0.1;
     private static final double MAX_PREPAYMENTS = 2000d;
-    //@formatter:on
-
+    
     private static final double LMR_UNIT_RENT_DIFFERENCE_CHANCE = 0.1;
 
     private static final double LEGAL_STATUS_CHANCE = 0.5;
+    //@formatter:on
 
     private static final List<String> REGIONS = Arrays.asList("GTA", "West", "East");
 
@@ -81,8 +83,6 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
         List<MockupTenant> tenants = new ArrayList<MockupTenant>();
         List<ArrearsSummary> buildingArrears = new ArrayList<ArrearsSummary>();
 
-        int tenantsCount = 0;
-        int arrearsCount = 0;
         for (Building building : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
@@ -233,7 +233,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
     }
 
     private LegalStatus randomLegalStatus() {
-        return RND.nextDouble() < LEGAL_STATUS_CHANCE ? (RND.nextBoolean() ? LegalStatus.EvictionLetterServed : LegalStatus.CourtHearingDate) : null;
+        return RND.nextDouble() < LEGAL_STATUS_CHANCE ? RandomUtil.randomChoice(RND, LEGAL_STATUSES, 1).get(0) : LegalStatus.Clean;
     }
 
     private static void sumArrears(MockupArrearsState arrearsCompilation, List<Path> arrearsCategory) {
