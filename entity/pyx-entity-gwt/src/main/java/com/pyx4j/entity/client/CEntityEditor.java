@@ -79,6 +79,10 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
         return binder.getValue();
     }
 
+    public boolean isDirty() {
+        return binder.isDirty();
+    }
+
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (isAttached()) {

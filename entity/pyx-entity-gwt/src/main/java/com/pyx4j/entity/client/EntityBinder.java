@@ -288,9 +288,9 @@ public class EntityBinder<E extends IEntity> {
         }
     }
 
-    public boolean isChanged() {
+    public boolean isDirty() {
         if (getEntityEditor().isAttached()) {
-            throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
+            throw new Error("Editor is bound. Only isDirty() method of root editor can be called.");
         }
         return !equalRecursive(getOrigValue(), getValue());
     }
@@ -318,7 +318,7 @@ public class EntityBinder<E extends IEntity> {
                 continue;
             }
             if (memberMeta.isEntity()) {
-                if (memberMeta.isEmbedded()) {
+                if (memberMeta.isOwnedRelationships()) {
                     if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
                         log.debug("changed {}", memberName);
                         return false;

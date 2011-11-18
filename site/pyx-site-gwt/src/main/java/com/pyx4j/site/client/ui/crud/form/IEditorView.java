@@ -49,6 +49,8 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     public E getValue();
 
+    public boolean isDirty();
+
     void onApplySuccess();
 
     void onSaveSuccess();

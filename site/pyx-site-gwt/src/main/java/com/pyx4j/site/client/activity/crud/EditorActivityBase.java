@@ -27,17 +27,21 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.form.IEditorView.EditMode;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class EditorActivityBase<E extends IEntity> extends AbstractActivity implements IEditorView.Presenter {
+
+    private static I18n i18n = I18n.get(EditorActivityBase.class);
 
     protected final IEditorView<E> view;
 
@@ -241,9 +245,18 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     }
 
+    // TODO Misha please review this implementation with me!
+    @Deprecated
+    protected boolean __sugestedChangesForIsDirty__() {
+        return false;
+    }
+
     protected void onApplySuccess(E result) {
         view.onApplySuccess();
-
+        if (__sugestedChangesForIsDirty__()) {
+            // TODO find a better way to clear dirty flag in form
+            view.populate(result);
+        }
         if (isNewEntity()) { // switch new item to regular editing after successful apply!..
             entityID = result.getPrimaryKey();
             view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
@@ -253,6 +266,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onSaveSuccess(E result) {
         view.onSaveSuccess();
+        if (__sugestedChangesForIsDirty__()) {
+            // TODO find a better way to clear dirty flag in form
+            view.populate(result);
+        }
         goToViewer(result.getPrimaryKey());
     }
 
@@ -266,4 +283,21 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
     }
 
+    @Override
+    public String mayStop() {
+        if (__sugestedChangesForIsDirty__()) {
+            if (view.isDirty()) {
+                String entityName = view.getValue().getStringView();
+                if (CommonsStringUtils.isEmpty(entityName)) {
+                    return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());
+                } else {
+                    return i18n.tr("Changes to {0} ''{1}'' were not saved", view.getValue().getEntityMeta().getCaption(), entityName);
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 }

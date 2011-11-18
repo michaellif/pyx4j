@@ -63,4 +63,9 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     public boolean onSaveFail(Throwable caught) {
         return false;
     }
+
+    @Override
+    public boolean isDirty() {
+        return form.isDirty();
+    }
 }
