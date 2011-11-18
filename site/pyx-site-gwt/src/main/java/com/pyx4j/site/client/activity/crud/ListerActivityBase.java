@@ -87,7 +87,10 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void setParentFiltering(Key parentID) {
-        parentFiltering = new DataTableFilterData(new Path(entityClass, EntityFactory.getEntityMeta(entityClass).getOwnerMemberName()), Operands.is, parentID);
+        String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
+        assert (ownerMemberName != null) : "No @Owner in " + entityClass;
+        assert (parentID != null);
+        parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operands.is, parentID);
         this.parentID = parentID; // save parent id for newItem creation...
     }
 
