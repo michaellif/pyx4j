@@ -99,6 +99,21 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("padding", "0 3px");
         style.addProperty("display", "inline-block");
         style.addGradient(ThemeColors.foreground, 0, ThemeColors.foreground, 0.2);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ButtonContent);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ButtonImage);
+        style.addProperty("verticalAlign", "middle");
+        style.addProperty("display", "inline-block");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ButtonText);
+        style.addProperty("verticalAlign", "middle");
+        style.addProperty("whiteSpace", "nowrap");
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);

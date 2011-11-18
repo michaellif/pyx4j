@@ -38,6 +38,8 @@ public class ColumnDescriptor<E> {
 
     private boolean wordWrap = true;
 
+    private final boolean visible = false;
+
     public ColumnDescriptor(String columnName, String columnTitle) {
         this(columnName, columnTitle, DEFAULT_WIDTH);
     }

@@ -90,25 +90,17 @@ public class Button extends ButtonBase {
         facesHandler.init(this);
 
         content = DOM.createSpan();
-        content.getStyle().setProperty("display", "inline-block");
-        content.getStyle().setProperty("whiteSpace", "nowrap");
-        content.getStyle().setProperty("verticalAlign", "middle");
-        content.getStyle().setProperty("height", "100%");
 
         setStylePrimaryName(content, DefaultWidgetsTheme.StyleName.ButtonContent.name());
 
         if (image != null) {
             imageElem = image.getElement();
-            imageElem.getStyle().setProperty("verticalAlign", "middle");
-            imageElem.getStyle().setProperty("display", "inline-block");
             setStylePrimaryName(imageElem, DefaultWidgetsTheme.StyleName.ButtonImage.name());
             content.appendChild(imageElem);
         }
         if (text != null) {
             textElem = DOM.createSpan();
             textElem.setInnerHTML(text);
-            textElem.getStyle().setProperty("verticalAlign", "middle");
-            textElem.getStyle().setProperty("display", "inline-block");
             content.appendChild(textElem);
             setStylePrimaryName(textElem, DefaultWidgetsTheme.StyleName.ButtonText.name());
         }

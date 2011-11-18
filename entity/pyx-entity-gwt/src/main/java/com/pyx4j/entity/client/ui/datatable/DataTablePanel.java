@@ -38,7 +38,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.BarSeparator;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public class DataTablePanel<E extends IEntity> extends VerticalPanel {
@@ -58,8 +57,6 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     private WidgetsImages images;
 
     private Button filterButton;
-
-    private BarSeparator filterSeparator;
 
     public DataTablePanel(Class<E> clazz) {
         this(clazz, EntityFolderImages.INSTANCE);
@@ -88,7 +85,6 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");
 
-        filterSeparator = topActionsBar.getToolbar().insertSeparator(0);
         topActionsBar.getToolbar().addItem(filterButton);
 
         filterButton.addClickHandler(new ClickHandler() {
@@ -123,8 +119,6 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     public void setVisibleBottomActionsBar(boolean visible) {
         bottomActionsBar.setVisible(visible);
     }
-
-//    public abstract List<ColumnDescriptor<E>> getColumnDescriptors();
 
     public EntityMeta getEntityMeta() {
         return entityPrototype.getEntityMeta();
@@ -232,6 +226,5 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setFilterEnabled(boolean enabled) {
         filterButton.setVisible(enabled);
-        filterSeparator.setVisible(enabled);
     }
 }
