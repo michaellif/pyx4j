@@ -74,7 +74,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Tenant")).build());
             get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
-        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().gender()), 7).build());
+        person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
         person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate()), 9).build());
 
         person.setWidget(++row, 0, new HTML("&nbsp"));

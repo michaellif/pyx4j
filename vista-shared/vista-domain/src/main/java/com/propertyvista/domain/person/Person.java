@@ -31,7 +31,7 @@ import com.propertyvista.domain.contact.Phone;
 public interface Person extends IEntity {
 
     @I18n
-    public enum Gender {
+    public enum Sex {
 
         Male, Female;
 
@@ -46,8 +46,9 @@ public interface Person extends IEntity {
     @EmbeddedEntity
     Name name();
 
+    @NotNull
     @ToString(index = 1)
-    IPrimitive<Gender> gender();
+    IPrimitive<Sex> sex();
 
     @EmbeddedEntity
     Phone homePhone();

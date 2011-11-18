@@ -492,7 +492,7 @@ public class PTGenerator {
             guarantor.name().lastName().setValue(DataGenerator.randomLastName());
             guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
             guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
-            guarantor.gender().setValue(RandomUtil.randomEnum(Person.Gender.class));
+            guarantor.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
             guarantor.email().set(CommonsGenerator.createEmail(guarantor.name()));
             tenantScreening.guarantors().add(guarantor);
         }

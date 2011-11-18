@@ -39,6 +39,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().name()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().sex()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().birthDate()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().homePhone()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().mobilePhone()));

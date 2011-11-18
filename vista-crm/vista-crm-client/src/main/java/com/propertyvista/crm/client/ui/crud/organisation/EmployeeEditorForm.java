@@ -81,7 +81,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
         }
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().gender()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         main.setBR(++row, 0, 1);

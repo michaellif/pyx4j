@@ -63,7 +63,7 @@ public class CTenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuara
             get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().gender()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         int col = 1;
