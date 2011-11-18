@@ -41,9 +41,11 @@ public class CommonsGenerator {
 
     private static List<Name> names;
 
-    static String[] lipsum;
+    private static String[] employeeTitles;
 
-    static String[] lipsumShort;
+    private static String[] lipsum;
+
+    private static String[] lipsumShort;
 
     private static List<AddressStructured> adresses;
 
@@ -59,6 +61,13 @@ public class CommonsGenerator {
             lipsumShort = CSVLoad.loadFile(IOUtils.resourceFileName("lipsum-short.csv", CommonsGenerator.class), "description");
         }
         return lipsumShort[DataGenerator.nextInt(lipsumShort.length, "lipsumShort", 4)];
+    }
+
+    public static String randomEmployeeTitle() {
+        if (employeeTitles == null) {
+            employeeTitles = CSVLoad.loadFile(IOUtils.resourceFileName("employee-titles.csv", CommonsGenerator.class), "title");
+        }
+        return employeeTitles[DataGenerator.nextInt(employeeTitles.length, "employeeTitles", 4)];
     }
 
     public static Name createName() {

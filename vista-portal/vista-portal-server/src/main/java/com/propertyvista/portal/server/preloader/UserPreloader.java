@@ -18,7 +18,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.PreloadData;
 import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
@@ -94,7 +93,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             String email = DemoData.UserType.EMP.getEmail(i);
 
             Employee emp = CommonsGenerator.createEmployee().clone(Employee.class);
-            emp.title().setValue(RandomUtil.random(PreloadData.pmcEmployeeTitles));
+            emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
             emp.email().address().setValue(email);
 
             emp.user().set(UserPreloader.createUser(emp.name().getStringView(), email, email, RandomUtil.random(VistaBehavior.getCrmBehaviors())));

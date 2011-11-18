@@ -22,9 +22,6 @@ public class PreloadData {
     public final static String[] CITIES = { "Toronto", "Vancouver", "Montreal", "Quebec", "Richmond Hill", "New Market", "Thornhill", "Scarborough",
             "North York" };
 
-    public final static String[] pmcEmployeeTitles = { "Regional Director", "Property Manager", "Account Executive", "Assistant Property Manager",
-            "Estate Agent", "Real Estate Sales Agent", "Super-Intendant" };
-
     public final static String[] COMPANY_ROLES = { "Sales", "Technical", "Help Desk" };
 
     public final static String[] CONTACT_ROLES = { "Administrator", "Support", "Tech" };
