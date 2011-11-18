@@ -133,7 +133,7 @@
 
             <dependency>
                 <groupId>com.pyx4j</groupId>
-                <artifactId>pyx-site-admin</artifactId>
+                <artifactId>pyx-site-gwt</artifactId>
                 <version>${pyxVersion}</version>
             </dependency>
 
