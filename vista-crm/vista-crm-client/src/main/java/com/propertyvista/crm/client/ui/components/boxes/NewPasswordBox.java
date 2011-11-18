@@ -66,9 +66,9 @@ public class NewPasswordBox extends OkCancelBox {
     public boolean isOk() {
         if (super.isOk()) {
             if (showOldPassword) {
-                return (!oldPassword.getValue().isEmpty() && !newPassword1.getValue().isEmpty() && !newPassword2.getValue().isEmpty());
+                return (oldPassword.getValue() != null && newPassword1.getValue() != null && newPassword2.getValue() != null);
             } else {
-                return (!newPassword1.getValue().isEmpty() && !newPassword2.getValue().isEmpty());
+                return (newPassword1.getValue() != null && newPassword2.getValue() != null);
             }
         }
         return false;

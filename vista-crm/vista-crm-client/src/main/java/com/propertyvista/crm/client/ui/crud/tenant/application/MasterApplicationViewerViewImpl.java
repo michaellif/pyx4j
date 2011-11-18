@@ -13,15 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
@@ -37,13 +40,21 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
     private final IListerView<ApplicationDTO> applicationLister;
 
-    private final CHyperlink approveAction;
+    private final Button approveAction;
 
-    private final CHyperlink moreInfoAction;
+    private final Button moreInfoAction;
 
-    private final CHyperlink declineAction;
+    private final Button declineAction;
 
-    private final CHyperlink cancelAction;
+    private final Button cancelAction;
+
+    private static final String APPROVE = i18n.tr("Approve");
+
+    private static final String MORE_INFO = i18n.tr("More Info");
+
+    private static final String DECLINE = i18n.tr("Decline");
+
+    private static final String CANCEL = i18n.tr("Cancel");
 
     public MasterApplicationViewerViewImpl() {
         super(CrmSiteMap.Tenants.MasterApplication.class, true);
@@ -51,10 +62,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         applicationLister = new ListerInternalViewImplBase<ApplicationDTO>(new ApplicationLister());
 
         // Add actions:
-        approveAction = new CHyperlink(new Command() {
+        approveAction = new Button(APPROVE, new ClickHandler() {
             @Override
-            public void execute() {
-                new ShowPopUpBox<ActionBox>(new ActionBox(i18n.tr("Approve"))) {
+            public void onClick(ClickEvent event) {
+                new ShowPopUpBox<ActionBox>(new ActionBox(APPROVE)) {
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
@@ -64,13 +75,12 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 };
             }
         });
-        approveAction.setValue(i18n.tr("Approve"));
         addToolbarItem(approveAction.asWidget());
 
-        moreInfoAction = new CHyperlink(new Command() {
+        moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
             @Override
-            public void execute() {
-                new ShowPopUpBox<ActionBox>(new ActionBox(i18n.tr("More Info"))) {
+            public void onClick(ClickEvent event) {
+                new ShowPopUpBox<ActionBox>(new ActionBox(MORE_INFO)) {
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
@@ -80,13 +90,12 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 };
             }
         });
-        moreInfoAction.setValue(i18n.tr("More Info"));
         addToolbarItem(moreInfoAction.asWidget());
 
-        declineAction = new CHyperlink(new Command() {
+        declineAction = new Button(DECLINE, new ClickHandler() {
             @Override
-            public void execute() {
-                new ShowPopUpBox<ActionBox>(new ActionBox(i18n.tr("Decline"))) {
+            public void onClick(ClickEvent event) {
+                new ShowPopUpBox<ActionBox>(new ActionBox(DECLINE)) {
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
@@ -96,12 +105,11 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 };
             }
         });
-        declineAction.setValue(i18n.tr("Decline"));
         addToolbarItem(declineAction.asWidget());
 
-        cancelAction = new CHyperlink(new Command() {
+        cancelAction = new Button(CANCEL, new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to cancel the application?"), new Runnable() {
                     @Override
                     public void run() {
@@ -110,7 +118,6 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                 });
             }
         });
-        cancelAction.setValue(i18n.tr("Cancel"));
         addToolbarItem(cancelAction.asWidget());
 
         //set main form here: 
@@ -133,8 +140,14 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
         protected Widget createContent() {
             okButton.setEnabled(true);
+
+            VerticalPanel content = new VerticalPanel();
+            content.add(new HTML(i18n.tr("Please fill the reason:")));
+            content.add(reason);
+
             reason.setWidth("100%");
-            return reason.asWidget();
+            content.setWidth("100%");
+            return content.asWidget();
 
         }
 

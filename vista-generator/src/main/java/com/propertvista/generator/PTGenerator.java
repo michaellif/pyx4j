@@ -395,7 +395,7 @@ public class PTGenerator {
         tenantSummary.tenantInLease().takeOwnership().setValue(RandomUtil.randomBoolean());
 
         if (index == 0) {
-            tenantSummary.tenant().person().name().namePrefix().setValue("");
+            tenantSummary.tenant().person().name().namePrefix().setValue(null);
             tenantSummary.tenant().person().name().middleName().setValue("");
             tenantSummary.tenant().person().email().address().setValue(user.email().getValue());
             user.name().setValue(tenantSummary.tenant().person().name().getStringView());

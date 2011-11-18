@@ -19,14 +19,27 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface Name extends IEntity {
 
     @I18n
-    public enum Title {
+    public enum Prefix {
 
-        Mr, Mrs, Ms, Miss, Dr;
+        @Translate("Mr.")
+        Mr,
+
+        @Translate("Mrs.")
+        Mrs,
+
+        @Translate("Ms.")
+        Ms,
+
+        Miss,
+
+        @Translate("Dr.")
+        Dr;
 
         @Override
         public String toString() {
@@ -35,7 +48,7 @@ public interface Name extends IEntity {
     }
 
     @ToString(index = 1)
-    IPrimitive<String> namePrefix();
+    IPrimitive<Prefix> namePrefix();
 
     @NotNull
     @ToString(index = 2)

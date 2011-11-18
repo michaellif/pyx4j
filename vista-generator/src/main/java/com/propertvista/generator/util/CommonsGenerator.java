@@ -65,7 +65,7 @@ public class CommonsGenerator {
         Name name = EntityFactory.create(Name.class);
 
         if (RandomUtil.randomInt() % 5 == 0) {
-            name.namePrefix().setValue(RandomUtil.random(PreloadData.NAME_PREFIX));
+            name.namePrefix().setValue(RandomUtil.randomEnum(Name.Prefix.class));
         }
 
         name.firstName().setValue(DataGenerator.randomFirstName());

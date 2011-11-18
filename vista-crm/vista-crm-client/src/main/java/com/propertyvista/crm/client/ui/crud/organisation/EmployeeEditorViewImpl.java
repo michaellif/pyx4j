@@ -13,10 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.boxes.NewPasswordBox;
@@ -26,15 +27,16 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
 public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> implements EmployeeEditorView {
 
-    private final CHyperlink passwordAction;
+    private final Button passwordAction;
 
     public EmployeeEditorViewImpl() {
         super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm());
 
         // Add actions:
-        passwordAction = new CHyperlink(new Command() {
+        passwordAction = new Button(i18n.tr("Change password"), new ClickHandler() {
+
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 new ShowPopUpBox<NewPasswordBox>(new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit()))) {
                     @Override
                     protected void onClose(NewPasswordBox box) {
@@ -45,7 +47,6 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
                 };
             }
         });
-        passwordAction.setValue(i18n.tr("Change password"));
         addToolbarItem(passwordAction.asWidget());
     }
 }
