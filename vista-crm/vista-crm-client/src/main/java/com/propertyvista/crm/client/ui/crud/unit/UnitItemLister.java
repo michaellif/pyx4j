@@ -27,12 +27,12 @@ public class UnitItemLister extends ListerBase<AptUnitItem> {
 
     public UnitItemLister() {
         super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     public UnitItemLister(boolean readOnly) {
         super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, readOnly);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     @Override

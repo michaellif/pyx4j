@@ -27,12 +27,12 @@ public class ElevatorLister extends ListerBase<ElevatorDTO> {
 
     public ElevatorLister() {
         super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     public ElevatorLister(boolean readOnly) {
         super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, readOnly);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     @Override

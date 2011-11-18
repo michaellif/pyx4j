@@ -27,12 +27,12 @@ public class BoilerLister extends ListerBase<BoilerDTO> {
 
     public BoilerLister() {
         super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     public BoilerLister(boolean readOnly) {
         super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, readOnly);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     @Override

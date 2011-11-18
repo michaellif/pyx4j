@@ -27,12 +27,12 @@ public class ReportLister extends ListerBase<DashboardMetadata> {
 
     public ReportLister() {
         super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     public ReportLister(boolean readOnly) {
         super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class, readOnly);
-        getDataTablePanel().setFiltersVisible(false);
+        getDataTablePanel().setFilterEnabled(false);
     }
 
     @Override

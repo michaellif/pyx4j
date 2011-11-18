@@ -62,7 +62,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     private ListerGadgetBaseSettings settings;
 
-    private E proto;
+    private final E proto;
 
     public ListerGadgetBase(GadgetMetadata gmd, Class<E> entityClass) {
         super(gmd);
@@ -76,14 +76,9 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
             gadgetMetadata.settings().set(settings);
         }
 
-        entityListPanel = new DataTablePanel<E>(entityClass) {
-            @Override
-            // although the name doesn't give a clue, this sets the default column descriptors for the EntityListPanelWidget
-            public List<ColumnDescriptor<E>> getColumnDescriptors() {
-                return fetchColumnDescriptorsFromSettings(proto());
-            }
+        entityListPanel = new DataTablePanel<E>(entityClass);
+        entityListPanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings(proto()));
 
-        };
         entityListPanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -130,7 +125,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         entityListPanel.getDataTable().setMarkSelectedRow(false);
         entityListPanel.getDataTable().setAutoColumnsWidth(true);
         entityListPanel.getDataTable().renderTable();
-        entityListPanel.setFiltersVisible(false);
+        entityListPanel.setFilterEnabled(false);
 
         // TODO enable filters when they can be persisted
 

@@ -56,15 +56,15 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
     private static final String ALL_BUTTON_CAPTION = "All";
 
-    private DataTablePanel<UnitVacancyStatus> unitListPanel;
+    private final DataTablePanel<UnitVacancyStatus> unitListPanel;
 
-    private UnitAvailabilityReportSettings settings;
+    private final UnitAvailabilityReportSettings settings;
 
-    private VerticalPanel panel;
+    private final VerticalPanel panel;
 
-    private VacancyReportService service;
+    private final VacancyReportService service;
 
-    private FlexTable controlsPanel;
+    private final FlexTable controlsPanel;
 
     private boolean isLoading = false;
 
@@ -86,17 +86,10 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         super(gmd);
         settings = gadgetMetadata.settings().cast();
 
-        final List<ColumnDescriptor<UnitVacancyStatus>> defaultColumns = getDefaultColumns();
         final List<ColumnDescriptor<UnitVacancyStatus>> availableColumns = getAvailableColumns();
-        unitListPanel = new DataTablePanel<UnitVacancyStatus>(UnitVacancyStatus.class) {
+        unitListPanel = new DataTablePanel<UnitVacancyStatus>(UnitVacancyStatus.class);
+        unitListPanel.setColumnDescriptors(getDefaultColumns());
 
-            @Override
-            // although the name doesn't give a clue, this sets the default column descriptors for the EntityListPanelWidget
-            public List<ColumnDescriptor<UnitVacancyStatus>> getColumnDescriptors() {
-                return defaultColumns;
-            }
-
-        };
         unitListPanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
