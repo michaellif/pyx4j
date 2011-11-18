@@ -67,8 +67,8 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.NOT_EQUAL, value);
     }
 
-    public static PropertyCriterion in(IObject<?> member, Collection<?> values) {
-        return new PropertyCriterion(member.getPath().toString(), Restriction.IN, (Serializable) values);
+    public static <T extends Collection<?> & Serializable> PropertyCriterion in(IObject<?> member, T values) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.IN, values);
     }
 
     public static PropertyCriterion in(IObject<?> member, Serializable... value) {
