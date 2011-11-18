@@ -22,17 +22,18 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.BarChart2D;
 import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
+import com.pyx4j.svg.chart.GridBasedChart;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
@@ -58,6 +59,10 @@ public class ArrearsYOYAnalysisChart extends GadgetBase implements IBuildingGadg
 
     Vector<Vector<Double>> data;
 
+    private final SvgFactoryForGwt factory;
+
+    private boolean isLoading = false;
+
     public ArrearsYOYAnalysisChart(GadgetMetadata gmd) {
         super(gmd);
         service = GWT.create(ArrearsReportService.class);
@@ -77,7 +82,11 @@ public class ArrearsYOYAnalysisChart extends GadgetBase implements IBuildingGadg
         };
         graph.setWidth("100%");
         graph.setHeight("" + GRAPH_HEIGHT + "em");
+        graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+
         data = null;
+
+        factory = new SvgFactoryForGwt();
     }
 
     @Override
@@ -105,16 +114,19 @@ public class ArrearsYOYAnalysisChart extends GadgetBase implements IBuildingGadg
 
     private void populate() {
         if (filterData != null) {
-            if (isRunning()) {
+            if (isRunning() & !isLoading) {
+                isLoading = true;
                 service.arrearsMonthlyComparison(new AsyncCallback<Vector<Vector<Double>>>() {
                     @Override
                     public void onSuccess(Vector<Vector<Double>> result) {
+                        isLoading = false;
                         setData(result);
                     }
 
                     @Override
                     public void onFailure(Throwable caught) {
-                        // TODO Auto-generated method stub
+                        isLoading = false;
+                        // TODO report error using base class
                     }
                 }, new Vector<Key>(filterData.buildings), YEARS_TO_COMPARE);
             }
@@ -131,20 +143,37 @@ public class ArrearsYOYAnalysisChart extends GadgetBase implements IBuildingGadg
 
     private void redraw() {
         graph.clear();
-        if (data == null || data.isEmpty()) {
-            // TODO show something like no data provided
-            return;
+
+        if (!(data == null || data.isEmpty())) {
+            DataSource ds = new DataSource();
+            ds.setSeriesDescription(createSeriesDescription());
+
+            for (int month = 0; month < 12; ++month) {
+                ds.addDataSet(ds.new Metric(i18n.tr(TimeUtils.MONTH_NAMES_SHORT[month])), data.get(month));
+            }
+            SvgRoot svgroot = factory.getSvgRoot();
+            svgroot.add(createChart(ds));
+            graph.add((Widget) svgroot);
+        } else {
+            // TODO make it look better
+            // TODO this kind of functionality should be provided by the base class
+            Label noData = new Label(i18n.tr("Data unavailable"));
+            graph.add(noData);
         }
 
-        DataSource ds = new DataSource();
+    }
 
-        ds.setSeriesDescription(createSeriesDescription());
-
-        for (int month = 0; month < 12; ++month) {
-            ds.addDataSet(ds.new Metric(i18n.tr(TimeUtils.MONTH_NAMES_SHORT[month])), data.get(month));
+    private List<String> createSeriesDescription() {
+        int lastYear = ((filterData != null) && (filterData.toDate != null) ? new LogicalDate(filterData.toDate) : new LogicalDate()).getYear() + 1900;
+        int firstYear = lastYear - YEARS_TO_COMPARE + 1;
+        List<String> description = new ArrayList<String>(lastYear - firstYear);
+        for (int year = firstYear; year <= lastYear; ++year) {
+            description.add(Integer.toString(year));
         }
+        return description;
+    }
 
-        SvgFactory factory = new SvgFactoryForGwt();
+    private GridBasedChartConfigurator createConfig(DataSource ds) {
         GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, graph.getElement().getClientWidth(), graph.getElement()
                 .getClientHeight());
         config.setGridType(GridType.Both);
@@ -152,21 +181,10 @@ public class ArrearsYOYAnalysisChart extends GadgetBase implements IBuildingGadg
         config.setShowValueLabels(false);
         config.setLegend(true);
         config.setZeroBased(false);
-
-        SvgRoot svgroot = factory.getSvgRoot();
-        svgroot.add(new BarChart2D(config));
-
-        graph.add((Widget) svgroot);
-        graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+        return config;
     }
 
-    private List<String> createSeriesDescription() {
-        int lastYear = (filterData.toDate != null ? new LogicalDate(filterData.toDate) : new LogicalDate()).getYear() + 1900;
-        int firstYear = lastYear - YEARS_TO_COMPARE;
-        List<String> description = new ArrayList<String>(lastYear - firstYear);
-        for (int year = firstYear; year <= lastYear; ++year) {
-            description.add(Integer.toString(year));
-        }
-        return description;
+    private GridBasedChart createChart(DataSource ds) {
+        return new BarChart2D(createConfig(ds));
     }
 }
