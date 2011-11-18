@@ -20,6 +20,7 @@
  */
 package com.pyx4j.security.shared;
 
+import java.util.Collection;
 import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
@@ -53,6 +54,15 @@ public abstract class SecurityController {
 
     public static boolean checkBehavior(Behavior behavior) {
         return controller.getAcl().checkBehavior(behavior);
+    }
+
+    public static <T extends Behavior> boolean checkAnyBehavior(Collection<T> list) {
+        for (Behavior behavior : list) {
+            if (controller.getAcl().checkBehavior(behavior)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean checkAnyBehavior(Behavior... behaviors) {
