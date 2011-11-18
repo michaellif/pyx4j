@@ -119,19 +119,19 @@ public interface UnitVacancyStatus extends IEntity {
 
     /** {@link AptUnit#availableForRent()} - 1 */
     @Transient
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveOutDay();
 
     /** Applicable only for rented */
     @Transient
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveInDay();
 
     /** Applicable only for rented; maybe different than move out date */
     @Transient
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> rentedFromDate();
 
@@ -149,12 +149,12 @@ public interface UnitVacancyStatus extends IEntity {
 
     /** this is hack to use the lister service interface */
     @Transient
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> fromDate();
 
     /** this is hack to use the lister service interface */
     @Transient
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> toDate();
 
 }

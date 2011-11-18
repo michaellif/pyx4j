@@ -49,7 +49,7 @@ public interface TenantGuarantor extends IEntity, Person {
     @Override
     @Caption(name = "Birth Date")
     @NotNull
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> birthDate();
 
     @Owned

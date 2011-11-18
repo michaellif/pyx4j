@@ -27,10 +27,10 @@ public interface Maintenance extends IEntity {
     Contract contract();
 
     @Caption(name = "Last Service Date")
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> lastService();
 
     @Caption(name = "Next Service Date")
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> nextService();
 }

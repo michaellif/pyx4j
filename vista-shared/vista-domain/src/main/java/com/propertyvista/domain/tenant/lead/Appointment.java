@@ -56,7 +56,7 @@ public interface Appointment extends IEntity {
     Lead lead();
 
     @NotNull
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @MemberColumn(name = "appointmentDate")
     IPrimitive<LogicalDate> date();
 

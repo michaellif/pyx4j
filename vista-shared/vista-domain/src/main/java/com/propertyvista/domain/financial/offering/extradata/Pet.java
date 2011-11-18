@@ -61,7 +61,7 @@ public interface Pet extends ChargeItemExtraData {
     public IPrimitive<WeightUnit> weightUnit();
 
     @NotNull
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @BusinessEqualValue
     public IPrimitive<LogicalDate> birthDate();
 

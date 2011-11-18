@@ -28,7 +28,7 @@ public interface UnitVacancyReportEvent extends IEntity {
     @ReadOnly
     UnitVacancyStatus belongsTo();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> eventDate();
 
     IPrimitive<String> propertyCode();
@@ -39,15 +39,15 @@ public interface UnitVacancyReportEvent extends IEntity {
 
     IPrimitive<String> rentReady();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @Caption(name = "Move Out Date")
     IPrimitive<LogicalDate> moveOutDate();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @Caption(name = "Move In Date")
     IPrimitive<LogicalDate> moveInDate();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> rentFromDate();
 
 }

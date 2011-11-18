@@ -45,7 +45,7 @@ public interface TenantScreening extends IEntity {
     @ReadOnly
     Tenant tenant();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> screeningDate();
 
     /**

@@ -121,9 +121,9 @@ public interface Concession extends IEntity {
 
     IPrimitive<String> approvedBy();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expirationDate();
 }

@@ -47,6 +47,6 @@ public interface Person extends IEntity {
     Email email();
 
     @NotNull
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> birthDate();
 }

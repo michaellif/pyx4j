@@ -245,10 +245,10 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
         }
     }
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> fromDate();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> toDate();
 
     /**

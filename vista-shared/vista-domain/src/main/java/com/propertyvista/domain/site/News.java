@@ -33,7 +33,7 @@ public interface News extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> content();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @MemberColumn(name = "newsDate")
     IPrimitive<LogicalDate> date();
 }

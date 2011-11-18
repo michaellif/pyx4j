@@ -43,10 +43,10 @@ public interface IIncomeInfo extends IEntity {
      * Start of income period. For employment that would be employment start date.
      */
     @Caption(name = "Start On")
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> starts();
 
     @Caption(name = "Stop On")
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> ends();
 }

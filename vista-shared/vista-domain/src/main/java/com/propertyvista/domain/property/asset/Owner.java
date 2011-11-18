@@ -44,10 +44,10 @@ public interface Owner extends IEntity {
     @MemberColumn(name = "shr")
     IPrimitive<Double> share();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> startDate();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> endDate();
 
 }

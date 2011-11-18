@@ -134,18 +134,18 @@ public interface UnitAvailabilityStatus extends IEntity {
     IPrimitive<Double> rentDeltaRelative();
 
     /** {@link AptUnit#availableForRent()} - 1 */
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> moveOutDay();
 
     /** Applicable only for rented */
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     @Caption(name = "Move In Date")
     IPrimitive<LogicalDate> moveInDay();
 
     /** Applicable only for rented; maybe different than move out date */
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> rentedFromDate();
 
@@ -153,7 +153,7 @@ public interface UnitAvailabilityStatus extends IEntity {
      * Used to speed up the {@link UnitAvailabilityStatusDTO#daysVacant()} computation. Should be equal to <code>{@link #moveOutDay()} + 1</code> or actually
      * {@link AptUnit#availableForRent()}
      */
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> availableFromDay();
 

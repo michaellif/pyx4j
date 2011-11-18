@@ -67,7 +67,7 @@ public interface AptUnitDTO extends IEntity {
     @Caption(name = "Deposit")
     IPrimitive<Double> requiredDeposit();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     @Caption(name = "Available")
     IPrimitive<LogicalDate> availableForRent();
 

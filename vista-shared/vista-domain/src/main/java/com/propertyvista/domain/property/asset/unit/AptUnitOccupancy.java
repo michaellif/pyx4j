@@ -73,13 +73,13 @@ public interface AptUnitOccupancy extends IEntity {
     @ReadOnly
     AptUnit unit();
 
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateFrom();
 
     /**
      * What if there is no limit to this date, what should it be then?
      */
-    @Format("MM/DD/YYYY")
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateTo();
 
     IPrimitive<Status> status();
