@@ -52,8 +52,7 @@ public class DataTableModel<E extends IEntity> {
 
     private int totalRows;
 
-    public DataTableModel(Class<E> clazz, List<ColumnDescriptor<E>> columnDescriptors) {
-        this.columnDescriptors = columnDescriptors;
+    public DataTableModel(Class<E> clazz) {
     }
 
     public void close() {

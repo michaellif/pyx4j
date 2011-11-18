@@ -49,21 +49,13 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
 
-    // Events:
-    public interface ItemSelectionHandler {
-        void onSelect(int selectedRow);
-    }
-
-    public interface CheckSelectionHandler {
-        void onCheck(boolean isAnyChecked);
-    }
-
-    public interface SortChangeHandler<E> {
-        void onChange(ColumnDescriptor<E> column);
-    }
-
-    // Data:
     private static final Logger log = LoggerFactory.getLogger(DataTable.class);
+
+    private static final int HEADER_RAW_INDEX = 0;
+
+    private static final String CHECK_MARK_COLUMN_SIZE = "22px";
+
+    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "12px";
 
     private DataTableModel<E> model;
 
@@ -83,17 +75,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private boolean markSelectedRow = true;
 
-    private final boolean isMultiSelect = false;
-
     private final List<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
     private SelectionCheckBox selectionCheckBoxAll;
-
-    private static final int HEADER_RAW_INDEX = 0;
-
-    private static final String CHECK_MARK_COLUMN_SIZE = "22px";
-
-    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "12px";
 
     private List<ItemSelectionHandler> itemSelectionHandlers;
 
@@ -136,6 +120,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         this.model = model;
         model.addDataTableModelListener(this);
         renderTable();
+    }
+
+    public DataTableModel<E> getDataTableModel() {
+        return model;
     }
 
     public int getSelectedRow() {
@@ -330,6 +318,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private void renderHeader() {
         if (getRowCount() > 0) {
             removeCells(0, 0, getCellCount(0));
+        }
+
+        if (model.getColumnDescriptors() == null) {
+            return;
         }
 
         int colIndex = 0;
@@ -588,5 +580,18 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
             });
         }
+    }
+
+    // Events:
+    public interface ItemSelectionHandler {
+        void onSelect(int selectedRow);
+    }
+
+    public interface CheckSelectionHandler {
+        void onCheck(boolean isAnyChecked);
+    }
+
+    public interface SortChangeHandler<E> {
+        void onChange(ColumnDescriptor<E> column);
     }
 }

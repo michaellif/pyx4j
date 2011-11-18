@@ -55,9 +55,10 @@ public class Toolbar extends FlowPanel {
         }
     }
 
-    public void insertSeparator(int beforeIndex) {
+    public BarSeparator insertSeparator(int beforeIndex) {
         BarSeparator separator = new BarSeparator();
         insert(separator, beforeIndex);
+        return separator;
     }
 
 }

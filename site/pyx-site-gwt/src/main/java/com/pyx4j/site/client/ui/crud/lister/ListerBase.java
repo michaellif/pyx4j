@@ -74,14 +74,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public ListerBase(Class<E> clazz) {
         setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Lister.name());
 
-        dataTablePanel = new DataTablePanel<E>(clazz) {
-            @Override
-            public List<ColumnDescriptor<E>> getColumnDescriptors() {
-                List<ColumnDescriptor<E>> columnDescriptors = ListerBase.this.getDefaultColumnDescriptors(proto());
-                assert !columnDescriptors.isEmpty() : "shouldn't be empty!..";
-                return columnDescriptors;
-            }
-        };
+        dataTablePanel = new DataTablePanel<E>(clazz);
+
+        dataTablePanel.setColumnDescriptors(ListerBase.this.getDefaultColumnDescriptors(dataTablePanel.proto()));
 
         dataTablePanel.setFilterActionHandler(new ClickHandler() {
             @Override
