@@ -200,8 +200,8 @@ public class TurnoverAnalysisGraphGadget extends GadgetBase implements IBuilding
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.TurnoverAnalysisGraphMk2);
-        gmd.name().setValue(GadgetType.TurnoverAnalysisGraphMk2.toString());
+        gmd.type().setValue(GadgetType.TurnoverAnalysisGraph);
+        gmd.name().setValue(GadgetType.TurnoverAnalysisGraph.toString());
     }
 
     @Override

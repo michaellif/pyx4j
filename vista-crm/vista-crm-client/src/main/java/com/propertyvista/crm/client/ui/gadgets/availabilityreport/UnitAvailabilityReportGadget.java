@@ -124,8 +124,8 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.UnitAvailabilityReportMk2);
-        gmd.name().setValue(GadgetType.UnitAvailabilityReportMk2.toString());
+        gmd.type().setValue(GadgetType.UnitAvailabilityReport);
+        gmd.name().setValue(GadgetType.UnitAvailabilityReport.toString());
     }
 
     @Override

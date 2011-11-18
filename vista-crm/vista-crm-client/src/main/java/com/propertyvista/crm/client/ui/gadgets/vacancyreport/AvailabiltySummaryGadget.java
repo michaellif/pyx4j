@@ -93,8 +93,8 @@ public class AvailabiltySummaryGadget extends VacancyGadgetBase {
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.AvailabilitySummary);
-        gmd.name().setValue(GadgetType.AvailabilitySummary.toString());
+        gmd.type().setValue(GadgetType.DeprecatedAvailabilitySummary);
+        gmd.name().setValue(GadgetType.DeprecatedAvailabilitySummary.toString());
     }
 
     @Override

@@ -43,18 +43,17 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         GaugeDisplay,
 
+        DeprecatedUnitAvailabilityReport,
+
+        DeprecatedAvailabilitySummary,
+
+        DeprecatedTurnoverAnalysisGraph,
+
         UnitAvailabilityReport,
 
         AvailabilitySummary,
 
         TurnoverAnalysisGraph,
-
-        // TODO make the new Availability Gadgets use the normal ENUMs once they have started to work properly
-        UnitAvailabilityReportMk2,
-
-        AvailabilitySummaryMk2,
-
-        TurnoverAnalysisGraphMk2,
 
         ArrearsGadget,
 

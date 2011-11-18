@@ -193,8 +193,8 @@ public class TurnoverAnalysisGraphGadget extends VacancyGadgetBase {
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.TurnoverAnalysisGraph);
-        gmd.name().setValue(GadgetType.TurnoverAnalysisGraph.toString());
+        gmd.type().setValue(GadgetType.DeprecatedTurnoverAnalysisGraph);
+        gmd.name().setValue(GadgetType.DeprecatedTurnoverAnalysisGraph.toString());
     }
 
     @Override

@@ -56,13 +56,13 @@ public class GadgetsFactory {
         GadgetType.PieChartDisplayBuilding,
         GadgetType.GaugeDisplay,
         
+        GadgetType.DeprecatedUnitAvailabilityReport,
+        GadgetType.DeprecatedAvailabilitySummary,
+        GadgetType.DeprecatedTurnoverAnalysisGraph,
+        
         GadgetType.UnitAvailabilityReport,
         GadgetType.AvailabilitySummary,
         GadgetType.TurnoverAnalysisGraph,
-        
-        GadgetType.UnitAvailabilityReportMk2,
-        GadgetType.AvailabilitySummaryMk2,
-        GadgetType.TurnoverAnalysisGraphMk2,
 
         GadgetType.RentArrearsGadget,
         GadgetType.ParkingArrearsGadget,
@@ -96,18 +96,18 @@ public class GadgetsFactory {
         case GaugeDisplay:
             return new GaugeGadget(metaData);
 
-        case UnitAvailabilityReport:
+        case DeprecatedUnitAvailabilityReport:
             return new UnitAvailabilityReportGadget(metaData);
-        case AvailabilitySummary:
+        case DeprecatedAvailabilitySummary:
             return new AvailabiltySummaryGadget(metaData);
-        case TurnoverAnalysisGraph:
+        case DeprecatedTurnoverAnalysisGraph:
             return new TurnoverAnalysisGraphGadget(metaData);
 
-        case UnitAvailabilityReportMk2:
+        case UnitAvailabilityReport:
             return new com.propertyvista.crm.client.ui.gadgets.availabilityreport.UnitAvailabilityReportGadget(metaData);
-        case AvailabilitySummaryMk2:
+        case AvailabilitySummary:
             return new com.propertyvista.crm.client.ui.gadgets.availabilityreport.AvailabiltySummaryGadget(metaData);
-        case TurnoverAnalysisGraphMk2:
+        case TurnoverAnalysisGraph:
             return new com.propertyvista.crm.client.ui.gadgets.availabilityreport.TurnoverAnalysisGraphGadget(metaData);
 
         case RentArrearsGadget:
@@ -156,9 +156,13 @@ public class GadgetsFactory {
             return "Gadget intended to demonstrate Occupancy/Vacancy Summary...";
         case TurnoverAnalysisGraph:
             return "Gadget intended to demonstrate Unit Turnover graph...";
-            // TODO add description for all gadgets
-        case ArrearsGadget:
+
+        case TotalArrearsGadget:
             return "Gadget intended to demonstrate Tenant's arrears...";
+        case ArrearsARBalanceComparisonChart:
+            return "Displays monthly AR balance year to year comparison";
+
+            // TODO add description for rest of the gadgets
         }
         return "";
     }

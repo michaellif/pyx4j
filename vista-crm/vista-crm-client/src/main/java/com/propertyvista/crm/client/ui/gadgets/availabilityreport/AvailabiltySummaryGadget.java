@@ -99,8 +99,8 @@ public class AvailabiltySummaryGadget extends GadgetBase implements IBuildingGad
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.AvailabilitySummaryMk2);
-        gmd.name().setValue(GadgetType.AvailabilitySummaryMk2.toString());
+        gmd.type().setValue(GadgetType.AvailabilitySummary);
+        gmd.name().setValue(GadgetType.AvailabilitySummary.toString());
     }
 
     @Override

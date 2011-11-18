@@ -173,8 +173,8 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.UnitAvailabilityReport);
-        gmd.name().setValue(GadgetType.UnitAvailabilityReport.toString());
+        gmd.type().setValue(GadgetType.DeprecatedUnitAvailabilityReport);
+        gmd.name().setValue(GadgetType.DeprecatedUnitAvailabilityReport.toString());
     }
 
     @Override
