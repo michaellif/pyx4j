@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -39,7 +40,6 @@ import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyRepor
 public class ArrearsReportServiceImpl implements ArrearsReportService {
     private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);
 
-    @SuppressWarnings("deprecation")
     @Override
     public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sorting,
             int pageNumber, int pageSize) {
@@ -53,16 +53,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             criteria.setSorts(sortingCriteria);
 
             when = when != null ? when : new LogicalDate();
-            LogicalDate monthAgo = new LogicalDate(when);
-            if (when.getMonth() != 0) {
-                monthAgo.setMonth((11 + when.getMonth() - 1) % 11);
-            } else {
-                monthAgo.setMonth(1);
-                monthAgo.setYear(when.getYear() - 1);
-            }
-            // TODO this is just for demo, IRL it shouldn't look the same at all...
-            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, monthAgo));
-            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, when));
+            when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
 
             final List<MockupArrearsState> allArrears = new ArrayList<MockupArrearsState>();
             if (!buildingPKs.isEmpty()) {
@@ -91,7 +83,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 }
             }
 
-            // TODO make this for for all properties 
             SORTING_FACTORY.sortDto(preliminaryResults, sorting);
 
             Vector<MockupArrearsState> pageData = new Vector<MockupArrearsState>();
@@ -144,7 +135,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
             criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
 
-            List<ArrearsSummary> buildingMonthlyArrears = Persistence.service().query(criteria);
+            List<ArrearsSummary> arrearsForEachBuilding = Persistence.service().query(criteria);
 
             //@formatter:off
             SeqUtils.Sum<ArrearsSummary> sum = new SeqUtils.Sum<ArrearsSummary>(ArrearsSummary.class,                    
@@ -157,7 +148,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                         criteria.proto().arBalance().getPath())
             );            
             //@formatter:on
-            ArrearsSummary summary = SeqUtils.foldl(sum, buildingMonthlyArrears);
+            ArrearsSummary summary = SeqUtils.foldl(sum, arrearsForEachBuilding);
 
             EntitySearchResult<ArrearsSummary> result = new EntitySearchResult<ArrearsSummary>();
             result.setData(new Vector<ArrearsSummary>(1));
@@ -169,6 +160,115 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
         } catch (Throwable error) {
             callback.onFailure(error);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo) {
+        try {
+            if (yearsAgo < 1) {
+                throw new Error("sorry, but you need to provide number of years that at least greater than zero");
+            }
+            final LogicalDate when = new LogicalDate();
+            // FIXME correct intervalEnd for year to point to dec 31 instead of the next year
+            final LogicalDate lastDay = new LogicalDate(AnalysisResolution.Year.intervalEnd(when.getTime()));
+            final LogicalDate firstDay = new LogicalDate(AnalysisResolution.Year.intervalStart(lastDay.getTime()));
+            firstDay.setYear(firstDay.getYear() - yearsAgo);
+            EntityQueryCriteria<ArrearsSummary> criteria = new EntityQueryCriteria<ArrearsSummary>(ArrearsSummary.class);
+            if (!buildingPKs.isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
+
+            }
+            //@formatter:off
+            List<Sort> sorting = Arrays.asList(
+                    new Sort(criteria.proto().statusTimestamp().getPath().toString(), false),
+                    new Sort(criteria.proto().belongsTo().getPath().toString(), false));
+            //@formatter:on
+            criteria.setSorts(sorting);
+            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, firstDay));
+            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, lastDay));
+
+            List<ArrearsSummary> buildingMonthlyArrears = Persistence.service().query(criteria);
+
+            List<ArBalanceHolder> summariesPerEachMonth = computeSummariesPerEachMonth(buildingMonthlyArrears);
+
+            HashMap<Integer, Vector<ArBalanceHolder>> comparison = new HashMap<Integer, Vector<ArBalanceHolder>>();
+            for (int i = 0; i < 12; ++i) {
+                comparison.put(i, new Vector<ArBalanceHolder>());
+            }
+            for (ArBalanceHolder monthlyArrears : summariesPerEachMonth) {
+                comparison.get(monthlyArrears.timestamp.getMonth()).add(monthlyArrears);
+            }
+
+            Vector<Vector<Double>> result = new Vector<Vector<Double>>();
+            // if by some accident data for some months is missing, fill in the blanks with NAN values;           
+            for (Vector<ArBalanceHolder> monthlyComparison : comparison.values()) {
+                Vector<Double> monthlyComparisonResult = new Vector<Double>();
+                int prevYear = firstDay.getYear();
+
+                for (ArBalanceHolder balanceHolder : monthlyComparison) {
+                    int diff = balanceHolder.timestamp.getYear() - prevYear;
+                    while (diff-- > 1) {
+                        monthlyComparisonResult.add(Double.NaN);
+                    }
+                    monthlyComparisonResult.add(balanceHolder.balance);
+                    prevYear = balanceHolder.timestamp.getYear();
+                }
+                int diff = lastDay.getYear() - prevYear;
+                while (diff-- > 1) {
+                    monthlyComparisonResult.add(Double.NaN);
+                }
+                result.add(monthlyComparisonResult);
+            }
+
+            callback.onSuccess(result);
+        } catch (Throwable error) {
+            callback.onFailure(error);
+        }
+    }
+
+    private static List<ArBalanceHolder> computeSummariesPerEachMonth(List<ArrearsSummary> buildingMonthlyArrears) {
+        long previousMonth = -1l;
+        List<ArBalanceHolder> summaryPerEachMonth = new ArrayList<ArBalanceHolder>();
+        List<ArrearsSummary> buldingArrearsOfTheSameMonth = new ArrayList<ArrearsSummary>();
+
+        for (ArrearsSummary arrears : buildingMonthlyArrears) {
+            long thisMonth = arrears.statusTimestamp().getValue().getTime();
+            if (thisMonth != previousMonth) {
+                if (!buldingArrearsOfTheSameMonth.isEmpty()) {
+                    summaryPerEachMonth.add(new ArBalanceHolder(buldingArrearsOfTheSameMonth.get(0).statusTimestamp().getValue(),
+                            summarizeArBalance(buldingArrearsOfTheSameMonth)));
+                    buldingArrearsOfTheSameMonth = new ArrayList<ArrearsSummary>(buldingArrearsOfTheSameMonth.size());
+                }
+                previousMonth = thisMonth;
+            }
+            buldingArrearsOfTheSameMonth.add(arrears);
+        }
+        if (!buldingArrearsOfTheSameMonth.isEmpty()) {
+            summaryPerEachMonth.add(new ArBalanceHolder(buldingArrearsOfTheSameMonth.get(0).statusTimestamp().getValue(),
+                    summarizeArBalance(buldingArrearsOfTheSameMonth)));
+        }
+
+        return summaryPerEachMonth;
+    }
+
+    private static double summarizeArBalance(Iterable<ArrearsSummary> arrearsCollection) {
+        double sum = 0.0;
+        for (ArrearsSummary arrears : arrearsCollection) {
+            sum += arrears.arBalance().getValue();
+        }
+        return sum;
+    }
+
+    private static class ArBalanceHolder {
+        public final LogicalDate timestamp;
+
+        public final double balance;
+
+        public ArBalanceHolder(LogicalDate timestamp, double balance) {
+            this.timestamp = timestamp;
+            this.balance = balance;
         }
     }
 }

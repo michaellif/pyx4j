@@ -175,6 +175,13 @@ public class DashboardGenerator extends Dashboards {
         GadgetMetadata gmd;
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
+        gmd.type().setValue(GadgetType.TotalArrearsGadget);
+        gmd.name().setValue(GadgetType.TotalArrearsGadget.toString() + " Demo");
+        gmd.column().setValue(0);
+        dmd.gadgets().add(gmd);
+
+        gmd = EntityFactory.create(GadgetMetadata.class);
+        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.RentArrearsGadget);
         gmd.name().setValue(GadgetType.RentArrearsGadget.toString() + " Demo");
         gmd.column().setValue(0);
@@ -197,13 +204,6 @@ public class DashboardGenerator extends Dashboards {
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.TotalArrearsGadget);
-        gmd.name().setValue(GadgetType.TotalArrearsGadget.toString() + " Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         gmd.type().setValue(GadgetType.ArrearsSummaryGadget);
         gmd.name().setValue(GadgetType.ArrearsSummaryGadget.toString() + " Demo");
         gmd.column().setValue(0);
@@ -211,8 +211,8 @@ public class DashboardGenerator extends Dashboards {
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.ArrearsYOYChart);
-        gmd.name().setValue(GadgetType.ArrearsGadget.toString() + " Demo");
+        gmd.type().setValue(GadgetType.ArrearsARBalanceComparisonChart);
+        gmd.name().setValue(GadgetType.ArrearsARBalanceComparisonChart.toString() + " Demo");
         gmd.column().setValue(0);
         dmd.gadgets().add(gmd);
 

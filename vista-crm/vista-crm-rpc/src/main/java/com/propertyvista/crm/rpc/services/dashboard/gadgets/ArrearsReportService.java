@@ -42,4 +42,6 @@ public interface ArrearsReportService extends IService {
 
     void summary(AsyncCallback<EntitySearchResult<ArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
             int pageNumber, int pageSize);
+
+    void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo);
 }

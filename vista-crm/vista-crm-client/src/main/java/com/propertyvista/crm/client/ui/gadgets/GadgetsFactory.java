@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChart;
 import com.propertyvista.crm.client.ui.gadgets.arrears.OtherArrearsListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ParkingArrearsListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.RentArrearsListerGadget;
@@ -68,7 +69,7 @@ public class GadgetsFactory {
         GadgetType.OtherArrearsGadget,
         GadgetType.TotalArrearsGadget,        
         GadgetType.ArrearsSummaryGadget,
-        GadgetType.ArrearsYOYChart,
+        GadgetType.ArrearsARBalanceComparisonChart,
         
     };
     //@formatter:on
@@ -119,8 +120,8 @@ public class GadgetsFactory {
             return new TotalArrearsListerGadget(metaData);
         case ArrearsSummaryGadget:
             return new ArrearsSummaryGadget(metaData);
-        case ArrearsYOYChart:
-            return null;
+        case ArrearsARBalanceComparisonChart:
+            return new ArrearsYOYAnalysisChart(metaData);
         default:
             return null;
         }

@@ -66,7 +66,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         TotalArrearsGadget,
 
-        ArrearsYOYChart,
+        ArrearsARBalanceComparisonChart,
 
         ArrearsSummaryGadget;
 

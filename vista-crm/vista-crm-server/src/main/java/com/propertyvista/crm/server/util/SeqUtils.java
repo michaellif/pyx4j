@@ -21,14 +21,14 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 
 public class SeqUtils {
-    public interface CombiningFunction<T> {
+    public interface CombiningFunction<A, B> {
         /** must never return <code>null</code> */
-        public <X extends T> X combine(X a, X b);
+        public <X extends A, Y extends B> A combine(X a, Y b);
 
-        public T initialValue();
+        public A initialValue();
     }
 
-    public static class Sum<T extends IEntity> implements CombiningFunction<T> {
+    public static class Sum<T extends IEntity> implements CombiningFunction<T, T> {
         final Path[] doubleProperties;
 
         final Path[] integerProperties;
@@ -58,24 +58,6 @@ public class SeqUtils {
             this.integerProperties = integerProperties.isEmpty() ? null : integerProperties.toArray(new Path[integerProperties.size()]);
         }
 
-        /**
-         * @return a = a + b (in place)
-         */
-        @Override
-        public <X extends T> X combine(X a, X b) {
-            if (doubleProperties != null) {
-                for (Path property : doubleProperties) {
-                    a.setValue(property, ((Double) a.getMember(property).getValue() + (Double) b.getMember(property).getValue()));
-                }
-            }
-            if (integerProperties != null) {
-                for (Path property : integerProperties) {
-                    a.setValue(property, ((Integer) a.getMember(property).getValue() + (Integer) b.getMember(property).getValue()));
-                }
-            }
-            return a;
-        }
-
         @Override
         public T initialValue() {
             T value = EntityFactory.create(entityClass);
@@ -91,17 +73,32 @@ public class SeqUtils {
             }
             return value;
         }
+
+        @Override
+        public <X extends T, Y extends T> T combine(X a, Y b) {
+            if (doubleProperties != null) {
+                for (Path property : doubleProperties) {
+                    a.setValue(property, ((Double) a.getMember(property).getValue() + (Double) b.getMember(property).getValue()));
+                }
+            }
+            if (integerProperties != null) {
+                for (Path property : integerProperties) {
+                    a.setValue(property, ((Integer) a.getMember(property).getValue() + (Integer) b.getMember(property).getValue()));
+                }
+            }
+            return a;
+        }
     }
 
-    public static <X> X foldl(CombiningFunction<X> f, X initalValue, Iterable<X> sequence) {
+    public static <X, Y> X foldl(CombiningFunction<X, Y> f, X initalValue, Iterable<Y> sequence) {
         X result = initalValue;
-        for (X value : sequence) {
+        for (Y value : sequence) {
             result = f.combine(result, value);
         }
         return result;
     }
 
-    public static <X> X foldl(CombiningFunction<X> f, Iterable<X> sequence) {
+    public static <X, Y> X foldl(CombiningFunction<X, Y> f, Iterable<Y> sequence) {
         return foldl(f, f.initialValue(), sequence);
     }
 
