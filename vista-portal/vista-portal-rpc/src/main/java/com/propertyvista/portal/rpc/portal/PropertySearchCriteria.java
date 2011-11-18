@@ -103,7 +103,7 @@ public interface PropertySearchCriteria extends IEntity {
         }
     }
 
-    @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     public static enum BedroomChoice {
 
         Any(0), One(1), Two(2), Three(3), Four(4);

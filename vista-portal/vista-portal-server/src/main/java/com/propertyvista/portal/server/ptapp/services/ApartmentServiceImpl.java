@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -78,20 +78,20 @@ public class ApartmentServiceImpl implements ApartmentService {
             }
         }
 
-        // add user-selected ones: 
+        // add user-selected ones:
         lease.serviceAgreement().featureItems().addAll(entity.agreedPets());
         lease.serviceAgreement().featureItems().addAll(entity.agreedParking());
         lease.serviceAgreement().featureItems().addAll(entity.agreedStorage());
         lease.serviceAgreement().featureItems().addAll(entity.agreedOther());
 
-        // save changes: 
+        // save changes:
         for (ChargeItem item : lease.serviceAgreement().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
         }
 
-// actually, just feature list should be saved:        
+// actually, just feature list should be saved:
 //        Persistence.service().merge(lease.serviceAgreement().featureItems());
         Persistence.service().merge(lease);
         callback.onSuccess(entity);
@@ -116,18 +116,18 @@ public class ApartmentServiceImpl implements ApartmentService {
         aptInfo.bedrooms().setValue(lease.unit().floorplan().bedrooms().getStringView());
 
         if (lease.unit().floorplan().dens().getValue() == 1) {
-            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + i18n.tr(" den"));
+            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " " + i18n.tr("den"));
         } else if (lease.unit().floorplan().dens().getValue() > 1) {
-            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + i18n.tr(" dens"));
+            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " " + i18n.tr("dens"));
         }
 
         aptInfo.bathrooms().setValue(lease.unit().floorplan().bathrooms().getStringView());
         if (lease.unit().floorplan().halfBath().getValue() == 1) {
-            aptInfo.bathrooms()
-                    .setValue(aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + i18n.tr(" separate WC"));
+            aptInfo.bathrooms().setValue(
+                    aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + " " + i18n.tr("separate WC"));
         } else if (lease.unit().floorplan().halfBath().getValue() > 1) {
             aptInfo.bathrooms().setValue(
-                    aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + i18n.tr(" separate WCs"));
+                    aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + " " + i18n.tr("separate WCs"));
         }
 
         aptInfo.address().set(lease.unit().belongsTo().info().address().clone(AddressStructured.class));
@@ -175,8 +175,8 @@ public class ApartmentServiceImpl implements ApartmentService {
             }
             Persistence.service().retrieve(item.concessions());
         }
-//        
-//  Currently not used here:        
+//
+//  Currently not used here:
 //
 //        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
 //        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
