@@ -32,7 +32,7 @@ public class DefaultDataTableTheme extends Theme {
     public static enum StyleName implements IStyleName {
         DataTable, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableColumnSelector, DataTableColumnMenu,
 
-        DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter
+        DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -136,6 +136,10 @@ public class DefaultDataTableTheme extends Theme {
 
         style = new Style(".", StyleName.DataTableFilterMain);
         style.addProperty("padding", "6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableFilterItem, " td");
+        style.addProperty("padding", "2px 0px 2px 6px");
         addStyle(style);
 
     }

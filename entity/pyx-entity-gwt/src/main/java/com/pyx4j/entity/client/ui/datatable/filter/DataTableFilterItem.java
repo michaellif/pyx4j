@@ -25,23 +25,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operands;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -85,6 +81,9 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
     public DataTableFilterItem(final DataTableFilterGrid<E> parent) {
         this.parent = parent;
+
+        setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterItem.name());
+
         Image btnDel = new ImageButton(EntityFolderImages.INSTANCE.del(), EntityFolderImages.INSTANCE.delHover(), i18n.tr("Remove Filter"));
         btnDel.addClickHandler(new ClickHandler() {
             @Override
@@ -115,28 +114,21 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         fieldsList.setWidth("100%");
 
         add(fieldsList);
+
         setCellWidth(fieldsList, "40%");
-        formatCell(fieldsList.asWidget());
 
         operandsList.setWidth("100%");
 
         add(operandsList);
-        setCellWidth(operandsList, "20%");
-        formatCell(operandsList.asWidget());
 
+        setCellWidth(operandsList, "20%");
         valueHolder.setWidth("100%");
 
         add(valueHolder);
 
         setCellWidth(valueHolder, "40%");
-        formatCell(valueHolder);
 
-        SimplePanel wrap = new SimplePanel();
-        wrap.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        wrap.getElement().getStyle().setPaddingLeft(10, Unit.PX);
-        wrap.setWidget(btnDel);
-        formatCell(wrap);
-        add(wrap);
+        add(btnDel);
 
         setWidth("100%");
     }
@@ -167,11 +159,6 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
                 break;
             }
         }
-    }
-
-    private void formatCell(Widget w) {
-        Element cell = DOM.getParent(w.getElement());
-        cell.getStyle().setPaddingLeft(10, Unit.PX);
     }
 
     private void setValueHolder(String valuePath) {
