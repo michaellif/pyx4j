@@ -28,6 +28,8 @@ import java.util.Date;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormatInfo;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.CalendarView;
@@ -118,11 +120,19 @@ public class CalendarViewExtended extends CalendarView {
     protected void setup() {
         setDaysOfWeek();
 
+        DateTimeFormatInfo dateTimeFormatInfo = LocaleInfo.getCurrentLocale().getDateTimeFormatInfo();
+        int firstDayOfWeekend = dateTimeFormatInfo.weekendStart();
+        int lastDayOfWeekend = dateTimeFormatInfo.weekendEnd();
+
         for (int i = 0; i < CalendarModel.DAYS_IN_WEEK; i++) {
             int shift = CalendarUtil.getStartingDayOfWeek();
             int dayIdx = i + shift < CalendarModel.DAYS_IN_WEEK ? i + shift : i + shift - CalendarModel.DAYS_IN_WEEK;
 
             grid.setText(0, i, daysOfWeek[dayIdx]);
+
+            if (dayIdx == firstDayOfWeekend || dayIdx == lastDayOfWeekend) {
+                grid.getCellFormatter().addStyleName(0, i, DefaultDatePickerTheme.StyleName.DatePickerWeekendDay.name());
+            }
         }
         //grid.getRowFormatter().setStyleName(0, "datePickerGridDaysRow");
         grid.getRowFormatter().setStyleName(0, DefaultDatePickerTheme.StyleName.DatePickerGridDaysRow.name());

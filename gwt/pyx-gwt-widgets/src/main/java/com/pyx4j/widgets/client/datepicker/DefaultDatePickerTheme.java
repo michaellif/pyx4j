@@ -46,7 +46,6 @@ public class DefaultDatePickerTheme extends Theme {
 
     protected void initStyles() {
         initDatePickerStyle();
-        initMultipleDatePicker();
     }
 
     protected void initDatePickerStyle() {
@@ -152,9 +151,9 @@ public class DefaultDatePickerTheme extends Theme {
         //style.addProperty("padding", "3px");
         //addStyle(style);
 
-        //style = new Style(".", StyleName.DatePickerWeekendDay);
-        //style.addProperty("background", "#EEEEEE none repeat scroll 0 0");
-        //addStyle(style);
+        style = new Style(".", StyleName.DatePickerWeekendDay);
+        style.addProperty("color", ThemeColors.object1);
+        addStyle(style);
 
         //style = new Style(".DatePickerDayIsFiller");
         //style.addProperty("color", "#888888");
