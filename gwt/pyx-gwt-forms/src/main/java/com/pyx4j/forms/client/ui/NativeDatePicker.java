@@ -99,7 +99,8 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     @Override
     public void setEditable(boolean editable) {
         super.setReadOnly(!editable);
-        textBox.setReadOnly(!editable);
+        textBox.setEditable(editable);
+        setTrigger(isEnabled() && editable);
     }
 
     @Override
@@ -115,6 +116,7 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         textBox.setEnabled(enabled);
+        setTrigger(isEditable() && enabled);
     }
 
     @Override

@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.TextBox;
 
 public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E> {
@@ -62,22 +61,20 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled);
         if (enabled) {
-            removeStyleDependentName(dependentSuffix);
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
         } else {
-            addStyleDependentName(dependentSuffix);
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
         }
     }
 
     @Override
     public void setEditable(boolean editable) {
         super.setReadOnly(!editable);
-        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly);
         if (editable) {
-            removeStyleDependentName(dependentSuffix);
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly.name());
         } else {
-            addStyleDependentName(dependentSuffix);
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly.name());
         }
 
     }

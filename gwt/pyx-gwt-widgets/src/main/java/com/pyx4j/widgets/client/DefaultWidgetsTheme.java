@@ -111,8 +111,9 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ButtonText);
-        style.addProperty("verticalAlign", "middle");
+        style.addProperty("vertical-align", "top");
         style.addProperty("whiteSpace", "nowrap");
+        style.addProperty("display", "inline-block");
         style.addProperty("display", "inline-block");
         addStyle(style);
 

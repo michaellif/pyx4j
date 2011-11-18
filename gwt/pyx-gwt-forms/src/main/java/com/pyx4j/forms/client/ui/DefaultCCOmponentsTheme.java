@@ -49,13 +49,15 @@ public class DefaultCCOmponentsTheme extends Theme {
     protected void initTextBoxStyle() {
 
         Style style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColors.foreground, 0.3);
+        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("color", ThemeColors.foreground, 0.6);
         addStyle(style);
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.readOnly);
         style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "none");
-        style.addProperty("background-color", ThemeColors.foreground, 0.3);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColors.foreground, 0.1);
         addStyle(style);
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.invalid);

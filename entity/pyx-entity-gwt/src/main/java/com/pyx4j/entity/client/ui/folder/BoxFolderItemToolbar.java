@@ -84,6 +84,8 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         titleIcon = new Image();
         titleIcon.getElement().getStyle().setMarginTop(2, Unit.PX);
         titleIcon.getElement().getStyle().setPaddingRight(2, Unit.PX);
+        titleIcon.setVisible(false);
+
         captionHolder.add(titleIcon);
 
         captionHolder.add(caption);
@@ -124,6 +126,9 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
     protected void setTitleIcon(ImageResource icon) {
         if (icon != null) {
             titleIcon.setResource(icon);
+            titleIcon.setVisible(true);
+        } else {
+            titleIcon.setVisible(false);
         }
     }
 
