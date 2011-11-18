@@ -47,7 +47,6 @@ public interface Person extends IEntity {
     Name name();
 
     @NotNull
-    @ToString(index = 1)
     IPrimitive<Sex> sex();
 
     @EmbeddedEntity

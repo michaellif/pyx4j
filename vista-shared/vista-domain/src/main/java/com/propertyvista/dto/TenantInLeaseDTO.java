@@ -19,11 +19,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.income.IncomeSource;
 
 @Transient
 public interface TenantInLeaseDTO extends TenantInLease {
-
-    IPrimitive<String> displayName();
 
     public static enum ChangeStatus {
         New, Updated;
@@ -31,8 +30,11 @@ public interface TenantInLeaseDTO extends TenantInLease {
 
     // ------------------------------------
 
+    @Deprecated
     @EmbeddedEntity
     Person person();
+
+    IPrimitive<IncomeSource> incomeSource();
 
     IPrimitive<ChangeStatus> changeStatus();
 }

@@ -69,7 +69,6 @@ public interface TenantInLease extends IBoundToApplication {
     @XmlType(name = "TenantStatus")
     public static enum Role implements Serializable {
 
-        @Translate("Main Applicant")
         Applicant,
 
         @Translate("Co-Applicant")

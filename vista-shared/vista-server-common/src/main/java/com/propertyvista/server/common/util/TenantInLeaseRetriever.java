@@ -39,10 +39,12 @@ public class TenantInLeaseRetriever extends TenantRetriever {
     }
 
     // Manipulation:
+    @Override
     public void retrieve(Key tenanInLeasetId) {
         retrieve(tenanInLeasetId, false);
     }
 
+    @Override
     public void retrieve(Key tenanInLeasetId, boolean financial) {
         tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenanInLeasetId);
         // TODO correct this check:
@@ -50,7 +52,7 @@ public class TenantInLeaseRetriever extends TenantRetriever {
             throw new SecurityViolationException("Invalid data access");
         }
 
-        super.retrieve(tenantInLease.tenant(), financial);
+        super.retrieve(tenantInLease.tenant().getPrimaryKey(), financial);
     }
 
     // Lease management:

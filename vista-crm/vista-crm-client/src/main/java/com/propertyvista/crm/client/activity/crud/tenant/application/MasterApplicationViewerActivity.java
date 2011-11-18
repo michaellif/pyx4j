@@ -24,18 +24,21 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
+import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterApplicationDTO> implements MasterApplicationViewerView.Presenter {
 
     private final IListerView.Presenter applicationLister;
+
+    private final IListerView.Presenter tenantLister;
 
     @SuppressWarnings("unchecked")
     public MasterApplicationViewerActivity(Place place) {
@@ -45,11 +48,8 @@ public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterAp
         applicationLister = new ListerActivityBase<ApplicationDTO>(place, ((MasterApplicationViewerView) view).getApplicationsView(),
                 (AbstractCrudService<ApplicationDTO>) GWT.create(ApplicationCrudService.class), ApplicationDTO.class);
 
-    }
-
-    @Override
-    public Presenter getScreeningPresenter() {
-        return applicationLister;
+        tenantLister = new ListerActivityBase<TenantInLeaseDTO>(place, ((MasterApplicationViewerView) view).getTenantsView(),
+                (AbstractCrudService<TenantInLeaseDTO>) GWT.create(TenantInLeaseCrudService.class), TenantInLeaseDTO.class);
     }
 
     @Override
@@ -58,11 +58,15 @@ public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterAp
 
         applicationLister.setParentFiltering(result.getPrimaryKey());
         applicationLister.populate();
+
+        tenantLister.setParentFiltering(result.lease().getPrimaryKey());
+        tenantLister.populate();
     }
 
     @Override
     public void onStop() {
         ((AbstractActivity) applicationLister).onStop();
+        ((AbstractActivity) tenantLister).onStop();
         super.onStop();
     }
 

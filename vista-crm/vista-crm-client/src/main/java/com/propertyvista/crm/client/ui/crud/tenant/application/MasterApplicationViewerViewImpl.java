@@ -35,10 +35,13 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication.Decision;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<MasterApplicationDTO> implements MasterApplicationViewerView {
 
     private final IListerView<ApplicationDTO> applicationLister;
+
+    private final IListerView<TenantInLeaseDTO> tenantLister;
 
     private final Button approveAction;
 
@@ -60,6 +63,8 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         super(CrmSiteMap.Tenants.MasterApplication.class, true);
 
         applicationLister = new ListerInternalViewImplBase<ApplicationDTO>(new ApplicationLister());
+
+        tenantLister = new ListerInternalViewImplBase<TenantInLeaseDTO>(new TenantInLeaseLister());
 
         // Add actions:
         approveAction = new Button(APPROVE, new ClickHandler() {
@@ -129,6 +134,11 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         return applicationLister;
     }
 
+    @Override
+    public IListerView<TenantInLeaseDTO> getTenantsView() {
+        return tenantLister;
+    }
+
     private class ActionBox extends OkCancelBox {
 
         private final CTextArea reason = new CTextArea();
@@ -164,4 +174,5 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             return currentValue;
         }
     }
+
 }

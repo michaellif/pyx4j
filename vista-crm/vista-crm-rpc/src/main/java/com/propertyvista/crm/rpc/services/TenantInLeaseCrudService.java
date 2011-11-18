@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.dto.TenantInLeaseDTO;
 
-public interface TenantInLeaseCrudService extends AbstractCrudService<TenantInLease> {
+public interface TenantInLeaseCrudService extends AbstractCrudService<TenantInLeaseDTO> {
 
 }

@@ -18,12 +18,11 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.TenantInLeaseDTO;
 
 public interface MasterApplicationViewerView extends IViewerView<MasterApplicationDTO> {
 
     interface Presenter extends IViewerView.Presenter {
-
-        IListerView.Presenter getScreeningPresenter();
 
         void approve(MasterApplicationDTO application);
 
@@ -35,4 +34,6 @@ public interface MasterApplicationViewerView extends IViewerView<MasterApplicati
     }
 
     IListerView<ApplicationDTO> getApplicationsView();
+
+    IListerView<TenantInLeaseDTO> getTenantsView();
 }

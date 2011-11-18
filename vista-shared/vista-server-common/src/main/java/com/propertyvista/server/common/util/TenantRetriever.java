@@ -15,6 +15,7 @@ package com.propertyvista.server.common.util;
 
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -35,28 +36,27 @@ public class TenantRetriever {
     public TenantRetriever() {
     }
 
-    public TenantRetriever(Tenant tenant) {
-        retrieve(tenant, false);
+    public TenantRetriever(Key tenantId) {
+        retrieve(tenantId, false);
     }
 
-    public TenantRetriever(Tenant tenant, boolean financial) {
-        retrieve(tenant, financial);
+    public TenantRetriever(Key tenantId, boolean financial) {
+        retrieve(tenantId, financial);
     }
 
     // Manipulation:
-    public void retrieve(Tenant tenant) {
-        retrieve(tenant, false);
+    public void retrieve(Key tenantId) {
+        retrieve(tenantId, false);
     }
 
-    public void retrieve(Tenant tenant, boolean financial) {
-        Persistence.service().retrieve(tenant);
-        this.tenant = tenant;
+    public void retrieve(Key tenantId, boolean financial) {
+        tenant = Persistence.service().retrieve(Tenant.class, tenantId);
         if (tenant != null) {
             EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
             tenantScreenings = Persistence.service().query(criteria);
             if (tenantScreenings != null && !tenantScreenings.isEmpty()) {
-                tenantScreening = tenantScreenings.get(tenantScreenings.size() - 1); // use last screenings as 
+                tenantScreening = tenantScreenings.get(tenantScreenings.size() - 1); // use last screenings
             } else {
                 tenantScreening = EntityFactory.create(TenantScreening.class);
             }

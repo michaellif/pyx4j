@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,6 +39,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -59,6 +61,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
     public IsWidget createContent() {
 
         tabPanel.add(createGeneralTab(), i18n.tr("Details"));
+        tabPanel.addDisable(isEditable() ? new HTML() : ((MasterApplicationViewerView) getParentView()).getTenantsView().asWidget(), i18n.tr("Tenants"));
         tabPanel.add(createInfoTab(), i18n.tr("Info"));
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
         tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
@@ -86,7 +89,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
                 inject(proto().lease(), new CEntityCrudHyperlink<Lease>(MainActivityMapper.getCrudAppPlace(Lease.class))), 15).build());
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mainApplicant(), new CEntityLabel()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mainApplicant(), new CEntityLabel<Tenant>()), 25).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfOccupants()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfCoApplicants()), 5).build());
