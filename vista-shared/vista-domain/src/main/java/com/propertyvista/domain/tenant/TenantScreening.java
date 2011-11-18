@@ -103,5 +103,4 @@ public interface TenantScreening extends IEntity {
 
     @Caption(name = "Not resident of Canada")
     IPrimitive<Boolean> notCanadianCitizen();
-
 }

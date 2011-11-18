@@ -163,7 +163,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         if (fullInfo) {
             setValueOnForm(fromDebugId, tenant.person().email());
             setValueOnForm(fromDebugId, tenant.relationship());
-            setValueOnForm(fromDebugId, tenant.status());
+            setValueOnForm(fromDebugId, tenant.role());
             setValueOnForm(fromDebugId, tenant.takeOwnership());
         }
     }

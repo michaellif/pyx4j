@@ -35,7 +35,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 
@@ -46,7 +46,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
         log.debug("Retrieving charges for tenant {}", tenantId);
 
         Lease lease = PtAppContext.getCurrentUserLease();
-        TenantRetriever.UpdateLeaseTenants(lease);
+        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
         Persistence.service().retrieve(lease.tenants());
 
         Charges charges = retrieveApplicationEntity(Charges.class);

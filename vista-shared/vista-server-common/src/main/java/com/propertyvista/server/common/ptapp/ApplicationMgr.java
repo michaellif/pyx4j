@@ -56,7 +56,7 @@ public class ApplicationMgr {
         ma.lease().set(lease);
         Persistence.service().retrieve(lease.tenants());
         for (TenantInLease tenantInLease : lease.tenants()) {
-            if (TenantInLease.Status.Applicant == tenantInLease.status().getValue()) {
+            if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
                 a.steps().addAll(ApplicationMgr.createApplicationProgress());

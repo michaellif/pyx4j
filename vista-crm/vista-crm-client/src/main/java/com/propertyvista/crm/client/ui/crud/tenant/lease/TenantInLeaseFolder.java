@@ -81,7 +81,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().role(), "8.5em"));
 //                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));
         return columns;
     }
@@ -147,10 +147,10 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp = null;
-            if (first && proto().status() == column.getObject()) {
+            if (first && proto().role() == column.getObject()) {
                 CTextField textComp = new CTextField();
                 textComp.setEditable(false);
-                textComp.setValue(TenantInLease.Status.Applicant.name());
+                textComp.setValue(TenantInLease.Role.Applicant.name());
                 comp = textComp;
             } else if (proto().tenant() == column.getObject()) {
                 comp = inject(column.getObject(), new CEntityLabel());
@@ -161,9 +161,9 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             } else {
                 comp = super.createCell(column);
 
-                if (proto().status() == column.getObject() && comp instanceof CComboBox) {
-                    Collection<TenantInLease.Status> status = EnumSet.allOf(TenantInLease.Status.class);
-                    status.remove(TenantInLease.Status.Applicant);
+                if (proto().role() == column.getObject() && comp instanceof CComboBox) {
+                    Collection<TenantInLease.Role> status = EnumSet.allOf(TenantInLease.Role.class);
+                    status.remove(TenantInLease.Role.Applicant);
                     ((CComboBox) comp).setOptions(status);
                 }
             }
@@ -191,8 +191,8 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
                 @Override
                 public boolean isValid(CComponent<Date, ?> component, Date value) {
-                    TenantInLease.Status status = getValue().status().getValue();
-                    if ((status == TenantInLease.Status.Applicant) || (status == TenantInLease.Status.CoApplicant)) {
+                    TenantInLease.Role status = getValue().role().getValue();
+                    if ((status == TenantInLease.Role.Applicant) || (status == TenantInLease.Role.CoApplicant)) {
                         // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
                         return ValidationUtils.isOlderThen18(value);
                     } else {
@@ -211,13 +211,13 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                        TenantInLease.Status status = getValue().status().getValue();
-                        if ((status == null) || (status == TenantInLease.Status.Dependent)) {
+                        TenantInLease.Role status = getValue().role().getValue();
+                        if ((status == null) || (status == TenantInLease.Role.Dependent)) {
                             if (ValidationUtils.isOlderThen18(event.getValue())) {
-                                boolean currentEditableState = get(proto().status()).isEditable();
+                                boolean currentEditableState = get(proto().role()).isEditable();
                                 enableStatusAndOwnership();
                                 if (!currentEditableState) {
-                                    get(proto().status()).setValue(null);
+                                    get(proto().role()).setValue(null);
                                 }
                             } else {
                                 setMandatoryDependant();
@@ -226,20 +226,20 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                     }
                 });
 
-                get(proto().status()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Status>(get(proto().tenant().person().birthDate())));
+                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Role>(get(proto().tenant().person().birthDate())));
             }
         }
 
         private void setMandatoryDependant() {
-            get(proto().status()).setValue(TenantInLease.Status.Dependent);
-            get(proto().status()).setEditable(false);
+            get(proto().role()).setValue(TenantInLease.Role.Dependent);
+            get(proto().role()).setEditable(false);
 
 //                get(proto().takeOwnership()).setValue(true);
 //                get(proto().takeOwnership()).setEnabled(false);
         }
 
         private void enableStatusAndOwnership() {
-            get(proto().status()).setEditable(true);
+            get(proto().role()).setEditable(true);
 //                get(proto().takeOwnership()).setEnabled(true);
         }
     }

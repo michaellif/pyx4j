@@ -85,7 +85,7 @@ public class TenantsGenerator {
         summary.tenants().add(tenantSummary);
         tenantSummary.tenant().set(tenant);
         tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
-        tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Applicant);
+        tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Applicant);
         tenantSummary.tenantInLease().lease().set(summary.lease());
 
         return summary;

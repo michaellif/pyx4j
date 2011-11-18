@@ -13,9 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -25,18 +26,18 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
-    private final CHyperlink createApplicationAction;
+    private final Button createApplicationAction;
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class, new LeaseEditorForm(new CrmViewersComponentFactory()));
 
-        createApplicationAction = new CHyperlink(new Command() {
+        createApplicationAction = new Button(i18n.tr("Create Application"), new ClickHandler() {
+
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 ((LeaseViewerView.Presenter) presenter).createMasterApplication();
             }
         });
-        createApplicationAction.setValue(i18n.tr("Create Application"));
         addToolbarItem(createApplicationAction.asWidget());
     }
 

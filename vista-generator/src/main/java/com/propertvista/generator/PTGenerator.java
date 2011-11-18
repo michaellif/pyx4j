@@ -370,14 +370,14 @@ public class PTGenerator {
 
         // first tenant must always be an applicant
         if (index == 0) {
-            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Applicant);
+            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Applicant);
             tenantSummary.tenant().user().set(user);
         } else if (index == 1) {
-            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.CoApplicant);
+            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.CoApplicant);
         } else if (index == 2) {
-            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.CoApplicant);
+            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.CoApplicant);
         } else {
-            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependent);
+            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Dependent);
         }
 
         if (index == 0) {
@@ -391,7 +391,7 @@ public class PTGenerator {
         tenantSummary.tenantInLease().percentage().setValue(RandomUtil.randomInt(100));
 
         if (EnumSet.of(TenantInLease.Relationship.Daughter, TenantInLease.Relationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {
-            tenantSummary.tenantInLease().status().setValue(TenantInLease.Status.Dependent);
+            tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Dependent);
         }
         tenantSummary.tenantInLease().takeOwnership().setValue(RandomUtil.randomBoolean());
 

@@ -24,7 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class TenantInfoServiceImpl implements TenantInfoService {
 
@@ -34,7 +34,7 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     public void retrieve(AsyncCallback<TenantInfoDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
 
-        TenantRetriever r = new TenantRetriever(tenantId);
+        TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantId);
 
         TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(r.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(r.tenantScreening, dto);
@@ -50,7 +50,7 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO dto) {
         log.debug("Saving Tenant Info {}", dto);
 
-        TenantRetriever r = new TenantRetriever(dto.getPrimaryKey());
+        TenantInLeaseRetriever r = new TenantInLeaseRetriever(dto.getPrimaryKey());
         new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(dto, r.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(dto, r.tenantScreening);
 

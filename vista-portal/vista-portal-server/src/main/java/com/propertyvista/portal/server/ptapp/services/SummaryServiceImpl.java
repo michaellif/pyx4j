@@ -45,7 +45,7 @@ import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.report.SummaryReport;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements SummaryService {
 
@@ -85,12 +85,12 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
 
         Lease lease = PtAppContext.getCurrentUserLease();
-        TenantRetriever.UpdateLeaseTenants(lease);
+        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
 
         for (TenantInLease tenantInLease : lease.tenants()) {
             Persistence.service().retrieve(tenantInLease);
 
-            TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
+            TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
 
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
             summary.tenantsWithInfo().add(createTenantInfoDTO(tr));
@@ -130,13 +130,13 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
     // internal helpers:
 
-    private TenantInfoDTO createTenantInfoDTO(TenantRetriever tr) {
+    private TenantInfoDTO createTenantInfoDTO(TenantInLeaseRetriever tr) {
         TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, tiDTO);
         return tiDTO;
     }
 
-    private TenantFinancialDTO createTenantFinancialDTO(TenantRetriever tr) {
+    private TenantFinancialDTO createTenantFinancialDTO(TenantInLeaseRetriever tr) {
         TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
         tfDTO.person().set(tr.tenant.person());
         return tfDTO;

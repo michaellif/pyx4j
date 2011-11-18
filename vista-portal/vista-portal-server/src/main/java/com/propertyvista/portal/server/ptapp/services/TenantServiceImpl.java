@@ -36,7 +36,7 @@ import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class TenantServiceImpl extends ApplicationEntityServiceImpl implements TenantService {
 
@@ -45,7 +45,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     @Override
     public void retrieve(AsyncCallback<TenantInApplicationListDTO> callback, Key tenantId) {
         Lease lease = PtAppContext.getCurrentUserLease();
-        TenantRetriever.UpdateLeaseTenants(lease);
+        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
 
         TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
         for (TenantInLease tenantInLease : lease.tenants()) {
@@ -62,7 +62,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     @Override
     public void save(AsyncCallback<TenantInApplicationListDTO> callback, TenantInApplicationListDTO tenants) {
         Lease lease = PtAppContext.getCurrentUserLease();
-        TenantRetriever.UpdateLeaseTenants(lease);
+        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
 
         List<TenantInLease> existingTenants = new Vector<TenantInLease>(lease.tenants());
         lease.tenants().clear();

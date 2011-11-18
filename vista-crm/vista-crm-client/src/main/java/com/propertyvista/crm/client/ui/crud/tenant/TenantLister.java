@@ -38,13 +38,13 @@ public class TenantLister extends ListerBase<TenantDTO> {
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
+
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().name()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().sex()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().birthDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().homePhone()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().mobilePhone()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().workPhone()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().email().address()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.role()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.incomeSource()));
         return columnDescriptors;
     }
 }

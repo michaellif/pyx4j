@@ -45,7 +45,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
 
     public static boolean shouldEnterInformation(TenantInLease tenant) {
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
+        if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
             return true;
         }
         if (!tenant.takeOwnership().isBooleanTrue()) {
@@ -56,7 +56,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
 
     public static boolean shouldEnterInformation(TenantInLease tenant, LogicalDate birthDate) {
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
+        if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
             return true;
         }
         if (!tenant.takeOwnership().isBooleanTrue()) {
@@ -67,7 +67,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
 
     public static boolean shouldEnterInformation(TenantInLeaseDTO tenant, LogicalDate birthDate) {
         //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.status().getValue() == TenantInLease.Status.Applicant) {
+        if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
             return true;
         }
         if (!tenant.takeOwnership().isBooleanTrue()) {

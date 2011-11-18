@@ -39,16 +39,16 @@ public class CampaignManager {
 
     public static void fireEvent(CampaignTrigger trigger, TenantInLeaseListDTO tenants) {
         for (TenantInLease tenantInfo : tenants.tenants()) {
-            TenantInLease.Status status = tenantInfo.status().getValue();
+            TenantInLease.Role status = tenantInfo.role().getValue();
 
             switch (trigger) {
             case ApplicationCompleated:
-                if (TenantInLease.Status.Applicant.equals(status)) {
+                if (TenantInLease.Role.Applicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
                 break;
             default:
-                if (TenantInLease.Status.Applicant.equals(status) || TenantInLease.Status.CoApplicant.equals(status)) {
+                if (TenantInLease.Role.Applicant.equals(status) || TenantInLease.Role.CoApplicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
             }

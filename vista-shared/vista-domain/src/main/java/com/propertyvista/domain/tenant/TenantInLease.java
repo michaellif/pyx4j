@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -66,8 +67,9 @@ public interface TenantInLease extends IBoundToApplication {
 
     @I18n
     @XmlType(name = "TenantStatus")
-    public static enum Status implements Serializable {
+    public static enum Role implements Serializable {
 
+        @Translate("Main Applicant")
         Applicant,
 
         @Translate("Co-Applicant")
@@ -97,7 +99,8 @@ public interface TenantInLease extends IBoundToApplication {
 
     @ToString(index = 2)
     @NotNull
-    IPrimitive<Status> status();
+    @MemberColumn(name = "status")
+    IPrimitive<Role> role();
 
     @Caption(name = "Take Ownership", description = "Main Applicant To Complete This Part Of The Application")
     IPrimitive<Boolean> takeOwnership();

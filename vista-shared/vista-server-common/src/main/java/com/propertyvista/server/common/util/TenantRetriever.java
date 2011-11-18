@@ -13,17 +13,15 @@
  */
 package com.propertyvista.server.common.util;
 
-import com.pyx4j.commons.Key;
+import java.util.List;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class TenantRetriever {
 
@@ -31,56 +29,46 @@ public class TenantRetriever {
 
     public TenantScreening tenantScreening;
 
-    public TenantInLease tenantInLease;
+    public List<TenantScreening> tenantScreenings;
 
     // Construction:
     public TenantRetriever() {
     }
 
-    public TenantRetriever(Key tenanInLeasetId) {
-        retrieve(tenanInLeasetId, false);
+    public TenantRetriever(Tenant tenant) {
+        retrieve(tenant, false);
     }
 
-    public TenantRetriever(Key tenanInLeasetId, boolean financial) {
-        retrieve(tenanInLeasetId, financial);
+    public TenantRetriever(Tenant tenant, boolean financial) {
+        retrieve(tenant, financial);
     }
 
     // Manipulation:
-    public void retrieve(Key tenanInLeasetId) {
-        retrieve(tenanInLeasetId, false);
+    public void retrieve(Tenant tenant) {
+        retrieve(tenant, false);
     }
 
-    public void retrieve(Key tenanInLeasetId, boolean financial) {
-        tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenanInLeasetId);
-        // TODO correct this check:
-        if ((tenantInLease == null) /* || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey())) */) {
-            throw new SecurityViolationException("Invalid data access");
+    public void retrieve(Tenant tenant, boolean financial) {
+        Persistence.service().retrieve(tenant);
+        this.tenant = tenant;
+        if (tenant != null) {
+            EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
+            tenantScreenings = Persistence.service().query(criteria);
+            if (tenantScreenings != null && !tenantScreenings.isEmpty()) {
+                tenantScreening = tenantScreenings.get(tenantScreenings.size() - 1); // use last screenings as 
+            } else {
+                tenantScreening = EntityFactory.create(TenantScreening.class);
+            }
+
+            if (financial && !tenantScreening.isEmpty()) {
+                Persistence.service().retrieve(tenantScreening.documents());
+                Persistence.service().retrieve(tenantScreening.incomes());
+                Persistence.service().retrieve(tenantScreening.assets());
+                Persistence.service().retrieve(tenantScreening.guarantors());
+            }
+
+            Persistence.service().retrieve(tenant.emergencyContacts());
         }
-
-        EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenantInLease.tenant()));
-        tenantScreening = Persistence.service().retrieve(criteria);
-        if (tenantScreening == null) {
-            tenantScreening = EntityFactory.create(TenantScreening.class);
-        }
-
-        if (financial) {
-            Persistence.service().retrieve(tenantScreening.documents());
-            Persistence.service().retrieve(tenantScreening.incomes());
-            Persistence.service().retrieve(tenantScreening.assets());
-            Persistence.service().retrieve(tenantScreening.guarantors());
-        }
-
-        tenant = Persistence.service().retrieve(Tenant.class, tenantInLease.tenant().getPrimaryKey());
-        Persistence.service().retrieve(tenant.emergencyContacts());
-    }
-
-    // Lease management:
-    static public void UpdateLeaseTenants(Lease lease) {
-        // update Tenants double links:
-        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-        lease.tenants().clear();
-        lease.tenants().addAll(Persistence.service().query(criteria));
     }
 }

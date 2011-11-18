@@ -29,7 +29,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl implements TenantFinancialService {
 
@@ -37,9 +37,9 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
     @Override
     public void retrieve(AsyncCallback<TenantFinancialDTO> callback, Key tenantId) {
-        log.debug("Retrieving financials for tenant {}", tenantId);
+        log.debug("Retrieving financial for tenant {}", tenantId);
 
-        TenantRetriever r = new TenantRetriever(tenantId, true);
+        TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantId, true);
         TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
 
@@ -60,7 +60,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO dto) {
         log.debug("Saving tenantFinancial {}", dto);
 
-        TenantRetriever r = new TenantRetriever(dto.getPrimaryKey(), true);
+        TenantInLeaseRetriever r = new TenantInLeaseRetriever(dto.getPrimaryKey(), true);
 
         new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, r.tenantScreening);
 

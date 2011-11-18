@@ -92,7 +92,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         if (fullInfo) {
             assertValueOnForm(formDebugId, tenant.person().email());
             assertValueOnForm(formDebugId, tenant.relationship());
-            assertValueOnForm(formDebugId, tenant.status());
+            assertValueOnForm(formDebugId, tenant.role());
             assertValueOnForm(formDebugId, tenant.takeOwnership());
         }
     }

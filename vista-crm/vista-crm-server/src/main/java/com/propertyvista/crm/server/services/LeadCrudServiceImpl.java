@@ -81,7 +81,7 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
             tenantInLease.tenant().set(tenant);
             tenantInLease.lease().set(lease);
-            tenantInLease.status().setValue(TenantInLease.Status.Applicant);
+            tenantInLease.role().setValue(TenantInLease.Role.Applicant);
             Persistence.service().merge(tenantInLease);
 
 //            // update lease tenants list:

@@ -24,7 +24,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Status;
+import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication.Decision;
 import com.propertyvista.dto.MasterApplicationDTO;
@@ -32,7 +32,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.TenantConverter;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<MasterApplication, MasterApplicationDTO> implements
         MasterApplicationCrudService {
@@ -49,7 +49,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         Persistence.service().retrieve(dto.lease().unit());
         Persistence.service().retrieve(dto.lease().unit().belongsTo());
 
-        TenantRetriever.UpdateLeaseTenants(dto.lease());
+        TenantInLeaseRetriever.UpdateLeaseTenants(dto.lease());
         dto.numberOfOccupants().setValue(dto.lease().tenants().size());
         dto.numberOfCoApplicants().setValue(0);
         dto.numberOfGuarantors().setValue(0);
@@ -57,14 +57,14 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         for (TenantInLease tenantInLease : dto.lease().tenants()) {
             Persistence.service().retrieve(tenantInLease);
 
-            if (tenantInLease.status().getValue() == Status.Applicant) {
+            if (tenantInLease.role().getValue() == Role.Applicant) {
                 dto.mainApplicant().set(tenantInLease.tenant());
-            } else if (tenantInLease.status().getValue() == Status.CoApplicant) {
+            } else if (tenantInLease.role().getValue() == Role.CoApplicant) {
                 dto.numberOfCoApplicants().setValue(dto.numberOfCoApplicants().getValue() + 1);
             }
 
             if (!fromList) {
-                TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
+                TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
                 dto.tenantsWithInfo().add(createTenantInfoDTO(tr));
                 dto.tenantFinancials().add(createTenantFinancialDTO(tr));
             }
@@ -109,13 +109,13 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
     }
 
     // internal helpers:
-    private TenantInfoDTO createTenantInfoDTO(TenantRetriever tr) {
+    private TenantInfoDTO createTenantInfoDTO(TenantInLeaseRetriever tr) {
         TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, tiDTO);
         return tiDTO;
     }
 
-    private TenantFinancialDTO createTenantFinancialDTO(TenantRetriever tr) {
+    private TenantFinancialDTO createTenantFinancialDTO(TenantInLeaseRetriever tr) {
         TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
         tfDTO.person().set(tr.tenant.person());
         return tfDTO;

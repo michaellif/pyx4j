@@ -98,7 +98,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDateAndClick(datePickerId(index), calendar);
-        setStatus(index, TenantInLease.Status.Dependent);
+        setStatus(index, TenantInLease.Role.Dependent);
         calendar.add(Calendar.YEAR, 10);
         navigateToDateAndClick(datePickerId(index), calendar);
         assertNotEditable(statusId(index));
@@ -109,7 +109,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         navigateToDateAndClick(datePickerId(index), calendar);
         assertEditable(statusId(index));
         assertEditable(ownershipId(index));
-        setStatus(index, TenantInLease.Status.Dependent);
+        setStatus(index, TenantInLease.Role.Dependent);
         //TODO 
         //ask anya about this test
         //assertEquals("off", selenium.getValue(ownershipId(index)));
@@ -121,7 +121,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);
         navigateToDate(datePickerId(index), calendar);
-        setStatus(index, TenantInLease.Status.CoApplicant);
+        setStatus(index, TenantInLease.Role.CoApplicant);
         validateBirthDateLessThen18(index);
     }
 
@@ -163,7 +163,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
         selenium.click(lastNameId(index));
     }
 
-    private void setStatus(int index, TenantInLease.Status status) {
+    private void setStatus(int index, TenantInLease.Role status) {
         selenium.setValue(statusId(index), status.toString());
     }
 
@@ -172,7 +172,7 @@ public class DatePickerValidationTest extends DatePickerTestBase {
     }
 
     private IDebugId statusId(int index) {
-        return D.id(baseID(index), D.id(proto(TenantInLease.class).status()));
+        return D.id(baseID(index), D.id(proto(TenantInLease.class).role()));
     }
 
     private IDebugId lastNameId(int index) {

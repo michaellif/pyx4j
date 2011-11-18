@@ -36,7 +36,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.common.util.TenantRetriever;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 import com.propertyvista.server.domain.CampaignTrigger;
 
 public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements PaymentService {
@@ -103,8 +103,8 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentUserLease()));
         for (TenantInLease tenantInfo : secureQuery(criteria)) {
-            if (tenantInfo.status().getValue().equals(TenantInLease.Status.Applicant)) {
-                TenantRetriever r = new TenantRetriever(tenantInfo.getPrimaryKey());
+            if (tenantInfo.role().getValue().equals(TenantInLease.Role.Applicant)) {
+                TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantInfo.getPrimaryKey());
                 paymentInfo.currentAddress().set(r.tenantScreening.currentAddress());
                 paymentInfo.currentPhone().set(tenantInfo.tenant().person().homePhone());
                 break;

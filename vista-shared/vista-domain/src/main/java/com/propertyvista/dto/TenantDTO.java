@@ -17,9 +17,16 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 public interface TenantDTO extends Tenant {
 
-    IPrimitive<String> displayName();
+    IPrimitive<IncomeSource> incomeSource();
+
+    IPrimitive<Role> role();
+
+    Lease lease();
 }

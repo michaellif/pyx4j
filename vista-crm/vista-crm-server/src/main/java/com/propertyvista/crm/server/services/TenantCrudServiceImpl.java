@@ -14,11 +14,15 @@
 package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.server.common.util.TenantRetriever;
 
 public class TenantCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
@@ -29,11 +33,19 @@ public class TenantCrudServiceImpl extends GenericCrudServiceDtoImpl<Tenant, Ten
     @Override
     protected void enhanceDTO(Tenant in, TenantDTO dto, boolean fromList) {
 
-        dto.displayName().setValue(in.getStringView());
-
         if (!fromList) {
             // load detached data:
             Persistence.service().retrieve(dto.emergencyContacts());
         }
+
+        TenantRetriever tr = new TenantRetriever(in, true);
+        if (tr.tenantScreening.isEmpty() && !tr.tenantScreening.incomes().isEmpty()) {
+            dto.incomeSource().setValue(tr.tenantScreening.incomes().get(0).incomeSource().getValue());
+        }
+
+        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), in));
+        TenantInLease tenantInLease = Persistence.service().retrieve(criteria);
+        dto.role().setValue(tenantInLease.role().getValue());
     }
 }

@@ -426,7 +426,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             return false;
         }
         for (TenantInLeaseDTO pti : getValue().tenantList().tenants()) {
-            if (pti.status().getValue() == TenantInLease.Status.Applicant) {
+            if (pti.role().getValue() == TenantInLease.Role.Applicant) {
                 return isCombinationMatch(signature, pti.person().name().firstName(), pti.person().name().lastName(), pti.person().name().middleName());
             }
         }

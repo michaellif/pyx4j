@@ -34,7 +34,7 @@ public class TenantConverter {
         protected void bind() {
             bind(dtoProto.person(), dboProto.tenant().person());
             bind(dtoProto.relationship(), dboProto.relationship());
-            bind(dtoProto.status(), dboProto.status());
+            bind(dtoProto.role(), dboProto.role());
             bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
         }
     }
