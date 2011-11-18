@@ -22,16 +22,32 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 
 public interface Person extends IEntity {
 
+    @I18n
+    public enum Gender {
+
+        Male, Female;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     @ToString(index = 1)
     @BusinessEqualValue
     @EmbeddedEntity
     Name name();
+
+    @ToString(index = 1)
+    IPrimitive<Gender> gender();
 
     @EmbeddedEntity
     Phone homePhone();

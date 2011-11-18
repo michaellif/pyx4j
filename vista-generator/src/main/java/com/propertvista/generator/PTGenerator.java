@@ -50,6 +50,7 @@ import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.Tenant.Type;
@@ -491,10 +492,10 @@ public class PTGenerator {
             guarantor.name().lastName().setValue(DataGenerator.randomLastName());
             guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
             guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
+            guarantor.gender().setValue(RandomUtil.randomEnum(Person.Gender.class));
             guarantor.email().set(CommonsGenerator.createEmail(guarantor.name()));
             tenantScreening.guarantors().add(guarantor);
         }
 
     }
-
 }

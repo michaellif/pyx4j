@@ -72,7 +72,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
         columns.add(new EntityFolderColumnDescriptor(proto().person().name().firstName(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().person().name().middleName(), "5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().person().name().lastName(), "12em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().person().birthDate(), "8.2em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().person().birthDate(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));

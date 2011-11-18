@@ -90,6 +90,7 @@ public class CommonsGenerator {
         Name name = createName();
         person.name().set(name);
         person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
+        person.gender().setValue(RandomUtil.randomEnum(Person.Gender.class));
 
         person.homePhone().set(createPhone());
         person.mobilePhone().set(createPhone());

@@ -78,7 +78,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().tenant(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "8.2em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().status(), "8.5em"));
