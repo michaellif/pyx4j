@@ -102,12 +102,10 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
         for (int i = 1; i <= config().numTenants; i++) {
             String email = DemoData.UserType.TENANT.getEmail(i);
-            User user = UserPreloader.createUser(email, email, VistaBehavior.TENANT);
             Tenant tenant = generator.createTenant();
+            User user = UserPreloader.createUser(tenant.person().name().getStringView(), email, email, VistaBehavior.TENANT);
             tenant.person().email().address().setValue(email);
-            // Update user name
-            user.name().setValue(tenant.person().name().getStringView());
-            Persistence.service().persist(user);
+            tenant.user().set(user);
             persistTenant(tenant);
 
             ApplicationSummaryGDO summary = generator.createLease(tenant, aptUnitSource.next());
