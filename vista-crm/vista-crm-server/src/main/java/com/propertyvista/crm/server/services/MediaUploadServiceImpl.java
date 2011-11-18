@@ -24,6 +24,7 @@ import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
@@ -32,9 +33,16 @@ import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO> implements MediaUploadService {
 
+    private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
+
     @Override
     public long getMaxSize() {
         return 5 * 1024 * 1024;
+    }
+
+    @Override
+    public String getUploadFileTypeName() {
+        return i18n.tr("Media");
     }
 
     @Override

@@ -27,6 +27,8 @@ import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.i18n.annotations.I18nComment;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.crm.rpc.dto.UpdateUploadDTO;
@@ -40,11 +42,19 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 
 public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> implements UpdateUploadService {
 
+    private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
+
     private final static Logger log = LoggerFactory.getLogger(UpdateUploadServiceImpl.class);
 
     @Override
     public long getMaxSize() {
         return 5 * 1024 * 1024;
+    }
+
+    @Override
+    @I18nComment("Used in message like this 'Unsupported Data update File Type .docx'")
+    public String getUploadFileTypeName() {
+        return i18n.tr("Data Update");
     }
 
     @Override

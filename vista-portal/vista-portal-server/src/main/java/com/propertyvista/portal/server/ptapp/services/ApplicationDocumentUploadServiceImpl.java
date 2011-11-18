@@ -25,6 +25,7 @@ import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
@@ -34,9 +35,16 @@ import com.propertyvista.server.domain.ApplicationDocumentData;
 
 public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<ApplicationDocumentUploadDTO> implements ApplicationDocumentUploadService {
 
+    private static I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
+
     @Override
     public long getMaxSize() {
         return EntityFactory.getEntityPrototype(ApplicationDocumentData.class).data().getMeta().getLength();
+    }
+
+    @Override
+    public String getUploadFileTypeName() {
+        return i18n.tr("Application Document");
     }
 
     @Override

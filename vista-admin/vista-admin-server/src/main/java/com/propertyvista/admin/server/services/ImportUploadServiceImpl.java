@@ -56,6 +56,11 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
     }
 
     @Override
+    public String getUploadFileTypeName() {
+        return "Import";
+    }
+
+    @Override
     public Collection<String> getSupportedExtensions() {
         return DownloadFormat.getExtensions(supportedFormats);
     }
@@ -152,4 +157,5 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> imp
             NamespaceManager.remove();
         }
     }
+
 }
