@@ -99,7 +99,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseID()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
 
         main.setBR(++row, 0, 1);

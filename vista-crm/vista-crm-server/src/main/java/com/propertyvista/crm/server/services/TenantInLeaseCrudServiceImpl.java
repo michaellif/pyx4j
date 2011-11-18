@@ -13,10 +13,13 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class TenantInLeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<TenantInLease, TenantInLeaseDTO> implements TenantInLeaseCrudService {
 
@@ -27,11 +30,11 @@ public class TenantInLeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Tena
     @Override
     protected void enhanceDTO(TenantInLease in, TenantInLeaseDTO dto, boolean fromList) {
 
-//        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(in.getPrimaryKey(), true);
-//        if (!tr.tenantScreening.isEmpty() && !tr.tenantScreening.incomes().isEmpty()) {
-//            dto.incomeSource().setValue(tr.tenantScreening.incomes().get(0).incomeSource().getValue());
-//        }
-//
-//        Persistence.service().retrieve(dto.lease());
+        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(in.getPrimaryKey(), true);
+        if (!tr.tenantScreening.isEmpty() && !tr.tenantScreening.incomes().isEmpty()) {
+            dto.incomeSource().setValue(tr.tenantScreening.incomes().get(0).incomeSource().getValue());
+        }
+
+        Persistence.service().retrieve(dto.application());
     }
 }

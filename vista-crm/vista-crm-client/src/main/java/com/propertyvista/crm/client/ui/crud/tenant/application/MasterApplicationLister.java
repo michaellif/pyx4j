@@ -49,7 +49,7 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseFrom()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseTo()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().status()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         return columnDescriptors;
     }
 
@@ -77,13 +77,13 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseFrom()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().leaseTo()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().status()));
-
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().expectedMoveIn()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().expectedMoveOut()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().actualMoveIn()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().actualMoveOut()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease().moveOutNotice()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.percenrtageApproved()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.suggestedDecision()));

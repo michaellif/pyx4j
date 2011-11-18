@@ -32,7 +32,7 @@ public class ApplicationLister extends ListerBase<ApplicationDTO> {
     @Override
     protected List<ColumnDescriptor<ApplicationDTO>> getDefaultColumnDescriptors(ApplicationDTO proto) {
         List<ColumnDescriptor<ApplicationDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ApplicationDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.submitted()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.stepsCompleted()));
         return columnDescriptors;
     }

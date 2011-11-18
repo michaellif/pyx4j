@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 
 /**
  * This is an application progress for tenant, secondary tenant and guarantors.
@@ -32,7 +33,7 @@ public interface Application extends IEntity, IUserEntity {
     @Owned
     IList<ApplicationWizardStep> steps();
 
-    IPrimitive<Boolean> submitted();
+    IPrimitive<Status> status();
 
     @Detached
     Lease lease();

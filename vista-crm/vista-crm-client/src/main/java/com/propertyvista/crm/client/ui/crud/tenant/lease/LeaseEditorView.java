@@ -20,6 +20,7 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -55,4 +56,6 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
     IListerView<AptUnit> getUnitListerView();
 
     IListerView<Tenant> getTenantListerView();
+
+    void showSelectTypePopUp(AsyncCallback<Service.Type> callback);
 }

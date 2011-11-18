@@ -27,6 +27,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class ApplicationMgr {
@@ -54,11 +55,13 @@ public class ApplicationMgr {
         lease.status().setValue(Lease.Status.ApplicationInProgress);
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
         ma.lease().set(lease);
+        ma.status().setValue(Status.Invited);
         Persistence.service().retrieve(lease.tenants());
         for (TenantInLease tenantInLease : lease.tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
+                a.status().setValue(Status.Invited);
                 a.steps().addAll(ApplicationMgr.createApplicationProgress());
                 a.user().set(tenantInLease.tenant().user());
                 a.lease().set(ma.lease());

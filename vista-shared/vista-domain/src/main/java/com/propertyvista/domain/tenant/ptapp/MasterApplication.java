@@ -35,6 +35,18 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public interface MasterApplication extends IEntity {
 
     @I18n
+    @XmlType(name = "Application Status")
+    public enum Status {
+
+        Invited, Submitted, Incomplete, PendingDecision, Approved, Declined, InfoRequested, Cancelled;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @I18n
     @XmlType(name = "Suggested Decision")
     public enum Decision {
 
@@ -52,6 +64,8 @@ public interface MasterApplication extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    IPrimitive<Status> status();
 
     @Owned
     IList<Application> applications();

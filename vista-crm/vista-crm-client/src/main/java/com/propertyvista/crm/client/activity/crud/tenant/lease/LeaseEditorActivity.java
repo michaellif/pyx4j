@@ -106,11 +106,23 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    protected void createNewEntity(AsyncCallback<LeaseDTO> callback) {
-        LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
-        entity.createDate().setValue(new LogicalDate());
-        entity.status().setValue(Lease.Status.Draft);
-        callback.onSuccess(entity);
+    protected void createNewEntity(final AsyncCallback<LeaseDTO> callback) {
+        ((LeaseEditorView) view).showSelectTypePopUp(new AsyncCallback<Service.Type>() {
+            @Override
+            public void onSuccess(Service.Type type) {
+                LeaseDTO entity = EntityFactory.create(LeaseDTO.class);
+                entity.createDate().setValue(new LogicalDate());
+                entity.status().setValue(Lease.Status.Draft);
+                entity.type().setValue(type);
+
+                callback.onSuccess(entity);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+        });
     }
 
     @Override

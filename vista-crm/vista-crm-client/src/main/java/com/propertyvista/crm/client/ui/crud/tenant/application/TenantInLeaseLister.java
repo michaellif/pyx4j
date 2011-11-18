@@ -39,9 +39,10 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.tenant().person().sex()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.tenant().person().birthDate()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.lease()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.role()));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.incomeSource()));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.application().status()));
         return columnDescriptors;
     }
 }
