@@ -29,6 +29,8 @@ public interface UploadReciver {
      */
     long getMaxSize();
 
+    String getUploadFileTypeName();
+
     public void onUploadStart(String fileName);
 
     public enum ProcessingStatus {
