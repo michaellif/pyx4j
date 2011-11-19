@@ -77,7 +77,7 @@ public abstract class SecurityController {
     public static void assertBehavior(Behavior behavior) {
         if (!checkBehavior(behavior)) {
             if (ApplicationMode.isDevelopment()) {
-                throw new SecurityViolationException("Permission denied " + behavior);
+                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + behavior);
             } else {
                 throw new SecurityViolationException("Permission denied");
             }
@@ -95,7 +95,7 @@ public abstract class SecurityController {
     public static void assertPermission(Permission permission) throws SecurityViolationException {
         if (!checkPermission(permission)) {
             if (ApplicationMode.isDevelopment()) {
-                throw new SecurityViolationException("Permission denied " + permission);
+                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + permission);
             } else {
                 throw new SecurityViolationException("Permission denied");
             }
