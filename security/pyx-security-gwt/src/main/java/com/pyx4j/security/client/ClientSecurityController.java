@@ -98,9 +98,11 @@ public class ClientSecurityController extends SecurityController implements HasV
         }
         if (!EqualsHelper.equals(acl.behaviours, behaviours)) {
             log.debug("Client behaviours changed {} -> {}", acl.behaviours, behaviours);
-            acl.behaviours = behaviours;
-            ValueChangeEvent.fire(this, acl.behaviours);
         }
+        //TODO do not fire change event all the time for now.  Problem in login places
+        acl.behaviours = behaviours;
+        ValueChangeEvent.fire(this, acl.behaviours);
+
         if (!initialized) {
             initialized = true;
             log.debug("Client security initialized");
