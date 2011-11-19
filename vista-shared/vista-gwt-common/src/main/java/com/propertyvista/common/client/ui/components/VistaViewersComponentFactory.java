@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
-import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
@@ -54,7 +54,7 @@ public class VistaViewersComponentFactory extends EntityFormComponentFactory {
             } else if (mm.isNumberValueClass()) {
                 CNumberLabel comp = new CNumberLabel();
                 if (mm.getFormat() != null) {
-                    (comp).setNumberFormat(mm.getFormat());
+                    (comp).setNumberFormat(mm.getFormat(), mm.useMessageFormat());
                 }
                 return comp;
             } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class) || mm.getValueClass().equals(LogicalDate.class)) {

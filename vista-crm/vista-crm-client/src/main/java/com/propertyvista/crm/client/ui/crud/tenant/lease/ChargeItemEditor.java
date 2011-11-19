@@ -68,10 +68,10 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
         CNumberLabel nl;
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().price(), nl = new CNumberLabel()), 6).build());
-        nl.setNumberFormat(proto().price().getMeta().getFormat());
+        nl.setNumberFormat(proto().price().getMeta().getFormat(), proto().price().getMeta().useMessageFormat());
 
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6).build());
-        nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat());
+        nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat(), proto().adjustedPrice().getMeta().useMessageFormat());
         nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         main.setWidget(++row, 0, extraDataPanel);
