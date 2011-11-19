@@ -8,7 +8,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.i18n.client.NumberFormat;
+import com.pyx4j.commons.SimpleMessageFormat;
 
 public class CNumberLabel extends CAbstractLabel<Number> {
 
@@ -16,11 +16,9 @@ public class CNumberLabel extends CAbstractLabel<Number> {
         if (format != null) {
             setFormat(new IFormat<Number>() {
 
-                NumberFormat formatter = NumberFormat.getFormat(format);
-
                 @Override
                 public String format(Number value) {
-                    return formatter.format(value);
+                    return SimpleMessageFormat.format(format, value);
                 }
 
                 @Override
