@@ -26,6 +26,7 @@ import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
@@ -97,6 +98,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate(), new CDateLabel()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().rentPrice()), 5).build());
