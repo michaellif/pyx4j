@@ -15,13 +15,15 @@ package com.propertyvista.domain.tenant.ptapp;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -33,7 +35,6 @@ import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-@ToStringFormat("Application")
 public interface MasterApplication extends IEntity {
 
     @I18n
@@ -66,6 +67,11 @@ public interface MasterApplication extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @Override
+    @Indexed
+    @ToString
+    IPrimitive<Key> id();
 
     IPrimitive<Status> status();
 
