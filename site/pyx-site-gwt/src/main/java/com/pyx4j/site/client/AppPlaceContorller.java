@@ -35,7 +35,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-public class AppPlaceContorller extends PlaceController {
+public final class AppPlaceContorller extends PlaceController {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlaceContorller.class);
 
@@ -71,10 +71,6 @@ public class AppPlaceContorller extends PlaceController {
         return forwardedFrom;
     }
 
-    public boolean confirm(String message) {
-        return Window.confirm(message);
-    }
-
     @Override
     public void goTo(final Place newPlace) {
         log.debug("requested to go to: " + newPlace);
@@ -91,22 +87,23 @@ public class AppPlaceContorller extends PlaceController {
                 }
 
                 String warning = maybeGoTo(result);
-                if (warning == null || confirm(warning)) {
-                    if (where.equals(newPlace)) {
-                        forwardedFrom = AppPlace.NOWHERE;
-                        log.debug("go to: " + where);
-                    } else {
-                        forwardedFrom = (AppPlace) newPlace;
-                        log.debug("forwarded to: {} from {}", where, forwardedFrom);
-                    }
-                    eventBus.fireEvent(new PlaceChangeEvent(where));
+                if (warning != null) {
+                    dispatcher.confirm(warning, new Runnable() {
+
+                        @Override
+                        public void run() {
+                            go(newPlace);
+                        }
+
+                    });
+                } else {
+                    go(newPlace);
                 }
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 // TODO Auto-generated method stub
-
             }
         };
 
@@ -119,5 +116,16 @@ public class AppPlaceContorller extends PlaceController {
         eventBus.fireEvent(willChange);
         String warning = willChange.getWarning();
         return warning;
+    }
+
+    private void go(Place newPlace) {
+        if (where.equals(newPlace)) {
+            forwardedFrom = AppPlace.NOWHERE;
+            log.debug("go to: " + where);
+        } else {
+            forwardedFrom = (AppPlace) newPlace;
+            log.debug("forwarded to: {} from {}", where, forwardedFrom);
+        }
+        eventBus.fireEvent(new PlaceChangeEvent(where));
     }
 }
