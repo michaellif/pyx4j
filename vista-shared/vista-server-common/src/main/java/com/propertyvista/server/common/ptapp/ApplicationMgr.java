@@ -66,6 +66,8 @@ public class ApplicationMgr {
                 a.user().set(tenantInLease.tenant().user());
                 a.lease().set(ma.lease());
 
+                tenantInLease.application().set(a);
+
                 ma.applications().add(a);
                 break;
             }
