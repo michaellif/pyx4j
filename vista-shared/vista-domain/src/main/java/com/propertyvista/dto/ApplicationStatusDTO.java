@@ -25,7 +25,7 @@ public interface ApplicationStatusDTO extends IEntity {
     /**
      * Tenant/Guarantor
      */
-    Name name();
+    Name person();
 
     /**
      * Primary Tenant, Co-signer or Guarantor
@@ -35,5 +35,7 @@ public interface ApplicationStatusDTO extends IEntity {
     /**
      * Completed steps/total steps in %
      */
-    IPrimitive<String> progress();
+    IPrimitive<Double> progress();
+
+    IPrimitive<String> description();
 }

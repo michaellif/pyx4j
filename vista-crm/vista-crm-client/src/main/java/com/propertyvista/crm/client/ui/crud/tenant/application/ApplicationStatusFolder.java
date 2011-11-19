@@ -30,9 +30,10 @@ public class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusD
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().person(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().progress(), "10em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().progress(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
         return columns;
     }
 }

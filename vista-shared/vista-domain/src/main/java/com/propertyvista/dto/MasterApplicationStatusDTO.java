@@ -16,9 +16,15 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface MasterApplicationStatusDTO extends IEntity {
 
     IList<ApplicationStatusDTO> individualApplications();
+
+    /**
+     * Completed steps/total steps in %
+     */
+    IPrimitive<Double> progress();
 }

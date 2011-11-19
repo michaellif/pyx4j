@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services;
 
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -139,24 +140,43 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
     private void calculateStatus(MasterApplication in, MasterApplicationDTO dto) {
         dto.masterApplicationStatus().set(EntityFactory.create(MasterApplicationStatusDTO.class));
 
+        Double masterApplicationProgress = 1.0;
+
         for (Application app : dto.applications()) {
             ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
 
             EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
-            status.name().set(Persistence.service().retrieve(criteria).person().name());
+            status.person().set(Persistence.service().retrieve(criteria).person().name());
             status.type().setValue("Tenant");
-            if (status.name().isEmpty()) {
+            if (status.person().isEmpty()) {
                 EntityQueryCriteria<TenantGuarantor> criteria1 = EntityQueryCriteria.create(TenantGuarantor.class);
                 criteria1.add(PropertyCriterion.eq(criteria1.proto().user(), app.user()));
-                status.name().set(Persistence.service().retrieve(criteria1).name());
+                status.person().set(Persistence.service().retrieve(criteria1).name());
                 status.type().setValue("Guarantor");
             }
 
-            if (!status.name().isEmpty()) {
-                status.progress().setValue("X out of Y steps completed");
+            if (!status.person().isEmpty()) {
+                int complete = 0;
+                for (int i = 0; i < app.steps().size(); ++i) {
+                    switch (app.steps().get(i).status().getValue()) {
+                    case complete:
+                        ++complete;
+                    case latest:
+                        break;
+                    }
+                }
+
+                status.progress().setValue(app.steps().isEmpty() ? 0. : complete / app.steps().size() * 100.0);
+                status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
+
                 dto.masterApplicationStatus().individualApplications().add(status);
             }
+
+            masterApplicationProgress *= status.progress().getValue();
+
         }
+
+        dto.masterApplicationStatus().progress().setValue(masterApplicationProgress);
     }
 }
