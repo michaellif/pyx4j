@@ -42,9 +42,9 @@ public class Button extends ButtonBase {
 
     private final Element content;
 
-    private Element imageElem;
-
     private Element textElem;
+
+    private final Image image;
 
     private final ButtonFacesHandler buttonFacesHandler;
 
@@ -73,6 +73,8 @@ public class Button extends ButtonBase {
     protected Button(ButtonFacesHandler facesHandler, Image image, final String text) {
         super(DOM.createDiv());
 
+        this.image = image;
+
         setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Button.name());
 
         container = DOM.createSpan();
@@ -93,16 +95,15 @@ public class Button extends ButtonBase {
 
         setStylePrimaryName(content, DefaultWidgetsTheme.StyleName.ButtonContent.name());
 
-        if (image != null) {
-            imageElem = image.getElement();
-            setStylePrimaryName(imageElem, DefaultWidgetsTheme.StyleName.ButtonImage.name());
-            content.appendChild(imageElem);
-        }
         if (text != null) {
             textElem = DOM.createSpan();
             textElem.setInnerHTML(text);
             content.appendChild(textElem);
             setStylePrimaryName(textElem, DefaultWidgetsTheme.StyleName.ButtonText.name());
+        }
+        if (image != null) {
+            textElem.getStyle().setProperty("paddingLeft", image.getWidth() + "px");
+            content.getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
         }
 
         getElement().appendChild(container);
@@ -134,8 +135,14 @@ public class Button extends ButtonBase {
     }
 
     public void setImageVisible(boolean visible) {
-        if (imageElem != null) {
-            setVisible(imageElem, visible);
+        if (image != null) {
+            if (visible) {
+                textElem.getStyle().setProperty("paddingLeft", image.getWidth() + "px");
+                content.getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
+            } else {
+                textElem.getStyle().setProperty("paddingLeft", "0px");
+                content.getStyle().setProperty("background", "none");
+            }
         }
     }
 
