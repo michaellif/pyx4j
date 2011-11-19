@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public class DataTableFilterData {
 
     @I18n
-    public static enum Operands {
+    public static enum Operators {
 
         is,
 
@@ -43,9 +43,9 @@ public class DataTableFilterData {
 //        beginsWith,
 //        endsWith,
 //        
-        lessThen,
+        lessThan,
 
-        greaterThen;
+        greaterThan;
 
         @Override
         public String toString() {
@@ -55,17 +55,17 @@ public class DataTableFilterData {
 
     private final String path;
 
-    private final Operands operand;
+    private final Operators operand;
 
     private final Serializable value;
 
-    public DataTableFilterData(String memberPath, Operands operand, Serializable value) {
+    public DataTableFilterData(String memberPath, Operators operand, Serializable value) {
         this.path = memberPath;
         this.operand = operand;
         this.value = value;
     }
 
-    public DataTableFilterData(Path memberPath, Operands operand, Serializable value) {
+    public DataTableFilterData(Path memberPath, Operators operand, Serializable value) {
         this(memberPath.toString(), operand, value);
     }
 
@@ -73,7 +73,7 @@ public class DataTableFilterData {
         return path;
     }
 
-    public Operands getOperand() {
+    public Operators getOperand() {
         return operand;
     }
 
@@ -82,8 +82,8 @@ public class DataTableFilterData {
     }
 
     public boolean isFilterOK() {
-        return (getMemberPath() != null && getOperand() != null && (getValue() != null || (getOperand().equals(Operands.is) || getOperand().equals(
-                Operands.isNot))));
+        return (getMemberPath() != null && getOperand() != null && (getValue() != null || (getOperand().equals(Operators.is) || getOperand().equals(
+                Operators.isNot))));
     }
 
 }

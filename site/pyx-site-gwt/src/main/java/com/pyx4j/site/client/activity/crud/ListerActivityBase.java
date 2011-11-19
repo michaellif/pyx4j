@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operands;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -90,7 +90,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
         assert (ownerMemberName != null) : "No @Owner in " + entityClass;
         assert (parentID != null);
-        parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operands.is, parentID);
+        parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, parentID);
         this.parentID = parentID; // save parent id for newItem creation...
     }
 
@@ -193,10 +193,10 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
                 case like:
                     criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.RDB_LIKE, fd.getValue()));
                     break;
-                case greaterThen:
+                case greaterThan:
                     criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.GREATER_THAN, fd.getValue()));
                     break;
-                case lessThen:
+                case lessThan:
                     criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.LESS_THAN, fd.getValue()));
                     break;
                 }

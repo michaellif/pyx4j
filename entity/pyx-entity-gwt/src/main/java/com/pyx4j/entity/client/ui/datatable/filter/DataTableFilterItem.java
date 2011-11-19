@@ -38,7 +38,7 @@ import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operands;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
@@ -54,7 +54,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
     protected final CComboBox<FieldData> fieldsList = new CComboBox<FieldData>(true);
 
-    protected final CComboBox<Operands> operandsList = new CComboBox<Operands>(true);
+    protected final CComboBox<Operators> operandsList = new CComboBox<Operators>(true);
 
     protected final SimplePanel valueHolder = new SimplePanel();
 
@@ -102,8 +102,8 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
             fieldsList.setValue(fds.iterator().next());
             setValueHolder(fieldsList.getValue().getPath());
         } else {
-            operandsList.setOptions(EnumSet.allOf(Operands.class));
-            operandsList.setValue(Operands.is);
+            operandsList.setOptions(EnumSet.allOf(Operators.class));
+            operandsList.setValue(Operators.is);
         }
         fieldsList.addValueChangeHandler(new ValueChangeHandler<FieldData>() {
             @Override
@@ -143,7 +143,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         if (fieldsList.getValue() != null) {
             path = fieldsList.getValue().getPath();
         }
-        Operands operand = operandsList.getValue();
+        Operators operand = operandsList.getValue();
         Serializable value = (Serializable) ((CComponent) ((INativeEditableComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
 
         return new DataTableFilterData(path, operand, value);
@@ -173,21 +173,21 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         comp.setValue(value);
         valueHolder.setWidget(comp);
 
-        operandsList.setOptions(EnumSet.allOf(Operands.class));
-        operandsList.setValue(Operands.is);
+        operandsList.setOptions(EnumSet.allOf(Operators.class));
+        operandsList.setValue(Operators.is);
 
         // correct operands list:
         Class<?> valueClass = member.getValueClass();
         if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
 
-            operandsList.removeOption(Operands.like);
-            operandsList.removeOption(Operands.greaterThen);
-            operandsList.removeOption(Operands.lessThen);
+            operandsList.removeOption(Operators.like);
+            operandsList.removeOption(Operators.greaterThan);
+            operandsList.removeOption(Operators.lessThan);
 
         } else if (valueClass.equals(String.class)) {
 
-            operandsList.removeOption(Operands.greaterThen);
-            operandsList.removeOption(Operands.lessThen);
+            operandsList.removeOption(Operators.greaterThan);
+            operandsList.removeOption(Operators.lessThan);
 
         }
     }
