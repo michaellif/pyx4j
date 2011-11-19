@@ -51,4 +51,6 @@ public interface MasterApplicationDTO extends MasterApplication {
     IList<TenantInfoDTO> tenantsWithInfo();
 
     IList<TenantFinancialDTO> tenantFinancials();
+
+    MasterApplicationStatusDTO masterApplicationStatus();
 }

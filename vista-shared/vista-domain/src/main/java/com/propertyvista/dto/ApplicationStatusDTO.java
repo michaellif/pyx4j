@@ -17,10 +17,15 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.person.Name;
+
 @Transient
 public interface ApplicationStatusDTO extends IEntity {
 
-    IPrimitive<String> name();
+    /**
+     * Tenant/Guarantor
+     */
+    Name name();
 
     /**
      * Primary Tenant, Co-signer or Guarantor
@@ -31,5 +36,4 @@ public interface ApplicationStatusDTO extends IEntity {
      * Completed steps/total steps in %
      */
     IPrimitive<String> progress();
-
 }

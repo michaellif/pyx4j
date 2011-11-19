@@ -16,18 +16,25 @@ package com.propertyvista.crm.server.services;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication.Decision;
+import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.MasterApplicationStatusDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -70,31 +77,13 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             }
         }
 
-        // calculate price adjustments:
-        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().serviceAgreement().serviceItem());
-
-        dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem().adjustedPrice().getValue());
-        dto.parkingPrice().setValue(0.);
-        dto.otherPrice().setValue(0.);
-        dto.deposit().setValue(0.);
-
-        for (ChargeItem item : dto.lease().serviceAgreement().featureItems()) {
-            PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
-            if (item.item().product() instanceof Feature) {
-                switch (((Feature) item.item().product()).type().getValue()) {
-                case parking:
-                    dto.parkingPrice().setValue(dto.parkingPrice().getValue() + item.adjustedPrice().getValue());
-                    break;
-
-                default:
-                    dto.otherPrice().setValue(dto.otherPrice().getValue() + item.adjustedPrice().getValue());
-                }
-            }
+        if (!fromList) {
+            calculateStatus(in, dto);
         }
 
-        dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
+        calculatePrices(in, dto);
 
-        // TODO: currently - just some smockup stuff:
+        // TODO: currently - just some mockup stuff:
         dto.deposit().setValue(100 + RandomUtil.randomDouble(1000));
         dto.percenrtageApproved().setValue(RandomUtil.randomDouble(100));
         dto.suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
@@ -119,5 +108,55 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
         tfDTO.person().set(tr.tenant.person());
         return tfDTO;
+    }
+
+    private void calculatePrices(MasterApplication in, MasterApplicationDTO dto) {
+        // calculate price adjustments:
+        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().serviceAgreement().serviceItem());
+
+        dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem().adjustedPrice().getValue());
+        dto.parkingPrice().setValue(0.);
+        dto.otherPrice().setValue(0.);
+        dto.deposit().setValue(0.);
+
+        for (ChargeItem item : dto.lease().serviceAgreement().featureItems()) {
+            PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
+            if (item.item().product() instanceof Feature) {
+                switch (((Feature) item.item().product()).type().getValue()) {
+                case parking:
+                    dto.parkingPrice().setValue(dto.parkingPrice().getValue() + item.adjustedPrice().getValue());
+                    break;
+
+                default:
+                    dto.otherPrice().setValue(dto.otherPrice().getValue() + item.adjustedPrice().getValue());
+                }
+            }
+        }
+
+        dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
+    }
+
+    private void calculateStatus(MasterApplication in, MasterApplicationDTO dto) {
+        dto.masterApplicationStatus().set(EntityFactory.create(MasterApplicationStatusDTO.class));
+
+        for (Application app : dto.applications()) {
+            ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
+
+            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
+            status.name().set(Persistence.service().retrieve(criteria).person().name());
+            status.type().setValue("Tenant");
+            if (status.name().isEmpty()) {
+                EntityQueryCriteria<TenantGuarantor> criteria1 = EntityQueryCriteria.create(TenantGuarantor.class);
+                criteria1.add(PropertyCriterion.eq(criteria1.proto().user(), app.user()));
+                status.name().set(Persistence.service().retrieve(criteria1).name());
+                status.type().setValue("Guarantor");
+            }
+
+            if (!status.name().isEmpty()) {
+                status.progress().setValue("X out of Y steps completed");
+                dto.masterApplicationStatus().individualApplications().add(status);
+            }
+        }
     }
 }

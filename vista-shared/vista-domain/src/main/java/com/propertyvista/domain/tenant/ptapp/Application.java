@@ -17,7 +17,6 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -28,7 +27,7 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 /**
  * This is an application progress for tenant, secondary tenant and guarantors.
  */
-public interface Application extends IEntity, IUserEntity {
+public interface Application extends IUserEntity {
 
     @Owned
     IList<ApplicationWizardStep> steps();

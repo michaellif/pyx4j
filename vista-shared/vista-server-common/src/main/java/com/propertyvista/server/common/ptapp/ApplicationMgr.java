@@ -65,6 +65,7 @@ public class ApplicationMgr {
                 a.steps().addAll(ApplicationMgr.createApplicationProgress());
                 a.user().set(tenantInLease.tenant().user());
                 a.lease().set(ma.lease());
+
                 ma.applications().add(a);
                 break;
             }

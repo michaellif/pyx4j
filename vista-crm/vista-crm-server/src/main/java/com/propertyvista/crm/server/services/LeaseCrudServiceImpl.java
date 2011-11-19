@@ -38,6 +38,7 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
+import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
@@ -63,16 +64,21 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             }
 
             // update Tenants double links:
-            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-            dto.tenants().clear();
-            dto.tenants().addAll(Persistence.service().query(criteria));
+            TenantInLeaseRetriever.UpdateLeaseTenants(dto);
+//            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+//            dto.tenants().clear();
+//            dto.tenants().addAll(Persistence.service().query(criteria));
 
             // calculate price adjustments:
             PriceCalculationHelpers.calculateChargeItemAdjustments(dto.serviceAgreement().serviceItem());
             for (ChargeItem item : dto.serviceAgreement().featureItems()) {
                 PriceCalculationHelpers.calculateChargeItemAdjustments(item);
             }
+
+            EntityQueryCriteria<MasterApplication> criteria = EntityQueryCriteria.create(MasterApplication.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
+            dto.application().set(Persistence.service().retrieve(criteria));
         }
     }
 

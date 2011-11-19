@@ -21,5 +21,4 @@ import com.pyx4j.entity.shared.IList;
 public interface MasterApplicationStatusDTO extends IEntity {
 
     IList<ApplicationStatusDTO> individualApplications();
-
 }

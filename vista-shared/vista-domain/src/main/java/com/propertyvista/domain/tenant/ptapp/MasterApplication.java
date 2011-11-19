@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@ToStringFormat("Application")
 public interface MasterApplication extends IEntity {
 
     @I18n

@@ -21,6 +21,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
 @Transient
 public interface LeaseDTO extends Lease {
@@ -41,5 +42,5 @@ public interface LeaseDTO extends Lease {
 
     // -----------------------------------------------------
 
-    MasterApplicationStatusDTO masterApplicationStatus();
+    MasterApplication application();
 }

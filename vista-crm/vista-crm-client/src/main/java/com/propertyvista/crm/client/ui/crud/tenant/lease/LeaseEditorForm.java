@@ -29,11 +29,13 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -41,14 +43,12 @@ import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.ServiceItem;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
-
-    private Widget appStatusTab;
 
     public LeaseEditorForm() {
         this(new CrmEditorsComponentFactory());
@@ -65,23 +65,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createServiceAgreementTab(), i18n.tr("Service Agreement"));
 
-        appStatusTab = createAppStatustab();
-
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
         return tabPanel;
-    }
-
-    @Override
-    public void populate(LeaseDTO value) {
-
-        if (value != null && Lease.Status.ApplicationInProgress.equals(value.status().getValue())) {
-            tabPanel.add(appStatusTab, i18n.tr("Application Status"));
-        } else {
-            tabPanel.remove(appStatusTab);
-        }
-
-        super.populate(value);
     }
 
     @Override
@@ -101,6 +87,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseID()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
+        main.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().application(),
+                        new CEntityCrudHyperlink<MasterApplication>(MainActivityMapper.getCrudAppPlace(MasterApplication.class))), 20).build());
 
         main.setBR(++row, 0, 1);
         HorizontalPanel leaseDatePanel = new HorizontalPanel();
@@ -213,16 +204,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         main.setWidget(++row, 0, new HTML("&nbsp"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceAgreement().account()), 15).build());
-
-        return new CrmScrollPanel(main);
-    }
-
-    private Widget createAppStatustab() {
-        FormFlexPanel main = new FormFlexPanel();
-
-        int row = -1;
-        main.setH1(++row, 0, 2, proto().masterApplicationStatus().individualApplications().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }

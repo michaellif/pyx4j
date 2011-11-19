@@ -120,6 +120,7 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -145,6 +146,8 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Roof.class);
         } else if (entityClass.equals(Lease.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Lease.class);
+        } else if (entityClass.equals(MasterApplication.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
         }
 
         return null;

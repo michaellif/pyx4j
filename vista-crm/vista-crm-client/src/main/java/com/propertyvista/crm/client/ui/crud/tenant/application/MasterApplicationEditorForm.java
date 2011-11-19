@@ -63,9 +63,10 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
 
         tabPanel.add(createGeneralTab(), i18n.tr("Details"));
         tabPanel.addDisable(isEditable() ? new HTML() : ((MasterApplicationViewerView) getParentView()).getTenantsView().asWidget(), i18n.tr("Tenants"));
-        tabPanel.add(createInfoTab(), i18n.tr("Info"));
+        tabPanel.add(createInfoTab(), i18n.tr("Information"));
         tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
         tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
+        tabPanel.add(createAppStatustab(), i18n.tr("Status Details"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -140,6 +141,14 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         FormFlexPanel main = new FormFlexPanel();
 
         main.setWidget(0, 0, inject(proto().tenantFinancials(), createFinancialView()));
+
+        return new CrmScrollPanel(main);
+    }
+
+    private Widget createAppStatustab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.lease;
+package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.dto.ApplicationStatusDTO;
 
-class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusDTO> {
+public class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusDTO> {
 
     public ApplicationStatusFolder(boolean modifyable) {
         super(ApplicationStatusDTO.class, modifyable);
