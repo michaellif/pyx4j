@@ -167,14 +167,13 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
                     }
                 }
 
-                status.progress().setValue(app.steps().isEmpty() ? 0. : complete / app.steps().size() * 100.0);
+                status.progress().setValue(app.steps().isEmpty() ? 0.0 : complete / app.steps().size() * 100.0);
                 status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
 
                 dto.masterApplicationStatus().individualApplications().add(status);
             }
 
             masterApplicationProgress *= status.progress().getValue();
-
         }
 
         dto.masterApplicationStatus().progress().setValue(masterApplicationProgress);

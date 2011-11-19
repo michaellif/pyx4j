@@ -13,6 +13,8 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -26,5 +28,7 @@ public interface MasterApplicationStatusDTO extends IEntity {
     /**
      * Completed steps/total steps in %
      */
+    @Format("#0.00")
+    @Caption(name = "Overall Application Progress (%)")
     IPrimitive<Double> progress();
 }

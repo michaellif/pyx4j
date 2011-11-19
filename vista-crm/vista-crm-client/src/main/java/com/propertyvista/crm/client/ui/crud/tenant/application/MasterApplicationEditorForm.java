@@ -148,7 +148,11 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
     private Widget createAppStatustab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
+        int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().masterApplicationStatus().progress()), 5).build());
+
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }

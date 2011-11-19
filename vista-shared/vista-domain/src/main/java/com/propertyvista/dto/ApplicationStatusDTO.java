@@ -13,6 +13,7 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -35,6 +36,7 @@ public interface ApplicationStatusDTO extends IEntity {
     /**
      * Completed steps/total steps in %
      */
+    @Format("#0.00")
     IPrimitive<Double> progress();
 
     IPrimitive<String> description();
