@@ -20,21 +20,19 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.User;
+import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
 
-public interface Tenant extends IEntity {
+public interface Tenant extends IUserEntity {
 
     @I18n
     @XmlType(name = "TenantType")
@@ -49,11 +47,6 @@ public interface Tenant extends IEntity {
             return I18nEnum.toString(this);
         }
     }
-
-    @ReadOnly
-    @Detached
-    @MemberColumn(name = "user_id")
-    User user();
 
     @NotNull
     @MemberColumn(name = "tenantType")
