@@ -49,6 +49,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void delete(Key itemID);
 
+        void refresh();
+
     }
 
     void setPresenter(Presenter presenter);

@@ -129,6 +129,11 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
+    public void refresh() {
+        populate(view.getPageNumber());
+    }
+
+    @Override
     public void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID) {
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formViewerPlace(itemID));
     }
