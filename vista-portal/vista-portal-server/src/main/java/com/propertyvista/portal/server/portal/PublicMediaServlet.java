@@ -145,7 +145,7 @@ public class PublicMediaServlet extends HttpServlet {
     private void serveResourceImage(String filename, ThumbnailSize thumbnailSize, HttpServletResponse response) throws IOException {
         ThumbnailBlob blob = (ThumbnailBlob) CacheService.get(PublicMediaServlet.class.getName() + filename);
         if (blob == null) {
-            byte raw[] = IOUtils.getResource(IOUtils.resourceFileName(filename, PublicMediaServlet.class));
+            byte raw[] = IOUtils.getBinaryResource(filename, PublicMediaServlet.class);
             if (raw == null) {
                 return;
             }
