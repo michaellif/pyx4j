@@ -94,7 +94,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         this.parentID = parentID; // save parent id for newItem creation...
     }
 
-    protected boolean filterCreatesEmptyDataSet() {
+    protected boolean isFilterCreateEmptyDataSet() {
         return (parentFiltering != null) && (parentID == null);
     }
 
@@ -116,7 +116,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void populate(final int pageNumber) {
         // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list 
-        if (filterCreatesEmptyDataSet()) {
+        if (isFilterCreateEmptyDataSet()) {
             view.populate(new Vector<E>(), pageNumber, false, 0);
             return;
         }
