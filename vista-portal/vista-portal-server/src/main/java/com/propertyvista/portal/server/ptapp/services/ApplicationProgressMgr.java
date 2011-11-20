@@ -99,7 +99,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         infoStep.substeps().clear();
         financialStep.substeps().clear();
         for (TenantInLeaseDTO tenant : tenants) {
-            if (shouldEnterInformation(tenant, tenant.person().birthDate().getValue())) {
+            if (shouldEnterInformation(tenant, tenant.tenant().person().birthDate().getValue())) {
                 ApplicationWizardSubstep infoSubstep = merge(tenant, infoSubSteps);
                 infoStep.substeps().add(infoSubstep);
                 updateParentStepStatus(infoStep, infoSubstep);
@@ -156,7 +156,8 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         //TODO serialize key.
         step.placeArgument().setValue(tenant.getPrimaryKey().toString());
         step.name().setValue(
-                EntityFromatUtils.nvl_concat(" ", tenant.person().name().firstName(), tenant.person().name().middleName(), tenant.person().name().lastName()));
+                EntityFromatUtils.nvl_concat(" ", tenant.tenant().person().name().firstName(), tenant.tenant().person().name().middleName(), tenant.tenant()
+                        .person().name().lastName()));
         step.status().setValue(ApplicationWizardStep.Status.notVisited);
 
         // find original

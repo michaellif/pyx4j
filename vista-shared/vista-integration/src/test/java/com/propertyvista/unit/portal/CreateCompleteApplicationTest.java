@@ -155,13 +155,13 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
     }
 
     private void enterTenantRow(IDebugId fromDebugId, TenantInLeaseDTO tenant, boolean fullInfo) {
-        setValueOnForm(fromDebugId, tenant.person().name().firstName());
-        setValueOnForm(fromDebugId, tenant.person().name().lastName());
-        setValueOnForm(fromDebugId, tenant.person().name().middleName());
-        setValueOnForm(fromDebugId, tenant.person().birthDate());
+        setValueOnForm(fromDebugId, tenant.tenant().person().name().firstName());
+        setValueOnForm(fromDebugId, tenant.tenant().person().name().lastName());
+        setValueOnForm(fromDebugId, tenant.tenant().person().name().middleName());
+        setValueOnForm(fromDebugId, tenant.tenant().person().birthDate());
 
         if (fullInfo) {
-            setValueOnForm(fromDebugId, tenant.person().email());
+            setValueOnForm(fromDebugId, tenant.tenant().person().email());
             setValueOnForm(fromDebugId, tenant.relationship());
             setValueOnForm(fromDebugId, tenant.role());
             setValueOnForm(fromDebugId, tenant.takeOwnership());

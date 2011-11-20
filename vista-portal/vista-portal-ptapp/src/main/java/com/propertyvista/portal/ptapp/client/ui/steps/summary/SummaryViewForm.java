@@ -433,7 +433,8 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         }
         for (TenantInLeaseDTO pti : getValue().tenantList().tenants()) {
             if (pti.role().getValue() == TenantInLease.Role.Applicant) {
-                return isCombinationMatch(signature, pti.person().name().firstName(), pti.person().name().lastName(), pti.person().name().middleName());
+                return isCombinationMatch(signature, pti.tenant().person().name().firstName(), pti.tenant().person().name().lastName(), pti.tenant().person()
+                        .name().middleName());
             }
         }
         return false;

@@ -15,7 +15,6 @@ package com.propertyvista.domain.tenant;
 
 import javax.xml.bind.annotation.XmlType;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -61,7 +60,8 @@ public interface Tenant extends IUserEntity {
     Company company();
 
     @Owned
-    @Detached
+// TODO : commented because of strange behavior of with @Owned - entities duplicated on loading/saving...  
+//    @Detached
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
 }

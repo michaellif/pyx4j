@@ -32,7 +32,7 @@ public class TenantConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.person(), dboProto.tenant().person());
+            bind(dtoProto.tenant(), dboProto.tenant());
             bind(dtoProto.relationship(), dboProto.relationship());
             bind(dtoProto.role(), dboProto.role());
             bind(dtoProto.takeOwnership(), dboProto.takeOwnership());
@@ -50,7 +50,6 @@ public class TenantConverter {
             bind(dtoProto.person(), dboProto.person());
             bind(dtoProto.emergencyContacts(), dboProto.emergencyContacts());
         }
-
     }
 
     public static class TenantScreening2TenantInfo extends EntityDtoBinder<TenantScreening, TenantInfoDTO> {
@@ -71,9 +70,7 @@ public class TenantConverter {
             bind(dtoProto.currentAddress(), dboProto.currentAddress());
             bind(dtoProto.previousAddress(), dboProto.previousAddress());
             bind(dtoProto.legalQuestions(), dboProto.legalQuestions());
-
         }
-
     }
 
     public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantScreening, TenantFinancialDTO> {
@@ -89,7 +86,5 @@ public class TenantConverter {
             bind(dtoProto.assets(), dboProto.assets());
             bind(dtoProto.guarantors(), dboProto.guarantors());
         }
-
     }
-
 }

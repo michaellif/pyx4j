@@ -103,7 +103,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
             for (TenantInLeaseDTO tenant : summary.tenantList().tenants()) {
                 if (tenant.equals(charge.tenant())) {
-                    charge.tenantName().set(tenant.person().name());
+                    charge.tenantName().set(tenant.tenant().person().name());
                     continue loopOverTenantCharge;
                 }
             }

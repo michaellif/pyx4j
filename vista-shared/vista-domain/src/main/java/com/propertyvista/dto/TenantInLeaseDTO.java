@@ -13,11 +13,9 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 
@@ -29,10 +27,6 @@ public interface TenantInLeaseDTO extends TenantInLease {
     }
 
     // ------------------------------------
-
-    @Deprecated
-    @EmbeddedEntity
-    Person person();
 
     IPrimitive<IncomeSource> incomeSource();
 

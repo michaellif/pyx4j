@@ -21,8 +21,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
@@ -31,7 +30,6 @@ import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -39,6 +37,7 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
@@ -50,11 +49,9 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-
-// TODO uncomment when isEditable() be fixed!          
-//        if (isEditable() && member instanceof TenantInApplicationDTO) {
-//            return new TenantEditor();
-//        }
+        if (isEditable() && member instanceof TenantInLeaseDTO) {
+            return new TenantEditor();
+        }
         return super.create(member);
     }
 
@@ -69,11 +66,11 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().person().name().firstName(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().person().name().middleName(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().person().name().lastName(), "12em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().person().birthDate(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().person().email(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().firstName(), "10em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().middleName(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().lastName(), "12em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "9em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().role(), "8.5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));
@@ -82,40 +79,71 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
     private class TenantEditor extends CEntityFolderRowEditor<TenantInLeaseDTO> {
 
-        private final boolean first = false;
+        private boolean applicant;
+
+        private Widget relationship, takeOwnership;
+
+        private CComponent email;
+
+        private CComboBox<Role> role;
 
         public TenantEditor() {
             super(TenantInLeaseDTO.class, columns());
         }
 
-        @SuppressWarnings("rawtypes")
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        public IsWidget createContent() {
-            if (first) {
-                HorizontalPanel main = new HorizontalPanel();
-                for (EntityFolderColumnDescriptor column : columns) {
-                    CComponent<?, ?> component = createCell(column);
-                    // Don't show relation and takeOwnership 
-                    if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
-                        component.setVisible(false);
-                    } else if (column.getObject() == proto().person().email()) {
-                        ((CComponent) component).setEditable(false);
-                    }
-                    main.add(createCellDecorator(column, component, column.getWidth()));
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?, ?> comp = super.createCell(column);
+
+            if (proto().role() == column.getObject() && comp instanceof CComboBox) {
+                role = ((CComboBox) comp);
+            } else if (proto().tenant().person().email() == column.getObject()) {
+                email = comp;
+            } else if (proto().relationship() == column.getObject()) {
+                relationship = comp.asWidget();
+            } else if (proto().takeOwnership() == column.getObject()) {
+                takeOwnership = comp.asWidget();
+            }
+
+            return comp;
+        }
+
+        @Override
+        public void populate(TenantInLeaseDTO value) {
+            super.populate(value);
+
+            applicant = (value.role().getValue() == Role.Applicant);
+            if (applicant) {
+                relationship.setVisible(false);
+                takeOwnership.setVisible(false);
+
+                email.setEditable(false);
+
+                if (role != null) {
+                    role.setEditable(false);
                 }
-                main.setWidth("100%");
-                return main;
-            } else {
-                return super.createContent();
+            } else if (role != null) {
+                Collection<TenantInLease.Role> roles = EnumSet.allOf(TenantInLease.Role.class);
+                roles.remove(TenantInLease.Role.Applicant);
+                role.setOptions(roles);
+            }
+
+            if (!applicant && !value.tenant().person().birthDate().isNull()) {
+                if (ValidationUtils.isOlderThen18(value.tenant().person().birthDate().getValue())) {
+                    enableStatusAndOwnership();
+                } else {
+                    setMandatoryDependant();
+                }
             }
         }
 
         @Override
         public void addValidations() {
 
-            get(proto().person().birthDate()).addValueValidator(new OldAgeValidator());
-            get(proto().person().birthDate()).addValueValidator(new BirthdayDateValidator());
-            get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+            get(proto().tenant().person().birthDate()).addValueValidator(new OldAgeValidator());
+            get(proto().tenant().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+            get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
                 @Override
                 public boolean isValid(CComponent<Date, ?> component, Date value) {
                     TenantInLease.Role status = getValue().role().getValue();
@@ -133,8 +161,8 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 }
             });
 
-            if (!first) { // all this stuff isn't for primary applicant:  
-                get(proto().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            if (!applicant) { // all this stuff isn't for primary applicant:  
+                get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                         TenantInLease.Role status = getValue().role().getValue();
@@ -152,41 +180,8 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                     }
                 });
 
-                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Role>(get(proto().person().birthDate())));
+                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Role>(get(proto().tenant().person().birthDate())));
             }
-        }
-
-        @Override
-        public void populate(TenantInLeaseDTO value) {
-            super.populate(value);
-            boolean applicant = TenantInLease.Role.Applicant.equals(value.role().getValue());
-            if (!applicant && !value.person().birthDate().isNull()) {
-                if (ValidationUtils.isOlderThen18(value.person().birthDate().getValue())) {
-                    enableStatusAndOwnership();
-                } else {
-                    setMandatoryDependant();
-                }
-            }
-        }
-
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp = null;
-            if (first && proto().role() == column.getObject()) {
-                CTextField textComp = new CTextField();
-                textComp.setEditable(false);
-                textComp.setValue(TenantInLease.Role.Applicant.name());
-                comp = textComp;
-            } else {
-                comp = super.createCell(column);
-                if (proto().role() == column.getObject()) {
-                    Collection<TenantInLease.Role> status = EnumSet.allOf(TenantInLease.Role.class);
-                    status.remove(TenantInLease.Role.Applicant);
-                    ((CComboBox) comp).setOptions(status);
-                }
-            }
-            return comp;
         }
 
         private void setMandatoryDependant() {

@@ -75,7 +75,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             num++;
         }
 
-        assertNotPresent(D.id(proto(TenantInApplicationListDTO.class).tenants(), num, proto(TenantInLeaseDTO.class).person().name().firstName()));
+        assertNotPresent(D.id(proto(TenantInApplicationListDTO.class).tenants(), num, proto(TenantInLeaseDTO.class).tenant().person().name().firstName()));
 
         if (doSave) {
             saveAndContinue();
@@ -83,14 +83,14 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
     }
 
     protected void assertTenantRow(IDebugId formDebugId, TenantInLeaseDTO tenant, boolean fullInfo) {
-        assertValueOnForm(formDebugId, tenant.person().name().firstName());
-        assertValueOnForm(formDebugId, tenant.person().name().lastName());
-        assertValueOnForm(formDebugId, tenant.person().name().middleName());
+        assertValueOnForm(formDebugId, tenant.tenant().person().name().firstName());
+        assertValueOnForm(formDebugId, tenant.tenant().person().name().lastName());
+        assertValueOnForm(formDebugId, tenant.tenant().person().name().middleName());
 
-        assertValueOnForm(formDebugId, tenant.person().birthDate());
+        assertValueOnForm(formDebugId, tenant.tenant().person().birthDate());
 
         if (fullInfo) {
-            assertValueOnForm(formDebugId, tenant.person().email());
+            assertValueOnForm(formDebugId, tenant.tenant().person().email());
             assertValueOnForm(formDebugId, tenant.relationship());
             assertValueOnForm(formDebugId, tenant.role());
             assertValueOnForm(formDebugId, tenant.takeOwnership());
