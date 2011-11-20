@@ -341,14 +341,18 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 headerText.append("&nbsp;&nbsp;&nbsp;");
             }
             setHTML(0, colIndex, headerText.toString());
-//            getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
+
+            //TODO calc column width for changing set of Column Descriptors
+            //getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
+
             getCellFormatter().setWordWrap(0, colIndex, false);
             ++colIndex;
         }
 
         if (isColumnSelectorVisible()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
-            getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
+            //TODO calc column width for changing set of Column Descriptors
+            //getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
             getCellFormatter().setStyleName(0, colIndex, DefaultDataTableTheme.StyleName.DataTableColumnSelector.name());
             getCellFormatter().setVerticalAlignment(0, colIndex, HasVerticalAlignment.ALIGN_MIDDLE);
             getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
@@ -373,7 +377,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
                 selectionCheckBoxes.add(selectionCheckBox);
 
-                selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
+                //TODO calc column width for changing set of Column Descriptors
+                //selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
+
                 setWidget(rowIndex, 0, selectionCheckBox);
                 getCellFormatter().setAlignment(rowIndex, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
                 ++colIndex;
@@ -497,7 +503,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     @Override
                     public void onClose(CloseEvent<PopupPanel> event) {
                         for (int i = 0; i < columnChecksList.size(); ++i) {
-                            System.out.println("++++++++++++++++++" + columnChecksList.get(i).getValue());
                             model.getColumnDescriptor(i).setVisible(columnChecksList.get(i).getValue());
                         }
                         renderTable();
