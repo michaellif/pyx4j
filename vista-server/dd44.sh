@@ -5,7 +5,7 @@
 #
 
 mvn -DskipTests=true -P deploy,deploy-target-d44
-if [[ ! "$?" = "0" ]]; then
+if [ "$?" != "0" ]; then
     echo   
     echo Error in build
     exit 1
