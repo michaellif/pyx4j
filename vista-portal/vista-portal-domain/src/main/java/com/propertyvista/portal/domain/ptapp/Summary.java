@@ -13,10 +13,7 @@
  */
 package com.propertyvista.portal.domain.ptapp;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
 
@@ -24,11 +21,4 @@ public interface Summary extends IEntity, IBoundToApplication {
 
     LeaseTerms leaseTerms();
 
-    @NotNull
-    @Caption(name = "I Agree")
-    IPrimitive<Boolean> agree();
-
-    @NotNull
-    @Caption(name = "Type Your Full Name")
-    IPrimitive<String> fullName();
 }

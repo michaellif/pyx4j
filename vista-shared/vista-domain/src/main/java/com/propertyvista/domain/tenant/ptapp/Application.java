@@ -41,4 +41,6 @@ public interface Application extends IUserEntity {
     @Detached
     @ReadOnly
     MasterApplication belongsTo();
+
+    DigitalSignature signature();
 }

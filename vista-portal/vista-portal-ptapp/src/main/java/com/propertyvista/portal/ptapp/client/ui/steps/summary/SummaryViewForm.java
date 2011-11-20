@@ -47,6 +47,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -355,7 +356,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
             // "I Agree" check-box:
             CCheckBox check = new CCheckBox();
-            bind(check, proto().agree());
+            bind(check, proto().application().signature().agree());
             VistaWidgetDecorator agree = new VistaWidgetDecorator(check, new DecorationData(0, Unit.EM, 0, Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
@@ -391,7 +392,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
             // signature composure:
             CTextField edit = new CTextField();
-            bind(edit, proto().fullName());
+            bind(edit, proto().application().signature().fullName());
 
             DecorationData dd = new DecorationData(16d, HasHorizontalAlignment.ALIGN_LEFT, 16);
             dd.labelStyleName = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
@@ -418,6 +419,11 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                     return i18n.tr("Digital Signature Must Match Your Name On File");
                 }
             });
+
+            CDateLabel dl = new CDateLabel();
+            dl.setDateFormat(proto().application().signature().timestamp().getMeta().getFormat());
+            add(inject(proto().application().signature().timestamp(), dl));
+            add(inject(proto().application().signature().ipAddress(), new CLabel()));
         }
     }
 

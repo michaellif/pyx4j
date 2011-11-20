@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.ptapp.services;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -106,6 +108,9 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
                 }
             }
         }
+
+        summary.application().signature().timestamp().setValue(new Date());
+        summary.application().signature().ipAddress().setValue(Context.getRequestRemoteAddr());
 
         // This should be taken from building policy
         summary.leaseTerms().set(Persistence.service().retrieve(EntityQueryCriteria.create(LeaseTerms.class)));
