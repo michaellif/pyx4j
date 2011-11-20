@@ -33,6 +33,9 @@ public class PortalEntryPoint implements EntryPoint {
         if (Window.Location.getHost().endsWith("residentportalsite.com")) {
             // Key for .residentportalsite.com
             GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hShXpG0z1GYh8qtGf1RDMPw_eX7gBQVD9gTYQZV0bRTbYFAMAnoaOWTqQ");
+        } else if (Window.Location.getHost().endsWith("propertyvista.com")) {
+            // Key for propertyvista.com
+            GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hSyeUldaL5RpJeho94okp3eVm_TSRReYYuX9Yx5PqVq2CO9w36_0whAoQ");
         } else {
             // Key for .birchwoodsoftwaregroup.com
             GoogleAPI.setGoogleAPIKey("ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg");
