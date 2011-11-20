@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.StatelessLink;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -46,6 +47,10 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.pojo.IPojo;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.PMSiteApplication;
@@ -96,6 +101,11 @@ public class WicketUtils {
         private boolean useDefault;
 
         private boolean useKeys;
+
+        public DropDownList(String id, IModel<T> model, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
+            this(id, choices, useKeys, useDefault);
+            setModel(model);
+        }
 
         public DropDownList(String id, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
             super(id, choices, new IChoiceRenderer<T>() {
@@ -361,6 +371,38 @@ public class WicketUtils {
             } else {
                 return super.getConverter(clazz);
             }
+        }
+    }
+
+    /*
+     * Implements model binding mechanism for compound IEntity models to avoid using strings as model
+     * property names and allow for easy refactoring. See examples below
+     * 1. Wicket default - will bind to the model property named "wicket_id" (must be in sync with wicket:id attribute):
+     * -- form.add(new TextField("wicket_id"));
+     * 2. Explicit binding - will bind to the model property named "model_prop" (string-based binding):
+     * -- form.add(new TextField("wicket_id", model.bind("model_prop")));
+     * 3. IEntity binding to model_prop (100% refactorable):
+     * -- form.add(new TextField("wicket_id", model.bind(model.getObject().model_prop().getMeta().getFieldName())));
+     */
+    public static class CompoundIEntityModel<T extends IEntity> extends CompoundPropertyModel<IPojo<T>> {
+        private static final long serialVersionUID = 1L;
+
+        public CompoundIEntityModel(final T ieObj) {
+            super(ServerEntityFactory.getPojo(ieObj));
+        }
+
+        // This will generate the correct property name and bind to corresponding property 
+        public <S> IModel<S> bind(IObject<S> ieProp) {
+            T modelObj = getObject().getEntityValue();
+            // build the property expression
+            String propName = ieProp.getMeta().getFieldName();
+            IObject<?> parent = ieProp.getParent();
+            while (parent != null && !parent.equals(modelObj)) {
+                propName = parent.getMeta().getFieldName() + "." + propName;
+                parent = parent.getParent();
+            }
+            // bind to the given property
+            return bind(propName);
         }
     }
 }

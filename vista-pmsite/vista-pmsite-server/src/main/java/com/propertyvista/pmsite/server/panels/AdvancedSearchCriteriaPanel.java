@@ -18,14 +18,13 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
+import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
@@ -37,12 +36,11 @@ public class AdvancedSearchCriteriaPanel extends Panel {
     public AdvancedSearchCriteriaPanel() {
         super("advancedSearchCriteriaPanel");
 
-        PropertySearchCriteria entity = EntityFactory.create(PropertySearchCriteria.class);
-        if (entity.searchType().isNull()) {
-            entity.searchType().setValue(PropertySearchCriteria.SearchType.city);
+        PropertySearchCriteria criteria = EntityFactory.create(PropertySearchCriteria.class);
+        if (criteria.searchType().isNull()) {
+            criteria.searchType().setValue(PropertySearchCriteria.SearchType.city);
         }
-        IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(entity);
-        final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
+        final CompoundIEntityModel<PropertySearchCriteria> model = new CompoundIEntityModel<PropertySearchCriteria>(criteria);
 
         final StatelessForm<IPojo<PropertySearchCriteria>> form = new StatelessForm<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;

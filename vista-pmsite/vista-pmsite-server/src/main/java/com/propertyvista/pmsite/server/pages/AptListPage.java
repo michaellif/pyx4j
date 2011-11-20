@@ -29,7 +29,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
 
 import templates.TemplateResources;
 
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,6 +40,7 @@ import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
+import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
@@ -87,8 +87,7 @@ public class AptListPage extends BasePage {
         if (criteria.searchType().getValue() == null) {
             criteria.searchType().setValue(PropertySearchCriteria.SearchType.city);
         }
-        IPojo<PropertySearchCriteria> pojo = ServerEntityFactory.getPojo(criteria);
-        final CompoundPropertyModel<IPojo<PropertySearchCriteria>> model = new CompoundPropertyModel<IPojo<PropertySearchCriteria>>(pojo);
+        final CompoundIEntityModel<PropertySearchCriteria> model = new CompoundIEntityModel<PropertySearchCriteria>(criteria);
 
         final StatelessForm<IPojo<PropertySearchCriteria>> form = new StatelessForm<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
             private static final long serialVersionUID = 1L;

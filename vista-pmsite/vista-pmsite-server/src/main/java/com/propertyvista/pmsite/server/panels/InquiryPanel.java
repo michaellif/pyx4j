@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -27,7 +28,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -37,20 +37,20 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Inquiry;
+import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
+import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.DateInput;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadioGroup;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
@@ -65,29 +65,24 @@ public class InquiryPanel extends Panel {
         super(id);
 
         final Building bld = (fp == null ? building : fp.building());
-        Inquiry inquiry = EntityFactory.create(Inquiry.class);
-        inquiry.phone1().type().setValue(Phone.Type.home);
-        inquiry.phone2().type().setValue(Phone.Type.mobile);
-        IPojo<Inquiry> pojo = ServerEntityFactory.getPojo(inquiry);
-        final CompoundPropertyModel<IPojo<Inquiry>> model = new CompoundPropertyModel<IPojo<Inquiry>>(pojo);
+        Lead lead = EntityFactory.create(Lead.class);
+        final CompoundIEntityModel<Lead> model = new CompoundIEntityModel<Lead>(lead);
 
-        final StatelessForm<IPojo<Inquiry>> form = new StatelessForm<IPojo<Inquiry>>("inquiryForm", model) {
+        final StatelessForm<IPojo<Lead>> form = new StatelessForm<IPojo<Lead>>("inquiryForm", model) {
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")
             @Override
             public void onSubmit() {
                 // update model
-                Inquiry inquiry = model.getObject().getEntityValue();
-                // add current building
-                inquiry.building().id().setValue(bld.id().getValue());
+                Lead lead = model.getObject().getEntityValue();
                 // floorplan
                 Long fpId = ((FormComponent<Long>) get("floorPlanList")).getModelObject();
                 if (fpId != null) {
-                    inquiry.floorplan().id().setValue(new Key(fpId));
+                    lead.floorplan().id().setValue(new Key(fpId));
                 }
-                inquiry.createDate().setValue(new LogicalDate());
-                Persistence.service().persist(inquiry);
+                lead.createDate().setValue(new LogicalDate());
+                Persistence.service().persist(lead);
                 PageParameters params = new PageParameters();
                 if (fp != null) {
                     params.set(PMSiteApplication.ParamNameFloorplan, fp.id().getValue().asLong());
@@ -103,18 +98,32 @@ public class InquiryPanel extends Panel {
 
         // add form input fields
         // name
-        form.add(new WicketUtils.DropDownList<Inquiry.Title>("name.namePrefix", Arrays.asList(Inquiry.Title.values()), false, false));
-        form.add(new RequiredTextField<String>("name.firstName").setLabel(new Model<String>(i18n.tr("First Name"))));
-        form.add(new RequiredTextField<String>("name.lastName").setLabel(new Model<String>(i18n.tr("Last Name"))));
+        form.add(new WicketUtils.DropDownList<Name.Prefix>("namePrefix", model.bind(lead.person().name().namePrefix()), Arrays.asList(Name.Prefix.values()),
+                true, false));
+
+        String label;
+//        label = lead.person().name().firstName().getMeta().getCaption();
+        label = i18n.tr("First Name");
+        form.add(new Label("firstNameLabel", label));
+        form.add(new RequiredTextField<String>("firstName", model.bind(lead.person().name().firstName())).setLabel(new Model<String>(label)));
+        label = i18n.tr("Last Name");
+        form.add(new Label("lastNameLabel", label));
+        form.add(new RequiredTextField<String>("lastName", model.bind(lead.person().name().lastName())).setLabel(new Model<String>(label)));
         // phone
-        TextField<String> workPhone = new TextField<String>("phone1.number");
-        form.add(workPhone.setLabel(new Model<String>(i18n.tr("Work Phone"))));
-        form.add(new TextField<String>("phone1.extension"));
-        TextField<String> cellPhone = new TextField<String>("phone2.number");
-        form.add(cellPhone.setLabel(new Model<String>(i18n.tr("Cell Phone"))));
+        label = i18n.tr("Work Phone");
+        form.add(new Label("workPhoneLabel", label));
+        TextField<String> workPhone = new TextField<String>("workPhone", model.bind(lead.person().workPhone().number()));
+        form.add(workPhone.setLabel(new Model<String>(label)));
+        form.add(new TextField<Integer>("workPhoneExt", model.bind(lead.person().workPhone().extension())));
+        label = i18n.tr("Cell Phone");
+        form.add(new Label("cellPhoneLabel", label));
+        TextField<String> cellPhone = new TextField<String>("cellPhone", model.bind(lead.person().mobilePhone().number()));
+        form.add(cellPhone.setLabel(new Model<String>(lead.person().mobilePhone().getMeta().getCaption())));
         // email
-        EmailTextField email = new EmailTextField("email.address");
-        form.add(email.setLabel(new Model<String>(i18n.tr("Email Address"))));
+        label = i18n.tr("Email Address");
+        form.add(new Label("emailLabel", label));
+        EmailTextField email = new EmailTextField("email", model.bind(lead.person().email().address()));
+        form.add(email.setLabel(new Model<String>(label)));
         // floorplan selector
         Long curFp = null;
         if (fp != null) {
@@ -129,24 +138,24 @@ public class InquiryPanel extends Panel {
                     minPrice = _prc;
                 }
             }
-            String fpEntry = SimpleMessageFormat.format(i18n.tr("<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not available|!null#from $ {3}}"), p
+            String fpEntry = SimpleMessageFormat.format(i18n.tr("<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not available|!null#from ${3}}"), p
                     .name().getValue(), p.bedrooms().getValue(), p.bathrooms().getValue(), minPrice);
             radioGroup.addChoice(p.id().getValue().asLong(), fpEntry);
         }
         form.add(radioGroup.setEscapeModelStrings(false));
         // lease term
-        form.add(new RadioChoice<Inquiry.LeaseTerm>("leaseTerm", Arrays.asList(Inquiry.LeaseTerm.values())));
+        form.add(new RadioChoice<Lead.LeaseTerm>("leaseTerm", model.bind(lead.leaseTerm()), Arrays.asList(Lead.LeaseTerm.values())));
         // moving date
-        form.add(new DateInput("movingDate"));
+        form.add(new DateInput("movingDate", model.bind(lead.moveInDate())));
         // apmnt date / time
-        form.add(new DateInput("appointmentDate1"));
-        form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime1", Arrays.asList(Inquiry.DayPart.values())));
-        form.add(new DateInput("appointmentDate2"));
-        form.add(new RadioChoice<Inquiry.DayPart>("appointmentTime2", Arrays.asList(Inquiry.DayPart.values())));
+        form.add(new DateInput("appointmentDate1", model.bind(lead.appointmentDate1())));
+        form.add(new RadioChoice<Lead.DayPart>("appointmentTime1", model.bind(lead.appointmentTime1()), Arrays.asList(Lead.DayPart.values())));
+        form.add(new DateInput("appointmentDate2", model.bind(lead.appointmentDate2())));
+        form.add(new RadioChoice<Lead.DayPart>("appointmentTime2", model.bind(lead.appointmentTime2()), Arrays.asList(Lead.DayPart.values())));
         // ref source
-        form.add(new WicketUtils.DropDownList<Inquiry.RefSource>("refSource", Arrays.asList(Inquiry.RefSource.values()), false, false));
+        form.add(new WicketUtils.DropDownList<Lead.RefSource>("refSource", model.bind(lead.refSource()), Arrays.asList(Lead.RefSource.values()), true, false));
         // comments
-        form.add(new TextArea<String>("comments"));
+        form.add(new TextArea<String>("comments", model.bind(lead.comments())));
         // captcha
 //        form.add(new Image("captchaImg", new CaptchaImageResource("1234", 40, 8)));
 //        form.add(new TextField<String>("captchaText", new Model<String>()).add(AttributeModifier.replace("size", "6")));
