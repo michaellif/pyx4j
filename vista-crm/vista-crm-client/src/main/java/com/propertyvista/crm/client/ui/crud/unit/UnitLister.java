@@ -29,11 +29,11 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         this(false);
     }
 
-    @SuppressWarnings("unchecked")
     public UnitLister(boolean readOnly) {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, readOnly);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
+        @SuppressWarnings("unchecked")
         List<ColumnDescriptor<AptUnitDTO>> columnDescriptors = Arrays.asList((ColumnDescriptor<AptUnitDTO>[]) new ColumnDescriptor[] {
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().buildingCode(), true),
                 ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().name(), i18n.tr("Floorplan Name"), true),
@@ -47,7 +47,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bathrooms(), true),
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._unitRent(), true),
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._marketRent(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().availableForRent(), true), });
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().availableForRent(), true) });
         setColumnDescriptors(columnDescriptors);
     }
 }

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -25,11 +25,14 @@ import com.propertyvista.dto.ApplicationDTO;
 
 public class ApplicationLister extends ListerBase<ApplicationDTO> {
 
+    @SuppressWarnings("unchecked")
     public ApplicationLister() {
         super(ApplicationDTO.class, CrmSiteMap.Tenants.Application.class);
-        List<ColumnDescriptor<ApplicationDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ApplicationDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().stepsCompleted(), true));
+
+        List<ColumnDescriptor<ApplicationDTO>> columnDescriptors = Arrays.asList((ColumnDescriptor<ApplicationDTO>[]) new ColumnDescriptor[] {
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().stepsCompleted(), true) });
+
         setColumnDescriptors(columnDescriptors);
     }
 
