@@ -53,6 +53,16 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
             return new VistaServerSideConfiguration33();
         } else if ("vista44".equals(contextName)) {
             return new VistaServerSideConfiguration44();
+
+        } else if ("vistad11".equals(contextName)) {
+            return new VistaServerSideConfigurationD11();
+        } else if ("vistad22".equals(contextName)) {
+            return new VistaServerSideConfigurationD22();
+        } else if ("vistad33".equals(contextName)) {
+            return new VistaServerSideConfigurationD33();
+        } else if ("vistad44".equals(contextName)) {
+            return new VistaServerSideConfigurationD44();
+
         } else if ("vistast22".equals(contextName)) {
             return new VistaServerSideConfigurationST22();
         } else if (servletContext.getServerInfo().contains("jetty")) {
