@@ -23,6 +23,7 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -34,10 +35,10 @@ public abstract class AppPlaceDispatcher {
 
     public abstract void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
 
-    public void confirm(String message, Runnable onConfirmed) {
+    public void confirm(String message, Command onConfirmed) {
         log.debug("We show JS confirm {}", message);
         if (Window.confirm(message)) {
-            onConfirmed.run();
+            onConfirmed.execute();
         }
     }
 }

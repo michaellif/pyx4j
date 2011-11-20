@@ -27,6 +27,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
@@ -88,16 +89,15 @@ public final class AppPlaceContorller extends PlaceController {
 
                 String warning = maybeGoTo(result);
                 if (warning != null) {
-                    dispatcher.confirm(warning, new Runnable() {
+                    dispatcher.confirm(warning, new Command() {
 
                         @Override
-                        public void run() {
-                            go(newPlace);
+                        public void execute() {
+                            goToPrivate(newPlace);
                         }
-
                     });
                 } else {
-                    go(newPlace);
+                    goToPrivate(newPlace);
                 }
             }
 
@@ -118,7 +118,7 @@ public final class AppPlaceContorller extends PlaceController {
         return warning;
     }
 
-    private void go(Place newPlace) {
+    private void goToPrivate(Place newPlace) {
         if (where.equals(newPlace)) {
             forwardedFrom = AppPlace.NOWHERE;
             log.debug("go to: " + where);
