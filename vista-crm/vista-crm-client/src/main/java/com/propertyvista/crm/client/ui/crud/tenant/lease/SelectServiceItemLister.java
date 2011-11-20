@@ -28,14 +28,12 @@ public class SelectServiceItemLister extends ListerBase<ServiceItem> {
         super(ServiceItem.class);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(5);
+
+        List<ColumnDescriptor<ServiceItem>> columnDescriptors = new ArrayList<ColumnDescriptor<ServiceItem>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().price(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<ServiceItem>> getDefaultColumnDescriptors(ServiceItem proto) {
-        List<ColumnDescriptor<ServiceItem>> columnDescriptors = new ArrayList<ColumnDescriptor<ServiceItem>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.price()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        return columnDescriptors;
-    }
 }

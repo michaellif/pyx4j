@@ -29,15 +29,13 @@ public class SelectFeatrueLister extends ListerBase<Feature> {
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);
+
+        List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().isMandatory(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().isRecurring(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<Feature>> getDefaultColumnDescriptors(Feature proto) {
-        List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isMandatory()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isRecurring()));
-        return columnDescriptors;
-    }
 }

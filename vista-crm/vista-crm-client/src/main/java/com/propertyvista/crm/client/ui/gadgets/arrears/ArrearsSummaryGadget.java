@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.gadgets.arrears;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -24,7 +23,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
@@ -46,26 +44,22 @@ public class ArrearsSummaryGadget extends ListerGadgetBase<ArrearsSummary> imple
     public ArrearsSummaryGadget(GadgetMetadata gmd) {
         super(gmd, ArrearsSummary.class);
         service = GWT.create(ArrearsReportService.class);
-    }
 
-    //@formatter:off
-    @Override
-    protected List<ColumnDescriptor<ArrearsSummary>> getDefaultColumnDescriptors(ArrearsSummary proto) {
-             return columnDescriptorsEx(Arrays.asList(new Object[] {
-                     Tuple.cons(proto().thisMonth(), i18n.tr("Total this month")),
-                     Tuple.cons(proto().monthAgo(), i18n.tr("Total 0-30")),
-                     Tuple.cons(proto().twoMonthsAgo(), i18n.tr("Total 30-60")),
-                     Tuple.cons(proto().threeMonthsAgo(), i18n.tr("Total 60-90")),
-                     Tuple.cons(proto().overFourMonthsAgo(), i18n.tr("Total over 90")),
-                     Tuple.cons(proto().arBalance(), i18n.tr("Total AR Balance"))
-             }));
-    }
+        setColumnDescriptors(columnDescriptorsEx(Arrays.asList(new Object[] {
 
-    @Override
-    protected List<ColumnDescriptor<ArrearsSummary>> getAvailableColumnDescriptors(ArrearsSummary proto) {
-        return getDefaultColumnDescriptors(proto());
+        Tuple.cons(proto().thisMonth(), i18n.tr("Total this month")),
+
+        Tuple.cons(proto().monthAgo(), i18n.tr("Total 0-30")),
+
+        Tuple.cons(proto().twoMonthsAgo(), i18n.tr("Total 30-60")),
+
+        Tuple.cons(proto().threeMonthsAgo(), i18n.tr("Total 60-90")),
+
+        Tuple.cons(proto().overFourMonthsAgo(), i18n.tr("Total over 90")),
+
+        Tuple.cons(proto().arBalance(), i18n.tr("Total AR Balance")) }), true));
+
     }
-    //@formatter:on
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {

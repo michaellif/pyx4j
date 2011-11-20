@@ -28,40 +28,24 @@ public class SelectedUnitLister extends ListerBase<AptUnit> {
         super(AptUnit.class, null, true);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(8);
-    }
 
-    @Override
-    protected List<ColumnDescriptor<AptUnit>> getDefaultColumnDescriptors(AptUnit proto) {
         List<ColumnDescriptor<AptUnit>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnit>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().area()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info()._bedrooms()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info()._bathrooms()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().economicStatus(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().floor(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().number(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().area(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().areaUnits(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bedrooms(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bathrooms(), true));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(),
-                i18n.tr("Floorplan Marketing Name")));
-        return columnDescriptors;
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._unitRent(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._marketRent(), false));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().name(), i18n.tr("Floorplan Name"), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().marketingName(),
+                i18n.tr("Floorplan Marketing Name"), true));
+
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<AptUnit>> getAvailableColumnDescriptors(AptUnit proto) {
-        List<ColumnDescriptor<AptUnit>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnit>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().economicStatus()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().floor()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().number()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().area()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().areaUnits()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info()._bedrooms()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info()._bathrooms()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial()._unitRent()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.financial()._marketRent()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().name(), i18n.tr("Floorplan Name")));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto, proto.floorplan().marketingName(),
-                i18n.tr("Floorplan Marketing Name")));
-        return columnDescriptors;
-    }
 }

@@ -26,22 +26,19 @@ import com.propertyvista.dto.BoilerDTO;
 public class BoilerLister extends ListerBase<BoilerDTO> {
 
     public BoilerLister() {
-        super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public BoilerLister(boolean readOnly) {
         super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<BoilerDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BoilerDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().make(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().model(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().build(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<BoilerDTO>> getDefaultColumnDescriptors(BoilerDTO proto) {
-        List<ColumnDescriptor<BoilerDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BoilerDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.make()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.model()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.build()));
-        return columnDescriptors;
-    }
 }

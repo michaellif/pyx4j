@@ -38,49 +38,29 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
     public BuildingListerGadget(GadgetMetadata gmd) {
         super(gmd, BuildingDTO.class);
         service = (AbstractListService<BuildingDTO>) GWT.create(BuildingCrudService.class);
+
+        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().complex(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().propertyCode(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().propertyManager(), true));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().marketing().name(), true));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().shape(), false));
+
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().streetName(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().city(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().province(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().country(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
     @Override
     protected void selfInit(GadgetMetadata gmd) {
         gmd.type().setValue(GadgetType.BuildingLister);
         gmd.name().setValue(GadgetType.BuildingLister.toString());
-    }
-
-    @Override
-    protected List<ColumnDescriptor<BuildingDTO>> getDefaultColumnDescriptors(BuildingDTO proto) {
-        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
-        return columnDescriptors;
-    }
-
-    @Override
-    protected List<ColumnDescriptor<BuildingDTO>> getAvailableColumnDescriptors(BuildingDTO proto) {
-        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complex()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketing().name()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().shape()));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().streetName()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().city()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().province()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.info().address().country()));
-        return columnDescriptors;
     }
 
     @Override

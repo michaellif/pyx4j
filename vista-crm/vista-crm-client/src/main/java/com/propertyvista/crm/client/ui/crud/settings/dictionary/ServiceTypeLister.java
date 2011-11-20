@@ -42,13 +42,11 @@ public class ServiceTypeLister extends ListerBase<ServiceItemType> {
                 }
             }
         }));
+
+        List<ColumnDescriptor<ServiceItemType>> columnDescriptors = new ArrayList<ColumnDescriptor<ServiceItemType>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().serviceType(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<ServiceItemType>> getDefaultColumnDescriptors(ServiceItemType proto) {
-        List<ColumnDescriptor<ServiceItemType>> columnDescriptors = new ArrayList<ColumnDescriptor<ServiceItemType>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.serviceType()));
-        return columnDescriptors;
-    }
 }

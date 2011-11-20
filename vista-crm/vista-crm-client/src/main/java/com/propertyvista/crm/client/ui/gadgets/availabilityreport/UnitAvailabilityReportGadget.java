@@ -120,6 +120,8 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
         gadgetPanel.add(getListerWidget());
         gadgetPanel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
         gadgetPanel.setWidth("100%");
+
+        setColumnDescriptors(getColumnDescriptors(proto()));
     }
 
     @Override
@@ -135,53 +137,32 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
         return settings;
     }
 
-    //@formatter:off
     @SuppressWarnings("unchecked")
-    @Override
-    protected List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getDefaultColumnDescriptors(UnitAvailabilityStatusDTO proto) {
-        return Arrays.asList(
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost())
-                );
-    }
+    protected List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getColumnDescriptors(UnitAvailabilityStatusDTO proto) {
 
-    
-    @SuppressWarnings("unchecked")
-    @Override
-    protected List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getAvailableColumnDescriptors(UnitAvailabilityStatusDTO proto) {
-
-        return Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(
-                proto, proto.propertyCode()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanMarketingName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReadinessStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaRelative()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDay()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost())
-                );
+        return Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanMarketingName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReadinessStatus(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaRelative(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDay(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost(), true));
     }
-    //@formatter:on
 
     @Override
     public void setFiltering(FilterData filterData) {

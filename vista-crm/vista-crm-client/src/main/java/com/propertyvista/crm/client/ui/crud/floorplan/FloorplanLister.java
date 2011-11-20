@@ -26,25 +26,22 @@ import com.propertyvista.dto.FloorplanDTO;
 public class FloorplanLister extends ListerBase<FloorplanDTO> {
 
     public FloorplanLister() {
-        super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public FloorplanLister(boolean readOnly) {
         super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<FloorplanDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<FloorplanDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().marketingName(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().floorCount(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().bedrooms(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dens(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().bathrooms(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().counters()._unitCount(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<FloorplanDTO>> getDefaultColumnDescriptors(FloorplanDTO proto) {
-        List<ColumnDescriptor<FloorplanDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<FloorplanDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketingName()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorCount()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bedrooms()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dens()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.bathrooms()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.counters()._unitCount()));
-        return columnDescriptors;
-    }
 }

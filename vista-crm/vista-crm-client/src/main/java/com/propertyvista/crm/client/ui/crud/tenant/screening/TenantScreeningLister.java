@@ -26,22 +26,21 @@ import com.propertyvista.domain.tenant.TenantScreening;
 public class TenantScreeningLister extends ListerBase<TenantScreening> {
 
     public TenantScreeningLister() {
-        super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
+        this(false);
     }
 
     public TenantScreeningLister(boolean readOnly) {
         super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class, readOnly);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
+
+        List<ColumnDescriptor<TenantScreening>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantScreening>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().screeningDate(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().driversLicense(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().secureIdentifier(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().notCanadianCitizen(), true));
+
+        setColumnDescriptors(columnDescriptors);
+
     }
 
-    @Override
-    protected List<ColumnDescriptor<TenantScreening>> getDefaultColumnDescriptors(TenantScreening proto) {
-        List<ColumnDescriptor<TenantScreening>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantScreening>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.screeningDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.driversLicense()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.secureIdentifier()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.notCanadianCitizen()));
-        return columnDescriptors;
-    }
 }

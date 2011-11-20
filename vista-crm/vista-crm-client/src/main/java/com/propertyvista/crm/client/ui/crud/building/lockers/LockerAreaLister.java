@@ -26,21 +26,18 @@ import com.propertyvista.dto.LockerAreaDTO;
 public class LockerAreaLister extends ListerBase<LockerAreaDTO> {
 
     public LockerAreaLister() {
-        super(LockerAreaDTO.class, CrmSiteMap.Properties.LockerArea.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public LockerAreaLister(boolean readOnly) {
         super(LockerAreaDTO.class, CrmSiteMap.Properties.LockerArea.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<LockerAreaDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LockerAreaDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().levels(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().totalLockers(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<LockerAreaDTO>> getDefaultColumnDescriptors(LockerAreaDTO proto) {
-        List<ColumnDescriptor<LockerAreaDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LockerAreaDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.levels()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.totalLockers()));
-        return columnDescriptors;
-    }
 }

@@ -26,38 +26,24 @@ import com.propertyvista.dto.ElevatorDTO;
 public class ElevatorLister extends ListerBase<ElevatorDTO> {
 
     public ElevatorLister() {
-        super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public ElevatorLister(boolean readOnly) {
         super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<ElevatorDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ElevatorDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().make(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().model(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().build(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().license().number(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().license().expiration(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().license().renewal(), false));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().warranty().type(), false));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<ElevatorDTO>> getDefaultColumnDescriptors(ElevatorDTO proto) {
-        List<ColumnDescriptor<ElevatorDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ElevatorDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.make()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.model()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.build()));
-        return columnDescriptors;
-    }
-
-    @Override
-    protected List<ColumnDescriptor<ElevatorDTO>> getAvailableColumnDescriptors(ElevatorDTO proto) {
-        List<ColumnDescriptor<ElevatorDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ElevatorDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.make()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.model()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.build()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().number()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().expiration()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.license().renewal()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.warranty().type()));
-        return columnDescriptors;
-    }
 }

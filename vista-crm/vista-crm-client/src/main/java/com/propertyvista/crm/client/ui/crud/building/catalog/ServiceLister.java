@@ -26,19 +26,17 @@ import com.propertyvista.domain.financial.offering.Service;
 public class ServiceLister extends ListerBase<Service> {
 
     public ServiceLister() {
-        super(Service.class, CrmSiteMap.Properties.Service.class);
+        this(false);
     }
 
     public ServiceLister(boolean readOnly) {
         super(Service.class, CrmSiteMap.Properties.Service.class, readOnly);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilterEnabled(!readOnly);
+
+        List<ColumnDescriptor<Service>> columnDescriptors = new ArrayList<ColumnDescriptor<Service>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<Service>> getDefaultColumnDescriptors(Service proto) {
-        List<ColumnDescriptor<Service>> columnDescriptors = new ArrayList<ColumnDescriptor<Service>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        return columnDescriptors;
-    }
 }

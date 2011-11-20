@@ -26,22 +26,20 @@ import com.propertyvista.dto.ParkingDTO;
 public class ParkingLister extends ListerBase<ParkingDTO> {
 
     public ParkingLister() {
-        super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public ParkingLister(boolean readOnly) {
         super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<ParkingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().levels(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().totalSpaces(), true));
+        setColumnDescriptors(columnDescriptors);
+
     }
 
-    @Override
-    protected List<ColumnDescriptor<ParkingDTO>> getDefaultColumnDescriptors(ParkingDTO proto) {
-        List<ColumnDescriptor<ParkingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.levels()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.totalSpaces()));
-        return columnDescriptors;
-    }
 }

@@ -51,6 +51,8 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
     public ArrearsListerGadget(GadgetMetadata gmd) {
         super(gmd, MockupArrearsState.class);
         service = GWT.create(ArrearsReportService.class);
+
+        setColumnDescriptors(getAvailableColumnDescriptors(proto()));
     }
 
     protected abstract Arrears getArrearsMemberProto();
@@ -71,7 +73,7 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
             proto.overFourMonthsAgo(),
             proto.totalBalance(),
             proto.prepayments()
-        }));
+        }), true);
     }
     
     private List<ColumnDescriptor<MockupArrearsState>> getAvailableArrearsStatusColumns() {
@@ -79,24 +81,24 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
         for (String memberName : getArrearsMemberProto().getEntityMeta().getMemberNames()) {
             members.add(getArrearsMemberProto().getMember(memberName));
         }
-        return columnDescriptors(members);
+        return columnDescriptors(members, true);
     }
 
-    @Override
-    protected List<ColumnDescriptor<MockupArrearsState>> getDefaultColumnDescriptors(MockupArrearsState proto) {
-        List<ColumnDescriptor<MockupArrearsState>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {        
-                proto.unitNumber(),
-                proto.lastName()
-        }));
-        cd.addAll(getDefaultArrearsStatusColumns());
-        cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {
-                proto.legalStatus(),
-                proto.lmrUnitRentDifference()                
-        })));
-        return cd;               
-    }
+//    @Override
+//    protected List<ColumnDescriptor<MockupArrearsState>> getDefaultColumnDescriptors(MockupArrearsState proto) {
+//        List<ColumnDescriptor<MockupArrearsState>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {        
+//                proto.unitNumber(),
+//                proto.lastName()
+//        }));
+//        cd.addAll(getDefaultArrearsStatusColumns());
+//        cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {
+//                proto.legalStatus(),
+//                proto.lmrUnitRentDifference()                
+//        }), true));
+//        return cd;               
+//    }
 
-    @Override
+
     protected List<ColumnDescriptor<MockupArrearsState>> getAvailableColumnDescriptors(MockupArrearsState proto) {        
         List<ColumnDescriptor<MockupArrearsState>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {
                 // building info
@@ -109,7 +111,7 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
                 // tenant info                
                 proto.firstName(),
                 proto.lastName()
-        }));        
+        }), true);        
         cd.addAll(getAvailableArrearsStatusColumns());
         cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {
                 // arrears status
@@ -129,7 +131,7 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
                 Tuple.cons(proto.common().owner().company().name(), i18n.tr("Owner")),
                 proto.common().region(),
                 Tuple.cons(proto.common().portfolio().name(), i18n.tr("Portfolio"))
-        })));               
+        }), true));               
         return cd;
     }
     //@formatter:on

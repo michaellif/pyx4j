@@ -26,21 +26,20 @@ import com.propertyvista.domain.financial.offering.Feature;
 public class FeatureLister extends ListerBase<Feature> {
 
     public FeatureLister() {
-        super(Feature.class, CrmSiteMap.Properties.Feature.class);
+        this(false);
     }
 
     public FeatureLister(boolean readOnly) {
         super(Feature.class, CrmSiteMap.Properties.Feature.class, readOnly);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilterEnabled(!readOnly);
+
+        List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().isMandatory(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().isRecurring(), true));
+        setColumnDescriptors(columnDescriptors);
+
     }
 
-    @Override
-    protected List<ColumnDescriptor<Feature>> getDefaultColumnDescriptors(Feature proto) {
-        List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isMandatory()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isRecurring()));
-        return columnDescriptors;
-    }
 }

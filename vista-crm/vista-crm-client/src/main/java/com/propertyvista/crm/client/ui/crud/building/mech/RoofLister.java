@@ -26,20 +26,17 @@ import com.propertyvista.dto.RoofDTO;
 public class RoofLister extends ListerBase<RoofDTO> {
 
     public RoofLister() {
-        super(RoofDTO.class, CrmSiteMap.Properties.Roof.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public RoofLister(boolean readOnly) {
         super(RoofDTO.class, CrmSiteMap.Properties.Roof.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<RoofDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<RoofDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().year(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<RoofDTO>> getDefaultColumnDescriptors(RoofDTO proto) {
-        List<ColumnDescriptor<RoofDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<RoofDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.year()));
-        return columnDescriptors;
-    }
 }

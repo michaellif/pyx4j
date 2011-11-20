@@ -27,17 +27,15 @@ public class LeadLister extends ListerBase<Lead> {
 
     public LeadLister() {
         super(Lead.class, Marketing.Lead.class);
+
+        List<ColumnDescriptor<Lead>> columnDescriptors = new ArrayList<ColumnDescriptor<Lead>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().moveInDate(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().leaseTerm(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().floorplan(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().createDate(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<Lead>> getDefaultColumnDescriptors(Lead proto) {
-        List<ColumnDescriptor<Lead>> columnDescriptors = new ArrayList<ColumnDescriptor<Lead>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.leaseTerm()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplan()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.createDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        return columnDescriptors;
-    }
 }

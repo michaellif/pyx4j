@@ -86,9 +86,8 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         super(gmd);
         settings = gadgetMetadata.settings().cast();
 
-        final List<ColumnDescriptor<UnitVacancyStatus>> availableColumns = getAvailableColumns();
         unitListPanel = new DataTablePanel<UnitVacancyStatus>(UnitVacancyStatus.class);
-        unitListPanel.setColumnDescriptors(getDefaultColumns());
+        unitListPanel.setColumnDescriptors(getColumns());
 
         unitListPanel.setPrevActionHandler(new ClickHandler() {
             @Override
@@ -114,7 +113,6 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         // use the same style as ListerBase
         unitListPanel.setWidth("100%");
         unitListPanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
-        unitListPanel.getDataTable().setColumnSelector(availableColumns);
         unitListPanel.getDataTable().setHasColumnClickSorting(true);
         unitListPanel.getDataTable().setHasCheckboxColumn(false);
         unitListPanel.getDataTable().setMarkSelectedRow(false);
@@ -186,43 +184,31 @@ public class UnitAvailabilityReportGadget extends VacancyGadgetBase {
         return settings;
     }
 
-    private static List<ColumnDescriptor<UnitVacancyStatus>> getDefaultColumns() {
+    private List<ColumnDescriptor<UnitVacancyStatus>> getColumns() {
         UnitVacancyStatus proto = EntityFactory.getEntityPrototype(UnitVacancyStatus.class);
         @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<UnitVacancyStatus>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()));
-        return x;
-    }
-
-    private List<ColumnDescriptor<UnitVacancyStatus>> getAvailableColumns() {
-        UnitVacancyStatus proto = EntityFactory.getEntityPrototype(UnitVacancyStatus.class);
-        @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<UnitVacancyStatus>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address()), ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanMarketingName()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReady()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaRelative()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDay()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant()),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost()));
+        List<ColumnDescriptor<UnitVacancyStatus>> x = Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManager(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanMarketingName(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReady(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaRelative(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDay(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost(), false));
         return x;
     }
 

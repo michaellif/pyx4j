@@ -26,21 +26,17 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 public class ReportLister extends ListerBase<DashboardMetadata> {
 
     public ReportLister() {
-        super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public ReportLister(boolean readOnly) {
         super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+        List<ColumnDescriptor<DashboardMetadata>> columnDescriptors = new ArrayList<ColumnDescriptor<DashboardMetadata>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<DashboardMetadata>> getDefaultColumnDescriptors(DashboardMetadata proto) {
-        List<ColumnDescriptor<DashboardMetadata>> columnDescriptors = new ArrayList<ColumnDescriptor<DashboardMetadata>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        return columnDescriptors;
-    }
 }

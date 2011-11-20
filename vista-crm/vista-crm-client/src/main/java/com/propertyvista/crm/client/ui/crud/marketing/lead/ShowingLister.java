@@ -27,16 +27,15 @@ public class ShowingLister extends ListerBase<Showing> {
 
     public ShowingLister() {
         super(Showing.class, Marketing.Showing.class);
+
+        List<ColumnDescriptor<Showing>> columnDescriptors = new ArrayList<ColumnDescriptor<Showing>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().building(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().unit(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().result(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().reason(), true));
+        setColumnDescriptors(columnDescriptors);
+
     }
 
-    @Override
-    protected List<ColumnDescriptor<Showing>> getDefaultColumnDescriptors(Showing proto) {
-        List<ColumnDescriptor<Showing>> columnDescriptors = new ArrayList<ColumnDescriptor<Showing>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.building()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.result()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.reason()));
-        return columnDescriptors;
-    }
 }

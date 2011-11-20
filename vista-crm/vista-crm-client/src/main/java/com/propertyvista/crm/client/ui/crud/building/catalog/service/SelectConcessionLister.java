@@ -29,18 +29,17 @@ public class SelectConcessionLister extends ListerBase<Concession> {
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);
+
+        List<ColumnDescriptor<Concession>> columnDescriptors = new ArrayList<ColumnDescriptor<Concession>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().term(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().value(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().condition(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().effectiveDate(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().expirationDate(), true));
+        setColumnDescriptors(columnDescriptors);
+
     }
 
-    @Override
-    protected List<ColumnDescriptor<Concession>> getDefaultColumnDescriptors(Concession proto) {
-        List<ColumnDescriptor<Concession>> columnDescriptors = new ArrayList<ColumnDescriptor<Concession>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.term()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.value()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.condition()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.effectiveDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.expirationDate()));
-        return columnDescriptors;
-    }
 }

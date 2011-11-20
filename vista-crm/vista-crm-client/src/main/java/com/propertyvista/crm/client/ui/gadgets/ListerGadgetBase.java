@@ -118,7 +118,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
         dataTablePanel.setWidth("100%");
         dataTablePanel.setFilterEnabled(isFilterRequired());
-        dataTablePanel.getDataTable().setColumnSelector(getAvailableColumnDescriptors(dataTablePanel.proto()));
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
@@ -141,6 +140,10 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         });
     }
 
+    protected void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(columnDescriptors);
+    }
+
     protected abstract boolean isFilterRequired();
 
     /**
@@ -149,18 +152,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      * @param pageNumber
      */
     public abstract void populatePage(int pageNumber);
-
-    /**
-     * Implement in derived class to set default columns.<br>
-     * Warning: that method this called from within the constructor!
-     */
-    protected abstract List<ColumnDescriptor<E>> getDefaultColumnDescriptors(E proto);
-
-    /**
-     * Implement in derived class to set available columns.<br>
-     * Warning: that method this called from within the constructor!
-     */
-    protected abstract List<ColumnDescriptor<E>> getAvailableColumnDescriptors(E proto);
 
     protected final E proto() {
         return proto;
@@ -172,8 +163,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      * @param member
      * @return
      */
-    protected final ColumnDescriptor<E> columnDescriptor(IObject<?> member) {
-        return columnDescriptorEx(member, null);
+    protected final ColumnDescriptor<E> columnDescriptor(IObject<?> member, boolean visible) {
+        return columnDescriptorEx(member, null, visible);
     }
 
     /**
@@ -182,11 +173,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      * @param member
      * @return
      */
-    protected final ColumnDescriptor<E> columnDescriptorEx(IObject<?> member, String title) {
+    protected final ColumnDescriptor<E> columnDescriptorEx(IObject<?> member, String title, boolean visible) {
         if (title == null) {
-            return ColumnDescriptorFactory.createColumnDescriptor(proto(), member);
+            return ColumnDescriptorFactory.createColumnDescriptor(proto(), member, visible);
         } else {
-            return ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), member, title);
+            return ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), member, title, visible);
         }
     }
 
@@ -196,36 +187,37 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      * @param members
      * @return
      */
-    protected final List<ColumnDescriptor<E>> columnDescriptors(List<IObject<?>> members) {
+    protected final List<ColumnDescriptor<E>> columnDescriptors(List<IObject<?>> members, boolean visible) {
         List<Object> membersAndTitles = new ArrayList<Object>(members.size());
         for (IObject<?> member : members) {
             membersAndTitles.add(new Tuple<IObject<?>, String>(member, null));
         }
-        return columnDescriptorsEx(membersAndTitles);
+        return columnDescriptorsEx(membersAndTitles, visible);
     }
 
     @SuppressWarnings("unchecked")
-    protected final List<ColumnDescriptor<E>> columnDescriptorsEx(List<Object> membersAndTitles) {
+    protected final List<ColumnDescriptor<E>> columnDescriptorsEx(List<Object> membersAndTitles, boolean visible) {
         List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>(membersAndTitles.size());
         for (Object memberAndTitle : membersAndTitles) {
             ColumnDescriptor<E> cd;
             if (memberAndTitle instanceof Tuple) {
                 Tuple<IObject<?>, String> mt = (Tuple<IObject<?>, String>) memberAndTitle;
-                cd = columnDescriptorEx(mt.car(), mt.cdr());
+                cd = columnDescriptorEx(mt.car(), mt.cdr(), visible);
             } else {
-                cd = columnDescriptor((IObject<?>) memberAndTitle);
+                cd = columnDescriptor((IObject<?>) memberAndTitle, visible);
             }
             columnDescriptors.add(cd);
         }
         return columnDescriptors;
     }
 
+    //TODO VL - please fix using ColumnDescriptor setter
     private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings() {
         // FIXME remove the next line when the stringholder string duplication is solved
         ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
 
         if (settings.columnPaths().isEmpty()) {
-            List<ColumnDescriptor<E>> descriptors = getDefaultColumnDescriptors(proto());
+            List<ColumnDescriptor<E>> descriptors = dataTablePanel.getDataTableModel().getColumnDescriptors();
             for (ColumnDescriptor<E> columnDescriptor : descriptors) {
                 StringHolder columnPath = EntityFactory.create(StringHolder.class);
                 StringHolder columnTitle = EntityFactory.create(StringHolder.class);
@@ -242,7 +234,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         while (paths.hasNext()) {
             Path propertyPath = new Path(paths.next().stringValue().getValue());
             String title = titles.next().stringValue().getValue();
-            ColumnDescriptor<E> columnDescriptor = columnDescriptorEx(proto().getMember(propertyPath), title);
+            ColumnDescriptor<E> columnDescriptor = columnDescriptorEx(proto().getMember(propertyPath), title, true);
             columnDescriptors.add(columnDescriptor);
         }
         return columnDescriptors;

@@ -27,16 +27,10 @@ public class ComplexLister extends ListerBase<ComplexDTO> {
 
     public ComplexLister() {
         super(ComplexDTO.class, CrmSiteMap.Properties.Complex.class);
+
+        List<ColumnDescriptor<ComplexDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ComplexDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<ComplexDTO>> getDefaultColumnDescriptors(ComplexDTO proto) {
-        List<ColumnDescriptor<ComplexDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ComplexDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        // TODO: enable when we know to deal with filtering (case all this info comes from primary building)
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().streetName()));
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().city()));
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address().province()));
-        return columnDescriptors;
-    }
 }

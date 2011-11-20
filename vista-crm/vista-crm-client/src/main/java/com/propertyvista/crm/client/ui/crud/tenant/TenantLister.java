@@ -27,26 +27,23 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
     public TenantLister() {
         super(TenantDTO.class, CrmSiteMap.Tenants.Tenant.class);
-    }
 
-    @Override
-    protected List<ColumnDescriptor<TenantDTO>> getDefaultColumnDescriptors(TenantDTO proto) {
         List<ColumnDescriptor<TenantDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantDTO>>();
 
         // TODO: currently we use just person tenant, so we'll display more data for them: 
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.displayName()));
-//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
+//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));
+//        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().id(), true));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().sex()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().birthDate()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().homePhone()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().mobilePhone()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().workPhone()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.person().email().address()));
-
-        return columnDescriptors;
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().sex(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().birthDate(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().homePhone(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().mobilePhone(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().workPhone(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().email().address(), true));
+        setColumnDescriptors(columnDescriptors);
     }
+
 }

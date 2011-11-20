@@ -26,16 +26,13 @@ public class MaintenanceLister extends ListerBase<MaintenanceRequestDTO> {
 
     public MaintenanceLister() {
         super(MaintenanceRequestDTO.class);
-    }
 
-    @Override
-    protected List<ColumnDescriptor<MaintenanceRequestDTO>> getDefaultColumnDescriptors(MaintenanceRequestDTO proto) {
         List<ColumnDescriptor<MaintenanceRequestDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<MaintenanceRequestDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.maintenanceType()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.problemDescription()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.updated()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        return columnDescriptors;
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().maintenanceType(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().problemDescription(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().updated(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
 }

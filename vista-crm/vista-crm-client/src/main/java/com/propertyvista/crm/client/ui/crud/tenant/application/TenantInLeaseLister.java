@@ -27,22 +27,21 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
 
     public TenantInLeaseLister() {
         super(TenantInLeaseDTO.class, CrmSiteMap.Tenants.Tenant.class, true);
-    }
 
-    @Override
-    protected List<ColumnDescriptor<TenantInLeaseDTO>> getDefaultColumnDescriptors(TenantInLeaseDTO proto) {
         List<ColumnDescriptor<TenantInLeaseDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantInLeaseDTO>>();
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.id()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().id(), true));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.tenant().person().name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.tenant().person().sex()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.tenant().person().birthDate()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().tenant().person().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().tenant().person().sex(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().tenant().person().birthDate(), true));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.role()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.incomeSource()));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().role(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().incomeSource(), true));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.application().status()));
-        return columnDescriptors;
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().application().status(), true));
+        setColumnDescriptors(columnDescriptors);
+
     }
+
 }

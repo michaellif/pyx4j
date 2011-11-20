@@ -26,23 +26,20 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 public class UnitItemLister extends ListerBase<AptUnitItem> {
 
     public UnitItemLister() {
-        super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public UnitItemLister(boolean readOnly) {
         super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<AptUnitItem>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitItem>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().flooringType(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().cabinetsType(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().counterTopType(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<AptUnitItem>> getDefaultColumnDescriptors(AptUnitItem proto) {
-        List<ColumnDescriptor<AptUnitItem>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitItem>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.flooringType()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.cabinetsType()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.counterTopType()));
-        return columnDescriptors;
-    }
 }

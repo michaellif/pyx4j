@@ -27,13 +27,12 @@ public class PmcLister extends ListerBase<PmcDTO> {
 
     public PmcLister() {
         super(PmcDTO.class, AdminSiteMap.Management.PMC.class, false, true);
+
+        List<ColumnDescriptor<PmcDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<PmcDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dnsName(), true));
+        setColumnDescriptors(columnDescriptors);
+
     }
 
-    @Override
-    protected List<ColumnDescriptor<PmcDTO>> getDefaultColumnDescriptors(PmcDTO proto) {
-        List<ColumnDescriptor<PmcDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<PmcDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dnsName()));
-        return columnDescriptors;
-    }
 }

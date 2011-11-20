@@ -27,17 +27,15 @@ public class AppointmentLister extends ListerBase<Appointment> {
 
     public AppointmentLister() {
         super(Appointment.class, Marketing.Appointment.class);
+
+        List<ColumnDescriptor<Appointment>> columnDescriptors = new ArrayList<ColumnDescriptor<Appointment>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().date(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().time(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().agent(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().phone(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().email(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<Appointment>> getDefaultColumnDescriptors(Appointment proto) {
-        List<ColumnDescriptor<Appointment>> columnDescriptors = new ArrayList<ColumnDescriptor<Appointment>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.date()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.time()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.agent()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.phone()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.email()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        return columnDescriptors;
-    }
 }

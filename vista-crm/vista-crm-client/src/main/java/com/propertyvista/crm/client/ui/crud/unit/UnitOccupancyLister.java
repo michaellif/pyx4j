@@ -25,23 +25,20 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
     public UnitOccupancyLister() {
-        super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class);
-        getDataTablePanel().setFilterEnabled(false);
+        this(false);
     }
 
     public UnitOccupancyLister(boolean readOnly) {
         super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, readOnly);
         getDataTablePanel().setFilterEnabled(false);
+
+        List<ColumnDescriptor<AptUnitOccupancy>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitOccupancy>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dateFrom(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dateTo(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().offMarket(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<AptUnitOccupancy>> getDefaultColumnDescriptors(AptUnitOccupancy proto) {
-        List<ColumnDescriptor<AptUnitOccupancy>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitOccupancy>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dateFrom()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.dateTo()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.offMarket()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.description()));
-        return columnDescriptors;
-    }
 }

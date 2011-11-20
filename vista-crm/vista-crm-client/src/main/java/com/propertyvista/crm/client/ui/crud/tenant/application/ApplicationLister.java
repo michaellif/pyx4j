@@ -27,13 +27,10 @@ public class ApplicationLister extends ListerBase<ApplicationDTO> {
 
     public ApplicationLister() {
         super(ApplicationDTO.class, CrmSiteMap.Tenants.Application.class);
+        List<ColumnDescriptor<ApplicationDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ApplicationDTO>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().stepsCompleted(), true));
+        setColumnDescriptors(columnDescriptors);
     }
 
-    @Override
-    protected List<ColumnDescriptor<ApplicationDTO>> getDefaultColumnDescriptors(ApplicationDTO proto) {
-        List<ColumnDescriptor<ApplicationDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ApplicationDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.status()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.stepsCompleted()));
-        return columnDescriptors;
-    }
 }

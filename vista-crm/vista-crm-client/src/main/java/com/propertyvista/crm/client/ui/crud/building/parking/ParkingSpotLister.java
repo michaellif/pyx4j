@@ -27,13 +27,12 @@ public class ParkingSpotLister extends ListerBase<ParkingSpot> {
 
     public ParkingSpotLister() {
         super(ParkingSpot.class, CrmSiteMap.Properties.ParkingSpot.class);
+
+        List<ColumnDescriptor<ParkingSpot>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingSpot>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
+        setColumnDescriptors(columnDescriptors);
+
     }
 
-    @Override
-    protected List<ColumnDescriptor<ParkingSpot>> getDefaultColumnDescriptors(ParkingSpot proto) {
-        List<ColumnDescriptor<ParkingSpot>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingSpot>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.name()));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.type()));
-        return columnDescriptors;
-    }
 }
