@@ -30,27 +30,30 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class ColumnDescriptorFactory {
 
-    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member) {
+    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, boolean visible) {
+        ColumnDescriptor<E> cd = null;
         MemberMeta mm = member.getMeta();
         if (mm.isEntity()) {
-            return new MemberEntityColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
+            cd = new MemberEntityColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
-            return new MemberEntityCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
+            cd = new MemberEntityCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if (member instanceof IPrimitiveSet<?>) {
-            return new MemberCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
+            cd = new MemberCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if (member instanceof IPrimitive<?>) {
-            return new MemberPrimitiveColumnDescriptor<E>(member.getPath(), mm.getCaption());
+            cd = new MemberPrimitiveColumnDescriptor<E>(member.getPath(), mm.getCaption());
         } else {
-            return new MemberColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
+            cd = new MemberColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         }
+        cd.setVisible(visible);
+        return cd;
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width) {
-        return createColumnDescriptor(meta, member, width, false);
+    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width, boolean visible) {
+        return createColumnDescriptor(meta, member, width, false, visible);
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width, boolean wordWrap) {
-        ColumnDescriptor<E> cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member);
+    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width, boolean wordWrap, boolean visible) {
+        ColumnDescriptor<E> cd = createColumnDescriptor(meta, member, visible);
         cd.setWidth(width);
         cd.setWordWrap(wordWrap);
         return cd;
@@ -58,16 +61,17 @@ public class ColumnDescriptorFactory {
 
 // custom titled column creation:
 
-    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title) {
-        return createTitledColumnDescriptor(meta, member, title, ColumnDescriptor.DEFAULT_WIDTH, false);
+    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, boolean visible) {
+        return createTitledColumnDescriptor(meta, member, title, ColumnDescriptor.DEFAULT_WIDTH, false, visible);
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width) {
-        return createTitledColumnDescriptor(meta, member, title, width, false);
+    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean visible) {
+        return createTitledColumnDescriptor(meta, member, title, width, false, visible);
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean wordWrap) {
-        ColumnDescriptor<E> cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member);
+    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean wordWrap,
+            boolean visible) {
+        ColumnDescriptor<E> cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member, visible);
         cd.setColumnTitle(title);
         cd.setWidth(width);
         cd.setWordWrap(wordWrap);

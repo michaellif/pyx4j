@@ -82,11 +82,6 @@ public class ColumnDescriptor<E> {
         builder.columnTitle = columnTitle;
     }
 
-    @Override
-    public String toString() {
-        return builder.columnName + "[" + builder.columnTitle + "]";
-    }
-
     public String getWidth() {
         return builder.width;
     }
@@ -103,9 +98,22 @@ public class ColumnDescriptor<E> {
         builder.wordWrap = wordWrap;
     }
 
+    public boolean isVisible() {
+        return builder.visible;
+    }
+
+    public void setVisible(boolean visible) {
+        builder.visible = visible;
+    }
+
     //TODO should be abstract
     public String convert(E entity) {
         return entity.toString();
+    }
+
+    @Override
+    public String toString() {
+        return builder.columnName + "[" + builder.columnTitle + "]";
     }
 
     public static class Builder {

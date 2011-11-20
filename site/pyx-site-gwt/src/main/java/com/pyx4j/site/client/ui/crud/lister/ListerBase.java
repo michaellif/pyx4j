@@ -76,8 +76,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         dataTablePanel = new DataTablePanel<E>(clazz);
 
-        dataTablePanel.setColumnDescriptors(ListerBase.this.getDefaultColumnDescriptors(dataTablePanel.proto()));
-
         dataTablePanel.setFilterActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -118,10 +116,17 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
-        dataTablePanel.getDataTable().renderTable();
 
         add(dataTablePanel);
 
+    }
+
+    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(columnDescriptors);
+    }
+
+    public E proto() {
+        return dataTablePanel.proto();
     }
 
     public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
@@ -164,12 +169,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     public void showColumnSelector(boolean show) {
-        if (show) {
-            List<ColumnDescriptor<E>> columnDescriptors = getAvailableColumnDescriptors(getDataTablePanel().proto());
-            dataTablePanel.getDataTable().setColumnSelector(columnDescriptors);
-        } else {
-            dataTablePanel.getDataTable().setColumnSelector(null);
-        }
+        dataTablePanel.getDataTable().setColumnSelectorVisible(show);
     }
 
     // selection/checking stuff:
@@ -284,20 +284,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     // EntityListPanel access:
     public DataTablePanel<E> getDataTablePanel() {
         return dataTablePanel;
-    }
-
-    /**
-     * Implement in derived class to set default table columns set.
-     * Note, that it's called from within constructor!
-     */
-    protected abstract List<ColumnDescriptor<E>> getDefaultColumnDescriptors(E proto);
-
-    /**
-     * Override in derived class to set available table columns set.
-     * Note, that it's called from within constructor!
-     */
-    protected List<ColumnDescriptor<E>> getAvailableColumnDescriptors(E proto) {
-        return dataTablePanel.getDataTableModel().getColumnDescriptors();
     }
 
     // Actions:

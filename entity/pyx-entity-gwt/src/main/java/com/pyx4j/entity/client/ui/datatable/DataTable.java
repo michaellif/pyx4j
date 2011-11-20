@@ -54,8 +54,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private DataTableModel<E> model;
 
-    private List<ColumnDescriptor<E>> availableColumns;
-
     private int selectedRow = -1;
 
     private List<Integer> selectedRows;
@@ -69,6 +67,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private boolean hasCheckboxColumn = false;
 
     private boolean markSelectedRow = true;
+
+    private boolean columnSelectorVisible = true;
 
     private final List<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
@@ -91,7 +91,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 if (cell == null) {
                     return; // do not process empty clicks!...
                 } else if (cell.getRowIndex() == 0) {
-                    if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0) && cell.getCellIndex() < getCellCount(0) - (hasColumnSelector() ? 1 : 0)) {
+                    if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0) && cell.getCellIndex() < getCellCount(0) - (isColumnSelectorVisible() ? 1 : 0)) {
                         processHeaderClick(hasCheckboxColumn() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
                     }
                 } else if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0)) {
@@ -114,7 +114,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
         this.model = model;
         model.addDataTableModelListener(this);
-        renderTable();
+        if (model.getColumnDescriptors() != null) {
+            renderTable();
+        }
     }
 
     public DataTableModel<E> getDataTableModel() {
@@ -258,12 +260,12 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         this.hasCheckboxColumn = hasCheckboxColumn;
     }
 
-    public boolean hasColumnSelector() {
-        return (availableColumns != null);
+    public boolean isColumnSelectorVisible() {
+        return columnSelectorVisible;
     }
 
-    public void setColumnSelector(List<ColumnDescriptor<E>> availableColumns) {
-        this.availableColumns = availableColumns;
+    public void setColumnSelectorVisible(boolean columnSelectorVisible) {
+        this.columnSelectorVisible = columnSelectorVisible;
     }
 
     public boolean hasDetailsNavigation() {
@@ -278,15 +280,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 // Internals:
 //    
     public void renderTable() {
-        removeAllRows();
 
-        // auto calculate column widths (actually make them equals in % and fill all 100%):
-        if (isAutoColumnsWidth() && !model.getColumnDescriptors().isEmpty()) {
-            int width = (int) (100. / model.getColumnDescriptors().size() + 0.5);
-            for (ColumnDescriptor<E> columnDescriptor : model.getColumnDescriptors()) {
-                columnDescriptor.setWidth(width + "%");
-            }
-        }
+        assert model.getColumnDescriptors() != null : "getColumnDescriptors() shouldn't be null";
+
+        removeAllRows();
+        setCellFormatter(new FlexCellFormatter());
+        setRowFormatter(new RowFormatter());
+        setColumnFormatter(new ColumnFormatter());
 
         renderHeader();
         renderBody();
@@ -315,10 +315,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             removeCells(0, 0, getCellCount(0));
         }
 
-        if (model.getColumnDescriptors() == null) {
-            return;
-        }
-
         int colIndex = 0;
         if (hasCheckboxColumn()) {
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
@@ -329,6 +325,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
 
         for (ColumnDescriptor<E> columnDescriptor : model.getColumnDescriptors()) {
+            if (!columnDescriptor.isVisible()) {
+                continue;
+            }
             String columnTitle = columnDescriptor.getColumnTitle();
             StringBuffer headerText = new StringBuffer("&nbsp;");
             headerText.append(columnTitle);
@@ -342,12 +341,12 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 headerText.append("&nbsp;&nbsp;&nbsp;");
             }
             setHTML(0, colIndex, headerText.toString());
-            getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
+//            getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
             getCellFormatter().setWordWrap(0, colIndex, false);
             ++colIndex;
         }
 
-        if (hasColumnSelector()) {
+        if (isColumnSelectorVisible()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
             getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
             getCellFormatter().setStyleName(0, colIndex, DefaultDataTableTheme.StyleName.DataTableColumnSelector.name());
@@ -381,6 +380,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
 
             for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
+                if (!columnDescriptor.isVisible()) {
+                    continue;
+                }
                 HTML contentHtml;
                 Object value = dataItem.getCellValue(columnDescriptor);
                 if (value == null || value.equals("")) {
@@ -471,8 +473,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     private Widget createHeaderColumnSelector() {
-        assert (availableColumns != null);
-
         final Anchor selector = new Anchor("...");
         selector.addClickHandler(new ClickHandler() {
 
@@ -496,13 +496,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 pp.addCloseHandler(new CloseHandler<PopupPanel>() {
                     @Override
                     public void onClose(CloseEvent<PopupPanel> event) {
-                        ArrayList<ColumnDescriptor<E>> selectedColumns = new ArrayList<ColumnDescriptor<E>>();
                         for (int i = 0; i < columnChecksList.size(); ++i) {
-                            if (columnChecksList.get(i).getValue()) {
-                                selectedColumns.add(availableColumns.get(i));
-                            }
+                            System.out.println("++++++++++++++++++" + columnChecksList.get(i).getValue());
+                            model.getColumnDescriptor(i).setVisible(columnChecksList.get(i).getValue());
                         }
-                        model.setColumnDescriptors(selectedColumns);
                         renderTable();
                     }
                 });
@@ -512,9 +509,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             private Widget createColumnsSelectors() {
                 FlowPanel panel = new FlowPanel();
 
-                for (ColumnDescriptor<E> column : availableColumns) {
+                for (ColumnDescriptor<E> column : model.getColumnDescriptors()) {
                     CheckBox columnCheck = new CheckBox(column.getColumnTitle());
-                    columnCheck.setValue(isSameColumn(column.getColumnName()));
+                    columnCheck.setValue(column.isVisible());
                     columnChecksList.add(columnCheck);
                     panel.add(columnCheck);
                     panel.add(new HTML());
@@ -523,15 +520,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 return panel;
             }
 
-            private boolean isSameColumn(String columnName) {
-                List<ColumnDescriptor<E>> currentColumns = model.getColumnDescriptors();
-                for (ColumnDescriptor<E> column : currentColumns) {
-                    if (columnName.contentEquals(column.getColumnName())) {
-                        return true;
-                    }
-                }
-                return false;
-            }
         });
 
         return selector;
