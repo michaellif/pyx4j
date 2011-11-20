@@ -89,7 +89,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void setParentFiltering(Key parentID) {
         String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
         assert (ownerMemberName != null) : "No @Owner in " + entityClass;
-        assert (parentID != null);
+        //assert (parentID != null);
         parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, parentID);
         this.parentID = parentID; // save parent id for newItem creation...
     }
