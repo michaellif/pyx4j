@@ -22,6 +22,7 @@ package com.pyx4j.site.client.activity.crud;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -89,9 +90,12 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void setParentFiltering(Key parentID) {
         String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
         assert (ownerMemberName != null) : "No @Owner in " + entityClass;
-        //assert (parentID != null);
         parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, parentID);
         this.parentID = parentID; // save parent id for newItem creation...
+    }
+
+    protected boolean filterCreatesEmptyDataSet() {
+        return (parentFiltering != null) && (parentID == null);
     }
 
     @Override
@@ -111,6 +115,12 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate(final int pageNumber) {
+        // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list 
+        if (filterCreatesEmptyDataSet()) {
+            view.populate(new Vector<E>(), pageNumber, false, 0);
+            return;
+        }
+
         EntityListCriteria<E> criteria = constructSearchCriteria();
         criteria.setPageSize(view.getPageSize());
         criteria.setPageNumber(pageNumber);
