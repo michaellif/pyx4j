@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -115,9 +116,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         cancelAction = new Button(CANCEL, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to cancel the application?"), new Runnable() {
+                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to cancel the application?"), new Command() {
+
                     @Override
-                    public void run() {
+                    public void execute() {
                         ((MasterApplicationViewerView.Presenter) presenter).cancelApp(form.getValue());
                     }
                 });

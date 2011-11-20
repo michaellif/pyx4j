@@ -16,6 +16,8 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -75,9 +77,10 @@ class FeatureFolder extends VistaTableFolder<ChargeItem> {
     protected void removeItem(final CEntityFolderItem<ChargeItem> item) {
         if (!item.getValue().adjustments().isEmpty()) {
             MessageDialog.confirm(i18n.tr("Warning!"),
-                    i18n.tr("By removing the selected item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Runnable() {
+                    i18n.tr("By removing the selected item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Command() {
+
                         @Override
-                        public void run() {
+                        public void execute() {
                             unconditionalRemoveItem(item);
                         }
                     });
