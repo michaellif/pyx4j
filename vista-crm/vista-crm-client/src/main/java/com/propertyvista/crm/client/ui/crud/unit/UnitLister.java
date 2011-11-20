@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -29,29 +29,25 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         this(false);
     }
 
+    @SuppressWarnings("unchecked")
     public UnitLister(boolean readOnly) {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, readOnly);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
-        List<ColumnDescriptor<AptUnitDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().buildingCode(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().name(), i18n.tr("Floorplan Name"), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().marketingName(),
-                i18n.tr("Floorplan Marketing Name"), true));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().economicStatus(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().floor(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().number(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().area(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().areaUnits(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bedrooms(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bathrooms(), true));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._unitRent(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._marketRent(), true));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().availableForRent(), true));
-
+        List<ColumnDescriptor<AptUnitDTO>> columnDescriptors = Arrays.asList((ColumnDescriptor<AptUnitDTO>[]) new ColumnDescriptor[] {
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().buildingCode(), true),
+                ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().name(), i18n.tr("Floorplan Name"), true),
+                ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().marketingName(), i18n.tr("Floorplan Marketing Name"), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().economicStatus(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().floor(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().number(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().area(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().areaUnits(), false),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bedrooms(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bathrooms(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._unitRent(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._marketRent(), true),
+                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().availableForRent(), true), });
+        setColumnDescriptors(columnDescriptors);
     }
-
 }
