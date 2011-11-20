@@ -9,42 +9,42 @@
 # requirements: maven3, javac, svn
 
 mvn --file ../pyx4j/pom.xml clean --fail-never
-if [[ ! "$?" = "0" ]]; then
+if [ "$?" != "0" ]; then
     echo   
     echo Error in PYX Clean
     exit 1
 fi
 
 mvn scm:update --file ../pyx4j/pom.xml
-if [[ ! "$?" = "0" ]]; then
+if [ "$?" != "0" ]; then
     echo   
     echo Error in PYX SVN Update
     exit 1
 fi
 
 mvn --file ../pyx4j/pom.xml -DskipTests=true
-if [[ ! "$?" = "0" ]]; then
+if [ "$?" != "0" ]; then
     echo   
     echo Error in PYX build
     exit 1
 fi
 
 mvn clean --fail-never
-if [[ ! "$?" = "0" ]]; then
+if [ "$?" != "0" ]; then
     echo   
     echo Error in Vista SVN Clean
     exit 1
 fi
 
 mvn scm:update
-if [[ ! "$?" = "0" ]]; then
+if [ "$?" != "0" ]; then
     echo   
     echo Error in Vista SVN Update
     exit 1
 fi
 
 mvn -DskipTests=true
-if [[ ! "$?" = "0" ]]; then
+if [ "$?" != "0" ]; then
     echo   
     echo Error in build
     exit 1
