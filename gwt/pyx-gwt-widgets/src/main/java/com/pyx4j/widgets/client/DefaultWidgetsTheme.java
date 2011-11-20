@@ -32,7 +32,7 @@ public class DefaultWidgetsTheme extends Theme {
     public static enum StyleName implements IStyleName {
         TextBox, ListBox, Toolbar, ToolbarSeparator,
 
-        Button, ButtonContainer, ButtonContent, ButtonText
+        Button, ButtonContent, ButtonText
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -106,7 +106,7 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ButtonText);
-        style.addProperty("vertical-align", "top");
+        style.addProperty("vertical-align", "middle");
         style.addProperty("whiteSpace", "nowrap");
         style.addProperty("display", "inline-block");
         style.addProperty("display", "inline-block");

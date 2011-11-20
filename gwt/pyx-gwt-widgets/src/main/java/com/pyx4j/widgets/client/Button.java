@@ -21,7 +21,6 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.ButtonElement;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -33,20 +32,20 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ButtonBase;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public class Button extends ButtonBase {
+public class Button extends FocusPanel {
 
-    private final Element container;
-
-    private final Element content;
-
-    private Element textElem;
+    private Label textLabel;
 
     private final Image image;
 
     private final ButtonFacesHandler buttonFacesHandler;
+
+    private final SimplePanel contentPanel;
 
     public Button(Image image) {
         this(image, null);
@@ -58,12 +57,12 @@ public class Button extends ButtonBase {
 
     public Button(String text, ClickHandler handler) {
         this((Image) null, text);
-        this.addClickHandler(handler);
+        addClickHandler(handler);
     }
 
     public Button(Image image, String text, ClickHandler handler) {
         this(image, text);
-        this.addClickHandler(handler);
+        addClickHandler(handler);
     }
 
     public Button(Image image, final String text) {
@@ -71,43 +70,30 @@ public class Button extends ButtonBase {
     }
 
     protected Button(ButtonFacesHandler facesHandler, Image image, final String text) {
-        super(DOM.createDiv());
 
         this.image = image;
 
         setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Button.name());
 
-        container = DOM.createSpan();
-        setStylePrimaryName(container, DefaultWidgetsTheme.StyleName.ButtonContainer.name());
-
         buttonFacesHandler = facesHandler;
-
-        container.getStyle().setProperty("display", "inline-block");
-        container.getStyle().setProperty("verticalAlign", "top");
-
-        // for IE6
-        // getElement().getStyle().setProperty("borderColor", "pink");
-        // getElement().getStyle().setProperty("filter", "chroma(color=pink)");
 
         facesHandler.init(this);
 
-        content = DOM.createSpan();
+        contentPanel = new SimplePanel();
 
-        setStylePrimaryName(content, DefaultWidgetsTheme.StyleName.ButtonContent.name());
+        contentPanel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonContent.name());
 
         if (text != null) {
-            textElem = DOM.createSpan();
-            textElem.setInnerHTML(text);
-            content.appendChild(textElem);
-            setStylePrimaryName(textElem, DefaultWidgetsTheme.StyleName.ButtonText.name());
+            textLabel = new Label(text);
+            contentPanel.setWidget(textLabel);
+            textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
         }
         if (image != null) {
-            textElem.getStyle().setProperty("paddingLeft", image.getWidth() + "px");
-            content.getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
+            textLabel.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
+            contentPanel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
         }
 
-        getElement().appendChild(container);
-        container.appendChild(content);
+        setWidget(contentPanel);
 
     }
 
@@ -120,28 +106,22 @@ public class Button extends ButtonBase {
         }
     };
 
-    public void setCaption(String html) {
-        textElem.setInnerHTML(html);
+    public void setCaption(String text) {
+        textLabel.setText(text);
     }
 
     public void setTooltip(String text) {
         setTitle(text);
     }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        buttonFacesHandler.enable(enabled);
-    }
-
     public void setImageVisible(boolean visible) {
         if (image != null) {
             if (visible) {
-                textElem.getStyle().setProperty("paddingLeft", image.getWidth() + "px");
-                content.getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
+                textLabel.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
+                contentPanel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
             } else {
-                textElem.getStyle().setProperty("paddingLeft", "0px");
-                content.getStyle().setProperty("background", "none");
+                textLabel.getElement().getStyle().setProperty("paddingLeft", "0px");
+                contentPanel.getElement().getStyle().setProperty("background", "none");
             }
         }
     }
@@ -152,6 +132,15 @@ public class Button extends ButtonBase {
 
     protected ButtonElement getButtonElement() {
         return ((ButtonElement) getElement().cast());
+    }
+
+    public boolean isEnabled() {
+        return !DOM.getElementPropertyBoolean(getElement(), "disabled");
+    }
+
+    public void setEnabled(boolean enabled) {
+        DOM.setElementPropertyBoolean(getElement(), "disabled", !enabled);
+        buttonFacesHandler.enable(enabled);
     }
 
     static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler {
