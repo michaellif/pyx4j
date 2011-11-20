@@ -12,6 +12,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
@@ -82,11 +83,11 @@ public class MessageDialog {
         });
     }
 
-    public static void confirm(String title, String text, final Runnable onConfirmed) {
+    public static void confirm(String title, String text, final Command onConfirmed) {
         show(title, text, Dialog.Type.Confirm, new YesNoOption() {
             @Override
             public boolean onClickYes() {
-                onConfirmed.run();
+                onConfirmed.execute();
                 return true;
             }
 

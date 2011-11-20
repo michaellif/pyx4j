@@ -23,9 +23,6 @@ package com.pyx4j.entity.client.ui.datatable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -48,8 +45,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IEntity;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
-
-    private static final Logger log = LoggerFactory.getLogger(DataTable.class);
 
     private static final int HEADER_RAW_INDEX = 0;
 

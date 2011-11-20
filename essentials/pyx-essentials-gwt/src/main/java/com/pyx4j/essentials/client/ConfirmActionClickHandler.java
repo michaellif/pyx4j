@@ -22,6 +22,7 @@ package com.pyx4j.essentials.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -31,9 +32,9 @@ public class ConfirmActionClickHandler implements ClickHandler {
 
     private final String text;
 
-    final Runnable onConfirmed;
+    final Command onConfirmed;
 
-    public ConfirmActionClickHandler(String title, String text, final Runnable onConfirmed) {
+    public ConfirmActionClickHandler(String title, String text, final Command onConfirmed) {
         this.title = title;
         this.text = text;
         this.onConfirmed = onConfirmed;

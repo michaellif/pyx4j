@@ -24,21 +24,7 @@ public class ColumnDescriptor<E> {
 
     public static final String DEFAULT_WIDTH = "100px";
 
-    private final String columnName;
-
-    private String columnTitle;
-
-    private boolean sortable;
-
-    private boolean navigable;
-
-    private boolean sortAscending = true;
-
-    private String width;
-
-    private boolean wordWrap = true;
-
-    private final boolean visible = false;
+    private Builder builder;
 
     public ColumnDescriptor(String columnName, String columnTitle) {
         this(columnName, columnTitle, DEFAULT_WIDTH);
@@ -52,79 +38,135 @@ public class ColumnDescriptor<E> {
         this(columnName, columnTitle, sortable, sortAscending, DEFAULT_WIDTH);
     }
 
-    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, boolean sortAscending, String width) {
-        if (columnName == null) {
-            throw new IllegalArgumentException("columnName can't be null");
-        }
+    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, boolean ascendingSort, String width) {
+        this(new Builder(columnName, columnTitle).sortable(sortable).ascendingSort(ascendingSort).width(width));
+    }
 
-        this.columnTitle = columnTitle;
-        this.columnName = columnName;
-        this.sortable = sortable;
-        this.sortAscending = sortAscending;
-        this.width = width;
-
+    private ColumnDescriptor(Builder builder) {
+        this.builder = builder;
     }
 
     public String getColumnName() {
-        return columnName;
+        return builder.columnName;
     }
 
     public boolean isSortAscending() {
-        return sortAscending;
+        return builder.ascending;
     }
 
     public void setSortAscending(boolean sortAscending) {
-        this.sortAscending = sortAscending;
+        builder.ascending = sortAscending;
     }
 
     public boolean isSortable() {
-        return sortable;
+        return builder.sortable;
     }
 
     public void setSortable(boolean sortable) {
-        this.sortable = sortable;
+        builder.sortable = sortable;
     }
 
     public boolean isNavigable() {
-        return navigable;
+        return builder.navigable;
     }
 
     public void setNavigable(boolean navigable) {
-        this.navigable = navigable;
+        builder.navigable = navigable;
     }
 
     public String getColumnTitle() {
-        return columnTitle;
+        return builder.columnTitle;
     }
 
     public void setColumnTitle(String columnTitle) {
-        this.columnTitle = columnTitle;
+        builder.columnTitle = columnTitle;
     }
 
     @Override
     public String toString() {
-        return columnName + "[" + columnTitle + "]";
+        return builder.columnName + "[" + builder.columnTitle + "]";
     }
 
     public String getWidth() {
-        return width;
+        return builder.width;
     }
 
     public void setWidth(String width) {
-        this.width = width;
+        builder.width = width;
     }
 
     public boolean isWordWrap() {
-        return wordWrap;
+        return builder.wordWrap;
     }
 
     public void setWordWrap(boolean wordWrap) {
-        this.wordWrap = wordWrap;
+        builder.wordWrap = wordWrap;
     }
 
     //TODO should be abstract
     public String convert(E entity) {
         return entity.toString();
+    }
+
+    public static class Builder {
+
+        private final String columnName;
+
+        private String columnTitle;
+
+        private boolean sortable;
+
+        private boolean navigable;
+
+        private boolean ascending = true;
+
+        private String width;
+
+        private boolean wordWrap = true;
+
+        private boolean visible = false;
+
+        public Builder(String columnName, String columnTitle) {
+            if (columnName == null) {
+                throw new IllegalArgumentException("columnName can't be null");
+            }
+            this.columnName = columnName;
+            this.columnTitle = columnTitle;
+        }
+
+        public Builder sortable(boolean sortable) {
+            this.sortable = sortable;
+            return this;
+        }
+
+        public Builder navigable(boolean navigable) {
+            this.navigable = navigable;
+            return this;
+        }
+
+        public Builder ascendingSort(boolean ascending) {
+            this.ascending = ascending;
+            return this;
+        }
+
+        public Builder width(String width) {
+            this.width = width;
+            return this;
+        }
+
+        public Builder wordWrap(boolean wordWrap) {
+            this.wordWrap = wordWrap;
+            return this;
+        }
+
+        public Builder visible(boolean visible) {
+            this.visible = visible;
+            return this;
+        }
+
+        public ColumnDescriptor build() {
+            return new ColumnDescriptor(this);
+        }
     }
 
 }

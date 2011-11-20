@@ -22,12 +22,9 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public class DataTableTopActionsBar extends SimplePanel implements DataTableModelListener {
-
-    private static I18n i18n = I18n.get(DataTableTopActionsBar.class);
 
     private DataTableModel<?> model;
 
