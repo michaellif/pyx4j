@@ -391,6 +391,56 @@
             </properties>
         </profile>
 
+        <!--
+                Demo server enviroments
+                Add to settings.xml,  Don't forget to add role 'manager-script' in tomcat-users.xml to this user
+                <server>
+                    <id>tomcat.demo.localhost</id>
+                    <username>vista</username>
+                    <password>Vista1102</password>
+                </server>
+        -->
+
+        <profile>
+            <id>deploy-target-d11</id>
+            <properties>
+                <deployContext>vistad11</deployContext>
+                <tomcatDeployServerId>tomcat.demo.localhost</tomcatDeployServerId>
+                <vista-app-ping-url>http://localhost:8080/${deployContext}</vista-app-ping-url>
+                <vista-tomcat-url>http://localhost:8080</vista-tomcat-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-target-d22</id>
+            <properties>
+                <deployContext>vistad22</deployContext>
+                <tomcatDeployServerId>tomcat.demo.localhost</tomcatDeployServerId>
+                <vista-app-ping-url>http://localhost:8080/${deployContext}</vista-app-ping-url>
+                <vista-tomcat-url>http://localhost:8080</vista-tomcat-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-target-d33</id>
+            <properties>
+                <deployContext>vistad33</deployContext>
+                <tomcatDeployServerId>tomcat.demo.localhost</tomcatDeployServerId>
+                <vista-app-ping-url>http://localhost:8080/${deployContext}</vista-app-ping-url>
+                <vista-tomcat-url>http://localhost:8080</vista-tomcat-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-target-d44</id>
+            <properties>
+                <deployContext>vistad44</deployContext>
+                <tomcatDeployServerId>tomcat.demo.localhost</tomcatDeployServerId>
+                <vista-app-ping-url>http://localhost:8380/${deployContext}</vista-app-ping-url>
+                <vista-tomcat-url>http://localhost:8380</vista-tomcat-url>
+            </properties>
+        </profile>
+
         <profile>
             <id>deploy</id>
             <build>
