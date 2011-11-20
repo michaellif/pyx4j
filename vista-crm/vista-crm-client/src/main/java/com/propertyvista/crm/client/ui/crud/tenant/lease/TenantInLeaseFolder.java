@@ -21,8 +21,6 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,7 +35,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
@@ -51,6 +48,7 @@ import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
 
@@ -81,8 +79,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().role(), "8.5em"));
-//                columns.add(new EntityFolderColumnDescriptor(proto().takeOwnership(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().role(), "9em"));
         return columns;
     }
 
@@ -117,42 +114,21 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     private class TenantInLeaseEditor extends CEntityFolderRowEditor<TenantInLease> {
 
-        // TODO - get somehow this info:
-        private final boolean first = false;
+        private boolean applicant;
+
+        private Widget relationship;
+
+        private CComboBox<Role> role;
 
         public TenantInLeaseEditor() {
             super(TenantInLease.class, columns());
-        }
-
-        @Override
-        public IsWidget createContent() {
-            if (first) {
-                HorizontalPanel main = new HorizontalPanel();
-                for (EntityFolderColumnDescriptor column : columns) {
-                    CComponent<?, ?> component = createCell(column);
-                    // Don't show relation and takeOwnership
-                    if (column.getObject() == proto().relationship() || column.getObject() == proto().takeOwnership()) {
-                        component.setVisible(false);
-                    }
-                    main.add(createCellDecorator(column, component, column.getWidth()));
-                }
-                main.setWidth("100%");
-                return main;
-            } else {
-                return super.createContent();
-            }
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp = null;
-            if (first && proto().role() == column.getObject()) {
-                CTextField textComp = new CTextField();
-                textComp.setEditable(false);
-                textComp.setValue(TenantInLease.Role.Applicant.name());
-                comp = textComp;
-            } else if (proto().tenant() == column.getObject()) {
+            if (proto().tenant() == column.getObject()) {
                 comp = inject(column.getObject(), new CEntityLabel());
             } else if (proto().tenant().person().birthDate() == column.getObject()) {
                 comp = inject(column.getObject(), new CLabel());
@@ -162,9 +138,9 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 comp = super.createCell(column);
 
                 if (proto().role() == column.getObject() && comp instanceof CComboBox) {
-                    Collection<TenantInLease.Role> status = EnumSet.allOf(TenantInLease.Role.class);
-                    status.remove(TenantInLease.Role.Applicant);
-                    ((CComboBox) comp).setOptions(status);
+                    role = ((CComboBox) comp);
+                } else if (proto().relationship() == column.getObject()) {
+                    relationship = comp.asWidget();
                 }
             }
             return comp;
@@ -174,7 +150,19 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         public void populate(TenantInLease value) {
             super.populate(value);
 
-            if (!first && !value.tenant().person().birthDate().isNull()) {
+            applicant = (value.role().getValue() == Role.Applicant);
+            if (applicant) {
+                relationship.setVisible(false);
+                if (role != null) {
+                    role.setEditable(false);
+                }
+            } else if (role != null) {
+                Collection<TenantInLease.Role> roles = EnumSet.allOf(TenantInLease.Role.class);
+                roles.remove(TenantInLease.Role.Applicant);
+                role.setOptions(roles);
+            }
+
+            if (!applicant && !value.tenant().person().birthDate().isNull()) {
                 if (ValidationUtils.isOlderThen18(value.tenant().person().birthDate().getValue())) {
                     enableStatusAndOwnership();
                 } else {
@@ -206,7 +194,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 }
             });
 
-            if (!first) { // all this stuff isn't for primary applicant:
+            if (!applicant) { // all this stuff isn't for primary applicant:
                 get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
                     @Override
@@ -233,14 +221,10 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         private void setMandatoryDependant() {
             get(proto().role()).setValue(TenantInLease.Role.Dependent);
             get(proto().role()).setEditable(false);
-
-//                get(proto().takeOwnership()).setValue(true);
-//                get(proto().takeOwnership()).setEnabled(false);
         }
 
         private void enableStatusAndOwnership() {
             get(proto().role()).setEditable(true);
-//                get(proto().takeOwnership()).setEnabled(true);
         }
     }
 
