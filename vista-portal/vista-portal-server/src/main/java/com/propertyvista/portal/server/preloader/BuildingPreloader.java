@@ -139,11 +139,15 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         List<Complex> complexesWithBuildins = new Vector<Complex>();
 
-        SharedGeoLocator.setMode(Mode.useCacheOnly);
+        SharedGeoLocator.setMode(Mode.updateCache);
+        int noGeoCount = 0;
 
         for (Building building : buildings) {
             if (building.info().address().location().isNull()) {
-                SharedGeoLocator.populateGeo(building.info().address());
+                if (!SharedGeoLocator.populateGeo(building.info().address())) {
+                    noGeoCount++;
+                    log.warn("Unable find location for {}", building.info().address().getStringView());
+                }
             }
             Persistence.service().persist(building);
 
@@ -320,6 +324,10 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
         }
         SharedGeoLocator.save();
+        if (noGeoCount > 0) {
+            noGeoCount++;
+            log.warn("GeoLocation not found for {} buildings", noGeoCount);
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created ").append(buildings.size()).append(" buildings\n");

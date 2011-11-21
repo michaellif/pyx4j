@@ -32,7 +32,9 @@ public class SharedGeoLocator {
 
     public static void setMode(Mode mode) {
         save();
-        geoLocator = new GeoLocator(mode);
+        if ((geoLocator == null) || (geoLocator.getMode() != mode)) {
+            geoLocator = new GeoLocator(mode);
+        }
     }
 
     public static boolean populateGeo(AddressStructured address) {

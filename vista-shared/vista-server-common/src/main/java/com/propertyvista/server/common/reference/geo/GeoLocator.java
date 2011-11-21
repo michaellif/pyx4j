@@ -45,6 +45,10 @@ public class GeoLocator {
         this.cache.load(new File(GeoCache.FILENAME));
     }
 
+    public Mode getMode() {
+        return mode;
+    }
+
     public GeoCache getCache() {
         return cache;
     }
