@@ -33,7 +33,6 @@ public interface ServiceAgreement extends IEntity {
     @Caption(name = "Charge Items")
     IList<ChargeItem> featureItems();
 
-    @Owned
     IList<ServiceConcession> concessions();
 
     @MemberColumn(name = "leaseAccount")
