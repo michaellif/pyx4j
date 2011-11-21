@@ -84,6 +84,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
         List<ArrearsSummary> buildingArrears = new ArrayList<ArrearsSummary>();
 
         for (Building building : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
+            Persistence.service().retrieve(building.complex());
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
             List<AptUnit> units = Persistence.service().query(criteria);
@@ -157,6 +158,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
 
                     arrear.building().set(building);
                     arrear.propertyCode().setValue(building.propertyCode().getValue());
+                    arrear.complexName().setValue(building.complex().name().getValue());
 
                     // TODO set owner
                     // arrear.common().owner().set(null);

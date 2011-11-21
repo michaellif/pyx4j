@@ -60,6 +60,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             if (!buildingPKs.isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingPKs));
             }
+            // FIXME in real version we need to apply custom criteria AFTER we have selected the most recent statuses (or if we use daily snapshots its better to let them be here)
             for (Criterion c : customCriteria) {
                 criteria.add(c);
             }
