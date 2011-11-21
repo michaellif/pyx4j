@@ -16,14 +16,12 @@ package com.propertyvista.crm.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.domain.site.SiteDescriptor;
 
 public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
 
@@ -59,15 +57,18 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
 
     @Override
     protected void persistDBO(PageDescriptor dbo) {
+        boolean isCreate = dbo.id().isNull();
         if (dbo.type().isNull()) {
             dbo.type().setValue(PageDescriptor.Type.staticContent);
         }
-        boolean isCreate = dbo.id().isNull();
+
         super.persistDBO(dbo);
-        if (isCreate) {
-            SiteDescriptor site = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-            site.childPages().add(dbo);
-            Persistence.service().persist(site);
+
+        // update parent child list: 
+        if (isCreate && !dbo.parent().isEmpty()) {
+            Persistence.service().retrieve(dbo.parent());
+            dbo.parent().childPages().add(dbo);
+            Persistence.service().merge(dbo.parent());
         }
     }
 }

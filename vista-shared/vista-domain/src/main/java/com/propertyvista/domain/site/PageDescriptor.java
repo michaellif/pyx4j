@@ -14,19 +14,21 @@
 package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-public interface PageDescriptor extends IEntity {
+@DiscriminatorValue("PageDescriptor")
+public interface PageDescriptor extends Descriptor {
 
     @I18n
     @I18nComment("Portal Page Type")
@@ -50,6 +52,9 @@ public interface PageDescriptor extends IEntity {
     @MemberColumn(name = "pageType")
     IPrimitive<Type> type();
 
+    @Owner
+    Descriptor parent();
+
     // -------------------------------
 
     @NotNull
@@ -62,9 +67,6 @@ public interface PageDescriptor extends IEntity {
     @Owned
     @Caption(name = "Page Content")
     IList<PageContent> content();
-
-    @Owned
-    IList<PageDescriptor> childPages();
 
     // ================================
 

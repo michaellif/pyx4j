@@ -15,18 +15,19 @@ package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.Cached;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @Cached
-public interface SiteDescriptor extends IEntity {
+@DiscriminatorValue("SiteDescriptor")
+public interface SiteDescriptor extends Descriptor {
 
     //TODO make single instance objects part of framework
     public final String cacheKey = "SiteDescriptor";
@@ -80,9 +81,6 @@ public interface SiteDescriptor extends IEntity {
     // Image for landing page
     @Owned
     IList<Resource> images();
-
-    @Owned
-    IList<PageDescriptor> childPages();
 
     @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
