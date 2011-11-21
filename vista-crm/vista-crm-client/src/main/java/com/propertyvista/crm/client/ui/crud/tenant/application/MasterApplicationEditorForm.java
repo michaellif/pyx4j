@@ -20,9 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -167,14 +165,6 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
                 }
                 return super.create(member);
             }
-
-            @Override
-            public IFolderItemDecorator<TenantInfoDTO> createItemDecorator() {
-                BoxFolderItemDecorator<TenantInfoDTO> decorator = (BoxFolderItemDecorator<TenantInfoDTO>) super.createItemDecorator();
-                decorator.setExpended(false);
-                return decorator;
-            }
-
         };
     }
 
@@ -187,13 +177,6 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
                     return new FinancialViewForm(new VistaViewersComponentFactory());
                 }
                 return super.create(member);
-            }
-
-            @Override
-            public IFolderItemDecorator<TenantFinancialDTO> createItemDecorator() {
-                BoxFolderItemDecorator<TenantFinancialDTO> decorator = (BoxFolderItemDecorator<TenantFinancialDTO>) super.createItemDecorator();
-                decorator.setExpended(false);
-                return decorator;
             }
         };
     }
