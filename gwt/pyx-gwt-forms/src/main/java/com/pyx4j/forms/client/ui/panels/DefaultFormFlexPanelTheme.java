@@ -46,7 +46,7 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelHR);
-        style.addProperty("background-color", getBackgroundColor());
+        style.addProperty("background-color", getBackgroundColor(), 0.4);
         style.addProperty("height", "2px");
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
