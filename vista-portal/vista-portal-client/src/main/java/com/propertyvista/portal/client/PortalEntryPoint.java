@@ -52,7 +52,6 @@ public class PortalEntryPoint implements EntryPoint {
                 @Override
                 public void onSuccess() {
                     RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
-                    PropertyMapController.loadMap();
                 }
             });
         } else if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
