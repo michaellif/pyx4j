@@ -158,7 +158,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex()), 15).build());
 
-        main.setHR(row++, 0, 2);
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().geoLocation()), 28).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
@@ -245,7 +244,6 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         int row = -1;
         main.setWidget(++row, 0, inject(proto().marketing(), new CMarketing()));
 
-        main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().email().address()), 30).customLabel(i18n.tr("Email Address")).build());
 
         main.setH1(++row, 0, 2, proto().contacts().phones().getMeta().getCaption());
