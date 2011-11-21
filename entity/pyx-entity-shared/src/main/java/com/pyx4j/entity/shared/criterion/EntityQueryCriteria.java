@@ -107,6 +107,16 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         return this;
     }
 
+    public OrCriterion or() {
+        OrCriterion criterion = new OrCriterion();
+        add(criterion);
+        return criterion;
+    }
+
+    public EntityQueryCriteria<E> or(Criterion criterionL, Criterion criterionR) {
+        return add(new OrCriterion(criterionL, criterionR));
+    }
+
     public void resetCriteria() {
         if (filters != null) {
             filters.clear();

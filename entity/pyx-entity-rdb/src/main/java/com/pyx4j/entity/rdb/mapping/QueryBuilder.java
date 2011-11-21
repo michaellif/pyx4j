@@ -45,6 +45,7 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -81,137 +82,8 @@ public class QueryBuilder<T extends IEntity> {
             sql.append(alias).append(".ns = ?");
             firstCriteria = false;
         }
-
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
-
-            for (Criterion cr : criteria.getFilters()) {
-                if (firstCriteria) {
-                    firstCriteria = false;
-                } else {
-                    sql.append(" AND ");
-                }
-                if (cr instanceof PropertyCriterion) {
-                    PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-
-                    ObjectClassType objectClassType = ObjectClassType.Primitive;
-                    MemeberWithAlias memeberWithAlias = null;
-                    String memberPersistenceName = propertyCriterion.getPropertyName();
-                    String pkPath = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()) + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR;
-                    if (pkPath.equals(propertyCriterion.getPropertyName()) || IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName())) {
-                        memberPersistenceName = IEntity.PRIMARY_KEY;
-                    } else if (!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
-                        memeberWithAlias = getMemberOperationsMetaByPath(alias, propertyCriterion.getPropertyName());
-                        if (memeberWithAlias == null) {
-                            throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
-                        }
-                        objectClassType = memeberWithAlias.memberOper.getMemberMeta().getObjectClassType();
-                        memberPersistenceName = memeberWithAlias.memberOper.sqlName();
-                    }
-
-                    String secondPersistenceName = null;
-
-                    switch (objectClassType) {
-                    case EntityList:
-                    case EntitySet:
-                        String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias);
-                        sql.append(memberJoinAlias).append(".value ");
-                        break;
-                    default:
-                        if (memeberWithAlias == null) {
-                            sql.append(alias).append('.').append(dialect.getNamingConvention().sqlFieldName(memberPersistenceName));
-                        } else {
-                            boolean firstValue = true;
-                            for (String name : memeberWithAlias.memberOper.getValueAdapter().getColumnNames(
-                                    memeberWithAlias.alias + "." + memeberWithAlias.memberOper.sqlName())) {
-                                if (firstValue) {
-                                    sql.append(name);
-                                    firstValue = false;
-                                } else {
-                                    secondPersistenceName = name;
-                                }
-                            }
-                        }
-                    }
-
-                    if (valueIsNull(propertyCriterion.getValue())) {
-                        switch (propertyCriterion.getRestriction()) {
-                        case EQUAL:
-                            sql.append(" IS NULL ");
-                            break;
-                        case NOT_EQUAL:
-                            sql.append(" IS NOT NULL ");
-                            break;
-                        default:
-                            throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for NULL value");
-                        }
-                    } else {
-                        Serializable bindValue = propertyCriterion.getValue();
-                        switch (propertyCriterion.getRestriction()) {
-                        case LESS_THAN:
-                            sql.append(" < ? ");
-                            break;
-                        case LESS_THAN_OR_EQUAL:
-                            sql.append(" <= ? ");
-                            break;
-                        case GREATER_THAN:
-                            sql.append(" > ? ");
-                            break;
-                        case GREATER_THAN_OR_EQUAL:
-                            sql.append(" >= ? ");
-                            break;
-                        case EQUAL:
-                            sql.append(" = ? ");
-                            break;
-                        case NOT_EQUAL:
-                            sql.append(" != ? ");
-                            break;
-                        case IN:
-                            sql.append(" IN (");
-                            Collection<?> items;
-                            if (bindValue.getClass().isArray()) {
-                                items = Arrays.asList((Object[]) bindValue);
-                            } else if (bindValue instanceof Collection) {
-                                items = (Collection<?>) bindValue;
-                            } else {
-                                throw new RuntimeException("Unsupported Type for IN " + bindValue.getClass().getName());
-                            }
-                            boolean first = true;
-                            for (Object i : items) {
-                                if (first) {
-                                    first = false;
-                                } else {
-                                    sql.append(",");
-                                }
-                                sql.append(" ? ");
-                                bindParams.add(i);
-                            }
-                            sql.append(")");
-                            continue;
-                        case RDB_LIKE:
-                            if (bindValue != null) {
-                                if (hasLikeValue(bindValue.toString())) {
-                                    bindValue = bindValue.toString().replace('*', dialect.likeWildCards());
-                                } else {
-                                    bindValue = dialect.likeWildCards() + bindValue.toString() + dialect.likeWildCards();
-                                }
-                            }
-                            sql.append(" LIKE ? ");
-                            break;
-                        default:
-                            throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
-                        }
-
-                        if (secondPersistenceName != null) {
-                            //TODO Use proper restriction
-                            sql.append(" AND ").append(secondPersistenceName).append(" = ? ");
-                            memeberWithAlias.bindValue = bindValue;
-                            bindParams.add(memeberWithAlias);
-                        } else {
-                            bindParams.add(bindValue);
-                        }
-                    }
-                }
-            }
+            appendFilters(entityMeta, criteria.getFilters(), firstCriteria);
         }
         if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
             log.debug("sort by {}", criteria.getSorts());
@@ -240,6 +112,147 @@ public class QueryBuilder<T extends IEntity> {
 
     private static boolean hasLikeValue(String value) {
         return value.contains("*");
+    }
+
+    private void appendFilters(EntityMeta entityMeta, List<Criterion> filters, boolean firstInSentence) {
+        for (Criterion cr : filters) {
+            if (firstInSentence) {
+                firstInSentence = false;
+            } else {
+                sql.append(" AND ");
+            }
+            if (cr instanceof PropertyCriterion) {
+                appendPropertyCriterion(entityMeta, (PropertyCriterion) cr);
+            } else if (cr instanceof OrCriterion) {
+                sql.append(" (( ");
+                appendFilters(entityMeta, ((OrCriterion) cr).getFiltersLeft(), true);
+                sql.append(" ) OR ( ");
+                appendFilters(entityMeta, ((OrCriterion) cr).getFiltersRight(), true);
+                sql.append(" )) ");
+            } else {
+                throw new RuntimeException("Unsupported Operator " + cr.getClass());
+            }
+        }
+    }
+
+    private void appendPropertyCriterion(EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
+        ObjectClassType objectClassType = ObjectClassType.Primitive;
+        MemeberWithAlias memeberWithAlias = null;
+        String memberPersistenceName = propertyCriterion.getPropertyName();
+        String pkPath = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass()) + Path.PATH_SEPARATOR + IEntity.PRIMARY_KEY + Path.PATH_SEPARATOR;
+        if (pkPath.equals(propertyCriterion.getPropertyName()) || IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName())) {
+            memberPersistenceName = IEntity.PRIMARY_KEY;
+        } else if (!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
+            memeberWithAlias = getMemberOperationsMetaByPath(mainTableSqlAlias, propertyCriterion.getPropertyName());
+            if (memeberWithAlias == null) {
+                throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
+            }
+            objectClassType = memeberWithAlias.memberOper.getMemberMeta().getObjectClassType();
+            memberPersistenceName = memeberWithAlias.memberOper.sqlName();
+        }
+
+        String secondPersistenceName = null;
+
+        switch (objectClassType) {
+        case EntityList:
+        case EntitySet:
+            String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias);
+            sql.append(memberJoinAlias).append(".value ");
+            break;
+        default:
+            if (memeberWithAlias == null) {
+                sql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(memberPersistenceName));
+            } else {
+                boolean firstValue = true;
+                for (String name : memeberWithAlias.memberOper.getValueAdapter().getColumnNames(
+                        memeberWithAlias.alias + "." + memeberWithAlias.memberOper.sqlName())) {
+                    if (firstValue) {
+                        sql.append(name);
+                        firstValue = false;
+                    } else {
+                        secondPersistenceName = name;
+                    }
+                }
+            }
+        }
+
+        if (valueIsNull(propertyCriterion.getValue())) {
+            switch (propertyCriterion.getRestriction()) {
+            case EQUAL:
+                sql.append(" IS NULL ");
+                break;
+            case NOT_EQUAL:
+                sql.append(" IS NOT NULL ");
+                break;
+            default:
+                throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for NULL value");
+            }
+        } else {
+            Serializable bindValue = propertyCriterion.getValue();
+            switch (propertyCriterion.getRestriction()) {
+            case LESS_THAN:
+                sql.append(" < ? ");
+                break;
+            case LESS_THAN_OR_EQUAL:
+                sql.append(" <= ? ");
+                break;
+            case GREATER_THAN:
+                sql.append(" > ? ");
+                break;
+            case GREATER_THAN_OR_EQUAL:
+                sql.append(" >= ? ");
+                break;
+            case EQUAL:
+                sql.append(" = ? ");
+                break;
+            case NOT_EQUAL:
+                sql.append(" != ? ");
+                break;
+            case IN:
+                sql.append(" IN (");
+                Collection<?> items;
+                if (bindValue.getClass().isArray()) {
+                    items = Arrays.asList((Object[]) bindValue);
+                } else if (bindValue instanceof Collection) {
+                    items = (Collection<?>) bindValue;
+                } else {
+                    throw new RuntimeException("Unsupported Type for IN " + bindValue.getClass().getName());
+                }
+                boolean first = true;
+                for (Object i : items) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sql.append(",");
+                    }
+                    sql.append(" ? ");
+                    bindParams.add(i);
+                }
+                sql.append(")");
+                return;
+            case RDB_LIKE:
+                if (bindValue != null) {
+                    if (hasLikeValue(bindValue.toString())) {
+                        bindValue = bindValue.toString().replace('*', dialect.likeWildCards());
+                    } else {
+                        bindValue = dialect.likeWildCards() + bindValue.toString() + dialect.likeWildCards();
+                    }
+                }
+                sql.append(" LIKE ? ");
+                break;
+            default:
+                throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
+            }
+
+            if (secondPersistenceName != null) {
+                //TODO Use proper restriction
+                sql.append(" AND ").append(secondPersistenceName).append(" = ? ");
+                memeberWithAlias.bindValue = bindValue;
+                bindParams.add(memeberWithAlias);
+            } else {
+                bindParams.add(bindValue);
+            }
+        }
     }
 
     private static class MemeberWithAlias {

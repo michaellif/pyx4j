@@ -27,6 +27,7 @@ import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -86,6 +87,44 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
             List<Employee> empsRetrived = srv.query(criteria);
             Assert.assertEquals("result set size", dataSize, empsRetrived.size());
+        }
+    }
+
+    public void testCriterionOr() {
+        String setId = uniqueString();
+        Employee emp1 = EntityFactory.create(Employee.class);
+        emp1.firstName().setValue(uniqueString());
+        emp1.workAddress().streetName().setValue(setId);
+        srv.persist(emp1);
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        emp2.firstName().setValue(uniqueString());
+        emp2.workAddress().streetName().setValue(setId);
+        srv.persist(emp2);
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.or(PropertyCriterion.eq(criteria.proto().id(), emp1.id().getValue()), PropertyCriterion.eq(criteria.proto().id(), emp2.id().getValue()));
+
+            boolean usageExample = false;
+            if (usageExample) {
+                {
+                    OrCriterion or = new OrCriterion();
+                    or.left(PropertyCriterion.eq(criteria.proto().firstName(), emp1.firstName().getValue()));
+                    or.left(PropertyCriterion.eq(criteria.proto().workAddress(), setId));
+                    or.right(PropertyCriterion.eq(criteria.proto().workAddress(), setId));
+                    criteria.add(or);
+                }
+
+                {
+                    criteria.or().left(PropertyCriterion.eq(criteria.proto().id(), emp1.id().getValue()))
+                            .left(PropertyCriterion.eq(criteria.proto().workAddress(), setId))
+                            .right(PropertyCriterion.eq(criteria.proto().id(), emp2.id().getValue()));
+                }
+            }
+
+            List<Employee> empsRetrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, empsRetrived.size());
         }
     }
 }
