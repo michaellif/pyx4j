@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -23,6 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.dashboard.gadgets.CommonGadgetColumns;
 import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -83,13 +85,6 @@ public interface UnitAvailabilityStatus extends IEntity {
 
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> region();
-
-    // TODO not clear where from to get the value of owner() property
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<String> owner();
-
-    @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<String> propertyManagerName();
 
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> complexName();
@@ -159,4 +154,6 @@ public interface UnitAvailabilityStatus extends IEntity {
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> availableFromDay();
 
+    @EmbeddedEntity
+    CommonGadgetColumns common();
 }

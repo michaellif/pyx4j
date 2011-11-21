@@ -14,7 +14,11 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -34,6 +38,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     private static final Random RND = new Random(9001l);
+
+    private static final List<String> REGIONS = Arrays.asList("GTA", "West", "East");
 
     private static final long MIN_EVENT_DELTA = 1000l * 60l * 60l * 24l; // one day
 
@@ -109,10 +115,11 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 status.buildingBelongsTo().setPrimaryKey(building.getPrimaryKey());
                 status.buildingName().setValue(building.info().name().getValue());
                 status.propertyCode().setValue(building.propertyCode().getValue());
-                status.propertyManagerName().setValue(building.propertyManager().name().getValue());
                 status.complexName().setValue(building.complex().name().getValue());
 
-                // TODO fill other things
+                status.common().propertyManger().set(building.propertyManager());
+                status.common().region().setValue(randomRegion());
+                // TODO fill common().owner() and commmon().portfolio() 
 
                 while (status.statusDate().getValue().before(end)) {
                     statuses.add(status.cloneEntity());
@@ -253,5 +260,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
     /** return x such that x >= min and x < max */
     private static long rand(long min, long max) {
         return Math.max(min, Math.abs(RND.nextLong()) % max);
+    }
+
+    private String randomRegion() {
+        return RandomUtil.randomChoice(RND, REGIONS, 1).get(0);
     }
 }
