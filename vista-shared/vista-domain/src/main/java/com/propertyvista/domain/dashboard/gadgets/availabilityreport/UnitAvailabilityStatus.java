@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
-import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;

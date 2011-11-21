@@ -11,7 +11,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard;
+package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;

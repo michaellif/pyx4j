@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets;
+package com.propertyvista.domain.dashboard.gadgets.util;
 
 import java.util.Comparator;
 

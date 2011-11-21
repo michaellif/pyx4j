@@ -28,9 +28,9 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
 import com.propertyvista.domain.User;
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 import com.propertyvista.server.common.security.VistaContext;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {

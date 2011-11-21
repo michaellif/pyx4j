@@ -20,8 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 
 public interface AbstractMetadataService extends IService {
 

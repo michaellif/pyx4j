@@ -26,8 +26,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 
 public abstract class BoardViewActivity<V extends BoardView> extends AbstractActivity implements BoardView.Presenter {
 

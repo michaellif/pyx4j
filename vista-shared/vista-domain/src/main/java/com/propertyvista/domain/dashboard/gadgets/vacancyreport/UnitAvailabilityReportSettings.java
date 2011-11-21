@@ -20,9 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
-import com.propertyvista.domain.dashboard.StringHolder;
-import com.propertyvista.domain.dashboard.gadgets.SortEntity;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.StringHolder;
 
 @DiscriminatorValue("UnitAvailabilityReportSettins")
 public interface UnitAvailabilityReportSettings extends AbstractGadgetSettings {
@@ -71,8 +70,5 @@ public interface UnitAvailabilityReportSettings extends AbstractGadgetSettings {
      */
     @Owned
     public IList<StringHolder> columnPaths();
-
-    @Owned
-    public IList<SortEntity> sorting();
 
 }

@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
-import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 
 /**
  * Sorting engine for times when customized sorting of resuls is required.

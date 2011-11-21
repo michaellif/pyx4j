@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets;
+package com.propertyvista.domain.dashboard.gadgets.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

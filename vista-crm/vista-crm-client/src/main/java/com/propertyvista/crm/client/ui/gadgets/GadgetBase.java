@@ -21,8 +21,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 
 public abstract class GadgetBase implements IGadgetBase {
     protected static I18n i18n = I18n.get(GadgetBase.class);

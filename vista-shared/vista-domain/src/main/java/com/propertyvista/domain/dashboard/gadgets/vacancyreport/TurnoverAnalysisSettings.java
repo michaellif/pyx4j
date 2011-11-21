@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 @DiscriminatorValue("TurnoverAnalysisSettings")

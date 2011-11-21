@@ -43,9 +43,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.VacancyReportService;
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitAvailabilityReportSettings;
 import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyStatus;
 

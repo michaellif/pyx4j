@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 
 /**
  * This is supposed to be thread safe sort engine/comparator factory for transient fields. Maybe I'm going to write detailed usage information when it works

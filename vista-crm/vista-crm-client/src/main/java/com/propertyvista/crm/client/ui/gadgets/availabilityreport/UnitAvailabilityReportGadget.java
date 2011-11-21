@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
@@ -120,8 +119,6 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
         gadgetPanel.add(getListerWidget());
         gadgetPanel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
         gadgetPanel.setWidth("100%");
-
-        setColumnDescriptors(getColumnDescriptors(proto()));
     }
 
     @Override
@@ -135,33 +132,6 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
         UnitAvailabilityStatusReportSettings settings = super.createSettings().clone(UnitAvailabilityStatusReportSettings.class);
         settings.defaultFilteringButton().setValue(ALL_CAPTION);
         return settings;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected List<ColumnDescriptor<UnitAvailabilityStatusDTO>> getColumnDescriptors(UnitAvailabilityStatusDTO proto) {
-
-        return Arrays.asList(ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyCode(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.buildingName(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.address(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.owner(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.propertyManagerName(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.complexName(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unit(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanName(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.floorplanMarketingName(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.vacancyStatus(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedStatus(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.isScoped(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentReadinessStatus(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.unitRent(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.marketRent(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaAbsolute(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentDeltaRelative(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveOutDay(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.moveInDay(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.rentedFromDate(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.daysVacant(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto, proto.revenueLost(), true));
     }
 
     @Override
@@ -272,8 +242,36 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
 
     @Override
     protected boolean isFilterRequired() {
-        // TODO Auto-generated method stub
         return false;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    //@formatter:off
+    public List<ColumnDescriptor<UnitAvailabilityStatusDTO>> defineColumnDescriptors() {
+        return Arrays.asList(
+                col(proto().propertyCode(), true),
+                col(proto().buildingName(), false),
+                col(proto().address(), false),
+                col(proto().owner(), false),
+                col(proto().propertyManagerName(), true),
+                col(proto().complexName(), false),
+                col(proto().unit(), true),
+                col(proto().floorplanName(), false),
+                col(proto().floorplanMarketingName(), false),
+                col(proto().vacancyStatus(), true),
+                col(proto().rentedStatus(), false),
+                col(proto().isScoped(), false),
+                col(proto().rentReadinessStatus(), false),
+                col(proto().unitRent(), true),
+                col(proto().marketRent(), true),
+                col(proto().rentDeltaAbsolute(), false),
+                col(proto().rentDeltaRelative(), false),
+                col(proto().moveOutDay(), false),
+                col(proto().moveInDay(), false),
+                col(proto().rentedFromDate(), false),
+                col(proto().daysVacant(), true),
+                col(proto().revenueLost(), true));
+    }
+    //@formatter:on
 }

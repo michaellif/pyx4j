@@ -27,7 +27,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -35,7 +34,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
-import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.arrears.Arrears;
@@ -51,89 +49,54 @@ public abstract class ArrearsListerGadget extends ListerGadgetBase<MockupArrears
     public ArrearsListerGadget(GadgetMetadata gmd) {
         super(gmd, MockupArrearsState.class);
         service = GWT.create(ArrearsReportService.class);
-
-        setColumnDescriptors(getAvailableColumnDescriptors(proto()));
     }
-
-    protected abstract Arrears getArrearsMemberProto();
 
     @Override
     protected boolean isFilterRequired() {
         return true;
     }
 
-    //@formatter:off  
-    private List<ColumnDescriptor<MockupArrearsState>> getDefaultArrearsStatusColumns() {
-        Arrears proto = getArrearsMemberProto();
-        return columnDescriptorsEx(Arrays.asList(new Object[] {
-            proto.thisMonth(),
-            proto.monthAgo(),
-            proto.twoMonthsAgo(),
-            proto.threeMonthsAgo(),
-            proto.overFourMonthsAgo(),
-            proto.totalBalance(),
-            proto.prepayments()
-        }), true);
-    }
-    
-    private List<ColumnDescriptor<MockupArrearsState>> getAvailableArrearsStatusColumns() {
-        List<IObject<?>> members = new ArrayList<IObject<?>>();
-        for (String memberName : getArrearsMemberProto().getEntityMeta().getMemberNames()) {
-            members.add(getArrearsMemberProto().getMember(memberName));
-        }
-        return columnDescriptors(members, true);
-    }
+    protected abstract Arrears arrearsProto();
 
-//    @Override
-//    protected List<ColumnDescriptor<MockupArrearsState>> getDefaultColumnDescriptors(MockupArrearsState proto) {
-//        List<ColumnDescriptor<MockupArrearsState>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {        
-//                proto.unitNumber(),
-//                proto.lastName()
-//        }));
-//        cd.addAll(getDefaultArrearsStatusColumns());
-//        cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {
-//                proto.legalStatus(),
-//                proto.lmrUnitRentDifference()                
-//        }), true));
-//        return cd;               
-//    }
-
-
-    protected List<ColumnDescriptor<MockupArrearsState>> getAvailableColumnDescriptors(MockupArrearsState proto) {        
-        List<ColumnDescriptor<MockupArrearsState>> cd = columnDescriptorsEx(Arrays.asList(new Object[] {
-                // building info
-                proto.propertyCode(),
-                proto.buildingName(),
-                proto.complexName(),                
+    //@formatter:off    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<ColumnDescriptor<MockupArrearsState>> defineColumnDescriptors() {
+        return Arrays.asList(
+                colh(proto().propertyCode()),
+                colh(proto().buildingName()),
+                colh(proto().complexName()),
+                colv(proto().unitNumber()),
+                colh(proto().firstName()),
+                colv(proto().lastName()),
                 
-                proto.unitNumber(),
+                // arrears subclass specific stuff goes here here
+                colv(arrearsProto().thisMonth()),
+                colv(arrearsProto().monthAgo()),
+                colv(arrearsProto().twoMonthsAgo()),
+                colv(arrearsProto().threeMonthsAgo()),
+                colv(arrearsProto().overFourMonthsAgo()),
+                colv(arrearsProto().totalBalance()),
+                colv(arrearsProto().prepayments()),
+                                
+                colv(proto().legalStatus()),
+                colv(proto().lmrUnitRentDifference()),
                 
-                // tenant info                
-                proto.firstName(),
-                proto.lastName()
-        }), true);        
-        cd.addAll(getAvailableArrearsStatusColumns());
-        cd.addAll(columnDescriptorsEx(Arrays.asList(new Object[] {
-                // arrears status
-                proto.legalStatus(),
-                proto.lmrUnitRentDifference(),                
-
                 // address
-                proto.streetNumber(),
-                proto.streetName(),
-                proto.streetType(),
-                proto.city(),
-                Tuple.cons(proto.province(), i18n.tr("Province")),
-                Tuple.cons(proto.country().name(), i18n.tr("Country")),
+                colh(proto().streetNumber()),
+                colh(proto().streetName()),
+                colh(proto().streetType()),
+                colh(proto().city()),
+                colh(proto().province(), i18n.tr("Province")),
+                colh(proto().country().name(), i18n.tr("Country")),
                 
                 // common tabular gadget stuff
-                Tuple.cons(proto.common().propertyManger().name(), i18n.tr("Property Manager")),
-                Tuple.cons(proto.common().owner().company().name(), i18n.tr("Owner")),
-                proto.common().region(),
-                Tuple.cons(proto.common().portfolio().name(), i18n.tr("Portfolio"))
-        }), true));               
-        return cd;
-    }
+                colh(proto().common().propertyManger().name(), i18n.tr("Property Manager")),
+                colh(proto().common().owner().company().name(), i18n.tr("Owner")),
+                colh(proto().common().region()),
+                colh(proto().common().portfolio().name(), i18n.tr("Portfolio"))
+        );
+    }                    
     //@formatter:on
 
     @Override

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 
 public interface IGadgetPresenter {
 

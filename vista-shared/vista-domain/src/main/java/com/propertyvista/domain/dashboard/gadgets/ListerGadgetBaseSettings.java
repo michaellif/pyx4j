@@ -20,8 +20,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
-import com.propertyvista.domain.dashboard.StringHolder;
 
 @DiscriminatorValue("ListerGadgetBaseSettings")
 public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
@@ -66,11 +64,5 @@ public interface ListerGadgetBaseSettings extends AbstractGadgetSettings {
     IPrimitive<Integer> pageNumber();
 
     @Owned
-    IList<StringHolder> columnPaths();
-
-    @Owned
-    IList<StringHolder> columnTitles();
-
-    @Owned
-    IList<SortEntity> sorting();
+    IList<ColumnDescriptorEntity> columnDescriptors();
 }

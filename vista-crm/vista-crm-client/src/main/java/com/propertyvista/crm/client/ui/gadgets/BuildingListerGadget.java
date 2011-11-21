@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -21,7 +21,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -38,23 +37,6 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
     public BuildingListerGadget(GadgetMetadata gmd) {
         super(gmd, BuildingDTO.class);
         service = (AbstractListService<BuildingDTO>) GWT.create(BuildingCrudService.class);
-
-        List<ColumnDescriptor<BuildingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BuildingDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().complex(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().propertyCode(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().propertyManager(), true));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().marketing().name(), true));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().name(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().shape(), false));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().streetName(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().city(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().province(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().country(), true));
-        setColumnDescriptors(columnDescriptors);
     }
 
     @Override
@@ -91,4 +73,24 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
         // TODO Auto-generated method stub
         return false;
     }
+
+    //@formatter:off
+    @SuppressWarnings("unchecked")
+    @Override    
+    public List<ColumnDescriptor<BuildingDTO>> defineColumnDescriptors() {
+        return Arrays.asList(
+                colh(proto().complex()),
+                colv(proto().propertyCode()),
+                colv(proto().propertyManager()),
+                colv(proto().marketing().name()),
+                colv(proto().info().name()),
+                colv(proto().info().type()),
+                colh(proto().info().shape()),
+                colh(proto().info().address().streetName()),
+                colv(proto().info().address().city()),
+                colv(proto().info().address().province()),
+                colv(proto().info().address().country())
+        );
+    }
+    //@formatter:on
 }

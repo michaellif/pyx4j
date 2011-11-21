@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -40,13 +39,11 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
-import com.propertyvista.crm.client.ui.gadgets.vacancyreport.util.Tuple;
-import com.propertyvista.domain.dashboard.AbstractGadgetSettings;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.StringHolder;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings;
 import com.propertyvista.domain.dashboard.gadgets.ListerGadgetBaseSettings.RefreshInterval;
-import com.propertyvista.domain.dashboard.gadgets.SortEntity;
 
 //TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
 //TODO somehow use GWT Places in order to store the state instead of clumsy settings
@@ -100,16 +97,14 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
-                // get the sorting criteria and store it in settings
-                List<Sort> sorting = new ArrayList<Sort>(2);
-                ColumnDescriptor<E> primarySortColumn = dataTablePanel.getDataTableModel().getSortColumn();
-                if (primarySortColumn != null) {
-                    sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
-                }
-                settings.sorting().clear();
-                for (Sort sort : sorting) {
-                    SortEntity sortEntity = SortToEntity(sort);
-                    settings.sorting().add(sortEntity);
+                ColumnDescriptor<E> sortColumn = dataTablePanel.getDataTableModel().getSortColumn();
+                for (ColumnDescriptorEntity columnDescriptorEntity : settings.columnDescriptors()) {
+                    if (sortColumn.getColumnName().equals(columnDescriptorEntity.propertyPath().getValue())) {
+                        columnDescriptorEntity.sortingPrecedence().setValue(1);
+                        columnDescriptorEntity.sortAscending().setValue(sortColumn.isSortAscending());
+                    } else {
+                        columnDescriptorEntity.sortingPrecedence().setValue(null);
+                    }
                 }
                 populateList();
             }
@@ -140,8 +135,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         });
     }
 
-    protected void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
-        dataTablePanel.setColumnDescriptors(columnDescriptors);
+    protected final E proto() {
+        return proto;
     }
 
     protected abstract boolean isFilterRequired();
@@ -153,27 +148,18 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
      */
     public abstract void populatePage(int pageNumber);
 
-    protected final E proto() {
-        return proto;
-    }
+    public abstract List<ColumnDescriptor<E>> defineColumnDescriptors();
 
     /**
-     * Convenience method
+     * Convenience method that allows to avoid a lot of unnecessary typing.
      * 
      * @param member
+     * @param title
+     *            use <code>null</code> to set default title.
+     * @param visible
      * @return
      */
-    protected final ColumnDescriptor<E> columnDescriptor(IObject<?> member, boolean visible) {
-        return columnDescriptorEx(member, null, visible);
-    }
-
-    /**
-     * Convenience method
-     * 
-     * @param member
-     * @return
-     */
-    protected final ColumnDescriptor<E> columnDescriptorEx(IObject<?> member, String title, boolean visible) {
+    protected final ColumnDescriptor<E> col(IObject<?> member, String title, boolean visible) {
         if (title == null) {
             return ColumnDescriptorFactory.createColumnDescriptor(proto(), member, visible);
         } else {
@@ -181,63 +167,59 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         }
     }
 
-    /**
-     * Convenience method
-     * 
-     * @param members
-     * @return
-     */
-    protected final List<ColumnDescriptor<E>> columnDescriptors(List<IObject<?>> members, boolean visible) {
-        List<Object> membersAndTitles = new ArrayList<Object>(members.size());
-        for (IObject<?> member : members) {
-            membersAndTitles.add(new Tuple<IObject<?>, String>(member, null));
-        }
-        return columnDescriptorsEx(membersAndTitles, visible);
+    protected final ColumnDescriptor<E> col(IObject<?> member, boolean visible) {
+        return col(member, null, visible);
     }
 
-    @SuppressWarnings("unchecked")
-    protected final List<ColumnDescriptor<E>> columnDescriptorsEx(List<Object> membersAndTitles, boolean visible) {
-        List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>(membersAndTitles.size());
-        for (Object memberAndTitle : membersAndTitles) {
-            ColumnDescriptor<E> cd;
-            if (memberAndTitle instanceof Tuple) {
-                Tuple<IObject<?>, String> mt = (Tuple<IObject<?>, String>) memberAndTitle;
-                cd = columnDescriptorEx(mt.car(), mt.cdr(), visible);
-            } else {
-                cd = columnDescriptor((IObject<?>) memberAndTitle, visible);
-            }
-            columnDescriptors.add(cd);
-        }
-        return columnDescriptors;
+    protected final ColumnDescriptor<E> colv(IObject<?> member) {
+        return col(member, true);
     }
 
-    //TODO VL - please fix using ColumnDescriptor setter
+    protected final ColumnDescriptor<E> colv(IObject<?> member, String title) {
+        return col(member, title, true);
+    }
+
+    /** Create invisible (hidden) column */
+    protected final ColumnDescriptor<E> colh(IObject<?> member) {
+        return col(member, false);
+    }
+
+    /** Create invisible (hidden) column */
+    protected final ColumnDescriptor<E> colh(IObject<?> member, String title) {
+        return col(member, title, false);
+    }
+
     private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings() {
         // FIXME remove the next line when the stringholder string duplication is solved
         ListerGadgetBaseSettings settings = EntityFactory.create(ListerGadgetBaseSettings.class);
 
-        if (settings.columnPaths().isEmpty()) {
-            List<ColumnDescriptor<E>> descriptors = dataTablePanel.getDataTableModel().getColumnDescriptors();
+        if (settings.columnDescriptors().isEmpty()) {
+            List<ColumnDescriptor<E>> descriptors = defineColumnDescriptors();
             for (ColumnDescriptor<E> columnDescriptor : descriptors) {
-                StringHolder columnPath = EntityFactory.create(StringHolder.class);
-                StringHolder columnTitle = EntityFactory.create(StringHolder.class);
-                columnPath.stringValue().setValue(columnDescriptor.getColumnName());
-                columnTitle.stringValue().setValue(columnDescriptor.getColumnTitle());
-                //columnDescriptor.getWidth();
-                settings.columnPaths().add(columnPath);
-                settings.columnTitles().add(columnTitle);
+                ColumnDescriptorEntity columnDescriptorEntity = EntityFactory.create(ColumnDescriptorEntity.class);
+                columnDescriptorEntity.propertyPath().setValue(columnDescriptor.getColumnName());
+                columnDescriptorEntity.title().setValue(columnDescriptor.getColumnTitle());
+                columnDescriptorEntity.visible().setValue(columnDescriptor.isVisible());
+                columnDescriptorEntity.sortingPrecedence().setValue(columnDescriptor.isSortable() ? 1 : null);
+                columnDescriptorEntity.sortAscending().setValue(columnDescriptor.isSortAscending());
+                settings.columnDescriptors().add(columnDescriptorEntity);
             }
         }
+
         List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-        Iterator<StringHolder> paths = settings.columnPaths().iterator();
-        Iterator<StringHolder> titles = settings.columnTitles().iterator();
-        while (paths.hasNext()) {
-            Path propertyPath = new Path(paths.next().stringValue().getValue());
-            String title = titles.next().stringValue().getValue();
-            ColumnDescriptor<E> columnDescriptor = columnDescriptorEx(proto().getMember(propertyPath), title, true);
+        for (ColumnDescriptorEntity columnDescriptorEntity : settings.columnDescriptors()) {
+            Path propertyPath = new Path(columnDescriptorEntity.propertyPath().getValue());
+            String title = columnDescriptorEntity.title().getValue();
+            boolean visibility = columnDescriptorEntity.visible().getValue();
+            ColumnDescriptor<E> columnDescriptor = col(proto().getMember(propertyPath), title, visibility);
+            // TODO add sorting
             columnDescriptors.add(columnDescriptor);
         }
         return columnDescriptors;
+    }
+
+    protected void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(columnDescriptors);
     }
 
     protected boolean isSettingsInstanceOk(AbstractGadgetSettings abstractSettings) {
@@ -250,7 +232,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         settings.refreshInterval().setValue(DEFAULT_REFRESH_INTERVAL);
         settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
         settings.pageNumber().setValue(0);
-        settings.columnPaths().clear();
+        settings.columnDescriptors().clear();
+
         return settings;
     }
 
@@ -309,8 +292,11 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
 
     public List<Sort> getSorting() {
         List<Sort> sorting = new ArrayList<Sort>(2);
-        for (SortEntity sortEntity : settings.sorting()) {
-            sorting.add(EntityToSort(sortEntity));
+        for (ColumnDescriptorEntity columnDescriptorEntity : settings.columnDescriptors()) {
+            // currently we don't allow to sort by more than one column
+            if (!columnDescriptorEntity.sortingPrecedence().isNull()) {
+                sorting.add(ColumnDescriptorEntityToSort(columnDescriptorEntity));
+            }
         }
         return sorting;
     }
@@ -363,15 +349,8 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         getRefreshTimer().setRefreshInterval(refreshIntervalMillis);
     }
 
-    private static SortEntity SortToEntity(Sort sort) {
-        SortEntity entity = EntityFactory.create(SortEntity.class);
-        entity.propertyName().setValue(sort.getPropertyName());
-        entity.descending().setValue(sort.isDescending());
-        return entity;
-    }
-
-    private static Sort EntityToSort(SortEntity entity) {
-        Sort sort = new Sort(entity.propertyName().getValue(), entity.descending().getValue());
+    private static Sort ColumnDescriptorEntityToSort(ColumnDescriptorEntity entity) {
+        Sort sort = new Sort(entity.propertyPath().getValue(), !entity.sortAscending().getValue());
         return sort;
     }
 

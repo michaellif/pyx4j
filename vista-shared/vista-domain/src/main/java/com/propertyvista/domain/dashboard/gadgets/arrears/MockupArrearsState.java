@@ -26,8 +26,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.dashboard.gadgets.CommonGadgetColumns;
-import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
-import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;

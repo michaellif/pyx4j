@@ -30,7 +30,7 @@ public class RentArrearsListerGadget extends ArrearsListerGadget {
     }
 
     @Override
-    protected Arrears getArrearsMemberProto() {
+    protected Arrears arrearsProto() {
         return proto().rentArrears();
     }
 }

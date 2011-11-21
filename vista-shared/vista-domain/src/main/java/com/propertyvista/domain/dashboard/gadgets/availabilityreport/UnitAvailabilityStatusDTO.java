@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.dashboard.gadgets.ComparableComparator;
-import com.propertyvista.domain.dashboard.gadgets.CustomComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
+import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 
 @Transient
 public interface UnitAvailabilityStatusDTO extends UnitAvailabilityStatus {

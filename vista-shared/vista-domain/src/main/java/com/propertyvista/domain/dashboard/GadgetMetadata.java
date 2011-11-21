@@ -20,6 +20,7 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.ISharedUserEntity;
+import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 
 public interface GadgetMetadata extends ISharedUserEntity {
 

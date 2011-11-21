@@ -11,12 +11,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard;
+package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.domain.dashboard.GadgetMetadata;
 
 @Inheritance
 @AbstractEntity
