@@ -65,7 +65,7 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
         super.persistDBO(dbo);
 
         // update parent child list: 
-        if (isCreate && !dbo.parent().isEmpty()) {
+        if (isCreate) {
             Persistence.service().retrieve(dbo.parent());
             dbo.parent().childPages().add(dbo);
             Persistence.service().merge(dbo.parent());
