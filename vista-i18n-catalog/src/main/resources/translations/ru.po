@@ -66,7 +66,7 @@ msgstr "#0.00"
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr ""
+msgstr "${0,number,#0.00}"
 
 #: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:157
 #: com/propertyvista/crm/client/ui/gadgets/vacancyreport/TurnoverAnalysisGraphGadget.java:151
@@ -140,6 +140,8 @@ msgid ""
 "<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not "
 "available|!null#from $ {3}}"
 msgstr ""
+"<b>{0}</b> - {1} кроватей, {2} ванная, {3,choice,null#без "
+"цены|!null#от $ {3}}"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "<clinit>"
@@ -207,7 +209,7 @@ msgstr "Добавить фильтр ..."
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderDecorator.java:42
 #, java-format
 msgid "Add {0}"
-msgstr ""
+msgstr "Добавить {0}"
 
 #: com/propertyvista/domain/financial/offering/Feature.java:1
 msgid "Add-On"
@@ -375,7 +377,7 @@ msgstr "Все функции уже отобраны!"
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/SelectFeatureBox.java:77
 #, java-format
 msgid "All {0}(s) have been selected already!"
-msgstr ""
+msgstr "Все {0} уже выбраны"
 
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Alley"
@@ -955,12 +957,12 @@ msgstr "Строительство"
 #: com/propertyvista/interfaces/importer/ImportPersister.java:144
 #, java-format
 msgid "Building ''{0}'' floorplan ''{1}'' media error {2}"
-msgstr ""
+msgstr "Здание ''{0}'' план этажа ''{1}'' ошибка в файле {2}"
 
 #: com/propertyvista/interfaces/importer/ImportPersister.java:85
 #, java-format
 msgid "Building ''{0}'' media error {1}"
-msgstr ""
+msgstr "Здание ''{0}'' ошибка медии {1}"
 
 #: com/propertyvista/portal/domain/dto/FloorplanDetailsDTO.java:2
 msgid "Building Amenities"
@@ -1724,7 +1726,12 @@ msgid ""
 " Vista apartments.<br/>\n"
 "Click the link below to go to the Property Vista site:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}{2}\">Application</a>"
-msgstr ""
+msgstr "Уважаемый {0},<br/>\n"
+"Это письмо является ответом на попытку реестрации с Property Vista"
+" ну в общем Вы поняли.<br/>\n"
+"    <a style=\"color:#929733\" href=\"{1}{2}\">Application</a>"
+
+
 
 #: com/propertyvista/server/common/mail/MessageTemplates.java:51
 #, java-format
@@ -1735,7 +1742,10 @@ msgid ""
 "Click the link below to go to the Property Vista site and create new "
 "password for your account:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}{2}\">Change Your Password</a>"
-msgstr ""
+msgstr "Уважаемый {0},<br/>\n"
+"Это письмо для ресета пароля на аккаунт от Property Vista."
+" Нажмите на линк чтобы перейти на страницу для изменения пароля.<br/>\n"
+"    <a style=\"color:#929733\" href=\"{1}{2}\">Change Your Password</a></a>"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Decided By"
@@ -2043,7 +2053,7 @@ msgstr "Дата вступления в силу"
 #: com/propertyvista/pmsite/server/model/WicketUtils.java:325
 #, java-format
 msgid "Either one of {0} or {1} must be provided"
-msgstr ""
+msgstr "Вы должны указать один из {0} или {1}"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
@@ -3124,7 +3134,7 @@ msgstr ""
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:199
 #, java-format
 msgid "Invalid YouTube Video ID ''{0}''"
-msgstr ""
+msgstr "Неправильный линк на YouTube ''{0}''"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Irregular"
@@ -3774,7 +3784,7 @@ msgstr "СМИ Загрузить"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:148
 #, java-format
 msgid "Media file not found ''{0}''"
-msgstr ""
+msgstr "Файл ''{0}'' не найден"
 
 #: com/propertyvista/crm/client/ui/components/media/MediaItemValidator.java:48
 msgid "Media source cannot be empty!"
@@ -5285,7 +5295,7 @@ msgstr "Удалить фильтр"
 #: com/propertyvista/common/client/ui/decorations/VistaTableFolderItemDecorator.java:31
 #, java-format
 msgid "Remove {0}"
-msgstr ""
+msgstr "Убрать {0}"
 
 #: com/propertyvista/domain/property/vendor/License.java:2
 msgid "Renewal"
@@ -5769,7 +5779,7 @@ msgstr "Услуги"
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session Duration {0}, Inactive For {1}"
-msgstr ""
+msgstr "Длительность сессии {0}, неактивная {1}"
 
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:70
 msgid "Session Inactive"
@@ -6404,7 +6414,7 @@ msgstr "Есть Нет сервиса элементов"
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/SelectFeatureBox.java:80
 #, java-format
 msgid "There Are No {0}(s) Available"
-msgstr ""
+msgstr "Кина не будет, {0} кончились"
 
 #: com/propertyvista/common/client/ui/validators/YouTubeVideoIdValidator.java:39
 msgid "This Is Not A Valid YouTube Video ID"
@@ -6645,13 +6655,13 @@ msgstr "URL"
 #: com/propertyvista/server/common/blob/ThumbnailService.java:103
 #, java-format
 msgid "Unable To Read The Image ''{0}''"
-msgstr ""
+msgstr "Невозможно прочитать картинку ''{0}''"
 
 #: com/propertyvista/server/common/blob/ImageResizer.java:121
 #: com/propertyvista/server/common/blob/ThumbnailService.java:111
 #, java-format
 msgid "Unable To Resample The Image ''{0}''"
-msgstr ""
+msgstr "Невозможно сделать ресампл для ''{0}''"
 
 #: com/propertyvista/domain/tenant/TenantInLease.java:1
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
@@ -6756,18 +6766,18 @@ msgstr "Единицы на страницу"
 #: com/pyx4j/essentials/client/upload/UploadPanel.java:192
 #, java-format
 msgid "Unsupported Extension ''{0}''"
-msgstr ""
+msgstr "Тип файла ''{0}'' не поддерживается"
 
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:119
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:160
 #, java-format
 msgid "Unsupported Media File Type ''{0}'' Extension ''{1}''"
-msgstr ""
+msgstr "Медиа файл ''{0}'' типа ''{1}'' не поддерживается"
 
 #: com/pyx4j/essentials/server/upload/UploadServiceImpl.java:98
 #, java-format
 msgid "Unsupported {0} File Type {1}"
-msgstr ""
+msgstr "Файл ''{0}'' типа ''{1}'' не поддерживается"
 
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "Update Data"
@@ -7161,7 +7171,7 @@ msgstr "У Вас должен быть включен JavaScript использ
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExFolder.java:70
 #, java-format
 msgid "You can't add more then {1} items here!"
-msgstr ""
+msgstr "Невозможно добавить больше чем {1} вещей"
 
 #: com/propertyvista/portal/server/ptapp/services/ApplicationServiceImpl.java:80
 msgid "You have no applications assigned"
@@ -7248,7 +7258,7 @@ msgstr "для Вашего будущего дома!"
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:392
 #, java-format
 msgid "from {0,date,short} to {1,date,short}"
-msgstr ""
+msgstr "от {0,date,short} до {1, date, short}"
 
 #: com/pyx4j/forms/client/ui/CTimeField.java:36
 msgid "h:mm a"
@@ -7269,12 +7279,12 @@ msgstr "месяц"
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:390
 #, java-format
 msgid "of {0,date,short}"
-msgstr ""
+msgstr "с {0,date,short}"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:396
 #, java-format
 msgid "of {0}"
-msgstr ""
+msgstr "с {0}"
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:57
 msgid "reCAPTCHA Connection Failed"
@@ -7307,18 +7317,20 @@ msgid ""
 "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
 "${1}}}"
 msgstr ""
+"{0,choice,null#Любой|0#Меньше чем ${1}|0<{1,choice,null#Больше чем ${0}|0<${0} - "
+"${1}}}"
 
 #. Number Of Bedrooms
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:102
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr ""
+msgstr "{0,choice,null#Любой|0#Меньше чем {1}|0<{0}{1,choice,null# и больше|0<}}"
 
 #: com/propertyvista/pmsite/server/panels/AptListPanel.java:103
 #, java-format
 msgid ""
 "{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"
-msgstr ""
+msgstr "{0} Кровать(и), {1} Ванная комната, {2,choice,null#цена не задана|!null#from $ {2}}"
 
 #: com/propertyvista/crm/server/openapi/model/util/Converter.java:307
 #, java-format
@@ -7328,22 +7340,22 @@ msgstr "{0} Спальня"
 #: com/pyx4j/forms/client/ui/CNumberField.java:85
 #, java-format
 msgid "{0} Should Be In The Range Between {1} And {2}"
-msgstr ""
+msgstr "{0} должна быть между {1} и {2}"
 
 #: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:519
 #, java-format
 msgid "{0} Updated Externally"
-msgstr ""
+msgstr "{0} обновляется удаленно"
 
 #: com/propertyvista/domain/tenant/Inquiry.java:67
 #, java-format
 msgid "{0} months{1,choice,0# or longer|0<}"
-msgstr ""
+msgstr "{0} месяцев{1,choice,0# или дольше|0<}"
 
 #: com/propertyvista/domain/File.java:0
 #, java-format
 msgid "{0} {1,size}"
-msgstr ""
+msgstr "{0} {1,size}"
 
 #: com/propertyvista/domain/charges/ChargeLine.java:0
 #: com/propertyvista/domain/property/asset/Equipment.java:0
@@ -7353,24 +7365,24 @@ msgstr ""
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:0
 #, java-format
 msgid "{0} {1}"
-msgstr ""
+msgstr "{0} {1}"
 
 #: com/propertyvista/domain/GeoLocation.java:0
 #, java-format
 msgid "{0} {1} & {2} {3}"
-msgstr ""
+msgstr "{0} {1} & {2} {3}"
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
 #, java-format
 msgid "{0}, Base Price: {1}, Adjusted Price: {2}"
-msgstr ""
+msgstr "{0}, Базовая цена: {1}, Измененная цена: {2}"
 
 #: com/propertyvista/domain/company/Employee.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:0
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:0
 #, java-format
 msgid "{0}, {1}"
-msgstr ""
+msgstr "{0}, {1}"
 
 #: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:156
 #, java-format
@@ -7380,7 +7392,7 @@ msgstr "{0}-{1} из {2}"
 #: com/propertyvista/crm/client/ui/components/cms/FileUploadHyperlink.java:66
 #, java-format
 msgid "{0}; Upload new file"
-msgstr ""
+msgstr "{0}; загрузите новый файл"
 
 #: com/propertyvista/domain/contact/Phone.java:0
 #: com/propertyvista/domain/property/PropertyPhone.java:0
@@ -7391,4 +7403,4 @@ msgstr "{0}{1,choice,null#|!null# доб.{1}}"
 #: com/pyx4j/essentials/server/preloader/AddressInfo.java:0
 #, java-format
 msgid "{1} {2}, {3}"
-msgstr ""
+msgstr "{1} {2}, {3}"
