@@ -39,10 +39,22 @@
 	<script language="javascript" wicket:id="jsAptDetailsUrl"></script>
 	<script language="javascript" wicket:id="jsAptListModeInfo"></script>
 	<script language="javascript">
+	var loadMapIfVisible, loadMapTimer, loadMapCount=0;
 	$(function() {
-		function loadMapIfVisible() {
+		loadMapIfVisible = function() {
+			loadMapCount++;
 			if ($('.listing_mapview:visible').size()) {
-				try { loadMap() } catch (err_ignore) { }
+				try {
+					loadMap();
+					clearInterval(loadMapTimer);
+					loadMapCount = 0;
+					return true;
+				} catch (err) { }
+				// stop after 10 tries (5 sec)
+				if (loadMapCount >= 10) {
+					clearInterval(loadMapTimer);
+				}
+				return false;
 			}
 		}
 		$('#aptListModeSwitch').click(function() {
@@ -66,7 +78,10 @@
 		});
 		// initial map load
 		$(window).load(function() {
-			loadMapIfVisible();
+			// try for a few times (5sec max) as the map may not have been initialized yet
+			if (!loadMapIfVisible()) {
+				loadMapTimer = setInterval("loadMapIfVisible()", 500);
+			}
 		});
 	})
 	</script>
