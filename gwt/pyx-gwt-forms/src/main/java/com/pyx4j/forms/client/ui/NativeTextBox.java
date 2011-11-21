@@ -72,9 +72,9 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     public void setEditable(boolean editable) {
         super.setReadOnly(!editable);
         if (editable) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly.name());
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
         } else {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly.name());
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
         }
 
     }

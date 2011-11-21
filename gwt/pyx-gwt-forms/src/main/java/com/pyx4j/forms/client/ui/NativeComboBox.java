@@ -27,7 +27,6 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
-import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
 
@@ -35,10 +34,6 @@ import com.pyx4j.widgets.client.ListBox;
  *
  */
 public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<E> {
-
-    public static enum StyleDependent implements IStyleDependent {
-        disabled, readOnly, invalid
-    }
 
     private final CComboBox<E> comboBox;
 
@@ -180,9 +175,9 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
         this.enabled = enabled;
         super.setEnabled(enabled && this.isEditable());
         if (enabled) {
-            removeStyleDependentName(StyleDependent.disabled.name());
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
         } else {
-            addStyleDependentName(StyleDependent.disabled.name());
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
         }
 
     }
@@ -197,9 +192,9 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
         this.editable = editable;
         super.setEnabled(editable && this.isEnabled());
         if (editable) {
-            removeStyleDependentName(StyleDependent.readOnly.name());
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
         } else {
-            addStyleDependentName(StyleDependent.readOnly.name());
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
         }
     }
 
@@ -268,9 +263,9 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
     @Override
     public void setValid(boolean valid) {
         if (valid) {
-            removeStyleDependentName(StyleDependent.invalid.name());
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         } else if (comboBox.isVisited()) {
-            addStyleDependentName(StyleDependent.invalid.name());
+            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         }
     }
 

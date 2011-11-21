@@ -66,7 +66,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     public void setEditable(boolean editable) {
         ((TextBox) getWidget()).setEnabled(editable);
         ((TextBox) getWidget()).setReadOnly(!editable);
-        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.readOnly);
+        String dependentSuffix = Selector.getDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly);
         if (editable) {
             removeStyleDependentName(dependentSuffix);
         } else {

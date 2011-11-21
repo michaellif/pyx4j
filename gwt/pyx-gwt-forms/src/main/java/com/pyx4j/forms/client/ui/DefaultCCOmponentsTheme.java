@@ -34,7 +34,7 @@ public class DefaultCCOmponentsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, readOnly, invalid
+        disabled, readonly, invalid
     }
 
     public DefaultCCOmponentsTheme() {
@@ -53,7 +53,7 @@ public class DefaultCCOmponentsTheme extends Theme {
         style.addProperty("color", ThemeColors.foreground, 0.6);
         addStyle(style);
 
-        style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.readOnly);
+        style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.readonly);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.1);
@@ -74,7 +74,7 @@ public class DefaultCCOmponentsTheme extends Theme {
         style.addProperty("background-color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.readOnly);
+        style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.readonly);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.1);
