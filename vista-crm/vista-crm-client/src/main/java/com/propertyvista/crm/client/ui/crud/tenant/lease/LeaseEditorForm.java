@@ -87,11 +87,15 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseID()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
-        main.setWidget(
-                ++row,
-                0,
-                new DecoratorBuilder(inject(proto().application(),
-                        new CEntityCrudHyperlink<MasterApplication>(MainActivityMapper.getCrudAppPlace(MasterApplication.class))), 20).build());
+        if (!isEditable()) {
+            main.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().application(),
+                            new CEntityCrudHyperlink<MasterApplication>(MainActivityMapper.getCrudAppPlace(MasterApplication.class))), 20).build());
+        } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().application(), new CEntityLabel()), 20).build());
+        }
 
         main.setBR(++row, 0, 1);
         HorizontalPanel leaseDatePanel = new HorizontalPanel();
