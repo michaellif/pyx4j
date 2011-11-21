@@ -550,7 +550,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                     if (!adapter.allowModifications(entity, memberMeta, null, value)) {
                         log.error("Forbidden change -> [{}]", value);
-                        throw new Error("Forbidden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                        throw new Error("Forbidden change '" + memberMeta.getCaption() + " of '" + entity.getEntityMeta().getCaption() + "'");
                     }
                 }
             }
@@ -560,7 +560,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                     if (!adapter.allowModifications(entity, memberMeta, null, value)) {
                         log.error("Forbidden change -> [{}]", value);
-                        throw new Error("Forbidden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                        throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                     }
                 }
             }
@@ -626,7 +626,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
                         insert(connection, tm, entity, now);
                     } else {
-                        throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+                        throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
                     }
                 }
             }
@@ -689,7 +689,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
                 if (childEntity.getPrimaryKey() != null) {
                     if (cascadeRetrieve(connection, childEntity) == null) {
-                        throw new RuntimeException("Entity " + memberMeta.getCaption() + " " + childEntity.getPrimaryKey() + " " + childEntity.getPath()
+                        throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' " + childEntity.getPrimaryKey() + " " + childEntity.getPath()
                                 + " NotFound");
                     }
                 }
@@ -698,7 +698,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
                     if (cascadeRetrieve(connection, childEntity) == null) {
-                        throw new RuntimeException("Entity " + childEntity.getEntityMeta().getCaption() + " " + childEntity.getPrimaryKey() + " "
+                        throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                                 + childEntity.getPath() + " NotFound");
                     }
                 }
