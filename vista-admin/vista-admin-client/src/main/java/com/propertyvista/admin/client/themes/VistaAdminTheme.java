@@ -19,6 +19,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
@@ -84,6 +85,7 @@ public class VistaAdminTheme extends VistaTheme {
         addTheme(new DefaultSiteCrudPanelsTheme());
         addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultDialogTheme());
+        addTheme(new DefaultCCOmponentsTheme());
 
         initGeneralStyles();
         initBodyStyles();

@@ -18,6 +18,7 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
 import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
@@ -60,10 +61,9 @@ public class PtAppTheme extends VistaTheme {
         initEntityFolderStyles();
 
         addTheme(new DefaultDatePickerTheme());
-
         addTheme(new PtAppSitePanelTheme());
-
         addTheme(new DefaultDialogTheme());
+        addTheme(new DefaultCCOmponentsTheme());
 
         initBodyStyles();
 
