@@ -3372,7 +3372,7 @@ msgstr "Contrats de location"
 
 #: com/propertyvista/crm/client/activity/NavigActivity.java:114
 msgid "Legal & Collections"
-msgstr "Legal &amp; Collections"
+msgstr "Legal & Collections"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Legal And Collections"
