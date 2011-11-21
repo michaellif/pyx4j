@@ -99,7 +99,7 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         String token = ETag.getEntityTag(media.file(), thumbnailSize);
-        response.setHeader("Etag", '"' + token + '"');
+        response.setHeader("Etag", token);
 
         if (!media.file().timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
@@ -114,8 +114,7 @@ public class PublicMediaServlet extends HttpServlet {
             response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
 
         }
-        String previousToken = request.getHeader("If-None-Match");
-        if (previousToken != null && previousToken.equals(token)) {
+        if (ETag.checkIfNoneMatch(token, request.getHeader("If-None-Match"))) {
             response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
             return;
         }

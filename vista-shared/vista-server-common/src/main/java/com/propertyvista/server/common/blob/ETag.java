@@ -25,6 +25,23 @@ public class ETag {
         b.append(file.fileSize().getValue()).append("-");
         b.append(file.timestamp().getValue()).append("-");
         b.append(variation);
-        return DigestUtils.md5Hex(b.toString());
+        return "\"" + DigestUtils.md5Hex(b.toString()) + "\"";
+    }
+
+    public static boolean checkIfNoneMatch(String currentToken, String headerValue) {
+        if (headerValue == null) {
+            return false;
+        }
+        if (headerValue.equals("*")) {
+            return true;
+        }
+        String[] tokens = headerValue.split(",");
+        for (String token : tokens) {
+            if (token.trim().equals(currentToken)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
