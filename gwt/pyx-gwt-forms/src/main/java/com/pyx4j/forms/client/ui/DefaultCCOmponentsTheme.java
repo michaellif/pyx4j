@@ -57,7 +57,7 @@ public class DefaultCCOmponentsTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.1);
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColors.foreground, 0);
         addStyle(style);
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.invalid);
@@ -76,8 +76,9 @@ public class DefaultCCOmponentsTheme extends Theme {
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.readOnly);
         style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "none");
-        style.addProperty("background-color", ThemeColors.foreground, 0.3);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColors.foreground, 0);
         addStyle(style);
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.invalid);

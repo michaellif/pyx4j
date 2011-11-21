@@ -39,7 +39,6 @@ import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.widgets.client.Tooltip;
 
 public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
@@ -86,10 +85,11 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
             if ((descr != null) && !descr.trim().equals("")) {
                 Image info = new Image(ImageFactory.getImages().formTooltipInfo());
 
-                info.getElement().getStyle().setPaddingRight(2, Unit.PX);
+                info.getElement().getStyle().setMarginLeft(6, Unit.PX);
                 headerLabelPanel.add(info);
-                headerLabelPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_BOTTOM);
-                Tooltip.tooltip(info, column.getObject().getMeta().getDescription());
+                headerLabelPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_MIDDLE);
+                headerLabelPanel.setCellHorizontalAlignment(info, HorizontalPanel.ALIGN_CENTER);
+                info.setTitle(column.getObject().getMeta().getDescription());
             }
 
             header.add(headerLabelPanel);

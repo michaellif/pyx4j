@@ -84,6 +84,7 @@ public class DefaultWidgetsTheme extends Theme {
 
     protected void initListBoxStyle() {
         Style style = new Style(".", StyleName.ListBox);
+        style.addProperty("color", ThemeColors.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.4);
