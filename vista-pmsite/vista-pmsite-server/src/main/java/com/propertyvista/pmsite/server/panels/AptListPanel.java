@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -128,8 +127,5 @@ public class AptListPanel extends Panel {
         }
         add(aptMap);
         add(aptList);
-        // add modal map widget
-        add(new GwtInclude("gwtMapModal").add(AttributeModifier.replace("style", "position:absolute;left:-100%")));
-
     }
 }

@@ -381,7 +381,7 @@ public class WicketUtils {
      * -- form.add(new TextField("wicket_id"));
      * 2. Explicit binding - will bind to the model property named "model_prop" (string-based binding):
      * -- form.add(new TextField("wicket_id", model.bind("model_prop")));
-     * 3. IEntity binding to model_prop (100% refactorable):
+     * 3. IEntity binding to model_prop via IPojo wrapper (100% refactorable):
      * -- form.add(new TextField("wicket_id", model.bind(model.getObject().model_prop().getMeta().getFieldName())));
      */
     public static class CompoundIEntityModel<T extends IEntity> extends CompoundPropertyModel<IPojo<T>> {

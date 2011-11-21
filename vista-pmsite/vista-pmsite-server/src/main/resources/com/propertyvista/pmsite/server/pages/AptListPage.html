@@ -42,7 +42,7 @@
 	$(function() {
 		function loadMapIfVisible() {
 			if ($('.listing_mapview:visible').size()) {
-				loadMap();
+				try { loadMap() } catch (err_ignore) { }
 			}
 		}
 		$('#aptListModeSwitch').click(function() {
