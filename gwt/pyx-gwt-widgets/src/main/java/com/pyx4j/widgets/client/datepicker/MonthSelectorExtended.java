@@ -92,17 +92,18 @@ public abstract class MonthSelectorExtended extends MonthSelector {
     }
 
     public void setValidDate(Date checkDate) {
-        int minDateMultiplier = minDate.getYear() * 12 + minDate.getMonth();
-        int maxDateMultiplier = maxDate.getYear() * 12 + maxDate.getMonth();
-        int checkDateMultiplier = checkDate.getYear() * 12 + checkDate.getMonth();
-
-        if (checkDate.compareTo(minDate) >= 0 && checkDate.compareTo(maxDate) <= 0) {
-            model.setCurrentMonth(checkDate);
-        } else if (checkDateMultiplier > maxDateMultiplier) {
-            model.setCurrentMonth(maxDate);
-        } else if (checkDateMultiplier < minDateMultiplier) {
-            model.setCurrentMonth(minDate);
-        }
+        model.setCurrentMonth(checkDate);
+//        int minDateMultiplier = minDate.getYear() * 12 + minDate.getMonth();
+//        int maxDateMultiplier = maxDate.getYear() * 12 + maxDate.getMonth();
+//        int checkDateMultiplier = checkDate.getYear() * 12 + checkDate.getMonth();
+//
+//        if (checkDate.compareTo(minDate) >= 0 && checkDate.compareTo(maxDate) <= 0) {
+//            model.setCurrentMonth(checkDate);
+//        } else if (checkDateMultiplier > maxDateMultiplier) {
+//            model.setCurrentMonth(maxDate);
+//        } else if (checkDateMultiplier < minDateMultiplier) {
+//            model.setCurrentMonth(minDate);
+//        }
     }
 
     @Override

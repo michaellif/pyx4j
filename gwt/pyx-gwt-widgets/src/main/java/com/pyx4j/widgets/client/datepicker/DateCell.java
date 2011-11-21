@@ -24,12 +24,11 @@ package com.pyx4j.widgets.client.datepicker;
 
 import java.util.Date;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Label;
@@ -42,19 +41,21 @@ public class DateCell extends Label {
 
     private DateGrid parent;
 
+    private HandlerRegistration onClickHandler;
+
     public DateCell() {
         addHandlers();
     }
 
     public void addHandlers() {
-        this.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                DateCell cell = (DateCell) event.getSource();
-
-                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), cell.isEnabled() && !cell.isEmpty());
-            }
-        });
+//        this.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                DateCell cell = (DateCell) event.getSource();
+//
+//                cell.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.selected.name(), cell.isEnabled() && !cell.isEmpty());
+//            }
+//        });
 
         this.addMouseOverHandler(new MouseOverHandler() {
             @Override
@@ -99,6 +100,10 @@ public class DateCell extends Label {
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.disabled.name(), !enabled);
+
+        if (!enabled) {
+            removeOnClick();
+        }
     }
 
     public final void setSelected(boolean selected) {
@@ -121,6 +126,7 @@ public class DateCell extends Label {
         setTodayDay(false);
         setOutOfDisplayMonth(false);
         setEnabled(true);
+        removeOnClick();
 
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.empty.name(), true);
         redraw();
@@ -128,6 +134,17 @@ public class DateCell extends Label {
 
     public boolean isEmpty() {
         return this.date == null;
+    }
+
+    public void setOnClick(HandlerRegistration handler) {
+        this.onClickHandler = handler;
+    }
+
+    private void removeOnClick() {
+        if (onClickHandler != null) {
+            onClickHandler.removeHandler();
+            onClickHandler = null;
+        }
     }
 
     private void heighlight(boolean isheighlighted) {

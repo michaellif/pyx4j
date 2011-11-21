@@ -85,22 +85,22 @@ public class DateGrid extends Grid {
         for (int row = 1; row < this.numRows; row++) {
             for (int col = 0; col < this.numColumns; col++) {
                 cell = new DateCell();
-                cell.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        DateCell clickedCell = (DateCell) event.getSource();
-
-                        if (!clickedCell.isEmpty()) {
-                            if (selectedCell != null) {
-                                selectedCell.setSelected(false);
-                            }
-
-                            selectedCell = clickedCell;
-                            selectedDate = selectedCell.getDate();
-                            selectedCell.setSelected(selectedCell.isEnabled());
-                        }
-                    }
-                });
+//                cell.addClickHandler(new ClickHandler() {
+//                    @Override
+//                    public void onClick(ClickEvent event) {
+//                        DateCell clickedCell = (DateCell) event.getSource();
+//
+//                        if (!clickedCell.isEmpty() && clickedCell.isEnabled()) {
+//                            if (selectedCell != null) {
+//                                selectedCell.setSelected(false);
+//                            }
+//
+//                            selectedCell = clickedCell;
+//                            selectedDate = selectedCell.getDate();
+//                            selectedCell.setSelected(selectedCell.isEnabled());
+//                        }
+//                    }
+//                });
                 setWidget(row, col, cell);
             }
         }
@@ -132,6 +132,26 @@ public class DateGrid extends Grid {
             } else {
                 cell.setDate(lastDisplayed);
                 cell.setOutOfDisplayMonth(lastDisplayed.getMonth() != displayedMonth);
+                cell.setEnabled(isEnabled(lastDisplayed));
+
+                if (isEnabled(lastDisplayed) && !cell.isEmpty()) {
+                    cell.setOnClick(cell.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            DateCell clickedCell = (DateCell) event.getSource();
+
+                            if (!clickedCell.isEmpty() && clickedCell.isEnabled()) {
+                                if (selectedCell != null) {
+                                    selectedCell.setSelected(false);
+                                }
+
+                                selectedCell = clickedCell;
+                                selectedDate = selectedCell.getDate();
+                                selectedCell.setSelected(selectedCell.isEnabled());
+                            }
+                        }
+                    }));
+                }
 
                 if (selectedDate != null && CalendarUtil.isSameDate(lastDisplayed, selectedDate)) {
                     cell.setSelected(true);

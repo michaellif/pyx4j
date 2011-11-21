@@ -54,7 +54,10 @@ public class CalendarViewExtended extends CalendarView {
             @Override
             public void onClick(ClickEvent event) {
                 DateGrid grid = (DateGrid) event.getSource();
-                picker.setValue(grid.getSelectedValue(), true);
+
+                Date selectedDate = grid.getSelectedValue();
+                if (selectedDate != null)
+                    picker.setValue(grid.getSelectedValue(), true);
             }
         });
     }
@@ -131,7 +134,7 @@ public class CalendarViewExtended extends CalendarView {
             grid.setText(0, i, daysOfWeek[dayIdx]);
 
             if (dayIdx == firstDayOfWeekend || dayIdx == lastDayOfWeekend) {
-                grid.getCellFormatter().addStyleName(0, i, DefaultDatePickerTheme.StyleName.DatePickerWeekendDay.name());
+                grid.getCellFormatter().addStyleName(0, i, DefaultDatePickerTheme.StyleName.DatePickerWeekendDayLabel.name());
             }
         }
         //grid.getRowFormatter().setStyleName(0, "datePickerGridDaysRow");

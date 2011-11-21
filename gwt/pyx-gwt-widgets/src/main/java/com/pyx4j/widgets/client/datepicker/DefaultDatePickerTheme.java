@@ -33,7 +33,7 @@ public class DefaultDatePickerTheme extends Theme {
 
         DatePickerMonthLabel, DatePickerYearLabel, DatePickerMonthYearLabel, DatePickerYearNavigation, monthSelectorNavigation,
 
-        DatePickerDay, DatePickerWeekdayLabel, DatePickerWeekendLabel, DatePickerTodayDay, DatePickerWeekendDay, DatePickerMonth, DatePickerNextButton, DatePickerPreviousButton;
+        DatePickerDay, DatePickerWeekdayLabel, DatePickerWeekendLabel, DatePickerTodayDay, DatePickerWeekendDayLabel, DatePickerMonth, DatePickerNextButton, DatePickerPreviousButton;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -151,8 +151,9 @@ public class DefaultDatePickerTheme extends Theme {
         //style.addProperty("padding", "3px");
         //addStyle(style);
 
-        style = new Style(".", StyleName.DatePickerWeekendDay);
+        style = new Style(".", StyleName.DatePickerWeekendDayLabel);
         style.addProperty("color", ThemeColors.object1);
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         //style = new Style(".DatePickerDayIsFiller");
@@ -213,7 +214,7 @@ public class DefaultDatePickerTheme extends Theme {
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-disabled");
         style.addProperty("color", ThemeColors.foreground, 0.4);
         style.addProperty("background-color", ThemeColors.foreground, 0.2);
-        style.addProperty("cursor", "none");
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-outofmonth");
