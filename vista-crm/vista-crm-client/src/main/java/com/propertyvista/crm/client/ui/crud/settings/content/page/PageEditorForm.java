@@ -48,4 +48,10 @@ public class PageEditorForm extends CrmEntityForm<PageDescriptor> {
 
         return new CrmScrollPanel(main);
     }
+
+    @Override
+    public void populate(PageDescriptor value) {
+        super.populate(value);
+        get(proto().childPages()).setVisible(value.type().getValue() == PageDescriptor.Type.staticContent);
+    }
 }

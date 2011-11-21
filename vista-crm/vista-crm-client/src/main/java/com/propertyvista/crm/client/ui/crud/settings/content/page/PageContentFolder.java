@@ -79,5 +79,15 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
             // main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().image(), new CFileUploader()), 60).build());
             return main;
         }
+
+        @Override
+        public void populate(PageContent value) {
+            super.populate(value);
+            boolean staticPage = value.descriptor().type().getValue() == PageDescriptor.Type.staticContent;
+            get(proto().content()).setVisible(staticPage);
+            get(proto()._caption().secondaryCaption()).setVisible(staticPage);
+        }
+
     }
+
 }
