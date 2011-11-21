@@ -32,7 +32,7 @@ import com.propertyvista.domain.site.SiteDescriptor;
 
 public class PageEditorActivity extends EditorActivityBase<PageDescriptor> implements PageEditor.Presenter {
 
-    private final Class<? extends Descriptor> parentClass;
+    private Class<? extends Descriptor> parentClass = null;
 
     @SuppressWarnings("unchecked")
     public PageEditorActivity(Place place) {
@@ -44,13 +44,14 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
             parentClass = SiteDescriptor.class;
         } else if (PageDescriptor.class.getName().equals(val)) {
             parentClass = PageDescriptor.class;
-        } else {
-            throw new Error("Incorrect class argument");
         }
     }
 
     @Override
     protected void createNewEntity(AsyncCallback<PageDescriptor> callback) {
+        if (parentClass == null) {
+            throw new Error("Incorrect parentClass argument");
+        }
         PageDescriptor entity = EntityFactory.create(entityClass);
         entity.parent().set(EntityFactory.create(parentClass));
         entity.type().setValue(Type.staticContent);

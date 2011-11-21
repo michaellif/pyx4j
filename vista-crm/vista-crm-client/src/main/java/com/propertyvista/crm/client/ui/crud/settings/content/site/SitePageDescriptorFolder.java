@@ -29,7 +29,6 @@ import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.domain.site.PageDescriptor.Type;
 
 class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
 
@@ -70,11 +69,6 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         decor.setShowHeader(false);
         decor.setAddButtonVisible(false);
         return decor;
-    }
-
-    @Override
-    protected boolean isFolderItemAllowed(PageDescriptor item) {
-        return !(Type.findApartment == item.type().getValue() || Type.residents == item.type().getValue());
     }
 
     private class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {

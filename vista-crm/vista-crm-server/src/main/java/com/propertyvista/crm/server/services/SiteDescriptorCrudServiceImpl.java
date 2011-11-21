@@ -28,6 +28,8 @@ import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.crm.server.util.TransientListHelpers;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
+import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.dto.SiteDescriptorDTO;
@@ -70,6 +72,13 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
             // load transient data:
             dto.news().addAll(Persistence.service().query(EntityQueryCriteria.create(News.class)));
             dto.testimonials().addAll(Persistence.service().query(EntityQueryCriteria.create(Testimonial.class)));
+
+            dto.childPages().clear();
+            for (PageDescriptor page : in.childPages()) {
+                if (Type.findApartment != page.type().getValue() && Type.residents != page.type().getValue()) {
+                    dto.childPages().add(page);
+                }
+            }
 
             {
                 EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
