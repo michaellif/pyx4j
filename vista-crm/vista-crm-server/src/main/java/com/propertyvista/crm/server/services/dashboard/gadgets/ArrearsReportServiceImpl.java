@@ -58,10 +58,9 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
 
             if (!buildingPKs.isEmpty()) {
-                criteria.add(PropertyCriterion.in(criteria.proto().belongsTo().belongsTo(), buildingPKs));
+                criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingPKs));
             }
             for (Criterion c : customCriteria) {
-                // TODO add checking for validity
                 criteria.add(c);
             }
             final List<MockupArrearsState> allArrears = Persistence.service().query(criteria);
@@ -269,6 +268,12 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         public ArBalanceHolder(LogicalDate timestamp, double balance) {
             this.timestamp = timestamp;
             this.balance = balance;
+        }
+
+        @Override
+        /** For Debug's sake */
+        public String toString() {
+            return "(" + timestamp.toString() + ", " + balance + ")";
         }
     }
 }
