@@ -20,9 +20,9 @@
  */
 package com.pyx4j.entity.client;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -301,7 +301,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 //    }
 
     @Override
-    public Collection<? extends CComponent<?, ?>> getComponents() {
+    public Set<? extends CComponent<?, ?>> getComponents() {
 //        if (itemsMap != null) {
 //            return itemsMap.values();
 //        } else {

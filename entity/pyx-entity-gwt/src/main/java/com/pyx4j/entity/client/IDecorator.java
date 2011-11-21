@@ -22,7 +22,7 @@ package com.pyx4j.entity.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IDecorator<E extends CEntity> extends IsWidget {
+public interface IDecorator<E extends CEntityContainer> extends IsWidget {
 
     void setFolderItem(E content);
 

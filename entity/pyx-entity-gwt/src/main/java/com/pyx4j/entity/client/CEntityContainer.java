@@ -34,9 +34,9 @@ import com.pyx4j.forms.client.ui.IAccessAdapter;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CEntity<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory, IAccessAdapter {
+public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory, IAccessAdapter {
 
-    protected static I18n i18n = I18n.get(CEntity.class);
+    protected static I18n i18n = I18n.get(CEntityContainer.class);
 
     private IDecorator decorator;
 
@@ -65,8 +65,8 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
             if (component.isValid()) {
                 continue;
             }
-            if (component instanceof CEntity<?>) {
-                validationResults.appendValidationErrors(((CEntity<?>) component).getValidationResults());
+            if (component instanceof CEntityContainer<?>) {
+                validationResults.appendValidationErrors(((CEntityContainer<?>) component).getValidationResults());
             } else if (component.isVisited()) {
                 validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid. {1}", component.getTitle(), component.getValidationMessage()));
             }
@@ -164,7 +164,7 @@ public abstract class CEntity<E extends IObject<?>> extends CContainer<E, Native
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
-        return ((CEntity<?>) getParent()).create(member);
+        return ((CEntityContainer<?>) getParent()).create(member);
     }
 
     public void addValidations() {

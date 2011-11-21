@@ -20,67 +20,105 @@
  */
 package com.pyx4j.entity.client;
 
-import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
-public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
+public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
 
     protected IEditableComponentFactory factory;
 
-    private final EntityBinder<E> binder;
+    private final E entityPrototype;
+
+    private E editableEntity;
+
+    private E origEntity;
+
+    private final HashMap<CComponent<?, ?>, Path> binding;
+
+    @SuppressWarnings("rawtypes")
+    private final ValueChangeHandler valuePropagation;
+
+    @SuppressWarnings("rawtypes")
+    private class ValuePropagation implements ValueChangeHandler {
+
+        @Override
+        public void onValueChange(ValueChangeEvent event) {
+            Path memberPath = binding.get(event.getSource());
+            if ((memberPath != null) && (editableEntity != null)) {
+                Object value = event.getValue();
+                if (value instanceof IEntity) {
+                    ((IEntity) editableEntity.getMember(memberPath)).set(((IEntity) value).cloneEntity());
+                    return;
+                }
+
+                if (value instanceof ICollection) {
+                    value = ((ICollection) value).getValue();
+                } else if ((value instanceof Date)) {
+                    Class<?> cls = editableEntity.getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                    if (cls.equals(LogicalDate.class)) {
+                        value = new LogicalDate((Date) value);
+                    } else if (cls.equals(java.sql.Date.class)) {
+                        value = new java.sql.Date(((Date) value).getTime());
+                    }
+                }
+                editableEntity.setValue(memberPath, value);
+            }
+        }
+    }
 
     public CEntityEditor(Class<E> clazz) {
         this(clazz, new EntityFormComponentFactory());
     }
 
     public CEntityEditor(Class<E> clazz, IEditableComponentFactory factory) {
-        binder = new EntityBinder<E>(clazz, this);
+        binding = new HashMap<CComponent<?, ?>, Path>();
+        this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
+        this.valuePropagation = new ValuePropagation();
+
         this.factory = factory;
     }
 
-    public EntityBinder<E> binder() {
-        return binder;
-    }
-
     public E proto() {
-        return binder.proto();
-    }
-
-    @Override
-    public void populate(E value) {
-        binder.populate(value);
-        super.populate(binder.getValue());
-    }
-
-    @Override
-    public void setValue(E value) {
-        binder.setValue(value);
-        super.setValue(binder.getValue());
-    }
-
-    @Override
-    public E getValue() {
-        return binder.getValue();
-    }
-
-    public boolean isDirty() {
-        return binder.isDirty();
+        return entityPrototype;
     }
 
     @Override
@@ -93,26 +131,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
     }
 
     @Override
-    public Collection<? extends CComponent<?, ?>> getComponents() {
-        if (binder == null) {
-            return null;
-        }
-        return binder.getComponents();
-    }
-
-    @Override
     public ValidationResults getValidationResults() {
         return getAllValidationResults();
-    }
-
-    public final <T> void bind(CComponent<T, ?> component, IObject<?> member) {
-        binder.bind(component, member);
-    }
-
-    @Override
-    public void setDebugId(IDebugId debugId) {
-        super.setDebugId(debugId);
-        binder.setComponentsDebugId(this.getDebugId());
     }
 
     @Override
@@ -132,24 +152,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
         return comp;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends IEntity> CComponent<T, ?> get(T member) {
-        return (CComponent<T, ?>) binder.get((IObject<?>) member);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends IEntity> CComponent<List<T>, ?> get(IList<T> member) {
-        return (CComponent<List<T>, ?>) binder.get((IObject<?>) member);
-    }
-
-    public <T> CComponent<T, ?> get(IObject<T> member) {
-        return binder.get(member);
-    }
-
-    public CComponent<?, ?> getRaw(IObject<?> member) {
-        return binder.get(member);
-    }
-
     public void setWidget(IsWidget widget) {
         asWidget().setWidget(widget);
     }
@@ -160,4 +162,310 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntity<E> {
 
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends IEntity> CComponent<T, ?> get(T member) {
+        return getRaw((IObject<?>) member);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends IEntity> CComponent<List<T>, ?> get(IList<T> member) {
+        return getRaw((IObject<?>) member);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> CComponent<T, ?> get(IObject<T> member) {
+        return getRaw(member);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private <T> CComponent getRaw(IObject<T> member) {
+        Path memberPath = member.getPath();
+        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
+            if (me.getValue().equals(memberPath)) {
+                return me.getKey();
+            }
+        }
+        throw new IndexOutOfBoundsException("Member " + member.getFieldName() + " is not bound");
+    }
+
+    public boolean contains(IObject<?> member) {
+        Path memberPath = member.getPath();
+        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
+            if (me.getValue().equals(memberPath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void bind(CComponent<T, ?> component, IObject<?> member) {
+        // verify that member actually exists in entity.
+        assert (proto().getMember(member.getPath()) != null);
+        component.addValueChangeHandler(valuePropagation);
+        applyAttributes(component, member);
+        binding.put(component, member.getPath());
+
+        component.addPropertyChangeHandler(new PropertyChangeHandler() {
+            boolean sheduled = false;
+
+            @Override
+            public void onPropertyChange(final PropertyChangeEvent event) {
+                if (!sheduled) {
+                    sheduled = true;
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            if (PropertyChangeEvent.PropertyName.valid.equals(event.getPropertyName())) {
+                                log.trace("CEntityEditor.onPropertyChange fired from {}. Changed property is {}.", getTitle(), event.getPropertyName());
+                                revalidate();
+                                PropertyChangeEvent.fire(CEntityEditor.this, PropertyChangeEvent.PropertyName.valid);
+
+                            }
+                            sheduled = false;
+                        }
+                    });
+                }
+            }
+        });
+
+        component.addValueChangeHandler(new ValueChangeHandler<T>() {
+            boolean sheduled = false;
+
+            @Override
+            public void onValueChange(final ValueChangeEvent<T> event) {
+                if (!sheduled) {
+                    sheduled = true;
+                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            revalidate();
+                            log.trace("CEntityEditor.onValueChange fired from {}. New value is {}.", getTitle(), event.getValue());
+                            ValueChangeEvent.fire(CEntityEditor.this, getValue());
+                            sheduled = false;
+                        }
+                    });
+                }
+
+            }
+        });
+
+        component.onAttach(this);
+
+    }
+
+    protected void applyAttributes(CComponent<?, ?> component, IObject<?> member) {
+        MemberMeta mm = member.getMeta();
+        if (mm.isValidatorAnnotationPresent(NotNull.class)) {
+            component.setMandatory(true);
+        }
+        if ((String.class == mm.getValueClass()) && (component instanceof CTextComponent)) {
+            ((CTextComponent<?, ?>) component).setMaxLength(mm.getLength());
+            if (mm.getDescription() != null) {
+                ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+            }
+        }
+        if (mm.getDescription() != null) {
+            component.setTooltip(mm.getDescription());
+        }
+        component.setTitle(mm.getCaption());
+        component.setDebugId(member.getPath());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void setValue(E entity) {
+        if (entity != null) {
+            this.editableEntity = entity;
+        } else {
+            this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
+        }
+        populateComponents();
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected void populateComponents() {
+        for (CComponent component : binding.keySet()) {
+            Path memberPath = binding.get(component);
+            IObject<?> m = editableEntity.getMember(memberPath);
+            try {
+                if (component instanceof DelegatingEntityEditableComponent) {
+                    ((DelegatingEntityEditableComponent) component).populateModel(null, m);
+                } else if ((m instanceof IEntity) || (m instanceof ICollection)) {
+                    component.populate(m);
+                } else {
+                    component.populate(m.getValue());
+                }
+            } catch (ClassCastException e) {
+                log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
+                log.error("Error", e);
+                throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
+                        + e.getMessage());
+            }
+
+        }
+    }
+
+    public void setComponentsDebugId(IDebugId debugId) {
+        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
+            me.getKey().setDebugId(new CompositeDebugId(debugId, me.getValue()));
+        }
+    }
+
+    @Override
+    public E getValue() {
+        return editableEntity;
+    }
+
+    @Override
+    public Set<? extends CComponent<?, ?>> getComponents() {
+        if (binding == null) {
+            return null;
+        }
+        return binding.keySet();
+    }
+
+    public E getOrigValue() {
+        if (isAttached()) {
+            throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
+        }
+        return origEntity;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void populate(E entity) {
+        if (isAttached()) {
+            setValue(entity);
+        } else {
+            if (entity != null) {
+                this.origEntity = (E) entity.cloneEntity();
+                setValue(entity);
+            } else {
+                this.origEntity = null;
+                setValue(null);
+            }
+        }
+        super.populate(entity);
+    }
+
+    public boolean isDirty() {
+        if (isAttached()) {
+            throw new Error("Editor is bound. Only isDirty() method of root editor can be called.");
+        }
+        return !equalRecursive(getOrigValue(), getValue());
+    }
+
+    public static boolean equalRecursive(IEntity entity1, IEntity entity2) {
+        return equalRecursive(entity1, entity2, new HashSet<IEntity>());
+    }
+
+    private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
+        if (((entity2 == null) || entity2.isNull())) {
+            return isEmptyEntity(entity1);
+        } else if ((entity1 == null) || entity1.isNull()) {
+            return isEmptyEntity(entity2);
+        }
+        if (processed != null) {
+            if (processed.contains(entity1)) {
+                return true;
+            }
+            processed.add(entity1);
+        }
+        EntityMeta em = entity1.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
+                continue;
+            }
+            if (memberMeta.isEntity()) {
+                if (memberMeta.isOwnedRelationships()) {
+                    if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
+                        log.debug("changed {}", memberName);
+                        return false;
+                    }
+                } else if (((IEntity) entity1.getMember(memberName)).isNull()) {
+                    if (!((IEntity) entity2.getMember(memberName)).isNull()) {
+                        log.debug("changed [null] -> [{}]", entity2.getMember(memberName));
+                        return false;
+                    }
+                } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
+                    log.debug("changed [{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
+                    return false;
+                }
+            } else if (ISet.class.equals(memberMeta.getObjectClass())) {
+                //TODO OwnedRelationships
+                if (!EqualsHelper.equals((ISet<?>) entity1.getMember(memberName), (ISet<?>) entity2.getMember(memberName))) {
+                    log.debug("changed {}", memberName);
+                    return false;
+                }
+            } else if (IList.class.equals(memberMeta.getObjectClass())) {
+                if (memberMeta.isOwnedRelationships()) {
+                    if (!listValuesEquals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName), processed)) {
+                        log.debug("changed {}", memberName);
+                        return false;
+                    }
+                } else if (!EqualsHelper.equals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName))) {
+                    log.debug("changed {}", memberName);
+                    return false;
+                }
+            } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
+                log.debug("changed {}", memberName);
+                log.debug("[{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean listValuesEquals(IList<?> value1, IList<?> value2, Set<IEntity> processed) {
+        if (value1.size() != value2.size()) {
+            return false;
+        }
+        Iterator<?> iter1 = value1.iterator();
+        Iterator<?> iter2 = value2.iterator();
+        for (; iter1.hasNext() && iter2.hasNext();) {
+            if (!equalRecursive((IEntity) iter1.next(), (IEntity) iter2.next(), processed)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isEmptyEntity(IEntity entity) {
+        if ((entity == null) || entity.isNull()) {
+            return true;
+        }
+        EntityMeta em = entity.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
+                continue;
+            }
+            IObject<?> member = entity.getMember(memberName);
+            if (member.isNull()) {
+                continue;
+            } else if (memberMeta.isEntity()) {
+                if (!isEmptyEntity((IEntity) member)) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else if ((ISet.class.equals(memberMeta.getObjectClass())) || (IList.class.equals(memberMeta.getObjectClass()))) {
+                if (!((ICollection<?, ?>) member).isEmpty()) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else if (Boolean.class.equals(memberMeta.getValueClass())) {
+                // Special case for values presented by CheckBox
+                if (member.getValue() == Boolean.TRUE) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else {
+                log.debug("member {} not empty; {}", memberName, member);
+                return false;
+            }
+        }
+        return true;
+    }
 }

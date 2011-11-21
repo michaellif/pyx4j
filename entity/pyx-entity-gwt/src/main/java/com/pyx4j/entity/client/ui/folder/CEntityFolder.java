@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.CEntity;
+import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -54,7 +54,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntity<IList<E>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
