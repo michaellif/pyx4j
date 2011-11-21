@@ -76,7 +76,6 @@ public class SiteDescriptorCrudServiceImpl extends GenericCrudServiceDtoImpl<Sit
                 criteria.asc(criteria.proto().displayOrder().getPath().toString());
                 dto.locales().addAll(Persistence.service().query(criteria));
             }
-
         }
     }
 }

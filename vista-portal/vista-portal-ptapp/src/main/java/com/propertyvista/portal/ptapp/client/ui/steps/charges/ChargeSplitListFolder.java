@@ -41,8 +41,6 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     private static I18n i18n = I18n.get(ChargeSplitListFolder.class);
 
-    private final boolean summaryViewMode;
-
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
@@ -58,7 +56,6 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     ChargeSplitListFolder(boolean summaryViewMode) {
         super(TenantCharge.class, false);
-        this.summaryViewMode = summaryViewMode;
     }
 
     @Override

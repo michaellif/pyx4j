@@ -44,6 +44,12 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
+    public void initContent() {
+        super.initContent();
+        ((IFolderDecorator) getDecorator()).setAddButtonVisible(false);
+    }
+
+    @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
@@ -62,19 +68,13 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     protected IFolderDecorator<PageDescriptor> createDecorator() {
         TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
         decor.setShowHeader(false);
+        decor.setAddButtonVisible(false);
         return decor;
     }
 
     @Override
-    protected void addItem() {
-        if (parent.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-            viewer.newChild(parent.getValue().getPrimaryKey());
-        }
-    }
-
-    @Override
     protected boolean isFolderItemAllowed(PageDescriptor item) {
-        return !(Type.findApartment.equals(item.type().getValue()) || Type.residents.equals(item.type().getValue()));
+        return !(Type.findApartment == item.type().getValue() || Type.residents == item.type().getValue());
     }
 
     private class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {
