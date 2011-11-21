@@ -250,12 +250,10 @@ public class PaymentViewForm extends CEntityEditor<PaymentInformation> {
             addressForm.get(addressForm.proto().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
             get(proto().phone()).setValue(getValue().currentPhone());
 
-            @SuppressWarnings("unchecked")
-            CComponent<Country, ?> country = (CComponent<Country, ?>) addressForm.getRaw(addressForm.proto().country());
+            CComponent<Country, ?> country = addressForm.get(addressForm.proto().country());
             country.setValue(getValue().currentAddress().country());
 
-            @SuppressWarnings("unchecked")
-            CComponent<Province, ?> prov = (CComponent<Province, ?>) addressForm.getRaw(addressForm.proto().province());
+            CComponent<Province, ?> prov = addressForm.get(addressForm.proto().province());
             prov.setValue(getValue().currentAddress().province());
 
             editable = false;

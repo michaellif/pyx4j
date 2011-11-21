@@ -154,7 +154,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().currentAddress()));
+        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) get(proto().currentAddress()));
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
             @Override
@@ -192,7 +192,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         // ------------------------------------------------------------------------------------------------
 
         @SuppressWarnings("unchecked")
-        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().previousAddress()));
+        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) get(proto().previousAddress()));
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override

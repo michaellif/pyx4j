@@ -108,7 +108,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().currentAddress()));
+        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) get(proto().currentAddress()));
 
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
@@ -123,7 +123,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         // ------------------------------------------------------------------------------------------------        
 
         @SuppressWarnings("unchecked")
-        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) getRaw(proto().previousAddress()));
+        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) get(proto().previousAddress()));
 
         new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
 
