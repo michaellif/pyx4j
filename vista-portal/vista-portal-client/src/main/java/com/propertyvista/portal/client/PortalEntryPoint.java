@@ -14,6 +14,8 @@
 package com.propertyvista.portal.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -42,15 +44,44 @@ public class PortalEntryPoint implements EntryPoint {
         }
 
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
-            RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
-            if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
-                PropertyMapWidget map = PropertyMapWidget.get();
-                RootPanel.get(APTINFO_MAP_INSERTION_ID).add(map);
-                map.setSize("300px", "300px");
-                map.loadMap();
-            }
+            GWT.runAsync(new RunAsyncCallback() {
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+
+                @Override
+                public void onSuccess() {
+                    RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
+                    PropertyMapController.loadMap();
+                }
+            });
+        } else if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
+            GWT.runAsync(new RunAsyncCallback() {
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+
+                @Override
+                public void onSuccess() {
+                    PropertyMapWidget map = PropertyMapWidget.get();
+                    RootPanel.get(APTINFO_MAP_INSERTION_ID).add(map);
+                    map.setSize("300px", "300px");
+                    map.loadMap();
+                }
+            });
+
         } else {
-            new PortalSite().onModuleLoad();
+            GWT.runAsync(new RunAsyncCallback() {
+                @Override
+                public void onFailure(Throwable caught) {
+                }
+
+                @Override
+                public void onSuccess() {
+                    new PortalSite().onModuleLoad();
+                }
+            });
+
         }
 
     }
