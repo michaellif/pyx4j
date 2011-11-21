@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -73,10 +73,14 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Contact Details"));
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName(), new CLabel()), 12).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 6).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName(), new CLabel()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate(), new CDateLabel()), 9).build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
