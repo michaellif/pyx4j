@@ -2,11 +2,38 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<body>
 
-	<div id="vista.aptmap"  style="width: 700px; height: 500px;"></div>
+	<div id="vista.aptlistmap"  style="width: 700px; height: 500px;"></div>
     <noscript><div style="margin-left:auto;margin-right:auto;width:80%;text-align:center;font-size:20px;background-color:#fad163;color: black">You need to have JavaScript enabled to use this site.</div></noscript>
     <script type="text/javascript" language="javascript" src="portal.nocache.js"></script>
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
 	<!--[if lt IE 7]><script type="text/javascript">var ieVersion6=6;</script><p>Please upgrade to Internet Explorer version 7 or later.</p><![endif]-->
+
+	<script language="javascript">
+		var loadMapHandler, loadMapTimer, loadMapCount=0;
+		loadMapHandler = function() {
+			loadMapCount++;
+			try {
+				loadMap();
+				clearInterval(loadMapTimer);
+				loadMapCount = 0;
+				return true;
+			} catch (err) {
+				// ignore
+			}
+			// stop after 10 tries (5 sec)
+			if (loadMapCount >= 10) {
+				clearInterval(loadMapTimer);
+			}
+			return false;
+		}
+		// initial map load
+		window.onload = function() {
+			// try for a few times (5 sec max) as the map may not have been initialized yet
+			if (!loadMapHandler()) {
+				loadMapTimer = setInterval("loadMapHandler()", 500);
+			}
+		}
+	</script>
 
 	</body>
 </html>
