@@ -17,8 +17,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -29,7 +27,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
@@ -140,30 +137,4 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 //        btnSave.setEnabled(enable);
     }
 
-    private class YesNoBox extends OkCancelBox {
-
-        private boolean yes;
-
-        public YesNoBox() {
-            super(i18n.tr("Please confirm"));
-
-            okButton.setText(i18n.tr("Yes"));
-            cancelButton.setText(i18n.tr("No"));
-
-            setContent(createContent());
-        }
-
-        protected Widget createContent() {
-            return new HTML(i18n.tr("Do you really want to cancel?"));
-        }
-
-        @Override
-        protected boolean onOk() {
-            return (yes = true);
-        }
-
-        public boolean getYes() {
-            return yes;
-        }
-    }
 }
