@@ -38,7 +38,7 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     private final SiteViewer viewer;
 
     public SitePageDescriptorFolder(SiteEditorForm parent) {
-        super(PageDescriptor.class, !parent.isEditable());
+        super(PageDescriptor.class, parent.isEditable());
         this.parent = parent;
         this.viewer = (!parent.isEditable() ? (SiteViewer) parent.getParentView() : null);
     }
@@ -51,18 +51,18 @@ class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    protected IFolderDecorator<PageDescriptor> createDecorator() {
-        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
-        decor.setShowHeader(false);
-        return decor;
-    }
-
-    @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PageDescriptor) {
             return new PageDescriptorEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    protected IFolderDecorator<PageDescriptor> createDecorator() {
+        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
+        decor.setShowHeader(false);
+        return decor;
     }
 
     @Override

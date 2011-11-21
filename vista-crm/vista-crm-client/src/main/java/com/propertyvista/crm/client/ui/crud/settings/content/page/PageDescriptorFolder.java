@@ -20,6 +20,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -35,7 +37,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     private final PageViewer viewer;
 
     public PageDescriptorFolder(PageEditorForm parent) {
-        super(PageDescriptor.class, !parent.isEditable());
+        super(PageDescriptor.class, parent.isEditable());
         this.parent = parent;
         this.viewer = (!parent.isEditable() ? (PageViewer) parent.getParentView() : null);
     }
@@ -53,6 +55,13 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
             return new PageDescriptorEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    protected IFolderDecorator<PageDescriptor> createDecorator() {
+        TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
+        decor.setShowHeader(false);
+        return decor;
     }
 
     @Override
