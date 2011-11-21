@@ -44,7 +44,24 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
     private void initToolbarStyles() {
 
-        Style style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        initButtonrStyles("." + StyleName.ActionsPanel);
+
+        initButtonrStyles("." + StyleName.Footer);
+
+        Style style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("padding", "6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Footer, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("border-top", "4px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addProperty("padding", "2px");
+        addStyle(style);
+
+    }
+
+    private void initButtonrStyles(String selector) {
+        Style style = new Style(selector, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.05);
         style.addProperty("color", ThemeColors.foreground, 0);
@@ -56,23 +73,13 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style.addProperty("-moz-border-radius", "5px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
+        style = new Style(selector, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
         style.addProperty("border-color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style = new Style(selector, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColors.foreground, 0);
         style.addGradient(ThemeColors.foreground, 0.4, ThemeColors.foreground, 0.4);
-        addStyle(style);
-
-        style = new Style(".", StyleName.Footer, " .", DefaultWidgetsTheme.StyleName.Toolbar);
-        style.addProperty("border-top", "4px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
-        style.addProperty("padding", "6px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.ActionsPanel, " .", DefaultWidgetsTheme.StyleName.Toolbar);
-        style.addProperty("padding", "6px");
         addStyle(style);
 
     }
