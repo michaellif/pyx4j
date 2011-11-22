@@ -55,10 +55,15 @@ public class AddressConverter {
                 address.append(' ').append(streetDirection);
             }
             
-            address.append(", ").append(i18n.tr("suite")).append(' ').append(val(dbo.suiteNumber()));
-            //@formatter:on
-
+            address.append(", ").append(i18n.tr("Suite")).append(' ').append(val(dbo.suiteNumber()));
             dto.street1().setValue(address.toString());
+            
+            address.append(", ").append(val(dbo.city()))
+                .append(", ").append(val(dbo.province().code()))
+                .append(' ').append(val(dbo.postalCode()))
+                .append(", ").append(val(dbo.country().name()));
+            dto.street2().setValue(address.toString());
+            //@formatter:on
         }
 
         private String val(IPrimitive<String> property) {
@@ -66,7 +71,7 @@ public class AddressConverter {
         }
 
         private String valenum(IPrimitive<? extends Enum<?>> property) {
-            return property.isNull() ? "" : property.getValue().name();
+            return property.isNull() ? "" : property.getValue().toString();
         }
     }
 }

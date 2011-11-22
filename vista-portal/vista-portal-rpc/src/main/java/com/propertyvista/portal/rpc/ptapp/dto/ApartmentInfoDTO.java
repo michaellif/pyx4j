@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.ptapp.dto;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -38,12 +39,19 @@ public interface ApartmentInfoDTO extends IEntity {
     // Floorplan data:
     IPrimitive<String> floorplan();
 
+    @Caption(name = "bedrooms")
+    IPrimitive<String> bedroomsAndDens();
+
     IPrimitive<String> bedrooms();
+
+    IPrimitive<String> dens();
 
     IPrimitive<String> bathrooms();
 
     // Unit data:
     AddressSimple address();
+
+    IPrimitive<String> landlordName();
 
     // We store the unit number separately from address because we use address in its simple incarnation
     IPrimitive<String> suiteNumber();

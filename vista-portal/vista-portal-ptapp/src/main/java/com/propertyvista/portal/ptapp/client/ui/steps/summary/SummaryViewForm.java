@@ -13,9 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -111,7 +110,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
 
         int row = -1;
 
-        main.setH1(++row, 0, 1, i18n.tr("Apartment"));
+        main.setH1(++row, 0, 1, i18n.tr("Premises"));
         main.setWidget(++row, 0, new ApartmentView());
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Term"));
@@ -190,60 +189,62 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         return e;
     }
 
+    private static class TableCell {
+        public String caption;
+
+        public String width;
+
+        public Widget widget;
+
+        public TableCell(String caption, String width, Widget widget) {
+            this.caption = caption;
+            this.width = width;
+            this.widget = widget;
+        }
+
+    }
+
     /*
      * Selected Apartment information view implementation
      */
     private class ApartmentView extends HorizontalPanel {
-
         public ApartmentView() {
 
             alignWidth(this);
 
-            FlowPanel main = new FlowPanel();
+            FormFlexPanel main = new FormFlexPanel();
+
             main.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             main.getElement().getStyle().setPaddingRight(1, Unit.EM);
             add(main);
             setCellWidth(main, "100%");
 
-            Map<String, String> tableLayout = new LinkedHashMap<String, String>();
-            tableLayout.put("Type", "30%");
-            tableLayout.put("Unit", "20%");
-            tableLayout.put("Bedrooms", "10%");
-            tableLayout.put("Bathrooms", "10%");
-            tableLayout.put("Available", "15%");
+            List<TableCell> cells = Arrays.asList(
+                    //
+                    new TableCell("Suite Name", "20%", inject(proto().selectedUnit().floorplan()).asWidget()),
+                    new TableCell("Address", "40%", inject(proto().selectedUnit().address().street2()).asWidget()),
+                    //new TableCell("Suite #", "20%", inject(proto().selectedUnit().suiteNumber()).asWidget()),
+                    new TableCell("Bedrooms #", "10%", inject(proto().selectedUnit().bedrooms()).asWidget()),
+                    new TableCell("Den #", "10%", inject(proto().selectedUnit().dens()).asWidget()),
+                    new TableCell("Landlord Name", "20%", inject(proto().selectedUnit().landlordName()).asWidget()));
+            int col = -1;
 
-            // fill header:
-            for (Entry<String, String> e : tableLayout.entrySet()) {
-                HTML label = new HTML(i18n.tr(e.getKey()));
+            for (TableCell c : cells) {
+                HTML label = new HTML(i18n.tr(c.caption).replaceAll(" ", "&nbsp"));
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-                label.setWidth(e.getValue());
-                main.add(label);
+                label.setWidth(c.width);
+                main.setWidget(0, ++col, label);
+                main.setWidget(2, col, c.widget);
+                main.getFlexCellFormatter().setWidth(0, col, c.width);
             }
-
             Widget sp = new VistaLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setPaddingRight(2, Unit.EM);
             sp.getElement().getStyle().setPosition(Position.RELATIVE);
             sp.getElement().getStyle().setLeft(-1, Unit.EM);
-            main.add(sp);
-
-            // add table content panel:
-            FlowPanel content;
-            main.add(content = new FlowPanel());
-
-            addCell(tableLayout, content, "Type", inject(proto().selectedUnit().floorplan()).asWidget());
-            addCell(tableLayout, content, "Unit", inject(proto().selectedUnit().suiteNumber()).asWidget());
-            addCell(tableLayout, content, "Bedrooms", inject(proto().selectedUnit().bedrooms()).asWidget());
-            addCell(tableLayout, content, "Bathrooms", inject(proto().selectedUnit().bathrooms()).asWidget());
-            addCell(tableLayout, content, "Available", inject(proto().selectedUnit().leaseFrom()).asWidget());
-        }
-
-        private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
-            cellContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            cellContent.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
-            cellContent.setWidth(tableLayout.get(cellName));
-            content.add(cellContent);
+            main.setWidget(1, 0, sp);
+            main.getFlexCellFormatter().setColSpan(1, 0, cells.size());
         }
     }
 

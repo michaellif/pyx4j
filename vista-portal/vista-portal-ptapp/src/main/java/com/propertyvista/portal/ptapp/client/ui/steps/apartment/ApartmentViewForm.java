@@ -78,7 +78,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         FormFlexPanel info = new FormFlexPanel();
 
         info.setWidget(0, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
-        info.setWidget(1, 0, new DecoratorBuilder(inject(proto().bedrooms()), 10).build());
+        info.setWidget(1, 0, new DecoratorBuilder(inject(proto().bedroomsAndDens()), 10).build());
         info.setWidget(1, 1, new DecoratorBuilder(inject(proto().bathrooms()), 10).build());
 
         info.getColumnFormatter().setWidth(0, "30%");

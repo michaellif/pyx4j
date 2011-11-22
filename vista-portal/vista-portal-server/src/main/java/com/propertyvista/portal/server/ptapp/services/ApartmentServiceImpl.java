@@ -110,17 +110,20 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (!Persistence.service().retrieve(lease.unit().belongsTo())) {
             throw new UserRuntimeException("There is no unit building data!?.");
         }
-
         // fill DTO:
         ApartmentInfoDTO aptInfo = EntityFactory.create(ApartmentInfoDTO.class);
 
+        // TODO actually landlord is not always a property manager, but right now it's the most accurate 
+        aptInfo.landlordName().setValue(lease.unit().belongsTo().propertyManager().name().getValue());
+
         aptInfo.floorplan().setValue(lease.unit().floorplan().marketingName().getValue());
         aptInfo.bedrooms().setValue(lease.unit().floorplan().bedrooms().getStringView());
+        aptInfo.dens().setValue(lease.unit().floorplan().dens().getStringView());
 
         if (lease.unit().floorplan().dens().getValue() == 1) {
-            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " " + i18n.tr("den"));
+            aptInfo.bedroomsAndDens().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " " + i18n.tr("den"));
         } else if (lease.unit().floorplan().dens().getValue() > 1) {
-            aptInfo.bedrooms().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " " + i18n.tr("dens"));
+            aptInfo.bedroomsAndDens().setValue(aptInfo.bedrooms().getValue() + " + " + lease.unit().floorplan().dens().getStringView() + " " + i18n.tr("dens"));
         }
 
         aptInfo.bathrooms().setValue(lease.unit().floorplan().bathrooms().getStringView());
