@@ -400,7 +400,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
     }
 
     private static int injectIEmploymentInfo(FormFlexPanel main, int row, CEntityDecoratableEditor<? extends IEmploymentInfo> parent) {
-        main.setH3(++row, 0, 1, i18n.tr("Employment Info"));
+        main.setH3(++row, 0, 2, i18n.tr("Employment Info"));
         main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 9).build());
         main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().position()), 20).build());
         return row;
