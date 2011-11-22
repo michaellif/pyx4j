@@ -97,7 +97,7 @@ class LeaseHelper {
     private static ChargeItem createChargeItem(ServiceItem serviceItem) {
         ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
         chargeItem.item().set(serviceItem);
-        chargeItem.price().setValue(serviceItem.price().getValue());
+        chargeItem.originalPrice().setValue(serviceItem.price().getValue());
         return chargeItem;
     }
 }

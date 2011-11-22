@@ -69,8 +69,6 @@ public class VistaCrmTheme extends VistaTheme {
 
         addTheme(new DefaultWidgetsTheme());
 
-        addTheme(new DefaultWidgetsTheme());
-
         addTheme(new DefaultWidgetDecoratorTheme());
 
         addTheme(new DefaultFormFlexPanelTheme() {

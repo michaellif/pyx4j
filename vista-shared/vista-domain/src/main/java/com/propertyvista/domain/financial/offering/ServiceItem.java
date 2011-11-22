@@ -18,12 +18,14 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.BuildingElement;
 
+@ToStringFormat("{0}, Price: {1}")
 public interface ServiceItem extends IEntity {
 
     @Owner
@@ -36,6 +38,7 @@ public interface ServiceItem extends IEntity {
     @MemberColumn(name = "itemType")
     ServiceItemType type();
 
+    @ToString(index = 1)
     IPrimitive<Double> price();
 
     IPrimitive<String> description();

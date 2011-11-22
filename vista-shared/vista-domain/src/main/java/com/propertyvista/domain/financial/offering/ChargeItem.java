@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{0}, Base Price: {1}, Adjusted Price: {2}")
+@ToStringFormat("{0}, Original Price: {1}, Adjusted Price: {2}")
 public interface ChargeItem extends IEntity {
 
     @ToString(index = 0)
@@ -33,8 +33,7 @@ public interface ChargeItem extends IEntity {
     // base price: originally - comes from item
     @ToString(index = 1)
     @Format("#0.00")
-    @Caption(name = "Base Price")
-    IPrimitive<Double> price();
+    IPrimitive<Double> originalPrice();
 
     /*
      * adjusted price: case price + adjustments (type of hole-term only!)
@@ -43,6 +42,7 @@ public interface ChargeItem extends IEntity {
     @Transient
     @ToString(index = 2)
     @Format("#0.00")
+    @Caption(name = "Price")
     IPrimitive<Double> adjustedPrice();
 
     @Owned

@@ -19,7 +19,7 @@ import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 public class PriceCalculationHelpers {
 
     public static Double calculateChargeItemAdjustments(ChargeItem item) {
-        Double adjustedPrice = item.price().getValue();
+        Double adjustedPrice = item.originalPrice().getValue();
 
         for (ChargeItemAdjustment adjustment : item.adjustments()) {
             Double calculated = calculateChargeItemAdjustments(adjustedPrice, adjustment);

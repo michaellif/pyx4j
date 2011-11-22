@@ -60,7 +60,7 @@ class FeatureFolder extends VistaTableFolder<ChargeItem> {
                     for (ServiceItem item : box.getSelectedItems()) {
                         ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                         newItem.item().set(item);
-                        newItem.price().setValue(item.price().getValue());
+                        newItem.originalPrice().setValue(item.price().getValue());
                         newItem.adjustedPrice().setValue(item.price().getValue());
                         addItem(newItem);
                     }
