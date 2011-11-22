@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
+import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -42,6 +44,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication.Decision;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -131,13 +135,42 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         MasterApplication ma = ApplicationMgr.createMasterApplication(summary.lease());
 
+// TODO: currently - just some mockup stuff:
+        ma.status().setValue(RandomUtil.randomEnum(Status.class));
+        switch (ma.status().getValue()) {
+        case Approved:
+            ma.percenrtageApproved().setValue(80 + RandomUtil.randomDouble(20));
+            ma.suggestedDecision().setValue(Decision.Approve);
+            break;
+        case InformationRequested:
+            ma.percenrtageApproved().setValue(40 + RandomUtil.randomDouble(20));
+            ma.suggestedDecision().setValue(Decision.RequestInfo);
+            break;
+        case Declined:
+            ma.percenrtageApproved().setValue(RandomUtil.randomDouble(20));
+            ma.suggestedDecision().setValue(Decision.Decline);
+            break;
+
+        default:
+            ma.suggestedDecision().setValue(Decision.Pending);
+        }
+
+        switch (ma.status().getValue()) {
+        case Approved:
+        case InformationRequested:
+        case Declined:
+        case Cancelled:
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            ma.decidedBy().set(RandomUtil.random(Persistence.service().query(criteria)));
+            ma.decisionDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+            ma.decisionReason().setValue("Decided according current application state and Equifax check results");
+        }
+
         Persistence.service().persist(summary.lease());
         Persistence.service().persist(ma);
 
 //TODO
 //        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));
 //        Persistence.service().persist(summary.charges());
-
     }
-
 }

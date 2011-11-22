@@ -33,7 +33,7 @@ import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication.Decision;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
@@ -75,7 +75,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).approve(box.updateValue(form.getValue(), Decision.Approve));
+                            ((MasterApplicationViewerView.Presenter) presenter).approve(box.updateValue(form.getValue(), Status.Approved));
                         }
                     }
                 };
@@ -90,7 +90,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).moreInfo(box.updateValue(form.getValue(), Decision.RequestInfo));
+                            ((MasterApplicationViewerView.Presenter) presenter).moreInfo(box.updateValue(form.getValue(), Status.InformationRequested));
                         }
                     }
                 };
@@ -105,7 +105,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).decline(box.updateValue(form.getValue(), Decision.Decline));
+                            ((MasterApplicationViewerView.Presenter) presenter).decline(box.updateValue(form.getValue(), Status.Declined));
                         }
                     }
                 };
@@ -160,7 +160,6 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             reason.setWidth("100%");
             content.setWidth("100%");
             return content.asWidget();
-
         }
 
         @Override
@@ -168,11 +167,13 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             setSize("350px", "100px");
         }
 
-        public MasterApplicationDTO updateValue(MasterApplicationDTO currentValue, Decision decision) {
-            currentValue.suggestedDecision().setValue(decision);
+        public MasterApplicationDTO updateValue(MasterApplicationDTO currentValue, Status status) {
+            currentValue.status().setValue(status);
+
             currentValue.decidedBy().setPrimaryKey(ClientContext.getUserVisit().getPrincipalPrimaryKey());
             currentValue.decisionReason().setValue(reason.getValue());
             currentValue.decisionDate().setValue(new LogicalDate());
+
             return currentValue;
         }
     }

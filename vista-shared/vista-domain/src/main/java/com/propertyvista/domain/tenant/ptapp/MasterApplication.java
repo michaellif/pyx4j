@@ -41,7 +41,7 @@ public interface MasterApplication extends IEntity {
     @XmlType(name = "Application Status")
     public enum Status {
 
-        Invited, Submitted, Incomplete, PendingDecision, Approved, Declined, InfoRequested, Cancelled;
+        Invited, Submitted, Incomplete, PendingDecision, Approved, Declined, InformationRequested, Cancelled;
 
         @Override
         public String toString() {

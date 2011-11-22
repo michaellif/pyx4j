@@ -120,6 +120,9 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percenrtageApproved()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().suggestedDecision()), 25).build());
+
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decidedBy()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionReason()), 40).build());
@@ -147,6 +150,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).labelWidth(20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().masterApplicationStatus().progress()), 5).labelWidth(20).build());
 
         main.setBR(++row, 0, 1);
