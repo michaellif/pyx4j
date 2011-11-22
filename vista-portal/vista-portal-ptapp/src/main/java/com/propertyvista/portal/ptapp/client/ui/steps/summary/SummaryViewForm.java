@@ -233,7 +233,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
             main.add(content = new FlowPanel());
 
             addCell(tableLayout, content, "Type", inject(proto().selectedUnit().floorplan()).asWidget());
-            addCell(tableLayout, content, "Unit", inject(proto().selectedUnit().address().suiteNumber()).asWidget());
+            addCell(tableLayout, content, "Unit", inject(proto().selectedUnit().suiteNumber()).asWidget());
             addCell(tableLayout, content, "Bedrooms", inject(proto().selectedUnit().bedrooms()).asWidget());
             addCell(tableLayout, content, "Bathrooms", inject(proto().selectedUnit().bathrooms()).asWidget());
             addCell(tableLayout, content, "Available", inject(proto().selectedUnit().leaseFrom()).asWidget());

@@ -29,7 +29,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
@@ -45,12 +44,15 @@ import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
+import com.propertyvista.server.common.util.AddressConverter;
 
 public class ApartmentServiceImpl implements ApartmentService {
 
     private final static I18n i18n = I18n.get(ApartmentServiceImpl.class);
 
     private final static Logger log = LoggerFactory.getLogger(ApartmentServiceImpl.class);
+
+    private final static AddressConverter.StructuredToSimpleAddressConverter ADDRESS_CONVERTER = new AddressConverter.StructuredToSimpleAddressConverter();
 
     @Override
     public void retrieve(AsyncCallback<ApartmentInfoDTO> callback, Key tenantId) {
@@ -130,8 +132,11 @@ public class ApartmentServiceImpl implements ApartmentService {
                     aptInfo.bathrooms().getValue() + " + " + lease.unit().floorplan().halfBath().getStringView() + " " + i18n.tr("separate WCs"));
         }
 
-        aptInfo.address().set(lease.unit().belongsTo().info().address().clone(AddressStructured.class));
-        aptInfo.address().suiteNumber().setValue(lease.unit().info().number().getValue());
+        String suiteNumber = lease.unit().info().number().getValue();
+
+        aptInfo.suiteNumber().setValue(suiteNumber);
+        lease.unit().belongsTo().info().address().suiteNumber().setValue(suiteNumber); // this was just for the following copy
+        ADDRESS_CONVERTER.copyDBOtoDTO(lease.unit().belongsTo().info().address(), aptInfo.address());
 
         // find picture:
         Persistence.service().retrieve(lease.unit().belongsTo().media());

@@ -19,15 +19,17 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -60,6 +62,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         setEditable(false);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
@@ -88,8 +91,26 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         main.setHR(++row, 0, 1);
 
         FormFlexPanel apartment = new FormFlexPanel();
+        FormFlexPanel apartmentAddress = new FormFlexPanel();
+        // address: we don't use any special widgets in order to simplify the view
+        int aptRow = -1;
+        apartmentAddress.setH3(++aptRow, 0, 2, i18n.tr("Address"));
+        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(inject(proto().address().street1()), 50).customLabel(i18n.tr("Street Address")).build());
+        // currently we don't put anything in street2() while converting from dbo 2 dto
+        // apartment.setWidget(++aptRow, 0, new DecoratorBuilder(inject(proto().address().street2()), 50).build());
+        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(inject(proto().address().city()), 15).build());
 
-        apartment.setWidget(0, 0, inject(proto().address(), new CAddressStructured(false)));
+        // Need local variables to avoid extended casting that make the code unreadable
+        CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().address().province());
+        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(province, 17).build());
+
+        CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().address().country());
+        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(country, 15).build());
+
+        CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().address().postalCode());
+        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(postalCode, 7).build());
+
+        apartment.setWidget(0, 0, apartmentAddress);
         apartment.setWidget(0, 1, pictureHolder);
 
         info.getColumnFormatter().setWidth(0, "40%");

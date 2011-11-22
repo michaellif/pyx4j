@@ -106,7 +106,6 @@ public class ArrearsSummaryGadget extends ListerGadgetBase<ArrearsSummary> imple
 
     @Override
     protected boolean isFilterRequired() {
-        // TODO Auto-generated method stub
         return false;
     }
 
