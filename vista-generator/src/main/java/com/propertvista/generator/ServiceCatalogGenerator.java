@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,9 +20,9 @@ import java.util.List;
 import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.DepositType;
@@ -38,6 +38,8 @@ import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ServiceCatalogGenerator {
+
+    private static final I18n i18n = I18n.get(ServiceCatalogGenerator.class);
 
     private final ServiceItemTypes serviceItemTypes;
 
@@ -110,7 +112,7 @@ public class ServiceCatalogGenerator {
         }
     }
 
-// internals:    
+// internals:
     private Service createService(ServiceCatalog catalog, Service.Type type) {
         Service item = EntityFactory.create(Service.class);
         item.catalog().set(catalog);
@@ -223,26 +225,28 @@ public class ServiceCatalogGenerator {
         concession.type().setValue(RandomUtil.random(Concession.Type.values(), "Concession.Type", Concession.Type.values().length));
 
         if (concession.type().getValue() == Concession.Type.percentageOff) {
-            concession.value().setValue(10d + RandomUtil.randomInt(90));
+            concession.value().setValue(10d + RandomUtil.randomInt(11));
+            concession.description().setValue(i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service", concession.value().getValue()));
         } else if (concession.type().getValue() == Concession.Type.monetaryOff) {
             concession.value().setValue(50d + RandomUtil.randomInt(50));
+            concession.description().setValue(i18n.tr("Special Promotion Applies, {0}$ Off The Value Of The Service", concession.value().getValue()));
         } else if (concession.type().getValue() == Concession.Type.promotionalItem) {
             concession.value().setValue(100d + RandomUtil.randomInt(100));
+            concession.description().setValue(i18n.tr("Special Promotion Applies, {0}$ In Promotional Items Or Services", concession.value().getValue()));
         } else if (concession.type().getValue() == Concession.Type.free) {
             concession.value().setValue(200d + RandomUtil.randomInt(100));
+            concession.description().setValue(i18n.tr("Special Promotion Applies, Everything Completely Free"));
         }
 
         concession.term().setValue(RandomUtil.random(Concession.Term.values()));
         concession.condition().setValue(RandomUtil.random(Concession.Condition.values()));
         concession.status().setValue(RandomUtil.random(Concession.Status.values()));
         if (concession.status().getValue() == Concession.Status.approved) {
-            concession.approvedBy().setValue("Gorge W. Bush Jr.");
+            concession.approvedBy().setValue("George W. Bush Jr.");
         }
 
         concession.effectiveDate().setValue(DataGenerator.randomDate(2));
         concession.expirationDate().setValue(DataGenerator.randomDate(4));
-
-        concession.description().setValue(SimpleMessageFormat.format("Concession description here..."));
 
         return concession;
     }
@@ -333,7 +337,7 @@ public class ServiceCatalogGenerator {
         item.type().name().setValue(selectedItem.getStringView());
         item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
-        // This value may not be used in all cases nad overriden later in generator
+        // This value may not be used in all cases and overridden later in generator
         item.price().setValue(500d + RandomUtil.randomInt(500));
         item.description().setValue(type.toString() + " description here...");
         item.element().set(buildingElement);

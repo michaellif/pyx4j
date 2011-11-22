@@ -158,7 +158,7 @@ public class SignInPanel extends Panel {
                 }
             } else {
                 strategy.remove();
-                error("Sign in failed");
+                error(i18n.tr("Sign in failed"));
             }
         }
     }
