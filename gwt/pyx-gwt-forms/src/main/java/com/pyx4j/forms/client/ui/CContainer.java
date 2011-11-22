@@ -70,7 +70,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                         @Override
                         public void execute() {
                             if (PropertyChangeEvent.PropertyName.valid.equals(event.getPropertyName())) {
-                                log.trace("CEntityEditor.onPropertyChange fired from {}. Changed property is {}.", getTitle(), event.getPropertyName());
+                                log.trace("CContainer.onPropertyChange fired from {}. Changed property is {}.", shortDebugInfo(), event.getPropertyName());
                                 revalidate();
                                 PropertyChangeEvent.fire(CContainer.this, PropertyChangeEvent.PropertyName.valid);
 
@@ -93,7 +93,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                         @Override
                         public void execute() {
                             revalidate();
-                            log.trace("CEntityEditor.onValueChange fired from {}. New value is {}.", getTitle(), event.getValue());
+                            log.trace("CContainer.onValueChange fired from {}. New value is {}.", shortDebugInfo(), event.getValue());
                             ValueChangeEvent.fire(CContainer.this, getValue());
                             sheduled = false;
                         }

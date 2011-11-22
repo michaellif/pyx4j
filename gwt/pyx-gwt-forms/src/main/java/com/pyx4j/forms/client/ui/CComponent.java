@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.ICloneable;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
@@ -530,6 +531,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
                 + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getTooltip()
                 + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
+    }
+
+    public String shortDebugInfo() {
+        return "class:" + GWTJava5Helper.getSimpleName(this.getClass()) + "; " + getDebugId();
     }
 
     protected void setNativeValue(DATA_TYPE value) {
