@@ -15,11 +15,11 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -28,8 +28,6 @@ import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -83,38 +81,33 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         info.setWidget(1, 0, new DecoratorBuilder(inject(proto().bedrooms()), 10).build());
         info.setWidget(1, 1, new DecoratorBuilder(inject(proto().bathrooms()), 10).build());
 
-        info.getColumnFormatter().setWidth(0, "50%");
-        info.getColumnFormatter().setWidth(1, "50%");
+        info.getColumnFormatter().setWidth(0, "30%");
+        info.getColumnFormatter().setWidth(1, "70%");
 
         main.setWidget(++row, 0, info);
 
         main.setHR(++row, 0, 1);
 
+        FormFlexPanel address = new FormFlexPanel();
+
+        int addrRow = -1;
+        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().city()), 15).build());
+        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().province()), 17).build());
+        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().country()), 15).build());
+        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().postalCode()), 7).build());
+
         FormFlexPanel apartment = new FormFlexPanel();
-        FormFlexPanel apartmentAddress = new FormFlexPanel();
-        // address: we don't use any special widgets in order to simplify the view
-        int aptRow = -1;
-        apartmentAddress.setH3(++aptRow, 0, 2, i18n.tr("Address"));
-        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(inject(proto().address().street1()), 50).customLabel(i18n.tr("Street Address")).build());
-        // currently we don't put anything in street2() while converting from dbo 2 dto
-        // apartment.setWidget(++aptRow, 0, new DecoratorBuilder(inject(proto().address().street2()), 50).build());
-        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(inject(proto().address().city()), 15).build());
 
-        // Need local variables to avoid extended casting that make the code unreadable
-        CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().address().province());
-        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(province, 17).build());
+        apartment.setWidget(0, 0, new DecoratorBuilder(inject(proto().address().street1()), 50).customLabel(i18n.tr("Street Address")).build());
+        apartment.getFlexCellFormatter().setColSpan(0, 0, 2);
 
-        CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().address().country());
-        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(country, 15).build());
+        apartment.setWidget(1, 0, address);
+        apartment.getCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
 
-        CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().address().postalCode());
-        apartmentAddress.setWidget(++aptRow, 0, new DecoratorBuilder(postalCode, 7).build());
+        apartment.setWidget(1, 1, pictureHolder);
 
-        apartment.setWidget(0, 0, apartmentAddress);
-        apartment.setWidget(0, 1, pictureHolder);
-
-        info.getColumnFormatter().setWidth(0, "40%");
-        info.getColumnFormatter().setWidth(1, "60%");
+        apartment.getColumnFormatter().setWidth(0, "50%");
+        apartment.getColumnFormatter().setWidth(1, "50%");
 
         main.setWidget(++row, 0, apartment);
 
