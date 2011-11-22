@@ -68,9 +68,9 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                     setVisibility(event.getValue());
                 }
             });
-            main.setWidget(++row, 0, new DecoratorBuilder(incomeSource, 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(incomeSource, 25).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().incomeSource()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().incomeSource()), 25).build());
         }
 
         main.setWidget(++row, 0, inject(proto().employer(), createEmployerEditor()));
@@ -220,14 +220,22 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().employedForYears()), 4).build());
 
-                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                row = -1;
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
+
+                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+                main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 9).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
+                main.getColumnFormatter().setWidth(0, "50%");
+                main.getColumnFormatter().setWidth(1, "50%");
+                main.setWidth("100%");
                 return main;
             }
 
@@ -248,13 +256,18 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                 int row = -1;
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
 
-                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                row = -1;
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
+
+                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+                main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 9).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -286,8 +299,8 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
 
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 9).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -309,8 +322,13 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                 int row = -1;
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
 
-                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                row = -1;
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
+
+                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+                main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
                 row = injectIEmploymentInfo(main, row, this);
 
@@ -318,8 +336,8 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyRevenue()), 10).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfEmployees()), 4).build());
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 9).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -341,13 +359,18 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                 int row = -1;
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
 
-                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
+                row = -1;
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
+                main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
+
+                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new CAddressStructured()));
+                main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 8.2).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 9).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -369,7 +392,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
                 int row = -1;
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 8.2).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -378,9 +401,7 @@ public class CPersonalIncomeEditor extends CEntityDecoratableEditor<PersonalInco
 
     private static int injectIEmploymentInfo(FormFlexPanel main, int row, CEntityDecoratableEditor<? extends IEmploymentInfo> parent) {
         main.setH3(++row, 0, 1, i18n.tr("Employment Info"));
-        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().supervisorName()), 20).build());
-        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().supervisorPhone()), 15).build());
-        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 8).build());
+        main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 9).build());
         main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().position()), 20).build());
         return row;
     }

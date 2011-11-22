@@ -18,10 +18,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 public enum IncomeSource {
 
-    @Translate("Full time")
+    @Translate("Full Time Employment")
     fulltime,
 
-    @Translate("Part time")
+    @Translate("Part Time Employment")
     parttime,
 
     @Translate("Self Employed")
