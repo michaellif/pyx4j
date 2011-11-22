@@ -20,6 +20,7 @@ import java.util.List;
 import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
@@ -241,7 +242,7 @@ public class ServiceCatalogGenerator {
         concession.effectiveDate().setValue(DataGenerator.randomDate(2));
         concession.expirationDate().setValue(DataGenerator.randomDate(4));
 
-        concession.description().setValue("Concession description here...");
+        concession.description().setValue(SimpleMessageFormat.format("Concession description here..."));
 
         return concession;
     }
