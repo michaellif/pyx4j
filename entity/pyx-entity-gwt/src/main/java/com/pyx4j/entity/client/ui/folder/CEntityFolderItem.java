@@ -41,7 +41,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
 
@@ -231,11 +230,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     public void setValue(E value) {
         editor.setValue(value);
         super.setValue(value);
-    }
-
-    @Override
-    public ValidationResults getValidationResults() {
-        return getAllValidationResults();
     }
 
     @Override

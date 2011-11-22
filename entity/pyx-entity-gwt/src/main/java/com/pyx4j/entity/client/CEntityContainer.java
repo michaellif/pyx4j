@@ -24,12 +24,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory {
@@ -39,62 +37,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     private IDecorator decorator;
 
     private ImageResource icon;
-
-    @Override
-    public boolean isValid() {
-
-        if (!isEditable() || !isEnabled()) {
-            return true;
-        }
-
-        if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
-                if (!ccomponent.isValid()) {
-                    return false;
-                }
-            }
-        }
-        return super.isValid();
-    }
-
-    public ValidationResults getAllValidationResults() {
-        ValidationResults validationResults = getContainerValidationResults();
-        for (CComponent<?, ?> component : this.getComponents()) {
-            if (component.isValid()) {
-                continue;
-            }
-            if (component instanceof CEntityContainer<?>) {
-                validationResults.appendValidationErrors(((CEntityContainer<?>) component).getValidationResults());
-            } else if (component.isVisited()) {
-                validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid. {1}", component.getTitle(), component.getValidationMessage()));
-            }
-        }
-
-        return validationResults;
-    }
-
-    public ValidationResults getContainerValidationResults() {
-        ValidationResults validationResults = new ValidationResults();
-        String message = getValidationMessage();
-        if (message != null) {
-            if (CommonsStringUtils.isStringSet(getTitle())) {
-                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid. {1}", getTitle(), message));
-            } else {
-                validationResults.appendValidationError(message);
-            }
-        }
-        return validationResults;
-    }
-
-    @Override
-    public void setVisited(boolean visited) {
-        super.setVisited(visited);
-        if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
-                ((CComponent<?, ?>) ccomponent).setVisited(visited);
-            }
-        }
-    }
 
     public abstract IsWidget createContent();
 

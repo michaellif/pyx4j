@@ -32,12 +32,16 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends CComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CContainer.class);
+
+    protected static I18n i18n = I18n.get(CContainer.class);
 
     private final IAccessAdapter aggregatingAccessAdapter;
 
@@ -113,6 +117,16 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @Override
+    public void setVisited(boolean visited) {
+        super.setVisited(visited);
+        if (getComponents() != null) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
+                ((CComponent<?, ?>) ccomponent).setVisited(visited);
+            }
+        }
+    }
+
+    @Override
     public boolean isValid() {
         if (!isEditable() || !isEnabled()) {
             return true;
@@ -129,13 +143,24 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
+        String message = getValidationMessage();
+        if (message != null) {
+            if (CommonsStringUtils.isStringSet(getTitle())) {
+                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid. {1}", getTitle(), message));
+            } else {
+                validationResults.appendValidationError(message);
+            }
+        }
+
         if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
-                if (ccomponent instanceof CContainer && !((CContainer<?, ?>) ccomponent).isValid()) {
-                    validationResults.appendValidationErrors(((CContainer<?, ?>) ccomponent).getValidationResults());
-                } else if (!((CComponent<?, ?>) ccomponent).isValid()) {
-                    validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
-                            + ((CComponent<?, ?>) ccomponent).getValidationMessage());
+            for (CComponent<?, ?> component : this.getComponents()) {
+                if (component.isValid()) {
+                    continue;
+                }
+                if (component instanceof CContainer<?, ?>) {
+                    validationResults.appendValidationErrors(((CContainer<?, ?>) component).getValidationResults());
+                } else if (component.isVisited()) {
+                    validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid. {1}", component.getTitle(), component.getValidationMessage()));
                 }
             }
         }
@@ -184,6 +209,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     @Override
     public void applyEditabilityRules() {
+        super.applyEditabilityRules();
         if (getComponents() != null) {
             for (CComponent<?, ?> component : getComponents()) {
                 component.applyEditabilityRules();
@@ -191,9 +217,4 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
-    @Override
-    public void applyAccessibilityRules() {
-        super.applyAccessibilityRules();
-        applyEditabilityRules();
-    }
 }

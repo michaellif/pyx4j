@@ -54,7 +54,6 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextComponent;
-import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E> {
@@ -125,11 +124,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         } else {
             return factory.create(member);
         }
-    }
-
-    @Override
-    public ValidationResults getValidationResults() {
-        return getAllValidationResults();
     }
 
     public final CComponent<?, ?> inject(IObject<?> member) {

@@ -43,7 +43,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 /**
@@ -327,44 +326,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public ValidationResults getValidationResults() {
-        return getAllValidationResults();
-    }
-
-    @Override
     public FlowPanel getContainer() {
         return container;
-    }
-
-    @Override
-    public void applyVisibilityRules() {
-        super.applyVisibilityRules();
-        if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
-                component.applyVisibilityRules();
-            }
-        }
-    }
-
-    @Override
-    public void applyEnablingRules() {
-        super.applyEnablingRules();
-        if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
-                component.applyEnablingRules();
-            }
-        }
-    }
-
-    @Override
-    public void applyEditabilityRules() {
-        if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
-                if (component instanceof CComponent<?, ?>) {
-                    ((CComponent<?, ?>) component).applyEditabilityRules();
-                }
-            }
-        }
     }
 
     public int getItemCount() {
