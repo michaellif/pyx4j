@@ -269,23 +269,21 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         currentRowDebugId = 0;
 
         for (E entity : value) {
-            if (isFolderItemAllowed(entity)) {
-                CEntityFolderItem<E> item = null;
-                for (CEntityFolderItem<E> itemFromCahe : previousList) {
-                    if (itemFromCahe.getValue().equals(entity)) {
-                        previousList.remove(itemFromCahe);
-                        item = itemFromCahe;
-                        break;
-                    }
+            CEntityFolderItem<E> item = null;
+            for (CEntityFolderItem<E> itemFromCahe : previousList) {
+                if (itemFromCahe.getValue().equals(entity)) {
+                    previousList.remove(itemFromCahe);
+                    item = itemFromCahe;
+                    break;
                 }
-
-                if (item == null) {
-                    item = createItemPrivate();
-                }
-
-                adopt(item);
-                item.populate(entity);
             }
+
+            if (item == null) {
+                item = createItemPrivate();
+            }
+
+            adopt(item);
+            item.populate(entity);
         }
 
         for (CEntityFolderItem<E> item : itemsList) {
@@ -295,17 +293,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (getDecorator() instanceof TableFolderDecorator) {
             ((TableFolderDecorator<E>) getDecorator()).setHeaderVisible(container.getWidgetCount() > 0);
         }
-    }
-
-    /**
-     * Controls folder population with entity items.
-     * 
-     * @param item
-     *            - processed entity item.
-     * @return true if item is allowed, false - otherwise.
-     */
-    protected boolean isFolderItemAllowed(E item) {
-        return true; // by default - all items are allowed!..
     }
 
     @Override
