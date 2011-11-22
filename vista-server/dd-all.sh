@@ -4,7 +4,7 @@
 # helper to run maven3 on Mac and Linux  demo server
 #
 SCRIPTS_DIR=`dirname "${0}"`
-
+cd ${SCRIPTS_DIR}
 ${SCRIPTS_DIR}/dd11.sh
 if [ "$?" != "0" ]; then
     echo   
