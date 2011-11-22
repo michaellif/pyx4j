@@ -398,7 +398,22 @@ public class TableModel {
             Object value = member.getValueAdapter().retrieveValue(rs, member.sqlName());
             if (value != null) {
                 if (member.getMemberMeta().isEntity()) {
-                    ((IEntity) member.getMember(entity)).set((IEntity) value);
+                    IEntity memberValue = (IEntity) member.getMember(entity);
+                    if (member.isOwnerColumn()) {
+                        // Special handling for recursive retrieve of Owner
+                        if ((entity.getOwner() != null) && member.getMemberMeta().isOwnedRelationships()) {
+                            // verify graph integrity
+                            if (!entity.getOwner().equals(value)) {
+                                throw new RuntimeException("Unexpected owner " + member.getMemberPath() + " '"
+                                        + ((IEntity) value).getDebugExceptionInfoString() + "' != '" + entity.getOwner().getDebugExceptionInfoString()
+                                        + "' in entity '" + entity.getDebugExceptionInfoString() + "'");
+                            }
+                        } else {
+                            memberValue.set((IEntity) value);
+                        }
+                    } else {
+                        memberValue.set((IEntity) value);
+                    }
                 } else {
                     member.setMemberValue(entity, value);
                 }

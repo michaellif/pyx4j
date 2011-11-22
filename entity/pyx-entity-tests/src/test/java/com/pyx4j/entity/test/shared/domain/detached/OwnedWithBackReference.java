@@ -14,32 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 12, 2011
+ * Created on Nov 22, 2011
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.detached;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Table(prefix = "test")
-public interface MainHolderEnity extends IEntity {
+public interface OwnedWithBackReference extends IEntity {
 
     IPrimitive<String> name();
 
-    @Owned
-    MainEnity ownedEntity();
+    @Detached
+    @Owner
+    MainHolderEnity detachedOwner();
 
-    @Owned
-    IList<MainEnity> ownedEntities();
-
-    @Owned
-    OwnedWithBackReference ownedWithBackReference();
-
-    @Owned
-    IList<OwnedWithBackReference> ownedWithBackReferenceList();
 }

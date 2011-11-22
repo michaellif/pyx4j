@@ -32,6 +32,8 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     private final MemberMeta memberMeta;
 
+    private final boolean ownerColumn;
+
     private final EntityMemberAccess memberAccess;
 
     private final ValueAdapter valueAdapter;
@@ -45,11 +47,16 @@ public class MemberOperationsMeta implements EntityMemberAccess {
     private String sqlSequenceName;
 
     public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath) {
-        this(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, null);
+        this(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, null, false);
     }
 
     public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
-            Class<? extends IndexAdapter<?>> indexAdapterClass, Class<?> indexValueClass) {
+            boolean ownerColumn) {
+        this(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, null, ownerColumn);
+    }
+
+    public MemberOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
+            Class<? extends IndexAdapter<?>> indexAdapterClass, Class<?> indexValueClass, boolean ownerColumn) {
         this.memberPath = memberPath;
         this.memberMeta = memberMeta;
         this.memberAccess = memberAccess;
@@ -57,6 +64,11 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         this.sqlName = sqlName;
         this.indexAdapterClass = indexAdapterClass;
         this.indexValueClass = indexValueClass;
+        this.ownerColumn = ownerColumn;
+    }
+
+    public boolean isOwnerColumn() {
+        return ownerColumn;
     }
 
     public String getMemberPath() {
@@ -120,5 +132,10 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     public void setSqlSequenceName(String sqlSequenceName) {
         this.sqlSequenceName = sqlSequenceName;
+    }
+
+    @Override
+    public String toString() {
+        return memberPath + " " + memberMeta.toString();
     }
 }

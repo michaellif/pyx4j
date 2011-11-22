@@ -97,6 +97,7 @@ public class EntityOperationsMeta {
 
     private void build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, String path, List<String> accessPath,
             List<String> namesPath, EntityMeta entityMeta) {
+        String ownerMemberName = entityMeta.getOwnerMemberName();
         for (String memberName : entityMeta.getMemberNames()) {
             MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
             if (memberMeta.isTransient()) {
@@ -175,7 +176,7 @@ public class EntityOperationsMeta {
                         valueAdapter = new ValueAdapterEntity(dialect, entityClass);
                     }
                     MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
-                            + memberName + Path.PATH_SEPARATOR);
+                            + memberName + Path.PATH_SEPARATOR, memberName.equals(ownerMemberName));
 
                     columnMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
@@ -230,7 +231,7 @@ public class EntityOperationsMeta {
                         IndexAdapter<?> adapter = AdapterFactory.getIndexAdapter(adapterClass);
                         String indexedPropertyName = namingConvention.sqlFieldName(adapter.getIndexedColumnName(null, memberMeta));
                         indexMembers.add(new MemberOperationsMeta(memberAccess, null, indexedPropertyName, memberMeta, null, adapterClass, adapter
-                                .getIndexValueClass()));
+                                .getIndexValueClass(), false));
                     }
                 }
             }

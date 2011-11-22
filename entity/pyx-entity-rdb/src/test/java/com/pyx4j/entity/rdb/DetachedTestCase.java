@@ -179,4 +179,18 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         testDetachedMemeberInListInOwnedObject(TestCaseMethod.Merge);
     }
 
+    public void testDetachedOwnerMemeber() {
+        MainHolderEnity main = EntityFactory.create(MainHolderEnity.class);
+        main.name().setValue("m1 " + uniqueString());
+        // TODO fix the first save
+        srv.persist(main);
+        main.ownedWithBackReference().name().setValue("c1 " + uniqueString());
+
+        srv.persist(main);
+
+        MainHolderEnity mainR = srv.retrieve(MainHolderEnity.class, main.getPrimaryKey());
+
+        Assert.assertFalse("is detached", mainR.ownedWithBackReference().detachedOwner().isValuesDetached());
+    }
+
 }

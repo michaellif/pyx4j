@@ -326,4 +326,9 @@ public class MemberMetaImpl implements MemberMeta {
         return method.isAnnotationPresent(annotationClass);
     }
 
+    @Override
+    public String toString() {
+        return "MemberMeta '" + fieldName + "' " + valueClass.getSimpleName();
+    }
+
 }
