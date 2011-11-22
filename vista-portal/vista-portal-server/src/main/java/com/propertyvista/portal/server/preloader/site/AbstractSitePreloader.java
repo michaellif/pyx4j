@@ -130,6 +130,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
             for (LocaleInfo li : siteLocale) {
                 addCaption(page, li.i18n.tr(caption), li.aLocale);
+                addEmptyContent(page, li.aLocale);
             }
             site.childPages().add(page);
         }
@@ -140,6 +141,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
             for (LocaleInfo li : siteLocale) {
                 addCaption(page, li.i18n.tr(caption), li.aLocale);
+                addEmptyContent(page, li.aLocale);
             }
             site.childPages().add(page);
         }
@@ -314,6 +316,12 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         return contentText;
 
+    }
+
+    protected void addEmptyContent(PageDescriptor page, AvailableLocale locale) {
+        PageContent pageContent = EntityFactory.create(PageContent.class);
+        pageContent.locale().set(locale);
+        page.content().add(pageContent);
     }
 
     protected void addContent(PageDescriptor page, String resourceBaseName, AvailableLocale locale) {
