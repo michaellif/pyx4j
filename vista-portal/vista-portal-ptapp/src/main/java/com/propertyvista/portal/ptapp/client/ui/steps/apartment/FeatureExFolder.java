@@ -33,8 +33,12 @@ class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     // TODO obtain this value somewhere!.. 
     private final int maxCount = 2;
 
-    public FeatureExFolder(boolean modifyable, Feature.Type type, ApartmentViewForm apartmentViewForm) {
-        super(ChargeItem.class, modifyable);
+    public FeatureExFolder(boolean modifiable, Feature.Type type, ApartmentViewForm apartmentViewForm) {
+        super(ChargeItem.class, modifiable);
+        // TODO: remove when folder modifiable state be unlinked from parents editing state! 
+        inheritContainerAccessRules(false);
+        setEditable(true);
+
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
     }

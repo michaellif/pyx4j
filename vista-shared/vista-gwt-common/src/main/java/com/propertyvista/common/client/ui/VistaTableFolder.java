@@ -44,8 +44,8 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         this(clazz, itemName, true);
     }
 
-    public VistaTableFolder(Class<E> clazz, boolean modifyable) {
-        this(clazz, null, modifyable);
+    public VistaTableFolder(Class<E> clazz, boolean modifiable) {
+        this(clazz, null, modifiable);
     }
 
     public VistaTableFolder(Class<E> clazz, String itemName, boolean modifyable) {

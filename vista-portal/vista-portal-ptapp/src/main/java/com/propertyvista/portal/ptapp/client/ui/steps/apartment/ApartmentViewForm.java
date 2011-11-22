@@ -57,6 +57,7 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
     public ApartmentViewForm() {
         super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
+        setEditable(false);
     }
 
     @Override

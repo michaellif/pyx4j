@@ -36,8 +36,8 @@ public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E>
         this(clazz, itemName, true);
     }
 
-    public VistaBoxFolder(Class<E> clazz, boolean modifyable) {
-        this(clazz, null, modifyable);
+    public VistaBoxFolder(Class<E> clazz, boolean modifiable) {
+        this(clazz, null, modifiable);
     }
 
     public VistaBoxFolder(Class<E> clazz, String itemName, boolean modifyable) {
