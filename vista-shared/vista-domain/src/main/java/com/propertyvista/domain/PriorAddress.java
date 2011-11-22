@@ -26,6 +26,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 
 @EmbeddedEntity
@@ -65,5 +66,13 @@ public interface PriorAddress extends AddressStructured {
     @Editor(type = EditorType.radiogroup)
     IPrimitive<OwnedRented> rented();
 
+    IPrimitive<String> propertyCompany();
+
     IPrimitive<String> managerName();
+
+    @EmbeddedEntity
+    Phone managerPhone();
+
+    @EmbeddedEntity
+    Email managerEmail();
 }

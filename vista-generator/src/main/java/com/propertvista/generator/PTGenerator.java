@@ -45,6 +45,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
@@ -341,6 +342,10 @@ public class PTGenerator {
         address.phone().set(CommonsGenerator.createPhone());
         address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
         address.managerName().setValue("Mr. " + DataGenerator.randomLastName());
+        address.managerPhone().set(CommonsGenerator.createPhone());
+        address.managerEmail().set(
+                CommonsGenerator.createEmail(DataGenerator.randomFirstName().toLowerCase() + "@" + DataGenerator.random(PreloadData.EMAIL_DOMAINS),
+                        Email.Type.work));
 
         return address;
     }

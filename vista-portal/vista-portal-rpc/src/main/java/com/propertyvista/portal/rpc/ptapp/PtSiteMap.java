@@ -46,7 +46,7 @@ public class PtSiteMap implements SiteMap {
     }
 
     @NavigationItem(navigLabel = "Tenants")
-    @PlaceProperties(caption = "Tenants")
+    @PlaceProperties(caption = "Tenants & Occupants")
     public static class Tenants extends AppPlace implements WizardStepPlace {
     }
 

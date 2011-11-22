@@ -62,7 +62,10 @@ public class CPriorAddress extends CAddressStructuredImpl<PriorAddress> {
         }
         main.setWidget(++row1, col, new DecoratorBuilder(rentedComponent, 15).build());
         main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().payment()), 8).build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerName()), 15).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().propertyCompany()), 20).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerName()), 20).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerPhone()), 20).build());
+        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerEmail()), 20).build());
 
         main.setWidth("100%");
         if (isTwoColumns()) {
@@ -82,6 +85,9 @@ public class CPriorAddress extends CAddressStructuredImpl<PriorAddress> {
     private void setVizibility(PriorAddress value) {
         boolean rented = OwnedRented.rented.equals(value.rented().getValue());
         get(proto().payment()).setVisible(rented);
+        get(proto().propertyCompany()).setVisible(rented);
         get(proto().managerName()).setVisible(rented);
+        get(proto().managerPhone()).setVisible(rented);
+        get(proto().managerEmail()).setVisible(rented);
     }
 }
