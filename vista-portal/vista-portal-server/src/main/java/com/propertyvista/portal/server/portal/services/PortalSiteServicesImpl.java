@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
@@ -42,6 +43,9 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
 
         PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         for (Building building : buildings) {
+            if (!PublicVisibilityType.global.equals(building.marketing().visibility().getValue())) {
+                continue;
+            }
 
             if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
                 continue;

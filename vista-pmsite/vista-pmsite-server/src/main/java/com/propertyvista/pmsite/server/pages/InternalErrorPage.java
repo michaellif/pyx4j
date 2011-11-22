@@ -20,6 +20,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 import com.propertyvista.pmsite.server.PMSiteApplication;
 
 public class InternalErrorPage extends ErrorPage {
@@ -34,8 +36,11 @@ public class InternalErrorPage extends ErrorPage {
         log.error("site error", e);
         if (e == null) {
             err.write("Unknown Error");
-        } else {
+        } else if (ApplicationMode.isDevelopment()) {
+            err.write(ApplicationMode.DEV);
             e.printStackTrace(new PrintWriter(err));
+        } else {
+            err.write(e.getMessage());
         }
         add(new Label("errorContent", err.toString()));
     }

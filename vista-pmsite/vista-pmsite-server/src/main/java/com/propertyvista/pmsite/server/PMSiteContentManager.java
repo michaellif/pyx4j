@@ -288,6 +288,10 @@ public class PMSiteContentManager implements Serializable {
         return provCityMap;
     }
 
+    public static boolean isPropertyVisible(Building bld) {
+        return PublicVisibilityType.global.equals(bld.marketing().visibility().getValue());
+    }
+
     public static List<Building> getPropertyList(PropertySearchCriteria searchCriteria) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
 
@@ -306,6 +310,10 @@ public class PMSiteContentManager implements Serializable {
         ArrayList<Building> remove = new ArrayList<Building>();
         for (Building bld : buildings) {
             // do some sanity check
+            if (!isPropertyVisible(bld)) {
+                remove.add(bld);
+                continue;
+            }
             if (bld.info().address().location().isNull() || bld.info().address().location().getValue().getLat() == 0) {
                 remove.add(bld);
                 continue;
@@ -332,6 +340,9 @@ public class PMSiteContentManager implements Serializable {
             return null;
         }
         Building bld = buildings.get(0);
+        if (!isPropertyVisible(bld)) {
+            return null;
+        }
         // check if we have any valid floorplans
         if (getBuildingFloorplans(bld).size() < 1) {
             return null;
@@ -342,6 +353,9 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static Map<Floorplan, List<AptUnit>> getBuildingFloorplans(Building bld) {
+        if (!isPropertyVisible(bld)) {
+            return null;
+        }
         final Map<Floorplan, List<AptUnit>> floorplans = new HashMap<Floorplan, List<AptUnit>>();
         EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
@@ -356,6 +370,10 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static List<AptUnit> getBuildingAptUnits(Building bld, Floorplan fp) {
+        if (!isPropertyVisible(bld)) {
+            return null;
+        }
+
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
@@ -363,6 +381,10 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static List<BuildingAmenity> getBuildingAmenities(Building bld) {
+        if (!isPropertyVisible(bld)) {
+            return null;
+        }
+
         EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
         return Persistence.service().query(criteria);
@@ -376,6 +398,10 @@ public class PMSiteContentManager implements Serializable {
             return null;
         }
         Floorplan fp = plans.get(0);
+        if (!isPropertyVisible(fp.building())) {
+            return null;
+        }
+
         if (getFloorplanUnits(fp).size() < 1) {
             return null;
         }
@@ -383,6 +409,10 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static List<AptUnit> getFloorplanUnits(Floorplan fp) {
+        if (!isPropertyVisible(fp.building())) {
+            return null;
+        }
+
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
@@ -390,6 +420,9 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static List<FloorplanAmenity> getFloorplanAmenities(Floorplan fp) {
+        if (!isPropertyVisible(fp.building())) {
+            return null;
+        }
         EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp));
         return Persistence.service().query(criteria);
