@@ -123,6 +123,9 @@ public class BuildingsResource {
         Map<Complex, BuildingRS> complexes = new Hashtable<Complex, BuildingRS>();
 
         for (Building building : buildings) {
+            if (!PublicVisibilityType.global.equals(building.marketing().visibility().getValue())) {
+                continue;
+            }
             try {
                 BuildingRS buildingRS;
 

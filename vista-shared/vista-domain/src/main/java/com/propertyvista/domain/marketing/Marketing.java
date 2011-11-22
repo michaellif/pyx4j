@@ -24,6 +24,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Marketing extends IEntity {
 
+    IPrimitive<PublicVisibilityType> visibility();
+
     @ToString
     IPrimitive<String> name();
 

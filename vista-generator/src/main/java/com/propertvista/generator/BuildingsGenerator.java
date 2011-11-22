@@ -40,6 +40,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Boiler;
@@ -137,6 +138,7 @@ public class BuildingsGenerator {
         building.financial().lastAppraisalValue().setValue(100d + RandomUtil.randomDouble(2000000));
         building.financial().currency().name().setValue("CAD");
 
+        building.marketing().visibility().setValue(PublicVisibilityType.global);
         building.marketing().name().setValue(building.info().name().getStringView() + " mkt" + RandomUtil.randomLetters(2));
         building.marketing().description().setValue(CommonsGenerator.lipsum());
         for (int i = 0; 1 < RandomUtil.randomInt(3); i++) {
