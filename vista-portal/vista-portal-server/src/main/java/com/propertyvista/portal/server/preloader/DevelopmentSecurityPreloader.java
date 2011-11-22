@@ -28,7 +28,7 @@ public class DevelopmentSecurityPreloader extends AbstractDataPreloader {
     public String create() {
         int developersCount = 0;
 
-        List<DevelopmentUser> developmentUsers = EntityCSVReciver.create(DevelopmentUser.class).loadFile("contacts.csv");
+        List<DevelopmentUser> developmentUsers = EntityCSVReciver.create(DevelopmentUser.class).loadFile("dev-contacts.csv");
 
         for (DevelopmentUser user : developmentUsers) {
             if (!user.email().isNull()) {
