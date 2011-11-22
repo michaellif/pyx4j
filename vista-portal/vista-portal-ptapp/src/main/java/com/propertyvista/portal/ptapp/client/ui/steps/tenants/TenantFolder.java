@@ -49,7 +49,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (isEditable() && member instanceof TenantInLeaseDTO) {
+        if (member instanceof TenantInLeaseDTO) {
             return new TenantEditor();
         }
         return super.create(member);
@@ -67,8 +67,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().firstName(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().middleName(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().lastName(), "12em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().lastName(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().birthDate(), "9em"));
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().email(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().relationship(), "9em"));
