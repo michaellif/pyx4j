@@ -19,9 +19,13 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.marketing.PublicVisibilityType;
+
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface MarketingIO extends IEntity {
+
+    IPrimitive<PublicVisibilityType> visibility();
 
     IPrimitive<String> name();
 

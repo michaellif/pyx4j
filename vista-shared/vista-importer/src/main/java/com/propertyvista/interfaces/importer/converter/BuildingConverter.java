@@ -56,6 +56,7 @@ public class BuildingConverter extends EntityDtoBinder<Building, BuildingIO> {
         bind(dtoProto.phones(), dboProto.contacts().phones());
         bind(dtoProto.contacts(), dboProto.contacts().contacts(), new OrganizationContactConverter());
 
+        bind(dtoProto.marketing().visibility(), dboProto.marketing().visibility());
         bind(dtoProto.marketing().name(), dboProto.marketing().name());
         bind(dtoProto.marketing().description(), dboProto.marketing().description());
 
