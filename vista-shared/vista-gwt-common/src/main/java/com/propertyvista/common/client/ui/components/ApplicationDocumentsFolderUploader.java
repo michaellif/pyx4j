@@ -255,7 +255,7 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
         }
 
         @Override
-        public void setFolderItem(CEntityFolder<ApplicationDocument> w) {
+        public void setComponent(CEntityFolder<ApplicationDocument> w) {
             // TODO Auto-generated method stub
 
         }

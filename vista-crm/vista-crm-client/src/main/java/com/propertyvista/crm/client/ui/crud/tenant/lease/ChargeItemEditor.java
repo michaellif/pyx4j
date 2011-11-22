@@ -181,7 +181,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         }
 
         if (editor != null) {
-            editor.onAttach(this);
+            this.adopt(editor);
             editor.populate(value.extraData().cast());
             extraDataPanel.setWidget(editor);
         }
