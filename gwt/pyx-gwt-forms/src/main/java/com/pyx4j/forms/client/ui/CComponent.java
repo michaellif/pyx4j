@@ -165,10 +165,15 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         return parent != null;
     }
 
-    public void onAttach(CContainer<?, ?> parent) {
-        assert (this.parent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + this.parent;
+    public void onAdopt(CContainer<?, ?> parent) {
+        assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(inheritContainerAccessRules);
+    }
+
+    public void onAbandon() {
+        parent = null;
+        setContainerAccessRules(false);
     }
 
     @Override

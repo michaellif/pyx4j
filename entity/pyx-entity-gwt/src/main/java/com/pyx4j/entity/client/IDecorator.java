@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface IDecorator<E extends CEntityContainer> extends IsWidget {
 
-    void setFolderItem(E content);
+    //TODO rename to setComponent
+    void setComponent(E component);
 
 }

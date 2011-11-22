@@ -48,7 +48,7 @@ public abstract class CEntityViewer<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public IsWidget createContent() {
+    public final IsWidget createContent() {
         return null;
     }
 
@@ -62,9 +62,4 @@ public abstract class CEntityViewer<E extends IEntity> extends CEntityContainer<
         return null;
     }
 
-    @Override
-    public void addComponent(CComponent<?, ?> component) {
-        // TODO Auto-generated method stub
-
-    }
 }

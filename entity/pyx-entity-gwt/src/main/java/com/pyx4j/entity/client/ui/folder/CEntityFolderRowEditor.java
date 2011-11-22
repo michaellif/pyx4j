@@ -74,10 +74,4 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> 
         return comp;
     }
 
-    @Override
-    public void addComponent(CComponent<?, ?> component) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

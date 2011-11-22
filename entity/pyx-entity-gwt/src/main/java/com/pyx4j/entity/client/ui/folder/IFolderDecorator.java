@@ -38,7 +38,7 @@ public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityF
     void setAddButtonVisible(boolean show);
 
     @Override
-    void setFolderItem(CEntityFolder<E> w);
+    void setComponent(CEntityFolder<E> folder);
 
     public enum DecoratorsIds implements IDebugId {
         Validation, Label;

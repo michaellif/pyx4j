@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +32,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -52,10 +52,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -135,12 +132,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         return getAllValidationResults();
     }
 
-    @Override
-    public void onAttach(CContainer<?, ?> parent) {
-        super.onAttach(parent);
-        initContent();
-    }
-
     public final CComponent<?, ?> inject(IObject<?> member) {
         CComponent<?, ?> comp = create(member);
         bind(comp, member);
@@ -154,12 +145,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     public void setWidget(IsWidget widget) {
         asWidget().setWidget(widget);
-    }
-
-    @Override
-    public void addComponent(CComponent<?, ?> component) {
-        // TODO Auto-generated method stub
-
     }
 
     @SuppressWarnings("unchecked")
@@ -199,59 +184,14 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     }
 
     @SuppressWarnings("unchecked")
-    public <T> void bind(CComponent<T, ?> component, IObject<?> member) {
+    public void bind(CComponent<?, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
         assert (proto().getMember(member.getPath()) != null);
         component.addValueChangeHandler(valuePropagation);
         applyAttributes(component, member);
         binding.put(component, member.getPath());
 
-        component.addPropertyChangeHandler(new PropertyChangeHandler() {
-            boolean sheduled = false;
-
-            @Override
-            public void onPropertyChange(final PropertyChangeEvent event) {
-                if (!sheduled) {
-                    sheduled = true;
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            if (PropertyChangeEvent.PropertyName.valid.equals(event.getPropertyName())) {
-                                log.trace("CEntityEditor.onPropertyChange fired from {}. Changed property is {}.", getTitle(), event.getPropertyName());
-                                revalidate();
-                                PropertyChangeEvent.fire(CEntityEditor.this, PropertyChangeEvent.PropertyName.valid);
-
-                            }
-                            sheduled = false;
-                        }
-                    });
-                }
-            }
-        });
-
-        component.addValueChangeHandler(new ValueChangeHandler<T>() {
-            boolean sheduled = false;
-
-            @Override
-            public void onValueChange(final ValueChangeEvent<T> event) {
-                if (!sheduled) {
-                    sheduled = true;
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            revalidate();
-                            log.trace("CEntityEditor.onValueChange fired from {}. New value is {}.", getTitle(), event.getValue());
-                            ValueChangeEvent.fire(CEntityEditor.this, getValue());
-                            sheduled = false;
-                        }
-                    });
-                }
-
-            }
-        });
-
-        component.onAttach(this);
-
+        adopt(component);
     }
 
     protected void applyAttributes(CComponent<?, ?> component, IObject<?> member) {
@@ -318,7 +258,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public Set<? extends CComponent<?, ?>> getComponents() {
+    public Collection<? extends CComponent<?, ?>> getComponents() {
         if (binding == null) {
             return null;
         }

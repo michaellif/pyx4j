@@ -27,14 +27,12 @@ import com.google.gwt.user.client.ui.Panel;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.forms.client.ui.IAccessAdapter;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory, IAccessAdapter {
+public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory {
 
     protected static I18n i18n = I18n.get(CEntityContainer.class);
 
@@ -119,7 +117,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
             asWidget().setWidget(createContent());
         } else {
             asWidget().setWidget(decorator);
-            decorator.setFolderItem(this);
+            decorator.setComponent(this);
         }
 
         addValidations();
@@ -138,25 +136,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     @Override
-    public boolean isEnabled(CComponent<?, ?> component) {
-        if (component instanceof CButton) {
-            return isEditable() && isEnabled();
-        } else {
-            return isEnabled();
-        }
-    }
-
-    @Override
-    public boolean isEditable(CComponent<?, ?> component) {
-        return isEditable();
-    }
-
-    @Override
-    public boolean isVisible(CComponent<?, ?> component) {
-        return isVisible();
-    }
-
-    @Override
     public boolean isVisited() {
         return true;
     }
@@ -165,6 +144,13 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     public CComponent<?, ?> create(IObject<?> member) {
         assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
         return ((CEntityContainer<?>) getParent()).create(member);
+    }
+
+    @Override
+    public void onAdopt(CContainer<?, ?> parent) {
+        super.onAdopt(parent);
+        initContent();
+        addValidations();
     }
 
     public void addValidations() {

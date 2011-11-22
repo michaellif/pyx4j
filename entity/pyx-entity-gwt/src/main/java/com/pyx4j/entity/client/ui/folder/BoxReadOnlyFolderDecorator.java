@@ -40,8 +40,8 @@ public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel i
     }
 
     @Override
-    public void setFolderItem(CEntityFolder<E> w) {
-        super.setWidget(w.getContainer());
+    public void setComponent(CEntityFolder<E> folder) {
+        super.setWidget(folder.getContainer());
     }
 
     @Override

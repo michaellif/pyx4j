@@ -29,11 +29,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -44,10 +42,7 @@ import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -119,13 +114,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void onAttach(CContainer<?, ?> parent) {
-        super.onAttach(parent);
-        initContent();
-        addValidations();
-    }
-
-    @Override
     public IsWidget createContent() {
         // TODO Auto-generated method stub
         return null;
@@ -149,8 +137,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         CEntityFolderItem<E> item = createItem(first);
 
-        item.onAttach(this);
-
         if (modifiable == false) {
             item.setRemovable(false);
         }
@@ -158,48 +144,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (orderable == false) {
             item.setMovable(false);
         }
-
-        item.addValueChangeHandler(new ValueChangeHandler<E>() {
-            boolean sheduled = false;
-
-            @Override
-            public void onValueChange(final ValueChangeEvent<E> event) {
-                if (!sheduled) {
-                    sheduled = true;
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            log.debug("CEntityFolder.onValueChange fired from {}. New value is {}.", CEntityFolder.this.getTitle(), event.getValue());
-                            revalidate();
-                            ValueChangeEvent.fire(CEntityFolder.this, getValue());
-                            sheduled = false;
-                        }
-                    });
-                }
-
-            }
-        });
-
-        item.addPropertyChangeHandler(new PropertyChangeHandler() {
-            boolean sheduled = false;
-
-            @Override
-            public void onPropertyChange(final PropertyChangeEvent event) {
-                sheduled = true;
-                if (!sheduled) {
-                    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                        @Override
-                        public void execute() {
-                            log.debug("CEntityFolder.onPropertyChange fired from {}. Changed property is {}.", CEntityFolder.this.getTitle(),
-                                    event.getPropertyName());
-                            revalidate();
-                            PropertyChangeEvent.fire(CEntityFolder.this, PropertyChangeEvent.PropertyName.enabled);
-                            sheduled = false;
-                        }
-                    });
-                }
-            }
-        });
 
         return item;
     }
@@ -247,18 +191,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
+                adopt(item);
                 getValue().add(result);
                 item.populate(result);
-                adoptItem(item);
-                ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
         });
 
     }
 
     protected void removeItem(CEntityFolderItem<E> item) {
+        abandon(item);
         getValue().remove(item.getValue());
-        abandonItem(item);
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
     }
 
@@ -320,7 +263,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
         for (CEntityFolderItem<E> item : previousList) {
-            abandonItem(item);
+            abandon(item);
         }
 
         currentRowDebugId = 0;
@@ -335,10 +278,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                         break;
                     }
                 }
+
                 if (item == null) {
                     item = createItemPrivate();
                 }
-                adoptItem(item);
+
+                adopt(item);
                 item.populate(entity);
             }
         }
@@ -366,26 +311,23 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     protected abstract IFolderDecorator<E> createDecorator();
 
-    private void adoptItem(final CEntityFolderItem<E> item) {
-        itemsList.add(item);
-        container.add(item);
-
-        item.addAccessAdapter(this);
+    @Override
+    public void adopt(final CComponent<?, ?> component) {
+        super.adopt(component);
+        itemsList.add((CEntityFolderItem<E>) component);
+        container.add(component);
 
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
-        item.setDebugId(rowDebugId);
+        component.setDebugId(rowDebugId);
         currentRowDebugId++;
-
-        item.onAdopt(this);
 
     }
 
-    private void abandonItem(final CEntityFolderItem<E> item) {
-        container.remove(item);
-        itemsList.remove(item);
-        item.removeAccessAdapter(this);
-
-        item.onAbandon();
+    @Override
+    public void abandon(final CComponent<?, ?> component) {
+        super.abandon(component);
+        container.remove(component);
+        itemsList.remove(component);
     }
 
     @Override
@@ -454,9 +396,4 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
     }
 
-    @Override
-    public void addComponent(CComponent<?, ?> component) {
-        // TODO Auto-generated method stub
-
-    }
 }

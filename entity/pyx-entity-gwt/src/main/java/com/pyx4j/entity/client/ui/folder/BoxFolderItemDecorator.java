@@ -90,9 +90,9 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public void setFolderItem(final CEntityFolderItem<E> folderItem) {
-        super.setFolderItem(folderItem);
-        contentHolder.setWidget(folderItem.getContainer());
+    public void setComponent(final CEntityFolderItem<E> folderItem) {
+        super.setComponent(folderItem);
+        contentHolder.setWidget(folderItem.createContent());
         toolbar.setTitleIcon(folderItem.getIcon());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

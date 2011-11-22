@@ -39,7 +39,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 /**
@@ -65,13 +64,6 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         container = new SimplePanel();
         container.getElement().setClassName("TESTTEST");
         subtypesHash = new HashMap<IDiscriminator<? extends E>, IEntity>();
-    }
-
-    @Override
-    public void onAttach(CContainer<?, ?> parent) {
-        super.onAttach(parent);
-        setDecorator(createContent());
-        addValidations();
     }
 
     @Override
@@ -225,7 +217,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         for (IDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {
                 CEntityEditor editor = createItemPrivate(discriminator);
-                editor.onAttach(this);
+                editor.onAdopt(this);
                 editor.populate(value);
                 container.setWidget(editor);
 

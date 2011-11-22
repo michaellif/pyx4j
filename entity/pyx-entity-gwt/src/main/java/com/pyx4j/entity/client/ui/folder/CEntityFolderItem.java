@@ -57,8 +57,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private final List<HandlerRegistration> handlerRegistrations;
 
-    private CEntityFolder<E> parent;
-
     private CEntityEditor<E> editor;
 
     private final Class<E> clazz;
@@ -112,7 +110,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     @Override
     public IsWidget createContent() {
         editor = (CEntityEditor<E>) create(EntityFactory.getEntityPrototype(clazz));
-        editor.onAttach(this);
+        adopt(editor);
         return editor;
     }
 
@@ -160,19 +158,24 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         }
     }
 
-    protected void onAbandon() {
+    @Override
+    public void onAbandon() {
+        super.onAbandon();
         for (HandlerRegistration handlerRegistration : handlerRegistrations) {
             handlerRegistration.removeHandler();
         }
         handlerRegistrations.clear();
     }
 
-    protected void onAdopt(final CEntityFolder<E> parent) {
+    @Override
+    public void onAdopt(final CContainer<?, ?> parent) {
+        super.onAdopt(parent);
 
-        this.parent = parent;
+        final CEntityFolder<E> folder = (CEntityFolder<E>) parent;
+
         handlerRegistrations.clear();
 
-        HandlerRegistration handlerRegistration = parent.addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
+        HandlerRegistration handlerRegistration = folder.addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
 
             @Override
             public void onValueChange(ValueChangeEvent<IList<E>> event) {
@@ -184,25 +187,27 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         addItemRemoveClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                parent.removeItem(CEntityFolderItem.this);
+                folder.removeItem(CEntityFolderItem.this);
             }
         });
         addRowUpClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                parent.moveUpItem(CEntityFolderItem.this);
+                folder.moveUpItem(CEntityFolderItem.this);
             }
         });
         addRowDownClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                parent.moveDownItem(CEntityFolderItem.this);
+                folder.moveDownItem(CEntityFolderItem.this);
             }
         });
 
     }
 
+    @SuppressWarnings("unchecked")
     protected void calculateActionsState() {
+        CEntityFolder<E> parent = ((CEntityFolder<E>) getParent());
         int index = parent.getItemIndex(CEntityFolderItem.this);
 
         first = index == 0;
@@ -229,13 +234,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void onAttach(CContainer<?, ?> parent) {
-        super.onAttach(parent);
-        getContainer().setWidget(createContent());
-        initContent();
-    }
-
-    @Override
     public ValidationResults getValidationResults() {
         return getAllValidationResults();
     }
@@ -248,9 +246,4 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         return Arrays.asList(new CComponent<?, ?>[] { editor });
     }
 
-    @Override
-    public void addComponent(CComponent<?, ?> component) {
-        // TODO Auto-generated method stub
-
-    }
 }

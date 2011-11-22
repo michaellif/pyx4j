@@ -21,15 +21,18 @@
 package com.pyx4j.tester.client.domain.test;
 
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface EntityIV extends IEntity {
 
     @ToString(index = 0)
+    @NotNull
     IPrimitive<String> stringMember();
 
     @ToString(index = 1)
+    @NotNull
     IPrimitive<Integer> integerMember();
 
 }

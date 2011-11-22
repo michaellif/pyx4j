@@ -40,8 +40,8 @@ public class BoxReadOnlyFolderItemDecorator<E extends IEntity> extends FlowPanel
     }
 
     @Override
-    public void setFolderItem(CEntityFolderItem<E> w) {
-        content.setWidget(w.getContainer());
+    public void setComponent(CEntityFolderItem<E> folderItem) {
+        content.setWidget(folderItem.getContainer());
     }
 
     @Override

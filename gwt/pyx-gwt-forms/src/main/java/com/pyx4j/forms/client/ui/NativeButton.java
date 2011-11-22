@@ -64,11 +64,6 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-    }
-
-    @Override
     public void installStyles(String stylePrefix) {
         // TODO Auto-generated method stub
 
@@ -76,14 +71,12 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
 
     @Override
     public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
-
+        super.setEnabled(editable);
     }
 
     @Override
     public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
+        return isEnabled();
     }
 
     @Override
