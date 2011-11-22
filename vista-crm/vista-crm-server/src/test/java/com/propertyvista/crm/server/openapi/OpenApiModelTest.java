@@ -83,9 +83,6 @@ public class OpenApiModelTest {
 
             Building building2 = Converter.convertBuilding(buildingRS);
             Assert.assertEquals("propertyCode", building.propertyCode().getStringView(), building2.propertyCode().getStringView());
-
-            // TODO we need to
-            assertEqual("building", building, building2);
         }
     }
 
