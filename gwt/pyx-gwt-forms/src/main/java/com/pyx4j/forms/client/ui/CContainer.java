@@ -97,7 +97,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                         @Override
                         public void execute() {
                             revalidate();
-                            log.trace("CContainer.onValueChange fired from {}. New value is {}.", shortDebugInfo(), event.getValue());
+                            log.trace("CContainer.onValueChange fired from {}", shortDebugInfo());
                             ValueChangeEvent.fire(CContainer.this, getValue());
                             sheduled = false;
                         }

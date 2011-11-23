@@ -83,6 +83,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                 Object value = event.getValue();
                 if (value instanceof IEntity) {
                     ((IEntity) editableEntity.getMember(memberPath)).set(((IEntity) value).cloneEntity());
+                    log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
                     return;
                 }
 
@@ -97,6 +98,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                     }
                 }
                 editableEntity.setValue(memberPath, value);
+                log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
             }
         }
     }

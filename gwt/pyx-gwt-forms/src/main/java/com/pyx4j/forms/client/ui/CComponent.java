@@ -541,7 +541,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public String shortDebugInfo() {
-        return "class:" + GWTJava5Helper.getSimpleName(this.getClass()) + "; " + getDebugId();
+        return GWTJava5Helper.getSimpleName(this.getClass()) + ((getDebugId() != null) ? " " + getDebugId() : "");
     }
 
     protected void setNativeValue(DATA_TYPE value) {
