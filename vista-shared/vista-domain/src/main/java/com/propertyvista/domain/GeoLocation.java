@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -47,6 +48,7 @@ public interface GeoLocation extends IEntity {
     // ---------------------------------------
 
     @ToString(index = 0)
+    @Format("#0.000000")
     IPrimitive<Double> latitude();
 
     @NotNull
@@ -54,6 +56,7 @@ public interface GeoLocation extends IEntity {
     IPrimitive<LatitudeType> latitudeType();
 
     @ToString(index = 2)
+    @Format("#0.000000")
     IPrimitive<Double> longitude();
 
     @NotNull
