@@ -167,9 +167,4 @@ public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements
     public void setValid(boolean valid) {
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }

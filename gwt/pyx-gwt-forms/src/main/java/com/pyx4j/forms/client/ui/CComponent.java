@@ -76,8 +76,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     private String height = "";
 
-    private String stylePrefix = null;
-
     private IDebugId debugId;
 
     private String mandatoryValidationMessage = i18n.tr("This field is Mandatory");
@@ -117,17 +115,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
             return "n/a";
         }
         return component.getClass() + " " + component.getTitle();
-    }
-
-    public void setStylePrefix(String stylePrefix) {
-        this.stylePrefix = stylePrefix;
-        if (isWidgetCreated()) {
-            ((INativeComponent) asWidget()).installStyles(stylePrefix);
-        }
-    }
-
-    public String getStylePrefix() {
-        return stylePrefix;
     }
 
     public String getTitle() {

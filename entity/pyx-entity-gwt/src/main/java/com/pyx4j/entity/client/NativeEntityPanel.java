@@ -67,7 +67,4 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
         return null;
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-    }
 }

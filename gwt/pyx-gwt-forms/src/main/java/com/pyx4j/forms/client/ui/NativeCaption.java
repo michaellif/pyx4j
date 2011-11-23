@@ -47,12 +47,6 @@ public class NativeCaption extends HTML implements INativeEditableComponent<Stri
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void setEditable(boolean editable) {
         // TODO Auto-generated method stub
 

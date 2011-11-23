@@ -59,9 +59,4 @@ public class NativeWidgetHolder extends SimplePanel implements INativeWidgetHold
         DomDebug.detachWidget();
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }

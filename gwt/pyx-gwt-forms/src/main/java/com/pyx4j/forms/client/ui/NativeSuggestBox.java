@@ -158,12 +158,6 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public boolean isParsedSuccesfully() {
         return !delegate.isParseFailed();
     }

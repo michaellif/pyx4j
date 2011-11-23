@@ -113,9 +113,4 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
         // do nothing - actually it's valid always...
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }

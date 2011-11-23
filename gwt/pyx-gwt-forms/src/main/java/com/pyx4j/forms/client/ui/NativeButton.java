@@ -64,12 +64,6 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void setEditable(boolean editable) {
         super.setEnabled(editable);
     }

@@ -43,10 +43,8 @@ import com.pyx4j.widgets.client.RadioButton;
 
 public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComponent<E> {
 
-    public static String DEFAULT_STYLE_PREFIX = "pyx4j_RadioGroup";
-
-    public static enum StyleSuffix implements IStyleName {
-        Item
+    public static enum StyleName implements IStyleName {
+        RadioGroup, RadioGroupItem
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -100,7 +98,10 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
                 ((VerticalPanel) panel).setCellWidth(button, "100%");
             }
         }
-        installStyles(cComponent.getStylePrefix());
+        setStyleName(StyleName.RadioGroup.name());
+        for (RadioButton button : buttons.values()) {
+            button.setStyleName(StyleName.RadioGroupItem.name());
+        }
     }
 
     @Override
@@ -209,14 +210,4 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
         return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        if (stylePrefix == null) {
-            stylePrefix = DEFAULT_STYLE_PREFIX;
-        }
-        setStyleName(stylePrefix);
-        for (RadioButton button : buttons.values()) {
-            button.setStyleName(stylePrefix + StyleSuffix.Item);
-        }
-    }
 }

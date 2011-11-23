@@ -203,9 +203,4 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         return richTextArea.addBlurHandler(blurHandler);
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }

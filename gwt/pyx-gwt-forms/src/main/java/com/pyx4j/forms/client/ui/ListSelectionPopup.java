@@ -96,11 +96,6 @@ public abstract class ListSelectionPopup<E> extends Dialog {
         public void setValid(boolean valid) {
         }
 
-        @Override
-        public void installStyles(String stylePrefix) {
-            // TODO Auto-generated method stub
-
-        }
     }
 
     public abstract String getItemName(E item);

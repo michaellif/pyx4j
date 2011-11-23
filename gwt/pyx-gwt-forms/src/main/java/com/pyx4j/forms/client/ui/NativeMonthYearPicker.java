@@ -111,9 +111,4 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
         return null;
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }

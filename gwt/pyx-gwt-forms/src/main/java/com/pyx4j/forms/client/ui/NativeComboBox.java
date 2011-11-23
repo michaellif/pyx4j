@@ -269,9 +269,4 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
         }
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }

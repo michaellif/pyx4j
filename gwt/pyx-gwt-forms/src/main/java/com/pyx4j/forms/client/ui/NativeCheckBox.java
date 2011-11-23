@@ -108,9 +108,4 @@ public class NativeCheckBox extends CheckBox implements INativeFocusComponent<Bo
     public void setValid(boolean valid) {
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }

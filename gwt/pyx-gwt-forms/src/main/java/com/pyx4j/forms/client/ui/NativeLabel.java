@@ -113,9 +113,4 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
         return null;
     }
 
-    @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
 }
