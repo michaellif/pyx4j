@@ -21,35 +21,31 @@
 package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
 
-    private final Path columnPath;
-
-    private String formatPattern;
-
-    public MemberColumnDescriptor(Path columnPath, String columnTitle, String formatPattern) {
-        super(columnPath.toString(), columnTitle);
-        this.columnPath = columnPath;
-        this.formatPattern = formatPattern;
+    protected MemberColumnDescriptor(Builder builder) {
+        super(builder);
     }
 
     public Path getColumnPath() {
-        return columnPath;
+        return ((Builder) getBuilder()).member.getPath();
     }
 
     public String getFormatPattern() {
-        return formatPattern;
-    }
-
-    public void setFormatPattern(String formatPattern) {
-        this.formatPattern = formatPattern;
+        return ((Builder) getBuilder()).member.getMeta().getFormat();
     }
 
     @Override
     public String convert(E entity) {
-        Object value = entity.getMember(columnPath).getValue();
+        Object value = entity.getMember(getColumnPath()).getValue();
         if (value == null) {
             return "";
         } else {
@@ -57,4 +53,33 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
         }
     }
 
+    public static class Builder extends ColumnDescriptor.Builder {
+
+        private final IObject<?> member;
+
+        public Builder(IObject<?> member, boolean visible) {
+            super(member.getPath().toString(), member.getMeta().getCaption());
+            this.member = member;
+            visible(visible);
+        }
+
+        @Override
+        public <E extends IEntity> ColumnDescriptor<E> build() {
+            ColumnDescriptor<E> cd = null;
+            MemberMeta mm = member.getMeta();
+            if (mm.isEntity()) {
+                cd = new MemberEntityColumnDescriptor<E>(this);
+            } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
+                cd = new MemberEntityCollectionColumnDescriptor<E>(this);
+            } else if (member instanceof IPrimitiveSet<?>) {
+                cd = new MemberCollectionColumnDescriptor<E>(this);
+            } else if (member instanceof IPrimitive<?>) {
+                cd = new MemberPrimitiveColumnDescriptor<E>(this);
+            } else {
+                cd = new MemberColumnDescriptor<E>(this);
+            }
+            return cd;
+        }
+
+    }
 }

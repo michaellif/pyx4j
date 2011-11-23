@@ -22,12 +22,11 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.Path;
 
 public class MemberPrimitiveColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
-    public MemberPrimitiveColumnDescriptor(Path columnPath, String columnTitle) {
-        super(columnPath, columnTitle, null);
+    protected MemberPrimitiveColumnDescriptor(Builder builder) {
+        super(builder);
     }
 
     @Override

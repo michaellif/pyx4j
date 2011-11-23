@@ -25,19 +25,19 @@ import java.util.Collection;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
 
 public class MemberEntityCollectionColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
     private static class StringConverter implements ToStringConverter<IEntity> {
 
+        @Override
         public String toString(IEntity value) {
             return value.getStringView();
         }
     }
 
-    public MemberEntityCollectionColumnDescriptor(Path columnPath, String columnTitle, String formatPattern) {
-        super(columnPath, columnTitle, formatPattern);
+    protected MemberEntityCollectionColumnDescriptor(Builder builder) {
+        super(builder);
     }
 
     @SuppressWarnings("unchecked")

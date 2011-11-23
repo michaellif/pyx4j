@@ -385,6 +385,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
 
             for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
+
                 if (!columnDescriptor.isVisible()) {
                     continue;
                 }
@@ -460,18 +461,20 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         if (hasColumnClickSorting()) {
             ColumnDescriptor<E> columnDescriptor = model.getVisibleColumnDescriptor(column);
-            if (columnDescriptor.equals(model.getSortColumn())) {
-                columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
-            } else {
-                model.setSortColumn(columnDescriptor);
-            }
+            if (columnDescriptor.isSortable()) {
+                if (columnDescriptor.equals(model.getSortColumn())) {
+                    columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
+                } else {
+                    model.setSortColumn(columnDescriptor);
+                }
 
-            renderHeader();
+                renderHeader();
 
-            // notify listeners:
-            if (sortChangeHandlers != null) {
-                for (SortChangeHandler<E> handler : sortChangeHandlers) {
-                    handler.onChange(columnDescriptor);
+                // notify listeners:
+                if (sortChangeHandlers != null) {
+                    for (SortChangeHandler<E> handler : sortChangeHandlers) {
+                        handler.onChange(columnDescriptor);
+                    }
                 }
             }
         }

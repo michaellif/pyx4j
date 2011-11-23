@@ -94,7 +94,10 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         Collection<FieldData> fds = new ArrayList<FieldData>();
         for (ColumnDescriptor<E> cd : parent.getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
-            fds.add(new FieldData(cd));
+            //only sortable columns can be searchable 
+            if (cd.isSortable()) {
+                fds.add(new FieldData(cd));
+            }
         }
 
         fieldsList.setOptions(fds);

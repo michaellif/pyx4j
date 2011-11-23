@@ -25,12 +25,12 @@ import java.util.Collection;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
 
 public class MemberCollectionColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
     private static class StringConverter implements ToStringConverter<Object> {
 
+        @Override
         public String toString(Object value) {
             if (value != null) {
                 //TODO Use formatPattern
@@ -41,8 +41,8 @@ public class MemberCollectionColumnDescriptor<E extends IEntity> extends MemberC
         }
     }
 
-    public MemberCollectionColumnDescriptor(Path columnPath, String columnTitle, String formatPattern) {
-        super(columnPath, columnTitle, formatPattern);
+    protected MemberCollectionColumnDescriptor(Builder builder) {
+        super(builder);
     }
 
     @SuppressWarnings("unchecked")

@@ -21,31 +21,12 @@
 package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class ColumnDescriptorFactory {
 
     public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, boolean visible) {
-        ColumnDescriptor<E> cd = null;
-        MemberMeta mm = member.getMeta();
-        if (mm.isEntity()) {
-            cd = new MemberEntityColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
-        } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
-            cd = new MemberEntityCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
-        } else if (member instanceof IPrimitiveSet<?>) {
-            cd = new MemberCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
-        } else if (member instanceof IPrimitive<?>) {
-            cd = new MemberPrimitiveColumnDescriptor<E>(member.getPath(), mm.getCaption());
-        } else {
-            cd = new MemberColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
-        }
-        cd.setVisible(visible);
-        return cd;
+        return new MemberColumnDescriptor.Builder(member, visible).build();
     }
 
     public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width, boolean visible) {

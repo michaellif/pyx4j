@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
+import com.pyx4j.entity.shared.IEntity;
+
 public class ColumnDescriptor<E> {
 
     public static final String DEFAULT_WIDTH = "100px";
@@ -42,7 +44,7 @@ public class ColumnDescriptor<E> {
         this(new Builder(columnName, columnTitle).sortable(sortable).ascendingSort(ascendingSort).width(width));
     }
 
-    private ColumnDescriptor(Builder builder) {
+    protected ColumnDescriptor(Builder builder) {
         this.builder = builder;
     }
 
@@ -64,14 +66,6 @@ public class ColumnDescriptor<E> {
 
     public void setSortable(boolean sortable) {
         builder.sortable = sortable;
-    }
-
-    public boolean isNavigable() {
-        return builder.navigable;
-    }
-
-    public void setNavigable(boolean navigable) {
-        builder.navigable = navigable;
     }
 
     public String getColumnTitle() {
@@ -106,6 +100,10 @@ public class ColumnDescriptor<E> {
         builder.visible = visible;
     }
 
+    protected Builder getBuilder() {
+        return builder;
+    }
+
     //TODO should be abstract
     public String convert(E entity) {
         return entity.toString();
@@ -122,9 +120,7 @@ public class ColumnDescriptor<E> {
 
         private String columnTitle;
 
-        private boolean sortable;
-
-        private boolean navigable;
+        private boolean sortable = true;
 
         private boolean ascending = true;
 
@@ -144,11 +140,6 @@ public class ColumnDescriptor<E> {
 
         public Builder sortable(boolean sortable) {
             this.sortable = sortable;
-            return this;
-        }
-
-        public Builder navigable(boolean navigable) {
-            this.navigable = navigable;
             return this;
         }
 
@@ -172,8 +163,8 @@ public class ColumnDescriptor<E> {
             return this;
         }
 
-        public ColumnDescriptor build() {
-            return new ColumnDescriptor(this);
+        public <E extends IEntity> ColumnDescriptor<E> build() {
+            return new ColumnDescriptor<E>(this);
         }
     }
 
