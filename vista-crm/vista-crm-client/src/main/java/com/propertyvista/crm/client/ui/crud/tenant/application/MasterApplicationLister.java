@@ -39,14 +39,14 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
                 new MemberColumnDescriptor.Builder(proto().lease().unit(), true).build(),
 
                 new MemberColumnDescriptor.Builder(proto().mainApplicant(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().numberOfOccupants(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().numberOfOccupants(), false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().numberOfCoApplicants(), true).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().numberOfGuarantors(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().numberOfGuarantors(), true).sortable(false).build(),
 
-                new MemberColumnDescriptor.Builder(proto().rentPrice(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().parkingPrice(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().otherPrice(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().discounts(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().rentPrice(), true).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().parkingPrice(), false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().otherPrice(), false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().discounts(), false).sortable(false).build(),
 
                 new MemberColumnDescriptor.Builder(proto().createDate(), true).build(),
 
