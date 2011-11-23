@@ -36,12 +36,10 @@ import com.pyx4j.server.contexts.Context;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantFinancialDTO;
-import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.Summary;
-import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -85,6 +83,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.setValue(dbo.getValue());
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
+        summary.charges().set(new ChargesServiceImpl().retrieveData());
 
         Lease lease = PtAppContext.getCurrentUserLease();
         TenantInLeaseRetriever.UpdateLeaseTenants(lease);
@@ -99,20 +98,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             summary.tenantFinancials().add(createTenantFinancialDTO(tr));
         }
 
-        retrieveApplicationEntity(summary.charges(), summary.application());
-        loopOverTenantCharge: for (TenantCharge charge : summary.charges().paymentSplitCharges().charges()) {
-            for (TenantInLeaseDTO tenant : summary.tenantList().tenants()) {
-                if (tenant.equals(charge.tenant())) {
-                    charge.tenantName().set(tenant.tenant().person().name());
-                    continue loopOverTenantCharge;
-                }
-            }
-        }
-
         summary.application().signature().timestamp().setValue(new Date());
         summary.application().signature().ipAddress().setValue(Context.getRequestRemoteAddr());
 
-        // This should be taken from building policy
+        // TODO This should be taken from building policy
         summary.leaseTerms().set(Persistence.service().retrieve(EntityQueryCriteria.create(LeaseTerms.class)));
 
         return summary;

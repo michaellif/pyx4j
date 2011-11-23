@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -43,6 +42,21 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     @Override
     public void retrieve(AsyncCallback<Charges> callback, Key tenantId) {
         log.debug("Retrieving charges for tenant {}", tenantId);
+        callback.onSuccess(retrieveData());
+    }
+
+    @Override
+    public void save(AsyncCallback<Charges> callback, Charges charges) {
+        //log.debug("Saving charges\n{}", VistaDataPrinter.print(charges));
+
+        saveApplicationEntity(charges);
+
+        loadTransientData(charges);
+
+        callback.onSuccess(charges);
+    }
+
+    public Charges retrieveData() {
 
         Lease lease = PtAppContext.getCurrentUserLease();
         TenantInLeaseRetriever.UpdateLeaseTenants(lease);
@@ -59,7 +73,8 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
         ChargeItem serviceItem = lease.serviceAgreement().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
-            charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.originalPrice().getValue()));
+            charges.monthlyCharges().charges()
+                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.originalPrice().getValue()));
 
             // fill agreed items:
             for (ChargeItem item : lease.serviceAgreement().featureItems()) {
@@ -71,11 +86,13 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
                     case pet:
                     case parking:
                     case locker:
-                        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.originalPrice().getValue()));
+                        charges.monthlyCharges().charges()
+                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.originalPrice().getValue()));
                         break;
 
                     default:
-                        charges.oneTimeCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.originalPrice().getValue()));
+                        charges.oneTimeCharges().charges()
+                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.originalPrice().getValue()));
                     }
                 }
             }
@@ -87,25 +104,12 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
         loadTransientData(charges);
 
-        callback.onSuccess(charges);
+        return charges;
     }
 
-    @Override
-    public void save(AsyncCallback<Charges> callback, Charges charges) {
-        //log.debug("Saving charges\n{}", VistaDataPrinter.print(charges));
-
-        saveApplicationEntity(charges);
-
-        loadTransientData(charges);
-
-        callback.onSuccess(charges);
-    }
-
-    // If adding new data here sync with @see SummaryServicesImpl#retrieveSummary 
     private void loadTransientData(Charges charges) {
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-            TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, charge.tenant().getPrimaryKey());
-            charge.tenantName().set(tenant.tenant().person().name().detach());
+            Persistence.service().retrieve(charge.tenant());
         }
     }
 }
