@@ -29,6 +29,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
@@ -139,6 +140,15 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         container.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
+        CComponent<?, ?> comp = get(proto().sameAsCurrent());
+        if (comp instanceof CCheckBox) {
+            ((CCheckBox) comp).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    onBillingAddressSameAsCurrentOne(event.getValue());
+                }
+            });
+        }
 
         container.setWidget(++row, 0, inject(proto().billingAddress(), new CAddressStructured(false)));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
@@ -150,6 +160,10 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         setInstrumentsVisibility(PaymentType.Echeck);
         return container;
 
+    }
+
+    public void onBillingAddressSameAsCurrentOne(boolean set) {
+        // Implements meaningful in derived classes...  
     }
 
     private void setInstrumentsVisibility(PaymentType value) {
