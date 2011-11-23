@@ -128,7 +128,7 @@ public class ColumnDescriptor<E> {
 
         private boolean wordWrap = true;
 
-        private boolean visible = false;
+        private boolean visible = true;
 
         public Builder(String columnName, String columnTitle) {
             if (columnName == null) {

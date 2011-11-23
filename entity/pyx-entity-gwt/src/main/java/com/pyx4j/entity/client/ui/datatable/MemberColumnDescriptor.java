@@ -57,9 +57,13 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
 
         private final IObject<?> member;
 
-        public Builder(IObject<?> member, boolean visible) {
+        public Builder(IObject<?> member) {
             super(member.getPath().toString(), member.getMeta().getCaption());
             this.member = member;
+        }
+
+        public Builder(IObject<?> member, boolean visible) {
+            this(member);
             visible(visible);
         }
 

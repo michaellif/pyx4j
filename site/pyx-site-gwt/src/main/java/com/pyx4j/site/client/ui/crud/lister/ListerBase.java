@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.crud.lister;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -119,6 +120,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         add(dataTablePanel);
 
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setColumnDescriptors(ColumnDescriptor<?>... columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(Arrays.asList((ColumnDescriptor<E>[]) columnDescriptors));
     }
 
     public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
