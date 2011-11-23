@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -58,14 +57,20 @@ public class AptDetailsPage extends BasePage {
         try {
             propId = params.get(PMSiteApplication.ParamNameBuilding).toLong();
         } catch (Exception e) {
-            throw new RestartResponseException(FindAptPage.class);
+            // redirect to findapt page
+            redirectOrFail(FindAptPage.class, "Invalid parameter: " + PMSiteApplication.ParamNameBuilding);
         }
 
         final Building propInfo = PMSiteContentManager.getBuildingDetails(propId);
         if (propInfo == null) {
-            throw new RestartResponseException(FindAptPage.class);
+            // redirect to findapt page
+            redirectOrFail(FindAptPage.class, "Could not get building details");
         }
         final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(propInfo);
+        if (fpUnits == null || fpUnits.size() < 1) {
+            // redirect to findapt page
+            redirectOrFail(FindAptPage.class, "No units found");
+        }
         final List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);
 
         // left side - building info
@@ -84,7 +89,7 @@ public class AptDetailsPage extends BasePage {
                     mediaId = floorPlan.media().get(0).getPrimaryKey().asLong();
                 }
                 item.add(new SimpleImage("plan", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.medium)));
-                item.add(new Label("name", floorPlan.name().getValue()));
+                item.add(new Label("name", floorPlan.marketingName().getValue()));
                 item.add(new Label("beds", String.valueOf(floorPlan.bedrooms().getValue())));
                 item.add(new Label("bath", String.valueOf(floorPlan.bathrooms().getValue())));
                 String price = "price not available";

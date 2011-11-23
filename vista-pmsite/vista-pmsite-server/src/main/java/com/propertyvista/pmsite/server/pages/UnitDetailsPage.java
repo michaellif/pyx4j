@@ -84,7 +84,7 @@ public class UnitDetailsPage extends BasePage {
         }
 
         add(new Label("backButton", "Back").add(AttributeModifier.replace("onClick", "history.back()")));
-        add(new Label("name", fp.name().getValue()));
+        add(new Label("name", fp.marketingName().getValue()));
         add(new Label("rooms", "bedrooms: " + fp.bedrooms().getValue() + ", bathrooms: " + fp.bathrooms().getValue()
                 + ((minArea != null) ? (", from " + Math.round(minArea) + " " + areaUnits) : "")));
         add(new Label("description", fp.description().getValue()));

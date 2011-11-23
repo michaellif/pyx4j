@@ -139,7 +139,7 @@ public class InquiryPanel extends Panel {
                 }
             }
             String fpEntry = SimpleMessageFormat.format(i18n.tr("<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not available|!null#from ${3}}"), p
-                    .name().getValue(), p.bedrooms().getValue(), p.bathrooms().getValue(), minPrice);
+                    .marketingName().getValue(), p.bedrooms().getValue(), p.bathrooms().getValue(), minPrice);
             radioGroup.addChoice(p.id().getValue().asLong(), fpEntry);
         }
         form.add(radioGroup.setEscapeModelStrings(false));
