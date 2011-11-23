@@ -25,9 +25,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
-import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
+import com.google.web.bindery.event.shared.UmbrellaException;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
