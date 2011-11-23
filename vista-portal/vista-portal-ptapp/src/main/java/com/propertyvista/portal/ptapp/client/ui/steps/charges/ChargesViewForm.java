@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -37,6 +40,8 @@ import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
 public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
 
+    private static final Logger log = LoggerFactory.getLogger(ChargesViewForm.class);
+
     private final FormFlexPanel splitCharges = new FormFlexPanel();
 
     public ChargesViewForm() {
@@ -51,6 +56,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
             @Override
             public void onValueChange(ValueChangeEvent<Charges> event) {
                 revalidate();
+                log.trace("calculateCharges");
                 if (isValid() && ChargesSharedCalculation.calculateCharges(getValue())) {
                     setValue(getValue());
                 }

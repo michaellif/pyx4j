@@ -35,6 +35,7 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
@@ -42,6 +43,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
     private static I18n i18n = I18n.get(ChargeSplitListFolder.class);
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantName(), "25em"));
@@ -124,6 +126,15 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             }
 
             return w;
+        }
+
+        @Override
+        public void populate(TenantCharge entity) {
+            super.populate(entity);
+            boolean applicant = (entity.tenant().role().getValue() == Role.Applicant);
+            if (applicant) {
+                get(proto().percentage()).setEditable(false);
+            }
         }
 
         @SuppressWarnings("unchecked")
