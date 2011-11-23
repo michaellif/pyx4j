@@ -22,9 +22,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
 import com.propertyvista.common.client.ui.components.editors.CEmail;
-import com.propertyvista.common.client.ui.components.editors.CGeoLocation;
 import com.propertyvista.common.client.ui.components.editors.CMoney;
 import com.propertyvista.common.client.ui.components.editors.CPhone;
+import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
@@ -64,7 +64,8 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
         } else if (member.getValueClass().equals(Email.class)) {
             return new CEmail();
         } else if (member.getValueClass().equals(GeoLocation.class)) {
-            return new CGeoLocation();
+            return new GeoLocationEditor();
+            //return new CGeoLocation();
         }
         return super.create(member);
     }
