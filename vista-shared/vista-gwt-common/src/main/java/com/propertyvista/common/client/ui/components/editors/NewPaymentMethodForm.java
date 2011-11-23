@@ -138,6 +138,8 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
         container.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
 
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
+
         container.setWidget(++row, 0, inject(proto().billingAddress(), new CAddressStructured(false)));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
