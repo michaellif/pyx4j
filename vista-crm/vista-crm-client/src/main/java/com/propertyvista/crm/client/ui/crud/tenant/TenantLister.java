@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -28,22 +24,27 @@ public class TenantLister extends ListerBase<TenantDTO> {
     public TenantLister() {
         super(TenantDTO.class, CrmSiteMap.Tenants.Tenant.class, false, true);
 
-        List<ColumnDescriptor<TenantDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantDTO>>();
-
         // TODO: currently we use just person tenant, so we'll display more data for them: 
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type()));
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().id(), true));
+        setColumnDescriptors(new Builder(proto().id()).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().name(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().sex(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().birthDate(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().homePhone(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().mobilePhone(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().workPhone(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().email().address(), true));
-        setColumnDescriptors(columnDescriptors);
+        new Builder(proto().person().name()).sortable(false).build(),
+
+        new Builder(proto().person().sex()).sortable(false).build(),
+
+        new Builder(proto().person().birthDate()).sortable(false).build(),
+
+        new Builder(proto().person().homePhone()).sortable(false).build(),
+
+        new Builder(proto().person().mobilePhone()).sortable(false).build(),
+
+        new Builder(proto().person().workPhone()).sortable(false).build(),
+
+        new Builder(proto().person().email().address()).build()
+
+        );
+
     }
-
 }
