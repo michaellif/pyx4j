@@ -54,12 +54,20 @@ public class UnitDetailsPage extends BasePage {
         try {
             planId = params.get(PMSiteApplication.ParamNameFloorplan).toLong();
         } catch (Exception e) {
-            throw new RuntimeException();
-//            throw new RestartResponseException(FindAptPage.class);
+            // redirect to findapt page
+            redirectOrFail(FindAptPage.class, "Invalid parameter: " + PMSiteApplication.ParamNameFloorplan);
         }
 
         final Floorplan fp = PMSiteContentManager.getFloorplanDetails(planId);
+        if (fp == null) {
+            // redirect to findapt page
+            redirectOrFail(FindAptPage.class, "Could not get floorplan data");
+        }
         final List<AptUnit> fpUnits = PMSiteContentManager.getFloorplanUnits(fp);
+        if (fpUnits == null || fpUnits.size() < 1) {
+            // redirect to findapt page
+            redirectOrFail(FindAptPage.class, "No units found");
+        }
         final List<FloorplanAmenity> amenities = PMSiteContentManager.getFloorplanAmenities(fp);
 
         // left side
@@ -104,6 +112,5 @@ public class UnitDetailsPage extends BasePage {
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);
         super.renderHead(response);
-
     }
 }

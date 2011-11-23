@@ -21,6 +21,7 @@ import js.JSResources;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -131,4 +132,13 @@ public abstract class BasePage extends WebPage {
             p.warn(message);
         }
     }
+
+    protected void redirectOrFail(Class<? extends BasePage> pageClass, String msg) {
+        if (ApplicationMode.isDevelopment()) {
+            throw new RuntimeException(msg);
+        } else {
+            throw new RestartResponseException(pageClass);
+        }
+    }
+
 }

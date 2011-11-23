@@ -289,6 +289,9 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static boolean isPropertyVisible(Building bld) {
+        if (bld.isValuesDetached()) {
+            Persistence.service().retrieve(bld);
+        }
         return PublicVisibilityType.global.equals(bld.marketing().visibility().getValue());
     }
 
@@ -398,9 +401,9 @@ public class PMSiteContentManager implements Serializable {
             return null;
         }
         Floorplan fp = plans.get(0);
-//        if (!isPropertyVisible(fp.building())) {
-//            return null;
-//        }
+        if (!isPropertyVisible(fp.building())) {
+            return null;
+        }
 
         if (getFloorplanUnits(fp).size() < 1) {
             return null;
@@ -409,9 +412,9 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public static List<AptUnit> getFloorplanUnits(Floorplan fp) {
-//        if (!isPropertyVisible(fp.building())) {
-//            return null;
-//        }
+        if (!isPropertyVisible(fp.building())) {
+            return null;
+        }
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
