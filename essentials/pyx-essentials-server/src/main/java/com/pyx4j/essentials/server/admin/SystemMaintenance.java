@@ -85,6 +85,14 @@ public class SystemMaintenance {
         }
     }
 
+    public static SystemState getExternalConnectionsState() {
+        if (isSystemMaintenance()) {
+            return systemMaintenanceState.externalConnections().getValue();
+        } else {
+            return SystemState.Online;
+        }
+    }
+
     public static long getSystemMaintenanceDellay() {
         return maintenanceStarted - System.currentTimeMillis();
     }
@@ -160,6 +168,9 @@ public class SystemMaintenance {
             if (systemMaintenanceState.type().isNull()) {
                 systemMaintenanceState.type().setValue(SystemState.ReadOnly);
             }
+            if (systemMaintenanceState.externalConnections().isNull()) {
+                systemMaintenanceState.externalConnections().setValue(SystemState.Online);
+            }
             if (!systemMaintenanceState.message().isNull() && CommonsStringUtils.isEmpty(systemMaintenanceState.message().getValue())) {
                 systemMaintenanceState.message().setValue(null);
             }
@@ -192,6 +203,9 @@ public class SystemMaintenance {
         }
         if (systemMaintenanceState.type().isNull()) {
             systemMaintenanceState.type().setValue(SystemState.Online);
+        }
+        if (systemMaintenanceState.externalConnections().isNull()) {
+            systemMaintenanceState.externalConnections().setValue(SystemState.Online);
         }
     }
 
