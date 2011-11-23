@@ -146,7 +146,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         String message = getValidationMessage();
         if (message != null) {
             if (CommonsStringUtils.isStringSet(getTitle())) {
-                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid. {1}", getTitle(), message));
+                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid, {1}", getTitle(), message));
             } else {
                 validationResults.appendValidationError(message);
             }
@@ -160,7 +160,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 if (component instanceof CContainer<?, ?>) {
                     validationResults.appendValidationErrors(((CContainer<?, ?>) component).getValidationResults());
                 } else if (component.isVisited()) {
-                    validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid. {1}", component.getTitle(), component.getValidationMessage()));
+                    validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid, {1}", component.getTitle(), component.getValidationMessage()));
                 }
             }
         }
