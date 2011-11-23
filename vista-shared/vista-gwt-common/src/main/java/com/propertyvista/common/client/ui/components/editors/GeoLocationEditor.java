@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components.editors;
 import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -40,12 +39,11 @@ public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
-        int col = -1;
-        main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latitude()), 15).build());
-        main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latitudeType()), 7).customLabel("").build());
-        main.setWidget(0, ++col, new HTML("&"));
-        main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().longitude()), 15).build());
-        main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().longitudeType()), 7).customLabel("").build());
+        int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latitude()), 15).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().latitudeType()), 7).customLabel("Latitude Direction").build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().longitude()), 15).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().longitudeType()), 7).customLabel("Longitude Direction").build());
         return main;
     }
 
