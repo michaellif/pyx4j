@@ -30,6 +30,7 @@ import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableE
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
+import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -135,11 +136,11 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         main.setH1(++row, 0, 1, i18n.tr("Add-Ons"));
 
         petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
-        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), new FeatureExFolder(true, Feature.Type.pet, this)));
+        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), new FeatureExFolder(Feature.Type.pet, this, true)));
         main.setWidget(++row, 0, petsPanel);
 
         parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
-        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), new FeatureExFolder(true, Feature.Type.parking, this)));
+        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), new FeatureExFolder(Feature.Type.parking, this, true)));
         main.setWidget(++row, 0, parkingPanel);
 
         storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));

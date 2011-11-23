@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -37,7 +36,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -58,24 +56,28 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
+import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureExFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantFolder;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
-public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
+public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
     private static I18n i18n = I18n.get(SummaryViewForm.class);
 
@@ -90,6 +92,19 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     }
 
     private SummaryViewPresenter presenter;
+
+    //@formatter:off
+    // parts of lease term panel
+    private final FormFlexPanel consessionPanel = new FormFlexPanel();
+    private final FormFlexPanel includedPanel = new FormFlexPanel();
+    private final FormFlexPanel excludedPanel = new FormFlexPanel();
+    private final FormFlexPanel chargedPanel = new FormFlexPanel();
+    private final FormFlexPanel petsPanel = new FormFlexPanel();
+    private final FormFlexPanel parkingPanel = new FormFlexPanel();
+    private final FormFlexPanel storagePanel = new FormFlexPanel();
+    private final FormFlexPanel otherPanel = new FormFlexPanel();
+    private final FormFlexPanel addonsPanel = new FormFlexPanel();
+    //@formatter:on
 
     public SummaryViewForm() {
         super(SummaryDTO.class, new VistaViewersComponentFactory());
@@ -113,7 +128,7 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         main.setH1(++row, 0, 1, i18n.tr("Premises"));
         main.setWidget(++row, 0, new ApartmentView());
 
-        main.setH1(++row, 0, 1, i18n.tr("Lease Term"));
+        main.setH1(++row, 0, 1, i18n.tr("Lease Term/Rent"));
         main.setWidget(++row, 0, new LeaseTermView());
 
         main.setH1(++row, 0, 1, i18n.tr("Tenants"), createEditLink(new PtSiteMap.Tenants()));
@@ -134,6 +149,24 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
         main.setWidget(++row, 0, new SignatureView());
 
         return main;
+    }
+
+    @Override
+    public void populate(SummaryDTO entity) {
+        super.populate(entity);
+
+        //hide/show various panels depend on populated data:
+        consessionPanel.setVisible(!entity.selectedUnit().concessions().isEmpty());
+        includedPanel.setVisible(!entity.selectedUnit().includedUtilities().isEmpty());
+        excludedPanel.setVisible(!entity.selectedUnit().externalUtilities().isEmpty());
+        chargedPanel.setVisible(!entity.selectedUnit().agreedUtilities().isEmpty());
+
+        petsPanel.setVisible(!entity.selectedUnit().agreedPets().isEmpty());
+        parkingPanel.setVisible(!entity.selectedUnit().agreedParking().isEmpty());
+        storagePanel.setVisible(!entity.selectedUnit().agreedStorage().isEmpty());
+        otherPanel.setVisible(!entity.selectedUnit().agreedOther().isEmpty());
+        addonsPanel.setVisible(!entity.selectedUnit().agreedPets().isEmpty() | !entity.selectedUnit().agreedParking().isEmpty()
+                | !entity.selectedUnit().agreedStorage().isEmpty() | !entity.selectedUnit().agreedOther().isEmpty());
     }
 
     public class DemoReportButtons extends FlowPanel {
@@ -223,12 +256,11 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
                     //
                     new TableCell("Suite Name", "20%", inject(proto().selectedUnit().floorplan()).asWidget()),
                     new TableCell("Address", "40%", inject(proto().selectedUnit().address().street2()).asWidget()),
-                    //new TableCell("Suite #", "20%", inject(proto().selectedUnit().suiteNumber()).asWidget()),
                     new TableCell("Bedrooms #", "10%", inject(proto().selectedUnit().bedrooms()).asWidget()),
                     new TableCell("Den #", "10%", inject(proto().selectedUnit().dens()).asWidget()),
                     new TableCell("Landlord Name", "20%", inject(proto().selectedUnit().landlordName()).asWidget()));
-            int col = -1;
 
+            int col = -1;
             for (TableCell c : cells) {
                 HTML label = new HTML(i18n.tr(c.caption).replaceAll(" ", "&nbsp"));
                 label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -251,32 +283,47 @@ public class SummaryViewForm extends CEntityEditor<SummaryDTO> {
     /*
      * Selected Apartment information view implementation
      */
-    private class LeaseTermView extends HorizontalPanel {
+    private class LeaseTermView extends FormFlexPanel {
 
         public LeaseTermView() {
-
+            super();
             alignWidth(this);
+            int row = -1;
+            setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseFrom()), 8).build());
+            setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseTo()), 8).build());
+            setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().unitRent()), 8).build());
 
-            // add lease term/price:
-            FlowPanel content = new FlowPanel();
-            content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            content.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            includedPanel.setH2(0, 0, 1, i18n.tr("Included Utilities"));
+            includedPanel.setWidget(1, 0, inject(proto().selectedUnit().includedUtilities(), new UtilityFolder()));
+            setWidget(++row, 0, includedPanel);
 
-            Widget label = inject(proto().selectedUnit().unitRent()).asWidget();
-            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            content.add(DecorationUtils.inline(label, "auto"));
-            label = new HTML("&nbsp;/ " + i18n.tr("month"));
-            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            content.add(DecorationUtils.inline(label));
+            excludedPanel.setH2(0, 0, 1, i18n.tr("Excluded Utilities"));
+            excludedPanel.setWidget(1, 0, inject(proto().selectedUnit().externalUtilities(), new UtilityFolder()));
+            setWidget(++row, 0, excludedPanel);
 
-            add(content);
-            setCellWidth(content, "30%");
+            chargedPanel.setH2(0, 0, 1, i18n.tr("Billed Utilities"));
+            chargedPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedUtilities(), new FeatureFolder(Feature.Type.utility, null, false)));
+            setWidget(++row, 0, chargedPanel);
 
-            // add static lease terms blah-blah:
-            HTML availabilityAndPricing = new HTML(PortalResources.INSTANCE.availabilityAndPricing().getText());
-            availabilityAndPricing.getElement().getStyle().setPaddingRight(1, Unit.EM);
-            add(availabilityAndPricing);
-            setCellWidth(availabilityAndPricing, "70%");
+            int addonsRow = -1;
+            addonsPanel.setH2(++addonsRow, 0, 1, i18n.tr("Add-Ons"));
+
+            petsPanel.setH3(0, 0, 1, i18n.tr("Pets"));
+            petsPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedPets(), new FeatureExFolder(Feature.Type.pet, null, false)));
+            addonsPanel.setWidget(++addonsRow, 0, petsPanel);
+
+            parkingPanel.setH3(0, 0, 1, i18n.tr("Parking"));
+            parkingPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedParking(), new FeatureExFolder(Feature.Type.parking, null, false)));
+            addonsPanel.setWidget(++addonsRow, 0, parkingPanel);
+
+            storagePanel.setH3(0, 0, 1, i18n.tr("Storage"));
+            storagePanel.setWidget(1, 0, inject(proto().selectedUnit().agreedStorage(), new FeatureFolder(Feature.Type.locker, null, false)));
+            addonsPanel.setWidget(++addonsRow, 0, storagePanel);
+
+            otherPanel.setH3(0, 0, 1, i18n.tr("Other"));
+            otherPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedOther(), new FeatureFolder(Feature.Type.addOn, null, false)));
+            addonsPanel.setWidget(++addonsRow, 0, otherPanel);
+            setWidget(++row, 0, addonsPanel);
         }
     }
 

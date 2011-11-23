@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
+package com.propertyvista.portal.ptapp.client.ui.components;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-class UtilityFolder extends VistaTableFolder<ServiceItemType> {
+public class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {

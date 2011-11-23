@@ -24,7 +24,7 @@ import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 
-class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
+public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
     private final Feature.Type type;
 
@@ -33,7 +33,7 @@ class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     // TODO obtain this value somewhere!.. 
     private final int maxCount = 2;
 
-    public FeatureExFolder(boolean modifiable, Feature.Type type, ApartmentViewForm apartmentViewForm) {
+    public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(ChargeItem.class, modifiable);
         // TODO: remove when folder modifiable state be unlinked from parents editing state! 
         inheritContainerAccessRules(false);
@@ -54,24 +54,26 @@ class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
     @Override
     protected void addItem() {
-        if (getValue().size() < maxCount) {
+        if (apartmentViewForm != null) {
+            if (getValue().size() < maxCount) {
 
-            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
-                @Override
-                protected void onClose(SelectFeatureBox box) {
-                    if (box.getSelectedItems() != null) {
-                        for (ServiceItem item : box.getSelectedItems()) {
-                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                            newItem.item().set(item);
-                            newItem.originalPrice().setValue(item.price().getValue());
-                            newItem.adjustedPrice().setValue(item.price().getValue());
-                            addItem(newItem);
+                new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
+                    @Override
+                    protected void onClose(SelectFeatureBox box) {
+                        if (box.getSelectedItems() != null) {
+                            for (ServiceItem item : box.getSelectedItems()) {
+                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                newItem.item().set(item);
+                                newItem.originalPrice().setValue(item.price().getValue());
+                                newItem.adjustedPrice().setValue(item.price().getValue());
+                                addItem(newItem);
+                            }
                         }
                     }
-                }
-            };
-        } else {
-            MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You can't add more then {1} items here!", maxCount));
+                };
+            } else {
+                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You can't add more then {1} items here!", maxCount));
+            }
         }
     }
 }

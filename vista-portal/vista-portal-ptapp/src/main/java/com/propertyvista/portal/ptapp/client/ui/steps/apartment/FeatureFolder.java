@@ -29,7 +29,7 @@ import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 
-class FeatureFolder extends VistaTableFolder<ChargeItem> {
+public class FeatureFolder extends VistaTableFolder<ChargeItem> {
 
     private final Feature.Type type;
 
@@ -56,20 +56,22 @@ class FeatureFolder extends VistaTableFolder<ChargeItem> {
 
     @Override
     protected void addItem() {
-        new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
-            @Override
-            protected void onClose(SelectFeatureBox box) {
-                if (box.getSelectedItems() != null) {
-                    for (ServiceItem item : box.getSelectedItems()) {
-                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                        newItem.item().set(item);
-                        newItem.originalPrice().setValue(item.price().getValue());
-                        newItem.adjustedPrice().setValue(item.price().getValue());
-                        addItem(newItem);
+        if (apartmentViewForm != null) {
+            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
+                @Override
+                protected void onClose(SelectFeatureBox box) {
+                    if (box.getSelectedItems() != null) {
+                        for (ServiceItem item : box.getSelectedItems()) {
+                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                            newItem.item().set(item);
+                            newItem.originalPrice().setValue(item.price().getValue());
+                            newItem.adjustedPrice().setValue(item.price().getValue());
+                            addItem(newItem);
+                        }
                     }
                 }
-            }
-        };
+            };
+        }
     }
 
     protected void unconditionalRemoveItem(CEntityFolderItem<ChargeItem> item) {
