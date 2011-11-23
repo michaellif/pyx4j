@@ -23,6 +23,7 @@ package com.pyx4j.essentials.server;
 import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.server.CookieLocaleResolver;
 
@@ -51,7 +52,7 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
 
     @Override
     public boolean datastoreReadOnly() {
-        return SystemMaintenance.isSystemMaintenance();
+        return SystemMaintenance.getState() != SystemState.Online;
     }
 
     @Override
