@@ -41,9 +41,9 @@ public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latitude()), 15).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().latitudeType()), 7).customLabel("Latitude Direction").build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().latitudeType()), 15).customLabel("Latitude Direction").build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().longitude()), 15).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().longitudeType()), 7).customLabel("Longitude Direction").build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().longitudeType()), 15).customLabel("Longitude Direction").build());
         return main;
     }
 
