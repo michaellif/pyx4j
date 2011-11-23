@@ -42,17 +42,17 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
 
     private final Class<E> clazz;
 
-    private final AbstractWizardService<E> wizardServices;
+    private final AbstractWizardService<E> wizardService;
 
     protected AppPlace currentPlace;
 
     @SuppressWarnings("unchecked")
-    public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardService<E> wizardServices) {
+    public WizardStepActivity(WizardStepView<E, T> view, Class<E> clazz, AbstractWizardService<E> wizardService) {
         this.view = view;
         this.clazz = clazz;
         view.setPresenter((T) this);
 
-        this.wizardServices = wizardServices;
+        this.wizardService = wizardService;
     }
 
     public WizardStepActivity<E, T> withPlace(AppPlace place) {
@@ -64,11 +64,19 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
         return null;
     }
 
+    protected AbstractWizardService<E> getService() {
+        return wizardService;
+    }
+
+    protected WizardStepView<E, T> getView() {
+        return view;
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
 
-        wizardServices.retrieve(new DefaultAsyncCallback<E>() {
+        wizardService.retrieve(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
                 if (result == null) {
@@ -100,7 +108,7 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
 
     @Override
     public void save(E entity) {
-        wizardServices.save(new DefaultAsyncCallback<E>() {
+        wizardService.save(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
                 //log.info("SAVED {}", result);
@@ -109,9 +117,4 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
             }
         }, entity);
     }
-
-    protected WizardStepView<E, T> getView() {
-        return view;
-    }
-
 }

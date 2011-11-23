@@ -15,8 +15,11 @@ package com.propertyvista.portal.ptapp.client.activity.steps;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
@@ -30,4 +33,20 @@ public class PaymentActivity extends WizardStepActivity<PaymentInformation, Paym
         withPlace(place);
     }
 
+    @Override
+    public void onBillingAddressSameAsCurrentOne(boolean set) {
+        final PaymentInformation currentValue = getView().getValue();
+        if (set) {
+            ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                @Override
+                public void onSuccess(AddressStructured result) {
+                    currentValue.paymentMethod().set(result);
+                    getView().populate(currentValue);
+                }
+            });
+        } else {
+            currentValue.paymentMethod().set(EntityFactory.create(AddressStructured.class));
+            getView().populate(currentValue);
+        }
+    }
 }

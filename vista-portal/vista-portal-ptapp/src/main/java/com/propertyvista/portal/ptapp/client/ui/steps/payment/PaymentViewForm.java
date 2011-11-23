@@ -43,6 +43,8 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
     private static I18n i18n = I18n.get(PaymentViewForm.class);
 
+    private PaymentViewImpl view;
+
     public static enum StyleSuffix implements IStyleName {
         PaymentImages, PaymentFee, PaymentForm
     }
@@ -53,6 +55,10 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
     public PaymentViewForm() {
         super(PaymentInformation.class, new VistaEditorsComponentFactory());
+    }
+
+    public void setView(PaymentViewImpl view) {
+        this.view = view;
     }
 
     @Override
@@ -73,7 +79,13 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         info.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.setWidget(++row, 0, info);
 
-        main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm()));
+        main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm() {
+            @Override
+            public void onBillingAddressSameAsCurrentOne(boolean set) {
+                assert (view != null);
+                view.getPresenter().onBillingAddressSameAsCurrentOne(set);
+            }
+        }));
 
         main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
 

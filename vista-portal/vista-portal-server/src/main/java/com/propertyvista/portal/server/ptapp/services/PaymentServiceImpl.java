@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -54,7 +55,10 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             payment.preauthorised().setValue(Boolean.TRUE);
         }
 
-        retrievePaymentData(payment);
+        // TODO VladS find a better way to retrieve just monthlyCharges
+        Charges charges = retrieveApplicationEntity(Charges.class);
+        payment.applicationCharges().charges().addAll(charges.applicationCharges().charges());
+        ChargesSharedCalculation.calculateTotal(payment.applicationCharges());
 
         callback.onSuccess(payment);
     }
@@ -82,20 +86,14 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         callback.onSuccess(payment);
     }
 
-    private void retrievePaymentData(PaymentInformation paymentInfo) {
-        // TODO VladS find a better way to retrieve just monthlyCharges
-        Charges charges = retrieveApplicationEntity(Charges.class);
-        paymentInfo.applicationCharges().charges().addAll(charges.applicationCharges().charges());
-        ChargesSharedCalculation.calculateTotal(paymentInfo.applicationCharges());
-
-        // Get the currentAddress
+    @Override
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentUserLease()));
         for (TenantInLease tenantInfo : secureQuery(criteria)) {
             if (tenantInfo.role().getValue().equals(TenantInLease.Role.Applicant)) {
                 TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantInfo.getPrimaryKey());
-//                paymentInfo.currentAddress().set(r.tenantScreening.currentAddress());
-//                paymentInfo.currentPhone().set(tenantInfo.tenant().person().homePhone());
+                callback.onSuccess(r.tenantScreening.currentAddress().clone(AddressStructured.class));
                 break;
             }
         }

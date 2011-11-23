@@ -21,6 +21,9 @@ public interface WizardStepView<E extends IEntity, T extends WizardStepPresenter
 
     public void setPresenter(T presenter);
 
+    public T getPresenter();
+
     public void populate(E entity);
 
+    public E getValue();
 }

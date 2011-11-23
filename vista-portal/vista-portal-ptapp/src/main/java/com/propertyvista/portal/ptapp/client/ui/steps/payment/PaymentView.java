@@ -21,6 +21,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.Paymen
 public interface PaymentView extends WizardStepView<PaymentInformation, PaymentPresenter> {
 
     public interface PaymentPresenter extends WizardStepPresenter<PaymentInformation> {
-    }
 
+        public void onBillingAddressSameAsCurrentOne(boolean set);
+    }
 }

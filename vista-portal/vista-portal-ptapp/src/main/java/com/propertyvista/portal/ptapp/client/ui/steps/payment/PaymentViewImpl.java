@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
-
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
@@ -26,6 +25,7 @@ public class PaymentViewImpl extends WizardStepViewImpl<PaymentInformation, Paym
 
     public PaymentViewImpl() {
         super(new PaymentViewForm());
+        ((PaymentViewForm) getForm()).setView(this);
     }
 
     @Override

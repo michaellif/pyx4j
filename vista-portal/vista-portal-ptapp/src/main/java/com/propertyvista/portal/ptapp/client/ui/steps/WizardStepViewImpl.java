@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -82,7 +81,8 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         this.presenter = presenter;
     }
 
-    protected T getPresenter() {
+    @Override
+    public T getPresenter() {
         return presenter;
     }
 
@@ -91,7 +91,8 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         form.populate(entity);
     }
 
-    protected E getValue() {
+    @Override
+    public E getValue() {
         return form.getValue();
     }
 

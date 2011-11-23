@@ -39,5 +39,6 @@ public interface TenantFinancialDTO extends IEntity {
 
     IList<PersonalAsset> assets();
 
+    @Caption(name = "Guarantor(s)")
     IList<TenantGuarantor> guarantors();
 }
