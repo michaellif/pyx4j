@@ -139,10 +139,10 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setH1(++row, 0, 1, i18n.tr("Financial"), createEditLink(new PtSiteMap.Financial()));
         main.setWidget(++row, 0, inject(proto().tenantFinancials(), createFinancialView()));
 
+        main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(this)));
+
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
         main.setWidget(++row, 0, new LeaseTermsCheck());
-
-        main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(this)));
 
         main.setH1(++row, 0, 1, i18n.tr("Digital Signature"));
         main.setWidget(++row, 0, new SignatureView());
