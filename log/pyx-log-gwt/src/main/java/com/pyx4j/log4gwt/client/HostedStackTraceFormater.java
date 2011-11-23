@@ -51,7 +51,20 @@ public class HostedStackTraceFormater implements AppenderStdOut.StackTraceFormat
 
     @Override
     public String format(LogEvent event) {
-        return " " + formatLocation(getLocation());
+        return " " + formatLocation(getLocation()) + formatThrowable(event.getThrowable());
+    }
+
+    private String formatThrowable(Throwable t) {
+        if (t == null) {
+            return "";
+        }
+        StringBuilder b = new StringBuilder();
+        b.append('\n').append(t.toString()).append('\n');
+        StackTraceElement[] trace = t.getStackTrace();
+        for (StackTraceElement traceElement : trace) {
+            b.append("\tat ").append(traceElement).append('\n');
+        }
+        return b.toString();
     }
 
     private static StackTraceElement getLocation() {
