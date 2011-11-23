@@ -67,8 +67,6 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
                 new MemberColumnDescriptor.Builder(proto().decisionDate(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decisionReason(), false).build() });
 
-        System.out.println("------------------" + columnDescriptors.size());
-
         setColumnDescriptors(columnDescriptors);
     }
 
