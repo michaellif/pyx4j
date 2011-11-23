@@ -111,6 +111,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     private void loadTransientData(Charges charges) {
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             Persistence.service().retrieve(charge.tenant());
+            charge.tenantName().set(charge.tenant().tenant().person().name().detach());
         }
     }
 }
