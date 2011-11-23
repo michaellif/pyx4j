@@ -22,6 +22,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -69,6 +70,10 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges = EntityFactory.create(Charges.class);
             charges.application().set(PtAppContext.getCurrentUserApplication());
             ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
+
+            // some mockup data:
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, 1200.0));
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.applicationFee, 24.99));
         }
 
         ChargeItem serviceItem = lease.serviceAgreement().serviceItem();

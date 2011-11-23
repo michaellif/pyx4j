@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.payment.PaymentMethod;
 
@@ -28,9 +27,6 @@ public interface PaymentInformation extends IEntity, IBoundToApplication {
 
     @Transient
     ChargeLineList applicationCharges();
-
-    @Transient
-    ChargeLine applicationFee();
 
     @Caption(name = "Yes, Please Enroll Me")
     IPrimitive<Boolean> preauthorised();

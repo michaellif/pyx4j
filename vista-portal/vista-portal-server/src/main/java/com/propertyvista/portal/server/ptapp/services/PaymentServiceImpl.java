@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -86,14 +85,8 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     private void retrievePaymentData(PaymentInformation paymentInfo) {
         // TODO VladS find a better way to retrieve just monthlyCharges
         Charges charges = retrieveApplicationEntity(Charges.class);
+        paymentInfo.applicationCharges().charges().addAll(charges.applicationCharges().charges());
         ChargesSharedCalculation.calculateTotal(paymentInfo.applicationCharges());
-        for (ChargeLine charge : charges.applicationCharges().charges()) {
-            if (charge.type().getValue() == ChargeLine.ChargeType.applicationFee) {
-                paymentInfo.applicationFee().set(charge);
-            } else {
-                paymentInfo.applicationCharges().charges().add(charge);
-            }
-        }
 
         // Get the currentAddress
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
