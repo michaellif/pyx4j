@@ -50,6 +50,9 @@ public interface PaymentMethod extends IEntity {
 
     InteracInfo interac();
 
+    // Billing Address:
+    IPrimitive<Boolean> sameAsCurrent();
+
     @EmbeddedEntity
     AddressStructured billingAddress();
 

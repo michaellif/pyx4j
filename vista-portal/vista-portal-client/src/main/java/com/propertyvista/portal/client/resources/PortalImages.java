@@ -63,34 +63,6 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
     ImageResource pointer();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-master.gif")
-    ImageResource paymentMC();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-visa.gif")
-    ImageResource paymentVISA();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-amex.gif")
-    ImageResource paymentAMEX();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-discover.gif")
-    ImageResource paymentDiscover();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-interact.gif")
-    ImageResource paymentInterac();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-ach.gif")
-    ImageResource paymentACH();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("cheque-guide.jpg")
-    ImageResource chequeGuide();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("info_orange.png")
     ImageResource warning();
 
@@ -104,5 +76,4 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
 
     @Source("paymentPreauthorisedNotes.html")
     TextResource paymentPreauthorisedNotes();
-
 }

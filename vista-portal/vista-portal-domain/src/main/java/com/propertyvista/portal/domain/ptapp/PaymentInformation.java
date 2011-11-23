@@ -14,24 +14,15 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.payment.InteracInfo;
-import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PaymentMethod;
 
 public interface PaymentInformation extends IEntity, IBoundToApplication {
 
@@ -41,34 +32,9 @@ public interface PaymentInformation extends IEntity, IBoundToApplication {
     @Transient
     ChargeLine applicationFee();
 
-    @Caption(name = "Payment Types")
-    @Editor(type = EditorType.radiogroup)
-    @MemberColumn(name = "tp")
-    IPrimitive<PaymentType> type();
-
-    @EmbeddedEntity
-    @Caption(name = "eCheque")
-    EcheckInfo echeck();
-
-    @EmbeddedEntity
-    @Transient
-    CreditCardInfo creditCard();
-
-    InteracInfo interac();
-
     @Caption(name = "Yes, Please Enroll Me")
     IPrimitive<Boolean> preauthorised();
 
-    IPrimitive<Boolean> sameAsCurrent();
-
-    PriorAddress currentAddress();
-
     @EmbeddedEntity
-    Phone currentPhone();
-
-    @EmbeddedEntity
-    AddressStructured billingAddress();
-
-    @EmbeddedEntity
-    Phone phone();
+    PaymentMethod paymentMethod();
 }

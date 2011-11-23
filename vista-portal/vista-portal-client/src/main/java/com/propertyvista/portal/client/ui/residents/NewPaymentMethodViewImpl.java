@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.common.client.ui.components.editors.NewPaymentMethodForm;
 import com.propertyvista.domain.payment.PaymentMethod;
 
 public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMethodView {

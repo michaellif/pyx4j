@@ -31,12 +31,12 @@ import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.components.editors.NewPaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
-import com.propertyvista.portal.client.ui.residents.NewPaymentMethodForm;
 
 public class PortalTheme extends VistaTheme {
 

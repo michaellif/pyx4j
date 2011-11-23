@@ -16,8 +16,8 @@ package com.propertyvista.portal.client.ui.util;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.ui.Image;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.resources.PortalImages;
 
 public class Utils {
 
@@ -25,17 +25,17 @@ public class Utils {
         SafeUri url;
 
         if (type == PaymentType.Echeck) {
-            url = PortalImages.INSTANCE.paymentACH().getSafeUri();
+            url = VistaImages.INSTANCE.paymentACH().getSafeUri();
         } else if (type == PaymentType.Visa) {
-            url = PortalImages.INSTANCE.paymentVISA().getSafeUri();
+            url = VistaImages.INSTANCE.paymentVISA().getSafeUri();
         } else if (type == PaymentType.Amex) {
-            url = PortalImages.INSTANCE.paymentAMEX().getSafeUri();
+            url = VistaImages.INSTANCE.paymentAMEX().getSafeUri();
         } else if (type == PaymentType.MasterCard) {
-            url = PortalImages.INSTANCE.paymentMC().getSafeUri();
+            url = VistaImages.INSTANCE.paymentMC().getSafeUri();
         } else if (type == PaymentType.Discover) {
-            url = PortalImages.INSTANCE.paymentDiscover().getSafeUri();
+            url = VistaImages.INSTANCE.paymentDiscover().getSafeUri();
         } else {
-            url = PortalImages.INSTANCE.paymentInterac().getSafeUri();
+            url = VistaImages.INSTANCE.paymentInterac().getSafeUri();
         }
         return new Image(url);
     }

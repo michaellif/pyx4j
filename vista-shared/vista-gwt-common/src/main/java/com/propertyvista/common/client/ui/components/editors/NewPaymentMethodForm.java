@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.common.client.ui.components.editors;
 
 import java.util.Date;
 
@@ -37,15 +37,13 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CAddressStructured;
-import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.resources.PortalImages;
 
 public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod> {
 
@@ -90,22 +88,22 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         for (int i = 0; i < PaymentType.values().length; i++) {
             switch (i) {
             case 0:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentACH().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentACH().getSafeUri());
                 break;
             case 1:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentVISA().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());
                 break;
             case 2:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentAMEX().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentAMEX().getSafeUri());
                 break;
             case 3:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentMC().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentMC().getSafeUri());
                 break;
             case 4:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentDiscover().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDiscover().getSafeUri());
                 break;
             default:
-                paymentTypeImage = new Image(PortalImages.INSTANCE.paymentInterac().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
                 break;
             }
             paymentTypeImage.setHeight("20px");
@@ -249,7 +247,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
         public CheckPanel(CEntityEditor<EcheckInfo> entityComponent) {
             this.entityComponent = entityComponent;
-            setWidget(1, 0, new Image(PortalImages.INSTANCE.chequeGuide()));
+            setWidget(1, 0, new Image(VistaImages.INSTANCE.chequeGuide()));
             getFlexCellFormatter().setColSpan(1, 0, 3);
         }
 

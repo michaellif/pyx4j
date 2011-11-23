@@ -15,6 +15,8 @@ package com.propertyvista.common.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
@@ -49,4 +51,32 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
 
     @Source("logo.png")
     ImageResource logo();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("payment-master.gif")
+    ImageResource paymentMC();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("payment-visa.gif")
+    ImageResource paymentVISA();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("payment-amex.gif")
+    ImageResource paymentAMEX();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("payment-discover.gif")
+    ImageResource paymentDiscover();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("payment-interact.gif")
+    ImageResource paymentInterac();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("payment-ach.gif")
+    ImageResource paymentACH();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("cheque-guide.jpg")
+    ImageResource chequeGuide();
 }

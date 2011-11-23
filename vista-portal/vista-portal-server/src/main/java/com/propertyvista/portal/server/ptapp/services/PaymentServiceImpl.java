@@ -45,26 +45,24 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void retrieve(AsyncCallback<PaymentInformation> callback, Key tenantId) {
-        log.debug("Retrieving PaymentInfo for tenant {}", tenantId);
-        EntityQueryCriteria<PaymentInformation> criteria = EntityQueryCriteria.create(PaymentInformation.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        PaymentInformation payment = secureRetrieve(criteria);
+        log.info("Retrieving PaymentInfo for tenant {}", tenantId);
+
+        PaymentInformation payment = retrieveApplicationEntity(PaymentInformation.class);
         if (payment == null) {
             log.debug("Creating new payment");
             payment = EntityFactory.create(PaymentInformation.class);
-            payment.type().setValue(PaymentType.Echeck);
+            payment.paymentMethod().type().setValue(PaymentType.Echeck);
             payment.preauthorised().setValue(Boolean.TRUE);
-
         }
 
-        retrievePaymentInfo(payment);
+        retrievePaymentData(payment);
 
         callback.onSuccess(payment);
     }
 
     @Override
     public void save(AsyncCallback<PaymentInformation> callback, PaymentInformation payment) {
-        //        log.info("Saving charges\n{}", PrintUtil.print(summary));
+//        log.info("Saving PaymentInformation\n", VistaDataPrinter.print(payment));
 
         saveApplicationEntity(payment);
 
@@ -75,8 +73,8 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, secureRetrieve(criteria));
         }
 
-        if ((EnumSet.of(PaymentType.Amex, PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.type().getValue()))
-                && ("2011".equals(payment.creditCard().cardNumber().getValue()))) {
+        if ((EnumSet.of(PaymentType.Amex, PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.paymentMethod().type().getValue()))
+                && ("2011".equals(payment.paymentMethod().creditCard().cardNumber().getValue()))) {
             // Ok
         } else {
             throw new UserRuntimeException(i18n.tr("Your Card Has Been Declined"));
@@ -85,10 +83,9 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         callback.onSuccess(payment);
     }
 
-    private void retrievePaymentInfo(PaymentInformation paymentInfo) {
+    private void retrievePaymentData(PaymentInformation paymentInfo) {
         // TODO VladS find a better way to retrieve just monthlyCharges
-        Charges charges = EntityFactory.create(Charges.class);
-        retrieveApplicationEntity(charges);
+        Charges charges = retrieveApplicationEntity(Charges.class);
         ChargesSharedCalculation.calculateTotal(paymentInfo.applicationCharges());
         for (ChargeLine charge : charges.applicationCharges().charges()) {
             if (charge.type().getValue() == ChargeLine.ChargeType.applicationFee) {
@@ -99,14 +96,13 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         // Get the currentAddress
-
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentUserLease()));
         for (TenantInLease tenantInfo : secureQuery(criteria)) {
             if (tenantInfo.role().getValue().equals(TenantInLease.Role.Applicant)) {
                 TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantInfo.getPrimaryKey());
-                paymentInfo.currentAddress().set(r.tenantScreening.currentAddress());
-                paymentInfo.currentPhone().set(tenantInfo.tenant().person().homePhone());
+//                paymentInfo.currentAddress().set(r.tenantScreening.currentAddress());
+//                paymentInfo.currentPhone().set(tenantInfo.tenant().person().homePhone());
                 break;
             }
         }
