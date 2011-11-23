@@ -26,6 +26,7 @@ import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -62,6 +63,8 @@ public class PtAppTheme extends VistaTheme {
         addTheme(new PtAppSitePanelTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new DefaultCCOmponentsTheme());
+
+        addTheme(new NewPaymentMethodEditorTheme());
 
         initBodyStyles();
 

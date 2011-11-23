@@ -194,11 +194,6 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     protected void onEnsureDebugId(String baseID) {
         amount.ensureDebugId(baseID);
     }

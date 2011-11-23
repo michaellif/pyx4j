@@ -261,11 +261,6 @@ public class NativeGeoLocation extends SimplePanel implements INativeFocusCompon
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     protected void onEnsureDebugId(String baseID) {
         latitude.ensureDebugId(baseID);
         longitude.ensureDebugId(baseID);

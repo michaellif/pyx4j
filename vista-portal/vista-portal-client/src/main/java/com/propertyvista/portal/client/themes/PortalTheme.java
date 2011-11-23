@@ -22,7 +22,6 @@ import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
-import com.pyx4j.forms.client.ui.NativeRadioGroup;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
@@ -30,8 +29,8 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.components.editors.NewPaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
@@ -66,13 +65,15 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new DefaultCCOmponentsTheme());
 
+        addTheme(new NewPaymentMethodEditorTheme());
+
         initEntityFolderStyles();
         initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initSiteViewStyles();
         initPropertyMarkerStyle();
-        initPaymentRadioButtonGroupStyles();
+
     }
 
     protected void initEntityFolderStyles() {
@@ -188,89 +189,4 @@ public class PortalTheme extends VistaTheme {
 
     }
 
-    private void initPaymentRadioButtonGroupStyles() {
-
-        String prefix = NewPaymentMethodForm.PAYMENT_BUTTONS_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("margin-top", "10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item));
-        style.addProperty("width", "100%");
-        style.addProperty("padding-top", "3px");
-        style.addProperty("height", "27px");
-//        style.addProperty("border-top", "1px solid #F7F7F7");
-//        style.addProperty("border-bottom", "1px solid #F7F7F7");
-        style.addProperty("white-space", "nowrap");
-
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item) + " input");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item) + " label");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NativeRadioGroup.StyleSuffix.Item, NativeRadioGroup.StyleDependent.selected));
-//        style.addProperty("border-top", "1px solid #bbb");
-//        style.addProperty("border-bottom", "1px solid #bbb");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentForm));
-        style.addProperty("border-radius", "5px");
-        style.addProperty("border", "solid 1px #666");
-        style.addProperty("width", "30em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages));
-        style.addProperty("margin-top", "10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div");
-        style.addProperty("height", "27px");
-        style.addProperty("padding-top", "5px");
-        style.addProperty("padding-right", "10px");
-        style.addProperty("padding-left", "10px");
-//        style.addProperty("border-top-left-radius", "3px");
-//        style.addProperty("border-bottom-left-radius", "3px");
-//        style.addProperty("border-left", "1px solid #F7F7F7");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div.selected");
-//        style.addProperty("padding-top", "4px");
-//        style.addProperty("height", "26px");
-//        style.addProperty("border-top", "1px solid #bbb");
-//        style.addProperty("border-bottom", "1px solid #bbb");
-//        style.addProperty("border-left", "1px solid #bbb");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentImages) + " div img");
-        style.addProperty("padding-left", "10px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentFee));
-        style.addProperty("margin-top", "10px");
-        style.addProperty("position", "relative");
-        style.addProperty("z-index", "2");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentFee) + " div");
-        style.addProperty("padding-right", "50px");
-        style.addProperty("padding-top", "8px");
-        style.addProperty("height", "24px");
-        style.addProperty("padding-left", "50px");
-        style.addProperty("padding-right", "20px");
-        style.addProperty("z-index", "2");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, NewPaymentMethodForm.StyleSuffix.PaymentFee) + " div.selected");
-//        style.addProperty("padding-top", "7px");
-//        style.addProperty("height", "23px");
-//        style.addProperty("border-top", "1px solid #bbb");
-//        style.addProperty("border-bottom", "1px solid #bbb");
-//        style.addProperty("background-color", "white");
-        addStyle(style);
-
-    }
 }

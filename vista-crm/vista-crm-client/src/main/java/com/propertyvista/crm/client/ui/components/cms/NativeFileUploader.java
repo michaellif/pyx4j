@@ -105,12 +105,6 @@ public class NativeFileUploader extends NativeTriggerComponent<File> implements 
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public Widget asWidget() {
         // TODO Auto-generated method stub
         return null;

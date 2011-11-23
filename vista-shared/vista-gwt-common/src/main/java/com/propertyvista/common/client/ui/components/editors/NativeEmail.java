@@ -203,11 +203,6 @@ public class NativeEmail extends SimplePanel implements INativeFocusComponent<Em
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     protected void onEnsureDebugId(String baseID) {
         address.ensureDebugId(baseID);
     }

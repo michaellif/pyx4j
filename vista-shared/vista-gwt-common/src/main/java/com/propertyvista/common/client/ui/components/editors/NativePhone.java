@@ -229,11 +229,6 @@ public class NativePhone extends SimplePanel implements INativeFocusComponent<Ph
     }
 
     @Override
-    public void installStyles(String stylePrefix) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     protected void onEnsureDebugId(String baseID) {
         number.ensureDebugId(baseID);
     }
