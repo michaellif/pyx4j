@@ -67,7 +67,6 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
-import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureExFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureFolder;
@@ -425,38 +424,16 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         }
     }
 
-    /*
-     * Digital Signature view implementation
+    /**
+     * Digital Signature View Implementation.
      */
-    private class SignatureView extends FlowPanel {
-
+    private class SignatureView extends FormFlexPanel {
         public SignatureView() {
-
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            alignWidth(this);
-
-            HTML signatureTerms = new HTML(PortalResources.INSTANCE.digitalSignature().getText());
-            add(signatureTerms);
-
-            // signature composure:
-            CTextField edit = new CTextField();
-            bind(edit, proto().application().signature().fullName());
-
-            DecorationData dd = new DecorationData(16d, HasHorizontalAlignment.ALIGN_LEFT, 16);
-            dd.labelStyleName = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
-            //            dd.componentStyle = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureEdit.name();
-            VistaWidgetDecorator signature = new VistaWidgetDecorator(edit, dd);
-            signature.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignature.name());
-            signature.getElement().getStyle().setMarginTop(1, Unit.EM);
-            signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
-            signature.getElement().getStyle().setPaddingLeft(1.5, Unit.EM);
-            signature.setHeight("3em");
-            edit.inheritContainerAccessRules(false);
-            add(alignWidth(signature));
-
-            // validation:
-            edit.addValueValidator(new EditableValueValidator<String>() {
-
+            super();
+            CTextField signatureEditField = new CTextField();
+            bind(signatureEditField, proto().application().signature().fullName());
+            signatureEditField.inheritContainerAccessRules(false);
+            signatureEditField.addValueValidator(new EditableValueValidator<String>() {
                 @Override
                 public boolean isValid(CComponent<String, ?> component, String value) {
                     return isSignatureValid(value);
@@ -468,10 +445,47 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
                 }
             });
 
-            CDateLabel dl = new CDateLabel();
-            dl.setDateFormat(proto().application().signature().timestamp().getMeta().getFormat());
-            add(inject(proto().application().signature().timestamp(), dl));
-            add(inject(proto().application().signature().ipAddress(), new CLabel()));
+            DecorationData dd = new DecorationData(17d, HasHorizontalAlignment.ALIGN_LEFT, 20d);
+            dd.labelStyleName = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
+            Widget signature = new VistaWidgetDecorator(signatureEditField, dd);
+            signature.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignature.name());
+            signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
+            signature.getElement().getStyle().setPaddingLeft(1.5, Unit.EM);
+            signature.setHeight("3em");
+            signature.setWidth("100%");
+            setWidget(0, 0, signature);
+
+            CLabel ipLabel = new CLabel();
+            ipLabel.asWidget().setStyleName(dd.labelStyleName);
+            inject(proto().application().signature().ipAddress(), ipLabel);
+            DecorationData ipdd = new DecorationData();
+            ipdd.labelStyleName = dd.labelStyleName;
+            ipdd.labelWidth = 4;
+            ipdd.componentCaption = i18n.tr("IP") + ":";
+            Widget ip = new VistaWidgetDecorator(ipLabel, ipdd);
+            ip.setStyleName(signature.getStyleName());
+            ip.setWidth("100%");
+            ip.getElement().getStyle().setPadding(0, Unit.EM);
+            setWidget(0, 1, ip);
+
+            CDateLabel dateLabel = new CDateLabel();
+            dateLabel.asWidget().setStyleName(dd.labelStyleName);
+            dateLabel.setDateFormat(proto().application().signature().timestamp().getMeta().getFormat());
+            inject(proto().application().signature().timestamp(), dateLabel);
+            DecorationData datedd = new DecorationData();
+            datedd.labelStyleName = dd.labelStyleName;
+            datedd.componentCaption = i18n.tr("Date") + ":";
+            Widget date = new VistaWidgetDecorator(dateLabel, datedd);
+            date.setStyleName(signature.getStyleName());
+            date.setWidth("100%");
+            dateLabel.asWidget().setStyleName(dd.labelStyleName);
+            setWidget(0, 2, dateLabel);
+            getCellFormatter().setWidth(0, 0, "60%");
+            getCellFormatter().setWidth(0, 1, "20%");
+            getCellFormatter().setWidth(0, 2, "20%");
+            setStyleName(signature.getStyleName());
+
+            setWidth("100%");
         }
     }
 

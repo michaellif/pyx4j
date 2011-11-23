@@ -120,7 +120,7 @@ public class PtAppTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, SummaryViewForm.StyleSuffix.DigitalSignatureLabel));
         style.addProperty("color", "#fff");
-        style.addProperty("font-size", "1.4em");
+        style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
         style.addProperty("text-align", "left");
         style.addProperty("text-shadow", "0 -1px 0 #333333");
