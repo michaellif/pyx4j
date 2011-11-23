@@ -284,9 +284,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         assert model.getColumnDescriptors() != null : "getColumnDescriptors() shouldn't be null";
 
         removeAllRows();
-        setCellFormatter(new FlexCellFormatter());
-        setRowFormatter(new RowFormatter());
-        setColumnFormatter(new ColumnFormatter());
+
+        for (int i = 0; i < 100; i++) {
+            getColumnFormatter().setWidth(i, "0");
+        }
 
         renderHeader();
         renderBody();
@@ -342,8 +343,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
             setHTML(0, colIndex, headerText.toString());
 
-            //TODO calc column width for changing set of Column Descriptors
-            //getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
+            getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
 
             getCellFormatter().setWordWrap(0, colIndex, false);
             ++colIndex;
@@ -351,11 +351,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         if (isColumnSelectorVisible()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
-            //TODO calc column width for changing set of Column Descriptors
-            //getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
+            getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
             getCellFormatter().setStyleName(0, colIndex, DefaultDataTableTheme.StyleName.DataTableColumnSelector.name());
             getCellFormatter().setVerticalAlignment(0, colIndex, HasVerticalAlignment.ALIGN_MIDDLE);
             getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
+
         }
 
         if (getRowCount() > 0) {
@@ -377,8 +377,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
                 selectionCheckBoxes.add(selectionCheckBox);
 
-                //TODO calc column width for changing set of Column Descriptors
-                //selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
+                selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
 
                 setWidget(rowIndex, 0, selectionCheckBox);
                 getCellFormatter().setAlignment(rowIndex, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -460,7 +459,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     protected void processHeaderClick(int column) {
 
         if (hasColumnClickSorting()) {
-            ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptors().get(column);
+            ColumnDescriptor<E> columnDescriptor = model.getVisibleColumnDescriptor(column);
             if (columnDescriptor.equals(model.getSortColumn())) {
                 columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
             } else {

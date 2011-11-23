@@ -40,6 +40,8 @@ public class DataTableModel<E extends IEntity> {
 
     private List<ColumnDescriptor<E>> columnDescriptors;
 
+    private List<ColumnDescriptor<E>> visibleColumnDescriptors;
+
     private ColumnDescriptor<E> sortColumn;
 
     private ColumnDescriptor<E> secondarySortColumn;
@@ -66,31 +68,25 @@ public class DataTableModel<E extends IEntity> {
 
     public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
         this.columnDescriptors = columnDescriptors;
-    }
 
-    public ColumnDescriptor<E> getColumnDescriptor(String columnName) {
-        for (ColumnDescriptor<E> descriptor : columnDescriptors) {
-            if (descriptor.getColumnName().equals(columnName)) {
-                return descriptor;
+        visibleColumnDescriptors = new ArrayList<ColumnDescriptor<E>>();
+        for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
+            if (columnDescriptor.isVisible()) {
+                visibleColumnDescriptors.add(columnDescriptor);
             }
         }
-        return null;
     }
 
     public ColumnDescriptor<E> getColumnDescriptor(int index) {
-        return getColumnDescriptor(getColumnName(index));
+        return columnDescriptors.get(index);
     }
 
-    public List<String> getColumnNames() {
-        ArrayList<String> names = new ArrayList<String>();
-        for (ColumnDescriptor<E> descriptor : columnDescriptors) {
-            names.add(descriptor.getColumnName());
-        }
-        return names;
+    public ColumnDescriptor<E> getVisibleColumnDescriptor(int index) {
+        return visibleColumnDescriptors.get(index);
     }
 
     public String getColumnName(int index) {
-        return getColumnNames().get(index);
+        return getColumnDescriptor(index).getColumnName();
     }
 
     /**
