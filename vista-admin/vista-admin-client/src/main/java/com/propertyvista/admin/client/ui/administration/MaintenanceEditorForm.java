@@ -40,6 +40,7 @@ public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceStat
 
         main.add(inject(proto().inEffect(), new CBooleanLabel()), 10);
         main.add(inject(proto().type()), 10);
+        main.add(inject(proto().externalConnections()), 10);
         main.add(inject(proto().startDate()), 10);
         main.add(inject(proto().startTime()), 10);
         main.add(inject(proto().gracePeriod()), 10);
