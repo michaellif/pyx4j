@@ -26,7 +26,7 @@ import com.propertyvista.dto.LeaseDTO;
 public class LeaseLister extends ListerBase<LeaseDTO> {
 
     public LeaseLister() {
-        super(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class);
+        super(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, false, true);
 
         List<ColumnDescriptor<LeaseDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LeaseDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().unit().belongsTo().propertyCode(), true));

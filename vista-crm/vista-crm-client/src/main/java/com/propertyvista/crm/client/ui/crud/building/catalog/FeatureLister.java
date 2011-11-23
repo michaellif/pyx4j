@@ -26,12 +26,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 public class FeatureLister extends ListerBase<Feature> {
 
     public FeatureLister() {
-        this(false);
-    }
-
-    public FeatureLister(boolean readOnly) {
-        super(Feature.class, CrmSiteMap.Properties.Feature.class, readOnly);
-        getDataTablePanel().setFilterEnabled(!readOnly);
+        super(Feature.class, CrmSiteMap.Properties.Feature.class, false, true);
+        getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));

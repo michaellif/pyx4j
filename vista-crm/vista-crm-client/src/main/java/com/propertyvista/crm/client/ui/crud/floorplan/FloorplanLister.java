@@ -26,11 +26,7 @@ import com.propertyvista.dto.FloorplanDTO;
 public class FloorplanLister extends ListerBase<FloorplanDTO> {
 
     public FloorplanLister() {
-        this(false);
-    }
-
-    public FloorplanLister(boolean readOnly) {
-        super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class, readOnly);
+        super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<FloorplanDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<FloorplanDTO>>();

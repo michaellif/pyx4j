@@ -27,7 +27,7 @@ public class ApplicationLister extends ListerBase<ApplicationDTO> {
 
     @SuppressWarnings("unchecked")
     public ApplicationLister() {
-        super(ApplicationDTO.class, CrmSiteMap.Tenants.Application.class);
+        super(ApplicationDTO.class, CrmSiteMap.Tenants.Application.class, false, true);
 
         List<ColumnDescriptor<ApplicationDTO>> columnDescriptors = Arrays.asList((ColumnDescriptor<ApplicationDTO>[]) new ColumnDescriptor[] {
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true),

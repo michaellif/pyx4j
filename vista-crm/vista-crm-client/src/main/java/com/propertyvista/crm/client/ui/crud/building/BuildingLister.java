@@ -26,7 +26,7 @@ import com.propertyvista.dto.BuildingDTO;
 public class BuildingLister extends ListerBase<BuildingDTO> {
 
     public BuildingLister() {
-        super(BuildingDTO.class, CrmSiteMap.Properties.Building.class);
+        super(BuildingDTO.class, CrmSiteMap.Properties.Building.class, false, true);
 
 //        // add custom actions (Buttons) here:
 //        getListPanel().getDataTable().setHasCheckboxColumn(true);

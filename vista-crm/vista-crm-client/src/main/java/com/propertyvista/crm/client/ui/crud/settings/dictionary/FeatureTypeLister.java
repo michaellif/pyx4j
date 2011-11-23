@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 public class FeatureTypeLister extends ListerBase<ServiceItemType> {
 
     public FeatureTypeLister() {
-        super(ServiceItemType.class, CrmSiteMap.Settings.FeatureItemType.class);
+        super(ServiceItemType.class, CrmSiteMap.Settings.FeatureItemType.class, false, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

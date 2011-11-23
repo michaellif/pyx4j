@@ -26,7 +26,7 @@ import com.propertyvista.dto.ComplexDTO;
 public class ComplexLister extends ListerBase<ComplexDTO> {
 
     public ComplexLister() {
-        super(ComplexDTO.class, CrmSiteMap.Properties.Complex.class);
+        super(ComplexDTO.class, CrmSiteMap.Properties.Complex.class, false, true);
 
         List<ColumnDescriptor<ComplexDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ComplexDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));

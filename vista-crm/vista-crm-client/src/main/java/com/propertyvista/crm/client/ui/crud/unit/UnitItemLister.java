@@ -26,11 +26,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 public class UnitItemLister extends ListerBase<AptUnitItem> {
 
     public UnitItemLister() {
-        this(false);
-    }
-
-    public UnitItemLister(boolean readOnly) {
-        super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, readOnly);
+        super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<AptUnitItem>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitItem>>();

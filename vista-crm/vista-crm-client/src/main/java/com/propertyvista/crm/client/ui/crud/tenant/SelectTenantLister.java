@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.Tenant;
 public class SelectTenantLister extends ListerBase<Tenant> {
 
     public SelectTenantLister() {
-        super(Tenant.class, null, true);
+        super(Tenant.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 

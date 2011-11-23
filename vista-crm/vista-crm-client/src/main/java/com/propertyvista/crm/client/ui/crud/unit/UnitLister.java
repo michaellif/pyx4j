@@ -26,11 +26,7 @@ import com.propertyvista.dto.AptUnitDTO;
 public class UnitLister extends ListerBase<AptUnitDTO> {
 
     public UnitLister() {
-        this(false);
-    }
-
-    public UnitLister(boolean readOnly) {
-        super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, readOnly);
+        super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         @SuppressWarnings("unchecked")

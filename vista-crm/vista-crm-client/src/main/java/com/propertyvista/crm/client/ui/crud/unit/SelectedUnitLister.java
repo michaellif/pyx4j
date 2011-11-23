@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public class SelectedUnitLister extends ListerBase<AptUnit> {
 
     public SelectedUnitLister() {
-        super(AptUnit.class, null, true);
+        super(AptUnit.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(8);
 

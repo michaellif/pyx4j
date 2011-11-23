@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 public class EmployeeLister extends ListerBase<EmployeeDTO> {
 
     public EmployeeLister() {
-        super(EmployeeDTO.class, CrmSiteMap.Organization.Employee.class);
+        super(EmployeeDTO.class, CrmSiteMap.Organization.Employee.class, false, true);
 
         List<ColumnDescriptor<EmployeeDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<EmployeeDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().title(), true));

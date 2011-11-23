@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 public class SelectFeatrueLister extends ListerBase<Feature> {
 
     public SelectFeatrueLister() {
-        super(Feature.class, null, true);
+        super(Feature.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);

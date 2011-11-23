@@ -26,11 +26,7 @@ import com.propertyvista.dto.ParkingDTO;
 public class ParkingLister extends ListerBase<ParkingDTO> {
 
     public ParkingLister() {
-        this(false);
-    }
-
-    public ParkingLister(boolean readOnly) {
-        super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, readOnly);
+        super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<ParkingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingDTO>>();

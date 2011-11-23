@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 public class LeadLister extends ListerBase<Lead> {
 
     public LeadLister() {
-        super(Lead.class, Marketing.Lead.class);
+        super(Lead.class, Marketing.Lead.class, false, true);
 
         List<ColumnDescriptor<Lead>> columnDescriptors = new ArrayList<ColumnDescriptor<Lead>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person(), true));

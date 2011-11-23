@@ -30,7 +30,7 @@ public class ConcessionLister extends ListerBase<Concession> {
     }
 
     public ConcessionLister(boolean readOnly) {
-        super(Concession.class, CrmSiteMap.Properties.Concession.class, readOnly);
+        super(Concession.class, CrmSiteMap.Properties.Concession.class, false, !readOnly);
         getDataTablePanel().setFilterEnabled(!readOnly);
 
         List<ColumnDescriptor<Concession>> columnDescriptors = new ArrayList<ColumnDescriptor<Concession>>();

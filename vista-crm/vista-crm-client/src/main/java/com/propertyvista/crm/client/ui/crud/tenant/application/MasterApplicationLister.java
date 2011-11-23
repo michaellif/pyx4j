@@ -26,7 +26,7 @@ import com.propertyvista.dto.MasterApplicationDTO;
 public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
     public MasterApplicationLister() {
-        super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class, true);
+        super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class, false, false);
 
         @SuppressWarnings("unchecked")
         List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors = Arrays.asList((ColumnDescriptor<MasterApplicationDTO>[]) new ColumnDescriptor[] {

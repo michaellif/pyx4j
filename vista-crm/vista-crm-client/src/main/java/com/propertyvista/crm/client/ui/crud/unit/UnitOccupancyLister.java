@@ -24,12 +24,9 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
-    public UnitOccupancyLister() {
-        this(false);
-    }
 
-    public UnitOccupancyLister(boolean readOnly) {
-        super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, readOnly);
+    public UnitOccupancyLister() {
+        super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<AptUnitOccupancy>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitOccupancy>>();

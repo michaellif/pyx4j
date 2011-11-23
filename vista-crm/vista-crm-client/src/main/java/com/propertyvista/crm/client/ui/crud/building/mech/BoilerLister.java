@@ -26,11 +26,7 @@ import com.propertyvista.dto.BoilerDTO;
 public class BoilerLister extends ListerBase<BoilerDTO> {
 
     public BoilerLister() {
-        this(false);
-    }
-
-    public BoilerLister(boolean readOnly) {
-        super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, readOnly);
+        super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<BoilerDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BoilerDTO>>();

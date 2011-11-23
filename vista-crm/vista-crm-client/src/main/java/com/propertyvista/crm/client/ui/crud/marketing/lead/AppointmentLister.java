@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public class AppointmentLister extends ListerBase<Appointment> {
 
     public AppointmentLister() {
-        super(Appointment.class, Marketing.Appointment.class);
+        super(Appointment.class, Marketing.Appointment.class, false, true);
 
         @SuppressWarnings("unchecked")
         List<ColumnDescriptor<Appointment>> columnDescriptors = Arrays.asList((ColumnDescriptor<Appointment>[]) new ColumnDescriptor[] {

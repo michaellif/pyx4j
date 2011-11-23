@@ -21,6 +21,6 @@ public class UnitListerViewImpl extends CrmListerViewImplBase<AptUnitDTO> implem
 
     public UnitListerViewImpl() {
         super(CrmSiteMap.Properties.Unit.class);
-        setLister(new UnitLister(true));
+        setLister(new UnitLister());
     }
 }

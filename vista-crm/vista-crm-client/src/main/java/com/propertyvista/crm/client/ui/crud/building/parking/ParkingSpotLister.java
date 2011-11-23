@@ -26,7 +26,7 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 public class ParkingSpotLister extends ListerBase<ParkingSpot> {
 
     public ParkingSpotLister() {
-        super(ParkingSpot.class, CrmSiteMap.Properties.ParkingSpot.class);
+        super(ParkingSpot.class, CrmSiteMap.Properties.ParkingSpot.class, false, true);
 
         List<ColumnDescriptor<ParkingSpot>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingSpot>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));

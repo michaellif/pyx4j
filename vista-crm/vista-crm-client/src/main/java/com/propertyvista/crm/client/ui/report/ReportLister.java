@@ -26,11 +26,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 public class ReportLister extends ListerBase<DashboardMetadata> {
 
     public ReportLister() {
-        this(false);
-    }
-
-    public ReportLister(boolean readOnly) {
-        super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class, readOnly);
+        super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
         List<ColumnDescriptor<DashboardMetadata>> columnDescriptors = new ArrayList<ColumnDescriptor<DashboardMetadata>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));

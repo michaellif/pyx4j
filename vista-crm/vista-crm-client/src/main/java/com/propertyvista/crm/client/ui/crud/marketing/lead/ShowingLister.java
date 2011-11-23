@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 public class ShowingLister extends ListerBase<Showing> {
 
     public ShowingLister() {
-        super(Showing.class, Marketing.Showing.class);
+        super(Showing.class, Marketing.Showing.class, false, true);
 
         List<ColumnDescriptor<Showing>> columnDescriptors = new ArrayList<ColumnDescriptor<Showing>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().building(), true));

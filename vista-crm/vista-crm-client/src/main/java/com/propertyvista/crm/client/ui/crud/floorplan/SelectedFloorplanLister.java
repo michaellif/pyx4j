@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 public class SelectedFloorplanLister extends ListerBase<Floorplan> {
 
     public SelectedFloorplanLister() {
-        super(Floorplan.class, null, true);
+        super(Floorplan.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(8);
 

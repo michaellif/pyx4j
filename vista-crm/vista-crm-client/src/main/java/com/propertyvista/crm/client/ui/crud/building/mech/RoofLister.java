@@ -26,11 +26,7 @@ import com.propertyvista.dto.RoofDTO;
 public class RoofLister extends ListerBase<RoofDTO> {
 
     public RoofLister() {
-        this(false);
-    }
-
-    public RoofLister(boolean readOnly) {
-        super(RoofDTO.class, CrmSiteMap.Properties.Roof.class, readOnly);
+        super(RoofDTO.class, CrmSiteMap.Properties.Roof.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<RoofDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<RoofDTO>>();

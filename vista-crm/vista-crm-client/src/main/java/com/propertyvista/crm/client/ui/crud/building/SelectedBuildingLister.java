@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public class SelectedBuildingLister extends ListerBase<Building> {
 
     public SelectedBuildingLister() {
-        super(Building.class, null, true);
+        super(Building.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(5);
 

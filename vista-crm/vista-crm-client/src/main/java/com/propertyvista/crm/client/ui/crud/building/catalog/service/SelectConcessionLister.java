@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 public class SelectConcessionLister extends ListerBase<Concession> {
 
     public SelectConcessionLister() {
-        super(Concession.class, null, true);
+        super(Concession.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);

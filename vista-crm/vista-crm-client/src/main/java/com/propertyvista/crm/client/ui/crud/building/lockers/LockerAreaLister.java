@@ -26,11 +26,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 public class LockerAreaLister extends ListerBase<LockerAreaDTO> {
 
     public LockerAreaLister() {
-        this(false);
-    }
-
-    public LockerAreaLister(boolean readOnly) {
-        super(LockerAreaDTO.class, CrmSiteMap.Properties.LockerArea.class, readOnly);
+        super(LockerAreaDTO.class, CrmSiteMap.Properties.LockerArea.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<LockerAreaDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LockerAreaDTO>>();

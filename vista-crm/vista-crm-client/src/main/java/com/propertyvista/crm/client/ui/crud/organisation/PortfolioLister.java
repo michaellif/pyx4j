@@ -26,11 +26,7 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioLister extends ListerBase<Portfolio> {
 
     public PortfolioLister() {
-        this(false);
-    }
-
-    public PortfolioLister(boolean readOnly) {
-        super(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, readOnly);
+        super(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, false, true);
         List<ColumnDescriptor<Portfolio>> columnDescriptors = new ArrayList<ColumnDescriptor<Portfolio>>();
 
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));

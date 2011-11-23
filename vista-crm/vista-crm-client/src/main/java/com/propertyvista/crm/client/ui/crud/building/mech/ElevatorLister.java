@@ -26,11 +26,7 @@ import com.propertyvista.dto.ElevatorDTO;
 public class ElevatorLister extends ListerBase<ElevatorDTO> {
 
     public ElevatorLister() {
-        this(false);
-    }
-
-    public ElevatorLister(boolean readOnly) {
-        super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, readOnly);
+        super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
         List<ColumnDescriptor<ElevatorDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ElevatorDTO>>();

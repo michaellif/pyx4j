@@ -26,7 +26,7 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantLister extends ListerBase<TenantDTO> {
 
     public TenantLister() {
-        super(TenantDTO.class, CrmSiteMap.Tenants.Tenant.class);
+        super(TenantDTO.class, CrmSiteMap.Tenants.Tenant.class, false, true);
 
         List<ColumnDescriptor<TenantDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantDTO>>();
 
