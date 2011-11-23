@@ -47,9 +47,12 @@ import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> implements HasHandlers,
         HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
+
+    private static I18n i18n = I18n.get(CComponent.class);
 
     private String title;
 
@@ -77,7 +80,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     private IDebugId debugId;
 
-    private String mandatoryValidationMessage = "This field is Mandatory";
+    private String mandatoryValidationMessage = i18n.tr("This field is Mandatory");
 
     private DATA_TYPE value = null;
 
@@ -453,7 +456,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public String getValidationMessage() {
-        return validationMessage;
+        if (!isMandatoryConditionMet()) {
+            return getMandatoryValidationMessage();
+        } else {
+            return validationMessage;
+        }
     }
 
     public String getMandatoryValidationMessage() {
