@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
 
@@ -285,8 +286,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         removeAllRows();
 
-        for (int i = 0; i < 100; i++) {
-            getColumnFormatter().setWidth(i, "0");
+        if (!BrowserType.isIE()) {
+            for (int i = 0; i < 100; i++) {
+                getColumnFormatter().setWidth(i, "0");
+            }
         }
 
         renderHeader();
