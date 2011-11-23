@@ -23,6 +23,10 @@ package com.pyx4j.entity.client.ui.datatable;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
+/**
+ * @deprecated use Builder in ColumnDescriptor instead
+ */
+@Deprecated
 public class ColumnDescriptorFactory {
 
     public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, boolean visible) {
