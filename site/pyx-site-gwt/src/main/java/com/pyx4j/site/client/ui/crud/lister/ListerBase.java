@@ -129,14 +129,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         return dataTablePanel.proto();
     }
 
-    public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
-        this(clazz, itemOpenPlaceClass, false, true);
-    }
-
-    public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean readOnly) {
-        this(clazz, itemOpenPlaceClass, !readOnly, !readOnly);
-    }
-
     public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean openEditor, boolean allowAddNew) {
         this(clazz);
 
