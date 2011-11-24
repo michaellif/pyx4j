@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.Dashboards;
 import com.propertvista.generator.MediaGenerator;
+import com.propertvista.generator.PreloadData;
 import com.propertvista.generator.ServiceCatalogGenerator;
 import com.propertvista.generator.gdo.AptUnitGDO;
 import com.propertvista.generator.gdo.ServiceItemTypes;
@@ -126,13 +127,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         Persistence.service().persist(complexes);
 
-        // create some StarlightPmc:
-        List<PropertyManager> pmcs = new Vector<PropertyManager>();
-        pmcs.add(generator.createPmc("PMC #1"));
-        pmcs.add(generator.createPmc("PMC #2"));
-        pmcs.add(generator.createPmc("PMC #3"));
-        pmcs.add(generator.createPmc("Blue Ridge Realty Inc."));
-        Persistence.service().persist(pmcs);
+        // create some management companies:
+        List<PropertyManager> managements = new Vector<PropertyManager>();
+        for (String mngName : PreloadData.MANAGEMENT_COMPANY) {
+            managements.add(generator.createPropertyManager(mngName));
+        }
+        Persistence.service().persist(managements);
 
         int unitCount = 0;
         List<Building> buildings = generator.createBuildings(config().numResidentialBuildings);
@@ -162,7 +162,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             // TODO Need to be saving PropertyProfile, PetCharge
-            building.propertyManager().set(DataGenerator.random(pmcs)); // temporary for Starlight!..
+            building.propertyManager().set(DataGenerator.random(managements)); // temporary for Starlight!..
 
             // Service Catalog:
             ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);
@@ -250,7 +250,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 }
 
                 Floorplan floorplan = floorplanDTO.clone(Floorplan.class);
-                Persistence.service().persist(floorplan); // persist real unit here, not DTO!..
+                Persistence.service().persist(floorplan.counters());
+                Persistence.service().persist(floorplan); // persist real Object here, not DTO!..
                 floorplanDTO.setPrimaryKey(floorplan.getPrimaryKey());
 
                 for (FloorplanAmenity amenity : floorplanDTO.amenities()) {
@@ -268,7 +269,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
                 // persist plain internal lists:
 
-                Persistence.service().persist(unitData.unit());
+                Persistence.service().merge(unitData.unit());
 
                 // persist internal lists and with belongness:
                 Persistence.service().persist(unitData.occupancies());

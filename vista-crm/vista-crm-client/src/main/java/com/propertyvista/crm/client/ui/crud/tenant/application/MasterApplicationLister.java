@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
@@ -28,28 +25,19 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
     public MasterApplicationLister() {
         super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class, false, false);
 
-        @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<MasterApplicationDTO>> columnDescriptors = Arrays.asList((ColumnDescriptor<MasterApplicationDTO>[]) new ColumnDescriptor[] {
-                new MemberColumnDescriptor.Builder(proto().id(), true).build(),
-
+        setColumnDescriptors(new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto().id(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().type(), true).build(),
-
                 new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode(), true).build(),
-
                 new MemberColumnDescriptor.Builder(proto().lease().unit(), true).build(),
-
                 new MemberColumnDescriptor.Builder(proto().mainApplicant(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().numberOfOccupants(), false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().numberOfCoApplicants(), true).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().numberOfGuarantors(), true).sortable(false).build(),
-
                 new MemberColumnDescriptor.Builder(proto().rentPrice(), true).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().parkingPrice(), false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().otherPrice(), false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().discounts(), false).sortable(false).build(),
-
                 new MemberColumnDescriptor.Builder(proto().createDate(), true).build(),
-
                 new MemberColumnDescriptor.Builder(proto().lease().leaseFrom(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().leaseTo(), true).build(),
 
@@ -66,8 +54,6 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
                 new MemberColumnDescriptor.Builder(proto().decidedBy(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decisionDate(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decisionReason(), false).build() });
-
-        setColumnDescriptors(columnDescriptors);
     }
 
 }

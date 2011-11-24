@@ -409,6 +409,9 @@ public class BuildingsGenerator {
             floorplan.amenities().add(amenity);
         }
 
+        floorplan.counters()._unitCount().setValue(0);
+        floorplan.counters()._marketingUnitCount().setValue(0);
+
         return floorplan;
     }
 
@@ -446,7 +449,7 @@ public class BuildingsGenerator {
         // now create units for the building
         for (int floor = 1; floor < numFloors + 1; floor++) {
             // for each floor we want to create the same number of units
-            for (int j = 1; j < numUnitsPerFloor + 1; j++) {
+            for (int j = 0; j < numUnitsPerFloor + 1; j++) {
 
                 String suiteNumber = "#" + (floor * 100 + j);
                 Floorplan floorplan = floorplans.get(j % floorplans.size());
@@ -589,7 +592,7 @@ public class BuildingsGenerator {
         return complex;
     }
 
-    public PropertyManager createPmc(String name) {
+    public PropertyManager createPropertyManager(String name) {
         PropertyManager pmc = EntityFactory.create(PropertyManager.class);
         pmc.name().setValue(name);
 

@@ -15,6 +15,8 @@ package com.propertvista.generator;
 
 public class PreloadData {
 
+    public final static String[] MANAGEMENT_COMPANY = { "Blue Realty Inc.", "Green Property Management Inc.", "Red Corporation", "White Management" };
+
     public final static String[] CAR_MAKES = { "Toyota", "BMW", "Honda", "Ford", "Nissan", "Jaguar", "Lexus" };
 
     public final static String[] CAR_MODELS = { "Sienna", "LS300", "Protege", "M5", "M3", "Viper" };
