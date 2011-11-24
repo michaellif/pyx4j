@@ -51,7 +51,6 @@ public interface PriorAddress extends AddressStructured {
     IPrimitive<LogicalDate> moveInDate();
 
     @Format("MM/dd/yyyy")
-    @Caption(name = "Move Out Date")
     IPrimitive<LogicalDate> moveOutDate();
 
     @Caption(name = "Monthly Payment")
