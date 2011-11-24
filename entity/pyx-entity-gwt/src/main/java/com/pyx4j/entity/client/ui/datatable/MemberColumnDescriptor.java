@@ -67,6 +67,11 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
             visible(visible);
         }
 
+        public Builder title(IObject<?> member) {
+            title(member.getMeta().getCaption());
+            return this;
+        }
+
         @Override
         public <E extends IEntity> ColumnDescriptor<E> build() {
             ColumnDescriptor<E> cd = null;

@@ -138,6 +138,11 @@ public class ColumnDescriptor<E> {
             this.columnTitle = columnTitle;
         }
 
+        public Builder title(String columnTitle) {
+            this.columnTitle = columnTitle;
+            return this;
+        }
+
         public Builder sortable(boolean sortable) {
             this.sortable = sortable;
             return this;
