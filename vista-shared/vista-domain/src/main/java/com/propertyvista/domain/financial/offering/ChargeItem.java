@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{0}, Original Price: {1}, Adjusted Price: {2}")
+@ToStringFormat("{0}")
 public interface ChargeItem extends IEntity {
 
     @ToString(index = 0)
