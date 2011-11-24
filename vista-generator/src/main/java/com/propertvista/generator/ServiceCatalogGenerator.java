@@ -119,7 +119,7 @@ public class ServiceCatalogGenerator {
 
         item.type().setValue(type);
         item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue("Service description here...");
+        item.description().setValue("Service description");
 
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
 
@@ -162,7 +162,7 @@ public class ServiceCatalogGenerator {
                 item.type().serviceType().setValue(selectedItem.serviceType().getValue());
 
                 item.price().setValue(500d + RandomUtil.randomInt(500));
-                item.description().setValue(type.toString() + " description here...");
+                item.description().setValue(type.toString() + " description");
 
                 items.add(item);
             }
@@ -177,7 +177,7 @@ public class ServiceCatalogGenerator {
 
         item.type().setValue(type);
         item.name().setValue(RandomUtil.randomLetters(6));
-        item.description().setValue("Feature description here...");
+        item.description().setValue("Feature description");
 
         item.priceType().setValue(RandomUtil.randomEnum(Feature.PriceType.class));
         item.depositType().setValue(RandomUtil.randomEnum(DepositType.class));
@@ -209,7 +209,7 @@ public class ServiceCatalogGenerator {
                 item.type().featureType().setValue(item.type().featureType().getValue());
 
                 item.price().setValue(100d + RandomUtil.randomInt(100));
-                item.description().setValue(type.toString() + " description here...");
+                item.description().setValue(type.toString() + " description");
 
                 items.add(item);
             }
@@ -339,7 +339,7 @@ public class ServiceCatalogGenerator {
 
         // This value may not be used in all cases and overridden later in generator
         item.price().setValue(500d + RandomUtil.randomInt(500));
-        item.description().setValue(type.toString() + " description here...");
+        item.description().setValue(type.toString() + " description");
         item.element().set(buildingElement);
 
         service.items().add(item);
