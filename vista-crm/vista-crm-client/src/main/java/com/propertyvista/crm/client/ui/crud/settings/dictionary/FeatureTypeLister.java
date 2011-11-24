@@ -34,7 +34,7 @@ public class FeatureTypeLister extends ListerBase<ServiceItemType> {
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
-        addActionItem(new Button(i18n.tr("Delete&nbspChecked"), new ClickHandler() {
+        addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 for (ServiceItemType item : getDataTablePanel().getDataTable().getCheckedItems()) {
