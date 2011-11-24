@@ -39,6 +39,7 @@ import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -114,6 +115,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //TODO this service should be granted to a tenant
         grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(MaintenanceRequestDTO.class, applicationEntityAccess, CRUD));
 
+        grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantDashboardService.class));
         grant(VistaBehavior.TENANT, new IServiceExecutePermission(PersonalInfoCrudService.class));
 
         grant(CoreBehavior.DEVELOPER, new AllPermissions());
