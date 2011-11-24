@@ -32,11 +32,11 @@ import com.pyx4j.widgets.client.MonthYearPicker;
 
 public class NativeMonthYearPicker extends MonthYearPicker implements INativeFocusComponent<Date> {
 
+    private final CMonthYearPicker cComponent;
+
     private boolean enabled = true;
 
     private boolean editable = true;
-
-    private final CMonthYearPicker cComponent;
 
     public NativeMonthYearPicker(final CMonthYearPicker cComponent) {
         super(cComponent.getYearRange(), cComponent.isYearOnly());
@@ -77,6 +77,19 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         super.setEnabled(enabled && this.isEditable());
+        if (enabled) {
+            yearSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+        } else {
+            yearSelector.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+        }
+        if (!cComponent.isYearOnly()) {
+            if (enabled) {
+                monthSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+            } else {
+                monthSelector.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+            }
+        }
+
     }
 
     @Override
@@ -88,6 +101,18 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
     public void setEditable(boolean editable) {
         this.editable = editable;
         super.setEnabled(editable && this.isEnabled());
+        if (editable) {
+            yearSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+        } else {
+            yearSelector.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+        }
+        if (!cComponent.isYearOnly()) {
+            if (editable) {
+                monthSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            } else {
+                monthSelector.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            }
+        }
     }
 
     @Override

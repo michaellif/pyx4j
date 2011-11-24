@@ -57,6 +57,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
         if (!showYearOnly) {
             monthSelector = new ListBox();
+
             add(monthSelector);
             String[] months = LocaleInfo.getCurrentLocale().getDateTimeConstants().months();
             monthSelector.addItem("");
