@@ -51,8 +51,15 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
     private CEntityEditor<AddressStructured> billingAddress;
 
+    private final boolean twoColumns;
+
     public NewPaymentMethodForm() {
+        this(false);
+    }
+
+    public NewPaymentMethodForm(boolean twoColumns) {
         super(PaymentMethod.class, new VistaEditorsComponentFactory());
+        this.twoColumns = twoColumns;
     }
 
     @Override
@@ -149,10 +156,11 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
             });
         }
 
-        container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new CAddressStructured(false)));
+        container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new CAddressStructured(twoColumns)));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
+        container.setHR(++row, 0, 3);
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 15).build());
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
         container.setWidth("100%");

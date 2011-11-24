@@ -79,7 +79,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         info.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.setWidget(++row, 0, info);
 
-        main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm() {
+        main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm(true) {
             @Override
             public void onBillingAddressSameAsCurrentOne(boolean set) {
                 assert (view != null);
