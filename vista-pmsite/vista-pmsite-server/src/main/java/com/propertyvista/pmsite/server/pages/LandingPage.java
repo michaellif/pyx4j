@@ -19,7 +19,6 @@ import templates.TemplateResources;
 
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.NewsPanel;
 import com.propertyvista.pmsite.server.panels.PromoPanel;

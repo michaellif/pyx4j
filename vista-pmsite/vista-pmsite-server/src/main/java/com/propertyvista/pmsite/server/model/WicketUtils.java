@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -42,11 +43,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DateConverter;
+import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.IEntity;
@@ -234,11 +237,22 @@ public class WicketUtils {
         private static final long serialVersionUID = 1L;
 
         public VolatileTemplateResourceReference(Class<?> scope, String fileName, String contentType, IModel<Map<String, Object>> vars) {
-            super(scope, fileName, contentType, vars);
-            Key rcKey = new Key(scope.getName(), fileName, null, null, null);
-            WebApplication.get().getResourceReferenceRegistry().unregisterResourceReference(rcKey);
-            WebApplication.get().getResourceReferenceRegistry().registerResourceReference(this);
 
+            super(scope, fileName, contentType, PackageTextTemplate.DEFAULT_ENCODING, vars, null, null, getVariationHash(fileName, vars));
+            if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
+                // renew cache for every request in case the file was changed
+                Key rcKey = new Key(scope.getName(), fileName, null, null, getVariation());
+                WebApplication.get().getResourceReferenceRegistry().unregisterResourceReference(rcKey);
+                WebApplication.get().getResourceReferenceRegistry().registerResourceReference(this);
+            }
+        }
+
+        public static String getVariationHash(String name, IModel<Map<String, Object>> vars) {
+            StringBuffer content = new StringBuffer(name);
+            for (Object o : vars.getObject().values()) {
+                content.append(o);
+            }
+            return DigestUtils.md5Hex(content.toString());
         }
     }
 

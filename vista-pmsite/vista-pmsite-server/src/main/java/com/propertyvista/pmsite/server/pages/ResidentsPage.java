@@ -22,7 +22,6 @@ import templates.TemplateResources;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.model.StylesheetTemplateModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
 
