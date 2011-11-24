@@ -70,9 +70,8 @@ public class Mappings {
         }
     }
 
-    //TODO fix connection
-    public TableModel getTableModel(Class<? extends IEntity> entityClass) {
-        return ensureTable(null, connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
+    public TableModel getTableModel(Connection connection, Class<? extends IEntity> entityClass) {
+        return ensureTable(connection, connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
     }
 
     public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {

@@ -470,7 +470,7 @@ public class TableModel {
         ResultSet rs = null;
         String sql = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
             sql = "SELECT m1.* FROM " + qb.getSQL(tableName);
             int offset = 0;
             boolean addLimit = false;
@@ -532,7 +532,7 @@ public class TableModel {
 
     public <T extends IEntity> ResultSetIterator<T> queryIterable(final Connection connection, EntityQueryCriteria<T> criteria) {
         String sql = null;
-        QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+        QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -597,7 +597,7 @@ public class TableModel {
         ResultSet rs = null;
         String sql = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
             stmt = connection.prepareStatement(sql = "SELECT m1.id FROM " + qb.getSQL(tableName));
             if (limit > 0) {
                 stmt.setMaxRows(limit);
@@ -625,7 +625,7 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
             stmt = connection.prepareStatement("SELECT " + dialect.sqlFunction(func, args) + " FROM " + qb.getSQL(tableName));
             qb.bindParameters(stmt);
 

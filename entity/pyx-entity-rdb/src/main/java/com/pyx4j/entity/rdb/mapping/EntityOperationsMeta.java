@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,8 +92,8 @@ public class EntityOperationsMeta {
         return mainEntityMeta;
     }
 
-    public EntityOperationsMeta getMappedOperationsMeta(Class<? extends IEntity> entityClass) {
-        return mappings.getTableModel(entityClass).operationsMeta();
+    public EntityOperationsMeta getMappedOperationsMeta(Connection connection, Class<? extends IEntity> entityClass) {
+        return mappings.getTableModel(connection, entityClass).operationsMeta();
     }
 
     private void build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, String path, List<String> accessPath,

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -70,9 +71,13 @@ public class QueryBuilder<T extends IEntity> {
 
     private final EntityOperationsMeta operationsMeta;
 
+    private final Connection connection;
+
     private final Dialect dialect;
 
-    public QueryBuilder(Dialect dialect, String alias, EntityMeta entityMeta, EntityOperationsMeta operationsMeta, EntityQueryCriteria<T> criteria) {
+    public QueryBuilder(Connection connection, Dialect dialect, String alias, EntityMeta entityMeta, EntityOperationsMeta operationsMeta,
+            EntityQueryCriteria<T> criteria) {
+        this.connection = connection;
         this.dialect = dialect;
         this.mainTableSqlAlias = alias;
         this.operationsMeta = operationsMeta;
@@ -280,8 +285,8 @@ public class QueryBuilder<T extends IEntity> {
 
                 //TODO recursion
                 @SuppressWarnings("unchecked")
-                EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta((Class<? extends IEntity>) memberOper.getMemberMeta()
-                        .getObjectClass());
+                EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta(connection, (Class<? extends IEntity>) memberOper
+                        .getMemberMeta().getObjectClass());
 
                 String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
                 String memberName = GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getObjectClass()) + Path.PATH_SEPARATOR + pathFragmet;
