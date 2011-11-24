@@ -500,6 +500,8 @@ public class PMSiteContentManager implements Serializable {
 
         // TODO promo building lookup
         EntityListCriteria<Building> dbCriteria = EntityListCriteria.create(Building.class);
+        // account for visibility type
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().marketing().visibility(), PublicVisibilityType.global));
         dbCriteria.setPageSize(4);
         List<Building> buildings = Persistence.service().query(dbCriteria);
         for (Building bld : buildings) {
