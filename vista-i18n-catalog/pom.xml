@@ -126,10 +126,10 @@
                                 <include>com.pyx4j*</include>
                                 <include>com.propertyvista*</include>
                             </includes>
-                            <autoTranslates>
-                                <autoTranslate>ru</autoTranslate>
-                                <autoTranslate>fr</autoTranslate>
-                            </autoTranslates>
+                            <translates>
+                                <translate>ru</translate>
+                                <translate>fr</translate>
+                            </translates>
                         </configuration>
                     </plugin>
 

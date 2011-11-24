@@ -243,6 +243,14 @@
     <profiles>
 
         <profile>
+            <id>i18n-merge</id>
+            <properties>
+                <i18n.merge>true</i18n.merge>
+                <i18n.catalog>../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
+            </properties>
+        </profile>
+
+        <profile>
             <id>i18n-auto</id>
             <properties>
                 <i18n.autoTranslate>true</i18n.autoTranslate>
@@ -281,10 +289,10 @@
                                 <include>com.pyx4j*</include>
                                 <include>com.propertyvista*</include>
                             </includes>
-                            <autoTranslates>
-                                <autoTranslate>ru</autoTranslate>
-                                <autoTranslate>fr</autoTranslate>
-                            </autoTranslates>
+                            <translates>
+                                <translate>ru</translate>
+                                <translate>fr</translate>
+                            </translates>
                         </configuration>
                     </plugin>
 
