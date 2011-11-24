@@ -39,6 +39,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -47,6 +48,8 @@ import com.propertyvista.domain.payment.PaymentType;
 public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod> {
 
     private FlowPanel paymentTypeImagesPanel;
+
+    private CEntityEditor<AddressStructured> billingAddress;
 
     public NewPaymentMethodForm() {
         super(PaymentMethod.class, new VistaEditorsComponentFactory());
@@ -141,11 +144,12 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     onBillingAddressSameAsCurrentOne(event.getValue());
+                    billingAddress.setEditable(!event.getValue());
                 }
             });
         }
 
-        container.setWidget(++row, 0, inject(proto().billingAddress(), new CAddressStructured(false)));
+        container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new CAddressStructured(false)));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());

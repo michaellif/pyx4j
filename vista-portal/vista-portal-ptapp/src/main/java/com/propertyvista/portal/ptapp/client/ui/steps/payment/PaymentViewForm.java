@@ -89,56 +89,14 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
         main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
 
-        HorizontalPanel preauthorisedNotes = new HorizontalPanel();
-        preauthorisedNotes.add(new HTML(PortalResources.INSTANCE.paymentPreauthorisedNotes_VISA().getText()));
-        main.setWidget(++row, 0, preauthorisedNotes);
-
+//        HorizontalPanel preauthorisedNotes = new HorizontalPanel();
+//        preauthorisedNotes.add(new HTML(PortalResources.INSTANCE.paymentPreauthorisedNotes_VISA().getText()));
+//        main.setWidget(++row, 0, preauthorisedNotes);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().preauthorised()), 5).build());
-
-        main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new HTML(PortalResources.INSTANCE.paymentTermsNotes().getText()));
 
         return main;
     }
-
-//    private void setAsCurrentAddress(Boolean value) {
-//        boolean editable = true;
-//        CAddressStructured addressForm = (CAddressStructured) get(proto().billingAddress());
-//        if (value == Boolean.TRUE) {
-//            //TODO use a better forms and copy of data
-//            addressForm.get(addressForm.proto().suiteNumber()).setValue(getValue().currentAddress().suiteNumber().getValue());
-//            addressForm.get(addressForm.proto().streetNumber()).setValue(getValue().currentAddress().streetNumber().getValue());
-//            addressForm.get(addressForm.proto().streetNumberSuffix()).setValue(getValue().currentAddress().streetNumberSuffix().getValue());
-//            addressForm.get(addressForm.proto().streetName()).setValue(getValue().currentAddress().streetName().getValue());
-//            addressForm.get(addressForm.proto().streetType()).setValue(getValue().currentAddress().streetType().getValue());
-//            addressForm.get(addressForm.proto().streetDirection()).setValue(getValue().currentAddress().streetDirection().getValue());
-//            addressForm.get(addressForm.proto().city()).setValue(getValue().currentAddress().city().getValue());
-//            addressForm.get(addressForm.proto().county()).setValue(getValue().currentAddress().county().getValue());
-//            addressForm.get(addressForm.proto().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
-//            get(proto().phone()).setValue(getValue().currentPhone());
-//
-//            CComponent<Country, ?> country = addressForm.get(addressForm.proto().country());
-//            country.setValue(getValue().currentAddress().country());
-//
-//            CComponent<Province, ?> prov = addressForm.get(addressForm.proto().province());
-//            prov.setValue(getValue().currentAddress().province());
-//
-//            editable = false;
-//        }
-//
-//        addressForm.get(addressForm.proto().suiteNumber()).setEditable(editable);
-//        addressForm.get(addressForm.proto().streetNumber()).setEditable(editable);
-//        addressForm.get(addressForm.proto().streetNumberSuffix()).setEditable(editable);
-//        addressForm.get(addressForm.proto().streetName()).setEditable(editable);
-//        addressForm.get(addressForm.proto().streetType()).setEditable(editable);
-//        addressForm.get(addressForm.proto().streetDirection()).setEditable(editable);
-//        addressForm.get(addressForm.proto().city()).setEditable(editable);
-//        addressForm.get(addressForm.proto().county()).setEditable(editable);
-//        addressForm.get(addressForm.proto().province()).setEditable(editable);
-//        addressForm.get(addressForm.proto().country()).setEditable(editable);
-//        addressForm.get(addressForm.proto().postalCode()).setEditable(editable);
-//        get(proto().phone()).setEditable(editable);
-//    }
 
     @Override
     public void populate(PaymentInformation value) {
