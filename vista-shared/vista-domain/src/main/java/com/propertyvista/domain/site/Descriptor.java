@@ -27,11 +27,7 @@ import com.pyx4j.entity.shared.IList;
 @AbstractEntity
 public interface Descriptor extends IEntity {
 
-    /**
-     * used as url parameter name in Site/PageViewerActivities and PageEditorActivity
-     */
-    public static final String PARENT_CLASS = "pc";
-
     @Owned
     IList<PageDescriptor> childPages();
+
 }

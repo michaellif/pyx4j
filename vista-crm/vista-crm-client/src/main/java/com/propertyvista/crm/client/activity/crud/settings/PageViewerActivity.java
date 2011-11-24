@@ -21,10 +21,10 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
-import com.propertyvista.domain.site.Descriptor;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerActivity extends ViewerActivityBase<PageDescriptor> implements PageViewer.Presenter {
@@ -42,6 +42,7 @@ public class PageViewerActivity extends ViewerActivityBase<PageDescriptor> imple
     @Override
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
-                AppSite.getHistoryMapper().createPlace(placeClass).formNewItemPlace(parentid).arg(Descriptor.PARENT_CLASS, PageDescriptor.class.getName()));
+                AppSite.getHistoryMapper().createPlace(placeClass).formNewItemPlace(parentid)
+                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.page.name()));
     }
 }

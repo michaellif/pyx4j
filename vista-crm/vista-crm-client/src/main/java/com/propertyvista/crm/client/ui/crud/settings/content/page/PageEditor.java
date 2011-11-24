@@ -33,5 +33,19 @@ import com.propertyvista.domain.site.PageDescriptor;
 public interface PageEditor extends IEditorView<PageDescriptor> {
 
     interface Presenter extends IEditorView.Presenter {
+
+        /**
+         * used as url parameter name in Site/PageViewerActivities and PageEditorActivity
+         */
+        public static final String URL_PARAM_PAGE_PARENT = "pp";
+
+        public enum PageParent {
+
+            site,
+
+            page;
+
+        }
+
     }
 }

@@ -21,12 +21,11 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
+import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
-import com.propertyvista.domain.site.Descriptor;
-import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteViewerActivity extends ViewerActivityBase<SiteDescriptorDTO> implements SiteViewer.Presenter {
@@ -45,6 +44,6 @@ public class SiteViewerActivity extends ViewerActivityBase<SiteDescriptorDTO> im
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
                 AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formNewItemPlace(parentid)
-                        .arg(Descriptor.PARENT_CLASS, SiteDescriptor.class.getName()));
+                        .arg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.site.name()));
     }
 }
