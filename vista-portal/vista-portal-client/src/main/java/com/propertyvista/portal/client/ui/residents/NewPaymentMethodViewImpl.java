@@ -34,7 +34,13 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
     private static I18n i18n = I18n.get(NewPaymentMethodViewImpl.class);
 
     public NewPaymentMethodViewImpl() {
-        form = new NewPaymentMethodForm();
+        form = new NewPaymentMethodForm() {
+            @Override
+            public void onBillingAddressSameAsCurrentOne(boolean set) {
+                assert (presenter != null);
+                presenter.onBillingAddressSameAsCurrentOne(set);
+            }
+        };
         form.initContent();
         add(form);
 
@@ -65,6 +71,11 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
     public void populate(PaymentMethod paymentMethod) {
         form.populate(paymentMethod);
 
+    }
+
+    @Override
+    public PaymentMethod getValue() {
+        return form.getValue();
     }
 
 }

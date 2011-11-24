@@ -17,8 +17,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -49,7 +51,23 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
         // TODO Implement
         //Just for presentation
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
-
     }
 
+    @Override
+    public void onBillingAddressSameAsCurrentOne(boolean set) {
+        final PaymentMethod currentValue = view.getValue();
+        if (set) {
+// TODO  implement in service method getCurrentAddress (like in #link PaymentServiceImpl)
+//            ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+//                @Override
+//                public void onSuccess(AddressStructured result) {
+//                    currentValue.billingAddress().set(result);
+//                    view.populate(currentValue);
+//                }
+//            });
+        } else {
+            currentValue.set(EntityFactory.create(AddressStructured.class));
+            view.populate(currentValue);
+        }
+    }
 }

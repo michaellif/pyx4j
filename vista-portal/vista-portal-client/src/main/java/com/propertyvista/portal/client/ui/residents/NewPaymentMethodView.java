@@ -20,9 +20,13 @@ import com.propertyvista.domain.payment.PaymentMethod;
 public interface NewPaymentMethodView extends IsWidget {
     void setPresenter(Presenter presenter);
 
+    public PaymentMethod getValue();
+
     public void populate(PaymentMethod paymentMethod);
 
     interface Presenter {
+
+        public void onBillingAddressSameAsCurrentOne(boolean set);
 
         public void save(PaymentMethod paymentmethod);
 
