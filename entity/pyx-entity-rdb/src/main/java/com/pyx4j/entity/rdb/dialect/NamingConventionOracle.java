@@ -24,6 +24,8 @@ import java.util.List;
 
 public class NamingConventionOracle implements NamingConvention {
 
+    private final boolean mustBeginWithLetter = true;
+
     private final int identifierMaximumLength;
 
     private final ShortWords shortWords;
@@ -47,6 +49,8 @@ public class NamingConventionOracle implements NamingConvention {
                     b.append(shortForm(currentWord.toString()));
                     currentWord = new StringBuilder();
                     wordStart = true;
+                } else if (mustBeginWithLetter) {
+                    continue;
                 }
                 b.append('_');
             } else if (Character.isUpperCase(c)) {
