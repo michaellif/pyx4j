@@ -47,6 +47,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -403,9 +404,8 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
             // "I Agree" check-box:
             CCheckBox check = new CCheckBox();
-            bind(check, proto().application().signature().agree());
-            VistaWidgetDecorator agree = new VistaWidgetDecorator(check, new DecorationData(0, Unit.EM, 0, Unit.EM));
-            agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
+            WidgetDecorator agree = new DecoratorBuilder(inject(proto().application().signature().agree(), check)).build();
+            agree.asWidget().getElement().getStyle().setMarginLeft(25, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             add(agree);
             check.inheritContainerAccessRules(false);
