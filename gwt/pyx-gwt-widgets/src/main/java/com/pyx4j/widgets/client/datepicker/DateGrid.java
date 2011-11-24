@@ -164,11 +164,11 @@ public class DateGrid extends Grid {
     }
 
     private boolean isEnabled(Date currentDate) {
-        if (currentDate.before(minDate)) {
+        if (minDate != null && currentDate.before(minDate)) {
             return false;
         }
 
-        if (currentDate.after(maxDate)) {
+        if (maxDate != null && currentDate.after(maxDate)) {
             return false;
         }
 

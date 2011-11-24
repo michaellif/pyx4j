@@ -24,9 +24,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
@@ -36,7 +38,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
     private static I18n i18n = I18n.get(NativeWidgetBasicViewImpl.class);
 
     public NativeWidgetBasicViewImpl() {
-        setSize("100%", "100");
+        setSize("100%", "100%");
 
         FormFlexPanel main = new FormFlexPanel();
 
@@ -49,7 +51,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
         final TextBox textBox = new TextBox();
 
-        DatePickerComposite datePicker = new DatePickerComposite(1, starting, minDate, maxDate, new ArrayList<Date>());
+        DatePickerComposite datePicker = new DatePickerComposite();
         datePicker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
 
             @Override
@@ -69,6 +71,17 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
         DatePickerComposite datePickerMulti = new DatePickerComposite(3, starting, minDate, maxDate, new ArrayList<Date>());
         main.setWidget(++row, 0, datePickerMulti);
+
+        main.setHR(++row, 0, 1);
+
+        CButton btn = new CButton("Say \"Hello\"", new Command() {
+            @Override
+            public void execute() {
+
+            }
+        });
+
+        main.setWidget(++row, 0, btn);
 
         add(main);
     }
