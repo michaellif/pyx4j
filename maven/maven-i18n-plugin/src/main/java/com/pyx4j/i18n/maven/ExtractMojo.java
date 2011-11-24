@@ -196,11 +196,18 @@ public class ExtractMojo extends AbstractMojo {
     public boolean autoTranslate = false;
 
     /**
-     * Use translation catalog for auto translate.
+     * merge translation catalog
+     * 
+     * @parameter expression="${i18n.merge}" default-value="false"
+     */
+    public boolean merge = false;
+
+    /**
+     * Use translation catalog for auto translate and merge.
      * 
      * @parameter expression="${i18n.catalog}"
      */
-    private File autoTranslateCatalog;
+    private File translationCatalog;
 
     /**
      * Used for auto translate.
@@ -214,7 +221,7 @@ public class ExtractMojo extends AbstractMojo {
      * 
      * @parameter
      */
-    public List<String> autoTranslates = null;
+    public List<String> translates = null;
 
     /**
      * The directory containing generated classes.
@@ -282,7 +289,9 @@ public class ExtractMojo extends AbstractMojo {
 
         POFile po = writePOFile(extractor);
         writeTextFile(extractor);
-        if (autoTranslate && (autoTranslates != null) && (this.googleApiKey != null) && (this.googleApiKey.length() > 0)) {
+        if (merge) {
+            mergeTranslationCatalog(po);
+        } else if (autoTranslate && (translates != null) && (this.googleApiKey != null) && (this.googleApiKey.length() > 0)) {
             autoTranslate(po);
         }
     }
@@ -484,12 +493,12 @@ public class ExtractMojo extends AbstractMojo {
     }
 
     private void autoTranslate(POFile po) throws MojoExecutionException {
-        for (String lang : autoTranslates) {
+        for (String lang : translates) {
             GoogleTranslate gt = new GoogleTranslate(this.googleApiKey);
 
             POCatalog catalog = new POCatalog(lang);
-            if (autoTranslateCatalog != null) {
-                catalog.loadCatalog(autoTranslateCatalog);
+            if (translationCatalog != null) {
+                catalog.loadCatalog(translationCatalog);
             }
             POFile poTransl = po.cloneForTranslation();
             getLog().info("Translating " + sourceLanguage + " -> " + lang);
@@ -509,7 +518,37 @@ public class ExtractMojo extends AbstractMojo {
                 }
                 translated++;
             }
-            getLog().info("Translated " + translated + "; api calls:" + apiCalls);
+            getLog().info("Translated:" + translated + "; api calls:" + apiCalls);
+            catalog.write();
+            writePO(poTransl, new File(poDirectory, lang + ".po"), true);
+        }
+    }
+
+    private void mergeTranslationCatalog(POFile po) throws MojoExecutionException {
+        if (translationCatalog == null) {
+            throw new MojoExecutionException("translationCatalog required");
+        }
+        if (!translationCatalog.canRead()) {
+            throw new MojoExecutionException("Can't read translationCatalog '" + translationCatalog.getAbsolutePath() + "'");
+        }
+        for (String lang : translates) {
+            POCatalog catalog = new POCatalog(lang);
+            if (translationCatalog != null) {
+                catalog.loadCatalog(translationCatalog);
+            }
+            POFile poTransl = po.cloneForTranslation();
+            getLog().info("Translating " + sourceLanguage + " -> " + lang);
+            int translated = 0;
+            int notTranslated = 0;
+            for (POEntry entry : poTransl.entries) {
+                entry.translated = catalog.translate(entry.untranslated);
+                if (entry.translated == null) {
+                    notTranslated++;
+                } else {
+                    translated++;
+                }
+            }
+            getLog().info("Translated:" + translated + "; Not Translated:" + notTranslated);
             catalog.write();
             writePO(poTransl, new File(poDirectory, lang + ".po"), true);
         }
