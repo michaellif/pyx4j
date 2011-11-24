@@ -24,27 +24,37 @@ import java.util.Map;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
+import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 
 /**
  * Sorting engine for times when customized sorting of resuls is required.
  */
 public class SortingFactory<X extends IEntity> {
-    @SuppressWarnings("rawtypes")
-    private final Map<String, Comparator> propertyToComparatorMap;
 
-    @SuppressWarnings("rawtypes")
+    // FIXME this is just temporary, to avoid circular ententies
+    private static final int MAX_DEPTH = 5;
+
+    private final Map<String, Comparator<?>> propertyToComparatorMap;
+
     public SortingFactory(Class<X> clazz) {
-        Map<String, Comparator> temp = new HashMap<String, Comparator>();
-        IEntity dtoProto = EntityFactory.getEntityPrototype(clazz);
+        Map<String, Comparator<?>> temp = new HashMap<String, Comparator<?>>();
+        IEntity proto = EntityFactory.getEntityPrototype(clazz);
+        fillCompartatorMap(proto, temp, 0);
 
-        for (String memberName : dtoProto.getEntityMeta().getMemberNames()) {
-            String propertyName = dtoProto.getMember(memberName).getPath().toString();
-            CustomComparator customComparatorAnnotation = dtoProto.getMember(memberName).getMeta().getAnnotation(CustomComparator.class);
-            Comparator propertyComparator = null;
+        propertyToComparatorMap = Collections.unmodifiableMap(temp);
+    }
+
+    private void fillCompartatorMap(IEntity proto, Map<String, Comparator<?>> map, int depth) {
+        for (String memberName : proto.getEntityMeta().getMemberNames()) {
+            String propertyName = proto.getMember(memberName).getPath().toString();
+            CustomComparator customComparatorAnnotation = proto.getMember(memberName).getMeta().getAnnotation(CustomComparator.class);
+            Comparator<?> propertyComparator = null;
             if (customComparatorAnnotation != null) {
                 try {
                     propertyComparator = customComparatorAnnotation.clazz().newInstance();
@@ -54,11 +64,18 @@ public class SortingFactory<X extends IEntity> {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
-                temp.put(propertyName, propertyComparator);
+                map.put(propertyName, propertyComparator);
+            } else {
+                IObject<?> member = proto.getMember(memberName);
+                if (member instanceof IEntity & depth < MAX_DEPTH) {
+                    fillCompartatorMap((IEntity) member, map, depth + 1);
+                } else if ((member instanceof IPrimitive<?>) && (Comparable.class.isAssignableFrom(member.getValueClass()))) {
+                    // TODO research the other implementation of this comparator not usable as it seems that it doesn't support nulls
+                    // (it appears there was already ComparableComparator in one of the 3rd party libraries by Apache foundation :)
+                    map.put(propertyName, new ComparableComparator());
+                }
             }
-
         }
-        propertyToComparatorMap = Collections.unmodifiableMap(temp);
     }
 
     /**
