@@ -39,6 +39,9 @@ maven profiles used in build:
     * i18n,i18n-merge
         Extract text catalogs and create translations (ru and fr) using Translation Catalog in vista-i18n-catalog\src\main\resources\translations
 
+        use:
+          mvn package -P i18n,i18n-merge  -Dmaven.test.skip=true
+
     * i18n,i18n-auto
         Extract text catalogs and create automatic translations (ru and fr) using Google trnanslate
 

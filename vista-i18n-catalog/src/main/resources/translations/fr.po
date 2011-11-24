@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 #   <gisele@aubutcommunications.com>, 2011.
 #   <leonard@propertyvista.com>, 2011.
@@ -3363,7 +3363,7 @@ msgstr "Les baux"
 
 #: com/propertyvista/crm/client/activity/NavigActivity.java:114
 msgid "Legal & Collections"
-msgstr "Juridique &amp; Collections"
+msgstr "Juridique & Collections"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Legal And Collections"
@@ -7264,23 +7264,6 @@ msgstr "à"
 #, java-format
 msgid "yyyy"
 msgstr "aaaa"
-
-#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:69
-#, java-format
-msgid ""
-"{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
-"${1}}}"
-msgstr ""
-"{0, choix, null # Tout | 0 # Moins de $ {1} | 0 &lt;{1, choix, null # Plus "
-"de $ {0} | 0 &lt;$ {0} - $ {1}}}"
-
-#. Number Of Bedrooms
-#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:102
-#, java-format
-msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr ""
-"{0, choix, null # Tout | 0 # Moins de {1} | 0 &lt;{0} {1, choix, null # et "
-"plus | 0 &lt;}}"
 
 #: com/propertyvista/pmsite/server/panels/AptListPanel.java:103
 #, java-format
