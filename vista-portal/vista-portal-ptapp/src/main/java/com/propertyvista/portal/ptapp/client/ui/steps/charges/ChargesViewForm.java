@@ -95,13 +95,13 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
     private static Widget createTotal(CEntityEditor<?> form, Money member) {
         FlowPanel totalRow = new FlowPanel();
 
-        Widget sp = new VistaLineSeparator(38, Unit.EM);
+        Widget sp = new VistaLineSeparator(48, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         sp.getElement().getStyle().setProperty("border", "1px dotted black");
         totalRow.add(sp);
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
-        totalRow.add(DecorationUtils.inline(total, "30.5em", null));
+        totalRow.add(DecorationUtils.inline(total, "40.5em", null));
         totalRow.add(DecorationUtils.inline(form.inject(member, new CMoneyLabel()), "7em"));
         form.get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
         return totalRow;

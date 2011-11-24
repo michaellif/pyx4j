@@ -106,14 +106,14 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
     private Widget createTotal(Money member) {
         FlowPanel totalRow = new FlowPanel();
 
-        Widget sp = new VistaLineSeparator(38, Unit.EM);
+        Widget sp = new VistaLineSeparator(48, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         sp.getElement().getStyle().setProperty("border", "1px dotted black");
         totalRow.add(sp);
 
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
-        totalRow.add(DecorationUtils.inline(total, "30.5em", null));
+        totalRow.add(DecorationUtils.inline(total, "40.5em", null));
         totalRow.add(DecorationUtils.inline(inject(member, new CMoneyLabel()), "7em"));
         get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 

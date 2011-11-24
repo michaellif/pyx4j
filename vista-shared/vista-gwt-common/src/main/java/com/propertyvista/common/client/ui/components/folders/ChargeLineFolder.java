@@ -44,7 +44,7 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().label(), "30em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().label(), "40em"));
         columns.add(new EntityFolderColumnDescriptor(proto().amount(), "7em"));
         return columns;
     }
