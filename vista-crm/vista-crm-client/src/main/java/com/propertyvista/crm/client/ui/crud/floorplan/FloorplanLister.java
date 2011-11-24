@@ -23,7 +23,6 @@ public class FloorplanLister extends ListerBase<FloorplanDTO> {
 
     public FloorplanLister() {
         super(FloorplanDTO.class, CrmSiteMap.Properties.Floorplan.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
 
         setColumnDescriptors(
 
