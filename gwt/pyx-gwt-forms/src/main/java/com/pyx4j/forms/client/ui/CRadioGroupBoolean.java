@@ -23,16 +23,26 @@ package com.pyx4j.forms.client.ui;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
-
 
 public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
     private static I18n i18n = I18n.get(CRadioGroupBoolean.class);
 
-    private String trueText = i18n.tr("Yes");
+    private String trueText = defaultYesText();
 
-    private String falseText = i18n.tr("No");
+    private String falseText = defaultNoText();
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultNoText() {
+        return i18n.tr("No");
+    }
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultYesText() {
+        return i18n.tr("Yes");
+    }
 
     public CRadioGroupBoolean(CRadioGroup.Layout layout) {
         super(layout);

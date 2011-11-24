@@ -22,20 +22,30 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Arrays;
 
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
-
 
 public class CComboBoxBoolean extends CComboBox<Boolean> {
 
     private static I18n i18n = I18n.get(CComboBoxBoolean.class);
 
-    private String trueText = i18n.tr("Yes");
+    private String trueText = defaultYesText();
 
-    private String falseText = i18n.tr("No");
+    private String falseText = defaultNoText();
 
     public CComboBoxBoolean() {
         super();
         setBooleanOptions();
+    }
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultNoText() {
+        return i18n.tr("No");
+    }
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultYesText() {
+        return i18n.tr("Yes");
     }
 
     public CComboBoxBoolean(String title) {

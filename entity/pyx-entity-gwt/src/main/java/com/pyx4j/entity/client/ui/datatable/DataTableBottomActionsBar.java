@@ -77,7 +77,7 @@ public class DataTableBottomActionsBar extends HorizontalPanel implements DataTa
         pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
         contentPanel.add(pageSizeContentPanel);
 
-        prevAnchor = new Anchor(i18n.tr("&lt;&nbsp;Prev"), true);
+        prevAnchor = new Anchor("&lt;&nbsp;" + i18n.tr("Prev"), true);
         prevAnchor.setVisible(false);
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
         contentPanel.add(prevAnchor);
@@ -87,7 +87,7 @@ public class DataTableBottomActionsBar extends HorizontalPanel implements DataTa
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         contentPanel.add(countLabel);
 
-        nextAnchor = new Anchor(i18n.tr("Next&nbsp;&gt;"), true);
+        nextAnchor = new Anchor(i18n.tr("Next") + "&nbsp;&gt;", true);
         nextAnchor.setVisible(false);
         contentPanel.add(nextAnchor);
 

@@ -64,6 +64,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
@@ -118,7 +119,7 @@ public class Dialog extends DialogPanel {
 
     private BlurHandler blurHandler;
 
-    // Handle focus for Stack of Dialogs, e.g. make proper focus on dialog bellow once the one above closed. 
+    // Handle focus for Stack of Dialogs, e.g. make proper focus on dialog bellow once the one above closed.
     private FocusWidget currentFocusWidget;
 
     private Element documentActiveElement;
@@ -163,7 +164,7 @@ public class Dialog extends DialogPanel {
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if ((allowEnterKeyForDefaultButton) && enabledEnterKeyForDefaultButton && event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    // This does help for in Safari on Windows, 
+                    // This does help for in Safari on Windows,
                     // or else other dialog shown after this would catch the keyCode be automatically closed.
                     event.preventDefault();
                     defaultButton.click();
@@ -242,11 +243,11 @@ public class Dialog extends DialogPanel {
         }
 
         if (options instanceof YesOption) {
-            yesButton = createButton(i18n.tr("Yes"), DialogDebugId.Dialog_Yes, buttonsHandler, true);
+            yesButton = createButton(defaultYesText(), DialogDebugId.Dialog_Yes, buttonsHandler, true);
             buttonsPanel.add(yesButton);
         }
         if (options instanceof NoOption) {
-            noButton = createButton(i18n.tr("No"), DialogDebugId.Dialog_No, buttonsHandler, true);
+            noButton = createButton(defaultNoText(), DialogDebugId.Dialog_No, buttonsHandler, true);
             buttonsPanel.add(noButton);
         }
         if (options instanceof OkOption) {
@@ -263,6 +264,16 @@ public class Dialog extends DialogPanel {
         }
 
         return buttonsPanel;
+    }
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultNoText() {
+        return i18n.tr("No");
+    }
+
+    @I18nComment("As an answer to a question")
+    private static final String defaultYesText() {
+        return i18n.tr("Yes");
     }
 
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
@@ -487,8 +498,8 @@ public class Dialog extends DialogPanel {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-                                                           return $doc.activeElement;
-                                                           }-*/;
+		return $doc.activeElement;
+    }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {

@@ -78,7 +78,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
 
         NoFileSelected,
 
-        UnSupportedExtension,
+        UnsupportedExtension,
 
         ServerMessage;
 
@@ -188,8 +188,8 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         case NoFileSelected:
             message = i18n.tr("The File Name Cannot Be Empty");
             break;
-        case UnSupportedExtension:
-            message = i18n.tr("Unsupported Extension ''{0}''", args);
+        case UnsupportedExtension:
+            message = i18n.tr("Unsupported File Extension ''{0}''", args);
             break;
         case ServerMessage:
             message = args;
@@ -211,7 +211,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
                 ext = name.substring(extIdx + 1).toLowerCase();
             }
             if (!supportedExtensions.contains(ext)) {
-                onUploadError(UploadError.UnSupportedExtension, ext);
+                onUploadError(UploadError.UnsupportedExtension, ext);
                 return false;
             }
         }
