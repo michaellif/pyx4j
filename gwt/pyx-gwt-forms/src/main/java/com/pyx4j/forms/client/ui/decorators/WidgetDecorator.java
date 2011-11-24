@@ -64,6 +64,10 @@ public class WidgetDecorator extends FlexTable {
 
     private final Label validationLabel;
 
+    private final FlowPanel labelHolder;
+
+    private final HorizontalPanel contentPanel;
+
     public WidgetDecorator(CComponent<?, ?> component) {
         this(new Builder(component));
     }
@@ -141,13 +145,12 @@ public class WidgetDecorator extends FlexTable {
             }
         });
 
-        FlowPanel labelHolder = new FlowPanel();
+        labelHolder = new FlowPanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
         labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
         labelHolder.getElement().getStyle().setWidth(builder.labelWidth, Unit.EM);
-        setWidget(0, 0, labelHolder);
         getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         SimplePanel componentHolder = new SimplePanel();
@@ -158,18 +161,15 @@ public class WidgetDecorator extends FlexTable {
         validationLabel = new Label();
         validationLabel.setStyleName(WidgetDecoratorValidationLabel.name());
 
-        HorizontalPanel contentPanel = new HorizontalPanel();
+        contentPanel = new HorizontalPanel();
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
         contentPanel.add(infoImageHolder);
-        setWidget(0, 1, contentPanel);
-
-        setWidget(1, 1, validationLabel);
-
         if (builder.readOnlyMode) {
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
         }
 
+        layout();
     }
 
     public Label getLabel() {
@@ -178,6 +178,24 @@ public class WidgetDecorator extends FlexTable {
 
     public CComponent<?, ?> getComnponent() {
         return component;
+    }
+
+    protected void layout() {
+        setWidget(0, 0, getLabelHolder());
+        setWidget(0, 1, getContentPanel());
+        setWidget(1, 1, getValidationLabel());
+    }
+
+    protected FlowPanel getLabelHolder() {
+        return labelHolder;
+    }
+
+    protected HorizontalPanel getContentPanel() {
+        return contentPanel;
+    }
+
+    protected Label getValidationLabel() {
+        return validationLabel;
     }
 
     protected void renderMandatoryStar() {
