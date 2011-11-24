@@ -64,10 +64,21 @@ public class ChargesSharedCalculation {
         charges.monthlyCharges().total().set(DomainUtil.createMoney(monthlyTotal));
 
         // take the rentStart date
-        Date rentStart = charges.rentStart().getValue();
-        if (rentStart == null) {
+        if (charges.rentStart().isNull()) {
             return true;
         }
+
+        charges.proratedCharges().charges().clear();
+        for (ChargeLine charge : charges.monthlyCharges().charges()) {
+            charges.proratedCharges().charges().add(calculateProrateCharge(charges.rentStart().getValue(), charge));
+        }
+
+        charges.proratedCharges().total().set(DomainUtil.createMoney(calculateTotal(charges.proratedCharges())));
+        return true;
+    }
+
+    private static ChargeLine calculateProrateCharge(Date rentStart, ChargeLine charge) {
+        double monthly = charge.amount().amount().getValue();
 
         // month end
         int currentDay = rentStart.getDate();
@@ -76,23 +87,20 @@ public class ChargesSharedCalculation {
 
         // build label
         StringBuilder sb = new StringBuilder();
-        sb.append("Pro-Rate (");
+        sb.append(charge.label().getStringView() + " (");
         sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
         sb.append(" ").append(currentDay).append(" - ");
         sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
         sb.append(" ").append(monthDays).append(")");
 
-        double proratedTotal = DomainUtil.roundMoney((monthlyTotal * numDays) / monthDays);
+        double proratedTotal = DomainUtil.roundMoney((monthly * numDays) / monthDays);
 
         ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
         proratedCharge.type().setValue(ChargeType.prorated);
         proratedCharge.label().setValue(sb.toString());
         proratedCharge.amount().set(DomainUtil.createMoney(proratedTotal));
 
-        charges.proratedCharges().charges().clear();
-        charges.proratedCharges().charges().add(proratedCharge);
-        charges.proratedCharges().total().set(DomainUtil.createMoney(proratedTotal));
-        return true;
+        return proratedCharge;
     }
 
     public static boolean calculateOneTimeCharges(Charges charges) {

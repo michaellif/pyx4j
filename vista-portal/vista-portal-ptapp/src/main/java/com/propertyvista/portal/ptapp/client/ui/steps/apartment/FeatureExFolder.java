@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -35,12 +37,19 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
     public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(ChargeItem.class, modifiable);
-        // TODO: remove when folder modifiable state be unlinked from parents editing state! 
+        // TODO: remove when folder modifiable state be unlinked from parents editing state!
         inheritContainerAccessRules(false);
-        setEditable(true);
+        setEditable(apartmentViewForm != null);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
+    }
+
+    @Override
+    public IFolderItemDecorator<ChargeItem> createItemDecorator() {
+        BoxFolderItemDecorator<ChargeItem> decor = (BoxFolderItemDecorator<ChargeItem>) super.createItemDecorator();
+        decor.setExpended(apartmentViewForm != null);
+        return decor;
     }
 
     @Override

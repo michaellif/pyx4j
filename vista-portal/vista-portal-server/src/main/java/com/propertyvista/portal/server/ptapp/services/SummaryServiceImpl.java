@@ -35,8 +35,6 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.TenantFinancialDTO;
-import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -88,17 +86,18 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.apartmentSummary().add(createApartmentSummary(summary.selectedUnit()));
         summary.charges().set(new ChargesServiceImpl().retrieveData());
 
+        TenantInfoServiceImpl tis = new TenantInfoServiceImpl();
+        TenantFinancialServiceImpl tfs = new TenantFinancialServiceImpl();
+
         Lease lease = PtAppContext.getCurrentUserLease();
         TenantInLeaseRetriever.UpdateLeaseTenants(lease);
-
         for (TenantInLease tenantInLease : lease.tenants()) {
             Persistence.service().retrieve(tenantInLease);
-
             TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
 
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
-            summary.tenantsWithInfo().add(createTenantInfoDTO(tr));
-            summary.tenantFinancials().add(createTenantFinancialDTO(tr));
+            summary.tenantsWithInfo().add(tis.retrieveData(tr));
+            summary.tenantFinancials().add(tfs.retrieveData(tr));
         }
 
         summary.application().signature().timestamp().setValue(new Date());
@@ -123,20 +122,6 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         } finally {
             IOUtils.closeQuietly(bos);
         }
-    }
-
-    // internal helpers:
-
-    private TenantInfoDTO createTenantInfoDTO(TenantInLeaseRetriever tr) {
-        TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, tiDTO);
-        return tiDTO;
-    }
-
-    private TenantFinancialDTO createTenantFinancialDTO(TenantInLeaseRetriever tr) {
-        TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
-        tfDTO.person().set(tr.tenant.person());
-        return tfDTO;
     }
 
     private static ApartmentInfoSummaryDTO createApartmentSummary(ApartmentInfoDTO selectedUnit) {

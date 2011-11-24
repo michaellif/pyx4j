@@ -33,17 +33,8 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     @Override
     public void retrieve(AsyncCallback<TenantInfoDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
-
         TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantId);
-
-        TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(r.tenant);
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(r.tenantScreening, dto);
-        dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
-
-        // get Detached values
-        Persistence.service().retrieve(dto.documents());
-
-        callback.onSuccess(dto);
+        callback.onSuccess(retrieveData(new TenantInLeaseRetriever(tenantId)));
     }
 
     @Override
@@ -63,4 +54,16 @@ public class TenantInfoServiceImpl implements TenantInfoService {
 
         callback.onSuccess(dto);
     }
+
+    public TenantInfoDTO retrieveData(TenantInLeaseRetriever tr) {
+
+        TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, dto);
+        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+
+        // get Detached values
+        Persistence.service().retrieve(dto.documents());
+        return dto;
+    }
+
 }

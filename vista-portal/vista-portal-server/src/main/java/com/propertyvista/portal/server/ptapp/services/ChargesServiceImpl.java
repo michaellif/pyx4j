@@ -79,8 +79,10 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
         ChargeItem serviceItem = lease.serviceAgreement().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
+
+            PriceCalculationHelpers.calculateChargeItemAdjustments(serviceItem);
             charges.monthlyCharges().charges()
-                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.originalPrice().getValue()));
+                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.adjustedPrice().getValue()));
 
             // fill agreed items:
             for (ChargeItem item : lease.serviceAgreement().featureItems()) {
@@ -93,12 +95,12 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
                     case parking:
                     case locker:
                         charges.monthlyCharges().charges()
-                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.originalPrice().getValue()));
+                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.adjustedPrice().getValue()));
                         break;
 
                     default:
                         charges.oneTimeCharges().charges()
-                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.originalPrice().getValue()));
+                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.adjustedPrice().getValue()));
                     }
                 }
             }

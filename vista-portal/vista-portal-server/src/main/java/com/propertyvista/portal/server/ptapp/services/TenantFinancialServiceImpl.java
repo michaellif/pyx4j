@@ -38,22 +38,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     @Override
     public void retrieve(AsyncCallback<TenantFinancialDTO> callback, Key tenantId) {
         log.debug("Retrieving financial for tenant {}", tenantId);
-
-        TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantId, true);
-        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
-        dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
-
-        SharedData.init();
-
-        IncomeInfoEmployer income1 = EntityFactory.create(IncomeInfoEmployer.class);
-        income1.set(PTGenerator.createEmployer());
-        dto.incomes2().add(income1);
-
-        IncomeInfoSelfEmployed income2 = EntityFactory.create(IncomeInfoSelfEmployed.class);
-        income2.set(PTGenerator.createSelfEmployed());
-        dto.incomes2().add(income2);
-
-        callback.onSuccess(dto);
+        callback.onSuccess(retrieveData(new TenantInLeaseRetriever(tenantId, true)));
     }
 
     @Override
@@ -70,5 +55,23 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
 
         callback.onSuccess(dto);
+    }
+
+    public TenantFinancialDTO retrieveData(TenantInLeaseRetriever tr) {
+
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
+        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+
+        SharedData.init();
+
+        IncomeInfoEmployer income1 = EntityFactory.create(IncomeInfoEmployer.class);
+        income1.set(PTGenerator.createEmployer());
+        dto.incomes2().add(income1);
+
+        IncomeInfoSelfEmployed income2 = EntityFactory.create(IncomeInfoSelfEmployed.class);
+        income2.set(PTGenerator.createSelfEmployed());
+        dto.incomes2().add(income2);
+
+        return dto;
     }
 }
