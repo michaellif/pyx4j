@@ -96,18 +96,6 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     public void populate(DashboardMetadata dashboardMetadata) {
         super.populate(dashboardMetadata);
 
-        board.getBoard().addEventHandler(new BoardEvent() {
-
-            @Override
-            public void onEvent(Reason reason) {
-                switch (reason) {
-                case addGadget:
-                    setDashboardFiltering(filters.getFiltering());
-                    break;
-                }
-            }
-        });
-
         filters = null;
         filtersPanel.setWidget(null);
         setWidgetSize(filtersPanel, 0);
@@ -115,6 +103,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             header.setCaption(dashboardMetadata.name().getStringView());
 
             if (dashboardMetadata.type().getValue() == DashboardType.building) {
+
                 filters = new BuildingFilters();
                 filtersPanel.setWidget(filters.getCompactVeiw());
                 setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
@@ -125,6 +114,16 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
                         setDashboardFiltering(filters.getFiltering());
                     }
                 });
+
+                board.getBoard().addEventHandler(new BoardEvent() {
+                    @Override
+                    public void onEvent(Reason reason) {
+                        if (Reason.addGadget.equals(reason)) {
+                            setDashboardFiltering(filters.getFiltering());
+                        }
+                    }
+                });
+
             }
         }
     }
