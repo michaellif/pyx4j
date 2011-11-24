@@ -43,6 +43,7 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
     protected void initStyles() {
         Style style = new Style(".", StyleName.FormFlexPanel);
         style.addProperty("width", "100%");
+        style.addProperty("border-spacing", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelHR);
