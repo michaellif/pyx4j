@@ -40,7 +40,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
 
         container.setH1(row++, 0, 1, i18n.tr("Dashboard"));
 
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().notification()), 12).build());
+//        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().notifications()), 12).build());
 
         return container;
     }

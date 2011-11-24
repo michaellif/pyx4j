@@ -31,12 +31,12 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
 
         for (int i = 0; i <= 3; i++) {
-            Message msg = dashboard.notification().$();
+            Message msg = dashboard.notifications().$();
             msg.subject().setValue("TODO");
             msg.acknowledged().setValue(Boolean.FALSE);
             msg.type().setValue(DataGenerator.randomEnum(Message.MessageType.class));
             msg.date().setValue(DataGenerator.randomDate(100));
-            dashboard.notification().add(msg);
+            dashboard.notifications().add(msg);
         }
 
         dashboard.currentBill().paid().setValue(Boolean.FALSE);

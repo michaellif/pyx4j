@@ -22,7 +22,7 @@ import com.propertyvista.domain.communication.Message;
 @Transient
 public interface TenantDashboardDTO extends IEntity {
 
-    IList<Message> notification();
+    IList<Message> notifications();
 
     BillInfoDTO currentBill();
 
