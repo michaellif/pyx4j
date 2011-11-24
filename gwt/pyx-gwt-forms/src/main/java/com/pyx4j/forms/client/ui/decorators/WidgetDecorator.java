@@ -172,8 +172,12 @@ public class WidgetDecorator extends FlexTable {
 
     }
 
-    protected Label getLabel() {
+    public Label getLabel() {
         return label;
+    }
+
+    public CComponent<?, ?> getComnponent() {
+        return component;
     }
 
     protected void renderMandatoryStar() {
