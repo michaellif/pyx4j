@@ -32,9 +32,9 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
         new Builder(proto().person().name()).sortable(false).build(),
 
-        new Builder(proto().person().sex()).sortable(false).build(),
+        new Builder(proto().person().sex()).build(),
 
-        new Builder(proto().person().birthDate()).sortable(false).build(),
+        new Builder(proto().person().birthDate()).build(),
 
         new Builder(proto().person().homePhone()).sortable(false).build(),
 
