@@ -42,7 +42,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
-import com.propertyvista.common.client.ui.components.editors.CEmailLabel;
+import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;

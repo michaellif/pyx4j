@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.editors.CEmergencyContact;
+import com.propertyvista.common.client.ui.components.editors.EmergencyContactEditor;
 import com.propertyvista.domain.EmergencyContact;
 
 public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
@@ -41,7 +41,7 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return new CEmergencyContact(twoColumns);
+            return new EmergencyContactEditor(twoColumns);
         } else {
             return super.create(member);
         }

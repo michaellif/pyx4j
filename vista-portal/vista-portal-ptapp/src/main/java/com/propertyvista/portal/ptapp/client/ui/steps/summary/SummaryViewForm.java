@@ -57,7 +57,7 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.decorations.DecorationData;

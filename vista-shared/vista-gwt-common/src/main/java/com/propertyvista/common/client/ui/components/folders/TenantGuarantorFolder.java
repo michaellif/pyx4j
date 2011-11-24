@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.editors.CTenantGuarantorEditor;
+import com.propertyvista.common.client.ui.components.editors.TenantGuarantorEditor;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 
 public class TenantGuarantorFolder extends VistaBoxFolder<TenantGuarantor> {
@@ -36,7 +36,7 @@ public class TenantGuarantorFolder extends VistaBoxFolder<TenantGuarantor> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantGuarantor) {
-            return new CTenantGuarantorEditor(twoColumns);
+            return new TenantGuarantorEditor(twoColumns);
         }
         return super.create(member);
     }

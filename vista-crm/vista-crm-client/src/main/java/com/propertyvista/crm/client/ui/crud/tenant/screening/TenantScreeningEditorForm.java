@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.editors.CPriorAddress;
+import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
@@ -206,10 +206,10 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
         int row = -1;
         main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentAddress(), new CPriorAddress()));
+        main.setWidget(++row, 0, inject(proto().currentAddress(), new PriorAddressEditor()));
 
         main.setH1(++row, 0, 1, proto().previousAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().previousAddress(), previousAddress = new CPriorAddress()));
+        main.setWidget(++row, 0, inject(proto().previousAddress(), previousAddress = new PriorAddressEditor()));
 
         return new CrmScrollPanel(main);
     }

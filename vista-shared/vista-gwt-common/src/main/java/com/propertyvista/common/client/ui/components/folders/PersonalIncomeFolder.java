@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.editors.CPersonalIncomeEditor;
+import com.propertyvista.common.client.ui.components.editors.PersonalIncomeEditor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
@@ -29,7 +29,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PersonalIncome) {
-            return new CPersonalIncomeEditor();
+            return new PersonalIncomeEditor();
         }
         return super.create(member);
     }

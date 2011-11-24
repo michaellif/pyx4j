@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
+import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.Money;
 

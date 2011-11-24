@@ -28,9 +28,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
-import com.propertyvista.common.client.ui.components.editors.NewPaymentMethodForm;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
+import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;

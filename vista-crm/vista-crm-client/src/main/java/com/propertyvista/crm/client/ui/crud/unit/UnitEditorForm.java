@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.editors.CMarketing;
+import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -149,7 +149,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     private Widget createMarketingTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().marketing(), new CMarketing()));
+        main.setWidget(0, 0, inject(proto().marketing(), new MarketingEditor()));
 
         return new CrmScrollPanel(main);
     }

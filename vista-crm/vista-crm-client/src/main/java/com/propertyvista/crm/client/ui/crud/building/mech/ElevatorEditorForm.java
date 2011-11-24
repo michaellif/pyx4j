@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.editors.CLicense;
+import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -51,7 +51,7 @@ public class ElevatorEditorForm extends MechlBaseEditorForm<ElevatorDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
 
         main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().license(), new CLicense()));
+        main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, "");

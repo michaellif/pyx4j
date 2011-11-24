@@ -37,9 +37,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.CEmailLabel;
-import com.propertyvista.common.client.ui.components.editors.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.editors.CPriorAddress;
+import com.propertyvista.common.client.ui.components.c.CEmailLabel;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
@@ -115,10 +115,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         });
 
         main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentAddress(), new CPriorAddress()));
+        main.setWidget(++row, 0, inject(proto().currentAddress(), new PriorAddressEditor()));
 
         previousAddress.setH1(0, 0, 1, proto().previousAddress().getMeta().getCaption());
-        previousAddress.setWidget(1, 0, inject(proto().previousAddress(), new CPriorAddress()));
+        previousAddress.setWidget(1, 0, inject(proto().previousAddress(), new PriorAddressEditor()));
         main.setWidget(++row, 0, previousAddress);
 
         main.setH1(++row, 0, 1, proto().legalQuestions().getMeta().getCaption());

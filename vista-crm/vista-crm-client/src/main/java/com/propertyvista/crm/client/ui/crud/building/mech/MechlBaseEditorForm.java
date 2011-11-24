@@ -21,8 +21,8 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.editors.CMaintenance;
-import com.propertyvista.common.client.ui.components.editors.CWarranty;
+import com.propertyvista.common.client.ui.components.editors.MaintenanceEditor;
+import com.propertyvista.common.client.ui.components.editors.WarrantyEditor;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -68,7 +68,7 @@ public abstract class MechlBaseEditorForm<E extends LicensedWarrantedMaintained>
     protected Widget createWarrantyTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().warranty(), new CWarranty()));
+        main.setWidget(0, 0, inject(proto().warranty(), new WarrantyEditor()));
 
         return new CrmScrollPanel(main);
     }
@@ -76,7 +76,7 @@ public abstract class MechlBaseEditorForm<E extends LicensedWarrantedMaintained>
     protected Widget createMaintenantceTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().maintenance(), new CMaintenance()));
+        main.setWidget(0, 0, inject(proto().maintenance(), new MaintenanceEditor()));
 
         return new CrmScrollPanel(main);
     }

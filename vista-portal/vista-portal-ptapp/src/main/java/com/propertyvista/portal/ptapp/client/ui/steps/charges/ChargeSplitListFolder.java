@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.editors.CMoneyLabel;
+import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
