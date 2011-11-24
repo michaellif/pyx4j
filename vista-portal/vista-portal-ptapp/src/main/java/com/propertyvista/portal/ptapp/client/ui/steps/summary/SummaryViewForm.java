@@ -365,7 +365,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
             // "I Agree" check-box:
             CCheckBox check = new CCheckBox();
-            WidgetDecorator agree = new DecoratorBuilder(inject(proto().application().signature().agree(), check)).build();
+            WidgetDecorator agree = new DecoratorBuilder2(inject(proto().application().signature().agree(), check), 3).build();
             agree.asWidget().getElement().getStyle().setMarginLeft(25, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             add(agree);
@@ -478,5 +478,34 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             return true;
         }
         return false;
+    }
+
+    // Internals:
+
+    protected class DecoratorBuilder2 extends DecoratorBuilder {
+
+        public DecoratorBuilder2(CComponent<?, ?> component) {
+            super(component);
+        }
+
+        public DecoratorBuilder2(CComponent<?, ?> component, double componentWidth) {
+            super(component, componentWidth);
+        }
+
+        public DecoratorBuilder2(CComponent<?, ?> component, double componentWidth, double labelWidth) {
+            super(component, componentWidth, labelWidth);
+        }
+
+        @Override
+        public WidgetDecorator build() {
+            return new WidgetDecorator(this) {
+                @Override
+                protected void layout() {
+                    setWidget(0, 0, getLabelHolder());
+                    setWidget(0, 1, getContentPanel());
+                    setWidget(0, 2, getValidationLabel());
+                }
+            };
+        }
     }
 }

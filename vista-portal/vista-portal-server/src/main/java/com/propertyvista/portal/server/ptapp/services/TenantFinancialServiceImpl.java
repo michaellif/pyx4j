@@ -61,6 +61,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
         TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+        dto.person().set(tr.tenant.person());
 
         SharedData.init();
 
