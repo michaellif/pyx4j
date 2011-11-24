@@ -92,7 +92,7 @@ public class TurnoverAnalysisGraphGadget extends GadgetBase implements IBuilding
                 new Tuple<Long, List<AnalysisResolution>>(TimeRange.YEAR + 1l, Arrays.asList(AnalysisResolution.Month)),
                 new Tuple<Long, List<AnalysisResolution>>(3L * TimeRange.MONTH +1l, Arrays.asList(AnalysisResolution.Month, AnalysisResolution.Week)),
                 new Tuple<Long, List<AnalysisResolution>>(31l * TimeRange.DAY + 1l, Arrays.asList(AnalysisResolution.Week)),                      
-                new Tuple<Long, List<AnalysisResolution>>(2L * TimeRange.WEEK, Arrays.asList(AnalysisResolution.Day, AnalysisResolution.Week)),
+                new Tuple<Long, List<AnalysisResolution>>(2L * TimeRange.DAY, Arrays.asList(AnalysisResolution.Day, AnalysisResolution.Week)),
                 new Tuple<Long, List<AnalysisResolution>>(0L, Arrays.asList(AnalysisResolution.Day))
                 );
             

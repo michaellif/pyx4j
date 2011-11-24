@@ -83,7 +83,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         start.setDate(1);
         final LogicalDate end = new LogicalDate();
         ArrayList<IEntity> statuses = new ArrayList<IEntity>();
-
+        AptUnit lastUnit = null;
         UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
         for (Building building : Persistence.service().query(new EntityQueryCriteria<Building>(Building.class))) {
             Persistence.service().retrieve(building.complex());
@@ -92,6 +92,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().belongsTo(), building));
 
             for (AptUnit unit : Persistence.service().query(unitCriteria)) {
+                lastUnit = unit;
                 status.set(null);
                 status.statusDate().setValue(start);
                 status.belongsTo().setPrimaryKey(unit.getPrimaryKey());
@@ -170,6 +171,33 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 } // end of unit status creation loop
             } // end of unit iteration loop
         } // end of building iteration loop
+        if (!statuses.isEmpty()) {
+            // add 1 turnover at the end
+            UnitAvailabilityStatus s = (UnitAvailabilityStatus) statuses.get(statuses.size() - 1);
+            status.belongsTo().set(lastUnit);
+            status.statusDate().setValue(end);
+            status.vacancyStatus().setValue(null);
+            statuses.add(status.cloneEntity());
+
+            status.vacancyStatus().setValue(VacancyStatus.Vacant);
+            statuses.add(status.cloneEntity());
+
+            status.vacancyStatus().setValue(null);
+            statuses.add(status.cloneEntity());
+
+            status.vacancyStatus().setValue(VacancyStatus.Vacant);
+            statuses.add(status.cloneEntity());
+
+            status.vacancyStatus().setValue(null);
+            statuses.add(status.cloneEntity());
+
+            status.vacancyStatus().setValue(VacancyStatus.Vacant);
+            statuses.add(status.cloneEntity());
+
+            status.vacancyStatus().setValue(null);
+            statuses.add(status.cloneEntity());
+
+        }
         persistArray(statuses);
         return "Created " + statuses.size() + " mockup unit statuses for Availability Gadgets";
     }
