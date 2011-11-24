@@ -40,7 +40,7 @@ public class PaymentActivity extends WizardStepActivity<PaymentInformation, Paym
             ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
                 @Override
                 public void onSuccess(AddressStructured result) {
-                    currentValue.paymentMethod().set(result);
+                    currentValue.paymentMethod().billingAddress().set(result);
                     getView().populate(currentValue);
                 }
             });
