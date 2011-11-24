@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,7 +25,7 @@ public interface BillInfoDTO extends IEntity {
 
     IPrimitive<Boolean> paid();
 
-    IPrimitive<Boolean> dueDate();
+    IPrimitive<LogicalDate> dueDate();
 
     IPrimitive<String> message();
 

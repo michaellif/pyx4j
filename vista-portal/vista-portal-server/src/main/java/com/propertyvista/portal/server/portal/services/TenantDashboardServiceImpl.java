@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.portal.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
@@ -37,6 +38,10 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
             msg.date().setValue(DataGenerator.randomDate(100));
             dashboard.notification().add(msg);
         }
+
+        dashboard.currentBill().paid().setValue(Boolean.FALSE);
+        dashboard.currentBill().dueDate().setValue(new LogicalDate(2011, 11, 01));
+        dashboard.currentBill().ammount().amount().setValue(1240.);
 
         callback.onSuccess(dashboard);
     }
