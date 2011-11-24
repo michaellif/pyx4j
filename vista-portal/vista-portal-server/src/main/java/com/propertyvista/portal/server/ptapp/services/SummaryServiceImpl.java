@@ -62,7 +62,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         Summary summary = EntityFactory.create(Summary.class);
         summary.setValue(summaryDTO.getValue());
         saveApplicationEntity(summary);
-        createSummaryDTO(summary);
+        Persistence.service().merge(summary.application().signature());
+//        createSummaryDTO(summary);
         callback.onSuccess(summaryDTO);
     }
 
@@ -72,6 +73,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             log.info("Creating new Summary for appl {}", PtAppContext.getCurrentUserApplicationPrimaryKey());
             summary = EntityFactory.create(Summary.class);
             summary.application().set(PtAppContext.getCurrentUserApplication());
+        } else {
+            Persistence.service().retrieve(summary.application().signature());
         }
 
         return createSummaryDTO(summary);

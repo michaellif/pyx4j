@@ -37,4 +37,6 @@ public interface DigitalSignature extends IEntity {
     @NotNull
     @Caption(name = "Type Your Full Name")
     IPrimitive<String> fullName();
+
+    IPrimitive<Boolean> signed();
 }
