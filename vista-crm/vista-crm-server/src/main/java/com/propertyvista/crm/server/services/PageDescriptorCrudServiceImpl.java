@@ -15,6 +15,9 @@ package com.propertyvista.crm.server.services;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
@@ -26,6 +29,8 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 
 public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
+
+    private final static Logger log = LoggerFactory.getLogger(PageDescriptorCrudServiceImpl.class);
 
     public PageDescriptorCrudServiceImpl() {
         super(PageDescriptor.class);
@@ -68,8 +73,10 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
 
         // update parent child list: 
         if (isCreate) {
+            log.debug("1. create child of ", dbo);
             Persistence.service().retrieve(dbo.parent());
             dbo.parent().childPages().add(dbo);
+            log.debug("2. create child of ", dbo);
             Persistence.service().merge(dbo.parent());
         } else {
             EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
