@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.propertyvista.common.client.ui.components.c.CEmail;
 import com.propertyvista.common.client.ui.components.c.CMoney;
 import com.propertyvista.common.client.ui.components.c.CPhone;
-import com.propertyvista.common.client.ui.components.c.GeoLocationEditor;
+import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.c;
+package com.propertyvista.common.client.ui.components.editors;
 
 import java.text.ParseException;
 
@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.GeoLocation;
 
 public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
