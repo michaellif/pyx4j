@@ -175,7 +175,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             // add 1 turnover at the end
             UnitAvailabilityStatus s = (UnitAvailabilityStatus) statuses.get(statuses.size() - 1);
             status.belongsTo().set(lastUnit);
-            status.statusDate().setValue(end);
+            status.statusDate().setValue(new LogicalDate(end.getTime() - MIN_EVENT_DELTA));
             status.vacancyStatus().setValue(null);
             statuses.add(status.cloneEntity());
 
