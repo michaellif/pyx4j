@@ -13,35 +13,31 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
 
     public TenantInLeaseLister() {
         super(TenantInLeaseDTO.class, CrmSiteMap.Tenants.Tenant.class, false, false);
 
-        List<ColumnDescriptor<TenantInLeaseDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantInLeaseDTO>>();
+        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().id(), true).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().id(), true));
+        new MemberColumnDescriptor.Builder(proto().tenant().person().name(), true).sortable(!VistaTODO.entityAsStringQueryCriteria).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().tenant().person().name(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().tenant().person().sex(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().tenant().person().birthDate(), true));
+        new MemberColumnDescriptor.Builder(proto().tenant().person().sex(), true).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().role(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().incomeSource(), true));
+        new MemberColumnDescriptor.Builder(proto().tenant().person().birthDate(), true).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().application().status(), true));
-        setColumnDescriptors(columnDescriptors);
+        new MemberColumnDescriptor.Builder(proto().role(), true).build(),
+
+        new MemberColumnDescriptor.Builder(proto().incomeSource(), true).sortable(!VistaTODO.complextQueryCriteria).build(),
+
+        new MemberColumnDescriptor.Builder(proto().application().status(), true).sortable(!VistaTODO.leftJoinQuerySort).build());
 
     }
-
 }

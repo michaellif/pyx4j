@@ -19,6 +19,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
@@ -27,9 +28,9 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
         setColumnDescriptors(new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto().id(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().type(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode()).sortable(!VistaTODO.recurciveQueryCriteria).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().mainApplicant(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).build(),
                 new MemberColumnDescriptor.Builder(proto().numberOfOccupants(), false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().numberOfCoApplicants(), true).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().numberOfGuarantors(), true).sortable(false).build(),
