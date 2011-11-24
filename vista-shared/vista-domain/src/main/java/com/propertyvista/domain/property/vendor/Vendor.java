@@ -34,7 +34,7 @@ public interface Vendor extends Company {
 
         electrical,
 
-        pluming,
+        plumbing,
 
         @Translate("HVAC")
         hvac,

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc;
 
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
@@ -179,6 +180,7 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
+        @I18nComment("Potential customer")
         @PlaceProperties(caption = "Lead")
         @NavigationItem(navigLabel = "Leads")
         public static class Lead extends CrudAppPlace {

@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -29,7 +30,7 @@ import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 
 @DiscriminatorValue("Pet_ChargeItemExtraData")
 public interface Pet extends ChargeItemExtraData {
-
+    @I18nComment("Pet weight")
     public enum WeightUnit {
 
         @Translate("LB")

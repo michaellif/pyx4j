@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
@@ -53,6 +54,7 @@ public interface Appointment extends IEntity {
     @Owner
     @Detached
     @ReadOnly
+    @I18nComment("Potential customer")
     Lead lead();
 
     @NotNull

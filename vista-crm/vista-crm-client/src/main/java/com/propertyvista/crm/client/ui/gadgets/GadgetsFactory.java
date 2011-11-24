@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,7 +27,7 @@ import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 /*
- * In order to work properly in VISTA environment every  
+ * In order to work properly in VISTA environment every
  * gadget should be registered here in 3 places:
  *      1. Compatibility lists;
  *      2  Creation routine;
@@ -40,26 +40,26 @@ public class GadgetsFactory {
      */
 
     //@formatter:off
-    private static GadgetType[] systemDashboardGadgets = 
+    private static GadgetType[] systemDashboardGadgets =
     {
         GadgetType.Demo,
         GadgetType.BuildingLister,
         GadgetType.LineChartDisplay,
         GadgetType.BarChartDisplay,
         GadgetType.PieChartDisplay,
-        GadgetType.GaugeDisplay,        
+        GadgetType.GaugeDisplay,
     };
-    private static GadgetType[] buildingDashboardGadgets = 
+    private static GadgetType[] buildingDashboardGadgets =
     {
         GadgetType.Demo,
         GadgetType.BarChartDisplayBuilding,
         GadgetType.PieChartDisplayBuilding,
         GadgetType.GaugeDisplay,
-        
+
         GadgetType.DeprecatedUnitAvailabilityReport,
         GadgetType.DeprecatedAvailabilitySummary,
         GadgetType.DeprecatedTurnoverAnalysisGraph,
-        
+
         GadgetType.UnitAvailabilityReport,
         GadgetType.AvailabilitySummary,
         GadgetType.TurnoverAnalysisGraph,
@@ -67,10 +67,10 @@ public class GadgetsFactory {
         GadgetType.RentArrearsGadget,
         GadgetType.ParkingArrearsGadget,
         GadgetType.OtherArrearsGadget,
-        GadgetType.TotalArrearsGadget,        
+        GadgetType.TotalArrearsGadget,
         GadgetType.ArrearsSummaryGadget,
         GadgetType.ArrearsARBalanceComparisonChart,
-        
+
     };
     //@formatter:on
 
@@ -151,16 +151,24 @@ public class GadgetsFactory {
         case GaugeDisplay:
             return "Gadget intended to demonstrate Gadget display functionality...";
         case UnitAvailabilityReport:
-            return "Gadget intended to demonstrate Units Vacancy Report/Status...";
+            return "Shows the information about units, whether they are available or rented, how long they have been vacant for and revenue lost as a result. Can be customized to show various information about buildings and units, for example their physical condition.";
         case AvailabilitySummary:
-            return "Gadget intended to demonstrate Occupancy/Vacancy Summary...";
+            return "Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity.";
         case TurnoverAnalysisGraph:
-            return "Gadget intended to demonstrate Unit Turnover graph...";
+            return "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years";
 
         case TotalArrearsGadget:
-            return "Gadget intended to demonstrate Tenant's arrears...";
+            return "Shows the information about total tenant arrears, including how long it is overdue, total balance, legal status information etc.";
         case ArrearsARBalanceComparisonChart:
-            return "Displays monthly AR balance year to year comparison";
+            return "A graph that visually demonstrates the arrear balance each month over the course of multiple years";
+        case RentArrearsGadget:
+            return "Shows the information about tenant rent arrears, including how long it is overdue, total balance, legal status information etc.";
+        case ParkingArrearsGadget:
+            return "Shows the information about tenant parking arrears, including how long it is overdue, total balance, legal status information etc.";
+        case OtherArrearsGadget:
+            return "Shows the information about tenant other arrears, including how long it is overdue, total balance, legal status information etc.";
+        case ArrearsSummaryGadget:
+            return "Shows a short summary of the total arrears";
 
             // TODO add description for rest of the gadgets
         }

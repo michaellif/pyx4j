@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.ref.Country;
@@ -44,6 +45,7 @@ public interface AddressStructured extends IEntity {
     IPrimitive<String> streetName();
 
     @I18n
+    @I18nComment("Street Type")
     public enum StreetType {
 
         street,

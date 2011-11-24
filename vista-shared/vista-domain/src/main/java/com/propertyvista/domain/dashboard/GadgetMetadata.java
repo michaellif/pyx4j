@@ -56,8 +56,6 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         TurnoverAnalysisGraph,
 
-        ArrearsGadget,
-
         RentArrearsGadget,
 
         ParkingArrearsGadget,

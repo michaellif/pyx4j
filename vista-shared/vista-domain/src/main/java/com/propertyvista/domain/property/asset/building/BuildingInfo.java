@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -102,6 +103,7 @@ public interface BuildingInfo extends IEntity {
     }
 
     @I18n
+    @I18nComment("Type of foundation")
     public enum FoundationType {
 
         pile,

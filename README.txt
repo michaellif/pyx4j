@@ -39,6 +39,9 @@ maven profiles used in build:
     * i18n,i18n-auto
         Extract text catalogs and create automatic translations using Google trnanslate
 
+    * i18n,i18n-auto,i18n-auto-all
+	Generate .po for ru and fr.
+
     * caledon-tests
         Enable caledon tests
 
