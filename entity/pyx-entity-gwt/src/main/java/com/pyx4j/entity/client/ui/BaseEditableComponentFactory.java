@@ -32,10 +32,10 @@ import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CIntegerField;
@@ -173,7 +173,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
         } else if (mm.getValueClass().equals(String.class)) {
             return new CTextField();
         } else {
-            throw new Error("No factory for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
+            throw new Error("No Component factory for member '" + member.getMeta().getFieldName() + "' of class " + member.getValueClass());
         }
     }
 
