@@ -23,6 +23,7 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.CurrentBillActivity;
+import com.propertyvista.portal.client.activity.DashboardActivity;
 import com.propertyvista.portal.client.activity.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.MaintenanceListerActivity;
@@ -47,7 +48,9 @@ public class ContentActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof Residents.PersonalInformation) {
+                if (place instanceof Residents) {
+                    activity = new DashboardActivity(place);
+                } else if (place instanceof Residents.PersonalInformation) {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);

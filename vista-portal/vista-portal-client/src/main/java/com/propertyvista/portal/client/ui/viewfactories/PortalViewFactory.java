@@ -25,6 +25,8 @@ import com.propertyvista.portal.client.ui.residents.BillingHistoryView;
 import com.propertyvista.portal.client.ui.residents.BillingHistoryViewImpl;
 import com.propertyvista.portal.client.ui.residents.CurrentBillView;
 import com.propertyvista.portal.client.ui.residents.CurrentBillViewImpl;
+import com.propertyvista.portal.client.ui.residents.DashboardView;
+import com.propertyvista.portal.client.ui.residents.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodViewImpl;
 import com.propertyvista.portal.client.ui.residents.MaintenanceListerView;
@@ -42,7 +44,9 @@ public class PortalViewFactory extends ViewFactoryBase {
 
     public static IsWidget instance(Class<?> type) {
         if (!map.containsKey(type)) {
-            if (MaintenanceView.class.equals(type)) {
+            if (DashboardView.class.equals(type)) {
+                map.put(type, new DashboardViewImpl());
+            } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
             } else if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
