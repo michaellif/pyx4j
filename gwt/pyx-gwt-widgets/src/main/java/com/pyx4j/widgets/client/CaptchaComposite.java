@@ -300,7 +300,10 @@ public class CaptchaComposite extends SimplePanel {
     @Override
     protected void onUnload() {
         if (created) {
-            destroyCaptcha();
+            try {
+                destroyCaptcha();
+            } catch (Throwable ignoreIE8) {
+            }
             assigneNutralId();
             created = false;
         }
