@@ -19,16 +19,13 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,6 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -56,12 +54,12 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.decorations.DecorationData;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -74,6 +72,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantFolder;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
@@ -126,7 +125,8 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         int row = -1;
 
         main.setH1(++row, 0, 1, i18n.tr("Premises"));
-        main.setWidget(++row, 0, new ApartmentView());
+
+        main.setWidget(++row, 0, inject(proto().apartmentSummary(), new ApartmentView()));
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Term/Rent"));
         main.setWidget(++row, 0, new LeaseTermView());
@@ -222,61 +222,22 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         return e;
     }
 
-    private static class TableCell {
-        public String caption;
-
-        public String width;
-
-        public Widget widget;
-
-        public TableCell(String caption, String width, Widget widget) {
-            this.caption = caption;
-            this.width = width;
-            this.widget = widget;
+    private class ApartmentView extends VistaTableFolder<ApartmentInfoSummaryDTO> {
+        public ApartmentView() {
+            super(ApartmentInfoSummaryDTO.class, false);
+            setWidth("100%");
         }
 
-    }
-
-    /*
-     * Selected Apartment information view implementation
-     */
-    private class ApartmentView extends HorizontalPanel {
-        public ApartmentView() {
-
-            alignWidth(this);
-
-            FormFlexPanel main = new FormFlexPanel();
-
-            main.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            main.getElement().getStyle().setPaddingRight(1, Unit.EM);
-            add(main);
-            setCellWidth(main, "100%");
-
-            List<TableCell> cells = Arrays.asList(
-                    //
-                    new TableCell("Suite Name", "20%", inject(proto().selectedUnit().floorplan()).asWidget()),
-                    new TableCell("Address", "40%", inject(proto().selectedUnit().address().street2()).asWidget()),
-                    new TableCell("Bedrooms #", "10%", inject(proto().selectedUnit().bedrooms()).asWidget()),
-                    new TableCell("Den #", "10%", inject(proto().selectedUnit().dens()).asWidget()),
-                    new TableCell("Landlord Name", "20%", inject(proto().selectedUnit().landlordName()).asWidget()));
-
-            int col = -1;
-            for (TableCell c : cells) {
-                HTML label = new HTML(i18n.tr(c.caption).replaceAll(" ", "&nbsp"));
-                label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-                label.setWidth(c.width);
-                main.setWidget(0, ++col, label);
-                main.setWidget(2, col, c.widget);
-                main.getFlexCellFormatter().setWidth(0, col, c.width);
-            }
-            Widget sp = new VistaLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-            sp.getElement().getStyle().setPadding(0, Unit.EM);
-            sp.getElement().getStyle().setPaddingRight(2, Unit.EM);
-            sp.getElement().getStyle().setPosition(Position.RELATIVE);
-            sp.getElement().getStyle().setLeft(-1, Unit.EM);
-            main.setWidget(1, 0, sp);
-            main.getFlexCellFormatter().setColSpan(1, 0, cells.size());
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            //@formatter:off
+          return Arrays.asList(
+                  new EntityFolderColumnDescriptor(proto().floorplan(), "10em"),
+                  new EntityFolderColumnDescriptor(proto().address(), "30em"),
+                  new EntityFolderColumnDescriptor(proto().bedrooms(), "10em"),
+                  new EntityFolderColumnDescriptor(proto().dens(), "10em"),
+                  new EntityFolderColumnDescriptor(proto().landlordName(), "10em"));
+            //@formatter:on
         }
     }
 

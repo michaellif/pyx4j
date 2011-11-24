@@ -7,36 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-21
- * @author jim
+ * Created on Nov 24, 2011
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
-
-import com.propertyvista.dto.TenantFinancialDTO;
-import com.propertyvista.dto.TenantInfoDTO;
-import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.Summary;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface SummaryDTO extends Summary {
+public interface ApartmentInfoSummaryDTO extends IEntity {
+    IPrimitive<String> floorplan();
 
-    IList<ApartmentInfoSummaryDTO> apartmentSummary();
+    IPrimitive<String> address();
 
-    ApartmentInfoDTO selectedUnit();
+    IPrimitive<String> bedrooms();
 
-    TenantInApplicationListDTO tenantList();
+    IPrimitive<String> dens();
 
-    IList<TenantInfoDTO> tenantsWithInfo();
-
-    IList<TenantFinancialDTO> tenantFinancials();
-
-    @Caption(name = "Add-Ons")
-    AddOnsDTO addons();
-
-    Charges charges();
+    @Caption(name = "Landlord")
+    IPrimitive<String> landlordName();
 }

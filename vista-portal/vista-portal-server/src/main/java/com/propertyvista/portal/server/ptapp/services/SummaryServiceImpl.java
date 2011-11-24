@@ -40,6 +40,8 @@ import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -83,6 +85,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.setValue(dbo.getValue());
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
+        summary.apartmentSummary().add(createApartmentSummary(summary.selectedUnit()));
         summary.charges().set(new ChargesServiceImpl().retrieveData());
 
         Lease lease = PtAppContext.getCurrentUserLease();
@@ -134,5 +137,15 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
         tfDTO.person().set(tr.tenant.person());
         return tfDTO;
+    }
+
+    private static ApartmentInfoSummaryDTO createApartmentSummary(ApartmentInfoDTO selectedUnit) {
+        ApartmentInfoSummaryDTO summary = EntityFactory.create(ApartmentInfoSummaryDTO.class);
+        summary.floorplan().set(selectedUnit.floorplan());
+        summary.address().setValue(selectedUnit.address().street2().getValue());
+        summary.bedrooms().setValue(selectedUnit.bedrooms().getValue());
+        summary.dens().setValue(selectedUnit.dens().getValue());
+        summary.landlordName().setValue(selectedUnit.landlordName().getValue());
+        return summary;
     }
 }
