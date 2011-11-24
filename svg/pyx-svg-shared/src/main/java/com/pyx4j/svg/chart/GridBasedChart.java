@@ -37,6 +37,11 @@ import com.pyx4j.svg.chart.DataSource.Metric;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 
 public abstract class GridBasedChart implements IsSvgElement {
+    /**
+     * Default max value of the graph, for the cases when actual max value that is present in the data set is 0.
+     * It's used to avoid the bug that causes the points that represent zero to be drawn not on the X-axis.
+     */
+    private static final double DEFAULT_MAX_VALUE = 100d;
 
     protected final static int PADDING = 15;
 
@@ -374,7 +379,7 @@ public abstract class GridBasedChart implements IsSvgElement {
                     max = d;
             }
         }
-        return ((max == null) ? 0 : max);
+        return ((max == null || max == 0d) ? DEFAULT_MAX_VALUE : max);
     }
 
     private Group createLegend(int numOfSeries) {
