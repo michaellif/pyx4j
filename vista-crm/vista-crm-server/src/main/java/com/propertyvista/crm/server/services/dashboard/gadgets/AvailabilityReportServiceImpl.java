@@ -318,9 +318,10 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             }
         }
 
+        int turnovers = moveins > 0 ? moveins - 1 : 0;
+        totalForUnit += turnovers;
         // update the last interval that collected some statistics if it did, or we have been explicitly asked for it 
         if ((totalForUnit != 0) | (toDate != null)) {
-            int turnovers = moveins > 0 ? moveins - 1 : 0;
             updateIntervalStats(statsMap, intervalStart, intervalEnd, turnovers);
             total += totalForUnit;
             intervalStart = intervalEnd;
