@@ -7,19 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-16
- * @author vlads
+ * Created on Nov 24, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.rpc.portal.dto;
 
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
-public interface DashboardDTO extends IEntity {
+import com.propertyvista.domain.financial.Money;
 
-    IPrimitive<String> notification();
+public interface BillInfoDTO extends IEntity {
+
+    IPrimitive<Boolean> paid();
+
+    IPrimitive<Boolean> dueDate();
+
+    IPrimitive<String> message();
+
+    Money ammount();
 
 }

@@ -7,24 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
- * @author Dad
+ * Created on 2011-05-16
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.rpc.portal.dto;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.domain.communication.Message;
 
-public interface DashboardView extends IsWidget {
+@Transient
+public interface TenantDashboardDTO extends IEntity {
 
-    public void populate(TenantDashboardDTO dashboard);
-
-    void setPresenter(Presenter presenter);
-
-    interface Presenter {
-
-    }
+    IList<Message> notification();
 
 }

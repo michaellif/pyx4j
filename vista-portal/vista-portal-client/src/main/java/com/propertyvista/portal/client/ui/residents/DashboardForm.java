@@ -20,16 +20,16 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.portal.domain.dto.DashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
-public class DashboardForm extends CEntityDecoratableEditor<DashboardDTO> implements DashboardView {
+public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> implements DashboardView {
 
     private static I18n i18n = I18n.get(DashboardForm.class);
 
     private Presenter presenter;
 
     public DashboardForm() {
-        super(DashboardDTO.class, new VistaViewersComponentFactory());
+        super(TenantDashboardDTO.class, new VistaViewersComponentFactory());
     }
 
     @Override

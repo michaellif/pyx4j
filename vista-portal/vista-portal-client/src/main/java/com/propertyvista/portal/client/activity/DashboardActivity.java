@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.client.ui.residents.DashboardView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.DashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 
 public class DashboardActivity extends SecurityAwareActivity {
@@ -46,8 +46,8 @@ public class DashboardActivity extends SecurityAwareActivity {
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        DashboardDTO dashboard = EntityFactory.create(DashboardDTO.class);
-        dashboard.notification().setValue("Notification");
+        TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
+        //  dashboard.notification().setValue("Notification");
 
         view.populate(dashboard);
 

@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.domain.dto.DashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
@@ -29,7 +29,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
     }
 
     @Override
-    public void populate(DashboardDTO dashboard) {
+    public void populate(TenantDashboardDTO dashboard) {
         form.populate(dashboard);
     }
 
