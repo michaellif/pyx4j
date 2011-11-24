@@ -14,6 +14,7 @@
 package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
@@ -22,9 +23,7 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
-import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.i18n.shared.I18n;
@@ -33,7 +32,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.ui.components.login.LoginForm;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.portal.ptapp.client.PtAppSite;
+import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
@@ -52,11 +51,37 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        HTML welcome = new HTML(HtmlUtils.h3(i18n.tr("Welcome to") + " " + PtAppSite.getPmcName() + "!"));
-        welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        FlowPanel leftColumn = new FlowPanel();
+        leftColumn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+        add(leftColumn);
 
-        HTML loginNotes = new HTML(PortalResources.INSTANCE.loginNotes().getText());
-        loginNotes.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        HTML requirements = new HTML(PortalResources.INSTANCE.requirements().getText());
+        requirements.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+        requirements.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+
+        requirements.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.requirements().getURL() + ") no-repeat");
+        leftColumn.add(requirements);
+
+        HTML time = new HTML(PortalResources.INSTANCE.time().getText());
+        time.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+        time.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+
+        time.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.time().getURL() + ") no-repeat");
+        leftColumn.add(time);
+
+        HTML dontWorry = new HTML(PortalResources.INSTANCE.dontWorry().getText());
+        dontWorry.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+        dontWorry.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+
+        dontWorry.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.dontWorry().getURL() + ") no-repeat");
+        leftColumn.add(dontWorry);
+
+        leftColumn.setWidth("45%");
+
+        FlowPanel rightColumn = new FlowPanel();
+        rightColumn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+        rightColumn.getElement().getStyle().setMarginLeft(5, Unit.PCT);
+        add(rightColumn);
 
         form = new LoginForm(i18n.tr("Login"), new Command() {
             @Override
@@ -79,9 +104,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
 
-        add(welcome);
-        add(loginNotes);
-        add(form);
+        rightColumn.add(form);
     }
 
     @Override
