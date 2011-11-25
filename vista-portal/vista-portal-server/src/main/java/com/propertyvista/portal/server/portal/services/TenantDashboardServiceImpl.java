@@ -17,12 +17,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
+import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantDashboardServiceImpl implements TenantDashboardService {
 
@@ -30,6 +35,22 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {
         TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
 
+        dashboard.general().tenantName().set(VistaContext.getCurrentUser().name());
+
+        TenantInLease tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        Persistence.service().retrieve(tenantInLease.lease());
+        Persistence.service().retrieve(tenantInLease.lease().unit());
+        Persistence.service().retrieve(tenantInLease.lease().unit().floorplan());
+        Persistence.service().retrieve(tenantInLease.lease().unit().belongsTo());
+
+        dashboard.general().floorplanName().set(tenantInLease.lease().unit().floorplan().marketingName());
+        AddressStructured address = tenantInLease.lease().unit().belongsTo().info().address().cloneEntity();
+        address.suiteNumber().set(tenantInLease.lease().unit().info().number());
+        dashboard.general().tenantAddress().setValue(address.getStringView());
+
+        dashboard.general().superIntendantPhone().setValue("(416) 333-22-44");
+
+        // TODO get Data from DB, Now we just Generate some Data now
         for (int i = 0; i <= 3; i++) {
             Message msg = dashboard.notifications().$();
             msg.subject().setValue("TODO");
