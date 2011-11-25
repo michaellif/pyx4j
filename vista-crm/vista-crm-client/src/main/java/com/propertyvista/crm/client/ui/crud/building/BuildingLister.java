@@ -28,8 +28,6 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
 
         new MemberColumnDescriptor.Builder(proto().complex()).build(),
 
-        new MemberColumnDescriptor.Builder(proto().complex(), false).build(),
-
         new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),
 
         new MemberColumnDescriptor.Builder(proto().propertyManager(), true).build(),
