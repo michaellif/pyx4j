@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory {
 
-    protected static I18n i18n = I18n.get(CEntityContainer.class);
+    private static final I18n i18n = I18n.get(CEntityContainer.class);
 
     private IDecorator decorator;
 

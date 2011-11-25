@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CrudEntityForm<E extends IEntity> extends CEntityEditor<E> {
 
-    protected static I18n i18n = I18n.get(CrudEntityForm.class);
+    private static final I18n i18n = I18n.get(CrudEntityForm.class);
 
     private IFormView<? extends IEntity> parentView;
 
