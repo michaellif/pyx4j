@@ -31,8 +31,8 @@ import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleNa
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelHR;
 
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -81,7 +81,7 @@ public class FormFlexPanel extends FlexTable {
 
     private void setHX(int row, int col, int span, String caption, Widget actionWidget, StyleName labelStyle, StyleName headerStyle) {
         getFlexCellFormatter().setColSpan(row, col, span);
-        FlowPanel header = new FlowPanel();
+        HorizontalPanel header = new HorizontalPanel();
         header.setStyleName(headerStyle.name());
 
         Label label = new Label(caption);
@@ -95,6 +95,6 @@ public class FormFlexPanel extends FlexTable {
             header.add(actionWidgetHolder);
         }
 
-        super.setWidget(row, 0, header);
+        super.setWidget(row, col, header);
     }
 }

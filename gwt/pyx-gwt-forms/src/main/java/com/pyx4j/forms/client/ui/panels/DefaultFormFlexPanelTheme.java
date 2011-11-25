@@ -59,7 +59,6 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style = new Style(".", StyleName.FormFlexPanelH1);
         style.addProperty("background-color", getBackgroundColor(), 0.4);
         style.addProperty("margin", "6px 0 4px 0");
-        style.addProperty("display", "inline-block");
         style.addProperty("width", "100%");
         addStyle(style);
 
@@ -67,14 +66,12 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("color", getBackgroundColor(), 0);
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
-        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH2);
         style.addProperty("border-bottom", "solid 2px");
         style.addProperty("border-bottom-color", getBackgroundColor(), 1);
         style.addProperty("margin", "6px 0 4px 0");
-        style.addProperty("display", "inline-block");
         style.addProperty("width", "100%");
         addStyle(style);
 
@@ -82,14 +79,12 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("color", getBackgroundColor(), 1);
         style.addProperty("padding", "3px");
         style.addProperty("font-size", "1.2em");
-        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH3);
         style.addProperty("border-bottom", "solid 1px");
         style.addProperty("border-bottom-color", getBackgroundColor(), 0.6);
         style.addProperty("margin", "6px 0 4px 0");
-        style.addProperty("display", "inline-block");
         style.addProperty("width", "100%");
         addStyle(style);
 
@@ -98,7 +93,6 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("padding", "2px");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-style", "italic");
-        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelActionWidget);

@@ -24,11 +24,11 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityViewer<E extends IEntity> extends CEntityContainer<E> {
+public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContainer<E> {
 
     @Override
     public void populate(E value) {
