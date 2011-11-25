@@ -21,11 +21,10 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -151,7 +150,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     private void fillReports(final NavigFolder folder) {
         ReportMetadataService service = GWT.create(ReportMetadataService.class);
-        service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
+        service.listMetadata(new DefaultAsyncCallback<Vector<DashboardMetadata>>() {
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
@@ -160,17 +159,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 // update UI:
                 view.setNavigFolders(currentfolders);
             }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
         });
     }
 
     private void fillDashboards(final NavigFolder folder) {
         DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
-        service.listMetadata(new AsyncCallback<Vector<DashboardMetadata>>() {
+        service.listMetadata(new DefaultAsyncCallback<Vector<DashboardMetadata>>() {
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
                 for (DashboardMetadata dmd : result) {
@@ -178,11 +172,6 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
             }
         });
     }

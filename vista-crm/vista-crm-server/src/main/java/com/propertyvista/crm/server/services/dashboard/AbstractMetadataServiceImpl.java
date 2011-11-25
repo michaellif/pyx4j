@@ -39,25 +39,24 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
 
     @Override
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
-        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
 
+        // Load shared dashboards:
         User anyUser = EntityFactory.create(User.class);
         anyUser.setPrimaryKey(Key.DORMANT_KEY);
+        EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
         addTypeCriteria(criteria);
+        Vector<DashboardMetadata> vdm = EntityServicesImpl.secureQuery(criteria);
 
-        Vector<DashboardMetadata> rc = EntityServicesImpl.secureQuery(criteria);
-
-        criteria = EntityQueryCriteria.create(DashboardMetadata.class);
-
+        // Load current user's dashboards:
         User user = EntityFactory.create(User.class);
         user.setPrimaryKey(Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+        criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
         addTypeCriteria(criteria);
+        vdm.addAll(EntityServicesImpl.secureQuery(criteria));
 
-        rc.addAll(EntityServicesImpl.secureQuery(criteria));
-
-        callback.onSuccess(rc);
+        callback.onSuccess(vdm);
     }
 
     @Override
