@@ -175,6 +175,13 @@ public class ExtractMojo extends AbstractMojo {
     public boolean poSaveLocation = true;
 
     /**
+     * Write 'java-format' as Extracted Comment (transifex.net bug)
+     * 
+     * @parameter default-value="true"
+     */
+    public boolean javaFormatFlagAsComment = true;
+
+    /**
      * File to save extracted strings, you may use it to run spell checker.
      * 
      * @parameter expression="${project.build.directory}/i18n.txt"
@@ -417,13 +424,20 @@ public class ExtractMojo extends AbstractMojo {
                 Collections.sort(pe.references);
             }
 
+            boolean javaFormat = false;
             if (entry.javaFormatFlag) {
                 pe.addFlag("java-format");
+                javaFormat = true;
             } else {
                 Matcher m = javaFormatPattern.matcher(pe.untranslated);
                 if (m.matches()) {
                     pe.addFlag("java-format");
+                    javaFormat = true;
                 }
+            }
+
+            if (javaFormat && javaFormatFlagAsComment) {
+                pe.addExtractedComment("java-format");
             }
 
             po.entries.add(pe);
@@ -496,7 +510,7 @@ public class ExtractMojo extends AbstractMojo {
         for (String lang : translates) {
             GoogleTranslate gt = new GoogleTranslate(this.googleApiKey);
 
-            POCatalog catalog = new POCatalog(lang);
+            POCatalog catalog = new POCatalog(lang, true);
             if (translationCatalog != null) {
                 catalog.loadCatalog(translationCatalog);
             }
@@ -532,10 +546,8 @@ public class ExtractMojo extends AbstractMojo {
             throw new MojoExecutionException("Can't read translationCatalog '" + translationCatalog.getAbsolutePath() + "'");
         }
         for (String lang : translates) {
-            POCatalog catalog = new POCatalog(lang);
-            if (translationCatalog != null) {
-                catalog.loadCatalog(translationCatalog);
-            }
+            POCatalog catalog = new POCatalog(lang, false);
+            catalog.loadCatalog(translationCatalog);
             POFile poTransl = po.cloneForTranslation();
             getLog().info("Translating " + sourceLanguage + " -> " + lang);
             int translated = 0;

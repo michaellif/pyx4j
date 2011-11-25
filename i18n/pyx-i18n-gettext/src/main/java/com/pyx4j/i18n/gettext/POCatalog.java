@@ -37,10 +37,14 @@ public class POCatalog implements Translator {
 
     private boolean updated = false;
 
-    public POCatalog(String lang) {
+    public POCatalog(String lang, boolean loadDefault) {
         this.lang = lang;
-        poDirectory = new File(System.getProperty("user.home"), ".po-catalog");
-        readMainFile();
+        if (loadDefault) {
+            poDirectory = new File(System.getProperty("user.home"), ".po-catalog");
+            readMainFile();
+        } else {
+            poDirectory = null;
+        }
     }
 
     public POCatalog(Locale locale) throws IOException {
