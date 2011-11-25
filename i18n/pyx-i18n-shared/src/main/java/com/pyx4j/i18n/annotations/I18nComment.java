@@ -34,4 +34,25 @@ public @interface I18nComment {
 
     String value();
 
+    public static enum I18nCommentTarget {
+
+        All,
+
+        /**
+         * Only the @I18n (IEntity/Enum) class name and do not affect all its members,
+         */
+        This,
+
+        /**
+         * Only add this comment to members
+         */
+        Memebers
+
+    }
+
+    /**
+     * Where to add this comment, On member or filed this has no effect.
+     */
+    I18nCommentTarget target() default I18nCommentTarget.All;
+
 }
