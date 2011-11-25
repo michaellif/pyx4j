@@ -30,7 +30,8 @@ import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 
 @DiscriminatorValue("Pet_ChargeItemExtraData")
 public interface Pet extends ChargeItemExtraData {
-    @I18nComment("Pet weight")
+
+    @I18nComment("Weight unit")
     public enum WeightUnit {
 
         @Translate("LB")

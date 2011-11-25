@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-24 20:30-0500\n"
+"POT-Creation-Date: 2011-11-25 01:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -308,7 +308,6 @@ msgstr "После полудня"
 msgid "Age cannot be greater than 150 years"
 msgstr "Возраст не может быть больше чем 150 лет"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Agent"
@@ -548,12 +547,10 @@ msgstr "Применять"
 msgid "Appointment"
 msgstr "Назначение"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Appointment Date 1"
 msgstr "Назначение Дата 1"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Appointment Date 2"
 msgstr "Назначение Дата 2"
@@ -562,12 +559,10 @@ msgstr "Назначение Дата 2"
 msgid "Appointment Request Submitted"
 msgstr "Назначение просьбу"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Appointment Time 1"
 msgstr "Назначение Время 1"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Appointment Time 2"
 msgstr "Назначение Time 2"
@@ -961,7 +956,6 @@ msgstr "Бюджеты"
 msgid "Build"
 msgstr "Строить"
 
-#. Potential customer
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/AssignedBuilding.java:2
 #: com/propertyvista/domain/dashboard/DashboardMetadata.java:1
@@ -1612,7 +1606,6 @@ msgstr "Крытая парковка"
 msgid "Create Application"
 msgstr "Создать приложение"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
@@ -2547,7 +2540,6 @@ msgstr "Полы типа"
 msgid "Flooring Value"
 msgstr "Полы Значение"
 
-#. Potential customer
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/Floorplan.java:0
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
@@ -2940,7 +2932,6 @@ msgstr "Домашнее хозяйство"
 msgid "How Did You Hear About Us"
 msgstr "Как вы узнали о нас"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "How did you hear about us"
 msgstr "Как вы узнали о нас"
@@ -3260,7 +3251,7 @@ msgstr "Товаров на странице"
 msgid "Jane L."
 msgstr "Джейн Л."
 
-#. Pet weight
+#. Weight unit
 #: com/propertyvista/domain/financial/offering/extradata/Pet.java:1
 msgid "KG"
 msgstr "Кило"
@@ -3273,7 +3264,7 @@ msgstr "Кухня"
 msgid "L-shape"
 msgstr "Г-формы"
 
-#. Pet weight
+#. Weight unit
 #: com/propertyvista/domain/financial/offering/extradata/Pet.java:1
 msgid "LB"
 msgstr "Паунд"
@@ -3413,7 +3404,6 @@ msgstr "Вести"
 msgid "Leads"
 msgstr "Ведет"
 
-#. Potential customer
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:2
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
@@ -3434,7 +3424,6 @@ msgstr "Аренда С"
 msgid "Lease ID"
 msgstr "Аренда ID"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Lease Length"
 msgstr "Длина аренды"
@@ -3649,6 +3638,7 @@ msgstr "Малоэтажный"
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #: com/pyx4j/forms/client/ui/CDatePicker.java:36
+#, java-format
 msgid "MM/dd/yyyy"
 msgstr "dd/MM/yyyy"
 
@@ -4085,7 +4075,6 @@ msgstr "Вниз"
 msgid "Move up"
 msgstr "Вверх"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Move-in date"
 msgstr "Move-Дата"
@@ -4773,7 +4762,6 @@ msgstr "Процент единиц перевернулся"
 msgid "Percentage Off"
 msgstr "Процент Офф"
 
-#. Potential customer
 #: com/propertyvista/common/client/ui/components/editors/EmergencyContactEditor.java:55
 #: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:87
 #: com/propertyvista/domain/company/OrganizationContact.java:2
@@ -5286,7 +5274,6 @@ msgstr "Пирамида Hip крыши"
 msgid "Quartz"
 msgstr "Кварцевый"
 
-#. Potential customer
 #: com/propertyvista/domain/tenant/lead/Lead.java:2
 msgid "Questions/Comments"
 msgstr "Вопросы / комментарии"
@@ -6124,7 +6111,6 @@ msgstr "Stateful компоненты найдено:"
 msgid "Static Content"
 msgstr "Статическое содержимое"
 
-#. Potential customer
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2

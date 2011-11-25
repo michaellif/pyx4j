@@ -34,7 +34,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-@I18nComment("Potential customer")
+@I18nComment(value = "Potential customer", target = I18nComment.I18nCommentTarget.This)
 public interface Lead extends IEntity {
 
     @I18n
