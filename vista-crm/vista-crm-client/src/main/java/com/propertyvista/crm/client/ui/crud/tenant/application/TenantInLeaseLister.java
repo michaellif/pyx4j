@@ -35,9 +35,6 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
 
         new MemberColumnDescriptor.Builder(proto().role(), true).build(),
 
-        new MemberColumnDescriptor.Builder(proto().incomeSource(), true).sortable(!VistaTODO.complextQueryCriteria).build(),
-
-        new MemberColumnDescriptor.Builder(proto().application().status(), true).sortable(!VistaTODO.leftJoinQuerySort).build());
-
+        new MemberColumnDescriptor.Builder(proto().incomeSource(), true).sortable(!VistaTODO.complextQueryCriteria).build());
     }
 }
