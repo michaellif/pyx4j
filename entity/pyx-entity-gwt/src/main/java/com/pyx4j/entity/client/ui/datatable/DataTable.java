@@ -408,21 +408,23 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 ++colIndex;
             }
 
-            Element rowElement = getRowFormatter().getElement(rowIndex);
-            UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name());
-            if (rowIndex % 2 == 0) {
-                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(),
-                        true);
-            } else {
-                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(),
-                        true);
-            }
-            if (!hasDetailsNavigation()) {
-                UIObject.setStyleName(rowElement,
-                        DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
-            }
+            if (rowIndex < getRowCount()) {
+                Element rowElement = getRowFormatter().getElement(rowIndex);
+                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name());
+                if (rowIndex % 2 == 0) {
+                    UIObject.setStyleName(rowElement,
+                            DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(), true);
+                } else {
+                    UIObject.setStyleName(rowElement,
+                            DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(), true);
+                }
+                if (!hasDetailsNavigation()) {
+                    UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name() + "-"
+                            + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
+                }
 
-            ++rowIndex;
+                ++rowIndex;
+            }
         }
         //TODO implement 
         //this.ensureDebugId(model.getDebugId());
