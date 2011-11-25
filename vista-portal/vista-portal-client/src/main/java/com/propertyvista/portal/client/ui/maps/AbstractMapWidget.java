@@ -21,6 +21,8 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MapMoveEndHandler;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.gwt.geo.GoogleAPI;
@@ -54,12 +56,27 @@ public abstract class AbstractMapWidget extends SimplePanel {
                     onMapLoaded();
                 }
             }, null);
+            Timer t = new Timer() {
+                @Override
+                public void run() {
+                    onMapLoaded();
+                }
+            };
+            t.schedule(3000);
         } else {
             onMapLoaded();
         }
     }
 
     protected void onMapLoaded() {
+        if (!mapLoadComplete) {
+            log.info("Gmaps not available");
+            Label failMsg = new Label("Sorry, Google maps not available.");
+            failMsg.setStyleName("googleMapsTimeout-error");
+            setWidget(failMsg);
+            return;
+        }
+
         log.info("call onMapLoaded()");
 
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);

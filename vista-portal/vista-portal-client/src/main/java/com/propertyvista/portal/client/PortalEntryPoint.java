@@ -43,11 +43,12 @@ public class PortalEntryPoint implements EntryPoint {
 
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
             RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
-        } else if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
-            PropertyMapWidget map = PropertyMapWidget.get();
-            RootPanel.get(APTINFO_MAP_INSERTION_ID).add(map);
-            map.setSize("300px", "300px");
-            map.loadMap();
+            if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
+                PropertyMapWidget map = PropertyMapWidget.get();
+                RootPanel.get(APTINFO_MAP_INSERTION_ID).add(map);
+                map.setSize("300px", "300px");
+                map.loadMap();
+            }
         } else {
             new PortalSite().onModuleLoad();
         }
