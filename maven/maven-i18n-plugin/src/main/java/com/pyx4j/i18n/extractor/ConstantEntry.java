@@ -37,10 +37,13 @@ public class ConstantEntry {
         this.text = text;
         this.reference = new Vector<String>();
         this.javaFormatFlag = javaFormatFlag;
-        addReference(sourceFileName, lineNr, comments);
+        addReference(sourceFileName, lineNr, javaFormatFlag, comments);
     }
 
-    public void addReference(String classSourceFileName, int lineNr, String... comments) {
+    public void addReference(String classSourceFileName, int lineNr, boolean javaFormatFlag, String... comments) {
+        if (javaFormatFlag) {
+            this.javaFormatFlag = true;
+        }
         String fmt = classSourceFileName + ":" + lineNr;
         if (!this.reference.contains(fmt)) {
             this.reference.add(fmt);

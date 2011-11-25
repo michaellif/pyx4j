@@ -63,7 +63,7 @@ public class Extractor {
             if (entry == null) {
                 constants.put(text, new ConstantEntry(sourceFileName, lineNr, text, javaFormatFlag, comments));
             } else {
-                entry.addReference(sourceFileName, lineNr, comments);
+                entry.addReference(sourceFileName, lineNr, javaFormatFlag, comments);
             }
         }
     }
