@@ -56,10 +56,6 @@ public class GadgetsFactory {
         GadgetType.PieChartDisplayBuilding,
         GadgetType.GaugeDisplay,
 
-        GadgetType.DeprecatedUnitAvailabilityReport,
-        GadgetType.DeprecatedAvailabilitySummary,
-        GadgetType.DeprecatedTurnoverAnalysisGraph,
-
         GadgetType.UnitAvailabilityReport,
         GadgetType.AvailabilitySummary,
         GadgetType.TurnoverAnalysisGraph,
@@ -70,8 +66,15 @@ public class GadgetsFactory {
         GadgetType.TotalArrearsGadget,
         GadgetType.ArrearsSummaryGadget,
         GadgetType.ArrearsARBalanceComparisonChart,
-
     };
+    
+    private static GadgetType[] deprecatedGadgets =
+    {
+        GadgetType.DeprecatedUnitAvailabilityReport,
+        GadgetType.DeprecatedAvailabilitySummary,
+        GadgetType.DeprecatedTurnoverAnalysisGraph,
+    };
+
     //@formatter:on
 
     /*
@@ -186,7 +189,7 @@ public class GadgetsFactory {
             answer = contains(buildingDashboardGadgets, gadget);
             break;
         }
-        return answer;
+        return answer && !contains(deprecatedGadgets, gadget);
     }
 
     private static boolean contains(GadgetType[] array, GadgetType gadget) {

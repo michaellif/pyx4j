@@ -60,7 +60,7 @@ public class AddGadgetBox extends DialogPanel {
         gadgets.setSpacing(8);
         gadgets.setWidth("100%");
 
-        gadgets.setCellWidth(gadgetsList, "35%");
+        gadgets.setCellWidth(gadgetsList, "60%");
         gadgetsList.setWidth("100%");
 
         // style right (description) cell:
@@ -95,7 +95,7 @@ public class AddGadgetBox extends DialogPanel {
         vPanel.setSize("100%", "100%");
 
         setContentWidget(vPanel);
-        setSize("600px", "250px");
+        setSize("600px", "300px");
     }
 
     public IGadget getSelectedGadget() {
@@ -110,7 +110,7 @@ public class AddGadgetBox extends DialogPanel {
             }
         }
         gadgetsList.setSelectedIndex(-1);
-        gadgetsList.setVisibleItemCount(8);
+        gadgetsList.setVisibleItemCount(12);
         gadgetsList.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {

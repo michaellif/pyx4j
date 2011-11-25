@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -24,6 +25,7 @@ import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
 
 public interface GadgetMetadata extends ISharedUserEntity {
 
+    @I18n
     @I18nComment("Gadget Type")
     public static enum GadgetType {
         Test,
