@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.ptapp.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -23,6 +24,8 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 
 @Transient
 public interface SummaryDTO extends Summary {
+
+    IPrimitive<Boolean> signed();
 
     IList<ApartmentInfoSummaryDTO> apartmentSummary();
 

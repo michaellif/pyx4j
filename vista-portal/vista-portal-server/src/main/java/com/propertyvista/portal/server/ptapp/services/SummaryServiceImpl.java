@@ -61,8 +61,15 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     public void save(AsyncCallback<SummaryDTO> callback, SummaryDTO summaryDTO) {
         Summary summary = EntityFactory.create(Summary.class);
         summary.setValue(summaryDTO.getValue());
+
+        if (!summaryDTO.signed().isBooleanTrue() && summary.application().signature().agree().isBooleanTrue()) {
+            //TODO validate signature
+            Persistence.service().merge(summary.application().signature());
+            Persistence.service().merge(summary.application());
+        }
+
         saveApplicationEntity(summary);
-        Persistence.service().merge(summary.application().signature());
+
 //        createSummaryDTO(summary);
         callback.onSuccess(summaryDTO);
     }
@@ -75,7 +82,9 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             summary.application().set(PtAppContext.getCurrentUserApplication());
         } else {
             Persistence.service().retrieve(summary.application());
-            Persistence.service().retrieve(summary.application().signature());
+            if (!summary.application().signature().isNull()) {
+                Persistence.service().retrieve(summary.application().signature());
+            }
         }
 
         return createSummaryDTO(summary);
@@ -85,6 +94,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
         summary.setValue(dbo.getValue());
+        summary.signed().set(dbo.application().signature().agree());
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
         summary.apartmentSummary().add(createApartmentSummary(summary.selectedUnit()));
