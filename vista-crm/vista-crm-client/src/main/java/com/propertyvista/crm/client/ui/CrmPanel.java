@@ -100,7 +100,7 @@ public class CrmPanel extends LayoutPanel {
         VerticalPanel leftPanel = new VerticalPanel();
         leftPanel.setSize("100%", "100%");
 
-        splitPanel.addWest(leftPanel, 190);
+        splitPanel.addWest(leftPanel, 200);
         splitPanel.setWidgetMinSize(leftPanel, 150);
 
         DisplayPanel navigDisplay = new DisplayPanel();
