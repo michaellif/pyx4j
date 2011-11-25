@@ -159,18 +159,25 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void delete(Key itemID) {
+    public void delete(final Key itemID) {
         service.delete(new AsyncCallback<Boolean>() {
+
             @Override
             public void onSuccess(Boolean result) {
+                onDeleted(itemID, true);
                 populate(view.getPageNumber());
             }
 
             @Override
             public void onFailure(Throwable caught) {
+                onDeleted(itemID, false);
                 throw new UnrecoverableClientError(caught);
             }
         }, itemID);
+    }
+
+    protected void onDeleted(Key itemID, boolean isSuccessful) {
+        view.onDeleted(itemID, isSuccessful);
     }
 
     protected EntityListCriteria<E> constructSearchCriteria() {

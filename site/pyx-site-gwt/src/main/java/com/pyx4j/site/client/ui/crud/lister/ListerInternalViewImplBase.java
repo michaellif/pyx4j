@@ -25,6 +25,7 @@ import java.util.List;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -120,5 +121,11 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
     @Override
     public void restoreState() {
         getLister().restoreState();
+    }
+
+    @Override
+    public void onDeleted(Key itemID, boolean isSuccessful) {
+        // TODO Auto-generated method stub
+
     }
 }

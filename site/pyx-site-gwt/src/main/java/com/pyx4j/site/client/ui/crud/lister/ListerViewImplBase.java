@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -149,5 +150,10 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
 
     public void addActionButton(Widget widget) {
         toolbar.addItem(widget, true);
+    }
+
+    @Override
+    public void onDeleted(Key itemID, boolean isSuccessful) {
+        // TODO Auto-generated method stub
     }
 }

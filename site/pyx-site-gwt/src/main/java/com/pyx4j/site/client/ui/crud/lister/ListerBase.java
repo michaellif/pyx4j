@@ -30,6 +30,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
@@ -334,6 +335,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     public void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
         setActionsActive(false);
         getDataTablePanel().populateData(entityes, pageNumber, hasMoreData, totalRows);
+    }
+
+    @Override
+    public void onDeleted(Key itemID, boolean isSuccessful) {
+        // TODO Auto-generated method stub
     }
 
     @Override
