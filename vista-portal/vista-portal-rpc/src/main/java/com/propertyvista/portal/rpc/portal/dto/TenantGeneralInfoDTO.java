@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-16
+ * Created on Nov 25, 2011
  * @author vlads
  * @version $Id$
  */
@@ -15,18 +15,17 @@ package com.propertyvista.portal.rpc.portal.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-
-import com.propertyvista.domain.communication.Message;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface TenantDashboardDTO extends IEntity {
+public interface TenantGeneralInfoDTO extends IEntity {
 
-    TenantGeneralInfoDTO general();
+    IPrimitive<String> tenantName();
 
-    IList<Message> notifications();
+    IPrimitive<String> floorplanName();
 
-    BillInfoDTO currentBill();
+    IPrimitive<String> tenantAddress();
 
-    IList<ReservationDTO> reservations();
+    IPrimitive<String> superIntendantPhone();
+
 }
