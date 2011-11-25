@@ -369,7 +369,7 @@ public class BytecodeConstantExtractor {
             for (@SuppressWarnings("rawtypes")
             Iterator i = classNode.methods.iterator(); i.hasNext();) {
                 MethodNode methodNode = (MethodNode) i.next();
-                if ("<init>".equals(methodNode.name)) {
+                if (methodNode.name.startsWith("<")) {
                     continue;
                 }
                 I18nStrategy methodStrategy = getStrategyAnnotationValue(methodNode);
