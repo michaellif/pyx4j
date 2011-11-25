@@ -1,0 +1,111 @@
+/* === reset === */
+a:hover{text-decoration:none;}
+ul, ol{list-style:none;}
+img, form, fieldset{border:none;}
+ul, ol, form, fieldset{
+	margin:0;
+	padding:0;
+}
+body, h1, h2, h3, h4, h5, h6, dl, dt, dd, p{margin:0;}
+table{width:100%; border-collapse:collapse;}
+q{quotes: none;}
+q:before{content:"";}
+q:after{content:"";}
+input:focus { outline: none; }
+textarea:focus { outline: none; }
+select:focus { outline: none; }
+/* === end reset === */
+body{
+	background:#333;
+}
+.main{
+	width:980px;
+	margin:0 auto;
+	padding:70px 0;
+	overflow:hidden;
+}
+.main ul li{
+	width:100%;
+	text-align:center;
+	padding:0 0 5px;
+}
+.main ul li a{
+	display:inline-block;
+	width:79px;
+	height:78px;
+	background:url(../images/ico.png) no-repeat;
+	overflow:hidden;
+	text-indent:-9898px;
+}
+.main ul li a.pdapp{background-position:0 0;}
+.main ul li a.pdapp:hover{background-position:-78px 1px;}
+.main ul li a.crm{background-position:4px -78px;}
+.main ul li a.crm:hover{background-position:-77px -78px;}
+.main ul li a.ptapp{background-position:0 -156px;}
+.main ul li a.ptapp:hover{background-position:-79px -157px;}
+.logo_sl{
+	display:block;
+	overflow:hidden;
+	text-indent:-9898px;
+	background:url(../images/logo_sl.png) no-repeat;
+	width:270px;
+	height:107px;
+}
+.column_first{
+	float:left;
+	width:270px;
+}
+.main .column_first ul{
+	padding:40px 38px 0 0;
+}
+.logo_bl{
+	display:block;
+	overflow:hidden;
+	text-indent:-9898px;
+	background:url(../images/logo_br.png) no-repeat;
+	width:315px;
+	height:69px;
+}
+.column{
+	float:left;
+	width:315px;
+	padding:30px 53px 0;
+	min-height:483px;
+}
+.main .column ul{
+	padding:48px 0 0 35px;
+}
+.logo_rv{
+	display:block;
+	overflow:hidden;
+	text-indent:-9898px;
+	background:url(../images/logo_rv.png) no-repeat;
+	width:260px;
+	height:68px;
+}
+.column_last{
+	width:260px;
+	float:left;
+	padding:31px 0 0 24px;
+}
+.main .column_last ul{
+	padding:48px 11px 0 0;
+}
+.logo_pv{
+	display:block;
+	overflow:hidden;
+	text-indent:-9898px;
+	clear:both;
+	margin:0 auto;
+	width:200px;
+	height:92px;
+	background:url(../images/logo_pv.png) no-repeat;
+}
+
+.internal_link {
+    color: #272727;
+}
+
+.internal_link:visited {
+    color: #272727;
+}
