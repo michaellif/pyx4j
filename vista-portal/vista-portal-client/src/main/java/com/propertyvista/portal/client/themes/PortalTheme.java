@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.themes;
 
 import java.util.List;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
@@ -34,12 +33,16 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 
 public class PortalTheme extends VistaTheme {
 
-    public PortalTheme() {
+    private final Skin skin;
+
+    public PortalTheme(Skin skin) {
+        this.skin = skin;
         initStyles();
     }
 
@@ -56,6 +59,37 @@ public class PortalTheme extends VistaTheme {
             protected ThemeColors getBackgroundColor() {
                 return ThemeColors.foreground;
             }
+
+            @Override
+            protected void initStyles() {
+                super.initStyles();
+
+                if (Skin.skin1.equals(skin)) {
+                    Style style = new Style(".", StyleName.FormFlexPanelH1);
+                    style.addProperty("margin", "0 0 4px 0");
+                    style.addProperty("border-top", "solid 1px");
+                    style.addProperty("border-bottom", "solid 1px");
+                    style.addProperty("border-top-color", ThemeColors.foreground, 0.3);
+                    style.addProperty("border-bottom-color", ThemeColors.foreground, 0.5);
+                    style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.4);
+                    addStyle(style);
+
+                    style = new Style(".", StyleName.FormFlexPanelH1Label);
+                    style.addProperty("color", getBackgroundColor(), 1.4);
+                    style.addProperty("padding", "20px");
+                    style.addProperty("font-size", "1.5em");
+                    addStyle(style);
+
+                    style = new Style(".", StyleName.FormFlexPanelActionWidget);
+                    style.addProperty("margin-top", "20px");
+                    addStyle(style);
+
+                    style = new Style(".", StyleName.FormFlexPanelActionWidget, " a");
+                    style.addProperty("color", getBackgroundColor(), 1.4);
+                    style.addProperty("font-style", "italic");
+                    addStyle(style);
+                }
+            }
         });
 
         addTheme(new DefaultDatePickerTheme());
@@ -67,26 +101,24 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new NewPaymentMethodEditorTheme());
 
-        initEntityFolderStyles();
+        addTheme(new DefaultEntityFolderTheme() {
+            @Override
+            protected ThemeColors getBackgroundColor() {
+                return ThemeColors.foreground;
+            }
+
+            @Override
+            protected void initStyles() {
+                super.initStyles();
+            }
+        });
+
         initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initSiteViewStyles();
         initPropertyMarkerStyle();
 
-    }
-
-    protected void initEntityFolderStyles() {
-        addTheme(new DefaultEntityFolderTheme() {
-            @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.foreground;
-            }
-        });
-
-        Style style = new Style((IStyleName) DefaultEntityFolderTheme.StyleName.EntityFolder);
-        style.addProperty("width", "690px");
-        addStyle(style);
     }
 
     protected void initSiteViewStyles() {

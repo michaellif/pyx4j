@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -35,21 +36,22 @@ public class PersonalInfoForm extends CEntityDecoratableEditor<ResidentDTO> impl
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
 
-        int row = 0;
+        int row = -1;
 
-        container.setH1(row++, 0, 1, i18n.tr("Contact Details"));
+        container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
 
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
-        container.setWidget(row++, 0, new DecoratorBuilder(inject(proto().email()), 20).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 20).build());
 
         //Emergency Contacts
-        container.setH1(row++, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        container.setWidget(row++, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
+        container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
+        container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
+        container.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
         return container;
     }
 

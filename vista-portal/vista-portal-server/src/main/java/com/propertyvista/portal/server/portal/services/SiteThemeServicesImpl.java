@@ -45,6 +45,7 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
         }
         SiteDefinitionsDTO def = EntityFactory.create(SiteDefinitionsDTO.class);
         def.palette().setValue(descriptor.sitePalette().getValue());
+        def.skin().setValue(descriptor.skin().getValue());
 
         for (SiteTitles t : descriptor.siteTitles()) {
             if (locale == t.locale().lang().getValue()) {

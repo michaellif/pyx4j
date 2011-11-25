@@ -15,14 +15,18 @@ package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.domain.site.SiteTitles;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface SiteDefinitionsDTO extends IEntity {
+
+    IPrimitive<Skin> skin();
 
     SitePalette palette();
 

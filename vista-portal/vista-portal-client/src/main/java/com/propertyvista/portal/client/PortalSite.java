@@ -77,7 +77,7 @@ public class PortalSite extends VistaSite {
                         siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
                             @Override
                             public void onSuccess(SiteDefinitionsDTO descriptor) {
-                                StyleManger.installTheme(new PortalTheme(), new VistaPalette(descriptor.palette()));
+                                StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
                             }
                         }, ClentNavigUtils.getCurrentLocale());
                         getHistoryHandler().handleCurrentHistory();

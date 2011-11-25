@@ -13,14 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -53,17 +50,8 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
             }
         });
 
-        getElement().getStyle().setMarginTop(15, Unit.PX);
-        HTML separator = new HTML();
-        separator.getElement().getStyle().setProperty("borderTop", "1px dotted black");
-        separator.getElement().getStyle().setProperty("margin", "1em 0em 0em 0em");
-        add(separator);
-
         saveButton.getElement().getStyle().setProperty("margin", "1em 1em 1em 0em");
         add(saveButton);
-
-        getElement().getStyle().setMarginTop(15, Unit.PX);
-        getElement().getStyle().setMarginBottom(15, Unit.PX);
 
     }
 

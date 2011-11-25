@@ -18,23 +18,23 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.client.ui.residents.DashboardView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
-import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 
 public class DashboardActivity extends SecurityAwareActivity {
 
     private final DashboardView view;
 
-    PersonalInfoCrudService srv;
+    private final TenantDashboardService srv;
 
     public DashboardActivity(Place place) {
         this.view = (DashboardView) PortalViewFactory.instance(DashboardView.class);
         withPlace(place);
-        srv = GWT.create(PersonalInfoCrudService.class);
+        srv = GWT.create(TenantDashboardService.class);
     }
 
     public DashboardActivity withPlace(Place place) {
@@ -46,10 +46,13 @@ public class DashboardActivity extends SecurityAwareActivity {
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
-        //  dashboard.notification().setValue("Notification");
+        srv.retrieveTenantDashboard(new DefaultAsyncCallback<TenantDashboardDTO>() {
+            @Override
+            public void onSuccess(TenantDashboardDTO result) {
+                view.populate(result);
+            }
 
-        view.populate(dashboard);
+        });
 
     }
 
