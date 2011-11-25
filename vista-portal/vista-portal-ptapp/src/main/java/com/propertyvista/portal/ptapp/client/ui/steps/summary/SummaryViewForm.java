@@ -480,6 +480,11 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         return false;
     }
 
+    @Override
+    public boolean isValid() {
+        return (super.isValid() && get(proto().application().signature().agree()).isValid() && get(proto().application().signature().fullName()).isValid());
+    }
+
     // Internals:
 
     protected class DecoratorBuilder2 extends DecoratorBuilder {
