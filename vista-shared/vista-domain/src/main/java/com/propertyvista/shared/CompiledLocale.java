@@ -47,4 +47,12 @@ public enum CompiledLocale implements Serializable {
         return I18nEnum.toString(this);
     }
 
+    public String getLanguage() {
+        int d = this.name().indexOf('_');
+        if (d == -1) {
+            return this.name();
+        } else {
+            return this.name().substring(0, d);
+        }
+    }
 }

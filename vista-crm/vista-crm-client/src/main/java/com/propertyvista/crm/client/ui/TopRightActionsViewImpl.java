@@ -217,7 +217,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                     presenter.setLocale(compiledLocale);
                 }
             });
-            link.setValue(compiledLocale.name());
+            link.setValue(compiledLocale.getLanguage());
             Tooltip.tooltip(link.asWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
             locales.add(link);
             locales.add(new Label("/"));

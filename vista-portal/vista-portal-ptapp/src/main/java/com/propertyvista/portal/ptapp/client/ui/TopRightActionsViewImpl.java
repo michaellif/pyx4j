@@ -127,7 +127,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
                     presenter.setLocale(compiledLocale);
                 }
             });
-            link.setValue(compiledLocale.name());
+            link.setValue(compiledLocale.getLanguage());
             Tooltip.tooltip(link.asWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
             locales.add(link);
             locales.add(new Label("/"));
