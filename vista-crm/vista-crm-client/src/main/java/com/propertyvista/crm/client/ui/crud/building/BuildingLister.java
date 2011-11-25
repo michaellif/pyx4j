@@ -78,7 +78,7 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
 
         new MemberColumnDescriptor.Builder(proto().contacts().website(), false).build(),
 
-        new MemberColumnDescriptor.Builder(proto().contacts().email().address(), false).title(i18n.tr("Email")).build(),
+        new MemberColumnDescriptor.Builder(proto().contacts().email().address(), false).title(proto().contacts().email()).build(),
 
         new MemberColumnDescriptor.Builder(proto().financial().dateAcquired(), true).build(),
 
