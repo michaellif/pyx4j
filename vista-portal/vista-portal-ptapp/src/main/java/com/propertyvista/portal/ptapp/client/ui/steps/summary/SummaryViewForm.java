@@ -27,13 +27,16 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -63,6 +66,7 @@ import com.propertyvista.common.client.ui.decorations.DecorationData;
 import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -102,7 +106,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     private final FormFlexPanel parkingPanel = new FormFlexPanel();
     private final FormFlexPanel storagePanel = new FormFlexPanel();
     private final FormFlexPanel otherPanel = new FormFlexPanel();
-    private final FormFlexPanel addonsPanel = new FormFlexPanel();
+    private final FormFlexPanel addonsPanel = new FormFlexPanel();        
     //@formatter:on
 
     public SummaryViewForm() {
@@ -145,8 +149,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
         main.setWidget(++row, 0, new LeaseTermsCheck());
 
-        main.setH1(++row, 0, 1, i18n.tr("Digital Signature"));
-        main.setWidget(++row, 0, new SignatureView());
+        main.setWidget(++row, 0, inject(proto().application().signature(), new SignatureView(factory, new SignatureValidator())));
 
         return main;
     }
@@ -362,13 +365,62 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             leaseTerms.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
             leaseTerms.setHeight("20em");
             add(leaseTerms);
+        }
+    }
+
+    /**
+     * Digital Signature View Implementation.
+     */
+    // TODO should be static (it's not because it uses DecoratorBuilder2)
+    private class SignatureView extends CEntityDecoratableEditor<DigitalSignature> {
+        //@formatter:off
+        private static final String SIGNATURE_PANEL_CAPTION = "Digital Signature";
+        private static final String ALREADY_SIGNED_MESSAGE = "Already Signed";
+
+        FormFlexPanel agreementAndSignaturePanel;
+        FlowPanel agreedMessagePanel;
+        VerticalPanel content;
+        
+        EditableValueValidator<String> signatureValidator;
+        //@formatter:on
+
+        public SignatureView(IEditableComponentFactory factory, EditableValueValidator<String> signatureValidator) {
+            super(DigitalSignature.class, factory);
+            setEditable(false);
+            this.signatureValidator = signatureValidator;
+        }
+
+        @Override
+        public IsWidget createContent() {
+            content = new VerticalPanel();
+            content.add(initAgreedContentPanel());
+            content.add(initSignatureContentPanel());
+            content.setSize("100%", "100%");
+            return content;
+        }
+
+        private FlowPanel initAgreedContentPanel() {
+            agreedMessagePanel = new FlowPanel();
+            agreedMessagePanel.setSize("100%", "100%");
+            Label msg = new Label(i18n.tr(ALREADY_SIGNED_MESSAGE));
+            msg.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            agreedMessagePanel.add(msg);
+            return agreedMessagePanel;
+        }
+
+        private FormFlexPanel initSignatureContentPanel() {
+            int row = -1;
+            agreementAndSignaturePanel = new FormFlexPanel();
+            agreementAndSignaturePanel.setH1(++row, 0, 3, i18n.tr(SIGNATURE_PANEL_CAPTION));
 
             // "I Agree" check-box:
             CCheckBox check = new CCheckBox();
-            WidgetDecorator agree = new DecoratorBuilder2(inject(proto().application().signature().agree(), check), 3).build();
+            WidgetDecorator agree = new DecoratorBuilder2(inject(proto().agree(), check), 3).build();
             agree.asWidget().getElement().getStyle().setMarginLeft(25, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
-            add(agree);
+            agreementAndSignaturePanel.setWidget(++row, 0, agree);
+            agreementAndSignaturePanel.getFlexCellFormatter().setColSpan(row, 0, 3);
+
             check.inheritContainerAccessRules(false);
             check.addValueValidator(new EditableValueValidator<Boolean>() {
 
@@ -382,29 +434,15 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
                     return i18n.tr("You Must Agree To The Terms And Conditions To Continue");
                 }
             });
-        }
-    }
 
-    /**
-     * Digital Signature View Implementation.
-     */
-    private class SignatureView extends FormFlexPanel {
-        public SignatureView() {
-            super();
+            int rowSig = -1;
+            FormFlexPanel signaturePanel = new FormFlexPanel();
             CTextField signatureEditField = new CTextField();
-            bind(signatureEditField, proto().application().signature().fullName());
+            bind(signatureEditField, proto().fullName());
             signatureEditField.inheritContainerAccessRules(false);
-            signatureEditField.addValueValidator(new EditableValueValidator<String>() {
-                @Override
-                public boolean isValid(CComponent<String, ?> component, String value) {
-                    return isSignatureValid(value);
-                }
-
-                @Override
-                public String getValidationMessage(CComponent<String, ?> component, String value) {
-                    return i18n.tr("Digital Signature Must Match Your Name On File");
-                }
-            });
+            if (signatureValidator != null) {
+                signatureEditField.addValueValidator(signatureValidator);
+            }
 
             DecorationData dd = new DecorationData(17d, HasHorizontalAlignment.ALIGN_LEFT, 20d);
             dd.labelStyleName = DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignatureLabel.name();
@@ -414,11 +452,11 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             signature.getElement().getStyle().setPaddingLeft(1.5, Unit.EM);
             signature.setHeight("3em");
             signature.setWidth("100%");
-            setWidget(0, 0, signature);
+            signaturePanel.setWidget(++rowSig, 0, signature);
 
             CLabel ipLabel = new CLabel();
             ipLabel.asWidget().setStyleName(dd.labelStyleName);
-            inject(proto().application().signature().ipAddress(), ipLabel);
+            inject(proto().ipAddress(), ipLabel);
             DecorationData ipdd = new DecorationData();
             ipdd.labelStyleName = dd.labelStyleName;
             ipdd.labelWidth = 4;
@@ -427,12 +465,12 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             ip.setStyleName(signature.getStyleName());
             ip.setWidth("100%");
             ip.getElement().getStyle().setPadding(0, Unit.EM);
-            setWidget(0, 1, ip);
+            signaturePanel.setWidget(rowSig, 1, ip);
 
             CDateLabel dateLabel = new CDateLabel();
             dateLabel.asWidget().setStyleName(dd.labelStyleName);
-            dateLabel.setDateFormat(proto().application().signature().timestamp().getMeta().getFormat());
-            inject(proto().application().signature().timestamp(), dateLabel);
+            dateLabel.setDateFormat(proto().timestamp().getMeta().getFormat());
+            inject(proto().timestamp(), dateLabel);
             DecorationData datedd = new DecorationData();
             datedd.labelStyleName = dd.labelStyleName;
             datedd.componentCaption = i18n.tr("Date") + ":";
@@ -440,51 +478,80 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             date.setStyleName(signature.getStyleName());
             date.setWidth("100%");
             dateLabel.asWidget().setStyleName(dd.labelStyleName);
-            setWidget(0, 2, dateLabel);
-            getCellFormatter().setWidth(0, 0, "60%");
-            getCellFormatter().setWidth(0, 1, "20%");
-            getCellFormatter().setWidth(0, 2, "20%");
-            setStyleName(signature.getStyleName());
 
-            setWidth("100%");
+            signaturePanel.setWidget(rowSig, 2, dateLabel);
+            signaturePanel.getCellFormatter().setWidth(0, 0, "60%");
+            signaturePanel.getCellFormatter().setWidth(0, 1, "20%");
+            signaturePanel.getCellFormatter().setWidth(0, 2, "20%");
+            signaturePanel.setStyleName(signature.getStyleName());
+            signaturePanel.setSize("100%", "100%");
+
+            agreementAndSignaturePanel.setWidget(++row, 0, signaturePanel);
+            agreementAndSignaturePanel.setSize("100%", "100%");
+            return agreementAndSignaturePanel;
+        }
+
+        @Override
+        public void populate(DigitalSignature entity) {
+            super.populate(entity);
+            Boolean isAgreed = entity == null ? null : entity.agree().isBooleanTrue();
+            agreedMessagePanel.setVisible(isAgreed == null ? false : isAgreed);
+            agreementAndSignaturePanel.setVisible(isAgreed == null ? false : !isAgreed);
+        }
+
+        @Override
+        public boolean isValid() {
+            return super.isValid() & get(proto().agree()).isValid() & get(proto().fullName()).isValid();
         }
     }
 
-    private boolean isSignatureValid(String signature) {
-        if (CommonsStringUtils.isEmpty(signature)) {
+    private class SignatureValidator implements EditableValueValidator<String> {
+        @Override
+        public boolean isValid(CComponent<String, ?> component, String value) {
+            return isSignatureValid(value);
+        }
+
+        @Override
+        public String getValidationMessage(CComponent<String, ?> component, String value) {
+            return i18n.tr("Digital Signature Must Match Your Name On File");
+        }
+
+        public boolean isSignatureValid(String signature) {
+            if (CommonsStringUtils.isEmpty(signature)) {
+                return false;
+            }
+            for (TenantInLeaseDTO pti : getValue().tenantList().tenants()) {
+                if (pti.role().getValue() == TenantInLease.Role.Applicant) {
+                    return isCombinationMatch(signature, pti.tenant().person().name().firstName(), pti.tenant().person().name().lastName(), pti.tenant()
+                            .person().name().middleName());
+                }
+            }
             return false;
         }
-        for (TenantInLeaseDTO pti : getValue().tenantList().tenants()) {
-            if (pti.role().getValue() == TenantInLease.Role.Applicant) {
-                return isCombinationMatch(signature, pti.tenant().person().name().firstName(), pti.tenant().person().name().lastName(), pti.tenant().person()
-                        .name().middleName());
-            }
-        }
-        return false;
-    }
 
-    private boolean isCombinationMatch(String signature, IPrimitive<String> value1, IPrimitive<String> value2, IPrimitive<String> value3) {
-        signature = signature.trim().toLowerCase().replaceAll("\\s+", " ");
-        String s1 = CommonsStringUtils.nvl(value1.getValue()).trim().toLowerCase();
-        String s2 = CommonsStringUtils.nvl(value2.getValue()).trim().toLowerCase();
-        String s3 = CommonsStringUtils.nvl(value3.getValue()).trim().toLowerCase();
-        if ((signature.equals(CommonsStringUtils.nvl_concat(s1, s2, " ")) || (signature.equals(CommonsStringUtils.nvl_concat(s2, s1, " "))))) {
-            return true;
+        private boolean isCombinationMatch(String signature, IPrimitive<String> value1, IPrimitive<String> value2, IPrimitive<String> value3) {
+            signature = signature.trim().toLowerCase().replaceAll("\\s+", " ");
+            String s1 = CommonsStringUtils.nvl(value1.getValue()).trim().toLowerCase();
+            String s2 = CommonsStringUtils.nvl(value2.getValue()).trim().toLowerCase();
+            String s3 = CommonsStringUtils.nvl(value3.getValue()).trim().toLowerCase();
+            if ((signature.equals(CommonsStringUtils.nvl_concat(s1, s2, " ")) || (signature.equals(CommonsStringUtils.nvl_concat(s2, s1, " "))))) {
+                return true;
+            }
+            if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s1, s3, " "), s2, " ")))) {
+                return true;
+            }
+            if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s2, s3, " "), s1, " ")))) {
+                return true;
+            }
+            return false;
         }
-        if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s1, s3, " "), s2, " ")))) {
-            return true;
-        }
-        if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s2, s3, " "), s1, " ")))) {
-            return true;
-        }
-        return false;
     }
 
     @Override
     public boolean isValid() {
         boolean result = true;
         if (!getValue().application().signature().signed().isBooleanTrue()) {
-            result = (get(proto().application().signature().agree()).isValid() && get(proto().application().signature().fullName()).isValid());
+            result = get(proto().application().signature()).isValid();
             if (result) {
                 getValue().application().signature().signed().setValue(true);
             }
