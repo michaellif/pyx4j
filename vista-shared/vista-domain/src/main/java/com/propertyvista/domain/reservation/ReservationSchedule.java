@@ -33,6 +33,7 @@ public interface ReservationSchedule extends IEntity {
 
     Tenant tenant();
 
+    @MemberColumn(name = "cmt")
     IPrimitive<String> comment();
 
     @MemberColumn(name = "reservationDate")
