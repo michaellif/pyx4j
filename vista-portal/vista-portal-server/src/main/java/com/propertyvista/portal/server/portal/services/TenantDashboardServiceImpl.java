@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.services;
 
+import java.sql.Time;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -24,6 +26,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -63,6 +66,14 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         dashboard.currentBill().paid().setValue(Boolean.FALSE);
         dashboard.currentBill().dueDate().setValue(new LogicalDate(2011, 11, 01));
         dashboard.currentBill().ammount().amount().setValue(1240.);
+
+        {
+            ReservationDTO r = dashboard.reservations().$();
+            r.description().setValue("Party Room");
+            r.date().setValue(new LogicalDate(2011, 12, 31));
+            r.time().setValue(new Time(19, 00, 00));
+            dashboard.reservations().add(r);
+        }
 
         callback.onSuccess(dashboard);
     }
