@@ -7,31 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-29
- * @author Vlad
+ * Created on Jul 20, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.income.IncomeSource;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.misc.EquifaxApproval;
 
 @Transient
-public interface TenantInLeaseDTO extends TenantInLease {
+public interface TenantApprovalDTO extends EquifaxApproval {
 
-    public static enum ChangeStatus {
-        New, Updated;
-    }
-
-    // ------------------------------------
-
-    IPrimitive<IncomeSource> incomeSource();
-
-    IPrimitive<ChangeStatus> changeStatus();
-
-    EquifaxApproval equifaxApproval();
+    @ToString
+    Person person();
 }

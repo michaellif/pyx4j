@@ -17,9 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -28,12 +26,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.misc.EquifaxApproval;
 
 public interface MasterApplication extends IEntity {
 
@@ -42,25 +40,6 @@ public interface MasterApplication extends IEntity {
     public enum Status {
 
         Invited, Submitted, Incomplete, PendingDecision, Approved, Declined, InformationRequested, Cancelled;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @I18n
-    @XmlType(name = "Suggested Decision")
-    public enum Decision {
-
-        Pending,
-
-        Approve,
-
-        @Translate("Request for Guarantor or further information")
-        RequestInfo,
-
-        Decline;
 
         @Override
         public String toString() {
@@ -78,13 +57,6 @@ public interface MasterApplication extends IEntity {
     @Owned
     IList<Application> applications();
 
-    @Format("#0.00")
-    @Caption(name = "% Rent Approved (based on Equifax check)")
-    IPrimitive<Double> percenrtageApproved();
-
-    @Caption(name = "Suggested Decision (based on Equifax check)")
-    IPrimitive<Decision> suggestedDecision();
-
     Employee decidedBy();
 
     IPrimitive<LogicalDate> decisionDate();
@@ -98,4 +70,6 @@ public interface MasterApplication extends IEntity {
 
     @ReadOnly
     IPrimitive<LogicalDate> createDate();
+
+    EquifaxApproval equifaxApproval();
 }

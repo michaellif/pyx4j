@@ -121,14 +121,19 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percenrtageApproved()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().suggestedDecision()), 25).build());
-
-        main.setHR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decidedBy()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decisionReason()), 40).build());
+        main.setHR(++row, 0, 1);
+
+        main.setBR(++row, 0, 1);
+        main.setH3(++row, 0, 1, i18n.tr("Equifax check results"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxApproval().percenrtageApproved()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxApproval().suggestedDecision()), 25).build());
+
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, inject(proto().tenantFinancials(), new TenantApprovalFolder(isEditable())));
 
         return new CrmScrollPanel(main);
     }
@@ -136,7 +141,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
     private Widget createInfoTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().tenantsWithInfo(), createTenantView()));
+        main.setWidget(0, 0, inject(proto().tenantInfo(), createTenantView()));
 
         return new CrmScrollPanel(main);
     }

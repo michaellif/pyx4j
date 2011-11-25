@@ -69,11 +69,11 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
                 dto.numberOfCoApplicants().setValue(dto.numberOfCoApplicants().getValue() + 1);
             }
 
-            if (!fromList) {
-                TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
-                dto.tenantsWithInfo().add(createTenantInfoDTO(tr));
-                dto.tenantFinancials().add(createTenantFinancialDTO(tr));
-            }
+            TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
+            dto.tenantInfo().add(createTenantInfoDTO(tr));
+            TenantFinancialDTO tf = createTenantFinancialDTO(tr);
+            dto.numberOfGuarantors().setValue(dto.numberOfGuarantors().getValue() + tf.guarantors().size());
+            dto.tenantFinancials().add(tf);
         }
 
         if (!fromList) {
@@ -81,6 +81,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         calculatePrices(in, dto);
+
         // TODO: currently - just some mockup stuff:
         dto.deposit().setValue(100 + RandomUtil.randomDouble(1000));
     }

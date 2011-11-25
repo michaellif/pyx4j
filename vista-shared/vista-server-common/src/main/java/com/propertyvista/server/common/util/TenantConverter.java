@@ -64,12 +64,11 @@ public class TenantConverter {
             bind(dtoProto.driversLicenseState(), dboProto.driversLicenseState());
             bind(dtoProto.secureIdentifier(), dboProto.secureIdentifier());
             bind(dtoProto.notCanadianCitizen(), dboProto.notCanadianCitizen());
-
-            bind(dtoProto.documents(), dboProto.documents());
-
             bind(dtoProto.currentAddress(), dboProto.currentAddress());
             bind(dtoProto.previousAddress(), dboProto.previousAddress());
+            bind(dtoProto.documents(), dboProto.documents());
             bind(dtoProto.legalQuestions(), dboProto.legalQuestions());
+            bind(dtoProto.equifaxApproval(), dboProto.equifaxApproval());
         }
     }
 
@@ -85,6 +84,7 @@ public class TenantConverter {
             //bind(dtoProto.incomes2(), dboProto.incomes2());
             bind(dtoProto.assets(), dboProto.assets());
             bind(dtoProto.guarantors(), dboProto.guarantors());
+            bind(dtoProto.equifaxApproval(), dboProto.equifaxApproval());
         }
     }
 }

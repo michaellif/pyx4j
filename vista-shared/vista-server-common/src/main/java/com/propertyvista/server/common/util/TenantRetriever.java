@@ -66,6 +66,7 @@ public class TenantRetriever {
                 Persistence.service().retrieve(tenantScreening.incomes());
                 Persistence.service().retrieve(tenantScreening.assets());
                 Persistence.service().retrieve(tenantScreening.guarantors());
+                Persistence.service().retrieve(tenantScreening.equifaxApproval());
             }
 
             Persistence.service().retrieve(tenant.emergencyContacts());

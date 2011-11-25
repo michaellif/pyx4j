@@ -44,8 +44,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
-import com.propertyvista.domain.tenant.ptapp.MasterApplication.Decision;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
+import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -113,6 +113,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         Persistence.service().persist(summary.lease());
 
+        Double overalPercentageApproval = 0.0, maxPercentageApproval = 0.0;
+
         for (TenantSummaryGDO tenantSummary : summary.tenants()) {
             Persistence.service().persist(tenantSummary.tenant());
 
@@ -128,31 +130,34 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
+            if (!tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().isNull()) {
+                overalPercentageApproval += tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue();
+
+                if (maxPercentageApproval < tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue()) {
+                    maxPercentageApproval = tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue();
+                }
+            }
+
+            Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval());
             Persistence.service().persist(tenantSummary.tenantScreening());
 
             summary.lease().tenants().add(tenantSummary.tenantInLease());
         }
 
         MasterApplication ma = ApplicationMgr.createMasterApplication(summary.lease());
+        ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
 
-// TODO: currently - just some mockup stuff:
-        ma.status().setValue(RandomUtil.randomEnum(Status.class));
-        switch (ma.status().getValue()) {
-        case Approved:
-            ma.percenrtageApproved().setValue(80 + RandomUtil.randomDouble(20));
-            ma.suggestedDecision().setValue(Decision.Approve);
-            break;
-        case InformationRequested:
-            ma.percenrtageApproved().setValue(40 + RandomUtil.randomDouble(20));
-            ma.suggestedDecision().setValue(Decision.RequestInfo);
-            break;
-        case Declined:
-            ma.percenrtageApproved().setValue(RandomUtil.randomDouble(20));
-            ma.suggestedDecision().setValue(Decision.Decline);
-            break;
-
-        default:
-            ma.suggestedDecision().setValue(Decision.Pending);
+        if (maxPercentageApproval > 80) {
+            ma.status().setValue(Status.Approved);
+            ma.equifaxApproval().suggestedDecision().setValue(Decision.Approve);
+        } else if (overalPercentageApproval > 20) {
+            ma.status().setValue(Status.InformationRequested);
+            ma.equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
+        } else if (overalPercentageApproval > 50) {
+            ma.status().setValue(Status.Declined);
+            ma.equifaxApproval().suggestedDecision().setValue(Decision.Decline);
+        } else {
+            ma.equifaxApproval().suggestedDecision().setValue(Decision.Pending);
         }
 
         switch (ma.status().getValue()) {
@@ -167,6 +172,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         }
 
         Persistence.service().persist(summary.lease());
+        Persistence.service().persist(ma.equifaxApproval());
         Persistence.service().persist(ma);
 
 //TODO

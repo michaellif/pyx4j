@@ -29,6 +29,7 @@ public interface MasterApplicationDTO extends MasterApplication {
 
     IPrimitive<Integer> numberOfOccupants();
 
+    @Caption(name = "Number Of Co-Applicants")
     IPrimitive<Integer> numberOfCoApplicants();
 
     IPrimitive<Integer> numberOfGuarantors();
@@ -48,7 +49,7 @@ public interface MasterApplicationDTO extends MasterApplication {
     @Caption(name = "Promotions/Discounts")
     IPrimitive<Boolean> discounts();
 
-    IList<TenantInfoDTO> tenantsWithInfo();
+    IList<TenantInfoDTO> tenantInfo();
 
     IList<TenantFinancialDTO> tenantFinancials();
 

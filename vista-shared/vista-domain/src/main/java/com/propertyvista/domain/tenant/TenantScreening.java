@@ -37,6 +37,7 @@ import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.misc.EquifaxApproval;
 
 public interface TenantScreening extends IEntity {
 
@@ -103,4 +104,8 @@ public interface TenantScreening extends IEntity {
 
     @Caption(name = "Not resident of Canada")
     IPrimitive<Boolean> notCanadianCitizen();
+
+    //=============== Approval =============//
+
+    EquifaxApproval equifaxApproval();
 }

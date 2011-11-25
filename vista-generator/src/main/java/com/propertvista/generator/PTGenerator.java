@@ -66,6 +66,7 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -451,11 +452,12 @@ public class PTGenerator {
         tenantSummary.tenantScreening().legalQuestions().set(legalQuestions);
 
         createFinancialInfo(tenantSummary.tenantScreening());
+        createEquifaxApproival(tenantSummary.tenantScreening());
 
         return tenantSummary;
     }
 
-    private void createFinancialInfo(TenantScreening tenantScreening) {
+    private void createFinancialInfo(TenantScreening ts) {
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
@@ -473,11 +475,11 @@ public class PTGenerator {
 //                income.documents().add(applicationDocument);
 //            }
 
-            tenantScreening.incomes().add(income);
+            ts.incomes().add(income);
         }
 
         int minAssets = 0;
-        if (tenantScreening.incomes().size() == 0) {
+        if (ts.incomes().size() == 0) {
             minAssets = 1;
         }
 
@@ -488,7 +490,7 @@ public class PTGenerator {
             asset.percent().setValue((double) RandomUtil.randomInt(100));
             asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
 
-            tenantScreening.assets().add(asset);
+            ts.assets().add(asset);
         }
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
@@ -499,8 +501,30 @@ public class PTGenerator {
             guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
             guarantor.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
             guarantor.email().set(CommonsGenerator.createEmail(guarantor.name()));
-            tenantScreening.guarantors().add(guarantor);
+            ts.guarantors().add(guarantor);
         }
 
+    }
+
+    private void createEquifaxApproival(TenantScreening ts) {
+        // TODO: currently - just some mockup stuff:
+        ts.equifaxApproval().suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
+        switch (ts.equifaxApproval().suggestedDecision().getValue()) {
+        case Approve:
+            ts.equifaxApproval().percenrtageApproved().setValue(80 + RandomUtil.randomDouble(40));
+            ts.equifaxApproval().suggestedDecision().setValue(Decision.Approve);
+            break;
+        case RequestInfo:
+            ts.equifaxApproval().percenrtageApproved().setValue(40 + RandomUtil.randomDouble(20));
+            ts.equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
+            break;
+        case Decline:
+            ts.equifaxApproval().percenrtageApproved().setValue(RandomUtil.randomDouble(20));
+            ts.equifaxApproval().suggestedDecision().setValue(Decision.Decline);
+            break;
+
+        default:
+            ts.equifaxApproval().suggestedDecision().setValue(Decision.Pending);
+        }
     }
 }

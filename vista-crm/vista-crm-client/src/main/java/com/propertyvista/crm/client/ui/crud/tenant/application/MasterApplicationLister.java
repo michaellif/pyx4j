@@ -31,9 +31,11 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
                 new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode()).sortable(!VistaTODO.recurciveQueryCriteria).build(),
                 new MemberColumnDescriptor.Builder(proto().lease().unit(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).build(),
-                new MemberColumnDescriptor.Builder(proto().numberOfOccupants(), false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().numberOfCoApplicants(), true).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().numberOfGuarantors(), true).sortable(false).build(),
+
+                new MemberColumnDescriptor.Builder(proto().numberOfOccupants(), false).sortable(false).title(i18n.tr("Occupants")).build(),
+                new MemberColumnDescriptor.Builder(proto().numberOfCoApplicants(), true).sortable(false).title(i18n.tr("Applicants")).build(),
+                new MemberColumnDescriptor.Builder(proto().numberOfGuarantors(), true).sortable(false).title(i18n.tr("Guarantors")).build(),
+
                 new MemberColumnDescriptor.Builder(proto().rentPrice(), true).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().parkingPrice(), false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().otherPrice(), false).sortable(false).build(),
@@ -50,11 +52,10 @@ public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
 
                 new MemberColumnDescriptor.Builder(proto().status(), true).build(),
 
-                new MemberColumnDescriptor.Builder(proto().percenrtageApproved(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().suggestedDecision(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().equifaxApproval().percenrtageApproved(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decidedBy(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decisionDate(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().decisionReason(), false).build() });
     }
-
 }

@@ -31,8 +31,11 @@ public class TenantInLeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Tena
     protected void enhanceDTO(TenantInLease in, TenantInLeaseDTO dto, boolean fromList) {
 
         TenantInLeaseRetriever tr = new TenantInLeaseRetriever(in.getPrimaryKey(), true);
-        if (!tr.tenantScreening.isEmpty() && !tr.tenantScreening.incomes().isEmpty()) {
-            dto.incomeSource().setValue(tr.tenantScreening.incomes().get(0).incomeSource().getValue());
+        if (!tr.tenantScreening.isEmpty()) {
+            if (!tr.tenantScreening.incomes().isEmpty()) {
+                dto.incomeSource().setValue(tr.tenantScreening.incomes().get(0).incomeSource().getValue());
+            }
+            dto.equifaxApproval().set(tr.tenantScreening.equifaxApproval());
         }
 
         Persistence.service().retrieve(dto.application());

@@ -24,6 +24,7 @@ import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
+import com.propertyvista.misc.EquifaxApproval;
 
 @Transient
 public interface TenantFinancialDTO extends IEntity {
@@ -41,4 +42,6 @@ public interface TenantFinancialDTO extends IEntity {
 
     @Caption(name = "Guarantor(s)")
     IList<TenantGuarantor> guarantors();
+
+    EquifaxApproval equifaxApproval();
 }

@@ -13,10 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,6 +43,7 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
+import com.propertyvista.dto.TenantInfoDTO;
 
 public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<MasterApplicationDTO> implements MasterApplicationViewerView {
 
@@ -51,6 +58,8 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
     private final Button declineAction;
 
     private final Button cancelAction;
+
+    private final Button checkAction;
 
     private static final String APPROVE = i18n.tr("Approve");
 
@@ -127,6 +136,21 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         });
         addToolbarItem(cancelAction.asWidget());
 
+        checkAction = new Button(i18n.tr("Equifax Check Query"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new ShowPopUpBox<SelectTenantsBox>(new SelectTenantsBox()) {
+                    @Override
+                    protected void onClose(SelectTenantsBox box) {
+                        if (box.isOk()) {
+//                            ((MasterApplicationViewerView.Presenter) presenter).decline(box.updateValue(form.getValue(), Status.Declined));
+                        }
+                    }
+                };
+            }
+        });
+        addToolbarItem(checkAction.asWidget());
+
         //set main form here: 
         setForm(new MasterApplicationEditorForm(new CrmViewersComponentFactory()));
     }
@@ -178,4 +202,59 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         }
     }
 
+    private class SelectTenantsBox extends OkCancelBox {
+
+        private ListBox list;
+
+        private List<TenantInfoDTO> selectedItems;
+
+        public SelectTenantsBox() {
+            super(i18n.tr("Select Tenants To Check"));
+            setContent(createContent());
+        }
+
+        protected Widget createContent() {
+            okButton.setEnabled(false);
+
+            list = new ListBox(true);
+            list.addChangeHandler(new ChangeHandler() {
+                @Override
+                public void onChange(ChangeEvent event) {
+                    okButton.setEnabled(list.getSelectedIndex() >= 0);
+                }
+            });
+
+            for (TenantInfoDTO item : form.getValue().tenantInfo()) {
+                list.addItem(item.person().name().getStringView(), item.id().toString());
+            }
+
+            list.setVisibleItemCount(5);
+            list.setWidth("100%");
+            return list.asWidget();
+        }
+
+        @Override
+        protected void setSize() {
+            setSize("350px", "100px");
+        }
+
+        @Override
+        protected boolean onOk() {
+            selectedItems = new ArrayList<TenantInfoDTO>(4);
+            for (int i = 0; i < list.getItemCount(); ++i) {
+                if (list.isItemSelected(i)) {
+                    for (TenantInfoDTO item : form.getValue().tenantInfo()) {
+                        if (list.getValue(i).contentEquals(item.id().toString())) {
+                            selectedItems.add(item);
+                        }
+                    }
+                }
+            }
+            return super.onOk();
+        }
+
+        protected List<TenantInfoDTO> getSelectedItems() {
+            return selectedItems;
+        }
+    }
 }
