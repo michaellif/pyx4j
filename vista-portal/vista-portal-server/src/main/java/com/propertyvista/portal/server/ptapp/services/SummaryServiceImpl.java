@@ -74,6 +74,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             summary = EntityFactory.create(Summary.class);
             summary.application().set(PtAppContext.getCurrentUserApplication());
         } else {
+            Persistence.service().retrieve(summary.application());
             Persistence.service().retrieve(summary.application().signature());
         }
 

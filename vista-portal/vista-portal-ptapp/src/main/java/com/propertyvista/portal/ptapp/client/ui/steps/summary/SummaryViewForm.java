@@ -482,7 +482,14 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
     @Override
     public boolean isValid() {
-        return (super.isValid() && get(proto().application().signature().agree()).isValid() && get(proto().application().signature().fullName()).isValid());
+        boolean result = true;
+        if (!getValue().application().signature().signed().isBooleanTrue()) {
+            result = (get(proto().application().signature().agree()).isValid() && get(proto().application().signature().fullName()).isValid());
+            if (result) {
+                getValue().application().signature().signed().setValue(true);
+            }
+        }
+        return result;
     }
 
     // Internals:
