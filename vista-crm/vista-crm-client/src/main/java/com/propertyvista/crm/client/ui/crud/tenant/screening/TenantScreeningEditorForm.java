@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -52,6 +53,8 @@ import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.misc.BusinessRules;
 
 public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
+
+    private static final I18n i18n = I18n.get(TenantScreeningEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 

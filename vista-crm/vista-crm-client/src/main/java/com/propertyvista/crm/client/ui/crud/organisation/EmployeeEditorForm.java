@@ -26,6 +26,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -39,6 +40,8 @@ import com.propertyvista.domain.company.AssignedPortfolio;
 import com.propertyvista.domain.company.ManagedEmployee;
 
 public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
+
+    private static final I18n i18n = I18n.get(EmployeeEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 

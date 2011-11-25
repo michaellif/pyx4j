@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
@@ -45,6 +46,8 @@ import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
 public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBillView {
+
+    private static final I18n i18n = I18n.get(CurrentBillForm.class);
 
     private Presenter presenter;
 

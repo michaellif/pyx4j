@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
@@ -40,6 +41,8 @@ import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
+
+    private static final I18n i18n = I18n.get(TenantEditorForm.class);
 
     private final FormFlexPanel person = new FormFlexPanel();
 

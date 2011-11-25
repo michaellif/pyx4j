@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
@@ -47,6 +48,8 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
 public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod> {
+
+    private static final I18n i18n = I18n.get(NewPaymentMethodForm.class);
 
     private FlowPanel paymentTypeImagesPanel;
 

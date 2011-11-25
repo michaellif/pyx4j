@@ -19,11 +19,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.EmergencyContact;
 
 public class EmergencyContactEditor extends CEntityDecoratableEditor<EmergencyContact> {
+
+    private static final I18n i18n = I18n.get(EmergencyContactEditor.class);
 
     private final boolean twoColumns;
 

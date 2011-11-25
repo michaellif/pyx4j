@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -31,6 +32,8 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 public class ShowingEditorForm extends CrmEntityForm<Showing> {
+
+    private static final I18n i18n = I18n.get(ShowingEditorForm.class);
 
     public ShowingEditorForm() {
         this(new CrmEditorsComponentFactory());

@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -45,6 +46,8 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
 class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
+
+    private static final I18n i18n = I18n.get(ChargeItemEditor.class);
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 

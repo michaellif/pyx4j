@@ -23,6 +23,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -33,6 +34,8 @@ import com.propertyvista.domain.company.AssignedBuilding;
 import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
+
+    private static final I18n i18n = I18n.get(PortfolioEditorForm.class);
 
     public PortfolioEditorForm() {
         super(Portfolio.class, new CrmEditorsComponentFactory());
