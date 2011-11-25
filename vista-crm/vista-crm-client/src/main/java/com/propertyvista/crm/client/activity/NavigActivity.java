@@ -101,13 +101,13 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder(i18n.tr("Tenants"), CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(), CrmImages.INSTANCE.tenantsActive());
         folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
         folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
-        folder.addNavigItem(new CrmSiteMap.Tenants.MasterApplication());
         list.add(folder);
 
         //Marketing
-        folder = new NavigFolder(i18n.tr("Marketing & Sales"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
+        folder = new NavigFolder(i18n.tr("Marketing & Leasing"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
                 CrmImages.INSTANCE.marketingActive());
         folder.addNavigItem(new Marketing.Lead());
+        folder.addNavigItem(new CrmSiteMap.Tenants.MasterApplication());
         list.add(folder);
 
         //LegalAndCollections
