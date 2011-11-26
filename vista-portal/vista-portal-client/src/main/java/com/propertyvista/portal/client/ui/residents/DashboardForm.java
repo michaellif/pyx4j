@@ -15,8 +15,10 @@ package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -31,6 +33,8 @@ import com.pyx4j.widgets.client.RateIt;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.Message.MessageType;
+import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.portal.dto.BillInfoDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
@@ -68,7 +72,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
         int row = -1;
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("COMMUNICATION"));
-        leftPanel.setWidget(++row, 0, inject(proto().notifications(), new AlertsViewer()));
+        leftPanel.setWidget(++row, 0, inject(proto().notifications(), new CommunicationViewer()));
 
         SimplePanel rightPanelHolder = new SimplePanel();
         FormFlexPanel rightPanel = new FormFlexPanel();
@@ -106,19 +110,52 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
 
     }
 
-    class AlertsViewer extends CEntityViewer<IList<Message>> {
+    class CommunicationViewer extends CEntityViewer<IList<Message>> {
 
         @Override
         public IsWidget createContent(IList<Message> value) {
-            VerticalPanel container = new VerticalPanel();
+
+            FlexTable container = new FlexTable();
+
+            container.getElement().getStyle().setProperty("borderCollapse", "collapse");
+
+            container.setWidth("100%");
+            container.getColumnFormatter().setWidth(0, "35px");
+            container.getColumnFormatter().setWidth(1, "250px");
+            container.getColumnFormatter().setWidth(2, "75px");
+
+            container.setHTML(0, 1, i18n.tr("Subject"));
+            container.setHTML(0, 2, i18n.tr("Date"));
+            container.getRowFormatter().getElement(0).getStyle().setBackgroundColor("#eee");
+            container.getRowFormatter().getElement(0).getStyle().setProperty("lineHeight", "35px");
+            container.getRowFormatter().getElement(0).getStyle().setProperty("color", "#888");
+
+            int row = 0;
+
             for (Message message : value) {
-                HTML html = new HTML(message.subject().getValue() + "-" + message.text().getValue() + "-" + message.type().getValue());
-
-                html.getElement().getStyle().setProperty("height", "5em");
-
-                container.add(html);
+                container.setWidget(++row, 0, getIcon(message.type().getValue()));
+                container.getCellFormatter().getElement(row, 0).getStyle().setPadding(4, Unit.PX);
+                container.setHTML(row, 1, message.subject().getValue());
+                container.setHTML(row, 2, message.date().getStringView());
+                container.getRowFormatter().getElement(row).getStyle().setProperty("height", "45px");
+                container.getRowFormatter().getElement(row).getStyle().setProperty("borderBottom", "dotted 1px #aaa");
             }
             return container;
+        }
+
+        private Image getIcon(MessageType messageType) {
+            switch (messageType) {
+            case communication:
+                return new Image(PortalImages.INSTANCE.communicationMessage());
+            case maintananceAlert:
+                return new Image(PortalImages.INSTANCE.communicationMaintanancee());
+            case paymnetPastDue:
+            case paymentMethodExpired:
+                return new Image(PortalImages.INSTANCE.communicationAlert());
+            default:
+                break;
+            }
+            return new Image(PortalImages.INSTANCE.communicationMessage());
         }
 
     }

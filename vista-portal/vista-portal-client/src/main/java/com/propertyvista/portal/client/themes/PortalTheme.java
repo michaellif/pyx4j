@@ -65,7 +65,7 @@ public class PortalTheme extends VistaTheme {
                 super.initStyles();
 
                 Style style = new Style(".", StyleName.FormFlexPanelH1);
-                style.addProperty("margin", "0 0 4px 0");
+                style.addProperty("margin", "0");
                 addStyle(style);
 
                 style = new Style(".", StyleName.FormFlexPanelH1Label);
