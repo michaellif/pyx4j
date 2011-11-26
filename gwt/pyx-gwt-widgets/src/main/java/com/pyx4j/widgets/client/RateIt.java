@@ -36,64 +36,75 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme.StyleName;
+
 public class RateIt extends FocusPanel implements HasValueChangeHandlers<Integer> {
 
-    private int userRating;
+    private static I18n i18n = I18n.get(RateIt.class);
 
-    private boolean rated = false;
+    private int rating;
 
-    private double rating;
+    private final int maxRating;
 
-    public RateIt(double rating, int maxRating) {
-        this(rating, maxRating, ImageFactory.getImages().rateEmptyStar(), ImageFactory.getImages().rateFullStar());
+    private final SimplePanel ratingBar;
+
+    private final SimplePanel ratingStars;
+
+    private final int starWidth;
+
+    public RateIt(int maxRating) {
+        this(maxRating, ImageFactory.getImages().rateEmptyStar(), ImageFactory.getImages().rateFullStar());
     }
 
-    public RateIt(final double rating, final int maxRating, ImageResource emptyStarImage, ImageResource fullStarImage) {
+    public RateIt(final int maxRating, ImageResource emptyStarImage, ImageResource fullStarImage) {
+
+        this.maxRating = maxRating;
+
+        setStyleName(StyleName.RateIt.name());
 
         FlowPanel container = new FlowPanel();
         setWidget(container);
 
-        SimplePanel ratingBar = new SimplePanel();
+        ratingBar = new SimplePanel();
+        ratingBar.setStyleName(StyleName.RateItBar.name());
+
         container.add(ratingBar);
         ratingBar.getElement().getStyle().setFloat(Float.LEFT);
         ratingBar.getElement().getStyle().setProperty("background", "url('" + emptyStarImage.getSafeUri().asString() + "') repeat-x 0%");
 
-        final int starWidth = emptyStarImage.getWidth();
+        starWidth = emptyStarImage.getWidth();
         int starHeight = emptyStarImage.getHeight();
 
         ratingBar.setWidth(starWidth * maxRating + "px");
         ratingBar.setHeight(starHeight + "px");
 
-        final SimplePanel ratingStars = new SimplePanel();
+        ratingStars = new SimplePanel();
         ratingStars.getElement().getStyle().setFloat(Float.LEFT);
         ratingStars.getElement().getStyle().setProperty("background", "url('" + fullStarImage.getSafeUri().asString() + "') repeat-x 0%");
-        ratingStars.setWidth(0 + "px");
+        ratingStars.setWidth("0px");
         ratingStars.setHeight(starHeight + "px");
         ratingBar.setWidget(ratingStars);
 
         ratingBar.addDomHandler(new MouseOutHandler() {
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                if (rated) {
-                    ratingStars.setWidth(userRating * starWidth + "px");
-                } else {
-                    ratingStars.setWidth(rating * starWidth + "px");
-                }
+                ratingStars.setWidth(rating * starWidth + "px");
             }
         }, MouseOutEvent.getType());
 
         ratingBar.addDomHandler(new MouseMoveHandler() {
             @Override
             public void onMouseMove(MouseMoveEvent event) {
-                ratingStars.setWidth(((int) ((float) (event.getX() - 1) / starWidth) + 1) * starWidth + "px");
+                showRating(convertCoordinateToRating(event.getX()));
             }
         }, MouseMoveEvent.getType());
 
         ratingBar.addDomHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                userRating = ((int) ((float) event.getX() / starWidth) + 1);
-                rated = true;
+                rating = convertCoordinateToRating(event.getX());
+                ValueChangeEvent.fire(RateIt.this, rating);
             }
         }, ClickEvent.getType());
 
@@ -102,37 +113,27 @@ public class RateIt extends FocusPanel implements HasValueChangeHandlers<Integer
 
     }
 
-    public void setUserRating(int rating) {
-        setUserRating(rating, false);
+    private int convertCoordinateToRating(int x) {
+        return (int) ((float) (x - 1) / starWidth) + 1;
     }
 
-    public int getUserRating() {
-        return userRating;
-    }
-
-    public boolean isRated() {
-        return rated;
-    }
-
-    public double getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(int rating) {
         this.rating = rating;
+        showRating(rating);
+    }
+
+    protected void showRating(int rating) {
+        ratingStars.setWidth(rating * starWidth + "px");
+        ratingBar.setTitle(rating + i18n.tr(" out of ") + maxRating);
     }
 
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Integer> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
-    }
-
-    protected void setUserRating(int rating, boolean fireEvents) {
-        this.userRating = rating;
-        if (fireEvents) {
-            this.rated = true;
-            ValueChangeEvent.fire(this, userRating);
-        }
     }
 
 }

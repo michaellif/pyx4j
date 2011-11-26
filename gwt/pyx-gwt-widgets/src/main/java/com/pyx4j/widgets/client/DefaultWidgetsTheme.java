@@ -34,7 +34,7 @@ public class DefaultWidgetsTheme extends Theme {
 
         Button, ButtonContent, ButtonText,
 
-        RateIt
+        RateIt, RateItBar
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -50,6 +50,7 @@ public class DefaultWidgetsTheme extends Theme {
         initListBoxStyle();
         initButtonStyle();
         initToolbarStyle();
+        initRateItStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -132,6 +133,13 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("margin-left", "8px");
         style.addProperty("height", "20px");
         style.addProperty("display", "inline-block");
+        addStyle(style);
+
+    }
+
+    protected void initRateItStyle() {
+        Style style = new Style(".", StyleName.RateItBar);
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
     }
