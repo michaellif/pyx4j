@@ -71,8 +71,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     private boolean openEditor;
 
-    private List<Sort> sorting;
-
     public ListerBase(Class<E> clazz) {
         setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Lister.name());
 
@@ -354,17 +352,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     @Override
     public List<Sort> getSorting() {
-
-        sorting = new ArrayList<Sort>(2);
-        ColumnDescriptor<E> primarySortColumn = getDataTablePanel().getDataTableModel().getSortColumn();
-        if (primarySortColumn != null) {
-            sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
-        }
-        ColumnDescriptor<E> secondarySortColumn = getDataTablePanel().getDataTableModel().getSecondarySortColumn();
-        if (secondarySortColumn != null) {
-            sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
-        }
-        return sorting;
+        return getDataTablePanel().getDataTableModel().getSortCriteria();
     }
 
     @Override

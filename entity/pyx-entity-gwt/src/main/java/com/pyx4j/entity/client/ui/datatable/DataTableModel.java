@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 /*
  * RowData defines one row in a Sortable Table
@@ -137,6 +138,19 @@ public class DataTableModel<E extends IEntity> {
 
     public void setSecondarySortColumn(ColumnDescriptor<E> sortColumn) {
         this.secondarySortColumn = sortColumn;
+    }
+
+    public List<Sort> getSortCriteria() {
+        List<Sort> sorting = new ArrayList<Sort>(2);
+        ColumnDescriptor<E> primarySortColumn = getSortColumn();
+        if (primarySortColumn != null) {
+            sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
+        }
+        ColumnDescriptor<E> secondarySortColumn = getSecondarySortColumn();
+        if (secondarySortColumn != null) {
+            sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
+        }
+        return sorting;
     }
 
     public ArrayList<DataItem<E>> getData() {
