@@ -128,25 +128,21 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                         for (NavigItemAnchor anchor : navigFolderWidget.getItems()) {
                             //matching new content to the existing one
                             boolean itemFound = false;
-                            AppPlace foundPlace = null;
                             for (AppPlace place : navigFolder.getNavigItems()) {
                                 if (anchor.equals(place)) {
                                     itemFound = true;
-                                    foundPlace = place;
                                     break;
                                 }
                             }
-
-                            if (itemFound) {
-                                anchor.update(foundPlace);
-                            } else {
+                            if (!itemFound) {
                                 //existing item is obsolete remove it
                                 obsoleteAnchors.add(anchor);
                             }
                         }
 
-                        for (NavigItemAnchor oa : obsoleteAnchors)
+                        for (NavigItemAnchor oa : obsoleteAnchors) {
                             navigFolderWidget.removeItem(oa);
+                        }
 
                         //now the other way around - match old content to the new one to find fresh items
                         for (AppPlace place : navigFolder.getNavigItems()) {
@@ -154,12 +150,14 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                             for (NavigItemAnchor anchor : navigFolderWidget.getItems()) {
                                 if (anchor.equals(place)) {
                                     itemFound = true;
+                                    anchor.update(place); // update with new place data (caption/description)
                                     break;
                                 }
                             }
-                            if (!itemFound)
+                            if (!itemFound) {
                                 //brand new item
                                 navigFolderWidget.addItem(new NavigItemAnchor(place));
+                            }
                         }
                         break;
 
@@ -189,6 +187,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                     }
                 }
                 if (folderFound) {
+// TODO not sure if we need this:                    
 //                    navigFolderWidget.updateItems(navigFolder);
 //                    navigFolderWidget = null; // just update content
                 } else {
@@ -398,7 +397,13 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
         @Override
         public boolean equals(Object obj) {
-            return (place != null ? place.equals(obj) : false);
+            if (obj instanceof NavigItemAnchor) {
+                return (place != null ? place.equals(((NavigItemAnchor) obj).place) : false);
+            } else if (obj instanceof AppPlace) {
+                return (place != null ? place.equals(obj) : false);
+            } else {
+                return false;
+            }
         }
 
         @Override
