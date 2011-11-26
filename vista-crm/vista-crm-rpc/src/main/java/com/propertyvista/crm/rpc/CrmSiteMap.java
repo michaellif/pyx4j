@@ -170,6 +170,9 @@ public class CrmSiteMap implements SiteMap {
 
         public static class Application extends CrudAppPlace {
         }
+
+        public static class EquifaxResult extends CrudAppPlace {
+        }
     }
 
     public static class Marketing extends AppPlace {

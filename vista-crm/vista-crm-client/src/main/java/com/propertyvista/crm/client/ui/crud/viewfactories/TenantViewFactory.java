@@ -40,6 +40,8 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningViewerView;
@@ -81,6 +83,9 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new ApplicationViewerViewImpl());
             } else if (ApplicationEditorView.class.equals(type)) {
                 map.put(type, new ApplicationEditorViewImpl());
+
+            } else if (EquifaxResultViewerView.class.equals(type)) {
+                map.put(type, new EquifaxResultViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

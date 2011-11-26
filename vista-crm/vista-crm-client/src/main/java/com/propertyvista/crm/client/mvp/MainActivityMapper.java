@@ -82,6 +82,7 @@ import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewer
 import com.propertyvista.crm.client.activity.crud.settings.SiteActivity;
 import com.propertyvista.crm.client.activity.crud.settings.SiteEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.SiteViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningEditorActivity;
@@ -121,6 +122,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.misc.EquifaxResult;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -144,10 +146,13 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Parking.class);
         } else if (entityClass.equals(Roof.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Roof.class);
+
         } else if (entityClass.equals(Lease.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Lease.class);
         } else if (entityClass.equals(MasterApplication.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
+        } else if (entityClass.equals(EquifaxResult.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
         }
 
         return null;
@@ -427,6 +432,13 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case lister:
                         activity = new ApplicationListerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Tenants.EquifaxResult) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case viewer:
+                        activity = new EquifaxResultViewerActivity(place);
                         break;
                     }
 

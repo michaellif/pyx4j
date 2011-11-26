@@ -530,6 +530,6 @@ public class PTGenerator {
         }
 
         ts.equifaxApproval().checkResultDetails().set(EntityFactory.create(EquifaxResult.class));
-        ts.equifaxApproval().checkResultDetails().details().setValue(CommonsGenerator.lipsumShort());
+        ts.equifaxApproval().checkResultDetails().details().setValue(CommonsGenerator.lipsum());
     }
 }

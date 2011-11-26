@@ -7,18 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 25, 2011
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.misc;
+package com.propertyvista.crm.server.services;
 
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.crm.rpc.services.EquifaxResultCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.misc.EquifaxResult;
 
-@ToStringFormat("View Details")
-public interface EquifaxResult extends IEntity {
+public class EquifaxResultCrudServiceImpl extends GenericCrudServiceImpl<EquifaxResult> implements EquifaxResultCrudService {
 
-    IPrimitive<String> details();
+    public EquifaxResultCrudServiceImpl() {
+        super(EquifaxResult.class);
+    }
 }

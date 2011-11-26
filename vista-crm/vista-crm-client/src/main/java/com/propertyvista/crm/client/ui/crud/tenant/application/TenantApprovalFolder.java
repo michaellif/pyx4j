@@ -17,9 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.misc.EquifaxResult;
 
 public class TenantApprovalFolder extends VistaTableFolder<TenantFinancialDTO> {
 
@@ -33,6 +38,15 @@ public class TenantApprovalFolder extends VistaTableFolder<TenantFinancialDTO> {
         columns.add(new EntityFolderColumnDescriptor(proto().person(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().equifaxApproval().percenrtageApproved(), "5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().equifaxApproval().suggestedDecision(), "25em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().equifaxApproval().checkResultDetails(), "10em"));
         return columns;
+    }
+
+    @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member.getValueClass().equals(EquifaxResult.class)) {
+            return new CEntityCrudHyperlink<EquifaxResult>(MainActivityMapper.getCrudAppPlace(EquifaxResult.class));
+        }
+        return super.create(member);
     }
 }

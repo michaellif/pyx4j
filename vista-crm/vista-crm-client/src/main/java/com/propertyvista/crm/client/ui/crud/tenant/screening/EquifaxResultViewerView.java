@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 25, 2011
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.misc;
+package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-@ToStringFormat("View Details")
-public interface EquifaxResult extends IEntity {
+import com.propertyvista.misc.EquifaxResult;
 
-    IPrimitive<String> details();
+public interface EquifaxResultViewerView extends IViewerView<EquifaxResult> {
+
 }
