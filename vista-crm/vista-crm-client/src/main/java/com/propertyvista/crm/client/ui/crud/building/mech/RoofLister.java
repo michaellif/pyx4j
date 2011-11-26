@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -29,10 +25,17 @@ public class RoofLister extends ListerBase<RoofDTO> {
         super(RoofDTO.class, CrmSiteMap.Properties.Roof.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
 
-        List<ColumnDescriptor<RoofDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<RoofDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().year(), true));
-        setColumnDescriptors(columnDescriptors);
-    }
+        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().type()).build(),
 
+        new MemberColumnDescriptor.Builder(proto().year()).build(),
+
+        new MemberColumnDescriptor.Builder(proto().license().number(), false).build(),
+
+        new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(),
+
+        new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(),
+
+        new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build());
+
+    }
 }
