@@ -79,6 +79,8 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         if ((EnumSet.of(PaymentType.Amex, PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.paymentMethod().type().getValue()))
                 && ("2011".equals(payment.paymentMethod().creditCard().number().getValue()))) {
             // Ok
+        } else if (PaymentType.Echeck == payment.paymentMethod().type().getValue()) {
+            // Ok for now
         } else {
             throw new UserRuntimeException(i18n.tr("Your Card Has Been Declined"));
         }

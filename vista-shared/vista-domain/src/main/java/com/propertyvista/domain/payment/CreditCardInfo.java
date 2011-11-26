@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,6 +30,7 @@ public interface CreditCardInfo extends IEntity {
     @NotNull
     @Caption(name = "Card Number")
     @MemberColumn(name = "cardNumber")
+    @Transient
     IPrimitive<String> number();
 
     @NotNull
@@ -38,6 +40,7 @@ public interface CreditCardInfo extends IEntity {
 
     @NotNull
     @Caption(name = "Card Security Code")
+    @Transient
     IPrimitive<String> securityCode();
 
     @NotNull
