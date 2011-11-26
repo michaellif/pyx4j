@@ -67,6 +67,7 @@ import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.EquifaxApproval.Decision;
+import com.propertyvista.misc.EquifaxResult;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.domain.ApplicationDocumentData;
@@ -415,6 +416,7 @@ public class PTGenerator {
         tenantSummary.tenant().emergencyContacts().add(ec2);
 
         // Screening
+        tenantSummary.tenantScreening().screeningDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
 
@@ -526,5 +528,8 @@ public class PTGenerator {
         default:
             ts.equifaxApproval().suggestedDecision().setValue(Decision.Pending);
         }
+
+        ts.equifaxApproval().checkResultDetails().set(EntityFactory.create(EquifaxResult.class));
+        ts.equifaxApproval().checkResultDetails().details().setValue(CommonsGenerator.lipsumShort());
     }
 }

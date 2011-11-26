@@ -138,6 +138,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
+            Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval().checkResultDetails());
             Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval());
             Persistence.service().persist(tenantSummary.tenantScreening());
 
@@ -172,6 +173,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         }
 
         Persistence.service().persist(summary.lease());
+        Persistence.service().persist(ma.equifaxApproval().checkResultDetails());
         Persistence.service().persist(ma.equifaxApproval());
         Persistence.service().persist(ma);
 

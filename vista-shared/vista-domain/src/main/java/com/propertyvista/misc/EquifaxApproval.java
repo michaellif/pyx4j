@@ -49,4 +49,6 @@ public interface EquifaxApproval extends IEntity {
     IPrimitive<Double> percenrtageApproved();
 
     IPrimitive<Decision> suggestedDecision();
+
+    EquifaxResult checkResultDetails();
 }

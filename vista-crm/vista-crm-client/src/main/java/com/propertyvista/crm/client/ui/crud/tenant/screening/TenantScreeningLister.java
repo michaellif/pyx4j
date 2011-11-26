@@ -35,6 +35,9 @@ public class TenantScreeningLister extends ListerBase<TenantScreening> {
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().secureIdentifier(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().notCanadianCitizen(), true));
 
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().equifaxApproval().percenrtageApproved(), true));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().equifaxApproval().suggestedDecision(), true));
+
         setColumnDescriptors(columnDescriptors);
 
     }
