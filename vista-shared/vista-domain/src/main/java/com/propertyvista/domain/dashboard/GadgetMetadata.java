@@ -14,7 +14,6 @@
 package com.propertyvista.domain.dashboard;
 
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -86,7 +85,6 @@ public interface GadgetMetadata extends ISharedUserEntity {
     IPrimitive<String> description();
 
     // Save gadgets Settings separately
-    @EmbeddedEntity
     AbstractGadgetSettings settings();
 
     /*
