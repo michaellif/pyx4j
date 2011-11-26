@@ -13,16 +13,18 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.completion;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordViewImpl;
 
@@ -38,31 +40,32 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
     public CompletionViewImpl() {
 
-        titleHtml = new HTML("Application completed!");
-        add(titleHtml);
+        VerticalPanel main = new VerticalPanel();
 
-        messageHtml = new HTML("Application completed!");
-        add(messageHtml);
+        titleHtml = new HTML(HtmlUtils.h2(i18n.tr("Application completed!")));
+        main.add(titleHtml);
+        main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);
+
+        messageHtml = new HTML(i18n.tr("Congratulation! You have successfully completed your application."));
+        main.add(messageHtml);
+        main.setCellHorizontalAlignment(messageHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
         actionButton = new Button("Back");
         actionButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         actionButton.addClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
 
             }
-
         });
-        actionButton.getElement().getStyle().setMarginLeft(6.4, Unit.EM);
-        actionButton.getElement().getStyle().setMarginRight(1, Unit.EM);
-        actionButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        add(actionButton);
+        actionButton.getElement().getStyle().setMarginTop(1, Unit.EM);
+        main.add(actionButton);
+        main.setCellHorizontalAlignment(actionButton, HasHorizontalAlignment.ALIGN_CENTER);
 
-        setWidth("100%");
+        main.setWidth("100%");
+        add(main);
 
-        getElement().getStyle().setMarginTop(1, Unit.EM);
         getElement().getStyle().setMarginBottom(1, Unit.EM);
+        setWidth("100%");
     }
-
 }
