@@ -59,7 +59,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         void onSelect(E selectedItem);
     }
 
-    protected static I18n i18n = I18n.get(ListerBase.class);
+    private static final I18n i18n = I18n.get(ListerBase.class);
 
     protected final DataTablePanel<E> dataTablePanel;
 
