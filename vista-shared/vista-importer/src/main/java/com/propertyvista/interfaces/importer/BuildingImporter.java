@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -104,14 +103,6 @@ public class BuildingImporter extends ImportPersister {
 
         ImportCounters counters = new ImportCounters();
         counters.buildings++;
-
-        // Set defaults
-        if (buildingIO.type().isNull()) {
-            buildingIO.type().setValue(BuildingInfo.Type.residential);
-        }
-        if (buildingIO.marketing().visibility().isNull()) {
-            buildingIO.marketing().visibility().setValue(PublicVisibilityType.global);
-        }
 
         if (buildingIO.propertyCode().isNull()) {
             throw new UserRuntimeException("propertyCode can't be empty");

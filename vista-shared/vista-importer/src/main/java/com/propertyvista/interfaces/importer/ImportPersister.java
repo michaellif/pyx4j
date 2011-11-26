@@ -27,10 +27,12 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.interfaces.importer.converter.BuildingAmenityConverter;
 import com.propertyvista.interfaces.importer.converter.BuildingConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
@@ -52,9 +54,23 @@ class ImportPersister {
 
     private final static Logger log = LoggerFactory.getLogger(ImportPersister.class);
 
+    // Set defaults
+    protected void setBuildingDfaults(Building building) {
+        if (building.info().type().isNull()) {
+            building.info().type().setValue(BuildingInfo.Type.residential);
+        }
+        if (building.marketing().visibility().isNull()) {
+            building.marketing().visibility().setValue(PublicVisibilityType.global);
+        }
+    }
+
+    // Save building
     protected Building createBuilding(BuildingIO buildingIO, MediaConfig mediaConfig) {
-        // Save building
         Building building = new BuildingConverter().createDBO(buildingIO);
+
+        // Set defaults
+        setBuildingDfaults(building);
+
         // Save Employee or find existing one
         for (OrganizationContact organisationContact : building.contacts().contacts()) {
             if (!organisationContact.person().isNull()) {
