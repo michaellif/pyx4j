@@ -1,6 +1,5 @@
 .vista-pmsite-residentPage {
     color: ${foreground_100};
-    font-size: 16px;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-content {
@@ -34,7 +33,7 @@
 
 .vista-pmsite-residentPage .secondaryNavig ul li {
 	color: ${object2_100};
-	font-size: 17px;
+	font-size: 15px;
 	font-weight:bold;
 	height: 38px;
 	overflow: hidden;
