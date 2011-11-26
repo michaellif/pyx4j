@@ -65,7 +65,6 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     protected void addItem() {
         if (apartmentViewForm != null) {
             if (getValue().size() < maxCount) {
-
                 new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
                     @Override
                     protected void onClose(SelectFeatureBox box) {
@@ -81,7 +80,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                     }
                 };
             } else {
-                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You can't add more then {1} items here!", maxCount));
+                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more then {0} items here!", maxCount));
             }
         }
     }
