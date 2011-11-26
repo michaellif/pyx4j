@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -22,6 +23,8 @@ import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.misc.VistaTODO;
 
 public class MasterApplicationLister extends ListerBase<MasterApplicationDTO> {
+
+    private static final I18n i18n = I18n.get(MasterApplicationLister.class);
 
     public MasterApplicationLister() {
         super(MasterApplicationDTO.class, CrmSiteMap.Tenants.MasterApplication.class, false, false);

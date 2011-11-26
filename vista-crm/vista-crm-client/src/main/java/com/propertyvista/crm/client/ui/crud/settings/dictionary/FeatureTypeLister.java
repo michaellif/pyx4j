@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
@@ -28,6 +29,8 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class FeatureTypeLister extends ListerBase<ServiceItemType> {
+
+    private static final I18n i18n = I18n.get(FeatureTypeLister.class);
 
     public FeatureTypeLister() {
         super(ServiceItemType.class, CrmSiteMap.Settings.FeatureItemType.class, false, true);

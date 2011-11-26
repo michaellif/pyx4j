@@ -18,11 +18,14 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class SelectedUnitLister extends ListerBase<AptUnit> {
+
+    private static final I18n i18n = I18n.get(SelectedUnitLister.class);
 
     public SelectedUnitLister() {
         super(AptUnit.class, null, false, false);

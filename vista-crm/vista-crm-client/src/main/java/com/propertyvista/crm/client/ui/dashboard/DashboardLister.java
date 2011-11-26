@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
 
@@ -28,6 +29,8 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardLister extends ListerBase<DashboardMetadata> {
+
+    private static final I18n i18n = I18n.get(DashboardLister.class);
 
     public DashboardLister() {
         super(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class, false, true);

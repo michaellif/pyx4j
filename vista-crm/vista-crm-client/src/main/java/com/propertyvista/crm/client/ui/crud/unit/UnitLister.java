@@ -18,12 +18,15 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitLister extends ListerBase<AptUnitDTO> {
+
+    private static final I18n i18n = I18n.get(UnitLister.class);
 
     public UnitLister() {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, false, true);

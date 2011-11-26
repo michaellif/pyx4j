@@ -24,9 +24,11 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
+import com.propertyvista.crm.client.ui.crud.building.BuildingLister;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
@@ -34,6 +36,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
+
+    private static final I18n i18n = I18n.get(BuildingLister.class);
 
     private final AbstractListService<BuildingDTO> service;
 
@@ -96,7 +100,7 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
                 colh(proto().complex()),
                 colv(proto().propertyCode()),
                 colv(proto().propertyManager()),
-                colv(proto().marketing().name()),
+                colv(proto().marketing().name(), i18n.tr("Marketing Name")),
                 colv(proto().info().name()),
                 colv(proto().info().type()),
                 colh(proto().info().shape()),
