@@ -97,15 +97,6 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
             public void onChange(ColumnDescriptor<E> column) {
-                ColumnDescriptor<E> sortColumn = dataTablePanel.getDataTableModel().getSortColumn();
-                for (ColumnDescriptorEntity columnDescriptorEntity : settings.columnDescriptors()) {
-                    if (sortColumn.getColumnName().equals(columnDescriptorEntity.propertyPath().getValue())) {
-                        columnDescriptorEntity.sortingPrecedence().setValue(1);
-                        columnDescriptorEntity.sortAscending().setValue(sortColumn.isSortAscending());
-                    } else {
-                        columnDescriptorEntity.sortingPrecedence().setValue(null);
-                    }
-                }
                 populateList();
             }
         });
@@ -291,24 +282,7 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     }
 
     public List<Sort> getSorting() {
-        // FIXME review this procedure once columns can be safely persisted without duplication
-//        List<Sort> sorting = new ArrayList<Sort>(2);
-//        for (ColumnDescriptorEntity columnDescriptorEntity : settings.columnDescriptors()) {
-//            // currently we don't allow to sort by more than one column
-//            if (!columnDescriptorEntity.sortingPrecedence().isNull()) {
-//                sorting.add(ColumnDescriptorEntityToSort(columnDescriptorEntity));
-//            }
-//        }
-//
-//        return sorting;
-
-        List<Sort> sorting = new ArrayList<Sort>(2);
-        ColumnDescriptor<E> cd = dataTablePanel.getDataTableModel().getSortColumn();
-        if (cd != null) {
-            sorting.add(new Sort(cd.getColumnName(), !cd.isSortAscending()));
-        }
-        return sorting;
-
+        return dataTablePanel.getDataTableModel().getSortCriteria();
     }
 
     /**

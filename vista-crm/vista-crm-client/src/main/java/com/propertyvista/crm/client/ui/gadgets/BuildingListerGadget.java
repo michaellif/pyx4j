@@ -31,6 +31,7 @@ import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
+
     private final AbstractListService<BuildingDTO> service;
 
     @SuppressWarnings("unchecked")
@@ -55,6 +56,9 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
         EntityListCriteria<BuildingDTO> criteria = new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
         criteria.setPageSize(getPageSize());
         criteria.setPageNumber(pageNumber);
+        // apply sorts:
+        criteria.setSorts(getSorting());
+
         service.list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
             @Override
             public void onSuccess(EntitySearchResult<BuildingDTO> result) {
