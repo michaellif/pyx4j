@@ -95,7 +95,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
         rightPanel.setH1(++row, 0, 1, i18n.tr("SERVICES"), newReservations);
         rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
 
-        rightPanel.setWidget(++row, 0, new RateIt(2.5, 5));
+        rightPanel.setWidget(++row, 0, new RateIt(5));
 
         return container;
     }
