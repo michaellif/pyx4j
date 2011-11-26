@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -100,7 +101,17 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                 populateList();
             }
         });
-        // FIXME add handler for column selection (store the selected columns in settings)
+        // item selection stuff:
+        dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
+            @Override
+            public void onSelect(int selectedRow) {
+                E item = dataTablePanel.getDataTable().getSelectedItem();
+                if (item != null) {
+                    onItemSelect(item);
+                }
+            }
+        });
+        // FIXME add handler for column selection (store the selected columns in settings)        
 
         dataTablePanel.setWidth("100%");
         dataTablePanel.setFilterEnabled(isFilterRequired());
@@ -140,6 +151,12 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
     public abstract void populatePage(int pageNumber);
 
     public abstract List<ColumnDescriptor<E>> defineColumnDescriptors();
+
+    /**
+     * Actions, Override in derived class for your own select item procedure.
+     */
+    protected void onItemSelect(E item) {
+    }
 
     /**
      * Convenience method that allows to avoid a lot of unnecessary typing.

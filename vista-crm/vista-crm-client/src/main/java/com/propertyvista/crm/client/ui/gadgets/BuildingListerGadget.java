@@ -24,10 +24,13 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.domain.dashboard.GadgetMetadata;
 import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
@@ -76,6 +79,13 @@ public class BuildingListerGadget extends ListerGadgetBase<BuildingDTO> {
     protected boolean isFilterRequired() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    protected void onItemSelect(BuildingDTO item) {
+        if ((item != null) && (item.getPrimaryKey() != null)) {
+            AppSite.getPlaceController().goTo(MainActivityMapper.getCrudAppPlace(Building.class).formViewerPlace(item.getPrimaryKey()));
+        }
     }
 
     //@formatter:off
