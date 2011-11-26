@@ -13,22 +13,27 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 
 public class NewPaymentMethodActivity extends SecurityAwareActivity implements NewPaymentMethodView.Presenter {
 
     private final NewPaymentMethodView view;
+
+    private final PersonalInfoCrudService srv = GWT.create(PersonalInfoCrudService.class);
 
     public NewPaymentMethodActivity(Place place) {
         this.view = (NewPaymentMethodView) PortalViewFactory.instance(NewPaymentMethodView.class);
@@ -55,19 +60,18 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
 
     @Override
     public void onBillingAddressSameAsCurrentOne(boolean set) {
-        final PaymentMethod currentValue = view.getValue();
-        if (set) {
-// TODO  implement in service method getCurrentAddress (like in #link PaymentServiceImpl)
-//            ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
-//                @Override
-//                public void onSuccess(AddressStructured result) {
-//                    currentValue.billingAddress().set(result);
-//                    view.populate(currentValue);
-//                }
-//            });
-        } else {
-            currentValue.set(EntityFactory.create(AddressStructured.class));
-            view.populate(currentValue);
+        if (!set) {
+            return;
         }
+        final PaymentMethod currentValue = EntityFactory.create(PaymentMethod.class);
+        currentValue.set(view.getValue());
+        srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
+            @Override
+            public void onSuccess(ResidentDTO result) {
+                currentValue.billingAddress().set(result.currentAddress());
+                currentValue.sameAsCurrent().setValue(true);
+                view.populate(currentValue);
+            }
+        }, null);
     }
 }
