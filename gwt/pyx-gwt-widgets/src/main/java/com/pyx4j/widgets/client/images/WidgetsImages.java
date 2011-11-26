@@ -95,4 +95,10 @@ public interface WidgetsImages extends ClientBundle {
     @Source("slideshowRight.png")
     ImageResource previousTabDisabled();
 
+    @Source("rate-empty-star.png")
+    ImageResource rateEmptyStar();
+
+    @Source("rate-full-star.png")
+    ImageResource rateFullStar();
+
 }

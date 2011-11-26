@@ -32,7 +32,9 @@ public class DefaultWidgetsTheme extends Theme {
     public static enum StyleName implements IStyleName {
         TextBox, ListBox, Toolbar, ToolbarSeparator,
 
-        Button, ButtonContent, ButtonText
+        Button, ButtonContent, ButtonText,
+
+        RateIt
     }
 
     public static enum StyleDependent implements IStyleDependent {

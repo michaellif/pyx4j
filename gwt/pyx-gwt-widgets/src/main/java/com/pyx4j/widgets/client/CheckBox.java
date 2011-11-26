@@ -47,5 +47,6 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
         ensureDebugId(labelElem, baseID, "label");
         ensureDebugId(inputElem, baseID);
         labelElem.setHtmlFor(inputElem.getId());
+
     }
 }
