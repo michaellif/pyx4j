@@ -24,9 +24,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordViewImpl;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap.Apartment;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
@@ -55,7 +57,7 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
         actionButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(Apartment.class));
             }
         });
         actionButton.getElement().getStyle().setMarginTop(1, Unit.EM);
