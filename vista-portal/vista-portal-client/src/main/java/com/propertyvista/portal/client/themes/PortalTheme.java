@@ -122,6 +122,8 @@ public class PortalTheme extends VistaTheme {
             }
         });
 
+        addTheme(new TenantDashboardTheme());
+
         initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();

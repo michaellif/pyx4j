@@ -22,10 +22,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface ReservationDTO extends IEntity {
+public interface MaintananceDTO extends IEntity {
 
     enum Status {
-        Submitted, Approved, Completed
+        Submitted, Scheduled, Completed
     }
 
     IPrimitive<String> description();
