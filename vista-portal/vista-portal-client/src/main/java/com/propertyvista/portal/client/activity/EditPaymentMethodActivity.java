@@ -41,7 +41,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
         panel.setWidget(view);
 
         PaymentMethodDTO paymentMethod = EntityFactory.create(PaymentMethodDTO.class);
-        paymentMethod.cardNumber().setValue("XXXX XXXXX XXXX 7890");
+        paymentMethod.number().setValue("XXXX XXXXX XXXX 7890");
         paymentMethod.nameOnAccount().setValue("Mahershalalhashbaz Alibaba");
         paymentMethod.type().setValue(PaymentType.Visa);
 

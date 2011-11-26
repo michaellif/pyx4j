@@ -50,7 +50,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         PaymentMethodDTO paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
         paymentmethod.id().setValue(new Key(1l));
         paymentmethod.type().setValue(PaymentType.Visa);
-        paymentmethod.cardNumber().setValue("XXX 5566");
+        paymentmethod.number().setValue("XXX 5566");
         paymentmethod.primary().setValue(true);
         paymentmethod.billingAddress().city().setValue("Toronto");
         paymentmethod.billingAddress().streetName().setValue("Clark Ave");
@@ -61,7 +61,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
         paymentmethod.id().setValue(new Key(2l));
         paymentmethod.type().setValue(PaymentType.MasterCard);
-        paymentmethod.cardNumber().setValue("XXX 1290");
+        paymentmethod.number().setValue("XXX 1290");
         paymentmethod.primary().setValue(false);
         paymentmethod.billingAddress().city().setValue("Richmond Hill");
         paymentmethod.billingAddress().streetName().setValue("Some Street");

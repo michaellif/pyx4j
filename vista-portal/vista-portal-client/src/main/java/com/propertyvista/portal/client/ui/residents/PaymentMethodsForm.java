@@ -61,8 +61,8 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().cardNumber(), "8em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().expiry(), "14em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().number(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().expiryDate(), "14em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().nameOnAccount(), "16em"));
                 return columns;
             }

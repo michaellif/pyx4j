@@ -41,10 +41,10 @@ public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
 
         container.setH1(row++, 0, 1, i18n.tr("Edit Payment Information"));
 
-        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().cardNumber(), new CLabel())));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().number(), new CLabel())));
         container.setWidget(row++, 0, new WidgetDecorator(inject(proto().nameOnAccount(), new CLabel())));
-        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().expiry())));
-        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().verificationDigits())));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().expiryDate())));
+        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().securityCode())));
 
 //        container.add(new VistaLineSeparator(100, Unit.PCT));
 //

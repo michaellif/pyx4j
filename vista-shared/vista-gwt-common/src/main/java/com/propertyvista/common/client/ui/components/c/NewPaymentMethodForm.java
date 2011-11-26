@@ -219,10 +219,11 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().cardNumber())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().expiry())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().exactName())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().number())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().expiryDate())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().name())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().securityCode())));
+//                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
                 return panel;
             }
 
@@ -261,7 +262,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
             @Override
             public void addValidations() {
                 super.addValidations();
-                get(proto().cardNumber()).addValueValidator(new CreditCardNumberValidator());
+                get(proto().number()).addValueValidator(new CreditCardNumberValidator());
             }
         };
     }

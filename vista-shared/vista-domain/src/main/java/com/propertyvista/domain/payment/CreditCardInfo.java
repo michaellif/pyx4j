@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,16 +27,22 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface CreditCardInfo extends IEntity {
 
     @NotNull
-    IPrimitive<String> cardNumber();
+    @Caption(name = "Card Number")
+    @MemberColumn(name = "cardNumber")
+    IPrimitive<String> number();
 
     @NotNull
+    @Caption(name = "Expiry Date")
     @Editor(type = EditorType.monthyearpicker)
-    IPrimitive<LogicalDate> expiry();
+    IPrimitive<LogicalDate> expiryDate();
 
-    @Caption(name = "CSC")
-    IPrimitive<String> verificationDigits();
+    @NotNull
+    @Caption(name = "Card Security Code")
+    IPrimitive<String> securityCode();
 
-    IPrimitive<String> exactName();
+    @NotNull
+    @Caption(name = "Name On Card")
+    IPrimitive<String> name();
 
     IPrimitive<String> bankPhone();
 }

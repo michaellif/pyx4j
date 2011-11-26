@@ -53,7 +53,7 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         BillDTO bill = EntityFactory.create(BillDTO.class);
 
         PaymentMethodDTO paymentMethod = EntityFactory.create(PaymentMethodDTO.class);
-        paymentMethod.cardNumber().setValue("XXXX XXXXX XXXX 7890");
+        paymentMethod.number().setValue("XXXX XXXXX XXXX 7890");
         paymentMethod.type().setValue(PaymentType.Visa);
 
         bill.paymentMethod().set(paymentMethod);

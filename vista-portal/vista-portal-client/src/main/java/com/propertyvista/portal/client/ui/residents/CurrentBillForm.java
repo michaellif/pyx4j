@@ -93,7 +93,7 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
             paymentImage.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             paymentImage.getElement().getStyle().setMarginRight(5d, Unit.PX);
             container.add(DecorationUtils.inline(paymentImage));
-            container.add(DecorationUtils.inline(new Label(paymentMethod.cardNumber().getStringView())));
+            container.add(DecorationUtils.inline(new Label(paymentMethod.number().getStringView())));
             CHyperlink changePayment = new CHyperlink(null, new Command() {
                 @Override
                 public void execute() {
