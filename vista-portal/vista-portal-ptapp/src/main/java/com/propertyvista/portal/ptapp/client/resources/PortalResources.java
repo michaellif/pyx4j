@@ -49,7 +49,7 @@ public interface PortalResources extends ClientBundleWithLookup {
     @Source("paymentPreauthorisedNotes_VISA.html")
     TextResource paymentPreauthorisedNotes_VISA();
 
-    @Source("stub.html")
+    @Source("paymentTermsNotes.html")
     TextResource paymentTermsNotes();
 
 }

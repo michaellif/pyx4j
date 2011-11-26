@@ -52,7 +52,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             log.debug("Creating new payment");
             payment = EntityFactory.create(PaymentInformation.class);
             payment.paymentMethod().type().setValue(PaymentType.Echeck);
-            payment.preauthorised().setValue(Boolean.TRUE);
+            payment.preauthoriseAgree().setValue(Boolean.TRUE);
         }
 
         // TODO VladS find a better way to retrieve just monthlyCharges

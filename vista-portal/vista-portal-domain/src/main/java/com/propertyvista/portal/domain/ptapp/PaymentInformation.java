@@ -16,6 +16,7 @@ package com.propertyvista.portal.domain.ptapp;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -28,8 +29,12 @@ public interface PaymentInformation extends IEntity, IBoundToApplication {
     @Transient
     ChargeLineList applicationCharges();
 
+    @NotNull
+    @Caption(name = "I Agree")
+    IPrimitive<Boolean> depositAgree();
+
     @Caption(name = "Yes, Please Enroll Me")
-    IPrimitive<Boolean> preauthorised();
+    IPrimitive<Boolean> preauthoriseAgree();
 
     @EmbeddedEntity
     PaymentMethod paymentMethod();
