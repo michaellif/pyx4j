@@ -30,10 +30,17 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CEntityCrudHyperlink<E extends IEntity> extends CAbstractHyperlink<IEntity> {
 
-    public CEntityCrudHyperlink(final CrudAppPlace place) {
-        super((String) null);
-        this.setFormat(new IFormat<IEntity>() {
+    private String caption;
 
+    public CEntityCrudHyperlink(final CrudAppPlace place) {
+        this(null, place);
+    }
+
+    public CEntityCrudHyperlink(String caption, final CrudAppPlace place) {
+        super((String) null);
+        this.caption = caption;
+
+        setFormat(new IFormat<IEntity>() {
             @Override
             public String format(IEntity value) {
                 if (value != null) {
@@ -58,5 +65,32 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CAbstractHyperlink<
                 }
             }
         });
+
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+        setCaption();
+    }
+
+    @Override
+    protected void setNativeValue(IEntity value) {
+        if (caption != null) {
+            setCaption();
+        } else {
+            super.setNativeValue(value);
+        }
+    }
+
+    // internals:
+
+    private void setCaption() {
+        if (isWidgetCreated()) {
+            asWidget().setText(caption);
+        }
     }
 }
