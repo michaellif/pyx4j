@@ -58,7 +58,7 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         // TODO get Data from DB, Now we just Generate some Data now
         {
             Object[][] messages = new Object[][] {
-                    { Message.MessageType.paymnetPastDue, "Overdue September payment", new GregorianCalendar(2011, 9, 28).getTime() },
+                    { Message.MessageType.paymnetPastDue, "Overdue September payment", new GregorianCalendar(2011, 8, 28).getTime() },
 
                     { Message.MessageType.communication, "Your maintanance call sceduled", new GregorianCalendar(2011, 9, 28).getTime() },
 
@@ -84,6 +84,8 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         dashboard.currentBill().paid().setValue(Boolean.FALSE);
         dashboard.currentBill().dueDate().setValue(new LogicalDate(new GregorianCalendar(2011, 9, 28).getTime()));
         dashboard.currentBill().ammount().amount().setValue(1240.);
+        dashboard.currentBill().lastPayment().amount().setValue(1231.);
+        dashboard.currentBill().receivedOn().setValue(new LogicalDate(new GregorianCalendar(2011, 8, 29).getTime()));
 
         {
             Object[][] reservations = new Object[][] { { ReservationDTO.Status.Submitted, "Party Room", new GregorianCalendar(2011, 9, 28).getTime() },

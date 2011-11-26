@@ -187,25 +187,25 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
 
             int row = 0;
 
-            dataPanel.setHTML(++row, 0, "Current Balance");
+            dataPanel.setHTML(++row, 0, value.ammount().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
             dataPanel.setHTML(row, 1, "$" + value.ammount().amount().getValue());
 
-            dataPanel.setHTML(++row, 0, "Due Date");
+            dataPanel.setHTML(++row, 0, value.dueDate().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, value.dueDate().getValue().toString());
+            dataPanel.setHTML(row, 1, value.dueDate().getStringView());
 
-            dataPanel.setHTML(++row, 0, "Last Payment");
+            dataPanel.setHTML(++row, 0, value.lastPayment().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, "$" + value.ammount().amount().getValue());
+            dataPanel.setHTML(row, 1, "$" + value.lastPayment().amount().getValue());
 
-            dataPanel.setHTML(++row, 0, "Received on");
+            dataPanel.setHTML(++row, 0, value.receivedOn().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, value.dueDate().getValue().toString());
+            dataPanel.setHTML(row, 1, value.receivedOn().getStringView());
 
             content.add(dataPanel);
             content.setCellWidth(dataPanel, "100%");

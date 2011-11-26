@@ -15,6 +15,7 @@ package com.propertyvista.domain.communication;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,6 +31,7 @@ public interface Message extends IEntity {
     IPrimitive<String> text();
 
     @MemberColumn(name = "messageDate")
+    @Format("MM/dd/yyyy")
     IPrimitive<Date> date();
 
     @MemberColumn(name = "messageType")
