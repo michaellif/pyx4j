@@ -13,11 +13,9 @@
  */
 package com.propertyvista.misc;
 
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("View Details")
 public interface EquifaxResult extends IEntity {
 
     IPrimitive<String> details();

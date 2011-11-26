@@ -45,7 +45,7 @@ public class TenantApprovalFolder extends VistaTableFolder<TenantFinancialDTO> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(EquifaxResult.class)) {
-            return new CEntityCrudHyperlink<EquifaxResult>(MainActivityMapper.getCrudAppPlace(EquifaxResult.class));
+            return new CEntityCrudHyperlink<EquifaxResult>(i18n.tr("View"), MainActivityMapper.getCrudAppPlace(EquifaxResult.class));
         }
         return super.create(member);
     }
