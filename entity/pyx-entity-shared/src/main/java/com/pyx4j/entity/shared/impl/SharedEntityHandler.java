@@ -206,7 +206,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @SuppressWarnings("unchecked")
     private Map<String, Object> getValue(boolean assertDetached) {
-        assert !isTemplateEntity : "Template Entity data manipulations disabled";
+        assert !isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if (delegateValue) {
             Map<String, Object> v = getOwner().getValue();
             if (v == null) {
@@ -248,7 +248,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public void setValue(Map<String, Object> value) {
-        assert !isTemplateEntity : "Template Entity data manipulations disabled";
+        assert !isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
         if ((value != null) && !(value instanceof EntityValueMap)) {
             throw new ClassCastException("Entity expects EntityValueMap as value");
         }
@@ -320,6 +320,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             }
             setValue(null);
         } else {
+            assert !((SharedEntityHandler) entity).isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
             Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
             //TODO Test type safety at runtime.
             if (!this.getObjectClass().equals(entity.getInstanceValueClass())) {
@@ -385,11 +386,15 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public int hashCode() {
-        Map<String, Object> thisValue = this.getValue(false);
-        if (thisValue == null) {
+        if (isTemplateEntity) {
             return super.hashCode();
         } else {
-            return thisValue.hashCode();
+            Map<String, Object> thisValue = this.getValue(false);
+            if (thisValue == null) {
+                return super.hashCode();
+            } else {
+                return thisValue.hashCode();
+            }
         }
     }
 
