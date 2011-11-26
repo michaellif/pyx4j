@@ -28,6 +28,7 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
+import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
@@ -71,7 +72,7 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
                     { Message.MessageType.maintananceAlert, "Stairs Renovation", new GregorianCalendar(2011, 9, 22).getTime() } };
 
             for (int i = 0; i < messages.length; i++) {
-                Message msg = dashboard.notifications().$();
+                MessageDTO msg = dashboard.notifications().$();
                 msg.subject().setValue((String) messages[i][1]);
                 msg.acknowledged().setValue(Boolean.FALSE);
                 msg.type().setValue((Message.MessageType) messages[i][0]);

@@ -7,37 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 24, 2011
- * @author michaellif
+ * Created on Nov 26, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.communication.Message;
 
 @Transient
-public interface BillInfoDTO extends IEntity {
+public interface MessageDTO extends Message {
 
-    IPrimitive<Boolean> paid();
-
+    @Override
     @Format("MMM dd, yyyy")
-    IPrimitive<LogicalDate> dueDate();
-
-    @Format("MMM dd, yyyy")
-    IPrimitive<LogicalDate> receivedOn();
-
-    IPrimitive<String> message();
-
-    @Caption(name = "Current Balance")
-    Money ammount();
-
-    Money lastPayment();
-
+    IPrimitive<Date> date();
 }

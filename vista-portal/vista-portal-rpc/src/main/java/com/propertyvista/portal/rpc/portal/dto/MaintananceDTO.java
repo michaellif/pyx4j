@@ -30,7 +30,7 @@ public interface MaintananceDTO extends IEntity {
 
     IPrimitive<String> description();
 
-    @Format("MM/dd/yyyy")
+    @Format("MMM dd, yyyy")
     IPrimitive<LogicalDate> date();
 
     @Format("h:mm a")

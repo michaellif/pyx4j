@@ -17,14 +17,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.communication.Message;
-
 @Transient
 public interface TenantDashboardDTO extends IEntity {
 
     TenantGeneralInfoDTO general();
 
-    IList<Message> notifications();
+    IList<MessageDTO> notifications();
 
     BillInfoDTO currentBill();
 
