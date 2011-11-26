@@ -63,6 +63,7 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
             dashboard.notifications().add(msg);
         }
 
+        dashboard.currentBill().message().setValue("You have unpaid October Rent");
         dashboard.currentBill().paid().setValue(Boolean.FALSE);
         dashboard.currentBill().dueDate().setValue(new LogicalDate(2011, 11, 01));
         dashboard.currentBill().ammount().amount().setValue(1240.);
