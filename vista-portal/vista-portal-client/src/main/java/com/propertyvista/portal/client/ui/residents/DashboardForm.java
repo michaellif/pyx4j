@@ -26,11 +26,15 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.RateIt;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.portal.rpc.portal.dto.BillInfoDTO;
+import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
 
 public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> implements DashboardView {
 
@@ -45,14 +49,8 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
     @Override
     public IsWidget createContent() {
 
-        VerticalPanel container = new VerticalPanel();
-        container.setWidth("100%");
+        FlowPanel container = new FlowPanel();
         container.setHeight("100%");
-        container.add(inject(proto().notifications(), new AlertsViewer()));
-
-        FlowPanel gadgetsPanel = new FlowPanel();
-        container.add(gadgetsPanel);
-        container.setCellHeight(gadgetsPanel, "100%");
 
         SimplePanel leftPanelHolder = new SimplePanel();
         SimplePanel leftPanelBorder = new SimplePanel();
@@ -61,36 +59,43 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
         leftPanelHolder.setWidget(leftPanelBorder);
         FormFlexPanel leftPanel = new FormFlexPanel();
         leftPanelBorder.setWidget(leftPanel);
-        gadgetsPanel.add(leftPanelHolder);
+        container.add(leftPanelHolder);
         leftPanelHolder.getElement().getStyle().setFloat(Float.LEFT);
         leftPanelHolder.getElement().getStyle().setWidth(50, Unit.PCT);
 
-        leftPanelBorder.getElement().getStyle().setProperty("borderRight", "groove 2px #ddd");
+        leftPanelBorder.getElement().getStyle().setProperty("borderRight", "groove 1px #666");
 
         int row = -1;
 
-        leftPanel.setH1(++row, 0, 1, i18n.tr("General Info"));
-        leftPanel.setWidget(++row, 0, new HTML("General Info<p>General Info<p>General Info<p>General Info<p>General Info<p>"));
-
-        leftPanel.setH1(++row, 0, 1, i18n.tr("Current Bill"));
-        leftPanel.setWidget(++row, 0, new HTML("Current Bill<p>Current Bill<p>Current Bill<p>"));
+        leftPanel.setH1(++row, 0, 1, i18n.tr("COMMUNICATION"));
+        leftPanel.setWidget(++row, 0, inject(proto().notifications(), new AlertsViewer()));
 
         SimplePanel rightPanelHolder = new SimplePanel();
         FormFlexPanel rightPanel = new FormFlexPanel();
         rightPanelHolder.setWidget(rightPanel);
-        gadgetsPanel.add(rightPanelHolder);
+        container.add(rightPanelHolder);
         rightPanelHolder.getElement().getStyle().setFloat(Float.RIGHT);
         rightPanelHolder.getElement().getStyle().setWidth(50, Unit.PCT);
 
         row = -1;
 
-        Anchor newTicket = new Anchor(i18n.tr("New Ticket"));
-        rightPanel.setH1(++row, 0, 1, i18n.tr("Maintanance"), newTicket);
-        rightPanel.setWidget(++row, 0, new HTML("Maintanance"));
+        if (false) {
+            rightPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
+            rightPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
+        }
 
-        Anchor newReservations = new Anchor(i18n.tr("New Reservations"));
-        rightPanel.setH1(++row, 0, 1, i18n.tr("Reservations"), newReservations);
-        rightPanel.setWidget(++row, 0, new HTML("Reservations"));
+        rightPanel.setH1(++row, 0, 1, i18n.tr("CURRENT BILL"));
+        rightPanel.setWidget(++row, 0, inject(proto().currentBill(), new CurrentBillViewer()));
+
+        Anchor newTicket = new Anchor(i18n.tr("New Ticket"));
+        rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTANANCE"), newTicket);
+        rightPanel.setWidget(++row, 0, inject(proto().reservations(), new MaintananceViewer()));
+
+        Anchor newReservations = new Anchor(i18n.tr("Order Service"));
+        rightPanel.setH1(++row, 0, 1, i18n.tr("SERVICES"), newReservations);
+        rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
+
+        rightPanel.setWidget(++row, 0, new RateIt(2.5, 5));
 
         return container;
     }
@@ -107,11 +112,67 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
         public IsWidget createContent(IList<Message> value) {
             VerticalPanel container = new VerticalPanel();
             for (Message message : value) {
-                HTML html = new HTML(message.subject().getValue());
+                HTML html = new HTML(message.subject().getValue() + "-" + message.text().getValue() + "-" + message.type().getValue());
+
+                html.getElement().getStyle().setProperty("height", "5em");
+
                 container.add(html);
             }
             return container;
         }
 
     }
+
+    class GeneralInfoViewer extends CEntityViewer<TenantGeneralInfoDTO> {
+
+        @Override
+        public IsWidget createContent(TenantGeneralInfoDTO value) {
+            HTML content = new HTML(value.tenantName().getValue() + "<p>" + value.floorplanName().getValue() + "<p>" + value.tenantAddress().getValue() + "<p>"
+                    + value.superIntendantPhone().getValue());
+            content.getElement().getStyle().setPadding(20, Unit.PX);
+            return content;
+        }
+    }
+
+    class CurrentBillViewer extends CEntityViewer<BillInfoDTO> {
+
+        @Override
+        public IsWidget createContent(BillInfoDTO value) {
+            HTML content = new HTML(value.message().getValue() + "<p>" + value.dueDate().getValue() + "<p>" + value.ammount().amount().getValue());
+            content.getElement().getStyle().setPadding(20, Unit.PX);
+            return content;
+        }
+
+    }
+
+    class MaintananceViewer extends CEntityViewer<IList<ReservationDTO>> {
+
+        @Override
+        public IsWidget createContent(IList<ReservationDTO> value) {
+            VerticalPanel content = new VerticalPanel();
+            for (ReservationDTO reservation : value) {
+                HTML html = new HTML(reservation.description().getValue() + "-" + reservation.date().getValue() + "-" + reservation.time().getValue());
+                content.add(html);
+            }
+            content.getElement().getStyle().setPadding(20, Unit.PX);
+            return content;
+        }
+
+    }
+
+    class ReservationsViewer extends CEntityViewer<IList<ReservationDTO>> {
+
+        @Override
+        public IsWidget createContent(IList<ReservationDTO> value) {
+            VerticalPanel content = new VerticalPanel();
+            for (ReservationDTO reservation : value) {
+                HTML html = new HTML(reservation.description().getValue() + "-" + reservation.date().getValue() + "-" + reservation.time().getValue());
+                content.add(html);
+            }
+            content.getElement().getStyle().setPadding(20, Unit.PX);
+            return content;
+        }
+
+    }
+
 }

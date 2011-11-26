@@ -64,33 +64,42 @@ public class PortalTheme extends VistaTheme {
             protected void initStyles() {
                 super.initStyles();
 
+                Style style = new Style(".", StyleName.FormFlexPanelH1);
+                style.addProperty("margin", "0 0 4px 0");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelH1Label);
+                style.addProperty("color", getBackgroundColor(), 1.4);
+                style.addProperty("padding", "20px");
+                style.addProperty("font-size", "1.3em");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelActionWidget);
+                style.addProperty("margin-top", "20px");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelActionWidget, " a");
+                style.addProperty("color", getBackgroundColor(), 1.4);
+                style.addProperty("font-style", "italic");
+                addStyle(style);
+
                 if (Skin.skin1.equals(skin)) {
-                    Style style = new Style(".", StyleName.FormFlexPanelH1);
-                    style.addProperty("margin", "0 0 4px 0");
+                    style = new Style(".", StyleName.FormFlexPanelH1);
                     style.addProperty("border-top", "solid 1px");
                     style.addProperty("border-bottom", "solid 1px");
                     style.addProperty("border-top-color", ThemeColors.foreground, 0.3);
                     style.addProperty("border-bottom-color", ThemeColors.foreground, 0.5);
                     style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.4);
                     addStyle(style);
-
-                    style = new Style(".", StyleName.FormFlexPanelH1Label);
-                    style.addProperty("color", getBackgroundColor(), 1.4);
-                    style.addProperty("padding", "20px");
-                    style.addProperty("font-size", "1.5em");
-                    addStyle(style);
-
-                    style = new Style(".", StyleName.FormFlexPanelActionWidget);
-                    style.addProperty("margin-top", "20px");
-                    addStyle(style);
-
-                    style = new Style(".", StyleName.FormFlexPanelActionWidget, " a");
-                    style.addProperty("color", getBackgroundColor(), 1.4);
-                    style.addProperty("font-style", "italic");
+                } else if (Skin.skin2.equals(skin) || Skin.skin3.equals(skin)) {
+                    style = new Style(".", StyleName.FormFlexPanelH1);
+                    style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
                     addStyle(style);
                 }
             }
         });
+
+        //.vista-pmsite-residentPage .content
 
         addTheme(new DefaultDatePickerTheme());
 
