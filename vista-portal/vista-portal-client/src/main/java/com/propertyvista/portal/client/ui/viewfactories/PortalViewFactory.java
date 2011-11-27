@@ -42,7 +42,6 @@ import com.propertyvista.portal.client.ui.residents.PersonalInfoViewImpl;
 
 public class PortalViewFactory extends ViewFactoryBase {
 
-    @SuppressWarnings("unchecked")
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (DashboardView.class.equals(type)) {
@@ -72,6 +71,11 @@ public class PortalViewFactory extends ViewFactoryBase {
             }
 
         }
-        return (T) map.get(type);
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }
