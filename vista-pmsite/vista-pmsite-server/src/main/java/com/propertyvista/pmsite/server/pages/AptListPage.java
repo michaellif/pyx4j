@@ -31,7 +31,9 @@ import templates.TemplateResources;
 
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteApplication;
@@ -55,12 +57,18 @@ public class AptListPage extends BasePage {
 
     public static final String LocalizedPageTitle = i18n.tr("Property List");
 
+    @com.pyx4j.i18n.annotations.I18n
     public enum ViewMode {
-        map, list;
+
+        @Translate("Map View")
+        map,
+
+        @Translate("List View")
+        list;
 
         @Override
         public String toString() {
-            return i18n.tr(this == map ? "List View" : "Map View");
+            return I18nEnum.toString(this);
         }
     }
 
