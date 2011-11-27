@@ -41,13 +41,13 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
         VerticalPanel main = new VerticalPanel();
 
-        HTML titleHtml = new HTML(HtmlUtils.h2(i18n.tr("Congratulation! You have successfully completed your application!")));
+        HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Congratulation! You have successfully completed your application!")));
         main.add(titleHtml);
         main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
         HTML messageHtml = new HTML(PortalResources.INSTANCE.completionMessage().getText());
         messageHtml.setWidth("50em");
-        messageHtml.getElement().getStyle().setMarginTop(2, Unit.EM);
+        messageHtml.getElement().getStyle().setMarginTop(1, Unit.EM);
         main.add(messageHtml);
         main.setCellHorizontalAlignment(messageHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
