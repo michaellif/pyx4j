@@ -16,8 +16,10 @@ package com.propertyvista.portal.rpc.portal.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface SatisfactionSurveyResponceDTO extends IEntity {
 
     IPrimitive<String> description();

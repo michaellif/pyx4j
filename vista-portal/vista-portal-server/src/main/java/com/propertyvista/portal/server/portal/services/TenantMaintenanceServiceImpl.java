@@ -17,7 +17,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+import com.propertyvista.domain.maintenance.IssueElement;
+import com.propertyvista.domain.maintenance.IssueRepairSubject;
+import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
+import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 
 public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
@@ -34,6 +40,37 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         Vector<MaintananceDTO> dto = new Vector<MaintananceDTO>();
         dto.addAll(TenantMaintenanceDAO.getHistoryIssues());
         callback.onSuccess(dto);
+    }
+
+    @Override
+    public void createNewTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request) {
+        callback.onSuccess(null);
+    }
+
+    // -------------
+
+    @Override
+    public void listIssueElements(AsyncCallback<Vector<IssueElement>> callback) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void getIssueRepairSubject(AsyncCallback<IssueElement> callback, IssueElement issueElement) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void getIssueSubjectDetails(AsyncCallback<IssueRepairSubject> callback, IssueRepairSubject issueRepairSubject) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void getIssueClassification(AsyncCallback<IssueSubjectDetails> callback, IssueSubjectDetails issueSubjectDetails) {
+        // TODO Auto-generated method stub
+
     }
 
 }

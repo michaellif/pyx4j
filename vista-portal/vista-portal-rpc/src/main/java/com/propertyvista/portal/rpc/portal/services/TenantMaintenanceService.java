@@ -18,8 +18,13 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.maintenance.IssueElement;
+import com.propertyvista.domain.maintenance.IssueRepairSubject;
+import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
+import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
 public interface TenantMaintenanceService extends IService {
 
@@ -27,5 +32,16 @@ public interface TenantMaintenanceService extends IService {
     public void listOpenIssues(AsyncCallback<Vector<MaintananceDTO>> callback);
 
     public void listHistoryIssues(AsyncCallback<Vector<MaintananceDTO>> callback);
+
+    public void createNewTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request);
+
+    // -- Data for New Tickets creation / Classification
+    public void listIssueElements(AsyncCallback<Vector<IssueElement>> callback);
+
+    public void getIssueRepairSubject(AsyncCallback<IssueElement> callback, IssueElement issueElement);
+
+    public void getIssueSubjectDetails(AsyncCallback<IssueRepairSubject> callback, IssueRepairSubject issueRepairSubject);
+
+    public void getIssueClassification(AsyncCallback<IssueSubjectDetails> callback, IssueSubjectDetails issueSubjectDetails);
 
 }
