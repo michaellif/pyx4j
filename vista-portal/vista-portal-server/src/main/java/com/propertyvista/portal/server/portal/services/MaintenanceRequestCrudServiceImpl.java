@@ -25,6 +25,12 @@ import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO.MaintenanceType
 import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO.StatusType;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
 
+/**
+ * 
+ * @deprecated remove ASAP
+ * 
+ */
+@Deprecated
 //TODO the whole implementation is TBD
 public class MaintenanceRequestCrudServiceImpl implements MaintenanceRequestCrudService {
 

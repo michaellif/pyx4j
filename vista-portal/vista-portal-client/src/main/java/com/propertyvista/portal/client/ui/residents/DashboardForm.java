@@ -34,6 +34,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.Message.MessageType;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.rpc.portal.dto.BillInfoDTO;
@@ -243,7 +244,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             for (MaintananceDTO maintanance : value) {
                 container.setHTML(++row, 0, maintanance.description().getValue());
                 container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-                if (MaintananceDTO.Status.Completed.equals(maintanance.status().getValue())) {
+                if (MaintenanceRequestStatus.Completed.equals(maintanance.status().getValue())) {
                     RateIt rateIt = new RateIt(5);
                     rateIt.setRating(4);
                     container.setWidget(row, 1, rateIt);

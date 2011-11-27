@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
@@ -105,23 +104,7 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
             }
         }
 
-        {
-            Object[][] maintanances = new Object[][] {
-                    { MaintananceDTO.Status.Submitted, "Leacking Kitchen Tap", new GregorianCalendar(2011, 9, 28).getTime() },
-
-                    { MaintananceDTO.Status.Scheduled, "Broken Blinds", new GregorianCalendar(2011, 9, 22).getTime() },
-
-                    { MaintananceDTO.Status.Completed, "Door Lock is Broken", new GregorianCalendar(2011, 6, 28).getTime() } };
-
-            for (int i = 0; i < maintanances.length; i++) {
-                MaintananceDTO m = dashboard.maintanances().$();
-                m.status().setValue((MaintananceDTO.Status) maintanances[i][0]);
-                m.description().setValue((String) maintanances[i][1]);
-                m.date().setValue(new LogicalDate((Date) maintanances[i][2]));
-                m.time().setValue(new Time(19, 00, 00));
-                dashboard.maintanances().add(m);
-            }
-        }
+        dashboard.maintanances().addAll(TenantMaintenanceDAO.getRecentIssues());
 
         callback.onSuccess(dashboard);
     }

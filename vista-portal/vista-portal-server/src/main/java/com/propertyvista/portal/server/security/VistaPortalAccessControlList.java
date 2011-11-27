@@ -35,6 +35,7 @@ import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.portal.services.MaintenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
@@ -117,6 +118,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantDashboardService.class));
         grant(VistaBehavior.TENANT, new IServiceExecutePermission(PersonalInfoCrudService.class));
+        grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantMaintenanceService.class));
 
         grant(CoreBehavior.DEVELOPER, new AllPermissions());
 

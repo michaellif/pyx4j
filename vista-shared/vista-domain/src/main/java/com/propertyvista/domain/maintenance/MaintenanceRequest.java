@@ -7,31 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 25, 2011
+ * Created on Nov 26, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.tenant.Tenant;
 
-@Transient
-public interface MaintananceDTO extends IEntity {
+public interface MaintenanceRequest extends IEntity {
 
-    IPrimitive<String> description();
+    Tenant tenant();
 
-    @Format("MMM dd, yyyy")
-    IPrimitive<LogicalDate> date();
+    //TODO Add 
+    //Building building();
+
+    IssueClassification issueClassification();
+
+    IPrimitive<LogicalDate> submited();
 
     IPrimitive<MaintenanceRequestStatus> status();
 
-    @EmbeddedEntity
-    SatisfactionSurveyResponceDTO satisfactionSurvey();
+    @Caption(name = "Last Updated")
+    IPrimitive<LogicalDate> updated();
+
+    IPrimitive<String> description();
 }

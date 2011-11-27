@@ -23,6 +23,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+/**
+ * 
+ * @deprecated remove ASAP
+ * 
+ */
+@Deprecated
 @Transient
 public interface MaintenanceRequestDTO extends IEntity {
 
