@@ -45,7 +45,7 @@ public class PaymentActivity extends WizardStepActivity<PaymentInformation, Paym
                 }
             });
         } else {
-            currentValue.paymentMethod().set(EntityFactory.create(AddressStructured.class));
+            currentValue.paymentMethod().billingAddress().set(EntityFactory.create(AddressStructured.class));
             getView().populate(currentValue);
         }
     }
