@@ -19,14 +19,17 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordViewImpl;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap.Apartment;
 
@@ -34,35 +37,46 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
     private static I18n i18n = I18n.get(RetrievePasswordViewImpl.class);
 
-    private final HTML titleHtml;
-
-    private final HTML messageHtml;
-
-    private final Button actionButton;
-
     public CompletionViewImpl() {
 
         VerticalPanel main = new VerticalPanel();
 
-        titleHtml = new HTML(HtmlUtils.h2(i18n.tr("Application completed!")));
+        HTML titleHtml = new HTML(HtmlUtils.h2(i18n.tr("Congratulation! You have successfully completed your application!")));
         main.add(titleHtml);
         main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
-        messageHtml = new HTML(i18n.tr("Congratulation! You have successfully completed your application."));
+        HTML messageHtml = new HTML(PortalResources.INSTANCE.completionMessage().getText());
+        messageHtml.setWidth("50em");
+        messageHtml.getElement().getStyle().setMarginTop(2, Unit.EM);
         main.add(messageHtml);
         main.setCellHorizontalAlignment(messageHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
-        actionButton = new Button("Back");
-        actionButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        actionButton.addClickHandler(new ClickHandler() {
+        HorizontalPanel actions = new HorizontalPanel();
+
+        Button backAction = new Button(i18n.tr("Review"));
+        backAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        backAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(Apartment.class));
             }
         });
-        actionButton.getElement().getStyle().setMarginTop(1, Unit.EM);
-        main.add(actionButton);
-        main.setCellHorizontalAlignment(actionButton, HasHorizontalAlignment.ALIGN_CENTER);
+        actions.add(backAction);
+
+        Button logoutAction = new Button(i18n.tr("Log Out"));
+        logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        logoutAction.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ClientContext.logout(null);
+            }
+        });
+        actions.add(logoutAction);
+
+        actions.setSpacing(15);
+        actions.getElement().getStyle().setMarginTop(2, Unit.EM);
+        main.add(actions);
+        main.setCellHorizontalAlignment(actions, HasHorizontalAlignment.ALIGN_CENTER);
 
         main.setWidth("100%");
         add(main);

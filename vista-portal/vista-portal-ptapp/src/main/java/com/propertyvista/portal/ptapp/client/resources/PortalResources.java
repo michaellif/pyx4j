@@ -38,7 +38,7 @@ public interface PortalResources extends ClientBundleWithLookup {
     @Source("digitalSignature.html")
     TextResource digitalSignature();
 
-    //PaymentViewForm
+    // Payment View
 
     @Source("paymentApprovalNotes.html")
     TextResource paymentApprovalNotes();
@@ -52,4 +52,8 @@ public interface PortalResources extends ClientBundleWithLookup {
     @Source("paymentTermsNotes.html")
     TextResource paymentTermsNotes();
 
+    // Completion View
+
+    @Source("completionMessage.html")
+    TextResource completionMessage();
 }
