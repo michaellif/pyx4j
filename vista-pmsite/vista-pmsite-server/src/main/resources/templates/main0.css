@@ -53,6 +53,14 @@ input,select,textarea {
 	font-size: 13px;
 }
 
+table {
+	border-collapse: collapse;
+}
+
+td {
+	padding: 0;
+}
+
 a, a:link, a:visited {
 	color: #B5E329;
 	outline: medium none;

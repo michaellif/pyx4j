@@ -59,9 +59,9 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
 
-        int row = 0;
+        container.getElement().getStyle().setMargin(20, Unit.PX);
 
-        container.setH1(row++, 0, 1, i18n.tr("Bill Details"));
+        int row = 0;
 
         container.setWidget(row++, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
         container.setHR(row++, 0, 1);
@@ -151,6 +151,9 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
                 container.add(info);
 
                 Button payBtn = new Button(i18n.tr("Pay Now"));
+                payBtn.getElement().getStyle().setMargin(20, Unit.PX);
+                payBtn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+
                 payBtn.addClickHandler(new ClickHandler() {
 
                     @Override
@@ -159,7 +162,6 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
 
                     }
                 });
-                payBtn.getElement().getStyle().setMarginBottom(1d, Unit.EM);
                 container.add(payBtn);
             }
 

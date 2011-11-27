@@ -32,7 +32,6 @@ public class NewPaymentMethodEditorTheme extends Theme {
     public NewPaymentMethodEditorTheme() {
 
         Style style = new Style(".", StyleName.PaymentEditor);
-        style.addProperty("margin-top", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorButtons);

@@ -118,8 +118,6 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
 
             FlexTable container = new FlexTable();
 
-            container.getElement().getStyle().setProperty("borderCollapse", "collapse");
-
             container.setWidth("100%");
             container.getColumnFormatter().setWidth(0, "35px");
             container.getColumnFormatter().setWidth(1, "250px");
@@ -179,8 +177,6 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
 
             FlexTable dataPanel = new FlexTable();
 
-            dataPanel.getElement().getStyle().setProperty("borderCollapse", "collapse");
-
             dataPanel.setWidth("100%");
             dataPanel.getColumnFormatter().setWidth(0, "250px");
             dataPanel.getColumnFormatter().setWidth(1, "75px");
@@ -211,7 +207,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             content.setCellWidth(dataPanel, "100%");
 
             HorizontalPanel actions = new HorizontalPanel();
-            actions.getElement().getStyle().setPadding(20, Unit.PX);
+            actions.getElement().getStyle().setMargin(20, Unit.PX);
 
             Anchor viewBill = new Anchor(i18n.tr("View Bill"));
             viewBill.getElement().getStyle().setPaddingRight(20, Unit.PX);
@@ -232,8 +228,6 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
         @Override
         public IsWidget createContent(IList<MaintananceDTO> value) {
             FlexTable container = new FlexTable();
-
-            container.getElement().getStyle().setProperty("borderCollapse", "collapse");
 
             container.setWidth("100%");
             container.getColumnFormatter().setWidth(0, "250px");
@@ -270,8 +264,6 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
         @Override
         public IsWidget createContent(IList<ReservationDTO> value) {
             FlexTable container = new FlexTable();
-
-            container.getElement().getStyle().setProperty("borderCollapse", "collapse");
 
             container.setWidth("100%");
             container.getColumnFormatter().setWidth(0, "250px");

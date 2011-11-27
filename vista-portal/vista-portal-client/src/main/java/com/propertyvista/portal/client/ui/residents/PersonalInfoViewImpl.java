@@ -13,14 +13,15 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
@@ -38,6 +39,9 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
         add(form);
 
         Button saveButton = new Button(i18n.tr("Save"));
+        saveButton.getElement().getStyle().setMargin(20, Unit.PX);
+        saveButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+
         saveButton.addClickHandler(new ClickHandler() {
 
             @Override
@@ -50,7 +54,6 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
             }
         });
 
-        saveButton.getElement().getStyle().setProperty("margin", "1em 1em 1em 0em");
         add(saveButton);
 
     }

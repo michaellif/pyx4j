@@ -59,6 +59,14 @@ input,select,textarea {
 	font-size: 13px;
 }
 
+table {
+	border-collapse: collapse;
+}
+
+td {
+	padding: 0;
+}
+
 a {
 	color: ${object2_100};
 	outline: medium none;

@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
@@ -42,6 +43,8 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> {
     @Override
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
+
+        container.getElement().getStyle().setMargin(20, Unit.PX);
 
         int row = -1;
 

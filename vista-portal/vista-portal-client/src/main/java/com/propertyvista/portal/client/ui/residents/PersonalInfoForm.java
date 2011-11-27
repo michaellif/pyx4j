@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -34,22 +35,28 @@ public class PersonalInfoForm extends CEntityDecoratableEditor<ResidentDTO> impl
 
     @Override
     public IsWidget createContent() {
+
+        Widget widget = null;
         FormFlexPanel container = new FormFlexPanel();
 
         int row = -1;
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
+        container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().name().firstName()), 12).build());
+        widget.getElement().getStyle().setMarginTop(20, Unit.PX);
+
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 12).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 20).build());
+        container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().email()), 20).build());
+        widget.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
         //Emergency Contacts
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
+
         container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
         container.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
         return container;
