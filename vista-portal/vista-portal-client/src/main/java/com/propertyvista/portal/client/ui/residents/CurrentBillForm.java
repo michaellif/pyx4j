@@ -28,11 +28,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -59,20 +60,49 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
 
-        int row = 0;
+        int row = -1;
 
-        container.setWidget(row++, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
-        container.setHR(row++, 0, 1);
-        container.setWidget(row++, 0, inject(proto().total(), new TotalLineViewer()));
-        container.setWidget(row++, 0, new WidgetDecorator(inject(proto().dueDate())));
-        container.setWidget(row++, 0, inject(proto().paymentMethod(), new PaymentMethodViewer()));
-        container.setWidget(row++, 0, inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
+        container.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
+        container.setHR(++row, 0, 1);
+        container.setWidget(++row, 0, inject(proto().total(), new TotalLineViewer()));
+        container.setWidget(++row, 0, inject(proto().dueDate(), new DueDateViewer()));
+        container.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodViewer()));
+        container.setWidget(++row, 0, inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
         return container;
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+
+    }
+
+    class DueDateViewer extends CViewer<LogicalDate> {
+
+        public DueDateViewer() {
+            super();
+        }
+
+        @Override
+        public void populate(LogicalDate value) {
+            super.populate(value);
+        }
+
+        @Override
+        public IsWidget createContent(LogicalDate value) {
+            if (value != null) {
+                FlowPanel container = new FlowPanel();
+                container.setWidth("100%");
+                container.add(DecorationUtils.inline(new Label(i18n.tr("Due Date")), "14em"));
+                container.add(DecorationUtils.inline(new Label(value.toString())));
+
+                container.asWidget().getElement().getStyle().setMarginLeft(20, Unit.PX);
+                container.asWidget().getElement().getStyle().setMarginTop(20, Unit.PX);
+                return container;
+            } else {
+                return null;
+            }
+        }
 
     }
 
@@ -86,7 +116,7 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
         public IsWidget createContent(PaymentMethodDTO paymentMethod) {
             FlowPanel container = new FlowPanel();
             container.setWidth("100%");
-            container.add(DecorationUtils.inline(new Label(i18n.tr("Your Payment Method")), "14em"));
+            container.add(DecorationUtils.inline(new Label(i18n.tr("Payment Method")), "14em"));
             Image paymentImage = Utils.getPaymentCardImage(paymentMethod.type().getValue());
             paymentImage.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             paymentImage.getElement().getStyle().setMarginRight(5d, Unit.PX);
@@ -101,6 +131,9 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
             changePayment.setValue(i18n.tr("Change"));
             changePayment.asWidget().getElement().getStyle().setMarginLeft(1d, Unit.EM);
             container.add(DecorationUtils.inline(changePayment));
+
+            container.asWidget().getElement().getStyle().setMarginLeft(20, Unit.PX);
+
             return container;
         }
 
@@ -129,12 +162,20 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
 
             } else {//notification
                 HorizontalPanel info = new HorizontalPanel();
+                info.asWidget().getElement().getStyle().setMarginLeft(20, Unit.PX);
+
                 info.getElement().getStyle().setMarginTop(1, Unit.EM);
-                info.add(new Image(PortalImages.INSTANCE.warningSide()));
-                info.add(new Image(PortalImages.INSTANCE.warning()));
+                Image image;
+                info.add(image = new Image(PortalImages.INSTANCE.warningSide()));
+                image.getElement().getStyle().setMarginRight(5, Unit.PX);
+
+                info.add(image = new Image(PortalImages.INSTANCE.warning()));
+                image.getElement().getStyle().setMarginRight(5, Unit.PX);
+
                 FlowPanel msg = new FlowPanel();
                 msg.add(new HTML(PortalImages.INSTANCE.paymentPreauthorisedNotes().getText()));
-                CheckBox cb = new CheckBox(i18n.tr("Yes, I Want To Enroll Into The Pre-Authorized Payment Plan (PAP)"));
+                msg.getElement().getStyle().setMarginRight(5, Unit.PX);
+                CheckBox cb = new CheckBox(i18n.tr("Yes! I Want To Take Advantage Of The Pre-Authorization."));
                 cb.addClickHandler(new ClickHandler() {
 
                     @Override
@@ -143,6 +184,7 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
 
                     }
                 });
+                cb.setValue(true);
                 msg.add(cb);
                 info.add(msg);
                 info.getElement().getStyle().setMarginBottom(1, Unit.EM);
@@ -181,16 +223,15 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
 
     private IsWidget formatBillLine(String label, String value) {
         HorizontalPanel container = new HorizontalPanel();
-        container.setWidth("100%");
         Label lbl = new Label(label);
         container.add(lbl);
-        container.setCellWidth(lbl, "50%");
+        lbl.setWidth("530px");
+        lbl.getElement().getStyle().setMarginLeft(6, Unit.PX);
         container.setCellHorizontalAlignment(lbl, HasHorizontalAlignment.ALIGN_LEFT);
         lbl = new Label(value);
         container.add(lbl);
-        container.setCellWidth(lbl, "50%");
-        container.setCellHorizontalAlignment(lbl, HasHorizontalAlignment.ALIGN_RIGHT);
-        container.setWidth("100%");
+        lbl.setWidth("100px");
+        container.setCellHorizontalAlignment(lbl, HasHorizontalAlignment.ALIGN_LEFT);
         return container;
     }
 
