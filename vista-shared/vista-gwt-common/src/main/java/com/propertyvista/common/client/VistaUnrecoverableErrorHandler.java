@@ -31,7 +31,7 @@ import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
-    private static I18n i18n = I18n.get(VistaUnrecoverableErrorHandler.class);
+    private static final I18n i18n = I18n.get(VistaUnrecoverableErrorHandler.class);
 
     public VistaUnrecoverableErrorHandler() {
         UncaughtHandler.setUnrecoverableErrorHandler(this);
@@ -92,15 +92,15 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         boolean sessionClosed = false;
 
-        String userMessage = i18n.tr("An Unexpected Error Has Occurred.") + " " +
+        String userMessage = i18n.tr("An Unexpected Error Has Occurred.") + " ";
 
-        i18n.tr("Please report the incident to technical support,\n"
+        userMessage += i18n.tr("Please report the incident to technical support,\n" + "describing the steps taken prior to the error.\n");
 
-        + "describing the steps taken prior to the error.\n")
+        if (sessionClosed) {
+            userMessage += "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption");
+        }
 
-        + ((sessionClosed) ? "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption") : "")
-
-        + detailsMessage;
+        userMessage += detailsMessage;
 
         StringBuilder debugMessage = new StringBuilder();
 
