@@ -31,28 +31,25 @@ public class TenantInLeaseRetriever extends TenantRetriever {
     }
 
     public TenantInLeaseRetriever(Key tenanInLeasetId) {
-        retrieve(tenanInLeasetId, false);
+        super(false);
+        retrieve(tenanInLeasetId);
     }
 
     public TenantInLeaseRetriever(Key tenanInLeasetId, boolean financial) {
-        retrieve(tenanInLeasetId, financial);
+        super(financial);
+        retrieve(tenanInLeasetId);
     }
 
     // Manipulation:
     @Override
     public void retrieve(Key tenanInLeasetId) {
-        retrieve(tenanInLeasetId, false);
-    }
-
-    @Override
-    public void retrieve(Key tenanInLeasetId, boolean financial) {
         tenantInLease = Persistence.service().retrieve(TenantInLease.class, tenanInLeasetId);
         // TODO correct this check:
         if ((tenantInLease == null) /* || (!tenantInLease.lease().getPrimaryKey().equals(PtAppContext.getCurrentUserLeasePrimaryKey())) */) {
             throw new SecurityViolationException("Invalid data access");
         }
 
-        super.retrieve(tenantInLease.tenant().getPrimaryKey(), financial);
+        super.retrieve(tenantInLease.tenant().getPrimaryKey());
     }
 
     // Lease management:

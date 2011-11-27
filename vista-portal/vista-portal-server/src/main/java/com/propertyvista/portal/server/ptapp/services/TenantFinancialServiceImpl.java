@@ -17,17 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.propertvista.generator.PTGenerator;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
-import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
-import com.propertyvista.server.common.reference.SharedData;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -45,14 +39,13 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO dto) {
         log.debug("Saving tenantFinancial {}", dto);
 
-        TenantInLeaseRetriever r = new TenantInLeaseRetriever(dto.getPrimaryKey(), true);
+        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(dto.getPrimaryKey(), true);
+        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, tr.tenantScreening);
 
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, r.tenantScreening);
+        tr.saveScreening();
 
-        Persistence.service().merge(r.tenantScreening);
-
-        dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(r.tenantScreening);
-        dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
+        dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
+        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
 
         callback.onSuccess(dto);
     }
@@ -63,15 +56,15 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
         dto.person().set(tr.tenant.person());
 
-        SharedData.init();
-
-        IncomeInfoEmployer income1 = EntityFactory.create(IncomeInfoEmployer.class);
-        income1.set(PTGenerator.createEmployer());
-        dto.incomes2().add(income1);
-
-        IncomeInfoSelfEmployed income2 = EntityFactory.create(IncomeInfoSelfEmployed.class);
-        income2.set(PTGenerator.createSelfEmployed());
-        dto.incomes2().add(income2);
+//        SharedData.init();
+//
+//        IncomeInfoEmployer income1 = EntityFactory.create(IncomeInfoEmployer.class);
+//        income1.set(PTGenerator.createEmployer());
+//        dto.incomes2().add(income1);
+//
+//        IncomeInfoSelfEmployed income2 = EntityFactory.create(IncomeInfoSelfEmployed.class);
+//        income2.set(PTGenerator.createSelfEmployed());
+//        dto.incomes2().add(income2);
 
         return dto;
     }

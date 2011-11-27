@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
@@ -33,7 +32,6 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     @Override
     public void retrieve(AsyncCallback<TenantInfoDTO> callback, Key tenantId) {
         log.debug("Retrieving Info for tenant {}", tenantId);
-        TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantId);
         callback.onSuccess(retrieveData(new TenantInLeaseRetriever(tenantId)));
     }
 
@@ -41,28 +39,24 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO dto) {
         log.debug("Saving Tenant Info {}", dto);
 
-        TenantInLeaseRetriever r = new TenantInLeaseRetriever(dto.getPrimaryKey());
-        new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(dto, r.tenant);
-        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(dto, r.tenantScreening);
+        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(dto.getPrimaryKey());
+        new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(dto, tr.tenant);
+        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(dto, tr.tenantScreening);
 
-        Persistence.service().merge(r.tenant);
-        Persistence.service().merge(r.tenantScreening);
+        tr.saveTenant();
+        tr.saveScreening();
 
-        dto = new TenantConverter.Tenant2TenantInfo().createDTO(r.tenant);
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(r.tenantScreening, dto);
-        dto.setPrimaryKey(r.tenantInLease.getPrimaryKey());
+        dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, dto);
+        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
 
         callback.onSuccess(dto);
     }
 
     public TenantInfoDTO retrieveData(TenantInLeaseRetriever tr) {
-
         TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, dto);
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
-
-        // get Detached values
-        Persistence.service().retrieve(dto.documents());
         return dto;
     }
 

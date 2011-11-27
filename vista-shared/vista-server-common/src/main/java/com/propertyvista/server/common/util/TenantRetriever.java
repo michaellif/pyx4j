@@ -32,24 +32,28 @@ public class TenantRetriever {
 
     public List<TenantScreening> tenantScreenings;
 
+    private final boolean financial;
+
     // Construction:
     public TenantRetriever() {
+        this.financial = false;
+    }
+
+    public TenantRetriever(boolean financial) {
+        this.financial = financial;
     }
 
     public TenantRetriever(Key tenantId) {
-        retrieve(tenantId, false);
+        this(tenantId, false);
     }
 
     public TenantRetriever(Key tenantId, boolean financial) {
-        retrieve(tenantId, financial);
+        this(financial);
+        retrieve(tenantId);
     }
 
     // Manipulation:
     public void retrieve(Key tenantId) {
-        retrieve(tenantId, false);
-    }
-
-    public void retrieve(Key tenantId, boolean financial) {
         tenant = Persistence.service().retrieve(Tenant.class, tenantId);
         if (tenant != null) {
             EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
@@ -61,15 +65,35 @@ public class TenantRetriever {
                 tenantScreening = EntityFactory.create(TenantScreening.class);
             }
 
-            if (financial && !tenantScreening.isEmpty()) {
+            if (!tenantScreening.isEmpty()) {
                 Persistence.service().retrieve(tenantScreening.documents());
-                Persistence.service().retrieve(tenantScreening.incomes());
-                Persistence.service().retrieve(tenantScreening.assets());
-                Persistence.service().retrieve(tenantScreening.guarantors());
-                Persistence.service().retrieve(tenantScreening.equifaxApproval());
+                if (financial) {
+                    Persistence.service().retrieve(tenantScreening.incomes());
+                    Persistence.service().retrieve(tenantScreening.assets());
+                    Persistence.service().retrieve(tenantScreening.guarantors());
+                    Persistence.service().retrieve(tenantScreening.equifaxApproval());
+                }
+            } else {
+                // newly created - set belonging to tenant:
+                tenantScreening.tenant().set(tenant);
             }
 
             Persistence.service().retrieve(tenant.emergencyContacts());
+        }
+    }
+
+    public void saveTenant() {
+        Persistence.service().merge(tenant);
+    }
+
+    public void saveScreening() {
+        Persistence.service().merge(tenantScreening);
+        // save detached entities:
+        Persistence.service().merge(tenantScreening.documents());
+        if (financial) {
+            Persistence.service().merge(tenantScreening.incomes());
+            Persistence.service().merge(tenantScreening.assets());
+            Persistence.service().merge(tenantScreening.guarantors());
         }
     }
 }
