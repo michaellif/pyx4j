@@ -53,7 +53,13 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
     private static I18n i18n = I18n.get(InfoViewForm.class);
 
-    private final FormFlexPanel previousAddress = new FormFlexPanel();
+    private final FormFlexPanel previousAddress = new FormFlexPanel() {
+        @Override
+        public void setVisible(boolean visible) {
+            get(proto().previousAddress()).setVisible(visible);
+            super.setVisible(visible);
+        }
+    };
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
@@ -72,7 +78,6 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Contact Details"));
-
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
