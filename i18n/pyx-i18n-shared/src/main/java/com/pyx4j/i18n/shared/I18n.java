@@ -26,7 +26,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 
-public class I18n {
+public abstract class I18n {
 
     private static II18nFactory factory;
 
@@ -46,12 +46,14 @@ public class I18n {
 
     }
 
-    public String tr(String text) {
-        return text;
+    protected abstract String translate(final String text);
+
+    public final String tr(final String text) {
+        return translate(text);
     }
 
-    public final String tr(String text, Object... objects) {
-        return SimpleMessageFormat.format(tr(text), objects);
+    public final String tr(final String text, Object... objects) {
+        return SimpleMessageFormat.format(translate(text), objects);
     }
 
     public static final I18n get(final Class<?> clazz) {

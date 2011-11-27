@@ -36,7 +36,7 @@ class ClientI18nImpl extends I18n {
     }
 
     @Override
-    public String tr(String text) {
+    public final String translate(String text) {
         String value = bundle.getString(text);
         if (value == null) {
             return text;

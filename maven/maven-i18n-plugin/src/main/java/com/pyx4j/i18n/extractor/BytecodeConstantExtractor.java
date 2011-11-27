@@ -36,11 +36,11 @@ import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.LineNumberNode;
-import org.objectweb.asm.tree.MemberNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.analysis.Analyzer;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.Frame;
+import org.objectweb.asm.tree.analysis.Value;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.i18n.annotations.I18n;
@@ -175,6 +175,12 @@ public class BytecodeConstantExtractor {
             protected void i18nString(int lineNr, String text, boolean javaFormatFlag, String currentComment) {
                 extractor.addEntry(classSourceFileName, lineNr, text, javaFormatFlag, classComment, currentComment);
             }
+
+            @Override
+            protected void reportError(int lineNr, Value arg) {
+                System.err.println("[WARN] i18n.tr: Constant Expression required at " + classSourceFileName.replace("/", ".") + ":" + lineNr);
+                //throw new Error("Constant Expression required at " + classSourceFileName.replace("/", ".") + ":" + lineNr);
+            }
         };
 
         Analyzer analyzer = new LineNumberAnalyzer(interpreter);
@@ -206,7 +212,7 @@ public class BytecodeConstantExtractor {
         }
     }
 
-    static I18nStrategy getStrategyAnnotationValue(MemberNode memberNode) {
+    static I18nStrategy getStrategyAnnotationValue(ClassNode memberNode) {
         Object strategy = AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "strategy", memberNode);
         if (strategy != null) {
             return I18nStrategy.valueOf(((String[]) strategy)[1]);
@@ -215,7 +221,25 @@ public class BytecodeConstantExtractor {
         }
     }
 
-    static I18nCommentTarget getCommentTargetAnnotationValue(MemberNode memberNode) {
+    static I18nStrategy getStrategyAnnotationValue(MethodNode memberNode) {
+        Object strategy = AsmUtils.getAnnotationValue(TRANSLATABLE_CLASS, "strategy", memberNode);
+        if (strategy != null) {
+            return I18nStrategy.valueOf(((String[]) strategy)[1]);
+        } else {
+            return I18nStrategy.TranslateAll;
+        }
+    }
+
+    static I18nCommentTarget getCommentTargetAnnotationValue(ClassNode memberNode) {
+        Object target = AsmUtils.getAnnotationValue(COMMENT_ANNOTATION_CLASS, "target", memberNode);
+        if (target != null) {
+            return I18nCommentTarget.valueOf(((String[]) target)[1]);
+        } else {
+            return I18nCommentTarget.All;
+        }
+    }
+
+    static I18nCommentTarget getCommentTargetAnnotationValue(MethodNode memberNode) {
         Object target = AsmUtils.getAnnotationValue(COMMENT_ANNOTATION_CLASS, "target", memberNode);
         if (target != null) {
             return I18nCommentTarget.valueOf(((String[]) target)[1]);

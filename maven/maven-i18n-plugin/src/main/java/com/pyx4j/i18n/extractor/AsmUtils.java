@@ -27,7 +27,8 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MemberNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
 
 class AsmUtils {
 
@@ -62,7 +63,25 @@ class AsmUtils {
         }
     }
 
-    static AnnotationNode getAnnotation(String annotationClassName, MemberNode memberNode) {
+    static AnnotationNode getAnnotation(String annotationClassName, FieldNode memberNode) {
+        AnnotationNode anode = getAnnotation(annotationClassName, memberNode.visibleAnnotations);
+        if (anode != null) {
+            return anode;
+        } else {
+            return getAnnotation(annotationClassName, memberNode.invisibleAnnotations);
+        }
+    }
+
+    static AnnotationNode getAnnotation(String annotationClassName, MethodNode memberNode) {
+        AnnotationNode anode = getAnnotation(annotationClassName, memberNode.visibleAnnotations);
+        if (anode != null) {
+            return anode;
+        } else {
+            return getAnnotation(annotationClassName, memberNode.invisibleAnnotations);
+        }
+    }
+
+    static AnnotationNode getAnnotation(String annotationClassName, ClassNode memberNode) {
         AnnotationNode anode = getAnnotation(annotationClassName, memberNode.visibleAnnotations);
         if (anode != null) {
             return anode;
@@ -83,18 +102,43 @@ class AsmUtils {
         return null;
     }
 
-    static boolean hasAnnotation(String annotationClassName, MemberNode memberNode) {
+    static boolean hasAnnotation(String annotationClassName, ClassNode memberNode) {
         return getAnnotation(annotationClassName, memberNode) != null;
     }
 
-    static Object getAnnotationValue(String annotationClassName, String valueName, MemberNode memberNode) {
+    static boolean hasAnnotation(String annotationClassName, MethodNode memberNode) {
+        return getAnnotation(annotationClassName, memberNode) != null;
+    }
+
+    static boolean hasAnnotation(String annotationClassName, FieldNode memberNode) {
+        return getAnnotation(annotationClassName, memberNode) != null;
+    }
+
+    static Object getAnnotationValue(String annotationClassName, String valueName, FieldNode memberNode) {
         AnnotationNode anode = getAnnotation(annotationClassName, memberNode);
         if ((anode == null) || (anode.values == null)) {
             return null;
         } else {
             return getAnnotationValue(anode, valueName);
         }
+    }
 
+    static Object getAnnotationValue(String annotationClassName, String valueName, MethodNode memberNode) {
+        AnnotationNode anode = getAnnotation(annotationClassName, memberNode);
+        if ((anode == null) || (anode.values == null)) {
+            return null;
+        } else {
+            return getAnnotationValue(anode, valueName);
+        }
+    }
+
+    static Object getAnnotationValue(String annotationClassName, String valueName, ClassNode memberNode) {
+        AnnotationNode anode = getAnnotation(annotationClassName, memberNode);
+        if ((anode == null) || (anode.values == null)) {
+            return null;
+        } else {
+            return getAnnotationValue(anode, valueName);
+        }
     }
 
     static Object getAnnotationValue(AnnotationNode anode, String valueName) {

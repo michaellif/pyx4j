@@ -25,11 +25,13 @@ package com.pyx4j.i18n.extractor;
 
 import java.util.List;
 
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.BasicInterpreter;
+import org.objectweb.asm.tree.analysis.BasicValue;
 import org.objectweb.asm.tree.analysis.Value;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -38,11 +40,12 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
 
     static String I18N_CLASS = AsmUtils.codeName(I18n.class);
 
-    static final class StringConstantValue implements Value {
+    static final class StringConstantValue extends BasicValue {
 
         final String string;
 
         public StringConstantValue(String string) {
+            super(Type.getObjectType("java/lang/String"));
             this.string = string;
         }
 
@@ -64,10 +67,12 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
         this.currentComment = currentComment;
     }
 
-    protected abstract void i18nString(int currentLineNr, String text, boolean javaFormatFlag, String currentComment);
+    protected abstract void i18nString(int lineNr, String text, boolean javaFormatFlag, String currentComment);
+
+    protected abstract void reportError(int lineNr, Value arg);
 
     @Override
-    public Value naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
+    public BasicValue naryOperation(AbstractInsnNode insn, @SuppressWarnings("rawtypes") List values) throws AnalyzerException {
         if (insn.getOpcode() == INVOKEVIRTUAL) {
             MethodInsnNode methodInsn = (MethodInsnNode) insn;
             if (I18N_CLASS.equals(methodInsn.owner) && "tr".equals(methodInsn.name)) {
@@ -75,6 +80,8 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
                 if (arg instanceof StringConstantValue) {
                     boolean javaFormatFlag = (values.size() > 2);
                     i18nString(currentLineNr, ((StringConstantValue) arg).string, javaFormatFlag, currentComment);
+                } else {
+                    reportError(currentLineNr, arg);
                 }
             }
         }
@@ -82,7 +89,7 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
     }
 
     @Override
-    public Value newOperation(AbstractInsnNode insn) throws AnalyzerException {
+    public BasicValue newOperation(AbstractInsnNode insn) throws AnalyzerException {
         if (insn.getOpcode() == LDC) {
             Object cst = ((LdcInsnNode) insn).cst;
             if (cst instanceof String) {

@@ -169,15 +169,17 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
         boolean sessionClosed = closeSessionOnUnrecoverableError();
 
-        MessageDialog.show(i18n.tr("An Unexpected Error Has Occurred"),
+        String userMessage = i18n.tr("Please report the incident to technical support,\n"
 
-        i18n.tr("Please report the incident to technical support,\n"
+        + "describing the steps taken prior to the error.\n");
 
-        + "describing the steps taken prior to the error.\n")
+        if (sessionClosed) {
+            userMessage += "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption");
+        }
 
-        + ((sessionClosed) ? "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption") : "")
+        userMessage += detailsMessage;
 
-        + detailsMessage, Type.Error, new ShowOnceDialogOptions());
+        MessageDialog.show(i18n.tr("An Unexpected Error Has Occurred"), userMessage, Type.Error, new ShowOnceDialogOptions());
     }
 
 }
