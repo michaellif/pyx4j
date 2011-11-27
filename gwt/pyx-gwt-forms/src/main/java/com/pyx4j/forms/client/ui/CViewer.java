@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,49 +14,45 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on 2011-03-22
+ * @author Vlad
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
-/**
- *
- */
-public class NativeWidgetHolder extends SimplePanel implements INativeWidgetHolder {
+public abstract class CViewer<E> extends CFocusComponent<E, NativeViewer<E>> {
 
-    public NativeWidgetHolder(Object widget) {
+    public CViewer() {
         super();
-        this.add((Widget) widget);
     }
 
     @Override
-    public CComponent<?, ?> getCComponent() {
-        return null;
-    }
-
-    @Override
-    public boolean isEnabled() {
+    public boolean isEditable() {
         return false;
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setEditable(boolean editable) {
+        // do nothing - not editable...
     }
 
     @Override
-    protected void onLoad() {
-        super.onLoad();
-        DomDebug.attachedWidget();
+    public void onEditingStart() {
+        // do nothing - not editable...
     }
 
     @Override
-    protected void onUnload() {
-        super.onUnload();
-        DomDebug.detachWidget();
+    public void onEditingStop() {
+        // do nothing - not editable...
+    }
+
+    public abstract IsWidget createContent(E value);
+
+    @Override
+    protected NativeViewer<E> createWidget() {
+        return new NativeViewer<E>(this);
     }
 
 }
