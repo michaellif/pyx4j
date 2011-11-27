@@ -278,7 +278,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     }
 
     protected void addCaption(PageDescriptor page, String caption, AvailableLocale aLocale) {
-        addCaption(page, caption, null, aLocale);
+        addCaption(page, caption, caption, aLocale);
     }
 
     protected void addCaption(PageDescriptor page, String caption, String secondaryCaption, AvailableLocale aLocale) {
