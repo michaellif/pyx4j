@@ -22,12 +22,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.essentials.rpc.SystemState;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -52,7 +55,12 @@ public class AptListPanel extends Panel {
     public AptListPanel(String id, CompoundPropertyModel<List<Building>> model, AptListPage.ViewMode viewMode) {
         super(id, model);
 
-        GwtInclude aptMap = new GwtInclude("gwtInclude");
+        Panel aptMap;
+        if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
+            aptMap = new GwtInclude("gwtInclude");
+        } else {
+            aptMap = new EmptyPanel("gwtInclude");
+        }
         WebMarkupContainer aptList = new WebMarkupContainer("aptResultList");
         aptList.add(new ListView<Building>("aptListItem", model) {
             private static final long serialVersionUID = 1L;
@@ -64,8 +72,12 @@ public class AptListPanel extends Panel {
                 // PropertyDetailsDTO
                 item.add(new SimpleImage("picture", PMSiteContentManager.getFistVisibleMediaImgUrl(propInfo.media(), ThumbnailSize.small)));
                 item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add("propId", propId)));
-                GeoPoint pt = propInfo.info().address().location().getValue();
-                item.add(new JSActionLink("aptMapview", "showLocation(" + pt.getLat() + ", " + pt.getLng() + ")", false));
+                if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
+                    GeoPoint pt = propInfo.info().address().location().getValue();
+                    item.add(new JSActionLink("aptMapview", "showLocation(" + pt.getLat() + ", " + pt.getLng() + ")", false));
+                } else {
+                    item.add(new Label("aptMapview").setVisible(false));
+                }
                 AddressStructured addr = propInfo.info().address();
                 String addrFmt = "";
                 if (addr != null) {

@@ -188,10 +188,10 @@
 	background-image: url("images/template2/aptListIcons-hlight.png");
 	color:${object2_10};
 }
-.aptListMode_list {
+.aptListMode_map {
 	background-position:0px 0px;
 }
-.aptListMode_map {
+.aptListMode_list {
 	background-position:0px -60px;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_mapview {

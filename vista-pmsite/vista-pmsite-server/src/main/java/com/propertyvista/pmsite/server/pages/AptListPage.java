@@ -31,6 +31,8 @@ import templates.TemplateResources;
 
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
+import com.pyx4j.essentials.rpc.SystemState;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -112,30 +114,41 @@ public class AptListPage extends BasePage {
 
         add(form);
 
-        // check view mode - Map/List
-        if (PMSiteClientPreferences.getClientPref("aptListMode") == null) {
-            PMSiteClientPreferences.setClientPref("aptListMode", ViewMode.map.name());
-        }
         ViewMode viewMode = ViewMode.map;
-        try {
-            viewMode = ViewMode.valueOf(PMSiteClientPreferences.getClientPref("aptListMode"));
-        } catch (Exception ignore) {
-            // do nothing
-        }
-        add(new Label("aptListModeSwitch", viewMode.toString()).add(new AttributeClassModifier(null, "aptListMode_" + viewMode.name())));
-        add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria)), viewMode));
-        String jsAptListModeInfo = "\n" + "var aptListModeInfo = {";
-        for (ViewMode mode : ViewMode.values()) {
-            int nextId = (mode.ordinal() + 1) % ViewMode.values().length;
-            ViewMode nextMode = ViewMode.values()[nextId];
-            jsAptListModeInfo += "\n" + mode.name() + ": {text: '" + mode.toString() + "', cls: 'aptListMode_" + mode.name() + "', show: '.listing_"
-                    + mode.name() + "view', next: '" + nextMode.name() + "'}";
-            if (nextId > 0) {
-                jsAptListModeInfo += ",";
+        if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
+            // check view mode - Map/List
+            if (PMSiteClientPreferences.getClientPref("aptListMode") == null) {
+                PMSiteClientPreferences.setClientPref("aptListMode", ViewMode.map.name());
             }
+            try {
+                viewMode = ViewMode.valueOf(PMSiteClientPreferences.getClientPref("aptListMode"));
+            } catch (Exception ignore) {
+                // do nothing
+            }
+            // set switch label
+            int nextId = (viewMode.ordinal() + 1) % ViewMode.values().length;
+            ViewMode nextMode = ViewMode.values()[nextId];
+            add(new Label("aptListModeSwitch", nextMode.toString()).add(new AttributeClassModifier(null, "aptListMode_" + nextMode.name())));
+            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria)), viewMode));
+            String jsAptListModeInfo = "\n" + "var aptListModeInfo = {";
+            for (ViewMode mode : ViewMode.values()) {
+                nextId = (mode.ordinal() + 1) % ViewMode.values().length;
+                nextMode = ViewMode.values()[nextId];
+                // switch icon must display the next mode it switches to, but must activate the current mode view
+                jsAptListModeInfo += "\n" + mode.name() + ": {text: '" + nextMode.toString() + "', cls: 'aptListMode_" + nextMode.name()
+                        + "', show: '.listing_" + mode.name() + "view', next: '" + nextMode.name() + "'}";
+                if (nextId > 0) {
+                    jsAptListModeInfo += ",";
+                }
+            }
+            jsAptListModeInfo += "\n}\n";
+            add(new Label("jsAptListModeInfo", jsAptListModeInfo).setEscapeModelStrings(false));
+        } else {
+            viewMode = ViewMode.list;
+            add(new Label("aptListModeSwitch").setVisible(false));
+            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria)), viewMode));
+            add(new Label("jsAptListModeInfo").setVisible(false));
         }
-        jsAptListModeInfo += "\n}\n";
-        add(new Label("jsAptListModeInfo", jsAptListModeInfo).setEscapeModelStrings(false));
         // js method to return aptDetails url
         CharSequence url = getRequestCycle().urlFor(AptDetailsPage.class, new PageParameters().add(PMSiteApplication.ParamNameBuilding, ""));
         String jsAptDetailsUrl = "\n" + "function getAptDetailsUrl() { return '" + url.toString() + "'; }\n";
