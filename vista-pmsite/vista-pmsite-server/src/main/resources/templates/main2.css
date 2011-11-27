@@ -197,7 +197,11 @@ select {
 	padding-right: 10px;
 	display:inline;
 }
-
+.auth .greeting {
+	color:  ${object1_20};
+	font-weight: bold;
+	padding-right:10px;
+}
 .auth a {
 	color:  ${object1_20};
 }

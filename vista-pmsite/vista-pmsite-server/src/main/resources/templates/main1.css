@@ -201,6 +201,11 @@ select {
 	float: right;
 	padding: 0 10px;
 }
+.auth .greeting {
+	color: ${foreground_100};
+	font-weight: bold;
+	padding-right:10px;
+}
 
 .auth a {
 	color: ${foreground_100};
