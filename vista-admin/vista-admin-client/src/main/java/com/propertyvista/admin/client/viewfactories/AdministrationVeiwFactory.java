@@ -27,6 +27,12 @@ public class AdministrationVeiwFactory extends ViewFactoryBase {
                 map.put(type, new MaintenanceViewImpl());
             }
         }
-        return (T) map.get(type);
+
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }

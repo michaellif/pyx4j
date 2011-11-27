@@ -21,7 +21,4 @@ public abstract class ViewFactoryBase {
 
     protected static HashMap<Class<?>, IsWidget> map = new HashMap<Class<?>, IsWidget>();
 
-    public static IsWidget instance(Class<?> type) {
-        return map.get(type);
-    }
 }
