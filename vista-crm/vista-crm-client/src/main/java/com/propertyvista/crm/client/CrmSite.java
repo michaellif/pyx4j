@@ -92,7 +92,7 @@ public class CrmSite extends VistaSite {
         siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
-                LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView());
+                LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
 
                 Window.setTitle(i18n.tr("Vista CRM") + " - " + descriptor.siteTitles().crmHeader().getStringView());
 

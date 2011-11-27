@@ -330,7 +330,29 @@
         <servlet-name>PublicMediaServlet</servlet-name>
         <url-pattern>/ptapp/media/*</url-pattern>
     </servlet-mapping>   
+
+
+    <servlet>
+        <servlet-name>SiteResourcesServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.portal.SiteResourcesServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SiteResourcesServlet</servlet-name>
+        <url-pattern>/site-resource/*</url-pattern>
+    </servlet-mapping>
+
+    <!--  need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->
+    <servlet-mapping>
+        <servlet-name>SiteResourcesServlet</servlet-name>
+        <url-pattern>/crm/site-resource/*</url-pattern>
+    </servlet-mapping>   
     
+    <servlet-mapping>
+        <servlet-name>SiteResourcesServlet</servlet-name>
+        <url-pattern>/ptapp/site-resource/*</url-pattern>
+    </servlet-mapping>
+        
     <servlet>
         <servlet-name>ExportDownloadServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.services.ExportDownloadServlet</servlet-class>

@@ -30,6 +30,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.rpc.services.SiteResourcesUploadService;
 import com.propertyvista.server.common.blob.BlobService;
 
+/**
+ * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
+ * 
+ */
 public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity> implements SiteResourcesUploadService {
 
     private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);

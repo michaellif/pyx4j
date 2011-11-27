@@ -32,4 +32,6 @@ public interface SiteDefinitionsDTO extends IEntity {
 
     SiteTitles siteTitles();
 
+    IPrimitive<Boolean> logoAvalable();
+
 }

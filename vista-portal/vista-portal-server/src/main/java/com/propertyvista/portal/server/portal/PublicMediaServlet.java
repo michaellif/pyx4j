@@ -46,6 +46,8 @@ import com.propertyvista.server.domain.ThumbnailBlob;
 
 /**
  * This service does extra read from DB to read BlobKey, We may decide in future not to do this.
+ * 
+ * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
  */
 @SuppressWarnings("serial")
 public class PublicMediaServlet extends HttpServlet {

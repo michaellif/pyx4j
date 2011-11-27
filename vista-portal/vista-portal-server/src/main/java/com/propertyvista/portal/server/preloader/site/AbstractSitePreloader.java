@@ -23,6 +23,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -37,11 +38,13 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.Resource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.portal.server.preloader.AbstractVistaDataPreloader;
+import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.shared.CompiledLocale;
 
 public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
@@ -147,6 +150,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         }
 
         createStaticPages(site, siteLocale);
+
+        createLogo(site, siteLocale);
 
         createNews(siteLocale);
         createTestimonial(siteLocale);
@@ -367,6 +372,29 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         news.date().setValue(date);
 
         return news;
+    }
+
+    private void createLogo(SiteDescriptor site, List<LocaleInfo> siteLocale) {
+        byte raw[];
+        try {
+            raw = IOUtils.getBinaryResource("crm-logo.png", this.getClass());
+        } catch (IOException e) {
+            log.error("logo load error", e);
+            return;
+        }
+        if (raw != null) {
+            Key blobKey = BlobService.persist(raw, "crm-logo.png", "image/png");
+            for (LocaleInfo li : siteLocale) {
+                Resource res = site.logo().$();
+                res.locale().set(li.aLocale);
+                res.file().blobKey().setValue(blobKey);
+                res.file().fileSize().setValue(raw.length);
+                res.file().contentMimeType().setValue("image/png");
+                res.file().timestamp().setValue(System.currentTimeMillis());
+                Persistence.service().persist(res);
+                site.logo().add(res);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

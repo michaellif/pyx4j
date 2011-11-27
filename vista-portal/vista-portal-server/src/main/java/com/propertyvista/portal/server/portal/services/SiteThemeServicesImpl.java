@@ -31,8 +31,7 @@ import com.propertyvista.shared.CompiledLocale;
 @IgnoreSessionToken
 public class SiteThemeServicesImpl implements SiteThemeServices {
 
-    @Override
-    public void retrieveSiteDescriptor(AsyncCallback<SiteDefinitionsDTO> callback, CompiledLocale locale) {
+    public static SiteDescriptor getSiteDescriptorFromCache() {
         SiteDescriptor descriptor = null;
         Key descriptorKey = (Key) CacheService.get(SiteDescriptor.cacheKey);
         if (descriptorKey != null) {
@@ -43,9 +42,20 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
             descriptor = siteDescriptor.cloneEntity();
             CacheService.put(SiteDescriptor.cacheKey, descriptor.getPrimaryKey());
         }
+        return descriptor;
+    }
+
+    @Override
+    public void retrieveSiteDescriptor(AsyncCallback<SiteDefinitionsDTO> callback, CompiledLocale locale) {
+        SiteDescriptor descriptor = getSiteDescriptorFromCache();
         SiteDefinitionsDTO def = EntityFactory.create(SiteDefinitionsDTO.class);
         def.palette().setValue(descriptor.sitePalette().getValue());
         def.skin().setValue(descriptor.skin().getValue());
+
+        // TODO different resources base on locale
+        if (descriptor.logo().size() > 0) {
+            def.logoAvalable().setValue(Boolean.TRUE);
+        }
 
         for (SiteTitles t : descriptor.siteTitles()) {
             if (locale == t.locale().lang().getValue()) {

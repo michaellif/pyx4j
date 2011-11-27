@@ -27,4 +27,6 @@ public interface DeploymentConsts {
 
     public static final String mediaImagesServletMapping = "media/";
 
+    public static final String siteResourcesServletMapping = "site-resource/";
+
 }
