@@ -25,44 +25,45 @@ public class TenantDashboardTheme extends Theme {
     }
 
     public TenantDashboardTheme() {
-        Style style = new Style(".", StyleName.TenantDashboard.name());
+        Style style = new Style(".", StyleName.TenantDashboard);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardLeft.name());
+        style = new Style(".", StyleName.TenantDashboardLeft);
         style.addProperty("height", "100%");
         style.addProperty("margin-bottom", "30px");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardLeft.name(), " > div");
+        style = new Style(".", StyleName.TenantDashboardLeft, " > div");
         style.addProperty("min-height", "500px");
         style.addProperty("border-right", "solid 1px");
         style.addProperty("border-right-color", ThemeColors.foreground, 0.4);
         style.addProperty("height", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardRight.name());
+        style = new Style(".", StyleName.TenantDashboardRight);
         style.addProperty("margin-bottom", "30px");
         style.addProperty("height", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardTableHeader.name());
+        style = new Style(".", StyleName.TenantDashboardTableHeader);
         style.addProperty("background-color", ThemeColors.foreground, 0.1);
         style.addProperty("line-height", "35px");
         style.addProperty("color", ThemeColors.foreground, 0.7);
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardTableRow.name());
+        style = new Style(".", StyleName.TenantDashboardTableRow);
         style.addProperty("height", "45px");
-        style.addProperty("border-bottom", "dotted 1px #aaa");
+        style.addProperty("border-bottom", "dotted 1px");
+        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.7);
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardTableRow.name(), ":last-child");
+        style = new Style(".", StyleName.TenantDashboardTableRow, ":last-child");
         style.addProperty("border-bottom", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardTableRow.name(), ":hover");
+        style = new Style(".", StyleName.TenantDashboardTableRow, ":hover");
         style.addProperty("background-color", ThemeColors.object1, 0.05);
         style.addProperty("cursor", "pointer");
         addStyle(style);

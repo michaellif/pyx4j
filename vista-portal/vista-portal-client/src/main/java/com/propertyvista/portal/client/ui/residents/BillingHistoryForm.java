@@ -16,14 +16,13 @@ package com.propertyvista.portal.client.ui.residents;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -32,9 +31,11 @@ import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 
-public class BillingHistoryForm extends CEntityEditor<BillListDTO> {
+public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements BillingHistoryView {
 
     protected static I18n i18n = I18n.get(BillingHistoryForm.class);
+
+    private BillingHistoryView.Presenter presenter;
 
     public BillingHistoryForm() {
         super(BillListDTO.class, new VistaViewersComponentFactory());
@@ -42,14 +43,15 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel container = new FormFlexPanel();
-
-        container.getElement().getStyle().setMargin(20, Unit.PX);
-
-        int row = -1;
-
-        container.setWidget(++row, 0, inject(proto().bills(), createBillingHistoryViewer()));
+        FlowPanel container = new FlowPanel();
+        container.add(inject(proto().bills(), createBillingHistoryViewer()));
         return container;
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+
     }
 
     private CEntityFolder<BillDTO> createBillingHistoryViewer() {

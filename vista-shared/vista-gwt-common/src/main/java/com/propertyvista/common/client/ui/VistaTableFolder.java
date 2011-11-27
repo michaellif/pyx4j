@@ -18,7 +18,6 @@ import java.util.List;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
@@ -54,9 +53,6 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         this.itemName = itemName;
         setModifiable(modifyable);
         setOrderable(modifyable);
-        if (!modifyable) {
-            asWidget().addStyleDependentName(DefaultEntityFolderTheme.StyleDependent.readOnly.name());
-        }
     }
 
     public abstract List<EntityFolderColumnDescriptor> columns();

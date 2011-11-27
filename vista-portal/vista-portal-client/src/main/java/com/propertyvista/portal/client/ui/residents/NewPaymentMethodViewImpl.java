@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -45,6 +46,9 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
         add(form);
 
         Button submitButton = new Button(i18n.tr("Save"));
+        submitButton.getElement().getStyle().setMargin(20, Unit.PX);
+        submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+
         //TODO implement
         submitButton.addClickHandler(new ClickHandler() {
 

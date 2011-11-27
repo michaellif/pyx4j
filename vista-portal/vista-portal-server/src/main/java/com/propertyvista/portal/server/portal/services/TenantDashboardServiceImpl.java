@@ -109,9 +109,9 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
             Object[][] maintanances = new Object[][] {
                     { MaintananceDTO.Status.Submitted, "Leacking Kitchen Tap", new GregorianCalendar(2011, 9, 28).getTime() },
 
-                    { MaintananceDTO.Status.Scheduled, "Brocken Blinds", new GregorianCalendar(2011, 9, 22).getTime() },
+                    { MaintananceDTO.Status.Scheduled, "Broken Blinds", new GregorianCalendar(2011, 9, 22).getTime() },
 
-                    { MaintananceDTO.Status.Completed, "Door Lock is Brocken", new GregorianCalendar(2011, 6, 28).getTime() } };
+                    { MaintananceDTO.Status.Completed, "Door Lock is Broken", new GregorianCalendar(2011, 6, 28).getTime() } };
 
             for (int i = 0; i < maintanances.length; i++) {
                 MaintananceDTO m = dashboard.maintanances().$();

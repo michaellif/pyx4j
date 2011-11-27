@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.ui.residents;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -43,8 +42,6 @@ public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> impl
     @Override
     public IsWidget createContent() {
         FlowPanel container = new FlowPanel();
-        container.getElement().getStyle().setMargin(20, Unit.PX);
-
         container.add(inject(proto().paymentMethods(), createPaymentMethodsViewer()));
         return container;
     }

@@ -129,6 +129,20 @@ public class PortalTheme extends VistaTheme {
             @Override
             protected void initStyles() {
                 super.initStyles();
+                Style style = new Style(".", StyleName.EntityFolderTableHeader);
+                style.addProperty("width", "100%");
+                style.addProperty("background-color", ThemeColors.foreground, 0.1);
+                style.addProperty("line-height", "35px");
+                style.addProperty("color", ThemeColors.foreground, 0.7);
+                style.addProperty("border", "none");
+                addStyle(style);
+
+                style = new Style(".", StyleName.EntityFolderRowItemDecorator);
+                style.addProperty("height", "35px");
+                style.addProperty("border-bottom", "dotted 1px");
+                style.addProperty("border-bottom-color", ThemeColors.foreground, 0.7);
+                addStyle(style);
+
             }
         });
 

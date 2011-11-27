@@ -59,8 +59,6 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
 
-        container.getElement().getStyle().setMargin(20, Unit.PX);
-
         int row = 0;
 
         container.setWidget(row++, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
