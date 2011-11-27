@@ -7,24 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 26, 2011
+ * Created on Nov 27, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.maintenance;
+package com.propertyvista.portal.server.preloader.ido;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-public interface IssueClassification extends IEntity {
+import com.propertyvista.domain.maintenance.IssueElementType;
+import com.propertyvista.domain.maintenance.IssuePriority;
 
-    @Owner
-    @Detached
-    IssueSubjectDetails subjectDetails();
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@Transient
+public interface IssueClassificationPreload extends IEntity {
+
+    IPrimitive<IssueElementType> type();
+
+    IPrimitive<String> rooms();
+
+    IPrimitive<String> repairSubject();
+
+    IPrimitive<String> subjectDetails();
 
     IPrimitive<String> issue();
 
     IPrimitive<IssuePriority> priority();
+
 }

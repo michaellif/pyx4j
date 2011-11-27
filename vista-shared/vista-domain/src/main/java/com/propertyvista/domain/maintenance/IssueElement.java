@@ -27,5 +27,5 @@ public interface IssueElement extends IEntity {
     IPrimitive<String> name();
 
     @Transient
-    IList<IssueRepairSubject> subject();
+    IList<IssueRepairSubject> subjects();
 }

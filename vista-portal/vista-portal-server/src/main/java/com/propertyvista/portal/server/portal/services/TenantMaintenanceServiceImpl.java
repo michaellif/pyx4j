@@ -13,13 +13,19 @@
  */
 package com.propertyvista.portal.server.portal.services;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
+import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
@@ -51,25 +57,56 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
 
     @Override
     public void listIssueElements(AsyncCallback<Vector<IssueElement>> callback) {
-        // TODO Auto-generated method stub
+        Vector<IssueElement> dto = new Vector<IssueElement>();
+
+        {
+            EntityQueryCriteria<IssueElement> criteria = EntityQueryCriteria.create(IssueElement.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), IssueElementType.ApartmentUnit));
+            List<IssueElement> elements = Persistence.service().query(criteria);
+            dto.addAll(elements);
+        }
+
+        callback.onSuccess(dto);
 
     }
 
     @Override
     public void getIssueRepairSubject(AsyncCallback<IssueElement> callback, IssueElement issueElement) {
-        // TODO Auto-generated method stub
+        issueElement.subjects().clear();
 
+        {
+            EntityQueryCriteria<IssueRepairSubject> criteria = EntityQueryCriteria.create(IssueRepairSubject.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().issueElement(), issueElement));
+            issueElement.subjects().addAll(Persistence.service().query(criteria));
+        }
+
+        callback.onSuccess(issueElement);
     }
 
     @Override
     public void getIssueSubjectDetails(AsyncCallback<IssueRepairSubject> callback, IssueRepairSubject issueRepairSubject) {
-        // TODO Auto-generated method stub
+        issueRepairSubject.details().clear();
 
+        {
+            EntityQueryCriteria<IssueSubjectDetails> criteria = EntityQueryCriteria.create(IssueSubjectDetails.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().subject(), issueRepairSubject));
+            issueRepairSubject.details().addAll(Persistence.service().query(criteria));
+        }
+
+        callback.onSuccess(issueRepairSubject);
     }
 
     @Override
     public void getIssueClassification(AsyncCallback<IssueSubjectDetails> callback, IssueSubjectDetails issueSubjectDetails) {
-        // TODO Auto-generated method stub
+        issueSubjectDetails.classifications().clear();
+
+        {
+            EntityQueryCriteria<IssueClassification> criteria = EntityQueryCriteria.create(IssueClassification.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().subjectDetails(), issueSubjectDetails));
+            issueSubjectDetails.classifications().addAll(Persistence.service().query(criteria));
+        }
+
+        callback.onSuccess(issueSubjectDetails);
 
     }
 
