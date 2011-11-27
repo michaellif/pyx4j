@@ -63,6 +63,10 @@
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.remember label {
 	display:inline;
 }
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput.hint a {
+	color: ${foreground_100};
+	font-weight:bold;
+}
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=text],
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput input[type=password] {
 	width:200px;
