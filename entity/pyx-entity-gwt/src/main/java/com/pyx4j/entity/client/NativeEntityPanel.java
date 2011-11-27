@@ -22,6 +22,7 @@ package com.pyx4j.entity.client;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
@@ -29,10 +30,6 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeEditableComponent<E> {
 
     public NativeEntityPanel() {
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
     }
 
     @Override
@@ -47,6 +44,21 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
 
     @Override
     public void setEditable(boolean editable) {
+        if (editable) {
+            asWidget().removeStyleDependentName(DefaultEntityFolderTheme.StyleDependent.readOnly.name());
+        } else {
+            asWidget().addStyleDependentName(DefaultEntityFolderTheme.StyleDependent.readOnly.name());
+        }
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        if (enabled) {
+            asWidget().removeStyleDependentName(DefaultEntityFolderTheme.StyleDependent.readOnly.name());
+        } else {
+            asWidget().addStyleDependentName(DefaultEntityFolderTheme.StyleDependent.readOnly.name());
+        }
+
     }
 
     @Override

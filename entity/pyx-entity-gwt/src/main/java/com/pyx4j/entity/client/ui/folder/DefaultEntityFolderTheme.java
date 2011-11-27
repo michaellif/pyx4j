@@ -94,7 +94,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderRowItemDecorator);
-        style.addProperty("width", "0");
+        //style.addProperty("width", "0");
         style.addProperty("margin", "6px");
         addStyle(style);
 
