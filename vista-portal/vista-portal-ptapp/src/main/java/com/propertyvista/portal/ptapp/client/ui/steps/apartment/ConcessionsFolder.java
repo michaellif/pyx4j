@@ -21,7 +21,7 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Concession;
 
-class ConcessionsFolder extends VistaTableFolder<Concession> {
+public class ConcessionsFolder extends VistaTableFolder<Concession> {
 
     public ConcessionsFolder() {
         super(Concession.class, false);

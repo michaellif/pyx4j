@@ -71,6 +71,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ConcessionsFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureExFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
@@ -256,6 +257,10 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseFrom()), 8).build());
             setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseTo()), 8).build());
             setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().unitRent()), 8).build());
+
+            consessionPanel.setH2(0, 0, 1, i18n.tr("Promotions, Discounts and Concessions"));
+            consessionPanel.setWidget(1, 0, inject(proto().selectedUnit().concessions(), new ConcessionsFolder()));
+            setWidget(++row, 0, consessionPanel);
 
             includedPanel.setH2(0, 0, 1, i18n.tr("Included Utilities"));
             includedPanel.setWidget(1, 0, inject(proto().selectedUnit().includedUtilities(), new UtilityFolder()));
