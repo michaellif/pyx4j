@@ -75,7 +75,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
         tabPanel.add(createSecureInformationTab(), i18n.tr("Secure Information"));
         tabPanel.add(createAddressesTab(), i18n.tr("Addresses"));
-        tabPanel.add(createlegalQuestionsTab(), i18n.tr(proto().legalQuestions().getMeta().getCaption()));
+        tabPanel.add(createlegalQuestionsTab(), proto().legalQuestions().getMeta().getCaption());
         tabPanel.add(createIncomesTab(), i18n.tr("Incomes"));
         tabPanel.add(createAssetsTab(), i18n.tr("Assets"));
         tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
