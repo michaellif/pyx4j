@@ -136,6 +136,9 @@
 	display: inline-block;
 	width: 70px;
 }
+.advancedSearchNarrowWrap .searchAmenityBox .amenityList label:lang(fr) {
+	width: 165px;
+}
 
 .advancedSearchNarrowWrap .typeselActiveHover {
 	color:${foreground_10} !important;

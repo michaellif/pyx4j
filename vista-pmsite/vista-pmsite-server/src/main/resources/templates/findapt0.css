@@ -113,8 +113,8 @@
 	margin-top:30px;
 }
 .advancedSearchWideWrap .searchCommonBox .searchField {
-	width:170px;
-	margin-left:22px;
+	width:175px;
+	margin-left:15px;
 	display: inline-block;
 }
 .advancedSearchWideWrap .searchCommonBox .searchField:first-child {
@@ -125,9 +125,12 @@
 	width:34px;
 	text-align:center;
 }
-.advancedSearchWideWrap .searchCommonBox select,
+.advancedSearchWideWrap .searchCommonBox select {
+	width:67px;
+	margin:1px;
+}
 .advancedSearchWideWrap .searchCommonBox input[type=text] {
-	width:60px;
+	width:62px;
 	margin:1px;
 }
 .advancedSearchWideWrap .searchAmenityBox {
@@ -155,6 +158,11 @@
 .advancedSearchWideWrap .searchAmenityBox .amenityList label {
 	display:inline-block;
 	width:88px;
+}
+.advancedSearchWideWrap .searchAmenityBox .amenityList label:lang(fr) {
+	display:inline-block;
+	width:125px;
+	font-size:13px;
 }
 .advancedSearchWideWrap .typeselActiveHover {
 	background-color:#bbb !important;

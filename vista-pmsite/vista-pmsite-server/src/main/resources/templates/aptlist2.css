@@ -151,6 +151,9 @@
 	width: 70px;
 	color:${foreground_80};
 }
+.advancedSearchNarrowWrap .searchAmenityBox .amenityList label:lang(fr) {
+	width: 165px;
+}
 
 .vista-pmsite-aptListPage .vista-pmsite-main {
 	display: inline-block;

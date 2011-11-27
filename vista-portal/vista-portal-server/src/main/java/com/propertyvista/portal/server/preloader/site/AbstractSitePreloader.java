@@ -246,7 +246,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     protected void createNews(List<LocaleInfo> siteLocale) {
         for (LocaleInfo li : siteLocale) {
             final String caption = "Vancouver prices to keep rising";
-            final String content = "The Vancouver housing market may already be unaffordable for many, but there’s enough demand to keep prices rising, according to a new forecast.";
+            final String content = "The Vancouver housing market may already be unaffordable for many, but there is enough demand to keep prices rising, according to a new forecast.";
             Persistence.service().persist(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 03, 22)));
         }
 
