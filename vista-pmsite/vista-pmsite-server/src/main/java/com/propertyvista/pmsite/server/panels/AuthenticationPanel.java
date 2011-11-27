@@ -17,12 +17,17 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.contexts.Context;
+
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 
 public class AuthenticationPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
+
+    private static I18n i18n = I18n.get(AuthenticationPanel.class);
 
     public AuthenticationPanel(String id) {
         super(id);
@@ -44,7 +49,13 @@ public class AuthenticationPanel extends Panel {
 
         add(link);
 
-        link.add(new Label("caption", ((PMSiteSession) getSession()).isSignedIn() ? "Logout" : "Login"));
+        if (((PMSiteSession) getSession()).isSignedIn()) {
+            this.add(new Label("greetings", i18n.tr("Welcome {0}", Context.getVisit().getUserVisit().getName())));
+            link.add(new Label("caption", i18n.tr("LogOut")));
+        } else {
+            this.add(new Label("greetings", ""));
+            link.add(new Label("caption", i18n.tr("Login")));
+        }
 
     }
 }
