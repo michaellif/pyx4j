@@ -13,49 +13,66 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import java.util.Vector;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Maintenance;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
+import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 
 public class MaintenanceAcitvity extends SecurityAwareActivity implements MaintenanceView.Presenter {
+
     private final MaintenanceView view;
 
-    public MaintenanceAcitvity(Place place) {
-        this.view = (MaintenanceView) PortalViewFactory.instance(MaintenanceView.class);
-        this.view.setPresenter(this);
-        withPlace(place);
-    }
+    private final TenantMaintenanceService srv;
 
-    public MaintenanceAcitvity withPlace(Place place) {
-        return this;
+    public MaintenanceAcitvity(Place place) {
+        this.view = PortalViewFactory.instance(MaintenanceView.class);
+        this.view.setPresenter(this);
+        srv = GWT.create(TenantMaintenanceService.class);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
-        //TODO Implement a service call
-        MaintenanceRequestDTO problem = EntityFactory.create(MaintenanceRequestDTO.class);
-        view.populate(problem);
+
+        srv.listOpenIssues(new DefaultAsyncCallback<Vector<MaintananceDTO>>() {
+            @Override
+            public void onSuccess(Vector<MaintananceDTO> result) {
+                view.populateOpenRequests(result);
+            }
+
+        });
+
+        srv.listHistoryIssues(new DefaultAsyncCallback<Vector<MaintananceDTO>>() {
+            @Override
+            public void onSuccess(Vector<MaintananceDTO> result) {
+                view.populateHistoryRequests(result);
+            }
+
+        });
+
     }
 
     @Override
-    public void showSystemStatus() {
+    public void openRequest(MaintananceDTO requests) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void showSupportHistory() {
-        AppSite.getPlaceController().goTo(new Maintenance.MaintenanceListHistory());
-
+    public void createNewRequest() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.MaintenanceDetails());
     }
+
 }

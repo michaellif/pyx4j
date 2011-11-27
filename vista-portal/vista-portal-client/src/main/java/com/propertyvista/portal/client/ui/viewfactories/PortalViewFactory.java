@@ -29,8 +29,8 @@ import com.propertyvista.portal.client.ui.residents.DashboardView;
 import com.propertyvista.portal.client.ui.residents.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodViewImpl;
-import com.propertyvista.portal.client.ui.residents.MaintenanceListerView;
-import com.propertyvista.portal.client.ui.residents.MaintenanceListerViewImpl;
+import com.propertyvista.portal.client.ui.residents.MaintenanceDetailsView;
+import com.propertyvista.portal.client.ui.residents.MaintenanceDetailsViewImpl;
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.MaintenanceViewImpl;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
@@ -42,7 +42,8 @@ import com.propertyvista.portal.client.ui.residents.PersonalInfoViewImpl;
 
 public class PortalViewFactory extends ViewFactoryBase {
 
-    public static IsWidget instance(Class<?> type) {
+    @SuppressWarnings("unchecked")
+    public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (DashboardView.class.equals(type)) {
                 map.put(type, new DashboardViewImpl());
@@ -62,8 +63,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new CurrentBillViewImpl());
             } else if (PotentialTenantView.class.equals(type)) {
                 map.put(type, new PotentialTenantViewImpl());
-            } else if (MaintenanceListerView.class.equals(type)) {
-                map.put(type, new MaintenanceListerViewImpl());
+            } else if (MaintenanceDetailsView.class.equals(type)) {
+                map.put(type, new MaintenanceDetailsViewImpl());
             } else if (NewPaymentMethodView.class.equals(type)) {
                 map.put(type, new NewPaymentMethodViewImpl());
             } else if (EditPaymentMethodView.class.equals(type)) {
@@ -71,6 +72,6 @@ public class PortalViewFactory extends ViewFactoryBase {
             }
 
         }
-        return map.get(type);
+        return (T) map.get(type);
     }
 }

@@ -13,10 +13,20 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
-public interface MaintenanceListerView extends IListerView<MaintenanceRequestDTO> {
+public interface MaintenanceDetailsView extends IsWidget {
+
+    void setPresenter(Presenter presenter);
+
+    void populate(MaintananceDTO requests);
+
+    interface Presenter {
+
+        public void submit();
+
+    }
 
 }

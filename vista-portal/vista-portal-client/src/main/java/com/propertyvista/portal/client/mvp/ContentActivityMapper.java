@@ -26,7 +26,7 @@ import com.propertyvista.portal.client.activity.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.DashboardActivity;
 import com.propertyvista.portal.client.activity.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.MaintenanceAcitvity;
-import com.propertyvista.portal.client.activity.MaintenanceListerActivity;
+import com.propertyvista.portal.client.activity.MaintenanceDetailsActivity;
 import com.propertyvista.portal.client.activity.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
@@ -54,8 +54,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
-                } else if (place instanceof Residents.Maintenance.MaintenanceListHistory) {
-                    activity = new MaintenanceListerActivity(place);
+                } else if (place instanceof Residents.Maintenance.MaintenanceDetails) {
+                    activity = new MaintenanceDetailsActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
                 } else if (place instanceof Residents.PaymentMethods) {

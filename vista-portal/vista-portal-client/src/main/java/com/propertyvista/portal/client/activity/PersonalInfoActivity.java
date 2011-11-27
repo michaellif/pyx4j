@@ -32,7 +32,7 @@ public class PersonalInfoActivity extends SecurityAwareActivity {
     PersonalInfoCrudService srv;
 
     public PersonalInfoActivity(Place place) {
-        this.view = (PersonalInfoView) PortalViewFactory.instance(PersonalInfoView.class);
+        this.view = PortalViewFactory.instance(PersonalInfoView.class);
         withPlace(place);
         srv = GWT.create(PersonalInfoCrudService.class);
     }

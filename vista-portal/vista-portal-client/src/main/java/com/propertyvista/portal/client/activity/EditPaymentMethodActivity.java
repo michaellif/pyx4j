@@ -31,7 +31,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
     private final EditPaymentMethodView view;
 
     public EditPaymentMethodActivity(Place place) {
-        this.view = (EditPaymentMethodView) PortalViewFactory.instance(EditPaymentMethodView.class);
+        this.view = PortalViewFactory.instance(EditPaymentMethodView.class);
         this.view.setPresenter(this);
     }
 

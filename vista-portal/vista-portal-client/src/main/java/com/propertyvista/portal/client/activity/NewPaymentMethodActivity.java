@@ -36,7 +36,7 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     private final PersonalInfoCrudService srv = GWT.create(PersonalInfoCrudService.class);
 
     public NewPaymentMethodActivity(Place place) {
-        this.view = (NewPaymentMethodView) PortalViewFactory.instance(NewPaymentMethodView.class);
+        this.view = PortalViewFactory.instance(NewPaymentMethodView.class);
         this.view.setPresenter(this);
         withPlace(place);
     }

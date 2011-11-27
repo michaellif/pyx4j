@@ -13,21 +13,25 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
 public interface MaintenanceView extends IsWidget {
 
     void setPresenter(Presenter presenter);
 
-    void populate(MaintenanceRequestDTO problem);
+    void populateOpenRequests(Vector<MaintananceDTO> openRequests);
+
+    void populateHistoryRequests(Vector<MaintananceDTO> historyRequests);
 
     interface Presenter {
 
-        public void showSystemStatus();
+        public void openRequest(MaintananceDTO requests);
 
-        public void showSupportHistory();
+        public void createNewRequest();
 
     }
 

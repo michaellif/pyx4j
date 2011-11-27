@@ -37,7 +37,7 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
     private final CurrentBillView view;
 
     public CurrentBillActivity(Place place) {
-        this.view = (CurrentBillView) PortalViewFactory.instance(CurrentBillView.class);
+        this.view = PortalViewFactory.instance(CurrentBillView.class);
         this.view.setPresenter(this);
         withPlace(place);
     }

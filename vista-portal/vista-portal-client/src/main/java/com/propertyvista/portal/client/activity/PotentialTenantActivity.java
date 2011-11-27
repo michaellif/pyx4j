@@ -25,7 +25,7 @@ public class PotentialTenantActivity extends AbstractActivity {
     private final PotentialTenantView view;
 
     public PotentialTenantActivity(Place place) {
-        this.view = (PotentialTenantView) PortalViewFactory.instance(PotentialTenantView.class);
+        this.view = PortalViewFactory.instance(PotentialTenantView.class);
         withPlace(place);
 
     }

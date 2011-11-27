@@ -33,7 +33,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
     private final NavigView view;
 
     public NavigActivity(Place place) {
-        this.view = (NavigView) PortalViewFactory.instance(NavigView.class);
+        this.view = PortalViewFactory.instance(NavigView.class);
         view.setPresenter(this);
         withPlace(place);
     }

@@ -31,7 +31,7 @@ public class CaptionActivity extends AbstractActivity {
     private final AppPlace place;
 
     public CaptionActivity(Place place) {
-        this.view = (CaptionView) PortalViewFactory.instance(CaptionView.class);
+        this.view = PortalViewFactory.instance(CaptionView.class);
         this.place = (AppPlace) place;
     }
 

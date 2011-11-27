@@ -35,7 +35,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     private final PaymentMethodsView view;
 
     public PaymentMethodsActivity(Place place) {
-        this.view = (PaymentMethodsView) PortalViewFactory.instance(PaymentMethodsView.class);
+        this.view = PortalViewFactory.instance(PaymentMethodsView.class);
         this.view.setPresenter(this);
         withPlace(place);
     }

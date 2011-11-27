@@ -7,40 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
+ * Created on Jun 25, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import java.util.Vector;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
-public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
+public class MaintenanceDetailsViewImpl extends SimplePanel implements MaintenanceDetailsView {
 
-    private final MaintenanceList list;
+    private static I18n i18n = I18n.get(MaintenanceDetailsViewImpl.class);
 
-    public MaintenanceViewImpl() {
-        list = new MaintenanceList();
-        add(list);
+    public MaintenanceDetailsViewImpl() {
+        setWidget(new HTML("MaintenanceDetailsViewImpl"));
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
-        list.setPresenter(presenter);
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    public void populateOpenRequests(Vector<MaintananceDTO> openRequests) {
-        list.populateOpenRequests(openRequests);
-    }
+    public void populate(MaintananceDTO requests) {
+        // TODO Auto-generated method stub
 
-    @Override
-    public void populateHistoryRequests(Vector<MaintananceDTO> historyRequests) {
-        list.populateHistoryRequests(historyRequests);
     }
 
 }

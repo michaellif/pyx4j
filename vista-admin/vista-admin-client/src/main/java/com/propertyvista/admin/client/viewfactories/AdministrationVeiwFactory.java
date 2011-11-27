@@ -21,12 +21,12 @@ import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 
 public class AdministrationVeiwFactory extends ViewFactoryBase {
 
-    public static IsWidget instance(Class<?> type) {
+    public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
             }
         }
-        return map.get(type);
+        return (T) map.get(type);
     }
 }

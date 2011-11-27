@@ -14,7 +14,6 @@
 package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -47,7 +46,7 @@ public class PortalSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Maintenance")
         public static class Maintenance extends AppPlace {
 
-            public static class MaintenanceListHistory extends CrudAppPlace {
+            public static class MaintenanceDetails extends AppPlace {
             }
         }
 

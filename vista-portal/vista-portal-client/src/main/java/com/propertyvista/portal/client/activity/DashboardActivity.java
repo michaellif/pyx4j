@@ -32,13 +32,8 @@ public class DashboardActivity extends SecurityAwareActivity {
     private final TenantDashboardService srv;
 
     public DashboardActivity(Place place) {
-        this.view = (DashboardView) PortalViewFactory.instance(DashboardView.class);
-        withPlace(place);
+        this.view = PortalViewFactory.instance(DashboardView.class);
         srv = GWT.create(TenantDashboardService.class);
-    }
-
-    public DashboardActivity withPlace(Place place) {
-        return this;
     }
 
     @Override

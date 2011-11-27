@@ -36,7 +36,7 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
     protected final VistaAdminService service;
 
     public MaintenanceActivity(Place place) {
-        view = (MaintenanceView) AdministrationVeiwFactory.instance(MaintenanceView.class);
+        view = AdministrationVeiwFactory.instance(MaintenanceView.class);
         assert (view != null);
         view.setPresenter(this);
 
