@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -27,10 +26,10 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
@@ -41,7 +40,6 @@ import com.propertyvista.crm.client.ui.CrmPanel;
 import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
@@ -49,8 +47,10 @@ public class CrmSite extends VistaSite {
 
     private static I18n i18n = I18n.get(CrmSite.class);
 
+    private boolean initialized = false;
+
     public CrmSite() {
-        super(CrmSiteMap.class);
+        super(CrmSiteMap.class, new CrmSiteAppPlaceDispatcher());
     }
 
     @Override
@@ -59,13 +59,11 @@ public class CrmSite extends VistaSite {
 
         DefaultErrorHandlerDialog.register();
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), getSystemFashboardPlace());
+        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
         RootPanel.get().add(RootLayoutPanel.get());
 
         RootLayoutPanel.get().add(new CrmPanel());
-
-        hideLoadingIndicator();
 
         SessionInactiveDialog.register();
 
@@ -73,39 +71,31 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                init();
+                if (initialized) {
+                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                }
             }
 
         });
 
-        obtainAuthenticationData();
+        initSiteTheme();
     }
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
-        //TODO getPlaceController().goTo(new CrmSiteMap.GenericMessage());
     }
 
-    private void init() {
+    private void initSiteTheme() {
         SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
         siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
+                hideLoadingIndicator();
                 LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
-
                 Window.setTitle(i18n.tr("Vista CRM") + " - " + descriptor.siteTitles().crmHeader().getStringView());
-
                 StyleManger.installTheme(new VistaCrmTheme(), new VistaPalette(descriptor.palette()));
-                if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
-                    if (CrmSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
-                        AppSite.getPlaceController().goTo(getSystemFashboardPlace());
-                    } else {
-                        CrmSite.getHistoryHandler().handleCurrentHistory();
-                    }
-                } else {
-                    AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-                }
+                obtainAuthenticationData();
             }
         }, ClentNavigUtils.getCurrentLocale());
 
@@ -116,19 +106,19 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onSuccess(Boolean result) {
-                init();
+                AppSite.getHistoryHandler().handleCurrentHistory();
+                initialized = true;
             }
 
             @Override
             public void onFailure(Throwable caught) {
-                //TODO handle it properly
-                CrmSite.getHistoryHandler().handleCurrentHistory();
+                AppSite.getHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
             }
         });
     }
 
-    static public Place getSystemFashboardPlace() {
+    static public AppPlace getSystemFashboardPlace() {
         return new CrmSiteMap.Dashboard().formDashboardPlace(new Key(-1));
     }
 }

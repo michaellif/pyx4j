@@ -18,16 +18,17 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class CrmSiteMap implements SiteMap {
 
     @PlaceProperties(caption = "Login")
-    public static class Login extends AppPlace {
+    public static class Login extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Retrieve Password")
-    public static class RetrievePassword extends AppPlace {
+    public static class RetrievePassword extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Reset Password")
