@@ -75,7 +75,7 @@ public class DashboardGenerator extends Dashboards {
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue("Building Dashboard #1");
+        dmd.name().setValue("General Building Dashboard");
         dmd.description().setValue("Displays some building data");
         dmd.layoutType().setValue(LayoutType.Two21);
 
@@ -131,7 +131,7 @@ public class DashboardGenerator extends Dashboards {
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue("Building Dashboard #2");
+        dmd.name().setValue("Unit Availability Dashboard");
         dmd.description().setValue("Displays some building data");
         dmd.layoutType().setValue(LayoutType.One);
 
@@ -168,7 +168,7 @@ public class DashboardGenerator extends Dashboards {
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue("Building Dashboard #3");
+        dmd.name().setValue("Arrears Dashboard");
         dmd.description().setValue("Displays some building data");
         dmd.layoutType().setValue(LayoutType.One);
 
