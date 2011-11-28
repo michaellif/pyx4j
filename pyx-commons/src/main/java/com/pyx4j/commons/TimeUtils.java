@@ -30,6 +30,10 @@ public class TimeUtils {
 
     public static int[] MONTH_DAYS_LEAP = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
+    /**
+     * Use TimeUtils.simpleFormat(, "MMM")
+     */
+    @Deprecated
     public static String[] MONTH_NAMES_SHORT = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
     public static boolean isOlderThen(final Date bithday, int years) {
