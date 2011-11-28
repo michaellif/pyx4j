@@ -16,7 +16,9 @@ package com.propertyvista.misc;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.misc.EquifaxApproval.Decision;
+
 public interface EquifaxResult extends IEntity {
 
-    IPrimitive<String> details();
+    IPrimitive<Decision> suggestedDecision();
 }

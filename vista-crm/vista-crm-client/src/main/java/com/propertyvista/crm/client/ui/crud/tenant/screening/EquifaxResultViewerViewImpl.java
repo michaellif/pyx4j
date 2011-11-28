@@ -21,6 +21,6 @@ import com.propertyvista.misc.EquifaxResult;
 public class EquifaxResultViewerViewImpl extends CrmViewerViewImplBase<EquifaxResult> implements EquifaxResultViewerView {
 
     public EquifaxResultViewerViewImpl() {
-        super(CrmSiteMap.Tenants.EquifaxResult.class, new EquifaxResultEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Tenants.EquifaxResult.class, new EquifaxResultEditorForm(new CrmViewersComponentFactory()), true);
     }
 }

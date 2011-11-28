@@ -10,7 +10,8 @@
  * Created on Feb 1, 2011
  * @author Misha
  * @version $Id$
- */package com.propertyvista.crm.client.resources;
+ */
+package com.propertyvista.crm.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
@@ -18,5 +19,4 @@ import com.google.gwt.resources.client.ClientBundleWithLookup;
 public interface CrmResources extends ClientBundleWithLookup {
 
     CrmResources INSTANCE = GWT.create(CrmResources.class);
-
 }

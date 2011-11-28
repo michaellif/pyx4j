@@ -34,6 +34,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
+
     private static I18n i18n = I18n.get(ComplexEditorForm.class);
 
     private static final String TAB_CAPTION_DASHBOARD = "Dashboard";

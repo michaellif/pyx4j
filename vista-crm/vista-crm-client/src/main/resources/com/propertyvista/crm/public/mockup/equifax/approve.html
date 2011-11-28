@@ -1,0 +1,606 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Approve</title>
+    <style type="text/css">
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, dfn, em,
+font, img, strong, sub, sup, tt, var, center, dl, dt, dd,
+ol, ul, li, blockquote, form, label, legend, table, caption, tr, th, td, fieldset, abbr {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+a { text-decoration:none; }
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+q { quotes: none; }
+q:before { content:""; }
+q:after { content:""; }
+input:focus { outline: none; }
+textarea:focus { outline: none; }
+select:focus { outline: none; }
+ol, ul { list-style: none; }
+/* === end reset CSS === */
+body{
+  width:100%;
+  color: #4c4e4d;
+  font:12px Arial,Helvetica,sans-serif;
+}
+.approve_table{
+  width: 100%;
+  padding-bottom: 50px;
+}
+table{
+  width: 100%;
+}
+a:hover{
+  text-decoration: underline;
+}
+.report_table th{
+  height: 3em;
+  text-shadow: 0 4px 2px #1d5a20;
+}
+.report_table th h1, .report_table td h2{
+  color: #fff;
+  font-size: 2.833em;
+  text-transform: uppercase;
+  font-weight: normal;
+  line-height: 2.8em;
+  text-align: center;
+}
+.report_table td h2{
+  line-height: 2.2em;
+  text-shadow: 0 3px 2px #445570;
+  font-size: 1.45em;
+  font-weight: bold;
+}
+.approve_table .report_table th{
+  background-color: #309636;
+}
+.report_table .head_row{
+  height: 2.1em;
+}
+.report_table .head_row td{
+  background-color: #647da4;
+}
+.report_table td{
+  border: 1px solid #e4e4e4;
+  padding: 0 7px;
+  line-height: 2.4em;
+  vertical-align: middle;
+  width: 25%;
+}
+.green_cell{
+  background-color: #a1d58b;
+  text-align: center;
+}
+.text_bg_ef, .text_bg_ef td{
+  background-color: #efefef;
+  font-weight: bold;
+}
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}
+.align_center, .align_center td{
+  text-align: center;
+}
+.align_right{
+  text-align: right!important;
+}
+.align_left{
+  text-align: left;
+}
+.border_top td, .history_table td.border_top{
+  border-top:3px solid #a9a9a9;
+}
+.report_table .inner_t td, .inner_t .in_table7 td#pad0{
+  padding: 0;
+}
+.report_table .inner_t td .inner_table9 td{
+  width: auto;
+}
+.report_table td a{
+  color: #ff2600;
+}
+.report_table .inner_t .in_table7 td{
+  padding: 0 7px;
+  width: auto;
+  vertical-align: top;
+}
+.bg_paloma{
+  background-color: #ffebc9;
+}
+/*.report_table .inner_t .in_table7 td.width210{
+  width: 17.5em;
+}
+.report_table .inner_t .in_table7 td.width165{
+  width: 13.7em;
+}
+.report_table .inner_t .in_table7 td.width74{
+  width: 6.15em;
+}
+.report_table .inner_t .in_table7 td.vertical_middle{
+  vertical-align: middle;
+}
+.report_table .inner_t .in_table7 td.width115{
+  width: 9.5em;
+}*/
+.empty_row td{
+  color: #a9a9a9;
+  text-transform: uppercase;
+  text-align: center;
+  height: 45px;
+}
+.inner_t.pad0 .in_table7.history_table td{
+  padding: 0 7px;
+}
+.green_cell.border_top{
+  height: 2.8em;
+}
+.dont_approve_table .report_table th{
+  background-color: #bd1900;
+  text-shadow: 0 4px 2px #710f00;
+}
+.pink_cell{
+  background-color: #ffa095;
+  text-align: center;
+}
+.yellow_cell{
+  text-align: center;
+  background-color: #f6d212;
+}
+.light_green{
+  background-color: #b9ebc5;
+  text-align: center;
+}
+	</style>
+  </head>
+
+  <body>
+	<div class="approve_table">
+	  <table class="report_table">
+		<tr>
+		  <th colspan="4"><h1>Approve</h1></th>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>Quick summary</h2></td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef">% Rent    Covered</td>
+		  <td class="green_cell">115%</td>
+		  <td class="text_bg_ef">Monthly Income To Rent Ratio</td>
+		  <td class="green_cell">3,2</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef">Gross Monthly Net Income</td>
+		  <td class="align_right">$ 3 670</td>
+		  <td class="text_bg_ef">Estimated    debt and rent payments</td>
+		  <td class="align_right">$ 2 200</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef">Total Accounts</td>
+		  <td class="align_right">$ 6</td>
+		  <td class="text_bg_ef">Accounts with no late payments</td>
+		  <td class="align_right">$ 6</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef">Total outstanding balance</td>
+		  <td class="align_right">$ 4 200</td>
+		  <td class="text_bg_ef">Outstanding Revolving debt</td>
+		  <td class="align_right">$ 4 200</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef">Bankruptcies/Proposals</td>
+		  <td class="align_right">$ 0</td>
+		  <td class="text_bg_ef">Evictions</td>
+		  <td class="align_right">$ 0</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef">Landlord/Tenant Court</td>
+		  <td class="align_right">$ 0</td>
+		  <td class="text_bg_ef">Landlord Collections Filed</td>
+		  <td class="align_right">$ 0</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef">Outstanding Balance in Collections</td>
+		  <td class="align_right">$ 345</td>
+		  <td class="text_bg_ef">&nbsp;</td>
+		  <td>&nbsp;</td>
+		</tr>
+		<tr class="align_center border_top">
+		  <td rowspan="2"><strong>Accounts paid late</strong></td>
+		  <td class="text_bg_ef">1-30 days</td>
+		  <td class="text_bg_ef">31-60 days</td>
+		  <td class="text_bg_ef">61-90 days</td>
+		</tr>
+		<tr class="align_center">
+		  <td>0</td>
+		  <td>0</td>
+		  <td>0</td>
+		</tr>
+		<tr class="align_center border_top">
+		  <td rowspan="2"><strong>Equifax</strong></td>
+		  <td class="text_bg_ef">Check Score</td>
+		  <td class="text_bg_ef">Rating Level</td>
+		  <td class="text_bg_ef">Risk Level</td>
+		</tr>
+		<tr class="align_center">
+		  <td>770</td>
+		  <td class="green_cell">EXCELLENT</td>
+		  <td class="green_cell">Low Risk</td>
+		</tr>
+		<tr class="align_center inner_t">
+		  <td colspan="4">
+			<table class="inner_table9">
+			  <tr class="align_center text_bg_ef border_top">
+				<td>R1</td>
+				<td>R2</td>
+				<td>R3</td>
+				<td>R4</td>
+				<td>R5</td>
+				<td>R6</td>
+				<td>R7</td>
+				<td>R8</td>
+				<td>R9</td>
+			  </tr>
+			  <tr>
+				<td>5</td>
+				<td>1</td>
+				<td>0</td>
+				<td>0</td>
+				<td>0</td>
+				<td>0</td>
+				<td>0</td>
+				<td>0</td>
+				<td>0</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>Identity</h2></td>
+		</tr>
+		<tr class="four_cols">
+		  <td class="text_bg_ef">NAME</td>
+		  <td class="align_center">John Smith</td>
+		  <td class="text_bg_ef">Date of Birth</td>
+		  <td class="align_center">1967-01-15</td>
+		</tr>
+		<tr class="border_top">
+		  <td rowspan="2"><strong>Address</strong></td>
+		  <td class="text_bg_ef align_right">Current</td>
+		  <td colspan="2" class="align_left">20 Bathurst St, Toronto, ON, Canada</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef align_right">Former</td>
+		  <td colspan="2">20 Bathurst St, Toronto, ON, Canada</td>
+		</tr>
+		<tr class="border_top">
+		  <td rowspan="3"><strong>Employment</strong></td>
+		  <td class="text_bg_ef align_right">Current</td>
+		  <td colspan="2">RBC Bank</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef align_right">Former</td>
+		  <td colspan="2" class="align_left">Scotia Bank</td>
+		</tr>
+		<tr>
+		  <td class="text_bg_ef align_right"></td>
+		  <td><a href="#">Conflicting Record Found</a></td>
+		  <td><a href="#">Fidelity Investment inc.</a></td>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>Accounts</h2></td>
+		</tr>
+		<tr class="inner_t">
+		  <td colspan="4">
+			<table class="in_table7">
+			  <tr class="align_center text_bg_ef">
+				<td class="width210">Account Name</td>
+				<td class="width210">Account Number</td>
+				<td class="width165">High Credit</td>
+				<td class="width165">Balance</td>
+				<td class="width115">Last Payment</td>
+				<td class="width74">Code</td>
+				<td class="width115">Type</td>
+			  </tr>
+			  <tr class="align_center">
+				<td rowspan="2" class="vertical_middle"><strong>BMO Master Card</strong></td>
+				<td class="bg_paloma">1234567890123450</td>
+				<td class="bg_paloma align_right">$ 14 567</td>
+				<td class="bg_paloma align_right">$ 1 342</td>
+				<td>Nov 27,2011</td>
+				<td class="green_cell">R1</td>
+				<td>Revolving</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Payment Rate:</strong></td>
+				<td colspan="2">Paid as agreed and up to date</td>
+				<td class="align_right"><strong>Payment Type:</strong></td>
+				<td colspan="2">Monthly payments</td>
+			  </tr>
+			  <tr class="border_top align_center">
+				<td  rowspan="2" class="vertical_middle"><strong>TD VISA</strong></td>
+				<td class="bg_paloma">2345678901234500</td>
+				<td class="bg_paloma align_right">$ 20 000</td>
+				<td class="bg_paloma align_right">$ 10 000</td>
+				<td>Nov 27,2011</td>
+				<td class="green_cell">R1</td>
+				<td>Revolving</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Payment Rate:</strong></td>
+				<td colspan="2">Bad debt, collection account or unable to locate</td>
+				<td class="align_right"><strong>Payment Type:</strong></td>
+				<td colspan="2">Monthly payments</td>
+			  </tr>
+			  <tr class="border_top align_center">
+				<td  rowspan="2" class="vertical_middle"><strong>TD Credit Line</strong></td>
+				<td class="bg_paloma">234-7564-9878987</td>
+				<td class="bg_paloma align_right">$ 25 000</td>
+				<td class="bg_paloma align_right">$ 1 234</td>
+				<td>Nov 27,2011</td>
+				<td class="green_cell">R2</td>
+				<td>Revolving</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Payment Rate:</strong></td>
+				<td colspan="2">Not more than one payment past due.</td>
+				<td class="align_right"><strong>Payment Type:</strong></td>
+				<td colspan="2">Monthly payments</td>
+			  </tr>
+			  <tr class="border_top align_center">
+				<td rowspan="2" class="vertical_middle"><strong>AMEX</strong></td>
+				<td class="bg_paloma">378282246310005</td>
+				<td class="bg_paloma align_right">$ 20 000</td>
+				<td class="bg_paloma align_right">$ 500</td>
+				<td>Nov 27,2011</td>
+				<td class="green_cell">R1</td>
+				<td>Revolving</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Payment Rate:</strong></td>
+				<td colspan="2">Not more than one payment past due.</td>
+				<td class="align_right"><strong>Payment Type:</strong></td>
+				<td colspan="2">Monthly payments</td>
+			  </tr>
+			  <tr class="border_top align_center">
+				<td rowspan="2" class="vertical_middle"><strong>Wisly Honda Car Loan</strong></td>
+				<td class="bg_paloma">212323234-4234234325</td>
+				<td class="bg_paloma align_right">$ 15 000</td>
+				<td class="bg_paloma align_right">$ 5 600</td>
+				<td>Nov 27,2011</td>
+				<td class="green_cell">R1</td>
+				<td>Installments</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Payment Rate:</strong></td>
+				<td colspan="2">Not more than one payment past due.</td>
+				<td class="align_right"><strong>Payment Type:</strong></td>
+				<td colspan="2">Monthly payments</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>COURT JUDGEMENTS</h2></td>
+		</tr>
+		<tr class="inner_t">
+		  <td colspan="4">
+			<table class="in_table7">
+			  <tr class="align_center text_bg_ef">
+				<td class="width210">Case Number</td>
+				<td class="width210">Customer Number</td>
+				<td>Name</td>
+				<td>Status</td>
+				<td class="width165">Date Filed</td>
+				<td class="width165">Date Satisfied</td>
+			  </tr>
+			  <tr class="align_center">
+				<td rowspan="3" class="width210 vertical_middle"><strong>844444</strong></td>
+				<td>481VS00116</td>
+				<td>MBS</td>
+				<td>Satisfied</td>
+				<td>Nov 27,2011</td>
+				<td>Nov 27,2011</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Plaintiff:</strong></td>
+				<td colspan="4">&nbsp;</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Defendants:</strong></td>
+				<td colspan="4">&nbsp;</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>PROPOSALS AND BANKRUPTCIES</h2></td>
+		</tr>
+		<tr class="inner_t">
+		  <td colspan="4">
+			<table class="in_table7">
+			  <tr class="align_center text_bg_ef">
+				<td class="width210">Case Number</td>
+				<td class="width210">Customer Number</td>
+				<td>Name</td>
+				<td>Disposition Date</td>
+				<td class="width165">Liability Amount</td>
+				<td class="width165">Asset Amount</td>
+			  </tr>
+			  <tr class="align_center">
+				<td rowspan="3" class="width210 vertical_middle"><strong>1234567</strong></td>
+				<td class="width210">1234567</td>
+				<td>001VS00121</td>
+				<td>Nov 27,2011</td>
+				<td class="bg_paloma align_right">$ 4 000</td>
+				<td class="bg_paloma align_right">$ 300</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Plaintiff:</strong></td>
+				<td colspan="4">88888 BACK STREET BOYS</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Defendants:</strong></td>
+				<td colspan="4">Proposal to creditors - paid</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>Evictions</h2></td>
+		</tr>
+		<tr class="empty_row">
+		  <td colspan="4">There are no evictions</td>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>Rent history</h2></td>
+		</tr>
+		<tr class="inner_t">
+		  <td colspan="4">
+			<table class="in_table7">
+			  <tr class="align_center text_bg_ef">
+				<td class="width210 ">Landlord</td>
+				<td class="width165">Rent</td>
+				<td class="width165">WriteOffs</td>
+				<td>Notice Given</td>
+				<td class="width210">Late Payments</td>
+				<td class="width210">NSF Checks</td>
+			  </tr>
+			  <tr class="align_center">
+				<td rowspan="4" class="vertical_middle"><strong>RedRidge</strong></td>
+				<td class="bg_paloma align_right">$ 2 340</td>
+				<td class="bg_paloma align_right">$ 250</td>
+				<td>-</td>
+				<td>0</td>
+				<td>0</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Last Updated</strong></td>
+				<td colspan="4">Nov 27,2011</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>From</strong></td>
+				<td>Nov 27,2011</td>
+				<td><strong>To:&nbsp;</strong>Nov 27,2011</td>
+				<td class="align_center"><strong>Duration</strong></td>
+				<td class="align_center">1 year</td>
+			  </tr>
+			  <tr>
+				<td class="align_right"><strong>Address</strong></td>
+				<td colspan="4">22 Larratt Street, Montreal, Que</td>
+			  </tr>
+			  <tr class="inner_t">
+				<td id="pad0" colspan="6">
+				  <table class="in_table7 history_table">
+					<tr>
+					  <td rowspan="3" class="width210">&nbsp;</td>
+					  <td rowspan="3" class="width165 border_top"><strong class="right">History Table</strong></td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="green_cell border_top">&nbsp;</td>
+					  <td class="text_bg_ef border_top">&nbsp;</td>
+					  <td class="text_bg_ef border_top">&nbsp;</td>
+					  <td class="text_bg_ef border_top">&nbsp;</td>
+					  <td class="text_bg_ef border_top">&nbsp;</td>
+					</tr>
+					<tr class="align_center">
+					  <td>Dec</td>
+					  <td>Jan</td>
+					  <td>Feb</td>
+					  <td>Mar</td>
+					  <td>Apr</td>
+					  <td>May</td>
+					  <td>Jun</td>
+					  <td>Jul</td>
+					  <td>Aug</td>
+					  <td>Sep</td>
+					  <td>Oct</td>
+					  <td>Nov</td>
+					  <td>Dec</td>
+					  <td>Jan</td>
+					  <td>Feb</td>
+					  <td>Mar</td>
+					</tr>
+					<tr class="align_center">
+					  <td>2010</td>
+					  <td colspan="12">2011</td>
+					  <td colspan="3">2012</td>
+					</tr>
+				  </table>
+				</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+		<tr class="head_row">
+		  <td colspan="4"><h2>Collections</h2></td>
+		</tr>
+		<tr class="empty_row">
+		  <td colspan="4">There are no collections</td>
+		</tr>
+
+		<tr class="head_row">
+		  <td colspan="4"><h2>INQUIRIES</h2></td>
+		</tr>
+		<tr class="text_bg_ef align_center">
+		  <td>On Behalf</td>
+		  <td>Date</td>
+		  <td>Customer #</td>
+		  <td>Phone</td>
+		</tr>
+		<tr class="align_center">
+		  <td><strong class="left">Royal Bank</strong></td>
+		  <td>Nov 27,2011</td>
+		  <td>2123-323213-4324</td>
+		  <td>(416) 897-0987</td>
+		</tr>
+		<tr class="align_center">
+		  <td><strong class="left">Lisa Simpson Property Management Co.</strong></td>
+		  <td>Nov 12,2011</td>
+		  <td>2123-323213-4324</td>
+		  <td>(416) 786-9827</td>
+		</tr>
+		<tr class="align_center">
+		  <td><strong class="left">Wisley Honda</strong></td>
+		  <td>Nov 20,2010</td>
+		  <td>2123-323213-4324</td>
+		  <td>(905) 647-4502</td>
+		</tr>
+		<tr class="align_center">
+		  <td><strong class="left">American Express</strong></td>
+		  <td>Oct 27,2010</td>
+		  <td>2123-323213-4324</td>
+		  <td>(416) 239-4987</td>
+		</tr>
+		<tr class="align_center">
+		  <td><strong class="left">TD Visa</strong></td>
+		  <td>Nov 12,2009</td>
+		  <td>2123-323213-4324</td>
+		  <td>(416) 454-6523</td>
+		</tr>
+	  </table>
+	</div>
+
+  </body>
+</html>
