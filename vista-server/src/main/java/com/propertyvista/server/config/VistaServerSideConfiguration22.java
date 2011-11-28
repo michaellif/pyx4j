@@ -41,6 +41,11 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
     }
 
     @Override
+    public boolean openIdrequired() {
+        return false;
+    }
+
+    @Override
     public String getApplicationURLDefault() {
         return "http://www22.birchwoodsoftwaregroup.com/";
     }
