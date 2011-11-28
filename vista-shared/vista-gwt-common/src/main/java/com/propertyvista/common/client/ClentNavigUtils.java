@@ -20,6 +20,7 @@ import com.google.gwt.i18n.client.LocaleInfo;
 
 import com.pyx4j.site.client.NavigationUri;
 
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.shared.CompiledLocale;
 
 public class ClentNavigUtils {
@@ -39,6 +40,9 @@ public class ClentNavigUtils {
                 localeName = "en_US";
             }
             CompiledLocale cl = CompiledLocale.valueOf(localeName);
+            if (DemoData.vistaDemo && cl == CompiledLocale.ru) {
+                continue;
+            }
             if (!locales.contains(cl)) {
                 locales.add(cl);
             }

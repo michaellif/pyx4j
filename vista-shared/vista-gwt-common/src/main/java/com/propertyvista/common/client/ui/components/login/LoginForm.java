@@ -35,6 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.domain.DemoData;
 
 public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
@@ -100,7 +101,7 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
         if (ApplicationMode.isDevelopment()) {
             FlowPanel devMessagePanel = new FlowPanel();
-            devMessagePanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
+            devMessagePanel.add(new HTML("This application is running in <B>" + DemoData.applicationModeName() + "</B> mode."));
 
             for (final String[] message : devLogins()) {
                 Anchor touchAnchor = new Anchor(message[0]);

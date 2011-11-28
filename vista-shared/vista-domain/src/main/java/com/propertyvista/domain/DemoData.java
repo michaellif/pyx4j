@@ -17,12 +17,14 @@ import com.pyx4j.commons.CommonsStringUtils;
 
 public class DemoData {
 
+    public static final boolean vistaDemo = true;
+
     public static enum DemoPmc {
         vista, star, redridge, rockville;
     }
 
     //We need E-mail delivery during tests. All E-mails goes to us!
-    public final static String USERS_DOMAIN = "@pyx4j.com";
+    public final static String USERS_DOMAIN = vistaDemo ? "@propertyvista.com" : "@pyx4j.com";
 
     public static enum UserType {
 
@@ -61,4 +63,7 @@ public class DemoData {
 
     }
 
+    public static String applicationModeName() {
+        return vistaDemo ? "DEMO" : "DEVELOPMENT";
+    }
 }

@@ -33,6 +33,7 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.server.ServerI18nFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
@@ -62,7 +63,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         List<CompiledLocale> l = new Vector<CompiledLocale>();
         l.add(CompiledLocale.en);
         l.add(CompiledLocale.fr);
-        if (ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment() && !DemoData.vistaDemo) {
             l.add(CompiledLocale.ru);
         }
         return l;

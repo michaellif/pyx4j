@@ -136,14 +136,20 @@ public class SignInPanel extends Panel {
             add(new Button("signIn").add(AttributeModifier.replace("value", i18n.tr("Sign In"))));
 
             if (ApplicationMode.isDevelopment()) {
-                Label devNotes = new Label("signInHint", "This application is running in <b>DEVELOPMENT</b> mode.<br/><i>Username and password are both<br/>");
+                Label devNotes = new Label("signInHint", "This application is running in <b>" + DemoData.applicationModeName()
+                        + "</b> mode.<br/><i>Username and password are both<br/>");
                 add(devNotes.setEscapeModelStrings(false));
                 String onClick = "var f=document.getElementById('signInForm');f.username.value=f.password.value";
                 String login1 = DemoData.UserType.TENANT.getEmail(1);
-
                 add(new JSActionLink("signInLogin1", onClick + "='" + login1 + "'", false).setBody(new Model<String>(login1)));
-                String login2 = DemoData.UserType.PTENANT.getEmail(1);
+                String login2;
+                if (!DemoData.vistaDemo) {
+                    login2 = DemoData.UserType.PTENANT.getEmail(1);
+                } else {
+                    login2 = DemoData.UserType.TENANT.getEmail(2);
+                }
                 add(new JSActionLink("signInLogin2", onClick + "='" + login2 + "'", false).setBody(new Model<String>(login2)));
+
             }
         }
 
