@@ -101,7 +101,12 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
             // Create IssueClassification
             IssueClassification classification = EntityFactory.create(IssueClassification.class);
             classification.subjectDetails().set(detail);
-            classification.issue().set(row.issue());
+            if (!row.issue().isNull()) {
+                classification.issue().set(row.issue());
+            } else {
+                // Defaults to value in Subject Details
+                classification.issue().set(row.subjectDetails());
+            }
             classification.priority().set(row.priority());
             Persistence.service().persist(classification);
         }
