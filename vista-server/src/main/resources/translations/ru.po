@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 03:25-0500\n"
+"POT-Creation-Date: 2011-11-27 23:28-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,7 +140,7 @@ msgstr ""
 msgid "AR Balance"
 msgstr "AR Баланс"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:164
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:170
 msgid "About us"
 msgstr "О компании"
 
@@ -633,7 +633,6 @@ msgstr "Проспект"
 msgid "Average"
 msgstr "Средний"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:18
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.java:80
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.java:86
 msgid "Back"
@@ -703,7 +702,7 @@ msgid "Baths"
 msgstr "Баня"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
-#: com/propertyvista/pmsite/server/panels/AptListPanel.java:94
+#: com/propertyvista/pmsite/server/panels/AptListPanel.java:106
 msgid "Bedroom"
 msgstr "Спальня"
 
@@ -743,7 +742,7 @@ msgstr "Кровати Диапазон"
 msgid "Belongs To"
 msgstr "Входит в"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:173
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:179
 msgid "Benefits"
 msgstr "Преимущества"
 
@@ -753,7 +752,7 @@ msgid "Bill"
 msgstr "Законопроект"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:236
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
 msgid "Bill B., London, Ontario"
 msgstr "Билл В., Лондон, Онтарио"
 
@@ -1000,7 +999,7 @@ msgstr "Номер карты"
 msgid "Card Security Code"
 msgstr "Код безопасности карты"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:193
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:199
 msgid "Careers"
 msgstr "Карьера"
 
@@ -1314,7 +1313,7 @@ msgstr "Строительство"
 msgid "Construction Type"
 msgstr "Тип конструкции"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:204
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:210
 msgid "Contact"
 msgstr "Контакт"
 
@@ -2204,7 +2203,7 @@ msgid "Find Apartment"
 msgstr "Найти квартиры"
 
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:14
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:132
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:136
 msgid "Find an Apartment"
 msgstr "Найти квартиры"
 
@@ -2436,7 +2435,7 @@ msgid "Gauge Display"
 msgstr "Калибровочных дисплей"
 
 #: com/propertyvista/portal/rpc/portal/dto/TenantDashboardDTO.java:2
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:164
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:170
 msgid "General"
 msgstr "Общий"
 
@@ -2642,7 +2641,7 @@ msgid "I Agree"
 msgstr "Я согласен"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:236
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
 msgid ""
 "I just had the pleasure to dealing with your superintendent at my building. "
 "I just moved in three weeks ago and was greeted right away by Manolo the "
@@ -2665,7 +2664,7 @@ msgstr ""
 "благодарен, что я нашел это прекрасное место, чтобы позвонить домой."
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:241
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
 msgid ""
 "I just wanted to let you know what a great job your superintendent Sean was "
 "doing.  He recently repaired my faucet and was very professional and "
@@ -2922,7 +2921,7 @@ msgid "Items Per Page"
 msgstr "Товаров на странице"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:241
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
 msgid "Jane L."
 msgstr "Джейн Л."
 
@@ -3237,6 +3236,10 @@ msgstr "Войти"
 msgid "Logo"
 msgstr "Логотип"
 
+#: com/propertyvista/portal/rpc/portal/SiteDefinitionsDTO.java:2
+msgid "Logo Avalable"
+msgstr ""
+
 #: com/propertyvista/domain/GeoLocation.java:2
 #: com/pyx4j/essentials/server/preloader/AddressInfo.java:2
 msgid "Longitude"
@@ -3335,8 +3338,8 @@ msgid "Maintenance Contract"
 msgstr "Договор на техническое обслуживание"
 
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance List History"
-msgstr "История обслуживания Список"
+msgid "Maintenance Details"
+msgstr ""
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
@@ -4041,13 +4044,13 @@ msgid "Other Price"
 msgstr "Другое Цена"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
 msgid "Ottawa, Toronto defy national sales trend ... for now"
 msgstr ""
 "Оттава, Торонто игнорировать национальные тенденции продаж ... на данный "
 "момент"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:183
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:189
 msgid "Our Vision"
 msgstr "Наше видение"
 
@@ -4544,7 +4547,7 @@ msgstr "До Адрес"
 msgid "Priority"
 msgstr "Приоритет"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:224
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:230
 msgid "Privacy"
 msgstr "Неприкосновенность частной жизни"
 
@@ -4593,7 +4596,7 @@ msgstr "Прогресс"
 msgid "Promotional Item"
 msgstr "Рекламная продукция"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:121
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:125
 msgid "Promotions"
 msgstr "Акции"
 
@@ -4627,7 +4630,7 @@ msgstr "Собственность компании"
 msgid "Property Details"
 msgstr "Информация о недвижимости"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.java:58
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:60
 #: com/propertyvista/portal/domain/dto/PropertyListDTO.java:0
 msgid "Property List"
 msgstr "Перечень недвижимости"
@@ -4895,7 +4898,7 @@ msgid "Request for Guarantor or further information"
 msgstr "Запрос Гарант или дополнительной информации"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
 msgid ""
 "Resale housing activity in August remained stable for the second consecutive"
 " month, according to new stats from The Canadian Real Estate Association, "
@@ -4967,7 +4970,7 @@ msgstr "Малина"
 #. Portal Page Type
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 #: com/propertyvista/pmsite/server/pages/ResidentsPage.java:43
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:143
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:147
 msgid "Residents"
 msgstr "Жители"
 
@@ -5092,7 +5095,7 @@ msgstr "Предварительное"
 msgid "Screening Date"
 msgstr "Дата Скрининга"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.java:111
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:113
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaPanel.java:58
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaPanel.java:58
 msgid "Search"
@@ -5250,11 +5253,11 @@ msgid "Sign Date"
 msgstr "Войти Дата"
 
 #: com/propertyvista/pmsite/server/pages/SignInPage.java:43
-#: com/propertyvista/pmsite/server/panels/SignInPanel.java:134
+#: com/propertyvista/pmsite/server/panels/SignInPanel.java:136
 msgid "Sign In"
 msgstr "Войдите в систему,"
 
-#: com/propertyvista/pmsite/server/panels/SignInPanel.java:161
+#: com/propertyvista/pmsite/server/panels/SignInPanel.java:172
 msgid "Sign in failed"
 msgstr "Войти не удалось"
 
@@ -5276,7 +5279,7 @@ msgstr "Сайт дескрипторов"
 msgid "Site Palette"
 msgstr "Сайт палитра"
 
-#: com/propertyvista/crm/server/services/SiteResourcesUploadServiceImpl.java:44
+#: com/propertyvista/crm/server/services/SiteResourcesUploadServiceImpl.java:48
 msgid "Site Resources Media"
 msgstr "Сайт медиа-ресурсами"
 
@@ -5650,6 +5653,7 @@ msgstr "Цель"
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/domain/tenant/Tenant.java:0
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
@@ -5757,7 +5761,7 @@ msgstr "Срок"
 msgid "Term Type"
 msgstr "Срок Тип"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:214
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:220
 msgid "Terms Of Use"
 msgstr "Условия использования"
 
@@ -5785,7 +5789,7 @@ msgid "The CAPTCHA Solution You Entered Was Incorrect"
 msgstr "Капчу Решение Вы ввели неверный"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:250
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
 msgid ""
 "The Vancouver housing market may already be unaffordable for many, but there"
 " is enough demand to keep prices rising, according to a new forecast."
@@ -6196,7 +6200,7 @@ msgid "Value"
 msgstr "Значение"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:250
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
 msgid "Vancouver prices to keep rising"
 msgstr "Ванкувер цены продолжают расти"
 
@@ -6444,11 +6448,11 @@ msgstr "миллисекунды"
 msgid "reCAPTCHA Connection Failed"
 msgstr "ReCaptcha Сбой при подключении"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:131
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:132
 msgid "separate WC"
 msgstr "отдельный туалет"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:134
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:135
 msgid "separate WCs"
 msgstr "отдельный туалет"
 
@@ -6491,7 +6495,7 @@ msgid "{0}"
 msgstr ""
 
 #. java-format
-#: com/propertyvista/pmsite/server/panels/AptListPanel.java:105
+#: com/propertyvista/pmsite/server/panels/AptListPanel.java:117
 #, java-format
 msgid ""
 "{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"

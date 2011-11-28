@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 03:25-0500\n"
+"POT-Creation-Date: 2011-11-27 23:28-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr ""
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
 #, java-format
 msgid "#0.#"
-msgstr "# 0. #"
+msgstr "#0.#"
 
 #. java-format
 #: com/propertyvista/domain/PriorAddress.java:2
@@ -63,19 +63,19 @@ msgstr "# 0. #"
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 #, java-format
 msgid "#0.00"
-msgstr "# 0.00"
+msgstr "#0.00"
 
 #. java-format
 #: com/propertyvista/domain/GeoLocation.java:2
 #, java-format
 msgid "#0.000000"
-msgstr ""
+msgstr "#0.000000"
 
 #. java-format
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr " {0, numéro, # 0.00} "
+msgstr " {0,number,#0.00} "
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "% Ownership"
@@ -136,12 +136,14 @@ msgid ""
 "<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not "
 "available|!null#from ${3}}"
 msgstr ""
+"<b>{0}</b> - {1} chambre à coucher,{2} salle de bains, {3,choice,null# Prix "
+"non disponible |!null#à partir de $ {3}}"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "AR Balance"
 msgstr "Balance des AR"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:164
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:170
 msgid "About us"
 msgstr "À propos de nous"
 
@@ -171,7 +173,7 @@ msgstr "Type de compte"
 
 #: com/propertyvista/domain/communication/Message.java:2
 msgid "Acknowledged"
-msgstr ""
+msgstr "Reconnu"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Active"
@@ -362,11 +364,11 @@ msgstr "Infos appartement"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoSummaryDTO.java:0
 msgid "Apartment Info Summary"
-msgstr ""
+msgstr "Résumé Infos appartement"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
 msgid "Apartment Summary"
-msgstr ""
+msgstr "Résumé appartement"
 
 #: com/propertyvista/domain/maintenance/IssueElementType.java:1
 msgid "Apartment Unit"
@@ -374,7 +376,7 @@ msgstr ""
 
 #: com/propertyvista/domain/tenant/TenantInLease.java:1
 msgid "Applicant"
-msgstr ""
+msgstr "Demandeur"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/IBoundToApplication.java:2
@@ -530,7 +532,7 @@ msgstr "Arrérages"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Arrears ARBalance Comparison Chart"
-msgstr ""
+msgstr "Tableau de comparaison des arriérés ARBalance"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsSummary.java:0
 msgid "Arrears Summary"
@@ -539,7 +541,7 @@ msgstr "Résumé des arriérés"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Arrears Summary Gadget"
-msgstr ""
+msgstr "Gadget Résumé des arriérés"
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "Asset Type"
@@ -580,7 +582,7 @@ msgstr "Disponibilité 24 heures"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Availability Summary"
-msgstr ""
+msgstr "Résumé disponibilité"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:1
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
@@ -634,7 +636,6 @@ msgstr "Avenue"
 msgid "Average"
 msgstr "Moyen/moyenne"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:18
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.java:80
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.java:86
 msgid "Back"
@@ -673,12 +674,12 @@ msgstr "Téléphone de l'institution bancaire"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Bar Chart Display"
-msgstr ""
+msgstr "Affichage graphique à barres"
 
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Bar Chart Display Building"
-msgstr ""
+msgstr "Bâtiment visualisation du graphique à barres"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -704,7 +705,7 @@ msgid "Baths"
 msgstr "Bains"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
-#: com/propertyvista/pmsite/server/panels/AptListPanel.java:94
+#: com/propertyvista/pmsite/server/panels/AptListPanel.java:106
 msgid "Bedroom"
 msgstr "Chambre à coucher"
 
@@ -744,7 +745,7 @@ msgstr "Gamme de lits"
 msgid "Belongs To"
 msgstr "Appartient à"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:173
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:179
 msgid "Benefits"
 msgstr "Avantages"
 
@@ -754,7 +755,7 @@ msgid "Bill"
 msgstr "Facturer"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:236
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
 msgid "Bill B., London, Ontario"
 msgstr "Bill B., London, Ontario"
 
@@ -906,7 +907,7 @@ msgstr "Infos bâtiment"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Building Lister"
-msgstr ""
+msgstr "Liste des bâtiments"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
@@ -948,6 +949,15 @@ msgid ""
 "with individual username and passwords will be automatically be sent to all "
 "Tenants and Guarantors"
 msgstr ""
+"En cochant la case PRENDRE POSSESSION, vous acceptez que le demandeur "
+"principal aura accès à vos renseignements personnels et que vous serez "
+"présent pendant le processus de demande. Le compte du demandeur principal "
+"sera le nom d'utilisateur pour les communications futures avec le "
+"gestionnaire immobilier. Cette case est recommandée uniquement pour les "
+"membres de la famille. Si vous souhaitez avoir un accès de connexion "
+"distinct et sûr, veuillez laisser la case vide. Une alerte courriel avec nom"
+" d'utilisateur et mots de passe individuels sera automatiquement envoyée à "
+"tous les locataires et les garants"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:2
 msgid "Cabinets Install Date"
@@ -971,7 +981,7 @@ msgstr ""
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Cancelled"
-msgstr ""
+msgstr "Annulé"
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:47
 msgid "Captcha code is required"
@@ -993,7 +1003,7 @@ msgstr "Numéro de la carte"
 msgid "Card Security Code"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:193
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:199
 msgid "Careers"
 msgstr "Carrières"
 
@@ -1172,11 +1182,11 @@ msgstr "Colonne"
 
 #: com/propertyvista/domain/dashboard/gadgets/ColumnDescriptorEntity.java:0
 msgid "Column Descriptor Entity"
-msgstr ""
+msgstr "Entité de description de colonnes"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
 msgid "Column Descriptors"
-msgstr ""
+msgstr "Descripteurs de colonne"
 
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:2
 msgid "Column Paths"
@@ -1307,7 +1317,7 @@ msgstr "Construction"
 msgid "Construction Type"
 msgstr "Type de construction"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:204
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:210
 msgid "Contact"
 msgstr "Contact"
 
@@ -1566,10 +1576,12 @@ msgid ""
 "Click the link below to go to the Property Vista site:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}{2}\">Application</a>"
 msgstr ""
-"Monsieur/Madame {0}, <br/> Ce courriel vous est adressé en réponse à votre "
-"demande pour les appartements Propriétés Vista  <br/> Cliquez sur le lien "
-"ci-dessous pour vous rendre sur le site de Propriétés Vista: <br/> <a "
-"style=\"couleur:#929733\" href=\"{1}{2}\">Demande</a>"
+"Monsieur/Madame {0}, <br/>\\\n"
+"Ce courriel vous est adressé en réponse à votre demande pour les "
+"appartements Propriétés Vista  <br/>\\\n"
+" Cliquez sur le lien ci-dessous pour vous rendre sur le site de Propriétés "
+"Vista: <br/>\\\n"
+" <a style=\"couleur:#929733\" href=\"{1}{2}\">Demande</a>"
 
 #. java-format
 #: com/propertyvista/server/common/mail/MessageTemplates.java:51
@@ -1582,11 +1594,12 @@ msgid ""
 "password for your account:<br/>\n"
 "    <a style=\"color:#929733\" href=\"{1}{2}\">Change Your Password</a>"
 msgstr ""
-"Monsieur/Madame {0}, <br/> Ce courriel vous est adressé en réponse à votre "
-"demande en vue de modifier le mot de passe de votre compte Propriétés Vista."
-" <br/> Cliquez sur le lien ci-dessous pour vous rendre sur le site de "
-"Propriétés Vista et créer un nouveau mot de passe pour votre compte: <br/> "
-"<a style=\"couleur:#929733\" href=\"{1}{2}\">Changer votre mot de passe</a>"
+"Monsieur/Madame {0}, <br/>\\\n"
+" Ce courriel vous est adressé en réponse à votre demande en vue de modifier "
+"le mot de passe de votre compte Propriétés Vista. <br/>\\\n"
+" Cliquez sur le lien ci-dessous pour vous rendre sur le site de Propriétés "
+"Vista et créer un nouveau mot de passe pour votre compte: <br/>\\\n"
+" <a style=\"couleur:#929733\" href=\"{1}{2}\">Changer votre mot de passe</a>"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Decided By"
@@ -1632,7 +1645,7 @@ msgstr "Delta, en %"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Demo"
-msgstr ""
+msgstr "Démo"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Den"
@@ -1667,17 +1680,17 @@ msgstr "Type de dépôt"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Deprecated Availability Summary"
-msgstr ""
+msgstr "Résumé Disponibilité Obsolète"
 
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Deprecated Turnover Analysis Graph"
-msgstr ""
+msgstr "Obsolète Graphique d'analyse des chiffres d'affaires"
 
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Deprecated Unit Availability Report"
-msgstr ""
+msgstr "Obsolète Rapport de disponibilité unité"
 
 #: com/propertyvista/domain/charges/ChargeLine.java:2
 #: com/propertyvista/domain/company/Employee.java:2
@@ -1712,7 +1725,7 @@ msgstr "Description de"
 
 #: com/propertyvista/domain/site/Descriptor.java:0
 msgid "Descriptor"
-msgstr ""
+msgstr "Descripteur"
 
 #: com/propertyvista/domain/property/PropertyPhone.java:2
 msgid "Designation"
@@ -1720,7 +1733,7 @@ msgstr "Désignation"
 
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.html:34
 msgid "Desired Lease Term"
-msgstr "Durée de la location désirée"
+msgstr "Durée désirée de la location"
 
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.html:38
 msgid "Desired Move In Date"
@@ -1884,7 +1897,7 @@ msgstr "Date d'entrée en vigueur"
 #: com/propertyvista/pmsite/server/model/WicketUtils.java:349
 #, java-format
 msgid "Either one of {0} or {1} must be provided"
-msgstr "Soit un de {0} ou {1} doit être fournie"
+msgstr "Soit un de {0} ou {1} doit être fourni"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
@@ -1995,7 +2008,7 @@ msgstr "Anglais (États-Unis)"
 #: com/propertyvista/portal/rpc/corp/PmcAccountCreationRequest.java:2
 #: com/propertyvista/portal/rpc/ptapp/AccountCreationRequest.java:2
 msgid "Enter The Code"
-msgstr "Entrez le code"
+msgstr "Entrer code"
 
 #: com/pyx4j/security/rpc/AuthenticationRequest.java:2
 #: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
@@ -2064,7 +2077,7 @@ msgstr ""
 
 #: com/pyx4j/essentials/rpc/admin/SystemMaintenanceState.java:2
 msgid "External Connections"
-msgstr ""
+msgstr "Connexions externes"
 
 #: com/propertyvista/domain/media/Media.java:1
 msgid "External URL"
@@ -2198,7 +2211,7 @@ msgid "Find Apartment"
 msgstr "Trouver logement"
 
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:14
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:132
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:136
 msgid "Find an Apartment"
 msgstr "Trouver un logement"
 
@@ -2327,7 +2340,7 @@ msgstr ""
 
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Foreground"
-msgstr "Plan"
+msgstr "Avant-plan"
 
 #: com/propertyvista/pmsite/server/pages/AptListPage.html:26
 msgid "Found Properties"
@@ -2381,7 +2394,7 @@ msgstr "Complet"
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Full Time Employment"
-msgstr ""
+msgstr "Emploi à temps plein"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "Funding Choices"
@@ -2427,10 +2440,10 @@ msgstr "Portillon"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Gauge Display"
-msgstr ""
+msgstr "Affichage de jauge"
 
 #: com/propertyvista/portal/rpc/portal/dto/TenantDashboardDTO.java:2
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:164
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:170
 msgid "General"
 msgstr "Général"
 
@@ -2501,7 +2514,7 @@ msgstr ""
 
 #: com/propertyvista/dto/TenantFinancialDTO.java:2
 msgid "Guarantor(s)"
-msgstr ""
+msgstr "Garant (s)"
 
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 msgid "Guarantors"
@@ -2570,8 +2583,8 @@ msgstr "Avez-vous déjà demandé la protection contre la faillite?"
 msgid ""
 "Have you ever had any public record suits, liens, judgments or reposessions?"
 msgstr ""
-"Avez-vous déjà eu des poursuites, des liens, des jugements ou des "
-"reposessions inscrits aux dossiers publics?"
+"Avez-vous déjà eu des poursuites, des liens, des jugements ou des reprises "
+"de posession inscrits aux dossiers publics?"
 
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Heat"
@@ -2588,7 +2601,7 @@ msgstr "Haute vitesse"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "High-rise"
-msgstr "Immeuble de grande hauteur"
+msgstr "Immeuble en hauteur"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -2636,7 +2649,7 @@ msgid "I Agree"
 msgstr "Je suis d'accord"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:236
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
 msgid ""
 "I just had the pleasure to dealing with your superintendent at my building. "
 "I just moved in three weeks ago and was greeted right away by Manolo the "
@@ -2656,11 +2669,11 @@ msgstr ""
 "Manolo a même travaillé directement avec le technicien du câble afin "
 "d'assurer que mon appartement fonctionne à mon goût. Vous disposez en Manolo"
 " d'un membre du personnel formidable et si mon expérience du premier mois "
-"est une vitrine de ce que Starlight a à offrir, je suis très heureux d'avoir"
-" trouvé un chez-soi en cet endroit idéal."
+"est un aperçu de ce que Starlight a à offrir, je suis très heureux d'avoir "
+"trouvé un chez-soi en cet endroit idéal."
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:241
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
 msgid ""
 "I just wanted to let you know what a great job your superintendent Sean was "
 "doing.  He recently repaired my faucet and was very professional and "
@@ -2671,7 +2684,7 @@ msgid ""
 msgstr ""
 "Je voulais seulement vous laisser savoir que votre surintendant Sean fait un"
 " très bon travail. Il a récemment réparé mon robinet et il a été très "
-"professionnel et courtois. Non seulement estt-il venu résoudre le problème "
+"professionnel et courtois. Non seulement est-il venu résoudre le problème "
 "tout de suite, il m'a également donné des conseils sur la façon d'éviter que"
 " cela se reproduise. J'habite dans cet édifice et la prise en charge par "
 "Starlight a démontré des résultats instantanés.\n"
@@ -2731,7 +2744,7 @@ msgstr "Renseignements sur le revenu des employés saisonniers"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:0
 msgid "Income Information Self Employed"
-msgstr "Renseignements sur le revenu Employé"
+msgstr "Renseignements sur le revenu employé autonome"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoSocialServices.java:0
 msgid "Income Information Social Services"
@@ -2748,7 +2761,7 @@ msgstr "Source de revenus"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Incomplete"
-msgstr ""
+msgstr "Incomplète"
 
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:2
 msgid "Individual Applications"
@@ -2774,7 +2787,7 @@ msgstr "Détails de l'information"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Information Requested"
-msgstr ""
+msgstr "Renseignements demandés"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Inquiry"
@@ -2843,15 +2856,15 @@ msgstr "Compte utilisateur non valide. Veuillez contacter le soutien"
 #: com/propertyvista/interfaces/importer/converter/MediaConverter.java:199
 #, java-format
 msgid "Invalid YouTube Video ID ''{0}''"
-msgstr "ID YouTube Video non valide ''{0}''"
+msgstr "ID de la vidéo YouTube non valide ''{0}''"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Invited"
-msgstr ""
+msgstr "Invités"
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "Ip Address"
-msgstr ""
+msgstr "Adresse Ip"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Irregular"
@@ -2867,7 +2880,7 @@ msgstr "Est pour la date de déménagement"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
 msgid "Is Fully Owned"
-msgstr "Est entièrement détenu"
+msgstr "Est entièrement détenu(e)"
 
 #: com/propertyvista/domain/financial/offering/Feature.java:2
 msgid "Is Mandatory"
@@ -2917,7 +2930,7 @@ msgid "Items Per Page"
 msgstr "Articles par page"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:241
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
 msgid "Jane L."
 msgstr "Jane L."
 
@@ -2967,11 +2980,11 @@ msgstr "Palier"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoSummaryDTO.java:2
 msgid "Landlord"
-msgstr ""
+msgstr "Propriétaire"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Landlord Name"
-msgstr ""
+msgstr "Nom propriétaire"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -3153,7 +3166,7 @@ msgstr "Ligne"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Line Chart Display"
-msgstr ""
+msgstr "Visualisation des cartes en ligne"
 
 #: com/propertyvista/dto/PetsDTO.java:2
 #: com/propertyvista/dto/VehiclesDTO.java:2
@@ -3232,6 +3245,10 @@ msgstr "Connexion"
 msgid "Logo"
 msgstr "Logo"
 
+#: com/propertyvista/portal/rpc/portal/SiteDefinitionsDTO.java:2
+msgid "Logo Avalable"
+msgstr ""
+
 #: com/propertyvista/domain/GeoLocation.java:2
 #: com/pyx4j/essentials/server/preloader/AddressInfo.java:2
 msgid "Longitude"
@@ -3273,13 +3290,13 @@ msgstr "Immeuble bas"
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #, java-format
 msgid "MM/dd/yyyy"
-msgstr "MM/jj/aaaa"
+msgstr "MM/dd/yyyy"
 
 #. java-format
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 #, java-format
 msgid "MM/dd/yyyy hh:mm a"
-msgstr ""
+msgstr "MM/dd/yyyy hh:mm a"
 
 #. java-format
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
@@ -3288,7 +3305,7 @@ msgstr ""
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #, java-format
 msgid "MMM dd, yyyy"
-msgstr ""
+msgstr "MMM dd, yyyy"
 
 #: com/propertyvista/domain/person/Name.java:2
 msgid "Maiden Name"
@@ -3331,8 +3348,8 @@ msgid "Maintenance Contract"
 msgstr "Contrat d'entretien"
 
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance List History"
-msgstr "Historique liste d'entretien"
+msgid "Maintenance Details"
+msgstr ""
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
@@ -3370,7 +3387,7 @@ msgstr "Responsable"
 
 #: com/propertyvista/domain/PriorAddress.java:2
 msgid "Manager Email"
-msgstr ""
+msgstr "Email Manager"
 
 #: com/propertyvista/domain/PriorAddress.java:2
 msgid "Manager Name"
@@ -3378,7 +3395,7 @@ msgstr "Nom du gestionnaire"
 
 #: com/propertyvista/domain/PriorAddress.java:2
 msgid "Manager Phone"
-msgstr ""
+msgstr "Phone Manager"
 
 #: com/propertvista/generator/BuildingsGenerator.java:1
 msgid "Mansard Roof"
@@ -3775,7 +3792,7 @@ msgstr "Exposition nette #"
 
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportSummaryDTO.java:2
 msgid "Net Exposure %"
-msgstr "Exposition nette%"
+msgstr "Exposition nette %"
 
 #: com/pyx4j/essentials/rpc/admin/NetworkSimulation.java:0
 msgid "Network Simulation"
@@ -3834,7 +3851,7 @@ msgstr "Aucune demande n'a été sélectionnée"
 #: com/propertyvista/server/common/security/VistaContext.java:47
 #: com/pyx4j/essentials/server/upload/AbstractUploadServlet.java:98
 msgid "No Session"
-msgstr "Pas de séance"
+msgstr "Aucune séance"
 
 #: com/propertyvista/domain/tenant/lead/Appointment.java:1
 msgid "No Show"
@@ -3889,7 +3906,7 @@ msgstr "Avis de location"
 
 #: com/propertyvista/portal/rpc/portal/dto/TenantDashboardDTO.java:2
 msgid "Notifications"
-msgstr ""
+msgstr "Notifications"
 
 #: com/propertyvista/domain/contact/Phone.java:2
 #: com/propertyvista/domain/property/PropertyPhone.java:2
@@ -3971,7 +3988,7 @@ msgstr "Un(e)"
 
 #: com/propertyvista/portal/domain/ptapp/Charges.java:2
 msgid "One Time Charges"
-msgstr "Frais unique"
+msgstr "Frais uniques"
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Ontario Disability Support Program (ODSP)"
@@ -3991,7 +4008,7 @@ msgstr "Contacts organisme"
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:2
 msgid "Original Price"
-msgstr ""
+msgstr "Prix ​​original"
 
 #. Street Type
 #. Building Amenity Type
@@ -4026,7 +4043,7 @@ msgstr "Autres arriérés"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Other Arrears Gadget"
-msgstr ""
+msgstr "Autre gadget arriérés"
 
 #: com/propertyvista/domain/tenant/income/PersonalIncome.java:2
 msgid "Other Income Information"
@@ -4037,22 +4054,22 @@ msgid "Other Price"
 msgstr "Autre prix"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
 msgid "Ottawa, Toronto defy national sales trend ... for now"
 msgstr ""
 "Ottawa, Toronto défient la tendance nationale des ventes ... pour l'instant"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:183
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:189
 msgid "Our Vision"
 msgstr "Notre Vision"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "Over 90 Days"
-msgstr "Plus de 90 Jours"
+msgstr "Plus de 90 jours"
 
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:2
 msgid "Overall Application Progress (%)"
-msgstr ""
+msgstr "Progrès d'application global (en%)"
 
 #: com/propertyvista/domain/PriorAddress.java:1
 msgid "Owned"
@@ -4100,7 +4117,7 @@ msgstr "Descripteur de la page"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
 msgid "Page Number"
-msgstr "Page numéro"
+msgstr "Numéro de page "
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
 msgid "Page Size"
@@ -4112,7 +4129,7 @@ msgstr "Pagette"
 
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
 msgid "Paid"
-msgstr ""
+msgstr "Payé"
 
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "Paid On"
@@ -4128,7 +4145,7 @@ msgstr "Panneau"
 
 #: com/propertyvista/domain/site/PageDescriptor.java:2
 msgid "Parent"
-msgstr ""
+msgstr "Parent"
 
 #. Building Amenity Type
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
@@ -4147,7 +4164,7 @@ msgstr "Arriérés de stationnement"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Parking Arrears Gadget"
-msgstr ""
+msgstr "Parking arriérés Gadget"
 
 #: com/propertyvista/dto/MasterApplicationDTO.java:2
 msgid "Parking Price"
@@ -4164,7 +4181,7 @@ msgstr "Places de stationnement"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Parking/Storage"
-msgstr "Stationnement  / Storage"
+msgstr "Stationnement  / Entreposage"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Parkings"
@@ -4176,7 +4193,7 @@ msgstr "Parquet"
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Part Time Employment"
-msgstr ""
+msgstr "Emploi à temps partiel"
 
 #: com/propertyvista/domain/property/vendor/Warranty.java:1
 msgid "Partial"
@@ -4240,7 +4257,7 @@ msgstr "Délai de paiement"
 
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
 msgid "Payment Types"
-msgstr "Types de paiements"
+msgstr "Types de paiement"
 
 #: com/propertyvista/misc/EquifaxApproval.java:1
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
@@ -4253,7 +4270,7 @@ msgstr "Approbation en attente"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Pending Decision"
-msgstr ""
+msgstr "En attendant la décision"
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Pension"
@@ -4275,7 +4292,7 @@ msgstr "Pourcentage du prix de service"
 
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportTurnoverAnalysisDTO.java:2
 msgid "Percentage Of Units Turned Over"
-msgstr "Pourcentage d'unités remis"
+msgstr "Pourcentage d'unités remises"
 
 #. Concession Type
 #: com/propertyvista/domain/financial/offering/Concession.java:1
@@ -4365,12 +4382,12 @@ msgstr "Photo"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Pie Chart Display"
-msgstr ""
+msgstr "Affichage graphique circulaire"
 
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Pie Chart Display Building"
-msgstr ""
+msgstr "Bâtiment d'affichage Pie Chart"
 
 #. Type of foundation
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
@@ -4461,11 +4478,11 @@ msgstr "Pré-autorisé(e)"
 
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.html:42
 msgid "Preferred Appointment Time"
-msgstr "Temps préféré pour le rendez-vous"
+msgstr "Heure préférée pour le rendez-vous"
 
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.html:30
 msgid "Preferred Unit"
-msgstr ""
+msgstr "Unité préféré"
 
 #: com/propertyvista/server/ci/DBResetServlet.java:1
 msgid "Preload this PMC"
@@ -4477,7 +4494,7 @@ msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "Prepayments"
-msgstr ""
+msgstr "Prépaiements"
 
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 msgid "Prev Payment Date"
@@ -4525,7 +4542,7 @@ msgstr "Primaire"
 
 #: com/propertyvista/dto/ComplexDTO.java:2
 msgid "Primary Building"
-msgstr ""
+msgstr "Bâtiment primaire"
 
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 msgid "Primary in Complex"
@@ -4539,9 +4556,9 @@ msgstr "Adresse précédente"
 msgid "Priority"
 msgstr ""
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:224
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:230
 msgid "Privacy"
-msgstr ""
+msgstr "Confidentialité"
 
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Private Balcony"
@@ -4565,7 +4582,7 @@ msgstr "Description du problème"
 
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
 msgid "Product"
-msgstr ""
+msgstr "Produit"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "Program"
@@ -4588,13 +4605,13 @@ msgstr "Progrès"
 msgid "Promotional Item"
 msgstr "Article promotionnel"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:121
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:125
 msgid "Promotions"
 msgstr "Promotions"
 
 #: com/propertyvista/dto/MasterApplicationDTO.java:2
 msgid "Promotions/Discounts"
-msgstr ""
+msgstr "Promotions/Réductions"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/portal/domain/dto/PropertyListDTO.java:2
@@ -4616,25 +4633,25 @@ msgstr "Code de la propriété"
 
 #: com/propertyvista/domain/PriorAddress.java:2
 msgid "Property Company"
-msgstr ""
+msgstr "Property Company"
 
 #: com/propertyvista/portal/domain/dto/PropertyDetailsDTO.java:0
 msgid "Property Details"
 msgstr "Description de la propriété"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.java:58
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:60
 #: com/propertyvista/portal/domain/dto/PropertyListDTO.java:0
 msgid "Property List"
 msgstr "Liste des biens"
 
 #: com/propertyvista/admin/rpc/AdminSiteMap.java:0
 msgid "Property Management Companies (PMCs)"
-msgstr ""
+msgstr "Entreprises de gestion immobilière (EGI)"
 
 #: com/propertyvista/admin/rpc/AdminSiteMap.java:0
 #: com/propertyvista/admin/rpc/PmcDTO.java:0
 msgid "Property Management Company (PMC)"
-msgstr ""
+msgstr "Entreprise de gestion immobilière (EGI)"
 
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/PropertyManager.java:0
@@ -4644,11 +4661,11 @@ msgstr "Gestionnaire immobilier"
 
 #: com/propertyvista/domain/dashboard/gadgets/CommonGadgetColumns.java:2
 msgid "Property Manger"
-msgstr ""
+msgstr "Gestionnaire immobilier "
 
 #: com/propertyvista/domain/dashboard/gadgets/ColumnDescriptorEntity.java:2
 msgid "Property Path"
-msgstr ""
+msgstr "Chemin de propriété"
 
 #: com/propertyvista/domain/property/PropertyPhone.java:0
 msgid "Property Phone"
@@ -4664,7 +4681,7 @@ msgstr "Critères de recherche propriété"
 
 #: com/propertyvista/portal/server/ptapp/services/ActivationServiceImpl.java:118
 msgid "Property Vista Password Reset"
-msgstr ""
+msgstr "Réinitialisation du mot de passe Propriété Vista"
 
 #: com/propertyvista/domain/charges/ChargeLine.java:1
 msgid "Prorated"
@@ -4676,7 +4693,7 @@ msgstr "Frais au prorata"
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Prospect Portal Title"
-msgstr ""
+msgstr "Titre du portail de clients potentiels"
 
 #: com/propertyvista/domain/property/PropertyPhone.java:2
 msgid "Provider"
@@ -4700,7 +4717,7 @@ msgstr "Province / État"
 
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 msgid "Province/State, In Which The License Has Been Issued"
-msgstr ""
+msgstr "Province/État, où le permis a été délivré"
 
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
 msgid "Public"
@@ -4766,11 +4783,11 @@ msgstr ""
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "Recreational Room"
-msgstr ""
+msgstr "Salle de loisirs"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "Referral"
-msgstr "Reférence"
+msgstr "Référence"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
 msgid "Refresh Interval"
@@ -4827,16 +4844,16 @@ msgstr "Renouvellement"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 msgid "Rent Arrears"
-msgstr ""
+msgstr "Arriérés de loyer"
 
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Rent Arrears Gadget"
-msgstr ""
+msgstr "Arriérés de loyers Gadget"
 
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Rent From Date"
-msgstr "Date du début de location"
+msgstr "Date du début de la location"
 
 #: com/propertyvista/dto/MasterApplicationDTO.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:53
@@ -4879,23 +4896,27 @@ msgstr "Rapports"
 #: com/propertyvista/pmsite/server/pages/InquiryPage.java:78
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.java:99
 msgid "Request Appointment"
-msgstr ""
+msgstr "Demander un rendez-vous"
 
 #: com/propertyvista/pmsite/server/pages/InquirySuccessPage.java:79
 msgid "Request Appointment Success"
-msgstr ""
+msgstr "Demande de rendez-vous réussie"
 
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Request for Guarantor or further information"
-msgstr ""
+msgstr "Demande de garant ou de plus amples informations"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
 msgid ""
 "Resale housing activity in August remained stable for the second consecutive"
 " month, according to new stats from The Canadian Real Estate Association, "
 "although brokers in Toronto and Ottawa benefited from an uptick in sales."
 msgstr ""
+"L'activité de revente de logements en août est demeurée stable pour le "
+"deuxième mois consécutif, selon de nouvelles statistiques de l'Association "
+"canadienne de l'immeuble, bien que les courtiers à Toronto et Ottawa ont "
+"bénéficié d'une hausse des ventes."
 
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:0
 msgid "Reservation"
@@ -4928,20 +4949,20 @@ msgstr ""
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Resident Portal Promotions"
-msgstr ""
+msgstr "Promotions portail résidents"
 
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Resident Portal Skin"
-msgstr ""
+msgstr "Peau portail résidents"
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Resident Portal Title"
-msgstr ""
+msgstr "Titre portail résidents"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 #: com/propertyvista/domain/property/asset/unit/AptUnitInfo.java:1
 msgid "Residential"
-msgstr "Résidentiel"
+msgstr "Résidentiel(le)"
 
 #: com/propertyvista/domain/financial/offering/Service.java:1
 msgid "Residential Short Term Unit"
@@ -4958,7 +4979,7 @@ msgstr "Unité d'habitation"
 #. Portal Page Type
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 #: com/propertyvista/pmsite/server/pages/ResidentsPage.java:43
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:143
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:147
 msgid "Residents"
 msgstr "Résidents(e)s"
 
@@ -4989,7 +5010,7 @@ msgstr "Retourner tout lieu"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatusDTO.java:2
 msgid "Revenue Lost ($)"
-msgstr ""
+msgstr "Perte de revenus ($)"
 
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Revenue Lost, in $"
@@ -5003,7 +5024,7 @@ msgstr "Chemin"
 #: com/propertyvista/crm/rpc/dto/company/EmployeeDTO.java:2
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 msgid "Role"
-msgstr ""
+msgstr "Rôle"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Service.java:1
@@ -5022,7 +5043,7 @@ msgstr "Toits"
 
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:28
 msgid "Rooms"
-msgstr "Chambres"
+msgstr "Pièces"
 
 #: com/propertyvista/domain/payment/EcheckInfo.java:2
 msgid "Routing Number"
@@ -5081,9 +5102,9 @@ msgstr "Cadrage"
 
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 msgid "Screening Date"
-msgstr "Date de dépistage"
+msgstr "Date de présélection"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.java:111
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:113
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaPanel.java:58
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaPanel.java:58
 msgid "Search"
@@ -5091,7 +5112,7 @@ msgstr "Recherche"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Search By"
-msgstr ""
+msgstr "Recherche par"
 
 #: com/propertyvista/portal/domain/dto/BillListDTO.java:2
 msgid "Search Type"
@@ -5104,11 +5125,11 @@ msgstr "Emploi saisonnier"
 
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.html:47
 msgid "Second Choice"
-msgstr ""
+msgstr "Deuxième choix"
 
 #: com/propertyvista/domain/site/PageCaption.java:2
 msgid "Secondary Caption"
-msgstr ""
+msgstr "Légende secondaire"
 
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
 msgid "Seen"
@@ -5137,7 +5158,7 @@ msgstr "Unité sélectionnée"
 
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 msgid "Selected Unit ID"
-msgstr ""
+msgstr "ID de l'unité sélectionnée"
 
 #: com/propertyvista/dto/LeaseDTO.java:2
 msgid "Selected Utility Items"
@@ -5208,7 +5229,7 @@ msgstr "Réglages"
 
 #: com/propertyvista/domain/person/Person.java:2
 msgid "Sex"
-msgstr ""
+msgstr "Sexe"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 msgid "Shape"
@@ -5241,21 +5262,21 @@ msgid "Sign Date"
 msgstr "Date de signature"
 
 #: com/propertyvista/pmsite/server/pages/SignInPage.java:43
-#: com/propertyvista/pmsite/server/panels/SignInPanel.java:134
+#: com/propertyvista/pmsite/server/panels/SignInPanel.java:136
 msgid "Sign In"
 msgstr "Ouvrir une session"
 
-#: com/propertyvista/pmsite/server/panels/SignInPanel.java:161
+#: com/propertyvista/pmsite/server/panels/SignInPanel.java:172
 msgid "Sign in failed"
-msgstr ""
+msgstr "Connexion a échoué"
 
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 msgid "Signature"
-msgstr ""
+msgstr "Signature"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
 msgid "Signed"
-msgstr ""
+msgstr "Signé"
 
 #: com/propertyvista/domain/site/SiteDescriptor.java:0
 #: com/propertyvista/dto/SiteDescriptorDTO.java:0
@@ -5265,17 +5286,17 @@ msgstr "Descripteur de site"
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 #: com/propertyvista/domain/site/SitePalette.java:0
 msgid "Site Palette"
-msgstr ""
+msgstr "Palette du site"
 
-#: com/propertyvista/crm/server/services/SiteResourcesUploadServiceImpl.java:44
+#: com/propertyvista/crm/server/services/SiteResourcesUploadServiceImpl.java:48
 msgid "Site Resources Media"
-msgstr ""
+msgstr "Ressources médias du site"
 
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 #: com/propertyvista/domain/site/SiteTitles.java:0
 #: com/propertyvista/portal/rpc/portal/SiteDefinitionsDTO.java:2
 msgid "Site Titles"
-msgstr ""
+msgstr "Titres du site"
 
 #: com/propertyvista/portal/rpc/portal/SiteDefinitionsDTO.java:2
 msgid "Skin"
@@ -5337,11 +5358,11 @@ msgstr "Fils"
 
 #: com/propertyvista/domain/dashboard/gadgets/ColumnDescriptorEntity.java:2
 msgid "Sort Ascending"
-msgstr ""
+msgstr "Tri croissant"
 
 #: com/propertyvista/domain/dashboard/gadgets/ColumnDescriptorEntity.java:2
 msgid "Sorting Precedence"
-msgstr ""
+msgstr "Tri Préséance"
 
 #: com/propertyvista/domain/GeoLocation.java:1
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -5367,25 +5388,27 @@ msgstr "Espagnol"
 
 #: com/propertvista/generator/ServiceCatalogGenerator.java:238
 msgid "Special Promotion Applies, Everything Completely Free"
-msgstr ""
+msgstr "Promotion spéciale s'applique, tout entièrement gratuit"
 
 #. java-format
 #: com/propertvista/generator/ServiceCatalogGenerator.java:235
 #, java-format
 msgid "Special Promotion Applies, {0}$ In Promotional Items Or Services"
 msgstr ""
+"Promotion spéciale s'applique, {0} $ en articles promotionnels ou des "
+"services"
 
 #. java-format
 #: com/propertvista/generator/ServiceCatalogGenerator.java:232
 #, java-format
 msgid "Special Promotion Applies, {0}$ Off The Value Of The Service"
-msgstr ""
+msgstr "Promotion spéciale s'applique, {0} $ sur le valeur du service"
 
 #. java-format
 #: com/propertvista/generator/ServiceCatalogGenerator.java:229
 #, java-format
 msgid "Special Promotion Applies, {0}% Off The Value Of The Service"
-msgstr ""
+msgstr "Promotion spéciale s'applique, {0}% Off The valeur du service"
 
 #: com/propertyvista/domain/tenant/TenantInLease.java:1
 msgid "Spouse"
@@ -5399,11 +5422,11 @@ msgstr "Semelle"
 #: com/propertyvista/domain/property/asset/AreaMeasurementUnit.java:1
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 msgid "Sq. Feet"
-msgstr ""
+msgstr "Pieds carrés"
 
 #: com/propertyvista/domain/property/asset/AreaMeasurementUnit.java:1
 msgid "Sq. Meters"
-msgstr ""
+msgstr "Mètres carrés"
 
 #: com/propertyvista/domain/property/asset/Owner.java:2
 #: com/propertyvista/domain/property/vendor/Contract.java:2
@@ -5418,7 +5441,7 @@ msgstr "Heure de début"
 
 #: com/propertyvista/pmsite/server/pages/BasePage.java:126
 msgid "Stateful components found: "
-msgstr ""
+msgstr "Composants Stateful trouvés:"
 
 #. Portal Page Type
 #: com/propertyvista/domain/site/PageDescriptor.java:1
@@ -5442,12 +5465,12 @@ msgstr "Statut"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 msgid "Status Date"
-msgstr ""
+msgstr "Date statut"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/ArrearsSummary.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 msgid "Status Timestamp"
-msgstr ""
+msgstr "Statut horodateur"
 
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 msgid "Steps"
@@ -5455,7 +5478,7 @@ msgstr "Étapes - marches"
 
 #: com/propertyvista/dto/ApplicationDTO.java:2
 msgid "Steps Completed"
-msgstr ""
+msgstr "Étapes complétées"
 
 #: com/propertyvista/domain/financial/offering/Service.java:1
 msgid "Storage"
@@ -5523,7 +5546,7 @@ msgstr "Revenu de l'étudiant(e)"
 #: com/propertyvista/domain/communication/Message.java:2
 #: com/propertyvista/domain/maintenance/IssueSubjectDetails.java:2
 msgid "Subject"
-msgstr ""
+msgstr "Sujet"
 
 #: com/propertyvista/domain/maintenance/IssueClassification.java:2
 msgid "Subject Details"
@@ -5552,7 +5575,7 @@ msgstr ""
 
 #: com/propertyvista/server/common/util/AddressConverter.java:58
 msgid "Suite"
-msgstr ""
+msgstr "Suite"
 
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
@@ -5608,7 +5631,7 @@ msgstr "Système"
 
 #: com/pyx4j/rpc/server/RemoteServiceImpl.java:168
 msgid "System Error. Please Contact Support"
-msgstr ""
+msgstr "Erreur système. Veuillez contacter le soutien technique"
 
 #: com/propertyvista/admin/rpc/AdminSiteMap.java:0
 msgid "System Maintenance"
@@ -5624,12 +5647,12 @@ msgstr "En forme de T"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "TV"
-msgstr ""
+msgstr "Télé"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "TV Lounge"
-msgstr ""
+msgstr "Salon télé"
 
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
 msgid "Take Ownership"
@@ -5642,6 +5665,7 @@ msgstr "But"
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/domain/tenant/Tenant.java:0
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
@@ -5687,7 +5711,7 @@ msgstr "Garant du locataire"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/ApplicationDocumentUploadDTO.java:2
 msgid "Tenant Id"
-msgstr ""
+msgstr "Id locataire"
 
 #: com/propertyvista/dto/TenantInLeaseDTO.java:0
 msgid "Tenant In Lease"
@@ -5705,11 +5729,11 @@ msgstr "Liste des locataires"
 #: com/propertyvista/portal/domain/ptapp/TenantCharge.java:2
 #: com/propertyvista/portal/rpc/portal/dto/TenantGeneralInfoDTO.java:2
 msgid "Tenant Name"
-msgstr ""
+msgstr "Nom du locataire"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Tenant On Lease"
-msgstr ""
+msgstr "Locataire sur le bail"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/TenantScreening.java:0
@@ -5728,7 +5752,7 @@ msgstr "Locataires"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Tenants On Lease"
-msgstr ""
+msgstr "Les locataires sur le bail"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
 msgid "Tenants With Info"
@@ -5749,14 +5773,14 @@ msgstr "Terme"
 msgid "Term Type"
 msgstr "Type de terme"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:214
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:220
 msgid "Terms Of Use"
-msgstr ""
+msgstr "Conditions d'utilisation"
 
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: com/propertyvista/domain/site/Testimonial.java:0
 msgid "Testimonial"
@@ -5774,10 +5798,10 @@ msgstr "Texte"
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:61
 msgid "The CAPTCHA Solution You Entered Was Incorrect"
-msgstr ""
+msgstr "La solution CAPTCHA que vous avez saisi n'est pas correcte"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:250
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
 msgid ""
 "The Vancouver housing market may already be unaffordable for many, but there"
 " is enough demand to keep prices rising, according to a new forecast."
@@ -5785,11 +5809,11 @@ msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "This month"
-msgstr ""
+msgstr "Ce mois-ci"
 
 #: com/propertyvista/pmsite/server/PMSiteContentManager.java:91
 msgid "This property management site was not set-up yet"
-msgstr ""
+msgstr "Ce site de gestion des biens n'a pas été créé encore"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Three"
@@ -5830,7 +5854,7 @@ msgstr "Jeton"
 
 #: com/propertyvista/portal/server/ptapp/services/ActivationServiceImpl.java:162
 msgid "Token Has Expired"
-msgstr ""
+msgstr "Jeton a expiré"
 
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
 msgid "Too Dark"
@@ -5843,7 +5867,7 @@ msgstr "Trop cher(e)"
 #: com/propertyvista/server/common/security/VistaAuthenticationServicesImpl.java:108
 #: com/propertyvista/server/common/security/VistaAuthenticationServicesImpl.java:91
 msgid "Too Many Failed Log In Attempts"
-msgstr ""
+msgstr "Trop de tentatives de connexion ont échoué"
 
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
 msgid "Too Small"
@@ -5861,16 +5885,16 @@ msgstr "Total des"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 msgid "Total Arrears"
-msgstr ""
+msgstr "Total des arriérés"
 
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Total Arrears Gadget"
-msgstr ""
+msgstr "Total des arriérés Gadget"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "Total Balance"
-msgstr ""
+msgstr "Total solde"
 
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
 msgid "Total Lockers"
@@ -5902,7 +5926,7 @@ msgstr "Transféré(e)"
 
 #: com/propertyvista/domain/payment/InteracInfo.java:2
 msgid "Transit Number"
-msgstr ""
+msgstr "Numéro de transit"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -5912,7 +5936,7 @@ msgstr "Transport"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Turnover Analysis Graph"
-msgstr ""
+msgstr "Graphique Analyse Chiffre d'affaires"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Two"
@@ -5991,14 +6015,14 @@ msgstr "URL"
 #: com/propertyvista/server/common/blob/ThumbnailService.java:103
 #, java-format
 msgid "Unable To Read The Image ''{0}''"
-msgstr ""
+msgstr "Impossible de lire l'image''{0}''"
 
 #. java-format
 #: com/propertyvista/server/common/blob/ImageResizer.java:121
 #: com/propertyvista/server/common/blob/ThumbnailService.java:111
 #, java-format
 msgid "Unable To Resample The Image ''{0}''"
-msgstr ""
+msgstr "Impossible pour rééchantillonner l'image ''{0}''"
 
 #: com/propertyvista/domain/tenant/TenantInLease.java:1
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
@@ -6027,20 +6051,20 @@ msgstr "Unité"
 #. Gadget Type
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Unit Availability Report"
-msgstr ""
+msgstr "Rapport de disponibilité Unité"
 
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:0
 msgid "Unit Availability Report Settings"
-msgstr ""
+msgstr "Réglages du rapport de la disponibilité unité"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:0
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatusDTO.java:0
 msgid "Unit Availability Status"
-msgstr ""
+msgstr "État de disponibilité unité"
 
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatusReportSettings.java:0
 msgid "Unit Availability Status Report Settings"
-msgstr ""
+msgstr "Paramètres du rapport sur l'état de disponibilité unité"
 
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:17
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.java:48
@@ -6106,12 +6130,13 @@ msgstr "Unités"
 #, java-format
 msgid "Unsupported Media File Type ''{0}'' Extension ''{1}''"
 msgstr ""
+"Type de fichier des médias non pris en charge ''{0}'' Extension ''{1}''"
 
 #. java-format
 #: com/pyx4j/essentials/server/upload/UploadServiceImpl.java:98
 #, java-format
 msgid "Unsupported {0} File Type {1}"
-msgstr ""
+msgstr "Type de fichier non pris en charge {0} {1}"
 
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "Update Data"
@@ -6142,7 +6167,7 @@ msgstr "Compte d'utilisateur"
 
 #: com/pyx4j/security/rpc/PasswordChangeRequest.java:2
 msgid "User Pk"
-msgstr ""
+msgstr "Utilisateur Pk"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "User Role"
@@ -6185,9 +6210,9 @@ msgid "Value"
 msgstr "Valeur"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:250
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
 msgid "Vancouver prices to keep rising"
-msgstr ""
+msgstr "Les prix à Vancouver continueront à augmenter"
 
 #: com/propertyvista/domain/financial/offering/extradata/Vehicle.java:0
 msgid "Vehicle"
@@ -6231,7 +6256,7 @@ msgstr "Visibilité"
 
 #: com/propertyvista/domain/dashboard/gadgets/ColumnDescriptorEntity.java:2
 msgid "Visible"
-msgstr ""
+msgstr "Visible"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -6278,11 +6303,11 @@ msgstr "Prise Wd"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 msgid "Web Service URL"
-msgstr ""
+msgstr "URL du service Web"
 
 #: com/propertyvista/domain/settings/YardiConnection.java:2
 msgid "Web Service User"
-msgstr ""
+msgstr "Utilisateur Web Service"
 
 #: com/propertyvista/domain/company/Company.java:2
 #: com/propertyvista/domain/property/asset/Complex.java:2
@@ -6298,7 +6323,7 @@ msgstr "Poids"
 #: com/propertyvista/pmsite/server/panels/AuthenticationPanel.java:53
 #, java-format
 msgid "Welcome {0}"
-msgstr ""
+msgstr "Bienvenue {0}"
 
 #: com/propertyvista/domain/GeoLocation.java:1
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -6323,7 +6348,7 @@ msgstr "Grands espaces"
 
 #: com/propertyvista/domain/dashboard/gadgets/ColumnDescriptorEntity.java:2
 msgid "Width"
-msgstr ""
+msgstr "Largeur"
 
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Window Coverings"
@@ -6359,7 +6384,7 @@ msgstr "Année"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoSelfEmployed.java:2
 msgid "Years In Business"
-msgstr ""
+msgstr "Années en affaires"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoSocialServices.java:2
 msgid "Years receiving"
@@ -6367,15 +6392,15 @@ msgstr "Années recevoir"
 
 #: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
 msgid "Yes, Please Enroll Me"
-msgstr ""
+msgstr "Oui, veuilllez m'inscrire"
 
 #: com/propertyvista/pmsite/server/panels/GwtInclude.html:6
 msgid "You Need To Have JavaScript Enabled To Use This Site."
-msgstr ""
+msgstr "Vous devez avoir activé JavaScript pour utiliser ce site."
 
 #: com/propertyvista/portal/server/ptapp/services/ApplicationServiceImpl.java:80
 msgid "You have no applications assigned"
-msgstr ""
+msgstr "Vous n'avez aucune application affectée"
 
 #: com/propertyvista/domain/media/Media.java:1
 msgid "YouTube"
@@ -6387,11 +6412,11 @@ msgstr "ID Vidéo YouTube "
 
 #: com/propertyvista/portal/server/ptapp/services/ActivationServiceImpl.java:155
 msgid "Your Account Is Suspended"
-msgstr ""
+msgstr "Votre compte est suspendu"
 
 #: com/propertyvista/portal/server/ptapp/services/PaymentServiceImpl.java:85
 msgid "Your Card Has Been Declined"
-msgstr ""
+msgstr "Votre carte a été refusée"
 
 #: com/pyx4j/security/rpc/PasswordRetrievalRequest.java:2
 msgid "Your Email"
@@ -6403,27 +6428,27 @@ msgstr "Zip / Code Postal"
 
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "bedrooms"
-msgstr ""
+msgstr "chambres"
 
 #: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:124
 msgid "den"
-msgstr ""
+msgstr "salle familiale"
 
 #: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:126
 msgid "dens"
-msgstr ""
+msgstr "salles familliales"
 
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/payment/PaymentType.java:1
 msgid "eCheque"
-msgstr ""
+msgstr "echèque"
 
 #. java-format
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #, java-format
 msgid "h:mm a"
-msgstr "h: mm a"
+msgstr "h:mm a"
 
 #: com/pyx4j/essentials/rpc/admin/NetworkSimulation.java:2
 msgid "milliseconds"
@@ -6431,15 +6456,15 @@ msgstr "millisecondes"
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:57
 msgid "reCAPTCHA Connection Failed"
-msgstr ""
+msgstr "Connexion reCAPTCHA a échoué"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:131
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:132
 msgid "separate WC"
-msgstr ""
+msgstr "WC séparé"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:134
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:135
 msgid "separate WCs"
-msgstr ""
+msgstr "WC séparés"
 
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:75
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:79
@@ -6453,7 +6478,7 @@ msgstr "à"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 #, java-format
 msgid "yyyy"
-msgstr "aaaa"
+msgstr "yyyy"
 
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:69
@@ -6476,14 +6501,16 @@ msgstr "{0,choice,null#Tout|0#Moins de {1}|0<{0}{1,choice,null# et plus|0<}}"
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
 #, java-format
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #. java-format
-#: com/propertyvista/pmsite/server/panels/AptListPanel.java:105
+#: com/propertyvista/pmsite/server/panels/AptListPanel.java:117
 #, java-format
 msgid ""
 "{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"
 msgstr ""
+"{0} chambre à coucher, {1} salle de bains, {2,choice,null#Prix non "
+"disponible|!null#à partir de $ {2}}"
 
 #. java-format
 #: com/propertyvista/crm/server/openapi/model/util/Converter.java:307
@@ -6495,13 +6522,13 @@ msgstr "{0} Chambre à coucher"
 #: com/pyx4j/entity/rdb/EntityPersistenceServiceRDB.java:519
 #, java-format
 msgid "{0} Updated Externally"
-msgstr ""
+msgstr "{0} Mise à jour extérieurement"
 
 #. java-format
 #: com/propertyvista/domain/File.java:0
 #, java-format
 msgid "{0} {1,size}"
-msgstr "{0} {1, taille}"
+msgstr "{0} {1,size}"
 
 #. java-format
 #: com/propertyvista/domain/charges/ChargeLine.java:0
@@ -6518,13 +6545,13 @@ msgstr "{0} {1}"
 #: com/propertyvista/domain/GeoLocation.java:0
 #, java-format
 msgid "{0} {1} & {2} {3}"
-msgstr "{0} {1} &; {2} {3}"
+msgstr "{0} {1} & {2} {3}"
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:0
 #, java-format
 msgid "{0}, Price: {1}"
-msgstr ""
+msgstr "{0}, Prix: {1}"
 
 #. java-format
 #: com/propertyvista/domain/company/Employee.java:0
@@ -6532,14 +6559,14 @@ msgstr ""
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:0
 #, java-format
 msgid "{0}, {1}"
-msgstr ""
+msgstr "{0}, {1}"
 
 #. java-format
 #: com/propertyvista/domain/contact/Phone.java:0
 #: com/propertyvista/domain/property/PropertyPhone.java:0
 #, java-format
 msgid "{0}{1,choice,null#|!null# ex.{1}}"
-msgstr "{0} {1,choice,null#|!null# ex.{1}}"
+msgstr "{0}{1,choice,null#|!null# ex.{1}}"
 
 #. java-format
 #: com/pyx4j/essentials/server/preloader/AddressInfo.java:0

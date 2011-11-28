@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 03:25-0500\n"
+"POT-Creation-Date: 2011-11-27 23:28-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,7 +306,7 @@ msgstr "Количество"
 msgid "Amount should be a numeric value"
 msgstr "Сумма должна быть числовое значение"
 
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:172
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:182
 msgid "An Unexpected Error Has Occurred"
 msgstr "Непредвиденная ошибка"
 
@@ -851,7 +851,7 @@ msgid "Cable"
 msgstr "Кабель"
 
 #: com/propertyvista/common/client/ui/components/OkCancelBox.java:65
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:126
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:159
 #: com/propertyvista/portal/client/ui/residents/EditPaymentMethodViewImpl.java:68
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:328
 #: com/pyx4j/widgets/client/dialog/Dialog.java:305
@@ -923,7 +923,7 @@ msgstr "Центральное кондиционирование"
 msgid "Central Heat"
 msgstr "Центральный тепловой"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:101
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:131
 msgid "Change"
 msgstr "Изменение"
 
@@ -1668,6 +1668,7 @@ msgstr "Водительские права"
 msgid "Dryer"
 msgstr "Сушилка"
 
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:96
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
 msgid "Due Date"
@@ -2284,6 +2285,10 @@ msgstr "Комната для гостей"
 msgid "HH:mm"
 msgstr "HH:mm"
 
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:112
+msgid "HISTORY"
+msgstr ""
+
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
 msgid "HVAC"
 msgstr "Система отопления "
@@ -2888,7 +2893,7 @@ msgstr "Рундук"
 msgid "Locker Area"
 msgstr "Площадь ящика"
 
-#: com/propertyvista/common/client/ui/components/login/LoginForm.java:80
+#: com/propertyvista/common/client/ui/components/login/LoginForm.java:81
 msgid "Login"
 msgstr "Войти"
 
@@ -2896,6 +2901,10 @@ msgstr "Войти"
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Logo"
 msgstr "Логотип"
+
+#: com/propertyvista/portal/rpc/portal/SiteDefinitionsDTO.java:2
+msgid "Logo Avalable"
+msgstr ""
 
 #: com/propertyvista/domain/GeoLocation.java:2
 msgid "Longitude"
@@ -2998,8 +3007,8 @@ msgid "Maintenance Contract"
 msgstr "Договор на техническое обслуживание"
 
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance List History"
-msgstr "История обслуживания Список"
+msgid "Maintenance Details"
+msgstr ""
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
@@ -3436,6 +3445,7 @@ msgid "New Payment Method"
 msgstr "Новый способ оплаты"
 
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:98
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:70
 msgid "New Ticket"
 msgstr "Новый билет"
 
@@ -3574,6 +3584,10 @@ msgstr "Числовой"
 msgid "OK"
 msgstr "Жми Сюда"
 
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:78
+msgid "OPEN TICKETS"
+msgstr ""
+
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Object 1"
 msgstr "Объект 1"
@@ -3623,6 +3637,11 @@ msgstr "Один Сборы время"
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Ontario Disability Support Program (ODSP)"
 msgstr "Онтарио программы поддержки инвалидов (ODSP)"
+
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:115
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:81
+msgid "Open Tickets"
+msgstr ""
 
 #: com/propertyvista/common/client/ui/decorations/DecorationData.java:1
 msgid "Optional"
@@ -3833,7 +3852,7 @@ msgstr "Пароль"
 msgid "Patio"
 msgstr "Патио"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:151
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:193
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:217
 msgid "Pay Now"
 msgstr "Оплатить сейчас"
@@ -3852,7 +3871,8 @@ msgid "Payment Information"
 msgstr "Информация об оплате"
 
 #: com/propertyvista/domain/payment/PaymentMethod.java:0
-#: com/propertyvista/portal/client/ui/residents/PaymentMethodsForm.java:57
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:119
+#: com/propertyvista/portal/client/ui/residents/PaymentMethodsForm.java:65
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodDTO.java:0
 #: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
@@ -4057,7 +4077,7 @@ msgstr "Пожалуйста, Войти снова."
 msgid "Please make sure you are connected to Internet"
 msgstr "Пожалуйста, убедитесь, что вы подключены к Интернету"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:95
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:97
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:172
 msgid ""
 "Please report the incident to technical support,\n"
@@ -4118,7 +4138,7 @@ msgstr "Потенциальные арендаторы"
 msgid "Pre Authorized"
 msgstr "Предварительно уполномоченный"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:118
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:151
 msgid "Pre-Authorized Monthly Payment Plan"
 msgstr "Предварительно Уполномоченный ежемесячный график платежей"
 
@@ -4365,6 +4385,10 @@ msgstr "Диапазон"
 msgid "Range Group"
 msgstr "Диапазон группы"
 
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:119
+msgid "Rate Service"
+msgstr ""
+
 #: com/propertyvista/portal/rpc/portal/dto/SatisfactionSurveyResponceDTO.java:2
 msgid "Rating"
 msgstr "Рейтинг"
@@ -4564,7 +4588,7 @@ msgstr "Результат"
 msgid "Retired"
 msgstr "В отставке"
 
-#: com/propertyvista/common/client/ui/components/login/LoginForm.java:97
+#: com/propertyvista/common/client/ui/components/login/LoginForm.java:98
 #: com/propertyvista/common/client/ui/components/login/RetrievePasswordForm.java:68
 msgid "Retrieve Password"
 msgstr "Забыли пароль?"
@@ -4775,7 +4799,7 @@ msgid "Services"
 msgstr "Услуги"
 
 #. java-format
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:80
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session Duration {0}, Inactive For {1}"
 msgstr "Длительность сессии {0}, неактивная {1}"
@@ -4989,6 +5013,8 @@ msgstr "Статическое содержимое"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:239
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:275
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:118
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:84
 #: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
@@ -5088,10 +5114,6 @@ msgstr "Тема Подробнее"
 msgid "Subjects"
 msgstr "Субъекты"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceViewImpl.java:38
-msgid "Submit"
-msgstr "Представлять"
-
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 msgid "Submited"
 msgstr "Занесена"
@@ -5149,10 +5171,6 @@ msgstr "Руководитель / менеджер Имя"
 msgid "Supervisor/Manager Phone"
 msgstr "Руководитель / Менеджер телефона"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceForm.java:56
-msgid "Support History"
-msgstr "Поддержка истории"
-
 #: com/propertyvista/domain/property/asset/Parking.java:1
 msgid "Surface Lot"
 msgstr "Поверхность лота"
@@ -5168,11 +5186,6 @@ msgstr "Системная ошибка"
 #: com/pyx4j/essentials/rpc/admin/SystemMaintenanceState.java:0
 msgid "System Maintenance State"
 msgstr "Государственная система технического обслуживания"
-
-#: com/propertyvista/portal/client/ui/residents/MaintenanceForm.java:47
-#: com/propertyvista/portal/client/ui/residents/MaintenanceListerViewImpl.java:37
-msgid "System Status"
-msgstr "Состояние системы"
 
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "T-shape"
@@ -5193,6 +5206,7 @@ msgstr "Смена владельца"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/domain/tenant/Tenant.java:0
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
@@ -5331,7 +5345,7 @@ msgstr ""
 msgid "The File Name Cannot Be Empty"
 msgstr "Имя файла не может быть пустым"
 
-#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:71
+#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:72
 msgid ""
 "The Number You Have Entered Is Not A Valid Phone Number. Please Use The "
 "Following Formats: 123-4567 OR 123-456-7890 (Dashes Optional)"
@@ -5353,8 +5367,8 @@ msgstr "Это не является допустимым видео YouTube ID"
 msgid "This Session Has Been Terminated"
 msgstr "Эта сессия была прервана"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:110
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:181
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:100
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:177
 msgid "This Session Has Been Terminated To Prevent Data Corruption"
 msgstr "Эта сессия была прервана Чтобы предотвратить повреждение данных"
 
@@ -5814,7 +5828,7 @@ msgid "We're Sorry"
 msgstr "Извините ошибка"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:66
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:127
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
 msgid ""
 "We're Sorry But Your Requests Look Similar To Automated Requests Initiated "
 "By Computer Virus Or Spyware Applications. To Protect Our Users, We Can't "
@@ -5918,11 +5932,9 @@ msgstr "Лет получения"
 msgid "Yes"
 msgstr "Да"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:137
-msgid "Yes, I Want To Enroll Into The Pre-Authorized Payment Plan (PAP)"
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:178
+msgid "Yes! I Want To Take Advantage Of The Pre-Authorization."
 msgstr ""
-"Да, я хочу зарегистрироваться в Предварительно Уполномоченный План оплаты "
-"(PAP)"
 
 #: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
 msgid "Yes, Please Enroll Me"
@@ -5944,17 +5956,13 @@ msgstr ""
 "Ваш браузер не позволило приложений от открытия всплывающих окон Пожалуйста,"
 " отключите блокировку всплывающих окон для приложения Fucntion Правильно"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:117
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:150
 msgid "Your Current Arrangement"
 msgstr "Ваша нынешняя схема"
 
 #: com/pyx4j/security/rpc/PasswordRetrievalRequest.java:2
 msgid "Your Email"
 msgstr "Ваш электронный адрес"
-
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:89
-msgid "Your Payment Method"
-msgstr "Ваш метод оплаты"
 
 #: com/pyx4j/essentials/client/SessionInactiveDialog.java:66
 msgid "Your Session Has Been Terminated"
