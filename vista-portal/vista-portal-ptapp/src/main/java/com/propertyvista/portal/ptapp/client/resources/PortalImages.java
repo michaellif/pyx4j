@@ -25,30 +25,6 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
 
     PortalImages INSTANCE = GWT.create(PortalImages.class);
 
-    @Override
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("add.png")
-    ImageResource add();
-
-    @Override
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("add_hover.png")
-    ImageResource addHover();
-
-    @Override
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("del.png")
-    ImageResource del();
-
-    @Override
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("del_hover.png")
-    ImageResource delHover();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("empty.png")
-    ImageResource hideRemoveRow();
-
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("bg_body.gif")
     ImageResource bodyBackground();
@@ -198,15 +174,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
     ImageResource chequeGuide();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("bild.gif")
-    ImageResource building();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("home.png")
     ImageResource floorplan();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("step2.png")
     ImageResource step2();
-
 }
