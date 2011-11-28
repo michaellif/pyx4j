@@ -59,6 +59,8 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
     @Override
     protected void persist(PaymentMethod entity) {
         entity.tenant().set(TenantAppContext.getCurrentUserTenant());
+        String ccn = entity.creditCard().number().getValue().trim();
+        entity.creditCard().numberRefference().setValue(ccn.substring(ccn.length() - 4));
         Persistence.service().persist(entity);
     }
 
