@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 23:28-0500\n"
+"POT-Creation-Date: 2011-11-28 12:56-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr "#0.000000"
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr " {0,number,#0.00} "
+msgstr "Toutes"
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "% Ownership"
@@ -1024,10 +1024,6 @@ msgstr "Voitures"
 msgid "Catalog"
 msgstr "Catalogue"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Category"
-msgstr "Catégorie"
-
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Ceiling Fan"
 msgstr "Ventilateur de plafond"
@@ -1380,10 +1376,6 @@ msgstr "Contraste 2"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Controlled Access"
 msgstr "Accès contrôlé"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Cooling"
-msgstr "Refroidissement"
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Copyright"
@@ -1900,7 +1892,6 @@ msgid "Either one of {0} or {1} must be provided"
 msgstr "Soit un de {0} ou {1} doit être fourni"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Electrical"
 msgstr "Électrique"
 
@@ -2243,7 +2234,7 @@ msgstr "Prénom"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Fitness"
-msgstr "Condition physique"
+msgstr "Gym"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -2589,10 +2580,6 @@ msgstr ""
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Heat"
 msgstr "Chaleur"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Heating"
-msgstr "Chauffage"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -3049,7 +3036,6 @@ msgid "Last Service Date"
 msgstr "Date du dernier entretien"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 msgid "Last Updated"
 msgstr "Dernière mise à jour"
 
@@ -3347,12 +3333,7 @@ msgstr "Entretien"
 msgid "Maintenance Contract"
 msgstr "Contrat d'entretien"
 
-#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance Details"
-msgstr ""
-
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
 msgid "Maintenance Request"
 msgstr "Demande d'entretien"
 
@@ -3803,10 +3784,6 @@ msgstr "Simulation de réseau"
 msgid "Never"
 msgstr "Jamais"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "New"
-msgstr "Nouveau"
-
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "New Data"
 msgstr "Nouvelles données"
@@ -3822,6 +3799,10 @@ msgstr "Nouveau mot de passe"
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "New Payment Method"
 msgstr "Nouveau mode de paiement"
+
+#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
+msgid "New Ticket"
+msgstr ""
 
 #: com/propertyvista/domain/site/News.java:0
 #: com/propertyvista/dto/SiteDescriptorDTO.java:2
@@ -3984,7 +3965,7 @@ msgstr "Gestion sur place"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "One"
-msgstr "Un(e)"
+msgstr "Une"
 
 #: com/propertyvista/portal/domain/ptapp/Charges.java:2
 msgid "One Time Charges"
@@ -4032,7 +4013,6 @@ msgstr "Prix ​​original"
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Other"
 msgstr "Autre"
 
@@ -4260,7 +4240,6 @@ msgid "Payment Types"
 msgstr "Types de paiement"
 
 #: com/propertyvista/misc/EquifaxApproval.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Pending"
 msgstr "En attente"
 
@@ -4422,7 +4401,6 @@ msgid "Play Ground"
 msgstr "Terrain de jeux"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Plumbing"
 msgstr "Plomberie"
 
@@ -4575,10 +4553,6 @@ msgstr "Patio privé"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Private Well"
 msgstr "Puits privé"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Problem Description"
-msgstr "Description du problème"
 
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
 msgid "Product"
@@ -4945,7 +4919,7 @@ msgstr "Résident(e)"
 
 #: com/propertyvista/pmsite/server/pages/SignInPage.html:14
 msgid "Resident Portal Log In"
-msgstr ""
+msgstr "Connexion portail résidents"
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Resident Portal Promotions"
@@ -4981,11 +4955,7 @@ msgstr "Unité d'habitation"
 #: com/propertyvista/pmsite/server/pages/ResidentsPage.java:43
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:147
 msgid "Residents"
-msgstr "Résidents(e)s"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Resolved"
-msgstr "Résolu(e)"
+msgstr "Résidents"
 
 #: com/propertyvista/domain/site/Resource.java:0
 msgid "Resource"
@@ -5087,7 +5057,6 @@ msgid "Saving"
 msgstr "Enregistrement"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Scheduled"
 msgstr "Prévu(e)"
 
@@ -5457,7 +5426,6 @@ msgstr "Contenu statique"
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 msgid "Status"
@@ -6333,10 +6301,6 @@ msgstr "Ouest"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Wheel Chair"
 msgstr "Fauteuil roulant"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "When Requested"
-msgstr "Lorsque demandé(e)"
 
 #: com/propertyvista/domain/property/asset/ParkingSpot.java:1
 msgid "Wide"

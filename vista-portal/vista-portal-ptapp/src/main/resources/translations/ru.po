@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 23:28-0500\n"
+"POT-Creation-Date: 2011-11-28 12:55-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -926,10 +926,6 @@ msgstr "Легковые автомобили"
 msgid "Catalog"
 msgstr "Каталог"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Category"
-msgstr "Категория"
-
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Ceiling Fan"
 msgstr "Потолочные вентиляторы"
@@ -1272,10 +1268,6 @@ msgstr "Контрастность 2"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Controlled Access"
 msgstr "Контролируемый доступ"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Cooling"
-msgstr "Охлаждение"
 
 #: com/propertyvista/common/client/ui/components/editors/GeoLocationEditor.java:112
 msgid "Coordinate Format error"
@@ -1700,7 +1692,7 @@ msgstr "Дата Выполнения"
 msgid "Duplicate Tenants Specified"
 msgstr "Дубликат Арендаторы Указанные"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:276
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:279
 msgid "Duplicate contacts specified"
 msgstr "Повторяющиеся контакты указанной"
 
@@ -1738,7 +1730,6 @@ msgid "Effective Date"
 msgstr "Дата вступления в силу"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Electrical"
 msgstr "Электрический"
 
@@ -1805,7 +1796,7 @@ msgstr "Работодатель"
 msgid "Employer Name"
 msgstr "Работодатель Имя"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:404
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:407
 msgid "Employment Info"
 msgstr "Занятость информация"
 
@@ -2385,10 +2376,6 @@ msgstr ""
 msgid "Heat"
 msgstr "Тепло"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Heating"
-msgstr "Обогрев"
-
 #: com/pyx4j/widgets/client/CaptchaComposite.java:106
 msgid "Help"
 msgstr "Помощь"
@@ -2776,7 +2763,6 @@ msgid "Last Service Date"
 msgstr "Дата последнего службы"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 msgid "Last Updated"
 msgstr "Последнее обновление"
 
@@ -3061,12 +3047,7 @@ msgstr "Обслуживание"
 msgid "Maintenance Contract"
 msgstr "Договор на техническое обслуживание"
 
-#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance Details"
-msgstr ""
-
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
 msgid "Maintenance Request"
 msgstr "Запросов о ведении"
 
@@ -3351,8 +3332,8 @@ msgstr "Выйти"
 msgid "Move Out Date"
 msgstr "Выйти Дата"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:224
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:256
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:227
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:259
 msgid "Move Out Date should be greater than Move In Date"
 msgstr "Выйти Дата должна быть больше, чем Переместить в дате"
 
@@ -3482,7 +3463,6 @@ msgstr "Моделирование сети"
 msgid "Never"
 msgstr "Никогда"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 #: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:133
 msgid "New"
 msgstr "Новый"
@@ -3499,6 +3479,10 @@ msgstr "Новый пароль"
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "New Payment Method"
 msgstr "Новый способ оплаты"
+
+#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
+msgid "New Ticket"
+msgstr "Новый билет"
 
 #: com/propertyvista/domain/site/News.java:0
 #: com/propertyvista/dto/SiteDescriptorDTO.java:2
@@ -3727,7 +3711,6 @@ msgstr "Оригинальная Цена"
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:150
 #: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:292
 msgid "Other"
@@ -3936,7 +3919,6 @@ msgid "Payment Types"
 msgstr "Способы оплаты"
 
 #: com/propertyvista/misc/EquifaxApproval.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Pending"
 msgstr "В ожидании"
 
@@ -4102,6 +4084,14 @@ msgstr "Платформа"
 msgid "Play Ground"
 msgstr "Детская площадка"
 
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:107
+msgid "Please Attach proof Of Citizenship"
+msgstr ""
+
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:89
+msgid "Please Attach proof Of Employment"
+msgstr ""
+
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:139
 msgid "Please Make Sure You Are Connected To The Internet"
 msgstr "Убедитесь, что вы подключены к Интернету"
@@ -4132,7 +4122,6 @@ msgstr ""
 "описывающий меры, принятые до ошибки."
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Plumbing"
 msgstr "Водопровод"
 
@@ -4275,10 +4264,6 @@ msgstr "Патио"
 msgid "Private Well"
 msgstr "Собственный колодец"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Problem Description"
-msgstr "Описание проблемы"
-
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
 msgid "Product"
 msgstr "Продукт"
@@ -4291,7 +4276,7 @@ msgstr "Программа"
 msgid "Program (Planned) to be completed on"
 msgstr "Программа (планируемые), которые будут завершены"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:296
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:299
 msgid "Program Info"
 msgstr "Программа информация"
 
@@ -4618,10 +4603,6 @@ msgstr "Малина"
 msgid "Residents"
 msgstr "Жители"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Resolved"
-msgstr "Урегулированный"
-
 #: com/propertyvista/domain/site/Resource.java:0
 msgid "Resource"
 msgstr "Ресурс"
@@ -4725,7 +4706,6 @@ msgid "Schedule"
 msgstr "График"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Scheduled"
 msgstr "Запланированные"
 
@@ -5065,7 +5045,6 @@ msgstr "Статическое содержимое"
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 msgid "Status"
@@ -5382,13 +5361,13 @@ msgstr "Текст"
 msgid "Thank you for choosing"
 msgstr "Благодарим Вас за выбор"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:180
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:210
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:242
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:183
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:213
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:245
 msgid "The Date Chosen Cannot Be Today's Date Or A Date In The Future"
 msgstr "Дата выбрана не Может Быть день Сегодня Или дату в будущем"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:193
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:196
 msgid "The Date Chosen Cannot Be Today's Date Or A Date In The Past"
 msgstr "Дата выбрана не Может Быть день Сегодня Или дату в прошлом"
 
@@ -5400,7 +5379,7 @@ msgstr "Дата должна быть установлена ​​ранее �
 msgid "The Date Must Be Later Than Today's Date"
 msgstr "Дата должна быть позднее даты сегодня"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:203
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:206
 msgid "The End Date Chosen Cannot Be The Same As The Start Date Or Before It"
 msgstr ""
 "Дата окончания Избранный не может быть таким же, как дата начала или до нее"
@@ -5418,7 +5397,7 @@ msgstr ""
 "используйте следующие форматы: 123-4567 или 123-456-7890 (тире "
 "дополнительно)"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:188
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:191
 msgid "The Start Date Cannot Be Equal To The End Date Or After It"
 msgstr "Дата начала не может быть равна Дата окончания или после него"
 
@@ -5947,10 +5926,6 @@ msgstr "Запад"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Wheel Chair"
 msgstr "Инвалидного кресла"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "When Requested"
-msgstr "По просьбе"
 
 #: com/propertyvista/domain/property/asset/ParkingSpot.java:1
 msgid "Wide"

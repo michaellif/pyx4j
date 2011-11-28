@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 23:28-0500\n"
+"POT-Creation-Date: 2011-11-28 12:55-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgstr "#0.000000"
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr " {0,number,#0.00} "
+msgstr "Toutes"
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "% Ownership"
@@ -854,6 +854,7 @@ msgstr "Câble"
 #: com/propertyvista/common/client/ui/components/OkCancelBox.java:65
 #: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:159
 #: com/propertyvista/portal/client/ui/residents/EditPaymentMethodViewImpl.java:68
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:97
 #: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:328
 #: com/pyx4j/widgets/client/dialog/Dialog.java:305
 msgid "Cancel"
@@ -907,10 +908,6 @@ msgstr "Voitures"
 #: com/propertyvista/domain/financial/offering/Product.java:2
 msgid "Catalog"
 msgstr "Catalogue"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Category"
-msgstr "Catégorie"
 
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Ceiling Fan"
@@ -1254,10 +1251,6 @@ msgstr "Contraste 2"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Controlled Access"
 msgstr "Accès contrôlé"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Cooling"
-msgstr "Refroidissement"
 
 #: com/propertyvista/common/client/ui/components/editors/GeoLocationEditor.java:112
 msgid "Coordinate Format error"
@@ -1675,7 +1668,7 @@ msgstr "Sécheuse"
 msgid "Due Date"
 msgstr "Date d'échéance"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:276
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:279
 msgid "Duplicate contacts specified"
 msgstr "Duplicata  des contacts spécifiés"
 
@@ -1713,7 +1706,6 @@ msgid "Effective Date"
 msgstr "Date d'entrée en vigueur"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Electrical"
 msgstr "Électrique"
 
@@ -1780,7 +1772,7 @@ msgstr "Employeur"
 msgid "Employer Name"
 msgstr "Nom de l'employeur"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:404
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:407
 msgid "Employment Info"
 msgstr "Infos emploi"
 
@@ -2008,7 +2000,7 @@ msgstr "Prénom"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Fitness"
-msgstr "Condition physique"
+msgstr "Gym"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -2286,7 +2278,7 @@ msgstr "Chambre d'invité"
 msgid "HH:mm"
 msgstr "HH:mm"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:112
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:116
 msgid "HISTORY"
 msgstr ""
 
@@ -2348,10 +2340,6 @@ msgstr ""
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Heat"
 msgstr "Chaleur"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Heating"
-msgstr "Chauffage"
 
 #: com/pyx4j/widgets/client/CaptchaComposite.java:106
 msgid "Help"
@@ -2590,6 +2578,7 @@ msgid "Is Shared"
 msgstr "Est partagé(e)"
 
 #: com/propertyvista/domain/maintenance/IssueClassification.java:2
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:76
 msgid "Issue"
 msgstr ""
 
@@ -2734,7 +2723,6 @@ msgid "Last Service Date"
 msgstr "Date du dernier entretien"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 msgid "Last Updated"
 msgstr "Dernière mise à jour"
 
@@ -3007,12 +2995,7 @@ msgstr "Entretien"
 msgid "Maintenance Contract"
 msgstr "Contrat d'entretien"
 
-#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance Details"
-msgstr ""
-
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
 msgid "Maintenance Request"
 msgstr "Demande d'entretien"
 
@@ -3297,8 +3280,8 @@ msgstr "Déménagement"
 msgid "Move Out Date"
 msgstr "Date de déménagement"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:224
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:256
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:227
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:259
 msgid "Move Out Date should be greater than Move In Date"
 msgstr ""
 "La date de déménagement doit être plus tard que la date d'emménagement"
@@ -3429,7 +3412,6 @@ msgstr "Simulation de réseau"
 msgid "Never"
 msgstr "Jamais"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 #: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:133
 msgid "New"
 msgstr "Nouveau"
@@ -3447,7 +3429,8 @@ msgid "New Payment Method"
 msgstr "Nouveau mode de paiement"
 
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:98
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:70
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:71
+#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "New Ticket"
 msgstr ""
 
@@ -3586,7 +3569,7 @@ msgstr "Numérique"
 msgid "OK"
 msgstr "OK"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:78
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:80
 msgid "OPEN TICKETS"
 msgstr ""
 
@@ -3630,7 +3613,7 @@ msgstr "Gestion sur place"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "One"
-msgstr "Un(e)"
+msgstr "Une"
 
 #: com/propertyvista/portal/domain/ptapp/Charges.java:2
 msgid "One Time Charges"
@@ -3640,8 +3623,8 @@ msgstr "Frais uniques"
 msgid "Ontario Disability Support Program (ODSP)"
 msgstr "Programme ontarien de soutien aux personnes handicapées (POSPH)"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:115
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:81
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:119
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:83
 msgid "Open Tickets"
 msgstr ""
 
@@ -3691,7 +3674,6 @@ msgstr "Prix ​​original"
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Other"
 msgstr "Autre"
 
@@ -3899,7 +3881,6 @@ msgid "Payment Types"
 msgstr "Types de paiement"
 
 #: com/propertyvista/misc/EquifaxApproval.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Pending"
 msgstr "En attente"
 
@@ -4059,6 +4040,14 @@ msgstr "Plate-forme"
 msgid "Play Ground"
 msgstr "Terrain de jeux"
 
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:107
+msgid "Please Attach proof Of Citizenship"
+msgstr ""
+
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:89
+msgid "Please Attach proof Of Employment"
+msgstr ""
+
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:139
 msgid "Please Make Sure You Are Connected To The Internet"
 msgstr "Veuillez vous assurer d'être connecté à l'Internet"
@@ -4089,7 +4078,6 @@ msgstr ""
 "décrivant les mesures prises avant l'erreur.\n"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Plumbing"
 msgstr "Plomberie"
 
@@ -4228,10 +4216,6 @@ msgstr "Patio privé"
 msgid "Private Well"
 msgstr "Puits privé"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Problem Description"
-msgstr "Description du problème"
-
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
 msgid "Product"
 msgstr "Produit"
@@ -4244,7 +4228,7 @@ msgstr "Programme"
 msgid "Program (Planned) to be completed on"
 msgstr "Date (prévue) d'achèvement du programme"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:296
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:299
 msgid "Program Info"
 msgstr "Informations sur le programme"
 
@@ -4387,7 +4371,7 @@ msgstr "Gamme"
 msgid "Range Group"
 msgstr "Groupe de la gamme"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:119
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:123
 msgid "Rate Service"
 msgstr ""
 
@@ -4512,6 +4496,10 @@ msgstr "Loué(e) à compter de"
 msgid "Rented/Unrented/OffMarket"
 msgstr "Loué(e) / Libre / Retiré(e) du marché"
 
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:74
+msgid "Repair Subject"
+msgstr ""
+
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Request for Guarantor or further information"
 msgstr "Demande de garant ou de plus amples informations"
@@ -4568,11 +4556,7 @@ msgstr "Unité d'habitation"
 #. Portal Page Type
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 msgid "Residents"
-msgstr "Résidents(e)s"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Resolved"
-msgstr "Résolu(e)"
+msgstr "Résidents"
 
 #: com/propertyvista/domain/site/Resource.java:0
 msgid "Resource"
@@ -4626,6 +4610,10 @@ msgstr "Toit"
 msgid "Roof Segment"
 msgstr "Segment de toit"
 
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:71
+msgid "Rooms"
+msgstr "Pièces"
+
 #: com/propertyvista/domain/payment/EcheckInfo.java:2
 msgid "Routing Number"
 msgstr "Numéro d'acheminement"
@@ -4678,7 +4666,6 @@ msgid "Schedule"
 msgstr "Calendrier"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Scheduled"
 msgstr "Prévu(e)"
 
@@ -5016,9 +5003,8 @@ msgstr "Contenu statique"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:239
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:275
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:118
-#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:84
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:122
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:86
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 msgid "Status"
@@ -5110,12 +5096,17 @@ msgid "Subject"
 msgstr "Sujet"
 
 #: com/propertyvista/domain/maintenance/IssueClassification.java:2
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:75
 msgid "Subject Details"
 msgstr ""
 
 #: com/propertyvista/domain/maintenance/IssueElement.java:2
 msgid "Subjects"
 msgstr ""
+
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:116
+msgid "Submit"
+msgstr "Soumettre"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 msgid "Submited"
@@ -5321,15 +5312,15 @@ msgstr "Témoignages"
 msgid "Text"
 msgstr "Texte"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:180
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:210
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:242
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:183
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:213
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:245
 msgid "The Date Chosen Cannot Be Today's Date Or A Date In The Future"
 msgstr ""
 "La date choisie ne peut pas être la date d'aujourd'hui ou une date dans le "
 "futur"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:193
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:196
 msgid "The Date Chosen Cannot Be Today's Date Or A Date In The Past"
 msgstr ""
 "La date choisie ne peut pas être la date d'aujourd'hui ou une date dans le "
@@ -5343,7 +5334,7 @@ msgstr "La date doit être antérieure à la date d'aujourd'hui"
 msgid "The Date Must Be Later Than Today's Date"
 msgstr "La date doit être postérieure à la date d'aujourd'hui"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:203
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:206
 msgid "The End Date Chosen Cannot Be The Same As The Start Date Or Before It"
 msgstr ""
 "La date de fin choisi ne peut être la même que la date de début ou avant"
@@ -5361,7 +5352,7 @@ msgstr ""
 "vous plaît utiliser les formats suivants: 123-4567 OU 123-456-7890 (Tirets "
 "Facultatif)"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:188
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:191
 msgid "The Start Date Cannot Be Equal To The End Date Or After It"
 msgstr "La date de début peut ne pas être égale à la date de fin ou après"
 
@@ -5878,10 +5869,6 @@ msgstr "Ouest"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Wheel Chair"
 msgstr "Fauteuil roulant"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "When Requested"
-msgstr "Lorsque demandé(e)"
 
 #: com/propertyvista/domain/property/asset/ParkingSpot.java:1
 msgid "Wide"

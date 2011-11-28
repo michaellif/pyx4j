@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 23:28-0500\n"
+"POT-Creation-Date: 2011-11-28 12:56-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1020,10 +1020,6 @@ msgstr "Легковые автомобили"
 msgid "Catalog"
 msgstr "Каталог"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Category"
-msgstr "Категория"
-
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Ceiling Fan"
 msgstr "Потолочные вентиляторы"
@@ -1376,10 +1372,6 @@ msgstr "Контрастность 2"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Controlled Access"
 msgstr "Контролируемый доступ"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Cooling"
-msgstr "Охлаждение"
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Copyright"
@@ -1892,7 +1884,6 @@ msgid "Either one of {0} or {1} must be provided"
 msgstr "Вы должны указать один из {0} или {1}"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Electrical"
 msgstr "Электрический"
 
@@ -2582,10 +2573,6 @@ msgstr ""
 msgid "Heat"
 msgstr "Тепло"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Heating"
-msgstr "Обогрев"
-
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 msgid "High Speed"
@@ -3040,7 +3027,6 @@ msgid "Last Service Date"
 msgstr "Дата последнего службы"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 msgid "Last Updated"
 msgstr "Последнее обновление"
 
@@ -3337,12 +3323,7 @@ msgstr "Обслуживание"
 msgid "Maintenance Contract"
 msgstr "Договор на техническое обслуживание"
 
-#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance Details"
-msgstr ""
-
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
 msgid "Maintenance Request"
 msgstr "Запросов о ведении"
 
@@ -3793,10 +3774,6 @@ msgstr "Моделирование сети"
 msgid "Never"
 msgstr "Никогда"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "New"
-msgstr "Новый"
-
 #: com/propertyvista/admin/rpc/PmcImportDTO.java:1
 msgid "New Data"
 msgstr "Новые данные"
@@ -3812,6 +3789,10 @@ msgstr "Новый пароль"
 #: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "New Payment Method"
 msgstr "Новый способ оплаты"
+
+#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
+msgid "New Ticket"
+msgstr "Новый билет"
 
 #: com/propertyvista/domain/site/News.java:0
 #: com/propertyvista/dto/SiteDescriptorDTO.java:2
@@ -4022,7 +4003,6 @@ msgstr "Оригинальная Цена"
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Other"
 msgstr "Другой"
 
@@ -4251,7 +4231,6 @@ msgid "Payment Types"
 msgstr "Способы оплаты"
 
 #: com/propertyvista/misc/EquifaxApproval.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Pending"
 msgstr "В ожидании"
 
@@ -4413,7 +4392,6 @@ msgid "Play Ground"
 msgstr "Детская площадка"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Plumbing"
 msgstr "Водопровод"
 
@@ -4566,10 +4544,6 @@ msgstr "Патио"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "Private Well"
 msgstr "Собственный колодец"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Problem Description"
-msgstr "Описание проблемы"
 
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
 msgid "Product"
@@ -4974,10 +4948,6 @@ msgstr "Малина"
 msgid "Residents"
 msgstr "Жители"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Resolved"
-msgstr "Урегулированный"
-
 #: com/propertyvista/domain/site/Resource.java:0
 msgid "Resource"
 msgstr "Ресурс"
@@ -5078,7 +5048,6 @@ msgid "Saving"
 msgstr "Сохраняем"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Scheduled"
 msgstr "Запланированные"
 
@@ -5445,7 +5414,6 @@ msgstr "Статическое содержимое"
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 #: com/propertyvista/domain/tenant/ptapp/Application.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 msgid "Status"
@@ -6323,10 +6291,6 @@ msgstr "Запад"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Wheel Chair"
 msgstr "Инвалидного кресла"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "When Requested"
-msgstr "По просьбе"
 
 #: com/propertyvista/domain/property/asset/ParkingSpot.java:1
 msgid "Wide"
