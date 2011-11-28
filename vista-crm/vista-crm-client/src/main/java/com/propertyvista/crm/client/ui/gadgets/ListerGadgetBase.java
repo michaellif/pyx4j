@@ -129,9 +129,9 @@ public abstract class ListerGadgetBase<E extends IEntity> extends GadgetBase {
                     // but draws another instance of ListerGadget, i.e: on the new gadget's setup, the refresh
                     // interval is "Never", but the "loading..." message on top of the screen begins to appear at regular period
 
-                    ListerGadgetBase.this.start();
+//                    ListerGadgetBase.this.start();
                 } else {
-                    ListerGadgetBase.this.stop();
+//                    ListerGadgetBase.this.stop();
                 }
             }
         });
