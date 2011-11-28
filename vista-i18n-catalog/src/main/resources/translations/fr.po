@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: Property Vista Software Inc.\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-27 05:38-0500\n"
-"PO-Revision-Date: 2011-11-28 04:24+0000\n"
-"Last-Translator: vlads <skarzhevskyy@gmail.com>\n"
+"PO-Revision-Date: 2011-11-28 17:55+0000\n"
+"Last-Translator: yuriyl <yuriyl@birchwoodsoftwaregroup.com>\n"
 "Language-Team: French (Canada) (http://www.transifex.net/projects/p/propertyvista/team/fr_CA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +39,7 @@ msgstr ""
 #: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:161
 #: com/propertyvista/crm/client/ui/gadgets/vacancyreport/TurnoverAnalysisGraphGadget.java:155
 msgid "#"
-msgstr "#"
+msgstr "Par Ville"
 
 #. java-format
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
@@ -88,7 +88,7 @@ msgstr "#0.000000"
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr " {0,number,#0.00} "
+msgstr "Toutes"
 
 #: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:157
 #: com/propertyvista/crm/client/ui/gadgets/vacancyreport/TurnoverAnalysisGraphGadget.java:151
@@ -2642,7 +2642,7 @@ msgstr "Prénom"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Fitness"
-msgstr "Condition physique"
+msgstr "Gym"
 
 #. Building Amenity Type
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
@@ -4664,7 +4664,7 @@ msgstr "Gestion sur place"
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "One"
-msgstr "Un(e)"
+msgstr "Une"
 
 #: com/propertyvista/portal/domain/ptapp/Charges.java:2
 msgid "One Time Charges"
@@ -5754,7 +5754,7 @@ msgstr "Résident(e)"
 
 #: com/propertyvista/pmsite/server/pages/SignInPage.html:14
 msgid "Resident Portal Log In"
-msgstr ""
+msgstr "Connexion portail résidents"
 
 #: com/propertyvista/domain/site/SiteTitles.java:2
 msgid "Resident Portal Promotions"
@@ -5790,7 +5790,7 @@ msgstr "Unité d'habitation"
 #: com/propertyvista/pmsite/server/pages/ResidentsPage.java:43
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:143
 msgid "Residents"
-msgstr "Résidents(e)s"
+msgstr "Résidents"
 
 #: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:144
 msgid "Resolution"
