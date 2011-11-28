@@ -94,7 +94,8 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
             openRequestsPanel.setHTML(row, 1, requests.status().getStringView() + "<p><i style='font-size:0.8em'>" + requests.date().getStringView() + "</i>");
 
-            openRequestsPanel.setHTML(row, 2, "");
+            Anchor cancelTicket = new Anchor(i18n.tr("Cancel"));
+            openRequestsPanel.setWidget(row, 2, cancelTicket);
 
             openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
         }

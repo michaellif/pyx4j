@@ -338,13 +338,17 @@ ul.footer_locations li {
 /*
  * Content
  */
-.vista-pmsite-contentWrap {
-}
 .vista-pmsite-content {
 	margin: 0 auto;
 	width: 960px;
 	padding: 0 19px;
 }
+
+.vista-pmsite-content a {
+	color: #1e2f01;
+	font-style: italic;
+}
+
 .vista-pmsite-mainWrap {
 	width: 960px;
 	margin: 0 auto;

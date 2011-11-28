@@ -60,7 +60,7 @@ td {
 }
 
 a {
-	color: ${object2_100};
+	color: ${object1_100};
 	outline: medium none;
 	text-decoration: none;
 }
