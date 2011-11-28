@@ -23,7 +23,11 @@ package com.pyx4j.widgets.client;
 public class ListBox extends com.google.gwt.user.client.ui.ListBox {
 
     public ListBox() {
-        super();
+        this(false);
+    }
+
+    public ListBox(boolean multipleSelect) {
+        super(multipleSelect);
         setStyleName(DefaultWidgetsTheme.StyleName.ListBox.name());
     }
 
