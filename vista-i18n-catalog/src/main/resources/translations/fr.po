@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Property Vista Software Inc.\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-27 05:38-0500\n"
-"PO-Revision-Date: 2011-11-28 17:55+0000\n"
+"PO-Revision-Date: 2011-11-28 18:08+0000\n"
 "Last-Translator: yuriyl <yuriyl@birchwoodsoftwaregroup.com>\n"
 "Language-Team: French (Canada) (http://www.transifex.net/projects/p/propertyvista/team/fr_CA/)\n"
 "MIME-Version: 1.0\n"
@@ -39,7 +39,7 @@ msgstr ""
 #: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:161
 #: com/propertyvista/crm/client/ui/gadgets/vacancyreport/TurnoverAnalysisGraphGadget.java:155
 msgid "#"
-msgstr "Par Ville"
+msgstr "#"
 
 #. java-format
 #: com/propertyvista/domain/property/asset/LockerArea.java:2
@@ -88,7 +88,7 @@ msgstr "#0.000000"
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr "Toutes"
+msgstr "${0,number,#0.00}"
 
 #: com/propertyvista/crm/client/ui/gadgets/availabilityreport/TurnoverAnalysisGraphGadget.java:157
 #: com/propertyvista/crm/client/ui/gadgets/vacancyreport/TurnoverAnalysisGraphGadget.java:151
@@ -455,7 +455,7 @@ msgstr "Une erreur inattendue s'est produite."
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Any"
-msgstr "Tout(e)"
+msgstr "Toutes"
 
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Apartment"
@@ -1094,7 +1094,7 @@ msgstr "Entreprises"
 
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:42
 msgid "By City"
-msgstr "À proximité de la ville"
+msgstr "Par Ville"
 
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:46
 msgid "By Proximity"
