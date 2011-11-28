@@ -14,6 +14,8 @@
 package com.propertyvista.portal.rpc.portal.dto;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,6 +31,7 @@ public interface MaintenanceRequestDTO extends IEntity {
     IssueClassification issueClassification();
 
     @Caption(name = "Additional Comments")
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
 }

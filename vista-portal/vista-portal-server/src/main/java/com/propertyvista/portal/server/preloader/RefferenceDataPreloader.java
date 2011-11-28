@@ -80,7 +80,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
                 subject = EntityFactory.create(IssueRepairSubject.class);
                 subject.issueElement().set(element);
                 subject.name().set(row.repairSubject());
-                Persistence.service().persist(element);
+                Persistence.service().persist(subject);
                 element.subjects().add(subject);
             }
             // Find or create Subject Details
@@ -93,7 +93,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
             }
             if (detail == null) {
                 detail = EntityFactory.create(IssueSubjectDetails.class);
-                detail.subject().set(element);
+                detail.subject().set(subject);
                 detail.name().set(row.subjectDetails());
                 Persistence.service().persist(detail);
                 subject.details().add(detail);

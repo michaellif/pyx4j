@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
+import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
@@ -147,6 +148,8 @@ public class PortalTheme extends VistaTheme {
         });
 
         addTheme(new TenantDashboardTheme());
+
+        addTheme(new DefaultDialogTheme());
 
         initCheckBoxStyle();
         initHyperlinkStyle();

@@ -60,12 +60,13 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
     @Override
     public void populateOpenRequests(Vector<MaintananceDTO> openRequests) {
         openRequestsPanel.clear();
-        int row = -1;
 
         openRequestsPanel.setWidth("100%");
         openRequestsPanel.getColumnFormatter().setWidth(0, "250px");
         openRequestsPanel.getColumnFormatter().setWidth(1, "75px");
         openRequestsPanel.getColumnFormatter().setWidth(2, "75px");
+
+        int row = -1;
 
         Anchor newTicket = new Anchor(i18n.tr("New Ticket"));
         newTicket.addClickHandler(new ClickHandler() {
@@ -75,6 +76,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                 presenter.createNewRequest();
             }
         });
+
         openRequestsPanel.setH1(++row, 0, 1, i18n.tr("OPEN TICKETS"), newTicket);
         openRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
@@ -83,6 +85,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
         openRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
         openRequestsPanel.setHTML(row, 2, "");
+
         openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
         for (MaintananceDTO requests : openRequests) {

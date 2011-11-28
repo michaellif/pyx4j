@@ -19,7 +19,7 @@ import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
 public interface DashboardView extends IsWidget {
 
-    public void populate(TenantDashboardDTO dashboard);
+    void populate(TenantDashboardDTO dashboard);
 
     void setPresenter(Presenter presenter);
 

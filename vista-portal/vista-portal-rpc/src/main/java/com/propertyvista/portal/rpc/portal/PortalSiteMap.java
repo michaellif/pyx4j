@@ -46,7 +46,7 @@ public class PortalSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Maintenance")
         public static class Maintenance extends AppPlace {
 
-            public static class MaintenanceDetails extends AppPlace {
+            public static class NewTicket extends AppPlace {
             }
         }
 

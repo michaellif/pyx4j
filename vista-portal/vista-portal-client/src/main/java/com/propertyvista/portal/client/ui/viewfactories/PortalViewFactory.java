@@ -29,8 +29,8 @@ import com.propertyvista.portal.client.ui.residents.DashboardView;
 import com.propertyvista.portal.client.ui.residents.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodViewImpl;
-import com.propertyvista.portal.client.ui.residents.MaintenanceDetailsView;
-import com.propertyvista.portal.client.ui.residents.MaintenanceDetailsViewImpl;
+import com.propertyvista.portal.client.ui.residents.NewMaintenanceRequestView;
+import com.propertyvista.portal.client.ui.residents.NewMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.MaintenanceViewImpl;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
@@ -62,8 +62,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new CurrentBillViewImpl());
             } else if (PotentialTenantView.class.equals(type)) {
                 map.put(type, new PotentialTenantViewImpl());
-            } else if (MaintenanceDetailsView.class.equals(type)) {
-                map.put(type, new MaintenanceDetailsViewImpl());
+            } else if (NewMaintenanceRequestView.class.equals(type)) {
+                map.put(type, new NewMaintenanceRequestViewImpl());
             } else if (NewPaymentMethodView.class.equals(type)) {
                 map.put(type, new NewPaymentMethodViewImpl());
             } else if (EditPaymentMethodView.class.equals(type)) {
