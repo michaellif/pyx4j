@@ -10,7 +10,8 @@
  * Created on Feb 1, 2011
  * @author Misha
  * @version $Id$
- */package com.propertyvista.portal.ptapp.client.resources;
+ */
+package com.propertyvista.portal.ptapp.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
