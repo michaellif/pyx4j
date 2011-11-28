@@ -100,8 +100,11 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
 
-        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo)));
-        fileUpload.asWidget().getElement().getStyle().setMarginLeft(11, Unit.EM);
+        main.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo))).customLabel(
+                        i18n.tr("Please Attach proof Of Citizenship")).build());
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
         fileUpload.asWidget().setWidth("40em");

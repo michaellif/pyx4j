@@ -82,8 +82,11 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
 
         if (isEditable()) {
-            main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income)));
-            fileUpload.asWidget().getElement().getStyle().setMarginLeft(11, Unit.EM);
+            main.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income))).customLabel(
+                            i18n.tr("Please Attach proof Of Employment")).build());
             fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
             fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
             fileUpload.asWidget().setWidth("40em");
