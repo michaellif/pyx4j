@@ -37,12 +37,16 @@ body{
 	overflow:hidden;
 	text-indent:-9898px;
 }
-.main ul li a.pdapp{background-position:0 0;}
-.main ul li a.pdapp:hover{background-position:-78px 1px;}
-.main ul li a.crm{background-position:4px -78px;}
-.main ul li a.crm:hover{background-position:-77px -78px;}
-.main ul li a.ptapp{background-position:0 -156px;}
-.main ul li a.ptapp:hover{background-position:-79px -157px;}
+
+.main ul li a.pdapp{background-position:0 -156px;}
+.main ul li a.pdapp:hover{background-position:-79px -157px;}
+
+.main ul li a.crm{background-position:0 0;}
+.main ul li a.crm:hover{background-position:-78px 1px;}
+
+.main ul li a.ptapp{background-position:4px -78px;}
+.main ul li a.ptapp:hover{background-position:-77px -78px;}
+
 .logo_sl{
 	display:block;
 	overflow:hidden;
