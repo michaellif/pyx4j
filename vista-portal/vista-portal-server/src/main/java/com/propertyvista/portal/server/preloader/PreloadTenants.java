@@ -114,7 +114,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
             for (TenantSummaryGDO tenantSummary : summary.tenants()) {
                 Persistence.service().persist(tenantSummary.tenantInLease());
             }
-
+            Persistence.service().persist(generator.createPaymentMethods(tenant));
         }
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {

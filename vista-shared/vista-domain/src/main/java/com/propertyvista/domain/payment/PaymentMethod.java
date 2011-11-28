@@ -14,25 +14,25 @@
 package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Phone;
+import com.propertyvista.domain.tenant.Tenant;
 
 public interface PaymentMethod extends IEntity {
 
-    //TODO vlads
-
-    //@Owner
-    //@Detached
-    //@ReadOnly
-    //Tenant tenant();
+    @Detached
+    @ReadOnly
+    Tenant tenant();
 
     @MemberColumn(name = "prim")
     IPrimitive<Boolean> primary();

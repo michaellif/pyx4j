@@ -22,22 +22,23 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 
 public class NewPaymentMethodActivity extends SecurityAwareActivity implements NewPaymentMethodView.Presenter {
 
     private final NewPaymentMethodView view;
 
-    private final PersonalInfoCrudService srv = GWT.create(PersonalInfoCrudService.class);
+    private final TenantPaymentMethodCrudService srv;
 
     public NewPaymentMethodActivity(Place place) {
         this.view = PortalViewFactory.instance(NewPaymentMethodView.class);
         this.view.setPresenter(this);
+        srv = GWT.create(TenantPaymentMethodCrudService.class);
         withPlace(place);
     }
 
@@ -53,9 +54,13 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
 
     @Override
     public void save(PaymentMethod paymentmethod) {
-        // TODO Implement
-        //Just for presentation
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+        srv.create(new DefaultAsyncCallback<PaymentMethod>() {
+            @Override
+            public void onSuccess(PaymentMethod result) {
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+
+            }
+        }, paymentmethod);
     }
 
     @Override
@@ -63,15 +68,17 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
         if (!set) {
             return;
         }
-        final PaymentMethod currentValue = EntityFactory.create(PaymentMethod.class);
-        currentValue.set(view.getValue());
-        srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
+        srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+
             @Override
-            public void onSuccess(ResidentDTO result) {
-                currentValue.billingAddress().set(result.currentAddress());
+            public void onSuccess(AddressStructured result) {
+                final PaymentMethod currentValue = EntityFactory.create(PaymentMethod.class);
+                currentValue.set(view.getValue());
+                currentValue.billingAddress().set(result);
                 currentValue.sameAsCurrent().setValue(true);
                 view.populate(currentValue);
+
             }
-        }, null);
+        });
     }
 }

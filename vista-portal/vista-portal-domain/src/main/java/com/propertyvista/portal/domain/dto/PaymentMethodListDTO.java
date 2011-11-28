@@ -17,8 +17,10 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.payment.PaymentMethod;
+
 @Transient
 public interface PaymentMethodListDTO extends IEntity {
 
-    IList<PaymentMethodDTO> paymentMethods();
+    IList<PaymentMethod> paymentMethods();
 }

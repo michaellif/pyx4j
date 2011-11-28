@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
+import com.propertyvista.domain.payment.PaymentMethod;
 
 public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethodsView {
 
@@ -29,7 +31,7 @@ public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethod
     }
 
     @Override
-    public void populate(PaymentMethodListDTO paymentMethods) {
+    public void populate(List<PaymentMethod> paymentMethods) {
         form.populate(paymentMethods);
     }
 

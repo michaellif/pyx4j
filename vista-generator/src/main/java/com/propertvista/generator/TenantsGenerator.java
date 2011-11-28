@@ -14,7 +14,9 @@
 package com.propertvista.generator;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Vector;
 
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 import com.propertvista.generator.gdo.TenantSummaryGDO;
@@ -22,10 +24,13 @@ import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -89,6 +94,25 @@ public class TenantsGenerator {
         tenantSummary.tenantInLease().lease().set(summary.lease());
 
         return summary;
+    }
+
+    public List<PaymentMethod> createPaymentMethods(Tenant tenant) {
+        List<PaymentMethod> l = new Vector<PaymentMethod>();
+
+        for (int i = 0; i < 2; i++) {
+            PaymentMethod m = EntityFactory.create(PaymentMethod.class);
+            m.type().setValue(RandomUtil.random(EnumSet.of(PaymentType.Amex, PaymentType.MasterCard, PaymentType.Visa)));
+            if (i == 0) {
+                m.primary().setValue(Boolean.TRUE);
+            }
+            m.creditCard().numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
+            m.creditCard().name().setValue(tenant.person().name().getStringView());
+            m.creditCard().expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
+            m.tenant().set(tenant);
+            l.add(m);
+        }
+
+        return l;
     }
 
     public List<Lead> createLeads(int num) {

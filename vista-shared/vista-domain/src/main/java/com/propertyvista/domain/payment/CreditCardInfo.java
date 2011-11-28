@@ -33,6 +33,9 @@ public interface CreditCardInfo extends IEntity {
     @Transient
     IPrimitive<String> number();
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    IPrimitive<String> numberRefference();
+
     @NotNull
     @Caption(name = "Expiry Date")
     @Editor(type = EditorType.monthyearpicker)

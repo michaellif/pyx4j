@@ -26,7 +26,7 @@ import com.propertyvista.server.common.security.VistaContext;
  */
 public class TenantAppContext {
 
-    public static Tenant getCurrentTenant() {
+    public static Tenant getCurrentUserTenant() {
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), VistaContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);

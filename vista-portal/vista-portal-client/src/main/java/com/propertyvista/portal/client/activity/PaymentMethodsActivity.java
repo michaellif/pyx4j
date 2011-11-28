@@ -13,30 +13,34 @@
  */
 package com.propertyvista.portal.client.activity;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
-import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
+import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 
 public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
 
     private final PaymentMethodsView view;
 
+    private final TenantPaymentMethodCrudService srv;
+
     public PaymentMethodsActivity(Place place) {
         this.view = PortalViewFactory.instance(PaymentMethodsView.class);
         this.view.setPresenter(this);
+        srv = GWT.create(TenantPaymentMethodCrudService.class);
         withPlace(place);
     }
 
@@ -44,31 +48,14 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
-        //TODO Implement a service call
-        PaymentMethodListDTO paymentMethods = EntityFactory.create(PaymentMethodListDTO.class);
 
-        PaymentMethodDTO paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
-        paymentmethod.id().setValue(new Key(1l));
-        paymentmethod.type().setValue(PaymentType.Visa);
-        paymentmethod.number().setValue("XXX 5566");
-        paymentmethod.primary().setValue(true);
-        paymentmethod.billingAddress().city().setValue("Toronto");
-        paymentmethod.billingAddress().streetName().setValue("Clark Ave");
-        paymentmethod.billingAddress().streetNumber().setValue("55");
-        paymentmethod.billingAddress().postalCode().setValue("M4R9L3");
-        paymentMethods.paymentMethods().add(paymentmethod);
+        srv.list(new DefaultAsyncCallback<EntitySearchResult<PaymentMethod>>() {
 
-        paymentmethod = EntityFactory.create(PaymentMethodDTO.class);
-        paymentmethod.id().setValue(new Key(2l));
-        paymentmethod.type().setValue(PaymentType.MasterCard);
-        paymentmethod.number().setValue("XXX 1290");
-        paymentmethod.primary().setValue(false);
-        paymentmethod.billingAddress().city().setValue("Richmond Hill");
-        paymentmethod.billingAddress().streetName().setValue("Some Street");
-        paymentmethod.billingAddress().streetNumber().setValue("3155");
-        paymentmethod.billingAddress().postalCode().setValue("L7U9O8");
-        paymentMethods.paymentMethods().add(paymentmethod);
-        view.populate(paymentMethods);
+            @Override
+            public void onSuccess(EntitySearchResult<PaymentMethod> result) {
+                view.populate(result.getData());
+            }
+        }, null);
     }
 
     public PaymentMethodsActivity withPlace(Place place) {
