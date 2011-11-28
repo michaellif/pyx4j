@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 /**
@@ -121,8 +120,7 @@ public interface UnitVacancyReportTurnoverAnalysisDTO extends IEntity {
             @SuppressWarnings("deprecation")
             @Override
             public String intervalLabelFormat(Date start, Date end) {
-                I18n i18n = I18n.get(UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution.class);
-                return i18n.tr(TimeUtils.MONTH_NAMES_SHORT[start.getMonth()]) + "-" + Integer.toString(1900 + start.getYear());
+                return TimeUtils.simpleFormat(start, "MMM") + " " + Integer.toString(1900 + start.getYear());
             }
 
             @SuppressWarnings("deprecation")

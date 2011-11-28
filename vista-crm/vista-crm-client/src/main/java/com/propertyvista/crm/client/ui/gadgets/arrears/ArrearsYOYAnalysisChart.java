@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -141,6 +142,7 @@ public class ArrearsYOYAnalysisChart extends GadgetBase implements IBuildingGadg
         redraw();
     }
 
+    @SuppressWarnings("deprecation")
     private void redraw() {
         graph.clear();
 
@@ -148,8 +150,10 @@ public class ArrearsYOYAnalysisChart extends GadgetBase implements IBuildingGadg
             DataSource ds = new DataSource();
             ds.setSeriesDescription(createSeriesDescription());
 
+            Date monthConverted = new Date(1);
             for (int month = 0; month < 12; ++month) {
-                ds.addDataSet(ds.new Metric(i18n.tr(TimeUtils.MONTH_NAMES_SHORT[month])), data.get(month));
+                monthConverted.setMonth(month);
+                ds.addDataSet(ds.new Metric(TimeUtils.simpleFormat(monthConverted, "MMM")), data.get(month));
             }
             SvgRoot svgroot = factory.getSvgRoot();
             svgroot.add(createChart(ds));

@@ -22,7 +22,8 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.dashboard.gadgets.CommonGadgetColumns;
@@ -41,50 +42,24 @@ import com.propertyvista.domain.ref.Province;
  */
 public interface MockupArrearsState extends IEntity {
     public enum LegalStatus {
-        Clean {
-            @Override
-            public String toString() {
-                return tr("Clean");
-            }
-        },
+        Clean,
 
-        FirstMissedPaymentLetterServed {
-            @Override
-            public String toString() {
-                return tr("1st Missed Payment Letter Served");
-            }
-        },
+        @Translate("1st Missed Payment Letter Served")
+        FirstMissedPaymentLetterServed,
 
-        SecondMissedPaymentLetterServed {
-            @Override
-            public String toString() {
-                return tr("2nd Missed Payment Letter Served");
-            }
-        },
+        @Translate("2nd Missed Payment Letter Served")
+        SecondMissedPaymentLetterServed,
 
-        ThirdMissedPaymentLetterServed {
-            @Override
-            public String toString() {
-                return tr("3rd Missed Payment Letter Served");
-            }
-        },
+        @Translate("3rd Missed Payment Letter Served")
+        ThirdMissedPaymentLetterServed,
 
-        EvictionLetterServed {
-            @Override
-            public String toString() {
-                return tr("Eviction Letter Served");
-            }
-        },
+        EvictionLetterServed,
 
-        CourtHearingDate {
-            @Override
-            public String toString() {
-                return tr("Court Hearing Date");
-            }
-        };
+        CourtHearingDate;
 
-        public String tr(String translatableString) {
-            return I18n.get(LegalStatus.class).tr(translatableString);
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
         }
     }
 
