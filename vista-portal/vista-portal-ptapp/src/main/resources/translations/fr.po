@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-28 12:55-0500\n"
+"POT-Creation-Date: 2011-11-28 13:13-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgstr "#0.000000"
 #: com/propertyvista/domain/financial/Money.java:0
 #, java-format
 msgid "${0,number,#0.00}"
-msgstr "Toutes"
+msgstr "${0,number,#0.00}"
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:2
 msgid "% Ownership"
@@ -328,7 +328,7 @@ msgstr "Une erreur inattendue s'est produite."
 
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Any"
-msgstr "Tout(e)"
+msgstr "Toutes"
 
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Apartment"
