@@ -16,18 +16,37 @@ package com.propertyvista.crm.client.ui.report;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class ReportLister extends ListerBase<DashboardMetadata> {
 
+    private static final I18n i18n = I18n.get(ReportLister.class);
+
     public ReportLister() {
         super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class, false, true);
         getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
+
+        addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                for (DashboardMetadata item : getDataTablePanel().getDataTable().getCheckedItems()) {
+                    getPresenter().delete(item.getPrimaryKey());
+
+                }
+            }
+        }));
+
         List<ColumnDescriptor<DashboardMetadata>> columnDescriptors = new ArrayList<ColumnDescriptor<DashboardMetadata>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));

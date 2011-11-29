@@ -16,9 +16,12 @@ package com.propertyvista.crm.client.activity.report;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
+import com.propertyvista.crm.client.event.NavigationUpdateEvent;
 import com.propertyvista.crm.client.ui.report.ReportManagement;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
@@ -31,5 +34,14 @@ public class ReportManagementActivity extends ListerActivityBase<DashboardMetada
         super(place, (ReportManagement) DashboardViewFactory.instance(ReportManagement.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(ReportMetadataCrudService.class), DashboardMetadata.class);
 
+    }
+
+    @Override
+    protected void onDeleted(Key itemID, boolean isSuccessful) {
+        super.onDeleted(itemID, isSuccessful);
+        if (isSuccessful) {
+            AppSite.instance();
+            AppSite.getEventBus().fireEvent(new NavigationUpdateEvent());
+        }
     }
 }
