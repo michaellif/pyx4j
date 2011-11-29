@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
@@ -50,6 +51,9 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
     @Override
     public void retrieve(AsyncCallback<DTO> callback, Key entityId) {
         DBO entity = Persistence.service().retrieve(dboClass, entityId);
+        if ((entity == null) || (entity.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+        }
         DTO dto = GenericConverter.convertDBO2DTO(entity, dtoClass);
         enhanceDTO(entity, dto, false);
         callback.onSuccess(dto);

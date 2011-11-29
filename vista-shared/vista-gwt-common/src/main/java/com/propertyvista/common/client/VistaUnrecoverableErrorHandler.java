@@ -28,6 +28,7 @@ import com.pyx4j.widgets.client.util.BrowserType;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.domain.DemoData;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
@@ -104,7 +105,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         StringBuilder debugMessage = new StringBuilder();
 
-        if (ApplicationMode.isDevelopment()) {
+        if (!DemoData.vistaDemo && ApplicationMode.isDevelopment()) {
             debugMessage.append(new Date());
             if (errorCode != null) {
                 debugMessage.append("ErrorCode [" + errorCode + "]");

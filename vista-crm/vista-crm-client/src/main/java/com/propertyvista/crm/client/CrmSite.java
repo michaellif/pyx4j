@@ -40,6 +40,7 @@ import com.propertyvista.crm.client.ui.CrmPanel;
 import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
@@ -57,7 +58,7 @@ public class CrmSite extends VistaSite {
     public void onSiteLoad() {
         super.onSiteLoad();
 
-        DefaultErrorHandlerDialog.register();
+        DefaultErrorHandlerDialog.register(!DemoData.vistaDemo);
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
