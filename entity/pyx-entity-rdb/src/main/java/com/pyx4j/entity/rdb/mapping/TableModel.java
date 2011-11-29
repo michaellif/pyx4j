@@ -356,6 +356,8 @@ public class TableModel {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(sqlUpdate());
+            // Just in case, used for pooled connections 
+            stmt.setMaxRows(1);
             int parameterIndex = bindPersistParameters(dialect, stmt, entity);
             stmt.setLong(parameterIndex, entity.getPrimaryKey().asLong());
             if (dialect.isMultitenant()) {
@@ -431,6 +433,8 @@ public class TableModel {
                 sql.append(" AND ns = ?");
             }
             stmt = connection.prepareStatement(sql.toString());
+            // Just in case, used for pooled connections 
+            stmt.setMaxRows(1);
 
             stmt.setLong(1, primaryKey.asLong());
             if (dialect.isMultitenant()) {
@@ -490,6 +494,9 @@ public class TableModel {
             stmt = connection.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
+            } else {
+                // zero means there is no limit, Need for pooled connections 
+                stmt.setMaxRows(0);
             }
             int parameterIndex = qb.bindParameters(stmt);
             if (addLimit) {
@@ -550,6 +557,9 @@ public class TableModel {
             stmt = connection.prepareStatement(sql);
             if (limit > 0) {
                 stmt.setMaxRows(limit);
+            } else {
+                // zero means there is no limit, Need for pooled connections 
+                stmt.setMaxRows(0);
             }
             int parameterIndex = qb.bindParameters(stmt);
             if (limit > 0) {
@@ -601,6 +611,9 @@ public class TableModel {
             stmt = connection.prepareStatement(sql = "SELECT m1.id FROM " + qb.getSQL(tableName));
             if (limit > 0) {
                 stmt.setMaxRows(limit);
+            } else {
+                // zero means there is no limit, Need for pooled connections 
+                stmt.setMaxRows(0);
             }
             qb.bindParameters(stmt);
 
@@ -627,6 +640,8 @@ public class TableModel {
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
             stmt = connection.prepareStatement("SELECT " + dialect.sqlFunction(func, args) + " FROM " + qb.getSQL(tableName));
+            // Just in case, used for pooled connections 
+            stmt.setMaxRows(1);
             qb.bindParameters(stmt);
 
             rs = stmt.executeQuery();
@@ -824,6 +839,8 @@ public class TableModel {
         Vector<T> all = new Vector<T>();
         try {
             stmt = connection.prepareStatement(sqlUpdate());
+            // zero means there is no limit, Need for pooled connections 
+            stmt.setMaxRows(0);
             for (T entity : entityIterable) {
                 if (entity.getPrimaryKey() == null) {
                     // persist(Connection connection, Iterable<T> entityIterable) should be called on entities with non-NULL PKs
@@ -882,6 +899,8 @@ public class TableModel {
         ResultSet rs = null;
         try {
             stmt = connection.prepareStatement(sql.toString());
+            // zero means there is no limit, Need for pooled connections 
+            stmt.setMaxRows(0);
             if (dialect.isMultitenant()) {
                 stmt.setString(1, NamespaceManager.getNamespace());
             }

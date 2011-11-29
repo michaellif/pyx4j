@@ -266,6 +266,8 @@ public class CollectionsTableModel {
                 sql.append(" ORDER BY seq");
             }
             stmt = connection.prepareStatement(sql.toString());
+            // zero means there is no limit, Need for pooled connections 
+            stmt.setMaxRows(0);
             stmt.setLong(1, entity.getPrimaryKey().asLong());
             if (dialect.isMultitenant()) {
                 stmt.setString(2, NamespaceManager.getNamespace());
@@ -321,6 +323,8 @@ public class CollectionsTableModel {
                 sql.append(", seq");
             }
             stmt = connection.prepareStatement(sql.toString());
+            // zero means there is no limit, Need for pooled connections 
+            stmt.setMaxRows(0);
             int parameterIndex = 1;
             if (dialect.isMultitenant()) {
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
