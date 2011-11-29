@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericConverter;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ChargeItem;
@@ -176,8 +177,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         MasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
 
         dbo.status().setValue(actionDTO.status().getValue());
-        // TODO Update dbo with logged employee:
-//        dbo.decidedBy().set(...);
+        dbo.decidedBy().set(CrmAppContext.getCurrentUserEmployee());
         dbo.decisionReason().setValue(actionDTO.decisionReason().getValue());
         dbo.decisionDate().setValue(new LogicalDate());
 
