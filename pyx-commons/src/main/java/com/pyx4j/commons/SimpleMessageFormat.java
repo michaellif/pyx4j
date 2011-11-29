@@ -31,14 +31,11 @@ public class SimpleMessageFormat {
 
     private static final char DELIM_STOP = '}';
 
-    private static String format = null;
+    private String format = null;
 
-    private static int scanPos = 0;
+    private int scanPos = 0;
 
-    private static int recursionLevel = 0;
-
-    private SimpleMessageFormat() {
-    }
+    private int recursionLevel = 0;
 
     private static enum QuotedString {
 
@@ -49,11 +46,14 @@ public class SimpleMessageFormat {
         Ending
     }
 
-    public static String format(final String fmt, Object... arguments) {
-        format = fmt;
+    public SimpleMessageFormat(String pattern) {
+        format = pattern;
         scanPos = 0;
         recursionLevel = 0;
-        return argScan(arguments);
+    }
+
+    public static String format(final String fmt, Object... arguments) {
+        return new SimpleMessageFormat(fmt).format(arguments);
     }
 
     /*
@@ -61,7 +61,7 @@ public class SimpleMessageFormat {
      * The inner arguments get resolved first, so there will be no curly brackets inside the parent's
      * format pattern when calling argFormat.
      */
-    private static String argScan(Object... arguments) {
+    public String format(Object... arguments) {
         StringBuilder result = new StringBuilder();
         StringBuilder formatPattern = new StringBuilder();
         boolean done = false;
@@ -109,7 +109,7 @@ public class SimpleMessageFormat {
             case DELIM_START:
                 scanPos++;
                 recursionLevel++;
-                String res = argScan(arguments);
+                String res = format(arguments);
                 recursionLevel--;
                 if (recursionLevel == 0) {
                     result.append(res);
