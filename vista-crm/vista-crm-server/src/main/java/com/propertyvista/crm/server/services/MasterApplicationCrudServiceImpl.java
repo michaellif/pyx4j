@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -21,7 +22,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
+import com.propertyvista.crm.server.util.GenericConverter;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -165,5 +168,18 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         dto.masterApplicationStatus().progress().setValue(masterApplicationProgress);
+    }
+
+    @Override
+    public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO) {
+        MasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
+
+        // TODO Update dbo
+
+        Persistence.service().merge(dbo);
+
+        MasterApplicationDTO dto2 = GenericConverter.convertDBO2DTO(dbo, dtoClass);
+        enhanceDTO(dbo, dto2, false);
+        callback.onSuccess(dto2);
     }
 }

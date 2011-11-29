@@ -7,21 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
- * @author Vlad
+ * Created on Nov 28, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.rpc.dto;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
-import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
-import com.propertyvista.dto.MasterApplicationDTO;
+public interface MasterApplicationActionDTO extends IEntity {
 
-public interface MasterApplicationCrudService extends AbstractCrudService<MasterApplicationDTO> {
+    IPrimitive<MasterApplication.Status> status();
 
-    public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO);
+    IPrimitive<String> decisionReason();
 
 }

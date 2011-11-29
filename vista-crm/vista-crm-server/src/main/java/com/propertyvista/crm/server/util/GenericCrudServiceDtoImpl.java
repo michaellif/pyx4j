@@ -59,7 +59,9 @@ public abstract class GenericCrudServiceDtoImpl<DBO extends IEntity, DTO extends
     public void save(AsyncCallback<DTO> callback, DTO dto) {
         DBO entity = GenericConverter.convertDTO2DBO(dto, dboClass);
         persistDBO(entity, dto);
-        enhanceDTO(entity, dto, false);
-        callback.onSuccess(GenericConverter.convertDBO2DTO(entity, dtoClass));
+
+        DTO dto2 = GenericConverter.convertDBO2DTO(entity, dtoClass);
+        enhanceDTO(entity, dto2, false);
+        callback.onSuccess(dto2);
     }
 }
