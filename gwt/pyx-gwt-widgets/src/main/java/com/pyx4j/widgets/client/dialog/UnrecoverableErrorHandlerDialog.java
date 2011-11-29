@@ -149,6 +149,10 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
         }
     }
 
+    protected boolean includeErrorCodeInUserMessage() {
+        return ApplicationMode.isDevelopment();
+    }
+
     @Override
     protected void showDefaultError(Throwable caught, String errorCode) {
 
@@ -156,11 +160,11 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
         if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
             detailsMessage += "\n" + caught.getMessage();
         }
-        if (ApplicationMode.isDevelopment() && (errorCode != null)) {
+        if (includeErrorCodeInUserMessage() && (errorCode != null)) {
             detailsMessage += "\n\nErrorCode [" + errorCode + "]";
         }
 
-        if (ApplicationMode.isDevelopment() && (caught != null)) {
+        if (includeErrorCodeInUserMessage() && (caught != null)) {
             detailsMessage += "\n" + caught.getClass();
             if (caught instanceof StatusCodeException) {
                 detailsMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());

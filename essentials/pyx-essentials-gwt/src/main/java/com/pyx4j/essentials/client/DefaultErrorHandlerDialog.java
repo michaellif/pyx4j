@@ -20,7 +20,6 @@
  */
 package com.pyx4j.essentials.client;
 
-
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -32,8 +31,23 @@ public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
 
     private static I18n i18n = I18n.get(DefaultErrorHandlerDialog.class);
 
+    private final boolean includeErrorCodeInUserMessage;
+
     public static void register() {
-        UncaughtHandler.setUnrecoverableErrorHandler(new DefaultErrorHandlerDialog());
+        register(true);
+    }
+
+    public static void register(boolean includeErrorCodeInUserMessage) {
+        UncaughtHandler.setUnrecoverableErrorHandler(new DefaultErrorHandlerDialog(includeErrorCodeInUserMessage));
+    }
+
+    protected DefaultErrorHandlerDialog(boolean includeErrorCodeInUserMessage) {
+        this.includeErrorCodeInUserMessage = includeErrorCodeInUserMessage;
+    }
+
+    @Override
+    protected boolean includeErrorCodeInUserMessage() {
+        return includeErrorCodeInUserMessage && super.includeErrorCodeInUserMessage();
     }
 
     @Override
