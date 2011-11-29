@@ -25,7 +25,7 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
     public TenantInLeaseLister() {
         super(TenantInLeaseDTO.class, CrmSiteMap.Tenants.Tenant.class, false, false);
 
-        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().id(), true).build(),
+        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().tenant().id(), true).build(),
 
         new MemberColumnDescriptor.Builder(proto().tenant().person().name(), true).sortable(!VistaTODO.entityAsStringQueryCriteria).build(),
 
@@ -38,5 +38,10 @@ public class TenantInLeaseLister extends ListerBase<TenantInLeaseDTO> {
         new MemberColumnDescriptor.Builder(proto().incomeSource(), true).sortable(!VistaTODO.complextQueryCriteria).build(),
 
         new MemberColumnDescriptor.Builder(proto().equifaxApproval().percenrtageApproved(), true).build());
+    }
+
+    @Override
+    protected void onItemSelect(TenantInLeaseDTO item) {
+        getPresenter().view(CrmSiteMap.Tenants.Tenant.class, item.tenant().getPrimaryKey());
     }
 }
