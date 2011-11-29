@@ -94,14 +94,18 @@ public abstract class BasePage extends WebPage {
     protected void onBeforeRender() {
         super.onBeforeRender();
 
-        String title = getLocalizedPageTitle();
-        if (title != null && title.trim().length() > 0) {
-            title = " - " + title;
-        } else {
-            title = "";
+        // add page title if not already done
+        final String pageTitleId = "pageTitle";
+        if (get(pageTitleId) == null) {
+            String title = getLocalizedPageTitle();
+            if (title != null && title.trim().length() > 0) {
+                title = " - " + title;
+            } else {
+                title = "";
+            }
+            PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
+            add(new Label(pageTitleId, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
         }
-        PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
-        add(new Label("pageTitle", req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
 
         if (ApplicationMode.isDevelopment()) {
             checkIfPageStateless(this);
