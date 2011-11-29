@@ -16,17 +16,16 @@ package com.propertyvista.crm.client.activity.crud.tenant.application;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
 import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
@@ -71,48 +70,12 @@ public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterAp
     }
 
     @Override
-    public void approve(MasterApplicationDTO application) {
-        save(application);
-    }
-
-    @Override
-    public void decline(MasterApplicationDTO application) {
-        save(application);
-    }
-
-    @Override
-    public void moreInfo(MasterApplicationDTO application) {
-        save(application);
-    }
-
-    @Override
-    public void cancelApp(MasterApplicationDTO application) {
-        service.delete(new AsyncCallback<Boolean>() {
-
-            @Override
-            public void onSuccess(Boolean result) {
-                History.back();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-        }, application.getPrimaryKey());
-    }
-
-    private void save(MasterApplicationDTO application) {
-        service.save(new AsyncCallback<MasterApplicationDTO>() {
-
+    public void action(MasterApplicationActionDTO action) {
+        ((MasterApplicationCrudService) service).action(new DefaultAsyncCallback<MasterApplicationDTO>() {
             @Override
             public void onSuccess(MasterApplicationDTO result) {
                 view.populate(result);
             }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-        }, application);
+        }, action);
     }
 }

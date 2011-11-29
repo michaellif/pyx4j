@@ -20,25 +20,23 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CTextArea;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
@@ -84,7 +82,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).approve(box.updateValue(form.getValue(), Status.Approved));
+                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Approved));
                         }
                     }
                 };
@@ -99,7 +97,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).moreInfo(box.updateValue(form.getValue(), Status.InformationRequested));
+                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.InformationRequested));
                         }
                     }
                 };
@@ -114,7 +112,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     @Override
                     protected void onClose(ActionBox box) {
                         if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).decline(box.updateValue(form.getValue(), Status.Declined));
+                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Declined));
                         }
                     }
                 };
@@ -125,13 +123,14 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         cancelAction = new Button(CANCEL, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to cancel the application?"), new Command() {
-
+                new ShowPopUpBox<ActionBox>(new ActionBox(CANCEL)) {
                     @Override
-                    public void execute() {
-                        ((MasterApplicationViewerView.Presenter) presenter).cancelApp(form.getValue());
+                    protected void onClose(ActionBox box) {
+                        if (box.isOk()) {
+                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Cancelled));
+                        }
                     }
-                });
+                };
             }
         });
         addToolbarItem(cancelAction.asWidget());
@@ -143,7 +142,6 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     @Override
                     protected void onClose(SelectTenantsBox box) {
                         if (box.isOk()) {
-//                            ((MasterApplicationViewerView.Presenter) presenter).decline(box.updateValue(form.getValue(), Status.Declined));
                         }
                     }
                 };
@@ -191,14 +189,12 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             setSize("350px", "100px");
         }
 
-        public MasterApplicationDTO updateValue(MasterApplicationDTO currentValue, Status status) {
-            currentValue.status().setValue(status);
-
-            currentValue.decidedBy().setPrimaryKey(ClientContext.getUserVisit().getPrincipalPrimaryKey());
-            currentValue.decisionReason().setValue(reason.getValue());
-            currentValue.decisionDate().setValue(new LogicalDate());
-
-            return currentValue;
+        public MasterApplicationActionDTO updateValue(Status status) {
+            MasterApplicationActionDTO action = EntityFactory.create(MasterApplicationActionDTO.class);
+            action.setPrimaryKey(form.getValue().getPrimaryKey());
+            action.decisionReason().setValue(reason.getValue());
+            action.status().setValue(status);
+            return action;
         }
     }
 

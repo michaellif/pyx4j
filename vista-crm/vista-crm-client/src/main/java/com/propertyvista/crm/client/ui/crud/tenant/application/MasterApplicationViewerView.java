@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.application;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
+import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
@@ -24,13 +25,7 @@ public interface MasterApplicationViewerView extends IViewerView<MasterApplicati
 
     interface Presenter extends IViewerView.Presenter {
 
-        void approve(MasterApplicationDTO application);
-
-        void decline(MasterApplicationDTO application);
-
-        void moreInfo(MasterApplicationDTO application);
-
-        void cancelApp(MasterApplicationDTO application);
+        void action(MasterApplicationActionDTO action);
     }
 
     IListerView<ApplicationDTO> getApplicationsView();

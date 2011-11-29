@@ -13,15 +13,16 @@
  */
 package com.propertyvista.crm.rpc.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 
+@Transient
 public interface MasterApplicationActionDTO extends IEntity {
 
     IPrimitive<MasterApplication.Status> status();
 
     IPrimitive<String> decisionReason();
-
 }
