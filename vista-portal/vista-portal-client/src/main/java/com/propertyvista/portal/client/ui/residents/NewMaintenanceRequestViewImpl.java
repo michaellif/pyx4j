@@ -177,11 +177,11 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
         private final Vector<E> values = new Vector<E>();
 
         Selector() {
-            super(true);
+            super(false);
             setWidth("100%");
-            setHeight("250px");
             getElement().getStyle().setProperty("overflow", "auto");
             getElement().getStyle().setProperty("background", "white");
+            clear();
         }
 
         @Override
@@ -191,6 +191,10 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
         }
 
         void addItem(E entity, String label) {
+            if (values.size() == 0) {
+                values.add(null);
+                super.addItem("=== " + i18n.tr("Select") + " ===");
+            }
             values.add(entity);
             super.addItem(label);
         }
