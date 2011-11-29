@@ -61,6 +61,8 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     private static final long MAX_WAIT_UNTIL_MOVEIN = 1000l * 60l * 60l * 24l * 7l;
 
+    private static final int MAX_NUMBER_OF_UNITS = 500;
+
     @Override
     public String createMockup() {
         return generateRandom();
@@ -77,6 +79,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     @SuppressWarnings("deprecation")
     private String generateRandom() {
+        int unitCounter = 0;
         final LogicalDate start = new LogicalDate();
         start.setYear(106);
         start.setMonth(0);
@@ -86,12 +89,18 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         AptUnit lastUnit = null;
         UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
         for (Building building : Persistence.service().query(new EntityQueryCriteria<Building>(Building.class))) {
+            if (++unitCounter > MAX_NUMBER_OF_UNITS) {
+                break;
+            }
             Persistence.service().retrieve(building.complex());
 
             EntityQueryCriteria<AptUnit> unitCriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().belongsTo(), building));
 
             for (AptUnit unit : Persistence.service().query(unitCriteria)) {
+                if (++unitCounter > MAX_NUMBER_OF_UNITS) {
+                    break;
+                }
                 lastUnit = unit;
                 status.set(null);
                 status.statusDate().setValue(start);

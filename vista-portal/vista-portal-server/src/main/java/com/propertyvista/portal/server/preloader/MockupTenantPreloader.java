@@ -70,6 +70,8 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
 
     private static final List<String> REGIONS = Arrays.asList("GTA", "West", "East");
 
+    private static final int MAX_NUMBER_OF_UNITS = 500;
+
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
@@ -82,8 +84,10 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
         List<MockupArrearsState> arrears = new ArrayList<MockupArrearsState>();
         List<MockupTenant> tenants = new ArrayList<MockupTenant>();
         List<ArrearsSummary> buildingArrears = new ArrayList<ArrearsSummary>();
-
+        int unitCounter = 0;
         for (Building building : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
+            if (++unitCounter > MAX_NUMBER_OF_UNITS)
+                break;
             Persistence.service().retrieve(building.complex());
             EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
@@ -117,7 +121,10 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
             final LogicalDate endDate = new LogicalDate();
 
             List<MockupTenant> buildingTenants = new ArrayList<MockupTenant>(units.size() * 3);
+
             for (AptUnit unit : units) {
+                if (++unitCounter > MAX_NUMBER_OF_UNITS)
+                    break;
                 LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
                 while (movein.before(endDate)) {
