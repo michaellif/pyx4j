@@ -135,7 +135,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         });
         addToolbarItem(cancelAction.asWidget());
 
-        checkAction = new Button(i18n.tr("Equifax Check Query"), new ClickHandler() {
+        checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 new ShowPopUpBox<SelectTenantsBox>(new SelectTenantsBox()) {
