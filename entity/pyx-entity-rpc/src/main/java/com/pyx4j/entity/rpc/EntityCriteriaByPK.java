@@ -105,4 +105,12 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
         hashCode += primaryKey.hashCode();
         return hashCode;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("domainName=").append(proto().getEntityMeta().getCaption());
+        builder.append(" pk=").append(primaryKey);
+        return builder.toString();
+    }
 }
