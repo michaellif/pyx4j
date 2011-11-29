@@ -81,15 +81,15 @@ public class DashboardGenerator extends Dashboards {
 
         GadgetMetadata gmd;
 
-        for (int i = 0; i < 2; ++i) {
-            gmd = EntityFactory.create(GadgetMetadata.class);
-            gmd.type().setValue(GadgetType.Demo);
-            gmd.name().setValue("Gadget #" + i);
-            gmd.column().setValue(0);
-
-            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
-            dmd.gadgets().add(gmd);
-        }
+//        for (int i = 0; i < 2; ++i) {
+//            gmd = EntityFactory.create(GadgetMetadata.class);
+//            gmd.type().setValue(GadgetType.Demo);
+//            gmd.name().setValue("Gadget #" + i);
+//            gmd.column().setValue(0);
+//
+//            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+//            dmd.gadgets().add(gmd);
+//        }
 
         gmd = EntityFactory.create(GadgetMetadata.class);
         gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
