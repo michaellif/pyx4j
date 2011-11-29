@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -174,7 +175,11 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
     public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO) {
         MasterApplication dbo = Persistence.service().retrieve(dboClass, actionDTO.getPrimaryKey());
 
-        // TODO Update dbo
+        dbo.status().setValue(actionDTO.status().getValue());
+        // TODO Update dbo with logged employee:
+//        dbo.decidedBy().set(...);
+        dbo.decisionReason().setValue(actionDTO.decisionReason().getValue());
+        dbo.decisionDate().setValue(new LogicalDate());
 
         Persistence.service().merge(dbo);
 
