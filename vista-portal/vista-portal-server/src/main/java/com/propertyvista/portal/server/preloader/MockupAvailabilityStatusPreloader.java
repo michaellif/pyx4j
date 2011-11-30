@@ -34,6 +34,8 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
@@ -108,8 +110,16 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
                 status.unit().setValue(unit.info().number().getValue());
 
+                EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
+                leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), unit));
+                Lease lease = Persistence.service().retrieve(leaseCriteria);
+                if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
+                    PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
+                    unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
+                }
+
                 double unitRent = unit.financial()._unitRent().isNull() ? 0d : unit.financial()._unitRent().getValue();
-                double marketRent = status.belongsTo().financial()._marketRent().isNull() ? 0d : unit.financial()._marketRent().getValue();
+                double marketRent = unit.financial()._marketRent().isNull() ? 0d : unit.financial()._marketRent().getValue();
                 double rentDeltaAbsoute = marketRent - unitRent;
                 double rentDeltaRelative = marketRent == 0d ? 0d : rentDeltaAbsoute / marketRent * 100;
 

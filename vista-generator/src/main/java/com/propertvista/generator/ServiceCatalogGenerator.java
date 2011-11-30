@@ -206,10 +206,28 @@ public class ServiceCatalogGenerator {
 
                 item.type().set(RandomUtil.random(allowedItemTypes));
                 item.type().name().setValue(item.type().getStringView());
-                item.type().featureType().setValue(item.type().featureType().getValue());
-
-                item.price().setValue(100d + RandomUtil.randomInt(100));
                 item.description().setValue(type.toString() + " description");
+
+                switch (type) {
+                case parking:
+                    item.price().setValue(50d + RandomUtil.randomInt(50));
+                    break;
+                case locker:
+                    item.price().setValue(5d + RandomUtil.randomInt(10));
+                    break;
+                case pet:
+                    item.price().setValue(20d + RandomUtil.randomInt(20));
+                    break;
+                case booking:
+                    item.price().setValue(5d + RandomUtil.randomInt(5));
+                    break;
+                case addOn:
+                    item.price().setValue(30d + RandomUtil.randomInt(50));
+                    break;
+                case utility:
+                    item.price().setValue(80d + RandomUtil.randomInt(50));
+                    break;
+                }
 
                 items.add(item);
             }
