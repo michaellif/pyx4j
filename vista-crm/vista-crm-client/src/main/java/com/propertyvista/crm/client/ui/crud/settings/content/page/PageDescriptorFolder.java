@@ -37,7 +37,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     private final PageViewer viewer;
 
     public PageDescriptorFolder(PageEditorForm parent) {
-        super(PageDescriptor.class, parent.isEditable());
+        super(PageDescriptor.class, false);
         this.parent = parent;
         this.viewer = (!parent.isEditable() ? (PageViewer) parent.getParentView() : null);
     }
@@ -62,13 +62,6 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         TableFolderDecorator<PageDescriptor> decor = (TableFolderDecorator<PageDescriptor>) super.createDecorator();
         decor.setShowHeader(false);
         return decor;
-    }
-
-    @Override
-    protected void addItem() {
-        if (parent.getValue().getPrimaryKey() != null) { // parent shouldn't be new unsaved value!..
-            viewer.newChild(parent.getValue().getPrimaryKey());
-        }
     }
 
     private class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {
