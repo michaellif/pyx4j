@@ -23,9 +23,6 @@ public enum PaymentType {
 
     Visa,
 
-    @Translate("American Express")
-    Amex,
-
     @Translate("MasterCard")
     MasterCard,
 

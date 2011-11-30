@@ -76,7 +76,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, secureRetrieve(criteria));
         }
 
-        if ((EnumSet.of(PaymentType.Amex, PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.paymentMethod().type().getValue()))
+        if ((EnumSet.of(PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.paymentMethod().type().getValue()))
                 && ("2011".equals(payment.paymentMethod().creditCard().number().getValue()))) {
             // Ok
         } else if (PaymentType.Echeck == payment.paymentMethod().type().getValue()) {

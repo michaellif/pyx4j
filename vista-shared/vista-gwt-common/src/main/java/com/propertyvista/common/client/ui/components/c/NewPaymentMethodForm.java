@@ -89,31 +89,34 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         paymentTypeImagesPanel.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorImages.name());
         Image paymentTypeImage;
         FlowPanel holder;
-        for (int i = 0; i < PaymentType.values().length; i++) {
-            switch (i) {
-            case 0:
+
+        for (PaymentType type : PaymentType.values()) {
+            switch (type) {
+            case Echeck:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentACH().getSafeUri());
                 break;
-            case 1:
+            case Visa:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());
                 break;
-            case 2:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentAMEX().getSafeUri());
-                break;
-            case 3:
+            case MasterCard:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentMC().getSafeUri());
                 break;
-            case 4:
+            case Discover:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDiscover().getSafeUri());
                 break;
-            default:
+            case Interac:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
                 break;
+            default:
+                paymentTypeImage = null;
+                break;
             }
-            paymentTypeImage.setHeight("20px");
-            holder = new FlowPanel();
-            holder.add(paymentTypeImage);
-            paymentTypeImagesPanel.add(holder);
+            if (paymentTypeImage != null) {
+                paymentTypeImage.setHeight("20px");
+                holder = new FlowPanel();
+                holder.add(paymentTypeImage);
+                paymentTypeImagesPanel.add(holder);
+            }
         }
 
         container.setWidget(++row, 0, paymentTypeImagesPanel);
@@ -126,8 +129,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                int index = event.getValue().ordinal();
-                setPaymentTableVisibility(index);
+
                 setInstrumentsVisibility(event.getValue());
             }
         });
@@ -141,8 +143,6 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         container.setWidget(row, 1, paymentType);
 
         container.setWidget(row, 2, instrumentsPanel);
-
-        setPaymentTableVisibility(0);
 
         container.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
 
@@ -168,7 +168,9 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
         container.setWidth("100%");
-        setInstrumentsVisibility(PaymentType.Echeck);
+
+        paymentType.setValue(PaymentType.Echeck);
+
         return container;
 
     }
@@ -181,6 +183,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         boolean card = (value != PaymentType.Echeck);
         get(proto().echeck()).setVisible(!card);
         get(proto().creditCard()).setVisible(card);
+        setPaymentTableVisibility(value.ordinal());
     }
 
     private void setPaymentTableVisibility(int index) {

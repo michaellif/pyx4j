@@ -61,10 +61,6 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     ImageResource paymentVISA();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-amex.gif")
-    ImageResource paymentAMEX();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("payment-discover.gif")
     ImageResource paymentDiscover();
 

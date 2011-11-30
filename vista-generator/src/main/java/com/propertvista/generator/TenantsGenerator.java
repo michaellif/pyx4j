@@ -14,7 +14,6 @@
 package com.propertvista.generator;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -101,7 +100,7 @@ public class TenantsGenerator {
 
         for (int i = 0; i < 2; i++) {
             PaymentMethod m = EntityFactory.create(PaymentMethod.class);
-            m.type().setValue(RandomUtil.random(EnumSet.of(PaymentType.Amex, PaymentType.MasterCard, PaymentType.Visa)));
+            m.type().setValue(PaymentType.Visa);
             if (i == 0) {
                 m.primary().setValue(Boolean.TRUE);
             }

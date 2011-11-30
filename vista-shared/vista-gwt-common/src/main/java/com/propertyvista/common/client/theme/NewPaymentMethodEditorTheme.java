@@ -41,7 +41,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style = new Style(".", StyleName.PaymentEditorButtons, " .", NativeRadioGroup.StyleName.RadioGroupItem);
         style.addProperty("width", "100%");
         style.addProperty("padding-top", "3px");
-        style.addProperty("height", "27px");
+        style.addProperty("height", "30px");
 //        style.addProperty("border-top", "1px solid #F7F7F7");
 //        style.addProperty("border-bottom", "1px solid #F7F7F7");
         style.addProperty("white-space", "nowrap");
@@ -65,7 +65,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages, " div");
-        style.addProperty("height", "27px");
+        style.addProperty("height", "30px");
         style.addProperty("padding-top", "5px");
         style.addProperty("padding-right", "10px");
         style.addProperty("padding-left", "10px");

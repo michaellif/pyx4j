@@ -28,8 +28,6 @@ public class Utils {
             url = VistaImages.INSTANCE.paymentACH().getSafeUri();
         } else if (type == PaymentType.Visa) {
             url = VistaImages.INSTANCE.paymentVISA().getSafeUri();
-        } else if (type == PaymentType.Amex) {
-            url = VistaImages.INSTANCE.paymentAMEX().getSafeUri();
         } else if (type == PaymentType.MasterCard) {
             url = VistaImages.INSTANCE.paymentMC().getSafeUri();
         } else if (type == PaymentType.Discover) {
