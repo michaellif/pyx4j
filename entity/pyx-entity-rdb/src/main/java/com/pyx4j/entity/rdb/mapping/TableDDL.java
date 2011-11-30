@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -232,9 +233,12 @@ class TableDDL {
     public static List<String> sqlCreateCollectionMember(Dialect dialect, MemberOperationsMeta member) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
+
+        String tableName = member.sqlName();
+
         sql.append("CREATE TABLE ");
 
-        sql.append(member.sqlName());
+        sql.append(tableName);
 
         sql.append(" (");
         if (dialect.isMultitenant()) {
@@ -254,7 +258,7 @@ class TableDDL {
             sql.append(" seq ").append(dialect.getSqlType(Integer.class));
         }
 
-        sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(member.sqlName())).append(" PRIMARY KEY (id)");
+        sql.append(", CONSTRAINT ").append(dialect.getNamingConvention().sqlTablePKName(tableName)).append(" PRIMARY KEY (id)");
 
         sql.append(')');
 
@@ -262,8 +266,8 @@ class TableDDL {
 
         StringBuilder sqlIdx = new StringBuilder();
         sqlIdx.append("CREATE INDEX ");
-        sqlIdx.append(member.sqlName()).append('_').append("ownerIdx");
-        sqlIdx.append(" ON ").append(member.sqlName()).append(" (").append("owner)");
+        sqlIdx.append(dialect.getNamingConvention().sqlTableIndexName(tableName, Arrays.asList("owner")));
+        sqlIdx.append(" ON ").append(tableName).append(" (").append("owner)");
 
         sqls.add(sqlIdx.toString());
 

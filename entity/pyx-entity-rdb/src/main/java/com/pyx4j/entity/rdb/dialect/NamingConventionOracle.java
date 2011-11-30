@@ -111,7 +111,7 @@ public class NamingConventionOracle implements NamingConvention {
             sql.append(column);
             sql.append('_');
         }
-        sql.append("_IDX");
+        sql.append("IDX");
         return sql.toString();
     }
 
