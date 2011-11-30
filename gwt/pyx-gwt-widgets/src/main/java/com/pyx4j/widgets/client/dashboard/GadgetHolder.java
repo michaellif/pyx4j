@@ -20,7 +20,6 @@
  */
 package com.pyx4j.widgets.client.dashboard;
 
-
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
 import com.allen_sauer.gwt.dnd.client.DragStartEvent;
@@ -271,7 +270,7 @@ final class GadgetHolder extends SimplePanel {
     }
 
     private void maximize() {
-        if (root.isMaximized(this)) {
+        if (isMaximized()) {
             root.showNormal(this);
 
             removeStyleDependentName(CSSNames.StyleDependent.maximized.name());
@@ -296,9 +295,18 @@ final class GadgetHolder extends SimplePanel {
         }
     }
 
+    private boolean isMaximized() {
+        return root.isMaximized(this);
+    }
+
     // --------------------------------------------------------------
 
     private void delete() {
+
+        if (isMinimized() || isMaximized()) {
+            return; // TODO : review all the code!..
+        }
+
         gadgetDragController.makeNotDraggable(this);
         holdedGadget.onDelete();
         this.removeFromParent();
