@@ -27,7 +27,7 @@ public class ServiceDictionaryViewImpl extends CrmViewerViewImplBase<ServiceItem
     private final IListerView<ServiceItemType> featureLister;
 
     public ServiceDictionaryViewImpl() {
-        super(CrmSiteMap.Settings.ServiceDictionary.class);
+        super(CrmSiteMap.Settings.ServiceDictionary.class, true);
 
         serviceLister = new ListerInternalViewImplBase<ServiceItemType>(new ServiceTypeLister());
         featureLister = new ListerInternalViewImplBase<ServiceItemType>(new FeatureTypeLister());
