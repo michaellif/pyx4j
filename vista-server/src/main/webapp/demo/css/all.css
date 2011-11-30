@@ -21,7 +21,7 @@ body{
 .main{
 	width:980px;
 	margin:0 auto;
-	padding:70px 0;
+	padding:60px 0;
 	overflow:hidden;
 }
 .main ul li{
@@ -74,7 +74,7 @@ body{
 	float:left;
 	width:315px;
 	padding:30px 53px 0;
-	min-height:483px;
+	min-height:440px;
 }
 .main .column ul{
 	padding:48px 0 0 35px;
