@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -42,6 +43,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
+import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.shared.Behavior;
 
 /**
  * Cache Reference Data
@@ -55,6 +58,15 @@ public class ReferenceDataManager {
     private static final Map<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>> concurrentLoad = new HashMap<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>>();
 
     private static EventBus eventBus;
+
+    static {
+        ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
+                ReferenceDataManager.invalidate();
+            }
+        });
+    }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends IEntity> void obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
@@ -200,6 +212,10 @@ public class ReferenceDataManager {
 
     public static void invalidate() {
         cache.clear();
+        if (eventBus != null) {
+            eventBus.fireEvent(new ValueChangeEvent<Class<IEntity>>(IEntity.class) {
+            });
+        }
     }
 
     public static <T extends IEntity> HandlerRegistration addValueChangeHandler(ValueChangeHandler<Class<T>> handler) {

@@ -82,6 +82,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     private EntityDataSource<E> optionsDataSource;
 
+    private HandlerRegistration referenceDataManagerHandlerRegistration;
+
     public CEntityComboBox(Class<E> entityClass) {
         this(null, entityClass, (NotInOptionsPolicy) null);
     }
@@ -249,16 +251,22 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                         }
                     });
                 }
-                ReferenceDataManager.addValueChangeHandler(new ValueChangeHandler<Class<E>>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<Class<E>> event) {
-                        if (criteria.getEntityClass() == event.getValue()) {
-                            resetOptions();
-                        }
-                    }
-                });
+                registerDataChangeHandler();
             }
 
+        }
+    }
+
+    private void registerDataChangeHandler() {
+        if (referenceDataManagerHandlerRegistration == null) {
+            referenceDataManagerHandlerRegistration = ReferenceDataManager.addValueChangeHandler(new ValueChangeHandler<Class<E>>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Class<E>> event) {
+                    if ((criteria.getEntityClass() == event.getValue()) || (IEntity.class == event.getValue())) {
+                        resetOptions();
+                    }
+                }
+            });
         }
     }
 
