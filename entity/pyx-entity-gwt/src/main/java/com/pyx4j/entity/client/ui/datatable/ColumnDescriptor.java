@@ -116,7 +116,7 @@ public class ColumnDescriptor<E> {
 
     public static class Builder {
 
-        private final String columnName;
+        private String columnName;
 
         private String columnTitle;
 
@@ -136,6 +136,16 @@ public class ColumnDescriptor<E> {
             }
             this.columnName = columnName;
             this.columnTitle = columnTitle;
+        }
+
+        public Builder columnName(String columnName) {
+            this.columnName = columnName;
+            return this;
+        }
+
+        public Builder columnTitle(String columnTitle) {
+            this.columnTitle = columnTitle;
+            return this;
         }
 
         public Builder title(String columnTitle) {

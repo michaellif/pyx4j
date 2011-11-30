@@ -74,4 +74,5 @@ public interface IListerView<E extends IEntity> extends IView<E> {
     void setSorting(List<Sort> sorts);
 
     void onDeleted(Key itemID, boolean isSuccessful);
+
 }
