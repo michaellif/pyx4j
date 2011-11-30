@@ -53,6 +53,8 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     private static final long MAX_STAY_AFTER_NOTICE = 1000l * 60l * 60l * 24l * 90l;
 
+    private static final long MIN_VACANT_TIME = 1000l * 60l * 60l * 24l * 3l; // approx 3 days
+
     private static final long MAX_VACANT_TIME = 1000l * 60l * 60l * 24l * 90l; // approx 3 months
 
     private static final long MAX_WAIT_UNTIL_SCOPED = 1000l * 60l * 60l * 24l * 30l; // 30 DAYS
@@ -87,6 +89,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         start.setMonth(0);
         start.setDate(1);
         final LogicalDate end = new LogicalDate();
+        end.setTime(end.getTime() - MIN_EVENT_DELTA);
         ArrayList<IEntity> statuses = new ArrayList<IEntity>();
         AptUnit lastUnit = null;
         UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
@@ -118,16 +121,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                     unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
                 }
 
-                double unitRent = unit.financial()._unitRent().isNull() ? 0d : unit.financial()._unitRent().getValue();
                 double marketRent = unit.financial()._marketRent().isNull() ? 0d : unit.financial()._marketRent().getValue();
-                double rentDeltaAbsoute = marketRent - unitRent;
-                double rentDeltaRelative = marketRent == 0d ? 0d : rentDeltaAbsoute / marketRent * 100;
-
-                status.unitRent().setValue(unitRent);
                 status.marketRent().setValue(marketRent);
-                status.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
-                status.rentDeltaRelative().setValue(rentDeltaRelative);
-
+                // TODO get unit rent from the correct place and remove the random generation in moveIn()
                 Persistence.service().retrieve(unit.floorplan());
                 status.floorplanName().setValue(unit.floorplan().name().getValue());
                 status.floorplanMarketingName().setValue(unit.floorplan().marketingName().getValue());
@@ -194,7 +190,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             // add 1 turnover at the end
             UnitAvailabilityStatus s = (UnitAvailabilityStatus) statuses.get(statuses.size() - 1);
             status.belongsTo().set(lastUnit);
-            status.statusDate().setValue(new LogicalDate(end.getTime() - MIN_EVENT_DELTA));
+            status.statusDate().setValue(new LogicalDate(end.getTime() + MIN_EVENT_DELTA));
             status.vacancyStatus().setValue(null);
             statuses.add(status.cloneEntity());
 
@@ -232,6 +228,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
 
     private static void moveOut(UnitAvailabilityStatus status) {
         status.statusDate().setValue(status.moveOutDay().getValue());
+        status.unitRent().setValue(null);
+        status.rentDeltaAbsolute().setValue(null);
+        status.rentDeltaRelative().setValue(null);
         status.vacancyStatus().setValue(VacancyStatus.Vacant);
     }
 
@@ -276,7 +275,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             moveInDay = new LogicalDate(rand(status.moveOutDay().getValue().getTime() + MIN_EVENT_DELTA, MAX_VACANT_TIME));
 
         } else { // VacancyStatus == Vacant
-            minRentedTime = status.statusDate().getValue().getTime() + MIN_EVENT_DELTA;
+            minRentedTime = status.statusDate().getValue().getTime() + MIN_VACANT_TIME;
             maxRentedTime = minRentedTime + MAX_VACANT_TIME;
         }
         if (minRentedTime < maxRentedTime) {
@@ -290,6 +289,13 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             }
             status.moveInDay().setValue(moveInDay);
         }
+
+        status.unitRent().setValue(randomUnitRent(status));
+        double marketRent = status.marketRent().isNull() ? 0d : status.marketRent().getValue();
+        double rentDeltaAbsoute = marketRent - status.unitRent().getValue();
+        double rentDeltaRelative = marketRent == 0d ? 0d : rentDeltaAbsoute / marketRent * 100;
+        status.rentDeltaAbsolute().setValue(rentDeltaAbsoute);
+        status.rentDeltaRelative().setValue(rentDeltaRelative);
     }
 
     private static void renoInProgress(UnitAvailabilityStatus status) {
@@ -302,6 +308,11 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         status.rentReadinessStatus().setValue(RentReadinessStatus.RentReady);
         status.rentedStatus().setValue(RentedStatus.Unrented);
         status.vacancyStatus().setValue(VacancyStatus.Vacant);
+    }
+
+    private static Double randomUnitRent(UnitAvailabilityStatus status) {
+        final double MAX_DIFF_PCT = 0.1;
+        return status.marketRent().getValue() * ((1 + MAX_DIFF_PCT) - (2 * RND.nextDouble() * MAX_DIFF_PCT));
     }
 
     /** return x such that x >= min and x < max */

@@ -115,12 +115,15 @@ public interface UnitAvailabilityStatus extends IEntity {
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<RentReadinessStatus> rentReadinessStatus();
 
+    @Format("#0.00")
     IPrimitive<Double> unitRent();
 
+    @Format("#0.00")
     IPrimitive<Double> marketRent();
 
     /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
     @Caption(name = "Delta, in $")
+    @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<Double> rentDeltaAbsolute();
 
