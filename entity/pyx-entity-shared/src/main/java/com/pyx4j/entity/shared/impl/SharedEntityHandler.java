@@ -321,6 +321,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             setValue(null);
         } else {
             assert !((SharedEntityHandler) entity).isTemplateEntity : "Template Entity '" + getObjectClass().getName() + "' data manipulations disabled";
+            assert this.getEntityMeta().isEntityClassAssignableFrom(entity) : this.getEntityMeta().getCaption() + " is not assignable from "
+                    + entity.getEntityMeta().getCaption();
             Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
             //TODO Test type safety at runtime.
             if (!this.getObjectClass().equals(entity.getInstanceValueClass())) {
@@ -459,7 +461,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         IObject<?> member = members.get(memberName);
         if (member == null) {
             if (PRIMARY_KEY.equals(memberName)) {
-                return lazyCreateMemberIPrimitive(PRIMARY_KEY, Long.class);
+                return lazyCreateMemberIPrimitive(PRIMARY_KEY, Key.class);
             } else {
                 member = lazyCreateMember(memberName);
                 if (member == null) {

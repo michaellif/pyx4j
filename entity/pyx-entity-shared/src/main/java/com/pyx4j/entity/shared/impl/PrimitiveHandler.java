@@ -24,11 +24,14 @@ import java.util.Date;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.CompareHelper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.geo.GeoPoint;
 
 public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
 
@@ -52,6 +55,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     @Override
     public void setValue(TYPE value) {
+        assert (value == null || isAssignableFrom(value)) : "IPrimitive of " + valueClass + " is not assignable from " + value.getClass();
         ((SharedEntityHandler) getOwner()).setMemberValue(getFieldName(), value);
     }
 
@@ -92,6 +96,46 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             throw new RuntimeException("Unsupported type " + valueClass.getName());
         }
         return converted;
+    }
+
+    private boolean isAssignableFrom(Object value) {
+        if (valueClass.equals(String.class)) {
+            return (value instanceof String);
+        } else if (valueClass.equals(Double.class)) {
+            return (value instanceof Double);
+        } else if (valueClass.equals(Float.class)) {
+            return (value instanceof Float);
+        } else if (valueClass.equals(Long.class)) {
+            return (value instanceof Long);
+        } else if (valueClass.equals(Key.class)) {
+            return (value instanceof Key);
+        } else if (valueClass.equals(Integer.class)) {
+            return (value instanceof Integer);
+        } else if (valueClass.equals(java.util.Date.class)) {
+            return (value instanceof java.util.Date);
+        } else if (valueClass.equals(java.sql.Date.class)) {
+            return (value instanceof java.sql.Date);
+        } else if (valueClass.equals(java.sql.Time.class)) {
+            return (value instanceof java.sql.Time);
+        } else if (valueClass.equals(LogicalDate.class)) {
+            return (value instanceof LogicalDate);
+        } else if (valueClass.isEnum()) {
+            return (value instanceof Enum);
+        } else if (valueClass.equals(Boolean.class)) {
+            return (value instanceof Boolean);
+        } else if (valueClass.equals(Short.class)) {
+            return (value instanceof Short);
+        } else if (valueClass.equals(Byte.class)) {
+            return (value instanceof Byte);
+        } else if (valueClass.equals(BYTE_ARRAY_CLASS)) {
+            return (value instanceof byte[]);
+        } else if (valueClass.equals(GeoPoint.class)) {
+            return (value instanceof GeoPoint);
+        } else if (valueClass.equals(Pair.class)) {
+            return (value instanceof Pair);
+        } else {
+            throw new RuntimeException("Unsupported type " + valueClass.getName());
+        }
     }
 
     @Override
