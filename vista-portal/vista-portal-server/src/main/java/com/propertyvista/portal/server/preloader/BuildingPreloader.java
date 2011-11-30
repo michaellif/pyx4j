@@ -135,7 +135,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
         Persistence.service().persist(managements);
 
-        // create some complexes:
+        // create some portfolios:
         List<Portfolio> portfolios = new Vector<Portfolio>();
         for (String pname : new String[] { "GTA", "East region", "West region" }) {
             Portfolio p = EntityFactory.create(Portfolio.class);

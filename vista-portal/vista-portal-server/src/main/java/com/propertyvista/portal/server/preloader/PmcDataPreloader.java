@@ -15,6 +15,8 @@ package com.propertyvista.portal.server.preloader;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +24,13 @@ import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -93,6 +99,18 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
             mediaConfig.baseFolder = "data";
             mediaConfig.ignoreMissingMedia = true;
             mediaConfig.mimizePreloadDataSize = true;
+
+            // TODO remove after Demo of when implemented in importer
+            if (DemoData.vistaDemo) {
+                // create some portfolios:
+                List<Portfolio> portfolios = new Vector<Portfolio>();
+                for (String pname : new String[] { "GTA", "East region", "West region" }) {
+                    Portfolio p = EntityFactory.create(Portfolio.class);
+                    p.name().setValue(pname);
+                    portfolios.add(p);
+                }
+                Persistence.service().persist(portfolios);
+            }
 
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new StringReader(data)));
             ImportCounters counters = new ImportCounters();
