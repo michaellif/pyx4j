@@ -237,7 +237,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                     Date now = new Date();
                     @SuppressWarnings("deprecation")
                     int y = 1900 + now.getYear();
-                    ((CMonthYearPicker) comp).setYearRange(new Range(y, y + 10));
+                    ((CMonthYearPicker) comp).setYearRange(new Range(y, 10));
 
                     ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
 
