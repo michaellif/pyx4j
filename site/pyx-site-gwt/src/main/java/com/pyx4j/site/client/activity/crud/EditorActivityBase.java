@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -208,6 +209,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             service.create(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
+                    ReferenceDataManager.created(result);
                     onSaved(result);
                     if (apply) {
                         onApplySuccess(result);
@@ -225,6 +227,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             service.save(new AsyncCallback<E>() {
                 @Override
                 public void onSuccess(E result) {
+                    ReferenceDataManager.update(result);
                     onSaved(result);
                     if (apply) {
                         onApplySuccess(result);

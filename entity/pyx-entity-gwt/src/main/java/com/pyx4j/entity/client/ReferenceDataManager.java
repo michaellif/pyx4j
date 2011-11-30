@@ -156,6 +156,21 @@ public class ReferenceDataManager {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static <T extends IEntity> void created(T ent) {
+        for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
+            if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {
+                if (!me.getKey().hasCriteria()) {
+                    ((List<T>) me.getValue()).add(ent);
+                }
+            }
+        }
+        if (eventBus != null) {
+            eventBus.fireEvent(new ValueChangeEvent(ent.getObjectClass()) {
+            });
+        }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void remove(IEntity ent) {
         for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {
