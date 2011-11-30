@@ -40,6 +40,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         super(PageDescriptor.class, false);
         this.parent = parent;
         this.viewer = (!parent.isEditable() ? (PageViewer) parent.getParentView() : null);
+        setOrderable(parent.isEditable());
     }
 
     @Override
