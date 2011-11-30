@@ -20,7 +20,7 @@ public class AlertViewImpl extends SimplePanel implements AlertView {
 
     public AlertViewImpl() {
         setSize("100%", "100%");
-        HTML label = new HTML("List of Alerts...");
+        HTML label = new HTML("List of Alerts is blocked in this demo version");
         setWidget(label);
     }
 }

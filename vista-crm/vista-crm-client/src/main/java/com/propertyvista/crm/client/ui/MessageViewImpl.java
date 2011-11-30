@@ -20,7 +20,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
 
     public MessageViewImpl() {
         setSize("100%", "100%");
-        HTML label = new HTML("Messages...");
+        HTML label = new HTML("Messages and E-mail delivery is blocked in this demo version");
         setWidget(label);
     }
 }

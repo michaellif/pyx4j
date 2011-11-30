@@ -20,7 +20,7 @@ public class AccountViewImpl extends SimplePanel implements AccountView {
 
     public AccountViewImpl() {
         setSize("100%", "100%");
-        HTML label = new HTML("User Account");
+        HTML label = new HTML("User Account page is blocked in this demo version");
         setWidget(label);
     }
 }
