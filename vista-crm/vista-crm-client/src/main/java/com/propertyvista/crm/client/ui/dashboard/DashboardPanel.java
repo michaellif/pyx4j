@@ -45,7 +45,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
 
     private static I18n i18n = I18n.get(DashboardPanel.class);
 
-    private LayoutsSet layouts;
+    private ActionsWidget actionsWidget;
 
     public DashboardPanel() {
         this(false);
@@ -65,12 +65,12 @@ public class DashboardPanel extends BoardBase implements DashboardView {
 
     @Override
     protected Widget createActionsWidget() {
-        return (layouts = new LayoutsSet());
+        return (actionsWidget = new ActionsWidget());
     }
 
     @Override
     protected void setLayout(LayoutType layoutType) {
-        layouts.setLayout(layoutType);
+        actionsWidget.setLayout(layoutType);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
         return layoutType;
     }
 
-    private class LayoutsSet extends HorizontalPanel {
+    private class ActionsWidget extends HorizontalPanel {
 
         final Image layout1 = new Image();
 
@@ -108,7 +108,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
 
         final Image layout3 = new Image();
 
-        public LayoutsSet() {
+        public ActionsWidget() {
             setDefaultImages();
 
             layout1.setTitle(i18n.tr("Switch Layout"));
@@ -197,6 +197,21 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                 }
             });
 
+            final Image print = new Image(CrmImages.INSTANCE.dashboardPrint());
+            print.addMouseOverHandler(new MouseOverHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    print.setResource(CrmImages.INSTANCE.dashboardPrintHover());
+                }
+            });
+            print.addMouseOutHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    print.setResource(CrmImages.INSTANCE.dashboardPrint());
+                }
+            });
+            print.getElement().getStyle().setCursor(Cursor.POINTER);
+
             this.add(layout1);
             this.add(layout12);
             this.add(layout21);
@@ -206,6 +221,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                 this.add(new HTML("&nbsp;&nbsp;&nbsp;&nbsp;"));
                 this.add(addGadget);
             }
+            this.add(print);
             this.setSpacing(4);
         }
 

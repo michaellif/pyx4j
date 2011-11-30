@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.dashboard;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
@@ -45,6 +46,10 @@ public class BuildingDashboardViewImpl extends DashboardPanel implements Buildin
         });
 
         addAction(dashboardSelect.asWidget());
+
+        dashboardSelect.asWidget().getElement().getStyle().setMarginLeft(4, Unit.PX);
+        dashboardSelect.asWidget().getElement().getStyle().setMarginTop(2, Unit.PX);
+
         setSize("100%", "100%");
     }
 

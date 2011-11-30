@@ -73,6 +73,12 @@ public interface CrmImages extends VistaImages {
     @Source("DashboardAddGadgetHover.png")
     ImageResource dashboardAddGadgetHover();
 
+    @Source("dashboard_print.png")
+    ImageResource dashboardPrint();
+
+    @Source("dashboard_print_hover.png")
+    ImageResource dashboardPrintHover();
+
     // Accordion Menu Folder Images:
 
     @Source("Bookmark_active.png")

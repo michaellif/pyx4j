@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
-
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,10 +23,10 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -55,7 +54,7 @@ public class ReportPanel extends BoardBase implements ReportView {
 
     @Override
     protected Widget createActionsWidget() {
-        return new AddWidgetButton();
+        return new ActionsWidget();
     }
 
     @Override
@@ -68,9 +67,9 @@ public class ReportPanel extends BoardBase implements ReportView {
         // nothing to do!..
     }
 
-    private class AddWidgetButton extends SimplePanel {
+    private class ActionsWidget extends HorizontalPanel {
 
-        public AddWidgetButton() {
+        public ActionsWidget() {
             super();
 
             final Image addGadget = new Image(CrmImages.INSTANCE.dashboardAddGadget());
@@ -114,7 +113,25 @@ public class ReportPanel extends BoardBase implements ReportView {
                 }
             });
 
-            setWidget(addGadget);
+            final Image print = new Image(CrmImages.INSTANCE.dashboardPrint());
+            print.addMouseOverHandler(new MouseOverHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    print.setResource(CrmImages.INSTANCE.dashboardPrintHover());
+                }
+            });
+            print.addMouseOutHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    print.setResource(CrmImages.INSTANCE.dashboardPrint());
+                }
+            });
+            print.getElement().getStyle().setCursor(Cursor.POINTER);
+
+            add(addGadget);
+            add(print);
+            this.setSpacing(4);
+
         }
     }
 
