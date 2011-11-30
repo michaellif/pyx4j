@@ -143,8 +143,8 @@ class TableDDL {
                 if (group != null) {
                     int p = group.indexOf(',');
                     if (p != -1) {
-                        position = group.substring(p);
-                        group = group.substring(0, p - 1);
+                        position = group.substring(p + 1).trim();
+                        group = group.substring(0, p).trim();
                     }
 
                     for (IndexDef other : indexes) {
