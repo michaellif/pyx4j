@@ -531,7 +531,7 @@ public class BuildingsGenerator {
 
         unit.floorplan().set(floorplan);
 
-        unit.marketing().set(floorplan); // copy floorplan marketing here?!..
+        unit.marketing().name().set(floorplan.marketingName()); // copy floorplan marketing here?!..
         for (int i = 0; 1 < RandomUtil.randomInt(3); ++i) {
             AdvertisingBlurb item = EntityFactory.create(AdvertisingBlurb.class);
             item.content().setValue(CommonsGenerator.lipsum());
