@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -133,6 +134,15 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             managements.add(generator.createPropertyManager(mngName));
         }
         Persistence.service().persist(managements);
+
+        // create some complexes:
+        List<Portfolio> portfolios = new Vector<Portfolio>();
+        for (String pname : new String[] { "GTA", "East region", "West region" }) {
+            Portfolio p = EntityFactory.create(Portfolio.class);
+            p.name().setValue(pname);
+            portfolios.add(p);
+        }
+        Persistence.service().persist(portfolios);
 
         int unitCount = 0;
         List<Building> buildings = generator.createBuildings(config().numResidentialBuildings);
