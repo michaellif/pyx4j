@@ -31,7 +31,7 @@ public interface ChargeLine extends Charge {
 
         deposit,
 
-        applicationFee,
+        oneTimePayment,
 
         monthlyRent,
 

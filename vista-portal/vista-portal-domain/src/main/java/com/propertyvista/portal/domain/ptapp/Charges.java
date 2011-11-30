@@ -47,6 +47,7 @@ public interface Charges extends IEntity, IBoundToApplication {
 
     //Calculated. DUMMY data on back-end for now., Also "deposit" may be changed by ChargesSharedCalculation.calculateCharges
     @Owned
+    @Caption(name = "Other Charges")
     ChargeLineList applicationCharges();
 
     //Calculated base on percentage and total monthly payable. ChargesSharedCalculation.calculateCharges

@@ -72,7 +72,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
         int row = -1;
 
-        main.setH1(++row, 0, 1, i18n.tr("Charges"));
+        main.setH1(++row, 0, 1, proto().applicationCharges().charges().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().applicationCharges().charges(), new ChargeLineFolder(isEditable())));
         main.setWidget(++row, 0, createTotal(proto().applicationCharges().total()));
 

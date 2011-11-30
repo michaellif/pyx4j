@@ -73,7 +73,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
             // some mockup data:
             charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, 1200.0));
-            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.applicationFee, 24.99));
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, 24.99));
         }
 
         ChargeItem serviceItem = lease.serviceAgreement().serviceItem();

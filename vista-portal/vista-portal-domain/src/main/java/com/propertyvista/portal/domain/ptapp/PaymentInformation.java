@@ -27,6 +27,7 @@ import com.propertyvista.domain.payment.PaymentMethod;
 public interface PaymentInformation extends IEntity, IBoundToApplication {
 
     @Transient
+    @Caption(name = "Charges")
     ChargeLineList applicationCharges();
 
     @NotNull
