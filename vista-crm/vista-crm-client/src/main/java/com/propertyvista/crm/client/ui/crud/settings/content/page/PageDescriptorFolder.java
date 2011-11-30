@@ -37,10 +37,15 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     private final PageViewer viewer;
 
     public PageDescriptorFolder(PageEditorForm parent) {
-        super(PageDescriptor.class, false);
+        super(PageDescriptor.class, parent.isEditable());
         this.parent = parent;
         this.viewer = (!parent.isEditable() ? (PageViewer) parent.getParentView() : null);
-        setOrderable(parent.isEditable());
+    }
+
+    @Override
+    public void initContent() {
+        super.initContent();
+        ((IFolderDecorator) getDecorator()).setAddButtonVisible(false);
     }
 
     @Override
