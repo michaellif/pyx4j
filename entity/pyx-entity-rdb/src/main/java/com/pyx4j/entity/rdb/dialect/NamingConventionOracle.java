@@ -31,7 +31,7 @@ public class NamingConventionOracle implements NamingConvention {
     private final ShortWords shortWords;
 
     public NamingConventionOracle() {
-        this(-1, null);
+        this(32, null);
     }
 
     public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords) {

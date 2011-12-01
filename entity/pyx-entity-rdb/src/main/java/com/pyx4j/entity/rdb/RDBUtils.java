@@ -133,6 +133,19 @@ public class RDBUtils implements Closeable {
         }
     }
 
+    public static void initAllEntityTables() {
+        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
+        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+        for (String className : allClasses) {
+            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
+                continue;
+            }
+            srv.count(EntityQueryCriteria.create(entityClass));
+        }
+    }
+
     public static void deleteFromAllEntityTables() {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();

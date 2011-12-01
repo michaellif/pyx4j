@@ -85,7 +85,7 @@ public class SQLUtils {
                     success = true;
                 } finally {
                     if (!success) {
-                        log.error("Error executing SQL {}", sql);
+                        log.error("Error executing SQL '{}'", sql);
                     }
                 }
             }
