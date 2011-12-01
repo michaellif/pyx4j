@@ -127,7 +127,7 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
                     break;
                 LogicalDate movein = new LogicalDate(startDate.getTime() + Math.abs(RND.nextLong()) % MAX_LEASE);
 
-                while (movein.before(endDate)) {
+                while (movein.before(endDate) | movein.equals(endDate)) {
                     LogicalDate moveout = new LogicalDate(movein.getTime() + Math.max(MIN_LEASE, RND.nextLong() % MAX_LEASE));
 
                     MockupTenant tenant = EntityFactory.create(MockupTenant.class);
@@ -149,9 +149,10 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
             // create mockup arrears states for these tenants
             for (MockupTenant tenant : buildingTenants) {
                 LogicalDate currentMonth = new LogicalDate(AnalysisResolution.Month.intervalStart(tenant.moveIn().getValue().getTime()));
-                LogicalDate lastMonth = tenant.moveOut().getValue().before(endDate) ? tenant.moveOut().getValue() : endDate;
+                LogicalDate lastMonth = new LogicalDate(AnalysisResolution.Month.intervalStart((tenant.moveOut().getValue().before(endDate) ? tenant.moveOut()
+                        .getValue() : endDate).getTime()));
 
-                while (currentMonth.before(lastMonth)) {
+                while (currentMonth.before(lastMonth) | currentMonth.equals(lastMonth)) {
                     MockupArrearsState arrear = EntityFactory.create(MockupArrearsState.class);
 
                     arrear.statusTimestamp().setValue(currentMonth);

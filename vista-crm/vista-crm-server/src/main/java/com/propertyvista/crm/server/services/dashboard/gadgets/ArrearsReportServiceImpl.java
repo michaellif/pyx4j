@@ -55,19 +55,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
             when = when != null ? when : new LogicalDate();
             when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
-
-            LogicalDate monthAgo = new LogicalDate(when);
-            if (when.getMonth() != 0) {
-                monthAgo.setMonth((11 + when.getMonth() - 1) % 11);
-            } else {
-                monthAgo.setMonth(1);
-                monthAgo.setYear(when.getYear() - 1);
-            }
-            // TODO this is just for demo, IRL it shouldn't look the same at all...
-            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, monthAgo));
-            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, when));
-
-            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN_OR_EQUAL, when));
+            criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
 
             if (!buildingPKs.isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingPKs));
