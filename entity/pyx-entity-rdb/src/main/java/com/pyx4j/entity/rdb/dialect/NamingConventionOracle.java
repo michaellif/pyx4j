@@ -30,23 +30,46 @@ public class NamingConventionOracle implements NamingConvention {
 
     private final ShortWords shortWords;
 
+    private final boolean forceShortWords;
+
     public NamingConventionOracle() {
-        this(32, null);
+        this(30, null);
     }
 
     public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords) {
-        this.identifierMaximumLength = identifierMaximumLength;
-        this.shortWords = shortWords;
+        this(identifierMaximumLength, shortWords, false);
     }
 
-    public String splitCapitals(String word) {
+    public NamingConventionOracle(int identifierMaximumLength, ShortWords shortWords, boolean forceShortWords) {
+        this.identifierMaximumLength = identifierMaximumLength;
+        this.shortWords = shortWords;
+        this.forceShortWords = forceShortWords;
+    }
+
+    public String shortForm(String word) {
+        if (shortWords != null) {
+            return shortWords.getShortForm(word);
+        } else {
+            return word;
+        }
+    }
+
+    protected String makeNameFragment(String word, boolean useShortForms) {
+        if (useShortForms) {
+            return shortForm(word);
+        } else {
+            return word;
+        }
+    }
+
+    protected String makeName(String word, boolean useShortForms) {
         StringBuilder b = new StringBuilder();
         StringBuilder currentWord = new StringBuilder();
         boolean wordStart = true;
         for (char c : word.toCharArray()) {
             if (c == '_') {
                 if (currentWord.length() > 0) {
-                    b.append(shortForm(currentWord.toString()));
+                    b.append(makeNameFragment(currentWord.toString(), useShortForms));
                     currentWord = new StringBuilder();
                     wordStart = true;
                 } else if (mustBeginWithLetter) {
@@ -55,7 +78,7 @@ public class NamingConventionOracle implements NamingConvention {
                 b.append('_');
             } else if (Character.isUpperCase(c)) {
                 if (!wordStart) {
-                    b.append(shortForm(currentWord.toString()));
+                    b.append(makeNameFragment(currentWord.toString(), useShortForms));
                     currentWord = new StringBuilder();
                     b.append('_');
                     wordStart = true;
@@ -68,38 +91,46 @@ public class NamingConventionOracle implements NamingConvention {
         }
 
         if (currentWord.length() > 0) {
-            b.append(shortForm(currentWord.toString()));
+            b.append(makeNameFragment(currentWord.toString(), useShortForms));
         }
-
         return b.toString();
     }
 
-    public String shortForm(String word) {
-        if (shortWords != null) {
-            return shortWords.getShortForm(word);
+    protected String makeName(String name, int maximumLength) {
+        String nameConverted = makeName(name, false);
+        if ((!forceShortWords) && nameConverted.length() <= maximumLength) {
+            return nameConverted;
         } else {
-            return word;
+            nameConverted = makeName(name, true);
+            if (nameConverted.length() > maximumLength) {
+                throw new Error("Can't make name '" + nameConverted + "' shorter");
+            }
+            return nameConverted;
         }
+    }
+
+    protected String makeName(String name) {
+        return makeName(name, identifierMaximumLength);
     }
 
     @Override
     public String sqlTableName(String javaPersistenceName) {
-        return splitCapitals(javaPersistenceName);
+        return makeName(javaPersistenceName);
     }
 
     @Override
     public String sqlTableSequenceName(String javaPersistenceName) {
-        return splitCapitals(javaPersistenceName) + "_SEQ";
+        return makeName(javaPersistenceName, identifierMaximumLength - 4) + "_SEQ";
     }
 
     @Override
     public String sqlTablePKName(String tableName) {
-        return tableName + "_PK";
+        return makeName(tableName, identifierMaximumLength - 3) + "_PK";
     }
 
     @Override
     public String sqlChildTableSequenceName(String tableName) {
-        return tableName + "_SEQ";
+        return makeName(tableName, identifierMaximumLength - 4) + "_SEQ";
     }
 
     @Override
@@ -112,7 +143,7 @@ public class NamingConventionOracle implements NamingConvention {
             sql.append('_');
         }
         sql.append("IDX");
-        return sql.toString();
+        return makeName(sql.toString());
     }
 
     @Override
@@ -122,30 +153,30 @@ public class NamingConventionOracle implements NamingConvention {
 
     @Override
     public String sqlFieldName(String javaPersistenceFieldName) {
-        return splitCapitals(javaPersistenceFieldName).replace('-', '_');
+        return makeName(javaPersistenceFieldName).replace('-', '_');
     }
 
     @Override
     public String sqlEmbededFieldName(List<String> path, String javaPersistenceFieldName) {
         StringBuilder sql = new StringBuilder();
         for (String pathPart : path) {
-            sql.append(splitCapitals(pathPart));
+            sql.append(makeName(pathPart));
             sql.append('_');
         }
-        sql.append(splitCapitals(javaPersistenceFieldName));
-        return sql.toString();
+        sql.append(makeName(javaPersistenceFieldName));
+        return makeName(sql.toString());
     }
 
     @Override
     public String sqlEmbededTableName(String javaPersistenceTableName, List<String> path, String javaPersistenceFieldName) {
         StringBuilder sql = new StringBuilder();
-        sql.append(splitCapitals(javaPersistenceTableName));
+        sql.append(makeName(javaPersistenceTableName));
         for (String pathPart : path) {
-            sql.append(splitCapitals(pathPart));
+            sql.append(makeName(pathPart));
             sql.append('_');
         }
-        sql.append(splitCapitals(javaPersistenceFieldName));
-        return sql.toString();
+        sql.append(makeName(javaPersistenceFieldName));
+        return makeName(sql.toString());
     }
 
 }
