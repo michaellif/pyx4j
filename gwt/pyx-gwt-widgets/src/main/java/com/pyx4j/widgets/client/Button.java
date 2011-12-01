@@ -20,8 +20,9 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.dom.client.ButtonElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -127,11 +128,7 @@ public class Button extends FocusPanel {
     }
 
     public void click() {
-        getButtonElement().click();
-    }
-
-    protected ButtonElement getButtonElement() {
-        return ((ButtonElement) getElement().cast());
+        DomEvent.fireNativeEvent(Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false), this);
     }
 
     public boolean isEnabled() {

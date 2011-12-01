@@ -30,13 +30,13 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.UIObject;
@@ -49,9 +49,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final int HEADER_RAW_INDEX = 0;
 
-    private static final String CHECK_MARK_COLUMN_SIZE = "22px";
+    private static final String CHECK_MARK_COLUMN_SIZE = "1px";
 
-    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "12px";
+    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "1px";
 
     private DataTableModel<E> model;
 
@@ -486,7 +486,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     private Widget createHeaderColumnSelector() {
-        final Anchor selector = new Anchor("...");
+
+        final Label selector = new Label("...");
+        selector.setWidth("100%");
+
+        selector.setTitle("Select Columns");
         selector.addClickHandler(new ClickHandler() {
 
             private final List<CheckBox> columnChecksList = new ArrayList<CheckBox>();
