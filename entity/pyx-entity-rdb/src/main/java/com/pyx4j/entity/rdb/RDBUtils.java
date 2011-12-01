@@ -137,6 +137,9 @@ public class RDBUtils implements Closeable {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         for (String className : allClasses) {
+            if (className.toLowerCase().contains(".gae")) {
+                continue;
+            }
             Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
             if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
