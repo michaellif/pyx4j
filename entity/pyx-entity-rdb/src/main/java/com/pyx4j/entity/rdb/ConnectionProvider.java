@@ -98,7 +98,7 @@ public class ConnectionProvider {
 
         NamingConvention namingConvention = cfg.namingConvention();
         if (namingConvention == null) {
-            namingConvention = new NamingConventionOracle();
+            namingConvention = new NamingConventionOracle(64, null);
         }
 
         switch (cfg.databaseType()) {
