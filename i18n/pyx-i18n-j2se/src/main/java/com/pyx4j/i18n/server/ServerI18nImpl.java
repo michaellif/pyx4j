@@ -26,14 +26,7 @@ class ServerI18nImpl extends I18n {
 
     @Override
     public final String translate(String context, String text) {
-        String key;
-        if ((context != null) && (context.length() > 0)) {
-            key = context + CONTEXT_GLUE + text;
-        } else {
-            key = text;
-        }
-
-        String value = I18nManager.getThreadLocaleTranslator().translate(key);
+        String value = I18nManager.getThreadLocaleTranslator().translate(context, text);
         if (value == null) {
             // if no translation was found return text in source locale
             return text;

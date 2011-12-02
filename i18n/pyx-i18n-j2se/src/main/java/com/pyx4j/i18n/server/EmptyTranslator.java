@@ -25,7 +25,7 @@ import com.pyx4j.i18n.gettext.Translator;
 class EmptyTranslator implements Translator {
 
     @Override
-    public String translate(String text) {
+    public String translate(String context, String text) {
         return text;
     }
 

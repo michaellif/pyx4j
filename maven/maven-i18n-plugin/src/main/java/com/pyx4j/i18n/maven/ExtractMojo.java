@@ -520,21 +520,23 @@ public class ExtractMojo extends AbstractMojo {
             int translated = 0;
             int apiCalls = 0;
             for (POEntry entry : poTransl.entries) {
-                entry.translated = catalog.translate(entry.untranslated);
+                entry.translated = catalog.translate(entry.context, entry.untranslated);
                 //TODO add proper java format handling
-                if ((entry.translated == null) && (!entry.contanisFlag("java-format"))) {
+                if (((entry.translated == null) || (entry.translated.length() == 0)) && (!entry.contanisFlag("java-format"))) {
                     try {
                         entry.translated = gt.translate(entry.untranslated, sourceLanguage, lang);
                     } catch (Throwable e) {
                         throw new MojoExecutionException("translate error", e);
                     }
-                    catalog.update(entry.untranslated, entry.translated);
+                    catalog.update(entry.context, entry.untranslated, entry.translated);
                     apiCalls++;
                 }
                 translated++;
             }
             getLog().info("Translated:" + translated + "; api calls:" + apiCalls);
-            catalog.write();
+            if (apiCalls > 0) {
+                catalog.write();
+            }
             writePO(poTransl, new File(poDirectory, lang + ".po"), true);
         }
     }
@@ -554,7 +556,7 @@ public class ExtractMojo extends AbstractMojo {
             int translated = 0;
             int notTranslated = 0;
             for (POEntry entry : poTransl.entries) {
-                entry.translated = catalog.translate(entry.untranslated);
+                entry.translated = catalog.translate(entry.context, entry.untranslated);
                 if (entry.translated == null) {
                     notTranslated++;
                 } else {
@@ -562,7 +564,6 @@ public class ExtractMojo extends AbstractMojo {
                 }
             }
             getLog().info("Translated:" + translated + "; Not Translated:" + notTranslated);
-            catalog.write();
             writePO(poTransl, new File(poDirectory, lang + ".po"), true);
         }
     }

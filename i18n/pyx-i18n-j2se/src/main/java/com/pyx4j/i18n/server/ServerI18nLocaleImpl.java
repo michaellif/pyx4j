@@ -34,13 +34,7 @@ class ServerI18nLocaleImpl extends I18n {
 
     @Override
     public String translate(String context, String text) {
-        String key;
-        if ((context != null) && (context.length() > 0)) {
-            key = context + CONTEXT_GLUE + text;
-        } else {
-            key = text;
-        }
-        String value = translator.translate(key);
+        String value = translator.translate(context, text);
         if (value == null) {
             return text;
         } else {

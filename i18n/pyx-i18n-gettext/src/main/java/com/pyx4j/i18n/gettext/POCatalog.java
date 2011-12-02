@@ -92,7 +92,7 @@ public class POCatalog implements Translator {
     private void buildTranslations(POFile po) {
         for (POEntry entry : po.entries) {
             if ((entry.translated != null) && (entry.translated.length() != 0)) {
-                if (entry.context != null) {
+                if ((entry.context != null) && (entry.context.length() > 0)) {
                     translations.put(entry.context + I18n.CONTEXT_GLUE + entry.untranslated, entry.translated);
                 } else {
                     translations.put(entry.untranslated, entry.translated);
@@ -102,13 +102,21 @@ public class POCatalog implements Translator {
     }
 
     @Override
-    public String translate(String text) {
-        return translations.get(text);
+    public String translate(String context, String text) {
+        return translations.get(key(context, text));
     }
 
-    public void update(String text, String translation) {
+    private String key(String context, String text) {
+        if ((context != null) && (context.length() > 0)) {
+            return context + I18n.CONTEXT_GLUE + text;
+        } else {
+            return text;
+        }
+    }
+
+    public void update(String context, String text, String translation) {
         if (translation != null) {
-            translations.put(text, translation);
+            translations.put(key(context, text), translation);
             updated = true;
         }
     }
@@ -127,6 +135,12 @@ public class POCatalog implements Translator {
         for (Map.Entry<String, String> entry : translations.entrySet()) {
             POEntry pe = new POEntry();
             pe.untranslated = entry.getKey();
+            int cIdx = pe.untranslated.indexOf(I18n.CONTEXT_GLUE);
+            if (cIdx != -1) {
+                pe.context = pe.untranslated.substring(0, cIdx);
+                pe.untranslated = pe.untranslated.substring(cIdx + 1);
+            }
+
             pe.translated = entry.getValue();
             po.entries.add(pe);
         }

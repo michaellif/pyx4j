@@ -22,6 +22,6 @@ package com.pyx4j.i18n.gettext;
 
 public interface Translator {
 
-    public String translate(String text);
+    public String translate(String context, String text);
 
 }

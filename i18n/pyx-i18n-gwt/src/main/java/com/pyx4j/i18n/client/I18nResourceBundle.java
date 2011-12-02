@@ -23,7 +23,7 @@ package com.pyx4j.i18n.client;
 public class I18nResourceBundle {
 
     public String getString(String key) {
-        return key;
+        return null;
     }
 
 }
