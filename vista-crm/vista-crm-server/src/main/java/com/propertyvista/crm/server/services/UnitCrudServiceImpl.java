@@ -43,6 +43,7 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             // load detached entities:
             Persistence.service().retrieve(dto.marketing().adBlurbs());
             Persistence.service().retrieve(dto.floorplan());
+            Persistence.service().retrieve(dto.belongsTo());
         } else {
             // load detached entities (temporary):
             Persistence.service().retrieve(dto.floorplan());

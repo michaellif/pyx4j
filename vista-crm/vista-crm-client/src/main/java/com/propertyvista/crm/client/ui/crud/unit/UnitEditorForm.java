@@ -23,20 +23,24 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
@@ -106,6 +110,15 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         row += 2;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 8.2).build());
+
+        main.setBR(++row, 0, 0);
+        CComponent<?, ?> belongs;
+        if (isEditable()) {
+            belongs = new CEntityLabel<Building>();
+        } else {
+            belongs = new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class));
+        }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().belongsTo(), belongs), 20).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
