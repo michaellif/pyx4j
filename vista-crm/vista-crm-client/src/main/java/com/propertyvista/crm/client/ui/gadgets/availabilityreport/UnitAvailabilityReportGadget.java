@@ -43,13 +43,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusReportSettings;
 
 public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabilityStatusDTO> implements IBuildingGadget {
-    //@formatter:off
-    private static final String ALL_CAPTION = "All";
-    private static final String VACANT_CAPTION = "Vacant";
-    private static final String NOTICE_CAPTION = "Notice";
-    private static final String RENTED_CAPTION = "Rented";
-    private static final String NET_EXPOSURE_CAPTION = "Net Exposure";
-    
+
     private FilterData filter;
 
     private final VerticalPanel gadgetPanel;
@@ -57,19 +51,22 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
     private final FlexTable controlsPanel;
 
     ToggleButton allButton;
+
     ToggleButton vacantButton;
+
     ToggleButton noticeButton;
+
     ToggleButton vacantNoticeButton;
+
     ToggleButton netExposureButton;
+
     ToggleButton rentedButton;
 
     List<ToggleButton> filteringButtons;
 
-    
     private final AvailabilityReportService service;
-    
+
     private final UnitAvailabilityStatusReportSettings settings;
-    //@formatter:on
 
     public UnitAvailabilityReportGadget(GadgetMetadata gmd) {
         super(gmd, UnitAvailabilityStatusDTO.class);
@@ -95,12 +92,12 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
                 });
             }
         };
-        allButton = new ToggleButton(i18n.tr(ALL_CAPTION), filterButtonClickHandler);
-        vacantButton = new ToggleButton(i18n.tr(VACANT_CAPTION), filterButtonClickHandler);
-        noticeButton = new ToggleButton(i18n.tr(NOTICE_CAPTION), filterButtonClickHandler);
-        vacantNoticeButton = new ToggleButton(i18n.tr(VACANT_CAPTION) + "/" + i18n.tr(NOTICE_CAPTION), filterButtonClickHandler);
-        rentedButton = new ToggleButton(i18n.tr(RENTED_CAPTION), filterButtonClickHandler);
-        netExposureButton = new ToggleButton(i18n.tr(NET_EXPOSURE_CAPTION), filterButtonClickHandler);
+        allButton = new ToggleButton(i18n.trc("Units", "All"), filterButtonClickHandler);
+        vacantButton = new ToggleButton(i18n.trc("Units", "Vacant"), filterButtonClickHandler);
+        noticeButton = new ToggleButton(i18n.tr("Notice"), filterButtonClickHandler);
+        vacantNoticeButton = new ToggleButton(i18n.trc("Units", "Vacant") + "/" + i18n.tr("Notice"), filterButtonClickHandler);
+        rentedButton = new ToggleButton(i18n.trc("Units", "Rented"), filterButtonClickHandler);
+        netExposureButton = new ToggleButton(i18n.tr("Net Exposure"), filterButtonClickHandler);
         filteringButtons = Arrays.asList(allButton, vacantButton, noticeButton, vacantNoticeButton, rentedButton, netExposureButton);
 
         int col = -1;
@@ -130,7 +127,7 @@ public class UnitAvailabilityReportGadget extends ListerGadgetBase<UnitAvailabil
     @Override
     protected UnitAvailabilityStatusReportSettings createSettings() {
         UnitAvailabilityStatusReportSettings settings = super.createSettings().clone(UnitAvailabilityStatusReportSettings.class);
-        settings.defaultFilteringButton().setValue(ALL_CAPTION);
+        settings.defaultFilteringButton().setValue(i18n.trc("Units", "All"));
         return settings;
     }
 
