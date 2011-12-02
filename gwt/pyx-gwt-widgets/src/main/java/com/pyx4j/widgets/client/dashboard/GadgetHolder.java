@@ -219,9 +219,11 @@ final class GadgetHolder extends SimplePanel {
                     menu.addItem((isMinimized() ? i18n.tr("Expand") : i18n.tr("Minimize")), cmdMinimize);
                 }
 
-                menu.addItem(i18n.tr("Delete"), cmdDelete);
+                if (!(isMinimized() || isMaximized())) {
+                    menu.addItem(i18n.tr("Delete"), cmdDelete);
+                }
 
-                if (holdedGadget.isSetupable() && !inSetup) {
+                if (holdedGadget.isSetupable() && !inSetup && !isMinimized()) {
                     menu.addSeparator();
                     menu.addItem(i18n.tr("Setup"), cmdSetup);
                 }
