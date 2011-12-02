@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-28 13:13-0500\n"
+"POT-Creation-Date: 2011-12-02 09:32-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,10 +104,18 @@ msgstr "15 мин"
 msgid "18 months"
 msgstr "18  месяцев"
 
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "1st Missed Payment Letter Served"
+msgstr ""
+
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:1
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "2 hours"
 msgstr "2-х часов"
+
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "2nd Missed Payment Letter Served"
+msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "30 - 60 Days"
@@ -117,6 +125,10 @@ msgstr "30 - 60 дней"
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "30 min"
 msgstr "30 мин"
+
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "3rd Missed Payment Letter Served"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "6 months"
@@ -331,10 +343,6 @@ msgstr "Удобства"
 msgid "Amenity"
 msgstr "Удобства"
 
-#: com/propertyvista/domain/payment/PaymentType.java:1
-msgid "American Express"
-msgstr "American Express"
-
 #: com/propertyvista/domain/charges/Charge.java:2
 #: com/propertyvista/domain/financial/Money.java:2
 #: com/propertyvista/domain/financial/Pricing.java:2
@@ -383,11 +391,6 @@ msgstr "Заявитель"
 msgid "Application"
 msgstr "Применение"
 
-#: com/propertyvista/portal/domain/ptapp/Charges.java:2
-#: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
-msgid "Application Charges"
-msgstr "Приложение сборы"
-
 #: com/propertyvista/server/domain/CampaignTrigger.java:1
 msgid "Application Compleated"
 msgstr "Приложение Compleated"
@@ -400,10 +403,6 @@ msgstr "Заявочный документ"
 #: com/propertyvista/portal/rpc/ptapp/dto/ApplicationDocumentUploadDTO.java:0
 msgid "Application Document Upload"
 msgstr "Приложение Отправить документ"
-
-#: com/propertyvista/domain/charges/ChargeLine.java:1
-msgid "Application Fee"
-msgstr "Сбор за подачу заявления"
 
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Application Form"
@@ -1084,6 +1083,7 @@ msgstr "Зарядка Тип"
 #: com/propertyvista/domain/charges/ChargeLineList.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/domain/ptapp/Charges.java:0
+#: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
 #: com/propertyvista/portal/domain/ptapp/TenantChargeList.java:2
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
@@ -1137,6 +1137,10 @@ msgstr "Город Заказы"
 #: com/propertyvista/domain/maintenance/IssueSubjectDetails.java:2
 msgid "Classifications"
 msgstr "Классификации"
+
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "Clean"
+msgstr ""
 
 #: com/propertyvista/server/ci/DBResetServlet.java:1
 msgid "Clear Pmc"
@@ -1411,6 +1415,10 @@ msgstr "Округ"
 msgid "Court"
 msgstr "Суд"
 
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "Court Hearing Date"
+msgstr ""
+
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Courtyard"
 msgstr "Двор"
@@ -1593,6 +1601,7 @@ msgstr "Решается"
 msgid "Decision Date"
 msgstr "Решение дате"
 
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Decision Reason"
 msgstr "Решение Причина"
@@ -1724,7 +1733,6 @@ msgid "Desired Move In Date"
 msgstr "Желаемый Переместить в дате"
 
 #: com/propertyvista/domain/maintenance/IssueRepairSubject.java:2
-#: com/propertyvista/misc/EquifaxResult.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:59
 #: com/propertyvista/pmsite/server/panels/AptListPanel.html:32
 msgid "Details"
@@ -2027,6 +2035,10 @@ msgstr "Дата события"
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyReportEvent.java:2
 msgid "Event Type"
 msgstr "Тип события"
+
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "Eviction Letter Served"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
 msgid "Expected Move In"
@@ -3415,6 +3427,10 @@ msgstr "Маркетинговое название"
 msgid "Master Application"
 msgstr "Мастер приложений"
 
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:0
+msgid "Master Application Action"
+msgstr ""
+
 #: com/propertyvista/dto/MasterApplicationDTO.java:2
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:0
 msgid "Master Application Status"
@@ -3961,6 +3977,10 @@ msgstr "Один"
 msgid "One Time Charges"
 msgstr "Один Сборы время"
 
+#: com/propertyvista/domain/charges/ChargeLine.java:1
+msgid "One Time Payment"
+msgstr ""
+
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Ontario Disability Support Program (ODSP)"
 msgstr "Онтарио программы поддержки инвалидов (ODSP)"
@@ -4014,6 +4034,10 @@ msgstr "Другие Задолженность"
 #: com/propertyvista/domain/dashboard/GadgetMetadata.java:1
 msgid "Other Arrears Gadget"
 msgstr "Другой гаджет Задолженность"
+
+#: com/propertyvista/portal/domain/ptapp/Charges.java:2
+msgid "Other Charges"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/PersonalIncome.java:2
 msgid "Other Income Information"
@@ -5345,24 +5369,24 @@ msgstr "Спа"
 msgid "Spanish"
 msgstr "Испанский"
 
-#: com/propertvista/generator/ServiceCatalogGenerator.java:238
+#: com/propertvista/generator/ServiceCatalogGenerator.java:256
 msgid "Special Promotion Applies, Everything Completely Free"
 msgstr "Специальное предложение применяется, все полностью бесплатно"
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:235
+#: com/propertvista/generator/ServiceCatalogGenerator.java:253
 #, java-format
 msgid "Special Promotion Applies, {0}$ In Promotional Items Or Services"
 msgstr ""
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:232
+#: com/propertvista/generator/ServiceCatalogGenerator.java:250
 #, java-format
 msgid "Special Promotion Applies, {0}$ Off The Value Of The Service"
 msgstr ""
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:229
+#: com/propertvista/generator/ServiceCatalogGenerator.java:247
 #, java-format
 msgid "Special Promotion Applies, {0}% Off The Value Of The Service"
 msgstr ""
@@ -5396,7 +5420,7 @@ msgstr "Дата начала"
 msgid "Start Time"
 msgstr "Start Time"
 
-#: com/propertyvista/pmsite/server/pages/BasePage.java:126
+#: com/propertyvista/pmsite/server/pages/BasePage.java:130
 msgid "Stateful components found: "
 msgstr "Stateful компоненты найдено:"
 
@@ -5405,6 +5429,7 @@ msgstr "Stateful компоненты найдено:"
 msgid "Static Content"
 msgstr "Статическое содержимое"
 
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:2
@@ -5526,6 +5551,7 @@ msgid "Submitted"
 msgstr "Представленный"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
+#: com/propertyvista/misc/EquifaxResult.java:2
 msgid "Suggested Decision"
 msgstr "Предлагаемые решения"
 
