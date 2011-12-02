@@ -89,7 +89,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
                 headerLabelPanel.add(info);
                 headerLabelPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_MIDDLE);
                 headerLabelPanel.setCellHorizontalAlignment(info, HorizontalPanel.ALIGN_CENTER);
-                info.setTitle(column.getObject().getMeta().getDescription());
+                info.setTitle(descr);
             }
 
             header.add(headerLabelPanel);
