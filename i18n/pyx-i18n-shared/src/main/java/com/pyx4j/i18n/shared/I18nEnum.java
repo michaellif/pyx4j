@@ -42,12 +42,19 @@ public class I18nEnum {
                 Field field = enumValue.getClass().getDeclaredField(enumValue.name());
                 Translate tr = field.getAnnotation(Translate.class);
                 if (tr != null) {
-                    return i18n.translate(tr.value());
+                    String context = null;
+                    if (trCfg != null) {
+                        context = trCfg.context();
+                    }
+                    if ((tr.context() != null) && (tr.context().length() > 0)) {
+                        context = tr.context();
+                    }
+                    return i18n.translate(context, tr.value());
                 } else {
                     if ((trCfg == null) || ((trCfg != null) && trCfg.capitalize())) {
-                        return i18n.translate(EnglishGrammar.capitalize(enumValue.name()));
+                        return i18n.translate((trCfg != null) ? trCfg.context() : null, EnglishGrammar.capitalize(enumValue.name()));
                     } else {
-                        return i18n.translate(enumValue.name());
+                        return i18n.translate(null, enumValue.name());
                     }
                 }
             } catch (NoSuchFieldException e) {

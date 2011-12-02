@@ -25,9 +25,17 @@ import com.pyx4j.i18n.shared.I18n;
 class ServerI18nImpl extends I18n {
 
     @Override
-    public final String translate(String text) {
-        String value = I18nManager.getThreadLocaleTranslator().translate(text);
+    public final String translate(String context, String text) {
+        String key;
+        if ((context != null) && (context.length() > 0)) {
+            key = context + CONTEXT_GLUE + text;
+        } else {
+            key = text;
+        }
+
+        String value = I18nManager.getThreadLocaleTranslator().translate(key);
         if (value == null) {
+            // if no translation was found return text in source locale
             return text;
         } else {
             return value;

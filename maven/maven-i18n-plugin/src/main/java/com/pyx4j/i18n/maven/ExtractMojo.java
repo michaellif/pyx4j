@@ -412,6 +412,7 @@ public class ExtractMojo extends AbstractMojo {
         for (ConstantEntry entry : extractor.getConstants()) {
             POEntry pe = new POEntry();
             pe.untranslated = entry.text;
+            pe.context = entry.context;
 
             if (entry.comments != null) {
                 for (String line : entry.comments) {

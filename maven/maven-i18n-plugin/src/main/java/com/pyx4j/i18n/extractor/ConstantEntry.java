@@ -25,7 +25,9 @@ import java.util.Vector;
 
 public class ConstantEntry {
 
-    public String text;
+    public final String context;
+
+    public final String text;
 
     public List<String> reference;
 
@@ -33,8 +35,9 @@ public class ConstantEntry {
 
     public List<String> comments;
 
-    public ConstantEntry(String sourceFileName, int lineNr, String text, boolean javaFormatFlag, String... comments) {
+    public ConstantEntry(String sourceFileName, int lineNr, String context, String text, boolean javaFormatFlag, String... comments) {
         this.text = text;
+        this.context = context;
         this.reference = new Vector<String>();
         this.javaFormatFlag = javaFormatFlag;
         addReference(sourceFileName, lineNr, javaFormatFlag, comments);

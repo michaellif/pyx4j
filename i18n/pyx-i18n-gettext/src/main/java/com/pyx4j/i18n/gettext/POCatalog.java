@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.pyx4j.i18n.shared.I18n;
+
 public class POCatalog implements Translator {
 
     final String lang;
@@ -90,7 +92,11 @@ public class POCatalog implements Translator {
     private void buildTranslations(POFile po) {
         for (POEntry entry : po.entries) {
             if ((entry.translated != null) && (entry.translated.length() != 0)) {
-                translations.put(entry.untranslated, entry.translated);
+                if (entry.context != null) {
+                    translations.put(entry.context + I18n.CONTEXT_GLUE + entry.untranslated, entry.translated);
+                } else {
+                    translations.put(entry.untranslated, entry.translated);
+                }
             }
         }
     }

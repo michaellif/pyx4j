@@ -36,9 +36,17 @@ class ClientI18nImpl extends I18n {
     }
 
     @Override
-    public final String translate(String text) {
-        String value = bundle.getString(text);
+    public final String translate(String context, String text) {
+        String key;
+        if ((context != null) && (context.length() > 0)) {
+            key = context + CONTEXT_GLUE + text;
+        } else {
+            key = text;
+        }
+
+        String value = bundle.getString(key);
         if (value == null) {
+            // if no translation was found return text in source locale
             return text;
         } else {
             return value;

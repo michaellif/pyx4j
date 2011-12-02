@@ -28,6 +28,8 @@ import com.pyx4j.config.shared.ApplicationMode;
 
 public abstract class I18n {
 
+    public static final String CONTEXT_GLUE = "\u0004";
+
     private static II18nFactory factory;
 
     static {
@@ -46,14 +48,51 @@ public abstract class I18n {
 
     }
 
-    protected abstract String translate(final String text);
+    protected abstract String translate(final String context, final String text);
 
+    /**
+     * Returns <code>text</code> translated into the currently selected
+     * language. Every user-visible string in the program must be wrapped into
+     * this function.
+     * 
+     * @param text
+     *            Constant text to translate
+     * @return the translation
+     */
     public final String tr(final String text) {
-        return translate(text);
+        return translate(null, text);
     }
 
+    /**
+     * Returns <code>text</code> translated into the currently selected
+     * language.
+     * <p>
+     * Occurrences of {number} placeholders in text are replaced by <code>objects</code>.
+     * <p>
+     * Invokes {@link SimpleMessageFormat#format(java.lang.String, java.lang.Object[])}.
+     * 
+     * @param text
+     *            text to translate
+     * @param objects
+     *            arguments to <code>SimpleMessageFormat.format()</code>
+     * @return the translated text
+     */
     public final String tr(final String text, Object... objects) {
-        return SimpleMessageFormat.format(translate(text), objects);
+        return SimpleMessageFormat.format(translate(null, text), objects);
+    }
+
+    /**
+     * Disambiguates translation keys.
+     * 
+     * @param context
+     *            the context of the text to be translated
+     * @param text
+     *            the ambiguous key message in the source locale
+     * @return <code>text</code> if the locale of the underlying resource
+     *         bundle equals the source code locale, the translation of <code>comment</code> otherwise.
+     */
+    public final String trc(String context, String text) {
+        return translate(context, text);
     }
 
     public static final I18n get(final Class<?> clazz) {

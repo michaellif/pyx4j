@@ -31,6 +31,7 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.i18n.extractor.xml.XMLConstantExtractor;
+import com.pyx4j.i18n.shared.I18n;
 
 public class Extractor {
 
@@ -57,11 +58,18 @@ public class Extractor {
         return r;
     }
 
-    public void addEntry(String sourceFileName, int lineNr, String text, boolean javaFormatFlag, String... comments) {
+    public void addEntry(String sourceFileName, int lineNr, String context, String text, boolean javaFormatFlag, String... comments) {
         if (text.length() != 0) {
-            ConstantEntry entry = constants.get(text);
+            String key;
+            if ((context != null) && (context.length() > 0)) {
+                key = context + I18n.CONTEXT_GLUE + text;
+            } else {
+                key = text;
+            }
+
+            ConstantEntry entry = constants.get(key);
             if (entry == null) {
-                constants.put(text, new ConstantEntry(sourceFileName, lineNr, text, javaFormatFlag, comments));
+                constants.put(key, new ConstantEntry(sourceFileName, lineNr, context, text, javaFormatFlag, comments));
             } else {
                 entry.addReference(sourceFileName, lineNr, javaFormatFlag, comments);
             }

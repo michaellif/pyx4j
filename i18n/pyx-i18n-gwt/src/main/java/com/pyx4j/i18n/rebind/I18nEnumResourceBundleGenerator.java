@@ -98,19 +98,33 @@ public class I18nEnumResourceBundleGenerator extends Generator {
                         writer.print(".");
                         writer.print(field.getName());
 
-                        writer.print(", i18n.tr(");
-
-                        String name;
-                        Translate tr = field.getAnnotation(Translate.class);
-                        if (tr != null) {
-                            name = tr.value();
-                        } else if ((trCfg == null) || ((trCfg != null) && trCfg.capitalize())) {
-                            name = EnglishGrammar.capitalize(field.getName());
-                        } else {
-                            name = field.getName();
+                        String trContext = null;
+                        if (trCfg != null) {
+                            trContext = trCfg.context();
                         }
 
-                        writer.print(escapeSourceString(name));
+                        String key;
+                        Translate tr = field.getAnnotation(Translate.class);
+                        if (tr != null) {
+                            key = tr.value();
+                            if ((tr.context() != null) && (tr.context().length() > 0)) {
+                                trContext = tr.context();
+                            }
+                        } else if ((trCfg == null) || ((trCfg != null) && trCfg.capitalize())) {
+                            key = EnglishGrammar.capitalize(field.getName());
+                        } else {
+                            key = field.getName();
+                        }
+
+                        if ((trContext != null) && (trContext.length() > 0)) {
+                            writer.print(", i18n.trc(");
+                            writer.print(escapeSourceString(trContext));
+                            writer.print(", ");
+                        } else {
+                            writer.print(", i18n.tr(");
+                        }
+
+                        writer.print(escapeSourceString(key));
 
                         writer.println("));");
                     }

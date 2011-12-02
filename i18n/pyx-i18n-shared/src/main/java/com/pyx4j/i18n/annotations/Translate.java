@@ -29,4 +29,6 @@ public @interface Translate {
 
     String value();
 
+    String context() default "";
+
 }

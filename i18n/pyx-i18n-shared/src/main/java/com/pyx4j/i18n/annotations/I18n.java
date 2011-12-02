@@ -39,6 +39,11 @@ public @interface I18n {
      */
     boolean javaFormatFlag() default false;
 
+    /**
+     * TBD strategy, Context if present is added to every translatable member of the class.
+     */
+    String context() default "";
+
     public static enum I18nStrategy {
 
         TranslateAll,

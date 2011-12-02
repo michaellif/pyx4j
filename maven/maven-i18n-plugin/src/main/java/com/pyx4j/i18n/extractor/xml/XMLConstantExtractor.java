@@ -69,22 +69,26 @@ public class XMLConstantExtractor {
 
             private boolean i18nTag = false;
 
+            private String context;
+
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                 if (qName.endsWith(":i18n")) {
                     i18nTag = true;
+                    //TODO context = attributes.getValue("context");
                 }
             }
 
             @Override
             public void endElement(String uri, String localName, String qName) throws SAXException {
                 i18nTag = false;
+                context = null;
             }
 
             @Override
             public void characters(char[] ch, int start, int length) throws SAXException {
                 if (i18nTag) {
-                    extractor.addEntry(name, locator.getLineNumber(), new String(ch, start, length), false);
+                    extractor.addEntry(name, locator.getLineNumber(), context, new String(ch, start, length), false);
                 }
             }
 

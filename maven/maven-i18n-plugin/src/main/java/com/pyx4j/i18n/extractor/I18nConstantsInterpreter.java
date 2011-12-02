@@ -67,7 +67,7 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
         this.currentComment = currentComment;
     }
 
-    protected abstract void i18nString(int lineNr, String text, boolean javaFormatFlag, String currentComment);
+    protected abstract void i18nString(int lineNr, String context, String text, boolean javaFormatFlag, String currentComment);
 
     protected abstract void reportError(int lineNr, Value arg);
 
@@ -79,9 +79,18 @@ abstract class I18nConstantsInterpreter extends BasicInterpreter {
                 Value arg = (Value) values.get(1);
                 if (arg instanceof StringConstantValue) {
                     boolean javaFormatFlag = (values.size() > 2);
-                    i18nString(currentLineNr, ((StringConstantValue) arg).string, javaFormatFlag, currentComment);
+                    i18nString(currentLineNr, null, ((StringConstantValue) arg).string, javaFormatFlag, currentComment);
                 } else {
                     reportError(currentLineNr, arg);
+                }
+            } else if (I18N_CLASS.equals(methodInsn.owner) && "trc".equals(methodInsn.name)) {
+                Value argContext = (Value) values.get(1);
+                Value argText = (Value) values.get(2);
+                if ((argText instanceof StringConstantValue) && (argContext instanceof StringConstantValue)) {
+                    boolean javaFormatFlag = (values.size() > 3);
+                    i18nString(currentLineNr, ((StringConstantValue) argContext).string, ((StringConstantValue) argText).string, javaFormatFlag, currentComment);
+                } else {
+                    reportError(currentLineNr, argText);
                 }
             }
         }

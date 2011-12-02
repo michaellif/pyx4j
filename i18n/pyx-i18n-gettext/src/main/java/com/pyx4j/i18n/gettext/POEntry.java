@@ -39,6 +39,8 @@ public class POEntry {
 
     public String previousUntranslated;
 
+    public String context;
+
     public String untranslated;
 
     public String translated;
@@ -97,6 +99,7 @@ public class POEntry {
         POEntry pe = new POEntry();
         pe.untranslated = this.untranslated;
         pe.translated = this.translated;
+        pe.context = this.context;
 
         if (this.comments != null) {
             for (final String str : this.comments) {

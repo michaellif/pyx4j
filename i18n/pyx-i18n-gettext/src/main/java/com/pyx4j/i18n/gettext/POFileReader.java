@@ -109,6 +109,8 @@ public class POFileReader {
                     currentEntry.untranslated = readString(line.substring("msgid ".length()), lnr);
                 } else if (line.startsWith("msgstr ")) {
                     currentEntry.translated = readString(line.substring("msgstr ".length()), lnr);
+                } else if (line.startsWith("msgctxt ")) {
+                    currentEntry.context = readString(line.substring("msgctxt ".length()), lnr);
                 } else {
                     //TODO read plural stuff
                 }

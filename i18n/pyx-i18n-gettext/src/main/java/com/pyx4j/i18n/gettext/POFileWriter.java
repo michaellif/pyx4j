@@ -107,6 +107,11 @@ public class POFileWriter {
             //TODO
         }
 
+        if (entry.context != null) {
+            writer.print("msgctxt ");
+            writeString(writer, entry.context, "msgctxt ".length());
+        }
+
         writer.print("msgid ");
         writeString(writer, entry.untranslated, "msgid ".length());
 

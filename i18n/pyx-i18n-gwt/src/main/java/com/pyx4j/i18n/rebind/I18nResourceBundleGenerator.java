@@ -41,6 +41,7 @@ import com.pyx4j.i18n.client.I18nResourceBundleImpl;
 import com.pyx4j.i18n.gettext.POEntry;
 import com.pyx4j.i18n.gettext.POFile;
 import com.pyx4j.i18n.gettext.POFileReader;
+import com.pyx4j.i18n.shared.I18n;
 
 public class I18nResourceBundleGenerator extends Generator {
 
@@ -123,7 +124,11 @@ public class I18nResourceBundleGenerator extends Generator {
 
         Map<String, String> translations = new HashMap<String, String>();
         for (POEntry entry : po.entries) {
-            translations.put(entry.untranslated, entry.translated);
+            if ((entry.context != null) && (entry.context.length() > 0)) {
+                translations.put(entry.context + I18n.CONTEXT_GLUE + entry.untranslated, entry.translated);
+            } else {
+                translations.put(entry.untranslated, entry.translated);
+            }
         }
         for (Map.Entry<String, String> entry : translations.entrySet()) {
             String key = entry.getKey();
