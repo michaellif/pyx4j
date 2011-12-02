@@ -261,6 +261,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         applyAccessibilityRules();
         asWidget().setWidth(getWidth());
         asWidget().setHeight(getHeight());
+        asWidget().setValid(isValid());
         setNativeValue(getValue());
     }
 
@@ -340,7 +341,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     protected void setValid(boolean newValid) {
         if (newValid != valid) {
             valid = newValid;
-            asWidget().setValid(valid);
+            if (isWidgetCreated()) {
+                asWidget().setValid(valid);
+            }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
     }
