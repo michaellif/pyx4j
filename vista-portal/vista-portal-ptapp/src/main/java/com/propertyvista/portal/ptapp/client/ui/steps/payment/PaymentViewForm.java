@@ -58,6 +58,8 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         item, selected
     }
 
+    private final CLabel termContent = new CLabel();
+
     public PaymentViewForm() {
         super(PaymentInformation.class, new VistaEditorsComponentFactory());
     }
@@ -99,18 +101,8 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
         main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
 
-        // prepare text:
-        String termText = PortalResources.INSTANCE.paymentTermsNotes().getText();
-        termText = termText.replace("$[PMC]", PtAppSite.getPmcName());
-        termText = termText.replace("$[USER]", ClientContext.getUserVisit().getName());
-        termText = termText.replace("$[AMOUNT]", "$1346.78");
-        termText = termText.replace("$[DATE]", "1st of January");
-
-        CLabel termContent = new CLabel();
         termContent.setAllowHtml(true);
         termContent.setWordWrap(true);
-        termContent.setValue(termText);
-
         ScrollPanel terms = new ScrollPanel(termContent.asWidget());
         terms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         terms.getElement().getStyle().setBorderWidth(1, Unit.PX);
@@ -131,6 +123,14 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
     @Override
     public void populate(PaymentInformation value) {
         super.populate(value);
+
+        // prepare term text:
+        String termText = PortalResources.INSTANCE.paymentTermsNotes().getText();
+        termText = termText.replace("$[PMC]", PtAppSite.getPmcName());
+        termText = termText.replace("$[USER]", ClientContext.getUserVisit().getName());
+        termText = termText.replace("$[AMOUNT]", value.applicationCharges().total().getStringView());
+        termText = termText.replace("$[DATE]", "1st of January");
+        termContent.setValue(termText);
     }
 
     private Widget createTotal(Money member) {

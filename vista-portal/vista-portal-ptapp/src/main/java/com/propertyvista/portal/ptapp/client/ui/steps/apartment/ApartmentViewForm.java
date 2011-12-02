@@ -56,21 +56,19 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
     private final SimplePanel pictureHolder = new SimplePanel();
 
+    private final HTML welcome = new HTML();
+
     public ApartmentViewForm() {
         super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
         setEditable(false);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        HTML welcome = new HTML(HtmlUtils.h3(i18n.tr("Welcome") + " " + ClientContext.getUserVisit().getName() + "!<br>" + i18n.tr("Thank you for choosing")
-                + " " + PtAppSite.getPmcName() + " " + i18n.tr("for your future home!")));
-        welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-
         int row = -1;
+        welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         main.setWidget(++row, 0, welcome);
         main.setWidget(++row, 0, new HTML(PortalResources.INSTANCE.welcomeNotes().getText()));
 
@@ -157,6 +155,10 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     @Override
     public void populate(ApartmentInfoDTO value) {
         super.populate(value);
+
+        // generate welcome message for logged user:
+        welcome.setHTML(HtmlUtils.h3(i18n.tr("Welcome") + " " + ClientContext.getUserVisit().getName() + "!<br>" + i18n.tr("Thank you for choosing") + " "
+                + PtAppSite.getPmcName() + " " + i18n.tr("for your future home!")));
 
         pictureHolder.setWidget(MediaUtils.createPublicMediaImage(value.picture().getPrimaryKey(), ThumbnailSize.large));
 
