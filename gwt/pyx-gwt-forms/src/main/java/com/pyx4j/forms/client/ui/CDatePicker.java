@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
-    protected static I18n i18n = I18n.get(CDatePicker.class);
+    private static final I18n i18n = I18n.get(CDatePicker.class);
 
     public static final String defaultDateFormat = i18n.tr("MM/dd/yyyy");
 
@@ -118,7 +118,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
             try {
                 return parser.parseStrict(string.replace('-', '/'));
             } catch (IllegalArgumentException e) {
-                throw new ParseException("Invalid date format. Use MM/DD/YYYY format", 0);
+                throw new ParseException(i18n.tr("Invalid date format. Use MM/DD/YYYY format"), 0);
             }
         }
     }
