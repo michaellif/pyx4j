@@ -221,8 +221,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
         private CComboBox<ServiceItem> combo;
 
-        private ServiceItem selectedItem;
-
         public SelectServiceItemBox() {
             super(i18n.tr("Service Item Selection"));
             setContent(createContent());
@@ -249,7 +247,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                 combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ServiceItem> event) {
-                        okButton.setEnabled((selectedItem = event.getValue()) != null);
+                        okButton.setEnabled((event.getValue()) != null);
                     }
                 });
                 combo.setWidth("100%");
@@ -266,13 +264,8 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             setSize("350px", "100px");
         }
 
-        @Override
-        public boolean isOk() {
-            return (super.onOk() && selectedItem != null);
-        }
-
         protected ServiceItem getSelectedItem() {
-            return selectedItem;
+            return combo.getValue();
         }
     }
 }
