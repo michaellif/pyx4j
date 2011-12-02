@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-27 03:24-0500\n"
+"POT-Creation-Date: 2011-12-02 15:52-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,10 +124,18 @@ msgstr "15 мин"
 msgid "18 months"
 msgstr "18  месяцев"
 
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "1st Missed Payment Letter Served"
+msgstr "Оплата первого пропущенного Письмо Подается"
+
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:1
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "2 hours"
 msgstr "2-х часов"
+
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "2nd Missed Payment Letter Served"
+msgstr "Второй пропущенный Оплата Письмо Подается"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "30 - 60 Days"
@@ -137,6 +145,10 @@ msgstr "30 - 60 дней"
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitAvailabilityReportSettings.java:1
 msgid "30 min"
 msgstr "30 мин"
+
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "3rd Missed Payment Letter Served"
+msgstr "Третий пропущенный Оплата Письмо Подается"
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 msgid "6 months"
@@ -160,7 +172,7 @@ msgstr ""
 msgid "AR Balance"
 msgstr "AR Баланс"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:164
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:170
 msgid "About us"
 msgstr "О компании"
 
@@ -215,7 +227,7 @@ msgid "Add Child Page"
 msgstr "Добавить страницу ребенка"
 
 #: com/propertyvista/crm/client/ui/dashboard/DashboardPanel.java:173
-#: com/propertyvista/crm/client/ui/report/ReportPanel.java:90
+#: com/propertyvista/crm/client/ui/report/ReportPanel.java:89
 msgid "Add Gadget..."
 msgstr "Добавить гаджеты ..."
 
@@ -235,8 +247,8 @@ msgid "Add-On"
 msgstr "Дополнительный"
 
 #: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:96
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:136
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:273
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:134
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:278
 #: com/propertyvista/portal/rpc/ptapp/dto/AddOnsDTO.java:0
 msgid "Add-Ons"
 msgstr "Дополнительные модули"
@@ -382,7 +394,7 @@ msgstr "Все"
 msgid "All Buildings"
 msgstr "Все здания"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:148
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:117
 msgid "All Concessions have already been selected!"
 msgstr "Все концессиях уже отобраны!"
 
@@ -401,7 +413,7 @@ msgstr "Все {0} уже выбраны"
 msgid "Alley"
 msgstr "Аллея"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:405
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:410
 msgid "Already Signed"
 msgstr "Уже подписан"
 
@@ -424,10 +436,6 @@ msgstr "Удобства"
 msgid "Amenity"
 msgstr "Удобства"
 
-#: com/propertyvista/domain/payment/PaymentType.java:1
-msgid "American Express"
-msgstr "American Express"
-
 #: com/propertyvista/domain/charges/Charge.java:2
 #: com/propertyvista/domain/financial/Money.java:2
 #: com/propertyvista/domain/financial/Pricing.java:2
@@ -438,11 +446,11 @@ msgstr "Количество"
 msgid "Amount should be a numeric value"
 msgstr "Сумма должна быть числовое значение"
 
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:172
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:186
 msgid "An Unexpected Error Has Occurred"
 msgstr "Непредвиденная ошибка"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:95
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:96
 msgid "An Unexpected Error Has Occurred."
 msgstr "Непредвиденная ошибка."
 
@@ -500,11 +508,6 @@ msgstr "Заявители"
 msgid "Application"
 msgstr "Применение"
 
-#: com/propertyvista/portal/domain/ptapp/Charges.java:2
-#: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
-msgid "Application Charges"
-msgstr "Приложение сборы"
-
 #: com/propertyvista/server/domain/CampaignTrigger.java:1
 msgid "Application Compleated"
 msgstr "Приложение Compleated"
@@ -517,10 +520,6 @@ msgstr "Заявочный документ"
 #: com/propertyvista/portal/rpc/ptapp/dto/ApplicationDocumentUploadDTO.java:0
 msgid "Application Document Upload"
 msgstr "Приложение Отправить документ"
-
-#: com/propertyvista/domain/charges/ChargeLine.java:1
-msgid "Application Fee"
-msgstr "Сбор за подачу заявления"
 
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Application Form"
@@ -596,14 +595,18 @@ msgstr "Назначения"
 msgid "Approval"
 msgstr "Утверждение"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:64
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:62
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Approve"
 msgstr "Одобрять"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgid "Approved"
+msgstr "Утвержденный"
+
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Approved"
 msgstr "Утвержденный"
 
@@ -632,6 +635,17 @@ msgstr "Хата группы"
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:0
 msgid "Apt Unit Occupancy"
 msgstr "Размещение в Хате"
+
+#. java-format
+#: com/propertyvista/crm/client/CrmSiteAppPlaceDispatcher.java:72
+#, java-format
+msgid ""
+"Are you sure you want to navigate away from this page?\n"
+"\n"
+"{0}\n"
+"\n"
+"Press Yes to continue, or No to stay on the current page."
+msgstr ""
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitInfo.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
@@ -779,7 +793,6 @@ msgstr "Проспект"
 msgid "Average"
 msgstr "Средний"
 
-#: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:18
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.java:80
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.java:86
 msgid "Back"
@@ -849,7 +862,7 @@ msgid "Baths"
 msgstr "Баня"
 
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
-#: com/propertyvista/pmsite/server/panels/AptListPanel.java:94
+#: com/propertyvista/pmsite/server/panels/AptListPanel.java:106
 msgid "Bedroom"
 msgstr "Спальня"
 
@@ -889,7 +902,7 @@ msgstr "Кровати Диапазон"
 msgid "Belongs To"
 msgstr "Входит в"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:173
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:179
 msgid "Benefits"
 msgstr "Преимущества"
 
@@ -899,7 +912,7 @@ msgid "Bill"
 msgstr "Законопроект"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:236
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
 msgid "Bill B., London, Ontario"
 msgstr "Билл В., Лондон, Онтарио"
 
@@ -907,8 +920,8 @@ msgstr "Билл В., Лондон, Онтарио"
 msgid "Bill List"
 msgstr "Билл Список"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:132
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:268
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:130
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:273
 msgid "Billed Utilities"
 msgstr "Объявленный Утилиты"
 
@@ -1070,7 +1083,7 @@ msgid "Building Name"
 msgstr "Название здания"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:368
-#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:60
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:61
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/Portfolio.java:2
 #: com/propertyvista/dto/ComplexDTO.java:2
@@ -1114,7 +1127,7 @@ msgstr ""
 "индивидуальным имя пользователя и пароль будут автоматически рассылаются по "
 "всем Арендаторы и Гаранты"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:84
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:85
 msgid ""
 "By removing the selected item you will lose the agreed price adjustment! Are"
 " you sure you want to remove it?"
@@ -1149,22 +1162,25 @@ msgstr "Кабель"
 #: com/propertyvista/common/client/ui/components/OkCancelBox.java:65
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:340
 #: com/propertyvista/crm/client/ui/crud/CrmEditorViewImplBase.java:76
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:70
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:68
 #: com/propertyvista/crm/client/ui/gadgets/AddGadgetBox.java:82
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:126
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:159
 #: com/propertyvista/portal/client/ui/residents/EditPaymentMethodViewImpl.java:68
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:328
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:97
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:302
 #: com/pyx4j/widgets/client/dialog/Dialog.java:305
 msgid "Cancel"
 msgstr "Отменить"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgid "Canceled"
+msgctxt "MaintenanceRequest"
+msgid "Cancelled"
 msgstr "Отменен"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Cancelled"
-msgstr "Отменено"
+msgstr "Отмененa"
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:47
 #: com/pyx4j/forms/client/ui/CCaptcha.java:32
@@ -1187,11 +1203,11 @@ msgstr "Номер карты"
 msgid "Card Security Code"
 msgstr "Код безопасности карты"
 
-#: com/propertyvista/common/client/ui/components/c/NewPaymentMethodForm.java:255
+#: com/propertyvista/common/client/ui/components/c/NewPaymentMethodForm.java:258
 msgid "Card expiry should be a future date"
 msgstr "Истечения срока действия карты должны быть будущую дату"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:193
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:199
 msgid "Careers"
 msgstr "Карьера"
 
@@ -1212,10 +1228,6 @@ msgstr "Легковые автомобили"
 msgid "Catalog"
 msgstr "Каталог"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Category"
-msgstr "Категория"
-
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Ceiling Fan"
 msgstr "Потолочные вентиляторы"
@@ -1232,7 +1244,7 @@ msgstr "Центральное кондиционирование"
 msgid "Central Heat"
 msgstr "Центральный тепловой"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:101
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:131
 msgid "Change"
 msgstr "Изменение"
 
@@ -1252,13 +1264,13 @@ msgid "Change password"
 msgstr "Изменить пароль"
 
 #. java-format
-#: com/pyx4j/site/client/activity/crud/EditorActivityBase.java:294
+#: com/pyx4j/site/client/activity/crud/EditorActivityBase.java:297
 #, java-format
 msgid "Changes to {0} ''{1}'' were not saved"
 msgstr "Изменения в {0} ''{1}''не были сохранены"
 
 #. java-format
-#: com/pyx4j/site/client/activity/crud/EditorActivityBase.java:292
+#: com/pyx4j/site/client/activity/crud/EditorActivityBase.java:295
 #, java-format
 msgid "Changes to {0} were not saved"
 msgstr "Изменения в {0} не были сохранены"
@@ -1302,8 +1314,8 @@ msgstr "Зарядка Тип"
 #: com/propertyvista/domain/charges/ChargeLineList.java:2
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/domain/ptapp/Charges.java:0
+#: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
 #: com/propertyvista/portal/domain/ptapp/TenantChargeList.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/payment/PaymentViewForm.java:75
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 #: com/propertyvista/portal/rpc/ptapp/dto/SummaryDTO.java:2
 msgid "Charges"
@@ -1356,6 +1368,10 @@ msgstr "Город Заказы"
 #: com/propertyvista/domain/maintenance/IssueSubjectDetails.java:2
 msgid "Classifications"
 msgstr "Классификации"
+
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "Clean"
+msgstr "Чистый"
 
 #: com/pyx4j/entity/client/ui/datatable/filter/DataTableFilterPanel.java:95
 #: com/pyx4j/widgets/client/dialog/Dialog.java:315
@@ -1447,8 +1463,12 @@ msgstr "Название фирмы"
 msgid "Complete"
 msgstr "Полный"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgid "Completed"
+msgstr "Завершенный"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Completed"
 msgstr "Завершенный"
 
@@ -1479,7 +1499,6 @@ msgstr "Соблюдение"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Concession.java:0
-#: com/propertyvista/domain/financial/offering/ServiceConcession.java:2
 msgid "Concession"
 msgstr "Концессия"
 
@@ -1515,7 +1534,7 @@ msgstr "Условный"
 msgid "Condo"
 msgstr "Квартира"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:128
+#: com/propertyvista/crm/client/CrmSiteAppPlaceDispatcher.java:72
 msgid "Confirm"
 msgstr "Подтверждать"
 
@@ -1543,7 +1562,7 @@ msgstr "Строительство"
 msgid "Construction Type"
 msgstr "Тип конструкции"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:204
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:210
 msgid "Contact"
 msgstr "Контакт"
 
@@ -1625,10 +1644,6 @@ msgstr "Преобразование удалось!"
 msgid "Convert to Lease"
 msgstr "Преобразовать в аренду"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Cooling"
-msgstr "Охлаждение"
-
 #: com/propertyvista/common/client/ui/components/editors/GeoLocationEditor.java:112
 msgid "Coordinate Format error"
 msgstr "Формат координат ошибке"
@@ -1672,6 +1687,10 @@ msgstr "Округ"
 msgid "Court"
 msgstr "Суд"
 
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "Court Hearing Date"
+msgstr "Дата судебных слушаний"
+
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Courtyard"
 msgstr "Двор"
@@ -1706,6 +1725,10 @@ msgstr "Созданный"
 #: com/propertyvista/domain/payment/PaymentMethod.java:2
 msgid "Credit Card"
 msgstr "Кредитная карта"
+
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:138
+msgid "Credit Check"
+msgstr "Проверка кредита"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -1781,7 +1804,7 @@ msgid "DNS name"
 msgstr "DNS-имя"
 
 #: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:72
-#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:58
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:59
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/property/asset/Complex.java:2
 #: com/propertyvista/domain/property/asset/building/Building.java:2
@@ -1812,7 +1835,7 @@ msgstr "Данные Id"
 msgid "Data Update"
 msgstr "Обновления данных"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsYOYAnalysisChart.java:160
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsYOYAnalysisChart.java:164
 msgid "Data unavailable"
 msgstr "Данные отсутствуют"
 
@@ -1825,7 +1848,7 @@ msgstr "База данных"
 #: com/propertyvista/domain/site/News.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:128
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:476
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:481
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MessageDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
@@ -1896,18 +1919,23 @@ msgstr "Решается"
 msgid "Decision Date"
 msgstr "Решение дате"
 
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:2
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 msgid "Decision Reason"
 msgstr "Решение Причина"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:68
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:66
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Decline"
 msgstr "Снижение"
 
+#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
+msgid "Declined"
+msgstr "Отказался"
+
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
-#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Declined"
 msgstr "Отказался"
 
@@ -1924,13 +1952,14 @@ msgstr "По умолчанию дисплей"
 msgid "Delay"
 msgstr "Задержка"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:223
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:341
 msgid "Delete"
 msgstr "Удалять"
 
 #: com/propertyvista/crm/client/ui/crud/settings/dictionary/FeatureTypeLister.java:40
 #: com/propertyvista/crm/client/ui/crud/settings/dictionary/ServiceTypeLister.java:40
 #: com/propertyvista/crm/client/ui/dashboard/DashboardLister.java:40
+#: com/propertyvista/crm/client/ui/report/ReportLister.java:40
 msgid "Delete Checked"
 msgstr "Удалить Проверено"
 
@@ -2055,7 +2084,6 @@ msgstr "Желаемый Переместить в дате"
 #: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:62
 #: com/propertyvista/crm/client/ui/crud/unit/UnitItemEditorForm.java:50
 #: com/propertyvista/domain/maintenance/IssueRepairSubject.java:2
-#: com/propertyvista/misc/EquifaxResult.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:59
 #: com/propertyvista/pmsite/server/panels/AptListPanel.html:32
 #: com/propertyvista/portal/client/ui/maps/PropertyMarker.java:154
@@ -2063,11 +2091,11 @@ msgid "Details"
 msgstr "Детали"
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:0
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:414
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:419
 msgid "Digital Signature"
 msgstr "Цифровая подпись"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:516
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:521
 msgid "Digital Signature Must Match Your Name On File"
 msgstr "Цифровая подпись должна Матч ваше имя файла"
 
@@ -2116,10 +2144,6 @@ msgstr "Расстояние"
 msgid "Dividends"
 msgstr "Дивиденды"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:128
-msgid "Do you really want to cancel the application?"
-msgstr "Вы действительно хотите отменить заявку?"
-
 #: com/propertyvista/domain/media/Document.java:0
 #: com/propertyvista/domain/property/vendor/Contract.java:2
 msgid "Document"
@@ -2163,6 +2187,7 @@ msgstr "Водительские права"
 msgid "Dryer"
 msgstr "Сушилка"
 
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:96
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
 msgid "Due Date"
@@ -2172,7 +2197,7 @@ msgstr "Дата Выполнения"
 msgid "Duplicate Tenants Specified"
 msgstr "Дубликат Арендаторы Указанные"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:276
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:279
 #: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:135
 msgid "Duplicate contacts specified"
 msgstr "Повторяющиеся контакты указанной"
@@ -2200,7 +2225,7 @@ msgstr "Экономическая Описание статус"
 
 #: com/propertyvista/crm/client/ui/crud/CrmViewerViewImplBase.java:43
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:202
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:203
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -2223,7 +2248,6 @@ msgid "Either one of {0} or {1} must be provided"
 msgstr "Вы должны указать один из {0} или {1}"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Electrical"
 msgstr "Электрический"
 
@@ -2313,7 +2337,7 @@ msgstr "Работодатель"
 msgid "Employer Name"
 msgstr "Работодатель Имя"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:404
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:407
 msgid "Employment Info"
 msgstr "Занятость информация"
 
@@ -2367,10 +2391,6 @@ msgstr "Введите код"
 msgid "Equifax Approval"
 msgstr "Equifax утверждении"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:139
-msgid "Equifax Check Query"
-msgstr "Equifax Проверьте запросов"
-
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/misc/EquifaxResult.java:0
 msgid "Equifax Result"
@@ -2388,7 +2408,7 @@ msgstr "Оборудование"
 #: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:71
 #: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadViewerViewImpl.java:73
 #: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
-#: com/pyx4j/essentials/client/DefaultErrorHandlerDialog.java:42
+#: com/pyx4j/essentials/client/DefaultErrorHandlerDialog.java:56
 msgid "Error"
 msgstr "Ошибка"
 
@@ -2404,8 +2424,12 @@ msgstr "Дата события"
 msgid "Event Type"
 msgstr "Тип события"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:128
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:264
+#: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:1
+msgid "Eviction Letter Served"
+msgstr "Выселение Письмо Подается"
+
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:126
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:269
 msgid "Excluded Utilities"
 msgstr "Исключенные Утилиты"
 
@@ -2413,7 +2437,7 @@ msgstr "Исключенные Утилиты"
 msgid "Excluded Utilities/Add-ons"
 msgstr "Исключенные Утилиты / дополнений"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:220
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:337
 msgid "Expand"
 msgstr "Расширять"
 
@@ -2499,7 +2523,6 @@ msgstr "Факс работы"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Feature.java:0
-#: com/propertyvista/domain/financial/offering/ServiceFeature.java:2
 #: com/propertyvista/domain/financial/offering/ServiceItemType.java:1
 msgid "Feature"
 msgstr "Особенность"
@@ -2588,7 +2611,7 @@ msgstr "Финансы"
 #: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:66
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:144
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:145
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Financial"
 msgstr "Финансовый"
@@ -2604,7 +2627,7 @@ msgid "Find Apartment"
 msgstr "Найти квартиры"
 
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:14
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:132
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:136
 msgid "Find an Apartment"
 msgstr "Найти квартиры"
 
@@ -2794,7 +2817,7 @@ msgstr "Полный"
 msgid "Full Time Employment"
 msgstr "С полной занятостью"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:141
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:142
 msgid "Full info"
 msgstr "Полная информация"
 
@@ -2855,18 +2878,18 @@ msgstr "Калибровочных дисплей"
 #: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:74
 #: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:48
 #: com/propertyvista/crm/client/ui/crud/building/mech/MechlBaseEditorForm.java:50
-#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:59
+#: com/propertyvista/crm/client/ui/crud/complex/ComplexEditorForm.java:60
 #: com/propertyvista/crm/client/ui/crud/marketing/lead/AppointmentEditorForm.java:50
 #: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:62
 #: com/propertyvista/crm/client/ui/crud/organisation/EmployeeEditorForm.java:59
 #: com/propertyvista/crm/client/ui/crud/settings/content/site/SiteEditorForm.java:54
 #: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:59
 #: com/propertyvista/portal/rpc/portal/dto/TenantDashboardDTO.java:2
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:164
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:170
 msgid "General"
 msgstr "Общий"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:77
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:75
 msgid "General Info"
 msgstr "Общая информация"
 
@@ -2972,6 +2995,10 @@ msgstr "Комната для гостей"
 msgid "HH:mm"
 msgstr "HH:mm"
 
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:116
+msgid "HISTORY"
+msgstr "ИСТОРИЯ"
+
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
 msgid "HVAC"
 msgstr "Система отопления "
@@ -3030,10 +3057,6 @@ msgstr ""
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Heat"
 msgstr "Тепло"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Heating"
-msgstr "Обогрев"
 
 #: com/pyx4j/widgets/client/CaptchaComposite.java:106
 msgid "Help"
@@ -3095,7 +3118,7 @@ msgid "I Agree"
 msgstr "Я согласен"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:236
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
 msgid ""
 "I just had the pleasure to dealing with your superintendent at my building. "
 "I just moved in three weeks ago and was greeted right away by Manolo the "
@@ -3118,7 +3141,7 @@ msgstr ""
 "благодарен, что я нашел это прекрасное место, чтобы позвонить домой."
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:241
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
 msgid ""
 "I just wanted to let you know what a great job your superintendent Sean was "
 "doing.  He recently repaired my faucet and was very professional and "
@@ -3134,7 +3157,7 @@ msgstr ""
 " домом, и, Starlight теперь захвата показал, мгновенных результатов. Еще раз"
 " спасибо."
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:463
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:468
 msgid "IP"
 msgstr "IP"
 
@@ -3164,8 +3187,8 @@ msgid "In Effect"
 msgstr "В сущности"
 
 #: com/propertyvista/domain/financial/offering/ServiceCatalog.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:124
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:260
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:122
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:265
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Included Utilities"
 msgstr "Включены утилиты"
@@ -3219,6 +3242,7 @@ msgid "Incomes"
 msgstr "Доходы"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Incomplete"
 msgstr "Неполный"
 
@@ -3248,6 +3272,7 @@ msgid "Information Details"
 msgstr "Информация Подробнее"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Information Requested"
 msgstr "Запрашиваемая информация"
 
@@ -3337,7 +3362,12 @@ msgstr ""
 msgid "Invalid YouTube Video ID ''{0}''"
 msgstr "Неправильный линк на YouTube ''{0}''"
 
+#: com/pyx4j/forms/client/ui/CDatePicker.java:121
+msgid "Invalid date format. Use MM/DD/YYYY format"
+msgstr "Неправильный формат даты. Используйте MM / DD / YYYY формате"
+
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Invited"
 msgstr "Приглашенный"
 
@@ -3386,6 +3416,7 @@ msgid "Is Shared"
 msgstr "Является общим для"
 
 #: com/propertyvista/domain/maintenance/IssueClassification.java:2
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:76
 msgid "Issue"
 msgstr "Вопрос"
 
@@ -3420,7 +3451,7 @@ msgid "Items Per Page"
 msgstr "Товаров на странице"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:241
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
 msgid "Jane L."
 msgstr "Джейн Л."
 
@@ -3543,7 +3574,6 @@ msgid "Last Service Date"
 msgstr "Дата последнего службы"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
 msgid "Last Updated"
 msgstr "Последнее обновление"
 
@@ -3606,14 +3636,14 @@ msgstr "Аренда ID"
 msgid "Lease Length"
 msgstr "Длина аренды"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:135
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:136
 msgid "Lease Term/Rent"
 msgstr "Срок аренды / Аренда"
 
 #: com/propertyvista/portal/domain/ptapp/LeaseTerms.java:0
 #: com/propertyvista/portal/domain/ptapp/Summary.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:115
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:149
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:113
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:150
 msgid "Lease Terms"
 msgstr "Условия аренды"
 
@@ -3751,7 +3781,7 @@ msgstr "Шкафы"
 
 #: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:64
 #: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:94
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
 #: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:90
 msgid "Log In"
 msgstr "Войдите"
@@ -3767,7 +3797,7 @@ msgid "LogOut"
 msgstr "Выйти"
 
 #: com/propertyvista/admin/rpc/AdminSiteMap.java:0
-#: com/propertyvista/common/client/ui/components/login/LoginForm.java:80
+#: com/propertyvista/common/client/ui/components/login/LoginForm.java:81
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/pmsite/server/panels/AuthenticationPanel.java:57
 #: com/propertyvista/portal/ptapp/client/ui/LoginViewImpl.java:86
@@ -3782,6 +3812,10 @@ msgstr "Войти в аккаунт"
 #: com/propertyvista/domain/site/SiteDescriptor.java:2
 msgid "Logo"
 msgstr "Логотип"
+
+#: com/propertyvista/portal/rpc/portal/SiteDefinitionsDTO.java:2
+msgid "Logo Avalable"
+msgstr "Логотип Доступные"
 
 #: com/propertyvista/domain/GeoLocation.java:2
 #: com/pyx4j/essentials/server/preloader/AddressInfo.java:2
@@ -3894,12 +3928,7 @@ msgstr "Обслуживание"
 msgid "Maintenance Contract"
 msgstr "Договор на техническое обслуживание"
 
-#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
-msgid "Maintenance List History"
-msgstr "История обслуживания Список"
-
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:0
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:0
 msgid "Maintenance Request"
 msgstr "Запросов о ведении"
 
@@ -4007,6 +4036,10 @@ msgstr "Маркетинговое название"
 msgid "Master Application"
 msgstr "Мастер приложений"
 
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:0
+msgid "Master Application Action"
+msgstr "Мастер приложений Действие"
+
 #: com/propertyvista/dto/MasterApplicationDTO.java:2
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:0
 msgid "Master Application Status"
@@ -4041,7 +4074,7 @@ msgstr "Макс Цена"
 msgid "Max Total"
 msgstr "Max Всего"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:65
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:64
 msgid "Maximize"
 msgstr "Максимизировать"
 
@@ -4143,7 +4176,7 @@ msgstr "Мин кровати"
 msgid "Min Price"
 msgstr "Минимальная цена"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:220
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:337
 msgid "Minimize"
 msgstr "Минимизировать"
 
@@ -4228,7 +4261,7 @@ msgstr "Ежемесячная зарплата / Дивиденды"
 msgid "More"
 msgstr "Больше"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:66
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:64
 msgid "More Info"
 msgstr "Подробнее"
 
@@ -4272,8 +4305,8 @@ msgstr "Выйти Дата"
 msgid "Move Out Date must be greater then Move In Date"
 msgstr "Выйти Дата должна быть больше, далее двигаться по дате"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:224
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:256
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:227
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:259
 msgid "Move Out Date should be greater than Move In Date"
 msgstr "Выйти Дата должна быть больше, чем Переместить в дате"
 
@@ -4414,8 +4447,7 @@ msgstr "Моделирование сети"
 msgid "Never"
 msgstr "Никогда"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:133
+#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:125
 msgid "New"
 msgstr "Новый"
 
@@ -4442,6 +4474,8 @@ msgid "New Payment Method"
 msgstr "Новый способ оплаты"
 
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:98
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:71
+#: com/propertyvista/portal/rpc/portal/PortalSiteMap.java:0
 msgid "New Ticket"
 msgstr "Новый билет"
 
@@ -4456,7 +4490,7 @@ msgstr "Новости"
 msgid "Newspaper"
 msgstr "Газета"
 
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:90
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:87
 msgid "Next"
 msgstr "Следующий"
 
@@ -4611,10 +4645,14 @@ msgstr "Числовой"
 #: com/propertyvista/common/client/ui/components/OkCancelBox.java:56
 #: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureEditorViewImpl.java:61
 #: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorViewImpl.java:74
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:320
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:294
 #: com/pyx4j/widgets/client/dialog/Dialog.java:292
 msgid "OK"
 msgstr "Жми Сюда"
+
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:80
+msgid "OPEN TICKETS"
+msgstr "Открытые билеты"
 
 #: com/propertyvista/domain/site/SitePalette.java:2
 msgid "Object 1"
@@ -4670,15 +4708,24 @@ msgstr "Один"
 msgid "One Time Charges"
 msgstr "Один Сборы время"
 
+#: com/propertyvista/domain/charges/ChargeLine.java:1
+msgid "One Time Payment"
+msgstr "Разовые платежи"
+
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Ontario Disability Support Program (ODSP)"
 msgstr "Онтарио программы поддержки инвалидов (ODSP)"
+
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:119
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:83
+msgid "Open Tickets"
+msgstr "Открытые билеты"
 
 #: com/propertyvista/common/client/ui/decorations/DecorationData.java:1
 msgid "Optional"
 msgstr "Необязательный"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:248
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:212
 msgid "Options"
 msgstr "Опции"
 
@@ -4725,9 +4772,8 @@ msgstr "Оригинальная Цена"
 #: com/propertyvista/domain/tenant/income/TenantGuarantor.java:1
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:150
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:287
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:148
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:292
 msgid "Other"
 msgstr "Другой"
 
@@ -4740,6 +4786,10 @@ msgstr "Другие Задолженность"
 msgid "Other Arrears Gadget"
 msgstr "Другой гаджет Задолженность"
 
+#: com/propertyvista/portal/domain/ptapp/Charges.java:2
+msgid "Other Charges"
+msgstr "Другие сборы"
+
 #: com/propertyvista/domain/tenant/income/PersonalIncome.java:2
 msgid "Other Income Information"
 msgstr "Другая информация доход"
@@ -4749,13 +4799,13 @@ msgid "Other Price"
 msgstr "Другое Цена"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
 msgid "Ottawa, Toronto defy national sales trend ... for now"
 msgstr ""
 "Оттава, Торонто игнорировать национальные тенденции продаж ... на данный "
 "момент"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:183
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:189
 msgid "Our Vision"
 msgstr "Наше видение"
 
@@ -4818,7 +4868,7 @@ msgid "Page Number"
 msgstr "Номер страницы"
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:75
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:72
 msgid "Page Size"
 msgstr "Размер страницы"
 
@@ -4852,8 +4902,8 @@ msgstr "Родитель"
 #: com/propertyvista/domain/property/asset/Parking.java:0
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 #: com/propertyvista/dto/ParkingDTO.java:0
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:142
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:279
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:140
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:284
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Parking"
 msgstr "Парковка"
@@ -4924,7 +4974,7 @@ msgstr "Пароль"
 msgid "Patio"
 msgstr "Патио"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:151
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:193
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:217
 msgid "Pay Now"
 msgstr "Оплатить сейчас"
@@ -4947,7 +4997,8 @@ msgid "Payment Information"
 msgstr "Информация об оплате"
 
 #: com/propertyvista/domain/payment/PaymentMethod.java:0
-#: com/propertyvista/portal/client/ui/residents/PaymentMethodsForm.java:57
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:119
+#: com/propertyvista/portal/client/ui/residents/PaymentMethodsForm.java:65
 #: com/propertyvista/portal/domain/dto/BillDTO.java:2
 #: com/propertyvista/portal/domain/dto/PaymentMethodDTO.java:0
 #: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
@@ -4972,7 +5023,6 @@ msgid "Payment Types"
 msgstr "Способы оплаты"
 
 #: com/propertyvista/misc/EquifaxApproval.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Pending"
 msgstr "В ожидании"
 
@@ -4981,6 +5031,7 @@ msgid "Pending Approval"
 msgstr "В ожидании утверждения"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Pending Decision"
 msgstr "В ожидании решения"
 
@@ -5062,8 +5113,8 @@ msgid "Pet Deposit"
 msgstr "Pet депозита"
 
 #: com/propertyvista/dto/PetsDTO.java:0
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:138
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:275
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:136
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:280
 #: com/propertyvista/portal/rpc/ptapp/dto/AddOnsDTO.java:2
 msgid "Pets"
 msgstr "Домашние животные"
@@ -5142,6 +5193,14 @@ msgstr "Платформа"
 msgid "Play Ground"
 msgstr "Детская площадка"
 
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:107
+msgid "Please Attach proof Of Citizenship"
+msgstr "Пожалуйста, приложите подтверждающие гражданство"
+
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:89
+msgid "Please Attach proof Of Employment"
+msgstr "Пожалуйста, приложите доказательства занятости"
+
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:139
 msgid "Please Make Sure You Are Connected To The Internet"
 msgstr "Убедитесь, что вы подключены к Интернету"
@@ -5158,7 +5217,7 @@ msgstr ""
 msgid "Please check your email"
 msgstr "Пожалуйста, проверьте свою электронную почту"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:181
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:179
 msgid "Please fill the reason:"
 msgstr "Пожалуйста, заполните причине:"
 
@@ -5166,12 +5225,12 @@ msgstr "Пожалуйста, заполните причине:"
 msgid "Please login again."
 msgstr "Пожалуйста, Войти снова."
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:72
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:73
 msgid "Please make sure you are connected to Internet"
 msgstr "Пожалуйста, убедитесь, что вы подключены к Интернету"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:95
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:172
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:98
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:176
 msgid ""
 "Please report the incident to technical support,\n"
 "describing the steps taken prior to the error.\n"
@@ -5184,7 +5243,6 @@ msgid "Please save this first"
 msgstr "Пожалуйста, сохраните эту первую"
 
 #: com/propertyvista/domain/property/vendor/Vendor.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
 msgid "Plumbing"
 msgstr "Водопровод"
 
@@ -5243,11 +5301,11 @@ msgstr "Потенциальные арендаторы"
 msgid "Pre Authorized"
 msgstr "Предварительно уполномоченный"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:118
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:151
 msgid "Pre-Authorized Monthly Payment Plan"
 msgstr "Предварительно Уполномоченный ежемесячный график платежей"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/payment/PaymentViewForm.java:100
+#: com/propertyvista/portal/ptapp/client/ui/steps/payment/PaymentViewForm.java:102
 msgid "Pre-Authorized Payment"
 msgstr "Предварительно Уполномоченный Оплата"
 
@@ -5259,7 +5317,7 @@ msgstr "Предпочтительные Время Назначение"
 msgid "Preferred Unit"
 msgstr "Предпочтительные группы"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:131
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:132
 msgid "Premises"
 msgstr "Помещение"
 
@@ -5267,7 +5325,7 @@ msgstr "Помещение"
 msgid "Prepayments"
 msgstr "Предоплаты"
 
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:80
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:77
 msgid "Prev"
 msgstr "Предыдущая"
 
@@ -5327,7 +5385,7 @@ msgstr "Здание первого контура"
 msgid "Primary in Complex"
 msgstr "Первичная в сложных"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:180
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:181
 msgid "Print/Download the Summary"
 msgstr "Печать / Скачать Основная информация"
 
@@ -5339,7 +5397,7 @@ msgstr "До Адрес"
 msgid "Priority"
 msgstr "Приоритет"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:224
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:230
 msgid "Privacy"
 msgstr "Неприкосновенность частной жизни"
 
@@ -5359,10 +5417,6 @@ msgstr "Патио"
 msgid "Private Well"
 msgstr "Собственный колодец"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "Problem Description"
-msgstr "Описание проблемы"
-
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
 msgid "Product"
 msgstr "Продукт"
@@ -5375,7 +5429,7 @@ msgstr "Программа"
 msgid "Program (Planned) to be completed on"
 msgstr "Программа (планируемые), которые будут завершены"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:296
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:299
 msgid "Program Info"
 msgstr "Программа информация"
 
@@ -5392,11 +5446,12 @@ msgstr "Прогресс"
 msgid "Promotional Item"
 msgstr "Рекламная продукция"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:121
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:125
 msgid "Promotions"
 msgstr "Акции"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:120
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:118
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:261
 msgid "Promotions, Discounts and Concessions"
 msgstr "Акции, скидки и льготы"
 
@@ -5431,7 +5486,7 @@ msgstr "Собственность компании"
 msgid "Property Details"
 msgstr "Информация о недвижимости"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.java:58
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:60
 #: com/propertyvista/portal/domain/dto/PropertyListDTO.java:0
 msgid "Property List"
 msgstr "Перечень недвижимости"
@@ -5558,6 +5613,10 @@ msgstr "Диапазон"
 #: com/propertyvista/domain/RangeGroup.java:0
 msgid "Range Group"
 msgstr "Диапазон группы"
+
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:123
+msgid "Rate Service"
+msgstr "Оценить службы"
 
 #: com/propertyvista/portal/rpc/portal/dto/SatisfactionSurveyResponceDTO.java:2
 msgid "Rating"
@@ -5692,6 +5751,10 @@ msgstr "Арендованные С даты"
 msgid "Rented/Unrented/OffMarket"
 msgstr "Арендованные / Нетаксированный / Отключено"
 
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:74
+msgid "Repair Subject"
+msgstr "Ремонт Тема"
+
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Report"
 msgstr "Отчет"
@@ -5717,7 +5780,7 @@ msgid "Request for Guarantor or further information"
 msgstr "Запрос Гарант или дополнительной информации"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
 msgid ""
 "Resale housing activity in August remained stable for the second consecutive"
 " month, according to new stats from The Canadian Real Estate Association, "
@@ -5789,7 +5852,7 @@ msgstr "Малина"
 #. Portal Page Type
 #: com/propertyvista/domain/site/PageDescriptor.java:1
 #: com/propertyvista/pmsite/server/pages/ResidentsPage.java:43
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:143
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:147
 msgid "Residents"
 msgstr "Жители"
 
@@ -5801,15 +5864,11 @@ msgstr "Разрешение"
 msgid "Resolution:"
 msgstr "Разрешение:"
 
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
-msgid "Resolved"
-msgstr "Урегулированный"
-
 #: com/propertyvista/domain/site/Resource.java:0
 msgid "Resource"
 msgstr "Ресурс"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:67
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:66
 msgid "Restore"
 msgstr "Восстановление"
 
@@ -5822,7 +5881,7 @@ msgid "Retired"
 msgstr "В отставке"
 
 #: com/propertyvista/admin/rpc/AdminSiteMap.java:0
-#: com/propertyvista/common/client/ui/components/login/LoginForm.java:97
+#: com/propertyvista/common/client/ui/components/login/LoginForm.java:98
 #: com/propertyvista/common/client/ui/components/login/RetrievePasswordForm.java:68
 #: com/propertyvista/crm/client/ui/login/RetrievePasswordViewImpl.java:35
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
@@ -5873,6 +5932,7 @@ msgid "Roofs"
 msgstr "Крыши"
 
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:28
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:71
 msgid "Rooms"
 msgstr "Помещение"
 
@@ -5946,7 +6006,7 @@ msgid "Schedule"
 msgstr "График"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:1
+msgctxt "MaintenanceRequest"
 msgid "Scheduled"
 msgstr "Запланированные"
 
@@ -5967,7 +6027,7 @@ msgstr "Скрининг"
 msgid "Screening Date"
 msgstr "Дата Скрининга"
 
-#: com/propertyvista/pmsite/server/pages/AptListPage.java:111
+#: com/propertyvista/pmsite/server/pages/AptListPage.java:113
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaPanel.java:58
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaPanel.java:58
 msgid "Search"
@@ -6003,13 +6063,17 @@ msgstr "Безопасность информации"
 msgid "Seen"
 msgstr "Посещение"
 
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:196
+msgid "Select"
+msgstr "Выбирать"
+
 #: com/propertyvista/crm/client/ui/components/boxes/SelectUnitBox.java:58
 #: com/propertyvista/crm/client/ui/crud/marketing/lead/LeadEditorForm.java:188
 msgid "Select Building"
 msgstr "Выберите Строительство"
 
-#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceConcessionFolder.java:107
-#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:116
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceConcessionFolder.java:79
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:90
 msgid "Select Concessions"
 msgstr "Выберите концессиях"
 
@@ -6021,7 +6085,7 @@ msgstr "Выберите тип панели"
 msgid "Select Feature Type"
 msgstr "Выберите тип функции"
 
-#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceFeatureFolder.java:108
+#: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceFeatureFolder.java:80
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/ChargeItemFolder.java:87
 msgid "Select Features"
 msgstr "Выбрать объекты"
@@ -6046,7 +6110,7 @@ msgstr "Выберите Арендатор"
 msgid "Select Tenant Type"
 msgstr "Выберите тип арендатора"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:212
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationViewerViewImpl.java:208
 msgid "Select Tenants To Check"
 msgstr "Выберите Арендаторы Чтобы проверить,"
 
@@ -6131,17 +6195,9 @@ msgstr "Соглашение об обслуживании"
 msgid "Service Catalog"
 msgstr "Каталог услуг"
 
-#: com/propertyvista/domain/financial/offering/ServiceConcession.java:0
-msgid "Service Concession"
-msgstr "Концессионные"
-
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Service Dictionary"
 msgstr "Служба словарь"
-
-#: com/propertyvista/domain/financial/offering/ServiceFeature.java:0
-msgid "Service Feature"
-msgstr "Особенности обслуживания"
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:2
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:0
@@ -6173,7 +6229,7 @@ msgid "Services"
 msgstr "Услуги"
 
 #. java-format
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:80
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session Duration {0}, Inactive For {1}"
 msgstr "Длительность сессии {0}, неактивная {1}"
@@ -6189,7 +6245,7 @@ msgid "Settings"
 msgstr "Настройки"
 
 #: com/propertyvista/crm/client/ui/board/CrmBoardViewImpl.java:229
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:227
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:346
 msgid "Setup"
 msgstr "Установка"
 
@@ -6241,11 +6297,11 @@ msgid "Sign Date"
 msgstr "Войти Дата"
 
 #: com/propertyvista/pmsite/server/pages/SignInPage.java:43
-#: com/propertyvista/pmsite/server/panels/SignInPanel.java:134
+#: com/propertyvista/pmsite/server/panels/SignInPanel.java:136
 msgid "Sign In"
 msgstr "Войдите в систему,"
 
-#: com/propertyvista/pmsite/server/panels/SignInPanel.java:161
+#: com/propertyvista/pmsite/server/panels/SignInPanel.java:172
 msgid "Sign in failed"
 msgstr "Войти не удалось"
 
@@ -6267,7 +6323,7 @@ msgstr "Сайт дескрипторов"
 msgid "Site Palette"
 msgstr "Сайт палитра"
 
-#: com/propertyvista/crm/server/services/SiteResourcesUploadServiceImpl.java:44
+#: com/propertyvista/crm/server/services/SiteResourcesUploadServiceImpl.java:48
 msgid "Site Resources Media"
 msgstr "Сайт медиа-ресурсами"
 
@@ -6368,24 +6424,24 @@ msgstr "Спа"
 msgid "Spanish"
 msgstr "Испанский"
 
-#: com/propertvista/generator/ServiceCatalogGenerator.java:238
+#: com/propertvista/generator/ServiceCatalogGenerator.java:251
 msgid "Special Promotion Applies, Everything Completely Free"
 msgstr "Специальное предложение применяется, все полностью бесплатно"
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:235
+#: com/propertvista/generator/ServiceCatalogGenerator.java:248
 #, java-format
 msgid "Special Promotion Applies, {0}$ In Promotional Items Or Services"
 msgstr ""
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:232
+#: com/propertvista/generator/ServiceCatalogGenerator.java:245
 #, java-format
 msgid "Special Promotion Applies, {0}$ Off The Value Of The Service"
 msgstr ""
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:229
+#: com/propertvista/generator/ServiceCatalogGenerator.java:242
 #, java-format
 msgid "Special Promotion Applies, {0}% Off The Value Of The Service"
 msgstr ""
@@ -6427,7 +6483,7 @@ msgstr "Start Time"
 msgid "Starting From"
 msgstr "Начиная с"
 
-#: com/propertyvista/pmsite/server/pages/BasePage.java:126
+#: com/propertyvista/pmsite/server/pages/BasePage.java:130
 msgid "Stateful components found: "
 msgstr "Stateful компоненты найдено:"
 
@@ -6436,6 +6492,7 @@ msgstr "Stateful компоненты найдено:"
 msgid "Static Content"
 msgstr "Статическое содержимое"
 
+#: com/propertyvista/crm/rpc/dto/MasterApplicationActionDTO.java:2
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnitOccupancy.java:2
@@ -6447,7 +6504,8 @@ msgstr "Статическое содержимое"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:2
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:239
 #: com/propertyvista/portal/client/ui/residents/DashboardForm.java:275
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:122
+#: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:86
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 msgid "Status"
@@ -6475,8 +6533,8 @@ msgid "Steps Completed"
 msgstr "Шаги Завершено"
 
 #: com/propertyvista/domain/financial/offering/Service.java:1
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:146
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:283
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:144
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:288
 msgid "Storage"
 msgstr "Хранение"
 
@@ -6491,7 +6549,7 @@ msgstr "Место для хранения"
 msgid "Street"
 msgstr "Улица"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:102
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:100
 msgid "Street Address"
 msgstr "Адрес"
 
@@ -6550,6 +6608,7 @@ msgid "Subject"
 msgstr "Тема"
 
 #: com/propertyvista/domain/maintenance/IssueClassification.java:2
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:75
 msgid "Subject Details"
 msgstr "Тема Подробнее"
 
@@ -6558,7 +6617,7 @@ msgid "Subjects"
 msgstr "Субъекты"
 
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.java:163
-#: com/propertyvista/portal/client/ui/residents/MaintenanceViewImpl.java:38
+#: com/propertyvista/portal/client/ui/residents/NewMaintenanceRequestViewImpl.java:116
 msgid "Submit"
 msgstr "Представлять"
 
@@ -6566,12 +6625,18 @@ msgstr "Представлять"
 msgid "Submited"
 msgstr "Занесена"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
+msgid "Submitted"
+msgstr "Представленный"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Submitted"
 msgstr "Представленный"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
+#: com/propertyvista/misc/EquifaxResult.java:2
 msgid "Suggested Decision"
 msgstr "Предлагаемые решения"
 
@@ -6627,10 +6692,6 @@ msgstr "Руководитель / менеджер Имя"
 msgid "Supervisor/Manager Phone"
 msgstr "Руководитель / Менеджер телефона"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceForm.java:56
-msgid "Support History"
-msgstr "Поддержка истории"
-
 #: com/propertyvista/domain/property/asset/Parking.java:1
 msgid "Surface Lot"
 msgstr "Поверхность лота"
@@ -6663,11 +6724,6 @@ msgstr "Обслуживание системы"
 msgid "System Maintenance State"
 msgstr "Государственная система технического обслуживания"
 
-#: com/propertyvista/portal/client/ui/residents/MaintenanceForm.java:47
-#: com/propertyvista/portal/client/ui/residents/MaintenanceListerViewImpl.java:37
-msgid "System Status"
-msgstr "Состояние системы"
-
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:1
 msgid "T-shape"
 msgstr "Т-образный"
@@ -6693,6 +6749,7 @@ msgstr "Цель"
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/maintenance/MaintenanceRequest.java:2
 #: com/propertyvista/domain/marketing/PublicVisibilityType.java:1
+#: com/propertyvista/domain/payment/PaymentMethod.java:2
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/domain/tenant/Tenant.java:0
 #: com/propertyvista/domain/tenant/TenantInLease.java:2
@@ -6776,7 +6833,7 @@ msgstr "Арендатор Отсев"
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:68
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:138
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:139
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Tenants"
 msgstr "Арендаторы"
@@ -6804,7 +6861,7 @@ msgstr "Срок"
 msgid "Term Type"
 msgstr "Срок Тип"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:214
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:220
 msgid "Terms Of Use"
 msgstr "Условия использования"
 
@@ -6828,7 +6885,7 @@ msgstr "Отзывы"
 msgid "Text"
 msgstr "Текст"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:69
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:160
 msgid "Thank you for choosing"
 msgstr "Благодарим Вас за выбор"
 
@@ -6836,13 +6893,13 @@ msgstr "Благодарим Вас за выбор"
 msgid "The CAPTCHA Solution You Entered Was Incorrect"
 msgstr "Капчу Решение Вы ввели неверный"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:180
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:210
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:242
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:183
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:213
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:245
 msgid "The Date Chosen Cannot Be Today's Date Or A Date In The Future"
 msgstr "Дата выбрана не Может Быть день Сегодня Или дату в будущем"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:193
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:196
 msgid "The Date Chosen Cannot Be Today's Date Or A Date In The Past"
 msgstr "Дата выбрана не Может Быть день Сегодня Или дату в прошлом"
 
@@ -6854,7 +6911,7 @@ msgstr "Дата должна быть установлена ​​ранее �
 msgid "The Date Must Be Later Than Today's Date"
 msgstr "Дата должна быть позднее даты сегодня"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:203
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:206
 msgid "The End Date Chosen Cannot Be The Same As The Start Date Or Before It"
 msgstr ""
 "Дата окончания Избранный не может быть таким же, как дата начала или до нее"
@@ -6863,7 +6920,7 @@ msgstr ""
 msgid "The File Name Cannot Be Empty"
 msgstr "Имя файла не может быть пустым"
 
-#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:71
+#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:72
 msgid ""
 "The Number You Have Entered Is Not A Valid Phone Number. Please Use The "
 "Following Formats: 123-4567 OR 123-456-7890 (Dashes Optional)"
@@ -6876,7 +6933,7 @@ msgstr ""
 msgid "The Selected Utility Type Is Included In The Price"
 msgstr "Выбранный тип Утилита входит в цену"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:188
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:191
 msgid "The Start Date Cannot Be Equal To The End Date Or After It"
 msgstr "Дата начала не может быть равна Дата окончания или после него"
 
@@ -6887,7 +6944,7 @@ msgstr ""
 "URL Вы пытались использовать либо неправильные или больше не действует"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:250
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
 msgid ""
 "The Vancouver housing market may already be unaffordable for many, but there"
 " is enough demand to keep prices rising, according to a new forecast."
@@ -6896,7 +6953,7 @@ msgstr ""
 "достаточный спрос, чтобы поддерживать цены растут, в соответствии с новым "
 "прогнозом."
 
-#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:151
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:120
 msgid "There Are No Concessions For This Service"
 msgstr "Есть никаких уступок За эту услугу"
 
@@ -6918,16 +6975,20 @@ msgstr "Есть Нет сервиса элементов"
 msgid "There Are No {0}(s) Available"
 msgstr "Кина не будет, {0} кончились"
 
+#: com/propertyvista/crm/client/ui/crud/tenant/screening/EquifaxResultEditorForm.java:79
+msgid "There is no check results available yet."
+msgstr "Существует не проверить результаты пока недоступны."
+
 #: com/propertyvista/common/client/ui/validators/YouTubeVideoIdValidator.java:39
 msgid "This Is Not A Valid YouTube Video ID"
 msgstr "Это не является допустимым видео YouTube ID"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:55
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:56
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:134
 msgid "This Session Has Been Terminated"
 msgstr "Эта сессия была прервана"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:110
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:101
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:181
 msgid "This Session Has Been Terminated To Prevent Data Corruption"
 msgstr "Эта сессия была прервана Чтобы предотвратить повреждение данных"
@@ -7429,7 +7490,7 @@ msgid "Value Should Be In Range Of 0-100%"
 msgstr "Значение должно быть в диапазоне 0-100%"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:250
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
 msgid "Vancouver prices to keep rising"
 msgstr "Ванкувер цены продолжают расти"
 
@@ -7506,7 +7567,7 @@ msgstr "Цвет стены"
 
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/ChargeItemFolder.java:53
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:188
-#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:62
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:68
 #: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:122
 msgid "Warning"
 msgstr "Предупреждение"
@@ -7559,7 +7620,7 @@ msgstr ""
 "Мы обновили наше приложение, чтобы продолжить с помощью этого приложения "
 "необходимо обновить страницу Вы хотите обновить страницу сейчас?"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:47
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:48
 msgid ""
 "We Updated Our Application\n"
 "In Order To Continue Using This Application You Need To Refresh The Page\n"
@@ -7572,8 +7633,8 @@ msgstr ""
 msgid "We're Sorry"
 msgstr "Извините ошибка"
 
-#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:66
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:127
+#: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:67
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
 msgid ""
 "We're Sorry But Your Requests Look Similar To Automated Requests Initiated "
 "By Computer Virus Or Spyware Applications. To Protect Our Users, We Can't "
@@ -7605,7 +7666,7 @@ msgstr "Веб-сайт"
 msgid "Weight"
 msgstr "Вес"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:69
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:160
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
@@ -7629,10 +7690,6 @@ msgstr "Запад"
 #: com/propertyvista/domain/property/asset/FloorplanAmenity.java:1
 msgid "Wheel Chair"
 msgstr "Инвалидного кресла"
-
-#: com/propertyvista/portal/domain/dto/MaintenanceRequestDTO.java:2
-msgid "When Requested"
-msgstr "По просьбе"
 
 #: com/propertyvista/domain/property/asset/ParkingSpot.java:1
 msgid "Wide"
@@ -7694,22 +7751,20 @@ msgstr "Лет получения"
 msgid "Yes"
 msgstr "Да"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:137
-msgid "Yes, I Want To Enroll Into The Pre-Authorized Payment Plan (PAP)"
-msgstr ""
-"Да, я хочу зарегистрироваться в Предварительно Уполномоченный План оплаты "
-"(PAP)"
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:178
+msgid "Yes! I Want To Take Advantage Of The Pre-Authorization."
+msgstr "Да! Я хочу воспользоваться предварительного разрешения."
 
 #: com/propertyvista/portal/domain/ptapp/PaymentInformation.java:2
 msgid "Yes, Please Enroll Me"
 msgstr "Да, пожалуйста, зачислить меня"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:434
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:439
 msgid "You Must Agree To The Terms And Conditions To Continue"
 msgstr "Вы должны согласиться с Условия предоставления Продолжить"
 
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/ChargeItemFolder.java:53
-#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:62
+#: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:68
 msgid "You Must Select A Service Item First"
 msgstr "Вы должны выбрать службы Пункт первый"
 
@@ -7730,6 +7785,10 @@ msgstr ""
 #: com/propertyvista/portal/server/ptapp/services/ApplicationServiceImpl.java:80
 msgid "You have no applications assigned"
 msgstr "У вас нет приложений назначены"
+
+#: com/propertyvista/common/client/ui/components/folders/PersonalIncomeFolder.java:60
+msgid "You need to enter previous employment information"
+msgstr "Необходимо ввести предыдущую информацию занятости"
 
 #: com/propertyvista/domain/media/Media.java:1
 msgid "YouTube"
@@ -7755,17 +7814,13 @@ msgstr ""
 msgid "Your Card Has Been Declined"
 msgstr "Ваша карта была отклонена"
 
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:117
+#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:150
 msgid "Your Current Arrangement"
 msgstr "Ваша нынешняя схема"
 
 #: com/pyx4j/security/rpc/PasswordRetrievalRequest.java:2
 msgid "Your Email"
 msgstr "Ваш электронный адрес"
-
-#: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:89
-msgid "Your Payment Method"
-msgstr "Ваш метод оплаты"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/tenants/TenantsViewForm.java:71
 msgid "Your Selection Exceeded The Number Of Allowed Tenants"
@@ -7795,11 +7850,11 @@ msgstr "Почтовый Код"
 msgid "bedrooms"
 msgstr "спальни"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:124
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:123
 msgid "den"
 msgstr "логово"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:126
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:125
 msgid "dens"
 msgstr "зубов"
 
@@ -7808,7 +7863,7 @@ msgstr "зубов"
 msgid "eCheque"
 msgstr "eCheque"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:70
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:161
 msgid "for your future home!"
 msgstr "для Вашего будущего дома!"
 
@@ -7897,7 +7952,7 @@ msgid "{0}"
 msgstr ""
 
 #. java-format
-#: com/propertyvista/pmsite/server/panels/AptListPanel.java:105
+#: com/propertyvista/pmsite/server/panels/AptListPanel.java:117
 #, java-format
 msgid ""
 "{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"
@@ -7961,7 +8016,7 @@ msgid "{0}, {1}"
 msgstr "{0}, {1}"
 
 #. java-format
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:156
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:144
 #, java-format
 msgid "{0}-{1} of {2}"
 msgstr "{0}-{1} из {2}"

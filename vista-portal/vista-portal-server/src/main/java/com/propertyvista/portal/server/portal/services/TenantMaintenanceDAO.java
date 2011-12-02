@@ -83,7 +83,7 @@ public class TenantMaintenanceDAO {
 
         { MaintenanceRequestStatus.Completed, "Broken Blinds", new GregorianCalendar(2011, 5, 22).getTime() },
 
-        { MaintenanceRequestStatus.Canceled, "Door Lock is Broken", new GregorianCalendar(2011, 4, 28).getTime() },
+        { MaintenanceRequestStatus.Cancelled, "Door Lock is Broken", new GregorianCalendar(2011, 4, 28).getTime() },
 
         { MaintenanceRequestStatus.Completed, "Broken Blinds", new GregorianCalendar(2011, 4, 3).getTime() },
 

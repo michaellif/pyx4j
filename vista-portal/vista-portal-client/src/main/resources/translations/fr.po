@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 09:32-0500\n"
+"POT-Creation-Date: 2011-12-02 15:57-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -413,7 +413,11 @@ msgstr "Approuver"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgid "Approved"
+msgstr "Approuvé/approuvée"
+
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Approved"
 msgstr "Approuvé/approuvée"
 
@@ -854,16 +858,18 @@ msgstr "Câble"
 #: com/propertyvista/portal/client/ui/residents/CurrentBillForm.java:159
 #: com/propertyvista/portal/client/ui/residents/EditPaymentMethodViewImpl.java:68
 #: com/propertyvista/portal/client/ui/residents/MaintenanceList.java:97
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:336
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:302
 #: com/pyx4j/widgets/client/dialog/Dialog.java:305
 msgid "Cancel"
 msgstr "Annuler"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgid "Canceled"
+msgctxt "MaintenanceRequest"
+msgid "Cancelled"
 msgstr "Annulé/annulée"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Cancelled"
 msgstr "Annulé/annulée"
 
@@ -1121,8 +1127,12 @@ msgstr "Nom de l'entreprise"
 msgid "Complete"
 msgstr "Remplir"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgid "Completed"
+msgstr "Rempli/remplie"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Completed"
 msgstr "Rempli/remplie"
 
@@ -1147,7 +1157,6 @@ msgid "Compliance"
 msgstr "Conformité"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:0
-#: com/propertyvista/domain/financial/offering/ServiceConcession.java:2
 msgid "Concession"
 msgstr "Concession"
 
@@ -1451,9 +1460,13 @@ msgstr "Raison de la décision"
 msgid "Decline"
 msgstr "Refuser"
 
+#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
+msgid "Declined"
+msgstr "Refusé/refusée"
+
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
-#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Declined"
 msgstr "Refusé/refusée"
 
@@ -1466,7 +1479,7 @@ msgstr "Bouton de filtrage par défaut"
 msgid "Delay"
 msgstr "Délai"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:222
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:341
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -1851,7 +1864,7 @@ msgstr "Type d'événement"
 msgid "Eviction Letter Served"
 msgstr ""
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:219
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:337
 msgid "Expand"
 msgstr "Développer"
 
@@ -1924,7 +1937,6 @@ msgid "Fax Work"
 msgstr "Télécopieur au travail"
 
 #: com/propertyvista/domain/financial/offering/Feature.java:0
-#: com/propertyvista/domain/financial/offering/ServiceFeature.java:2
 #: com/propertyvista/domain/financial/offering/ServiceItemType.java:1
 msgid "Feature"
 msgstr "Caractéristique"
@@ -2465,6 +2477,7 @@ msgid "Income Source"
 msgstr "Source de revenus"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Incomplete"
 msgstr "Incomplet/incomplète"
 
@@ -2492,6 +2505,7 @@ msgid "Information Details"
 msgstr "Détails de l'information"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Information Requested"
 msgstr "Renseignements demandés"
 
@@ -2540,7 +2554,12 @@ msgstr "NAS non valide"
 msgid "Invalid US Zip Code"
 msgstr "Code zip É-U non valide"
 
+#: com/pyx4j/forms/client/ui/CDatePicker.java:121
+msgid "Invalid date format. Use MM/DD/YYYY format"
+msgstr ""
+
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Invited"
 msgstr "Invité/invitée"
 
@@ -2955,13 +2974,13 @@ msgstr "ENTRETIEN"
 #: com/pyx4j/forms/client/ui/CDatePicker.java:36
 #, java-format
 msgid "MM/dd/yyyy"
-msgstr "MM/jj/aaaa"
+msgstr "dd/MM/yyyy"
 
 #. java-format
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 #, java-format
 msgid "MM/dd/yyyy hh:mm a"
-msgstr "MM/jj/aaaa hh:mm a"
+msgstr "dd/MM/yyyy hh:mm a"
 
 #. java-format
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
@@ -2970,7 +2989,7 @@ msgstr "MM/jj/aaaa hh:mm a"
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #, java-format
 msgid "MMM dd, yyyy"
-msgstr "MMM jj, aaaa"
+msgstr "dd MMM, yyyy"
 
 #: com/propertyvista/domain/person/Name.java:2
 msgid "Maiden Name"
@@ -3179,7 +3198,7 @@ msgstr "Lits minimum"
 msgid "Min Price"
 msgstr "Prix minimal"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:219
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:337
 msgid "Minimize"
 msgstr "Minimiser"
 
@@ -3423,7 +3442,7 @@ msgstr "Simulation de réseau"
 msgid "Never"
 msgstr "Jamais"
 
-#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:133
+#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:125
 msgid "New"
 msgstr "Nouveau"
 
@@ -3454,7 +3473,7 @@ msgstr "Nouvelles"
 msgid "Newspaper"
 msgstr "Journal"
 
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:90
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:87
 msgid "Next"
 msgstr "Suivant/suivante"
 
@@ -3575,7 +3594,7 @@ msgid "Numeric"
 msgstr "Numérique"
 
 #: com/propertyvista/common/client/ui/components/OkCancelBox.java:56
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:328
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:294
 #: com/pyx4j/widgets/client/dialog/Dialog.java:292
 msgid "OK"
 msgstr "OK"
@@ -3647,7 +3666,7 @@ msgstr ""
 msgid "Optional"
 msgstr "En option"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:247
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:212
 msgid "Options"
 msgstr "Options"
 
@@ -3766,7 +3785,7 @@ msgid "Page Number"
 msgstr "Numéro de page "
 
 #: com/propertyvista/domain/dashboard/gadgets/ListerGadgetBaseSettings.java:2
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:75
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:72
 msgid "Page Size"
 msgstr "Taille de la page"
 
@@ -3908,6 +3927,7 @@ msgid "Pending Approval"
 msgstr "Approbation en attente"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Pending Decision"
 msgstr "Décision en attente"
 
@@ -4155,7 +4175,7 @@ msgstr "Plan de paiements mensuels pré-autorisé"
 msgid "Prepayments"
 msgstr "Prépaiements"
 
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:80
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:77
 msgid "Prev"
 msgstr "Précédent/précédente"
 
@@ -4685,6 +4705,7 @@ msgid "Schedule"
 msgstr "Calendrier"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Scheduled"
 msgstr "Prévu/prévue"
 
@@ -4784,14 +4805,6 @@ msgstr "Entente de service"
 msgid "Service Catalog"
 msgstr "Catalogue de services"
 
-#: com/propertyvista/domain/financial/offering/ServiceConcession.java:0
-msgid "Service Concession"
-msgstr "Concession de services"
-
-#: com/propertyvista/domain/financial/offering/ServiceFeature.java:0
-msgid "Service Feature"
-msgstr "Caractéristique du service"
-
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:2
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:0
 #: com/propertyvista/domain/tenant/lease/ServiceAgreement.java:2
@@ -4824,7 +4837,7 @@ msgstr "Session inactive"
 msgid "Settings"
 msgstr "Réglages"
 
-#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:226
+#: com/pyx4j/widgets/client/dashboard/GadgetHolder.java:346
 msgid "Setup"
 msgstr "Configuration"
 
@@ -5135,8 +5148,13 @@ msgstr "Soumettre"
 msgid "Submited"
 msgstr "Soumis/soumise"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
+msgid "Submitted"
+msgstr "Soumis"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Submitted"
 msgstr "Soumis"
 
@@ -5961,6 +5979,10 @@ msgstr ""
 msgid "Yes, Please Enroll Me"
 msgstr "Oui, veuillez m'inscrire"
 
+#: com/propertyvista/common/client/ui/components/folders/PersonalIncomeFolder.java:60
+msgid "You need to enter previous employment information"
+msgstr ""
+
 #: com/propertyvista/domain/media/Media.java:1
 msgid "YouTube"
 msgstr "YouTube"
@@ -6037,7 +6059,7 @@ msgstr "millisecondes"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 #, java-format
 msgid "yyyy"
-msgstr "aaaa"
+msgstr "yyyy"
 
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:69
@@ -6106,7 +6128,7 @@ msgid "{0}, {1}"
 msgstr "{0}, {1}"
 
 #. java-format
-#: com/pyx4j/entity/client/ui/datatable/DataTableBottomActionsBar.java:156
+#: com/pyx4j/entity/client/ui/datatable/PageNavigBar.java:144
 #, java-format
 msgid "{0}-{1} of {2}"
 msgstr "{0}-{1} de {2}"

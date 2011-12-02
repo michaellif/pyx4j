@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 09:32-0500\n"
+"POT-Creation-Date: 2011-12-02 15:57-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -476,7 +476,11 @@ msgstr "Approuver"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgid "Approved"
+msgstr "Approuvé/approuvée"
+
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Approved"
 msgstr "Approuvé/approuvée"
 
@@ -975,10 +979,12 @@ msgid "Cable"
 msgstr "Câble"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgid "Canceled"
+msgctxt "MaintenanceRequest"
+msgid "Cancelled"
 msgstr "Annulé/annulée"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Cancelled"
 msgstr "Annulé/annulée"
 
@@ -1235,8 +1241,12 @@ msgstr "Nom de l'entreprise"
 msgid "Complete"
 msgstr "Remplir"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
+msgid "Completed"
+msgstr "Rempli/remplie"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Completed"
 msgstr "Rempli/remplie"
 
@@ -1267,7 +1277,6 @@ msgstr "Conformité"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Concession.java:0
-#: com/propertyvista/domain/financial/offering/ServiceConcession.java:2
 msgid "Concession"
 msgstr "Concession"
 
@@ -1618,9 +1627,13 @@ msgstr "Raison de la décision"
 msgid "Decline"
 msgstr "Refuser"
 
+#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
+msgid "Declined"
+msgstr "Refusé/refusée"
+
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
-#: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgid "Declined"
 msgstr "Refusé/refusée"
 
@@ -2130,7 +2143,6 @@ msgstr "Télécopieur au travail"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/Feature.java:0
-#: com/propertyvista/domain/financial/offering/ServiceFeature.java:2
 #: com/propertyvista/domain/financial/offering/ServiceItemType.java:1
 msgid "Feature"
 msgstr "Caractéristique"
@@ -2759,6 +2771,7 @@ msgid "Income Source"
 msgstr "Source de revenus"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Incomplete"
 msgstr "Incomplet/incomplète"
 
@@ -2785,6 +2798,7 @@ msgid "Information Details"
 msgstr "Détails de l'information"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Information Requested"
 msgstr "Renseignements demandés"
 
@@ -2858,6 +2872,7 @@ msgid "Invalid YouTube Video ID ''{0}''"
 msgstr "ID de la vidéo YouTube non valide ''{0}''"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Invited"
 msgstr "Invité/invitée"
 
@@ -3288,13 +3303,13 @@ msgstr "Immeuble bas"
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #, java-format
 msgid "MM/dd/yyyy"
-msgstr "MM/jj/aaaa"
+msgstr "dd/MM/yyyy"
 
 #. java-format
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 #, java-format
 msgid "MM/dd/yyyy hh:mm a"
-msgstr "MM/jj/aaaa hh:mm a"
+msgstr "dd/MM/yyyy hh:mm a"
 
 #. java-format
 #: com/propertyvista/portal/rpc/portal/dto/BillInfoDTO.java:2
@@ -3303,7 +3318,7 @@ msgstr "MM/jj/aaaa hh:mm a"
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
 #, java-format
 msgid "MMM dd, yyyy"
-msgstr "MMM jj, aaaa"
+msgstr "dd MMM, yyyy"
 
 #: com/propertyvista/domain/person/Name.java:2
 msgid "Maiden Name"
@@ -4272,6 +4287,7 @@ msgid "Pending Approval"
 msgstr "Approbation en attente"
 
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
 msgid "Pending Decision"
 msgstr "Décision en attente"
 
@@ -5081,6 +5097,7 @@ msgid "Saving"
 msgstr "Enregistrement"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Scheduled"
 msgstr "Prévu/prévue"
 
@@ -5182,17 +5199,9 @@ msgstr "Entente de service"
 msgid "Service Catalog"
 msgstr "Catalogue de services"
 
-#: com/propertyvista/domain/financial/offering/ServiceConcession.java:0
-msgid "Service Concession"
-msgstr "Concession de services"
-
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Service Dictionary"
 msgstr "Dictionnaire service"
-
-#: com/propertyvista/domain/financial/offering/ServiceFeature.java:0
-msgid "Service Feature"
-msgstr "Caractéristique du service"
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:2
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:0
@@ -5379,26 +5388,26 @@ msgstr "Spa"
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: com/propertvista/generator/ServiceCatalogGenerator.java:256
+#: com/propertvista/generator/ServiceCatalogGenerator.java:251
 msgid "Special Promotion Applies, Everything Completely Free"
 msgstr "Promotion spéciale s'applique, tout entièrement gratuit"
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:253
+#: com/propertvista/generator/ServiceCatalogGenerator.java:248
 #, java-format
 msgid "Special Promotion Applies, {0}$ In Promotional Items Or Services"
 msgstr ""
 "Promotion spéciale s'applique, {0} $ en articles promotionnels ou services"
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:250
+#: com/propertvista/generator/ServiceCatalogGenerator.java:245
 #, java-format
 msgid "Special Promotion Applies, {0}$ Off The Value Of The Service"
 msgstr ""
 "Promotion spéciale s'applique, {0} $ de rabais sur le valeur du service"
 
 #. java-format
-#: com/propertvista/generator/ServiceCatalogGenerator.java:247
+#: com/propertvista/generator/ServiceCatalogGenerator.java:242
 #, java-format
 msgid "Special Promotion Applies, {0}% Off The Value Of The Service"
 msgstr ""
@@ -5558,8 +5567,13 @@ msgstr "Soumettre"
 msgid "Submited"
 msgstr "Soumis/soumise"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
+msgctxt "Application"
+msgid "Submitted"
+msgstr "Soumis"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "MaintenanceRequest"
 msgid "Submitted"
 msgstr "Soumis"
 
@@ -6424,11 +6438,11 @@ msgstr "Zip/Code Postal"
 msgid "bedrooms"
 msgstr "chambres à coucher"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:124
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:123
 msgid "den"
 msgstr "salle familiale"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:126
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:125
 msgid "dens"
 msgstr "salles familiales"
 
@@ -6452,11 +6466,11 @@ msgstr "millisecondes"
 msgid "reCAPTCHA Connection Failed"
 msgstr "Connexion reCAPTCHA a échoué"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:132
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:131
 msgid "separate WC"
 msgstr "WC séparé"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:135
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:134
 msgid "separate WCs"
 msgstr "WC séparés"
 
@@ -6472,7 +6486,7 @@ msgstr "à"
 #: com/propertyvista/domain/property/asset/building/BuildingInfo.java:2
 #, java-format
 msgid "yyyy"
-msgstr "aaaa"
+msgstr "yyyy"
 
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:69

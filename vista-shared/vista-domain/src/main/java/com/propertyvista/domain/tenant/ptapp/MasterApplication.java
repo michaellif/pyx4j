@@ -35,8 +35,8 @@ import com.propertyvista.misc.EquifaxApproval;
 
 public interface MasterApplication extends IEntity {
 
-    @I18n
-    @XmlType(name = "Application Status")
+    @I18n(context = "Application")
+    @XmlType(name = "ApplicationStatus")
     public enum Status {
 
         Invited, Submitted, Incomplete, PendingDecision, Approved, Declined, InformationRequested, Cancelled;

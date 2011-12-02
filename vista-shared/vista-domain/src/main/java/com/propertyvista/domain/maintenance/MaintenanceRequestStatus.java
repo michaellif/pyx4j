@@ -16,10 +16,10 @@ package com.propertyvista.domain.maintenance;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@I18n
+@I18n(context = "MaintenanceRequest")
 public enum MaintenanceRequestStatus {
 
-    Submitted, Scheduled, Completed, Canceled;
+    Submitted, Scheduled, Completed, Cancelled;
 
     // New, Pending, Resolved  ?
 
