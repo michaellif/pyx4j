@@ -88,11 +88,13 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         dashboard.currentBill().receivedOn().setValue(new LogicalDate(new GregorianCalendar(2011, 8, 29).getTime()));
 
         {
-            Object[][] reservations = new Object[][] { { ReservationDTO.Status.Submitted, "Party Room", new GregorianCalendar(2011, 9, 28).getTime() },
+            Object[][] reservations = new Object[][] {
+
+            { ReservationDTO.Status.Submitted, "Party Room", new GregorianCalendar(2011, 9, 28).getTime() },
 
             { ReservationDTO.Status.Completed, "Pool", new GregorianCalendar(2011, 9, 22).getTime() },
 
-            { ReservationDTO.Status.Completed, "Party Room", new GregorianCalendar(2011, 6, 28).getTime() } };
+            { ReservationDTO.Status.Approved, "Party Room", new GregorianCalendar(2011, 6, 28).getTime() } };
 
             for (int i = 0; i < reservations.length; i++) {
                 ReservationDTO r = dashboard.reservations().$();

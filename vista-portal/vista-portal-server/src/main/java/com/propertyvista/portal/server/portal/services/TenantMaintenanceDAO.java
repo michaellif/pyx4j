@@ -53,7 +53,7 @@ public class TenantMaintenanceDAO {
 
         { MaintenanceRequestStatus.Submitted, "Leacking Kitchen Tap", new GregorianCalendar(2011, 9, 28).getTime() },
 
-        { MaintenanceRequestStatus.Scheduled, "Broken Blinds", new GregorianCalendar(2011, 9, 22).getTime() },
+        { MaintenanceRequestStatus.Cancelled, "Broken Blinds", new GregorianCalendar(2011, 9, 22).getTime() },
 
         { MaintenanceRequestStatus.Completed, "Door Lock is Broken", new GregorianCalendar(2011, 8, 28).getTime() }
 
@@ -81,7 +81,7 @@ public class TenantMaintenanceDAO {
 
         { MaintenanceRequestStatus.Completed, "Leacking Kitchen Tap", new GregorianCalendar(2011, 6, 28).getTime() },
 
-        { MaintenanceRequestStatus.Completed, "Broken Blinds", new GregorianCalendar(2011, 5, 22).getTime() },
+        { MaintenanceRequestStatus.Cancelled, "Broken Blinds", new GregorianCalendar(2011, 5, 22).getTime() },
 
         { MaintenanceRequestStatus.Cancelled, "Door Lock is Broken", new GregorianCalendar(2011, 4, 28).getTime() },
 

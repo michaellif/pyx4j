@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 15:57-0500\n"
+"POT-Creation-Date: 2011-12-02 18:42-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -474,6 +474,11 @@ msgstr "Rendez-vous"
 msgid "Approve"
 msgstr "Approuver"
 
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Approved"
+msgstr ""
+
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
 msgid "Approved"
@@ -482,7 +487,7 @@ msgstr "Approuvé/approuvée"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Approved"
-msgstr "Approuvé/approuvée"
+msgstr ""
 
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 msgid "Approved By"
@@ -978,15 +983,15 @@ msgstr "Valeur des armoires"
 msgid "Cable"
 msgstr "Câble"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
-msgid "Cancelled"
-msgstr "Annulé/annulée"
-
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Cancelled"
-msgstr "Annulé/annulée"
+msgstr ""
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "Maintenance Request"
+msgid "Cancelled"
+msgstr ""
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:47
 msgid "Captcha code is required"
@@ -1246,9 +1251,14 @@ msgid "Completed"
 msgstr "Rempli/remplie"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Completed"
-msgstr "Rempli/remplie"
+msgstr ""
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Completed"
+msgstr ""
 
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Completion"
@@ -1630,7 +1640,7 @@ msgstr "Refuser"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Declined"
-msgstr "Refusé/refusée"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
@@ -2773,7 +2783,7 @@ msgstr "Source de revenus"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Incomplete"
-msgstr "Incomplet/incomplète"
+msgstr ""
 
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:2
 msgid "Individual Applications"
@@ -2800,7 +2810,7 @@ msgstr "Détails de l'information"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Information Requested"
-msgstr "Renseignements demandés"
+msgstr ""
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Inquiry"
@@ -2874,7 +2884,7 @@ msgstr "ID de la vidéo YouTube non valide ''{0}''"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Invited"
-msgstr "Invité/invitée"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "Ip Address"
@@ -4289,7 +4299,7 @@ msgstr "Approbation en attente"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Pending Decision"
-msgstr "Décision en attente"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Pension"
@@ -5097,9 +5107,9 @@ msgid "Saving"
 msgstr "Enregistrement"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Scheduled"
-msgstr "Prévu/prévue"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "School"
@@ -5570,12 +5580,17 @@ msgstr "Soumis/soumise"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Submitted"
-msgstr "Soumis"
+msgstr ""
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Submitted"
+msgstr ""
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Submitted"
-msgstr "Soumis"
+msgstr ""
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 #: com/propertyvista/misc/EquifaxResult.java:2
@@ -6466,11 +6481,11 @@ msgstr "millisecondes"
 msgid "reCAPTCHA Connection Failed"
 msgstr "Connexion reCAPTCHA a échoué"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:131
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:130
 msgid "separate WC"
 msgstr "WC séparé"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:134
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:133
 msgid "separate WCs"
 msgstr "WC séparés"
 

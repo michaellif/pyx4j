@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 15:57-0500\n"
+"POT-Creation-Date: 2011-12-02 18:42-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -470,6 +470,11 @@ msgstr "Назначения"
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Approve"
 msgstr "Одобрять"
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Approved"
+msgstr "Утвержденный"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
@@ -974,15 +979,15 @@ msgstr "Шкафы Значение"
 msgid "Cable"
 msgstr "Кабель"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
-msgid "Cancelled"
-msgstr ""
-
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Cancelled"
-msgstr ""
+msgstr "Отмененa"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "Maintenance Request"
+msgid "Cancelled"
+msgstr "Отменен"
 
 #: com/pyx4j/essentials/server/ReCaptchaAntiBot.java:47
 msgid "Captcha code is required"
@@ -1242,7 +1247,12 @@ msgid "Completed"
 msgstr "Завершенный"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
+msgid "Completed"
+msgstr "Завершенный"
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
 msgid "Completed"
 msgstr "Завершенный"
 
@@ -2763,7 +2773,7 @@ msgstr "Источник дохода"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Incomplete"
-msgstr ""
+msgstr "Неполный"
 
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:2
 msgid "Individual Applications"
@@ -2790,7 +2800,7 @@ msgstr "Информация Подробнее"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Information Requested"
-msgstr ""
+msgstr "Запрашиваемая информация"
 
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Inquiry"
@@ -2865,7 +2875,7 @@ msgstr "Неправильный линк на YouTube ''{0}''"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Invited"
-msgstr ""
+msgstr "Приглашенный"
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "Ip Address"
@@ -4280,7 +4290,7 @@ msgstr "В ожидании утверждения"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Pending Decision"
-msgstr ""
+msgstr "В ожидании решения"
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Pension"
@@ -5088,9 +5098,9 @@ msgid "Saving"
 msgstr "Сохраняем"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Scheduled"
-msgstr ""
+msgstr "Запланированные"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "School"
@@ -5557,12 +5567,17 @@ msgstr "Занесена"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Submitted"
-msgstr ""
+msgstr "Представленный"
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Submitted"
+msgstr "Представленный"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Submitted"
-msgstr ""
+msgstr "Представленный"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 #: com/propertyvista/misc/EquifaxResult.java:2
@@ -6452,11 +6467,11 @@ msgstr "миллисекунды"
 msgid "reCAPTCHA Connection Failed"
 msgstr "ReCaptcha Сбой при подключении"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:131
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:130
 msgid "separate WC"
 msgstr "отдельный туалет"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:134
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:133
 msgid "separate WCs"
 msgstr "отдельный туалет"
 

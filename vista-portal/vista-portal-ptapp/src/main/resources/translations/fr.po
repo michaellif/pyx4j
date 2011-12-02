@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 15:57-0500\n"
+"POT-Creation-Date: 2011-12-02 18:42-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -427,6 +427,11 @@ msgstr "Heure de rendez-vous 2"
 msgid "Approve"
 msgstr "Approuver"
 
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Approved"
+msgstr ""
+
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
 msgid "Approved"
@@ -435,7 +440,7 @@ msgstr "Approuvé/approuvée"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Approved"
-msgstr "Approuvé/approuvée"
+msgstr ""
 
 #: com/propertyvista/domain/financial/offering/Concession.java:2
 msgid "Approved By"
@@ -851,7 +856,7 @@ msgstr ""
 " nom d'utilisateur et mots de passe individuels sera automatiquement envoyée"
 " à tous les locataires et les garants"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:85
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:84
 msgid ""
 "By removing the selected item you will lose the agreed price adjustment! Are"
 " you sure you want to remove it?"
@@ -881,15 +886,15 @@ msgstr "Câble"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
-msgid "Cancelled"
-msgstr "Annulé/annulée"
-
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Cancelled"
-msgstr "Annulé/annulée"
+msgstr ""
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "Maintenance Request"
+msgid "Cancelled"
+msgstr ""
 
 #: com/pyx4j/forms/client/ui/CCaptcha.java:32
 msgid "Captcha code is required"
@@ -1146,9 +1151,14 @@ msgid "Completed"
 msgstr "Rempli/remplie"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Completed"
-msgstr "Rempli/remplie"
+msgstr ""
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Completed"
+msgstr ""
 
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Completion"
@@ -1480,7 +1490,7 @@ msgstr "Refuser"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Declined"
-msgstr "Refusé/refusée"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
@@ -2520,7 +2530,7 @@ msgstr "Source de revenus"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Incomplete"
-msgstr "Incomplet/incomplète"
+msgstr ""
 
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:2
 msgid "Individual Applications"
@@ -2548,7 +2558,7 @@ msgstr "Détails de l'information"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Information Requested"
-msgstr "Renseignements demandés"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:1
 msgid "Insurance Policies"
@@ -2602,7 +2612,7 @@ msgstr ""
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Invited"
-msgstr "Invité/invitée"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "Ip Address"
@@ -2957,7 +2967,7 @@ msgstr "Casier"
 msgid "Locker Area"
 msgstr "Zone de casiers"
 
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
 #: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:90
 msgid "Log In"
 msgstr "Connexion "
@@ -3968,7 +3978,7 @@ msgstr "Approbation en attente"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Pending Decision"
-msgstr "Décision en attente"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Pension"
@@ -4037,7 +4047,7 @@ msgstr "Frais pour animal domestique"
 msgid "Pet Charge Rules(s)"
 msgstr "Règlements sur les frais pour animaux"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExEditor.java:138
+#: com/propertyvista/common/client/ui/components/editors/PetDataEditor.java:42
 msgid "Pet Data"
 msgstr "Données sur les animaux"
 
@@ -4124,11 +4134,11 @@ msgstr "Plate-forme"
 msgid "Play Ground"
 msgstr "Terrain de jeux"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:107
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:103
 msgid "Please Attach proof Of Citizenship"
 msgstr ""
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:89
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:85
 msgid "Please Attach proof Of Employment"
 msgstr ""
 
@@ -4746,9 +4756,9 @@ msgid "Schedule"
 msgstr "Calendrier"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Scheduled"
-msgstr "Prévu/prévue"
+msgstr ""
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "School"
@@ -5189,12 +5199,17 @@ msgstr "Soumis/soumise"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Submitted"
-msgstr "Soumis"
+msgstr ""
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Submitted"
+msgstr ""
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Submitted"
-msgstr "Soumis"
+msgstr ""
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 #: com/propertyvista/misc/EquifaxResult.java:2
@@ -5432,7 +5447,7 @@ msgstr ""
 msgid "The File Name Cannot Be Empty"
 msgstr "Le nom du fichier ne peut être vide"
 
-#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:72
+#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:71
 msgid ""
 "The Number You Have Entered Is Not A Valid Phone Number. Please Use The "
 "Following Formats: 123-4567 OR 123-456-7890 (Dashes Optional)"
@@ -5807,7 +5822,7 @@ msgstr "Véhicule"
 msgid "Vehicle Charge Rule"
 msgstr "Règle de charge des véhicules"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExEditor.java:90
+#: com/propertyvista/common/client/ui/components/editors/VehicleDataEditor.java:48
 msgid "Vehicle Data"
 msgstr "Données du véhicule"
 
@@ -6104,7 +6119,7 @@ msgstr "chambres à coucher"
 msgid "eCheque"
 msgstr "echèque"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:161
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:160
 msgid "for your future home!"
 msgstr "pour votre future maison!"
 

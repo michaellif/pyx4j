@@ -249,7 +249,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
                     rateIt.setRating(4);
                     container.setWidget(row, 1, rateIt);
                 } else {
-                    container.setHTML(row, 1, maintanance.status().getValue().name() + "<p><i style='font-size:0.8em'>" + maintanance.date().getStringView()
+                    container.setHTML(row, 1, maintanance.status().getStringView() + "<p><i style='font-size:0.8em'>" + maintanance.date().getStringView()
                             + "</i>");
                 }
                 container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
@@ -280,8 +280,8 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             for (ReservationDTO reservation : value) {
                 container.setHTML(++row, 0, reservation.description().getValue());
                 container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-                container.setHTML(row, 1, reservation.status().getValue().name() + "<p><i style='font-size:0.8em'>" + reservation.date().getStringView()
-                        + "</i>");
+                container
+                        .setHTML(row, 1, reservation.status().getStringView() + "<p><i style='font-size:0.8em'>" + reservation.date().getStringView() + "</i>");
                 container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
             return container;

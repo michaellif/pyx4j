@@ -20,12 +20,25 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
 public interface ReservationDTO extends IEntity {
 
+    @I18n(context = "Reservation")
     enum Status {
-        Submitted, Approved, Completed
+
+        Submitted,
+
+        Approved,
+
+        Completed;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     IPrimitive<String> description();

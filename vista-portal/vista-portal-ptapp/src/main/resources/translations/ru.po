@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 15:57-0500\n"
+"POT-Creation-Date: 2011-12-02 18:42-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -426,6 +426,11 @@ msgstr "Назначение Time 2"
 #: com/propertyvista/misc/EquifaxApproval.java:1
 msgid "Approve"
 msgstr "Одобрять"
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Approved"
+msgstr "Утвержденный"
 
 #: com/propertyvista/domain/financial/offering/Concession.java:1
 #: com/propertyvista/domain/tenant/lease/Lease.java:1
@@ -850,7 +855,7 @@ msgstr ""
 "индивидуальным имя пользователя и пароль будут автоматически рассылаются по "
 "всем Арендаторы и Гаранты"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:85
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:84
 msgid ""
 "By removing the selected item you will lose the agreed price adjustment! Are"
 " you sure you want to remove it?"
@@ -880,15 +885,15 @@ msgstr "Кабель"
 msgid "Cancel"
 msgstr "Отменить"
 
-#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
-msgid "Cancelled"
-msgstr ""
-
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Cancelled"
-msgstr ""
+msgstr "Отмененa"
+
+#: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
+msgctxt "Maintenance Request"
+msgid "Cancelled"
+msgstr "Отменен"
 
 #: com/pyx4j/forms/client/ui/CCaptcha.java:32
 msgid "Captcha code is required"
@@ -1145,7 +1150,12 @@ msgid "Completed"
 msgstr "Завершенный"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
+msgid "Completed"
+msgstr "Завершенный"
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
 msgid "Completed"
 msgstr "Завершенный"
 
@@ -2519,7 +2529,7 @@ msgstr "Источник дохода"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Incomplete"
-msgstr ""
+msgstr "Неполный"
 
 #: com/propertyvista/dto/MasterApplicationStatusDTO.java:2
 msgid "Individual Applications"
@@ -2547,7 +2557,7 @@ msgstr "Информация Подробнее"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Information Requested"
-msgstr ""
+msgstr "Запрашиваемая информация"
 
 #: com/propertyvista/domain/tenant/income/PersonalAsset.java:1
 msgid "Insurance Policies"
@@ -2601,7 +2611,7 @@ msgstr "Неправильный формат даты. Используйте M
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Invited"
-msgstr ""
+msgstr "Приглашенный"
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:2
 msgid "Ip Address"
@@ -2956,7 +2966,7 @@ msgstr "Рундук"
 msgid "Locker Area"
 msgstr "Площадь ящика"
 
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
 #: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:90
 msgid "Log In"
 msgstr "Войдите"
@@ -3966,7 +3976,7 @@ msgstr "В ожидании утверждения"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Pending Decision"
-msgstr ""
+msgstr "В ожидании решения"
 
 #: com/propertyvista/domain/tenant/income/IncomeSource.java:1
 msgid "Pension"
@@ -4035,7 +4045,7 @@ msgstr "Pet зарядки"
 msgid "Pet Charge Rules(s)"
 msgstr "Правила содержания домашних животных заряд (ы)"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExEditor.java:138
+#: com/propertyvista/common/client/ui/components/editors/PetDataEditor.java:42
 msgid "Pet Data"
 msgstr "Pet данных"
 
@@ -4122,11 +4132,11 @@ msgstr "Платформа"
 msgid "Play Ground"
 msgstr "Детская площадка"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:107
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:103
 msgid "Please Attach proof Of Citizenship"
 msgstr "Пожалуйста, приложите подтверждающие гражданство"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:89
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:85
 msgid "Please Attach proof Of Employment"
 msgstr "Пожалуйста, приложите доказательства занятости"
 
@@ -4744,9 +4754,9 @@ msgid "Schedule"
 msgstr "График"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Scheduled"
-msgstr ""
+msgstr "Запланированные"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "School"
@@ -5186,12 +5196,17 @@ msgstr "Занесена"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Submitted"
-msgstr ""
+msgstr "Представленный"
+
+#: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
+msgctxt "Reservation"
+msgid "Submitted"
+msgstr "Представленный"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
-msgctxt "MaintenanceRequest"
+msgctxt "Maintenance Request"
 msgid "Submitted"
-msgstr ""
+msgstr "Представленный"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 #: com/propertyvista/misc/EquifaxResult.java:2
@@ -5425,7 +5440,7 @@ msgstr ""
 msgid "The File Name Cannot Be Empty"
 msgstr "Имя файла не может быть пустым"
 
-#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:72
+#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:71
 msgid ""
 "The Number You Have Entered Is Not A Valid Phone Number. Please Use The "
 "Following Formats: 123-4567 OR 123-456-7890 (Dashes Optional)"
@@ -5801,7 +5816,7 @@ msgstr "Автомобиль"
 msgid "Vehicle Charge Rule"
 msgstr "Правило автомобиля зарядки"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureExEditor.java:90
+#: com/propertyvista/common/client/ui/components/editors/VehicleDataEditor.java:48
 msgid "Vehicle Data"
 msgstr "Данные о транспортном средстве"
 
@@ -6094,7 +6109,7 @@ msgstr "спальни"
 msgid "eCheque"
 msgstr "eCheque"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:161
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:160
 msgid "for your future home!"
 msgstr "для Вашего будущего дома!"
 
