@@ -182,53 +182,16 @@ final class GadgetHolder extends SimplePanel {
         final Image btn = new Image(images.WindowMenu());
         btn.getElement().getStyle().setCursor(Cursor.POINTER);
         btn.addClickHandler(new ClickHandler() {
-            private final PopupPanel pp = new PopupPanel(true);
-
             @Override
             public void onClick(ClickEvent event) {
-                // menu items command processors go here:
-                Command cmdMinimize = new Command() {
+                // show the menu:
+                final PopupPanel pp = new PopupPanel(true);
+                pp.setWidget(new GadgetMenu() {
                     @Override
-                    public void execute() {
+                    protected void onItemSelected() {
                         pp.hide();
-                        minimize();
                     }
-                };
-
-                Command cmdSetup = new Command() {
-                    @Override
-                    public void execute() {
-                        pp.hide();
-                        setup();
-                    }
-                };
-
-                Command cmdDelete = new Command() {
-                    @Override
-                    public void execute() {
-                        pp.hide();
-                        delete();
-                    }
-                };
-
-                // create the menu:
-                MenuBar menu = new MenuBar(true);
-                menu.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderMenu);
-
-                if (holdedGadget.isMinimizable()) {
-                    menu.addItem((isMinimized() ? i18n.tr("Expand") : i18n.tr("Minimize")), cmdMinimize);
-                }
-
-                if (!(isMinimized() || isMaximized())) {
-                    menu.addItem(i18n.tr("Delete"), cmdDelete);
-                }
-
-                if (holdedGadget.isSetupable() && !inSetup && !isMinimized()) {
-                    menu.addSeparator();
-                    menu.addItem(i18n.tr("Setup"), cmdSetup);
-                }
-
-                pp.setWidget(menu);
+                });
                 pp.setPopupPositionAndShow(new PositionCallback() {
                     @Override
                     public void setPosition(int offsetWidth, int offsetHeight) {
@@ -243,8 +206,8 @@ final class GadgetHolder extends SimplePanel {
                     }
                 });
                 pp.show();
-            } // onClick button event handler...
-        }); // ClickHandler class...
+            }
+        });
 
         btn.setTitle(i18n.tr("Options"));
         return btn;
@@ -256,6 +219,8 @@ final class GadgetHolder extends SimplePanel {
             gadgetMmenu.setVisible(visible);
         }
     }
+
+    // --------------------------------------------------------------
 
     private void minimize() {
         if (isMinimized()) {
@@ -304,9 +269,8 @@ final class GadgetHolder extends SimplePanel {
     // --------------------------------------------------------------
 
     private void delete() {
-
         if (isMinimized() || isMaximized()) {
-            return; // TODO : review all the code!..
+            return; // prevent deleting in non-standard state 
         }
 
         gadgetDragController.makeNotDraggable(this);
@@ -358,5 +322,59 @@ final class GadgetHolder extends SimplePanel {
     private void switchViewToNormal() {
         switchViewTo(holdedGadget.asWidget());
         inSetup = false;
+    }
+
+    // --------------------------------------------------------------
+
+    private abstract class GadgetMenu extends MenuBar {
+
+        GadgetMenu() {
+            super(true);
+            addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderMenu);
+
+            // fill menu items:
+            if (holdedGadget.isMinimizable()) {
+                addItem((isMinimized() ? i18n.tr("Expand") : i18n.tr("Minimize")), cmdMinimize);
+            }
+
+            if (!(isMinimized() || isMaximized())) {
+                addItem(i18n.tr("Delete"), cmdDelete);
+            }
+
+            if (holdedGadget.isSetupable() && !inSetup && !isMinimized()) {
+                addSeparator();
+                addItem(i18n.tr("Setup"), cmdSetup);
+            }
+        }
+
+        // menu items command processors:
+        private final Command cmdMinimize = new Command() {
+            @Override
+            public void execute() {
+                onItemSelected();
+                minimize();
+            }
+        };
+
+        private final Command cmdSetup = new Command() {
+            @Override
+            public void execute() {
+                onItemSelected();
+                setup();
+            }
+        };
+
+        private final Command cmdDelete = new Command() {
+            @Override
+            public void execute() {
+                onItemSelected();
+                delete();
+            }
+        };
+
+        /**
+         * Override to close popup panel where menu resides
+         */
+        abstract protected void onItemSelected();
     }
 }
