@@ -19,7 +19,6 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -69,11 +68,9 @@ public interface Service extends Product {
 
     IPrimitive<DepositType> depositType();
 
-    @Owned
     @Detached
-    IList<ServiceFeature> features();
+    IList<Feature> features();
 
-    @Owned
     @Detached
-    IList<ServiceConcession> concessions();
+    IList<Concession> concessions();
 }

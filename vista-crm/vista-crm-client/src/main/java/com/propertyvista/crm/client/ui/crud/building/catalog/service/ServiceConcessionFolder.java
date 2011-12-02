@@ -13,52 +13,48 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.ServiceConcession;
 
-class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
+class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
     private final IListerView<Concession> concessionListerVeiw;
 
     public ServiceConcessionFolder(boolean modifyable, IListerView<Concession> concessionListerVeiw) {
-        super(ServiceConcession.class, modifyable);
+        super(Concession.class, modifyable);
         this.concessionListerVeiw = concessionListerVeiw;
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().concession(), "50em"));
-        return columns;
-    }
-
-    @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ServiceConcession) {
-            return new ServiceConcessionEditor();
+        if (member instanceof Concession) {
+            return new ConcessionEditorForm(new CrmViewersComponentFactory());
         }
         return super.create(member);
 
+    }
+
+    @Override
+    public IFolderItemDecorator<Concession> createItemDecorator() {
+        BoxFolderItemDecorator<Concession> decor = (BoxFolderItemDecorator<Concession>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
@@ -68,35 +64,11 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
             protected void onClose(SelectConcessionBox box) {
                 if (box.getSelectedConcessions() != null) {
                     for (Concession item : box.getSelectedConcessions()) {
-                        ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                        newItem.concession().set(item);
-                        addItem(newItem);
+                        addItem(item);
                     }
                 }
             }
         };
-    }
-
-    @Override
-    protected IFolderDecorator<ServiceConcession> createDecorator() {
-        TableFolderDecorator<ServiceConcession> decor = (TableFolderDecorator<ServiceConcession>) super.createDecorator();
-        decor.setShowHeader(false);
-        return decor;
-    }
-
-    private class ServiceConcessionEditor extends CEntityFolderRowEditor<ServiceConcession> {
-
-        public ServiceConcessionEditor() {
-            super(ServiceConcession.class, columns());
-        }
-
-        @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().concession()) {
-                return inject(column.getObject(), new CEntityLabel());
-            }
-            return super.createCell(column);
-        }
     }
 
     private class SelectConcessionBox extends OkCancelBox {

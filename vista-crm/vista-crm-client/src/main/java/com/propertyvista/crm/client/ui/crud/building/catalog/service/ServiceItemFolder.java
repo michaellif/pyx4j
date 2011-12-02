@@ -106,7 +106,11 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
             } else {
-                comp = super.createCell(column);
+                if (column.getObject() == proto().type()) {
+                    comp = super.createCell(column);
+                } else {
+                    comp = super.createCell(column);
+                }
             }
 
             if (column.getObject() == proto().type()) {

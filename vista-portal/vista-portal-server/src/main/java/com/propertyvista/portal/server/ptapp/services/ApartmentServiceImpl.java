@@ -30,10 +30,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceConcession;
-import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
@@ -178,8 +177,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         for (Service item : services) {
             Persistence.service().retrieve(item.items());
             Persistence.service().retrieve(item.features());
-            for (ServiceFeature fi : item.features()) {
-                Persistence.service().retrieve(fi.feature().items());
+            for (Feature fi : item.features()) {
+                Persistence.service().retrieve(fi.items());
             }
             Persistence.service().retrieve(item.concessions());
         }
@@ -251,8 +250,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         // fill available items:
         for (Service service : building.serviceCatalog().services()) {
             if (service.type().equals(lease.type())) {
-                for (ServiceFeature feature : service.features()) {
-                    for (ServiceItem item : feature.feature().items()) {
+                for (Feature feature : service.features()) {
+                    for (ServiceItem item : feature.items()) {
                         switch (item.type().featureType().getValue()) {
                         case utility:
                             if (!entity.includedUtilities().contains(item.type()) && !entity.externalUtilities().contains(item.type())) {
@@ -277,8 +276,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // fill concessions:
-        for (ServiceConcession consession : lease.serviceAgreement().concessions()) {
-            entity.concessions().add(consession.concession());
-        }
+        entity.concessions().addAll(lease.serviceAgreement().concessions());
     }
 }

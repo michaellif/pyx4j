@@ -13,51 +13,47 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorForm;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceFeature;
 
-class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
+class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
 
     private final IListerView<Feature> featureListerVeiw;
 
     public ServiceFeatureFolder(boolean modifyable, IListerView<Feature> featureListerVeiw) {
-        super(ServiceFeature.class, modifyable);
+        super(Feature.class, modifyable);
         this.featureListerVeiw = featureListerVeiw;
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().feature(), "50em"));
-        return columns;
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof Feature) {
+            return new FeatureEditorForm(new CrmViewersComponentFactory());
+        }
+        return super.create(member);
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ServiceFeature) {
-            return new ServiceFeatureEditor();
-        }
-        return super.create(member);
+    public IFolderItemDecorator<Feature> createItemDecorator() {
+        BoxFolderItemDecorator<Feature> decor = (BoxFolderItemDecorator<Feature>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
@@ -67,35 +63,11 @@ class ServiceFeatureFolder extends VistaTableFolder<ServiceFeature> {
             protected void onClose(SelectFeatureBox box) {
                 if (box.getSelectedFeatures() != null) {
                     for (Feature item : box.getSelectedFeatures()) {
-                        ServiceFeature newItem = EntityFactory.create(ServiceFeature.class);
-                        newItem.feature().set(item);
-                        addItem(newItem);
+                        addItem(item);
                     }
                 }
             }
         };
-    }
-
-    @Override
-    protected IFolderDecorator<ServiceFeature> createDecorator() {
-        TableFolderDecorator<ServiceFeature> decor = (TableFolderDecorator<ServiceFeature>) super.createDecorator();
-        decor.setShowHeader(false);
-        return decor;
-    }
-
-    class ServiceFeatureEditor extends CEntityFolderRowEditor<ServiceFeature> {
-
-        public ServiceFeatureEditor() {
-            super(ServiceFeature.class, columns());
-        }
-
-        @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().feature()) {
-                return inject(column.getObject(), new CEntityLabel());
-            }
-            return super.createCell(column);
-        }
     }
 
     private class SelectFeatureBox extends OkCancelBox {

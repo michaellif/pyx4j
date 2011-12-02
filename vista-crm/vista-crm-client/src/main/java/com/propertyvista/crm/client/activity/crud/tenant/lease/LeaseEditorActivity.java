@@ -38,10 +38,9 @@ import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceConcession;
-import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -264,9 +263,9 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
-            for (ServiceFeature feature : selectedService.features()) {
-                for (ServiceItem item : feature.feature().items()) {
-                    switch (feature.feature().type().getValue()) {
+            for (Feature feature : selectedService.features()) {
+                for (ServiceItem item : feature.items()) {
+                    switch (feature.type().getValue()) {
                     case utility:
                         // filter out utilities included in price for selected building:
                         if (!utilitiesToExclude.contains(item.type())) {
@@ -279,9 +278,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                 }
             }
             // fill concessions:
-            for (ServiceConcession consession : selectedService.concessions()) {
-                currentValue.selectedConcessions().add(consession.concession());
-            }
+            currentValue.selectedConcessions().addAll(selectedService.concessions());
         }
 
         return (selectedService != null);

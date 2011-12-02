@@ -28,8 +28,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -129,8 +129,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         for (Service item : services) {
             Persistence.service().retrieve(item.items());
             Persistence.service().retrieve(item.features());
-            for (ServiceFeature fi : item.features()) {
-                Persistence.service().retrieve(fi.feature().items());
+            for (Feature fi : item.features()) {
+                Persistence.service().retrieve(fi.items());
             }
             Persistence.service().retrieve(item.concessions());
         }

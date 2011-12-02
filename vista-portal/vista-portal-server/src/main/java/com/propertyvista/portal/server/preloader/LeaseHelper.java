@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -73,10 +72,10 @@ class LeaseHelper {
             Persistence.service().retrieve(building.serviceCatalog());
             // pre-populate utilities for the new service: 
             Persistence.service().retrieve(selectedService.features());
-            for (ServiceFeature feature : selectedService.features()) {
-                if (Feature.Type.utility.equals(feature.feature().type().getValue())) {
-                    Persistence.service().retrieve(feature.feature().items());
-                    for (ServiceItem item : feature.feature().items()) {
+            for (Feature feature : selectedService.features()) {
+                if (Feature.Type.utility.equals(feature.type().getValue())) {
+                    Persistence.service().retrieve(feature.items());
+                    for (ServiceItem item : feature.items()) {
                         if (!building.serviceCatalog().includedUtilities().contains(item.type())
                                 && !building.serviceCatalog().externalUtilities().contains(item.type())) {
                             lease.serviceAgreement().featureItems().add(createChargeItem(item));

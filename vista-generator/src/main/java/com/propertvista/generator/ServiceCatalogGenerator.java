@@ -30,8 +30,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.Type;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceConcession;
-import com.propertyvista.domain.financial.offering.ServiceFeature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -96,18 +94,15 @@ public class ServiceCatalogGenerator {
             if (srv.type().getValue().equals(Service.Type.residentialUnit) || srv.type().getValue().equals(Service.Type.residentialShortTermUnit)
                     || srv.type().getValue().equals(Service.Type.commercialUnit)) {
 
-                for (int i = 0; i < catalog.features().size(); ++i) {
-                    ServiceFeature srvFeature = EntityFactory.create(ServiceFeature.class);
-                    srvFeature.feature().set(catalog.features().get(i));
-                    srv.features().add(srvFeature);
+                int count = catalog.features().size();
+                for (int i = 0; i < count; ++i) {
+                    srv.features().add(catalog.features().get(i));
                 }
             }
 
             int count = Math.min(2, catalog.concessions().size());
             for (int i = 0; i < count; ++i) {
-                ServiceConcession srvConcession = EntityFactory.create(ServiceConcession.class);
-                srvConcession.concession().set(RandomUtil.random(catalog.concessions(), "concessions", count));
-                srv.concessions().add(srvConcession);
+                srv.concessions().add(RandomUtil.random(catalog.concessions(), "concessions", count));
             }
         }
     }

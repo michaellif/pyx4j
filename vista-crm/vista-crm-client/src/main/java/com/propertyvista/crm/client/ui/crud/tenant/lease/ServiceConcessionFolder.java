@@ -23,37 +23,43 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.ShowPopUpBox;
+import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.ServiceConcession;
 import com.propertyvista.dto.LeaseDTO;
 
-class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
+class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
     private final CEntityEditor<LeaseDTO> parent;
 
     public ServiceConcessionFolder(boolean modifyable, CEntityEditor<LeaseDTO> parent) {
-        super(ServiceConcession.class, modifyable);
+        super(Concession.class, modifyable);
         this.parent = parent;
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().concession(), "50em"));
-        return columns;
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof Concession) {
+            return new ConcessionEditorForm(new CrmViewersComponentFactory());
+        }
+        return super.create(member);
+
+    }
+
+    @Override
+    public IFolderItemDecorator<Concession> createItemDecorator() {
+        BoxFolderItemDecorator<Concession> decor = (BoxFolderItemDecorator<Concession>) super.createItemDecorator();
+        decor.setExpended(false);
+        return decor;
     }
 
     @Override
@@ -66,43 +72,11 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
                 protected void onClose(SelectConcessionBox box) {
                     if (box.getSelectedItems() != null) {
                         for (Concession item : box.getSelectedItems()) {
-                            ServiceConcession newItem = EntityFactory.create(ServiceConcession.class);
-                            newItem.concession().set(item);
-                            addItem(newItem);
+                            addItem(item);
                         }
                     }
                 }
             };
-        }
-    }
-
-    @Override
-    protected IFolderDecorator<ServiceConcession> createDecorator() {
-        TableFolderDecorator<ServiceConcession> decor = (TableFolderDecorator<ServiceConcession>) super.createDecorator();
-        decor.setShowHeader(false);
-        return decor;
-    }
-
-    @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ServiceConcession) {
-            return new ServiceConcessionEditor();
-        }
-        return super.create(member);
-    }
-
-    private class ServiceConcessionEditor extends CEntityFolderRowEditor<ServiceConcession> {
-
-        public ServiceConcessionEditor() {
-            super(ServiceConcession.class, columns());
-        }
-
-        @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().concession()) {
-                return inject(column.getObject(), new CEntityLabel());
-            }
-            return super.createCell(column);
         }
     }
 
@@ -129,13 +103,8 @@ class ServiceConcessionFolder extends VistaTableFolder<ServiceConcession> {
                     }
                 });
 
-                List<Concession> alreadySelected = new ArrayList<Concession>();
-                for (ServiceConcession item : parent.getValue().serviceAgreement().concessions()) {
-                    alreadySelected.add(item.concession());
-                }
-
                 for (Concession item : parent.getValue().selectedConcessions()) {
-                    if (!alreadySelected.contains(item)) {
+                    if (!parent.getValue().serviceAgreement().concessions().contains(item)) {
                         list.addItem(item.getStringView(), item.id().toString());
                     }
                 }

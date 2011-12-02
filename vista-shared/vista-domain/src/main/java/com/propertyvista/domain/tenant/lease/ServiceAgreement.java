@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.Account;
 import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.ServiceConcession;
+import com.propertyvista.domain.financial.offering.Concession;
 
 public interface ServiceAgreement extends IEntity {
 
@@ -33,7 +33,7 @@ public interface ServiceAgreement extends IEntity {
     @Caption(name = "Charge Items")
     IList<ChargeItem> featureItems();
 
-    IList<ServiceConcession> concessions();
+    IList<Concession> concessions();
 
     @MemberColumn(name = "leaseAccount")
     Account account();
