@@ -95,6 +95,14 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                 onNextPage();
             }
         });
+
+        dataTablePanel.setPageSizeActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().populate(0);
+            }
+        });
+
         dataTablePanel.getDataTable().setHasCheckboxColumn(true);
         dataTablePanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
             @Override
@@ -111,6 +119,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         });
 
         showColumnSelector(true);
+
+        dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { 10, 25, 50 }));
+
         dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? 10 : 30);
         dataTablePanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);

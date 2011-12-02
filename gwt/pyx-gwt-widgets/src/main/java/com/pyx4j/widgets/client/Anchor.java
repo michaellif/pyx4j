@@ -20,24 +20,42 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
 
 public class Anchor extends com.google.gwt.user.client.ui.Anchor {
 
+    public static final String DEFAULT_HREF = "javascript:;";
+
     public Anchor(String text) {
-        super(text);
+        this(text, false, DEFAULT_HREF);
     }
 
     public Anchor(String text, boolean asHTML, String href) {
         super(text, asHTML, href);
+        setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Anchor.name());
     }
 
-    public Anchor(Element element) {
-        super(element);
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if (enabled) {
+            removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+        } else {
+            addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+        }
     }
+
+    @Override
+    public void onBrowserEvent(Event event) {
+        if (isEnabled()) {
+            super.onBrowserEvent(event);
+        } else {
+            event.stopPropagation();
+        }
+    };
 
     @Override
     public HandlerRegistration addClickHandler(final ClickHandler handler) {

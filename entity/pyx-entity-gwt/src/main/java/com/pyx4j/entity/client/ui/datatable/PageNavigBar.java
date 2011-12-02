@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 24, 2010
- * @author Michael
+ * Created on Dec 1, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.entity.client.ui.datatable;
@@ -28,20 +28,19 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TargetLabel;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public class DataTableBottomActionsBar extends HorizontalPanel implements DataTableModelListener {
+public class PageNavigBar extends Toolbar {
 
-    private static I18n i18n = I18n.get(DataTableBottomActionsBar.class);
-
-    private DataTableModel<?> model;
+    private static I18n i18n = I18n.get(PageNavigBar.class);
 
     private final Label countLabel;
 
@@ -61,35 +60,33 @@ public class DataTableBottomActionsBar extends HorizontalPanel implements DataTa
 
     private ClickHandler pageSizeClickHandler;
 
-    public DataTableBottomActionsBar() {
-        setStyleName(DefaultDataTableTheme.StyleName.DataTableActionsBar.name());
-        setWidth("100%");
-        HorizontalPanel contentPanel = new HorizontalPanel();
-        add(contentPanel);
-        setCellHorizontalAlignment(contentPanel, HorizontalPanel.ALIGN_RIGHT);
+    private final DataTableActionsBar actionsBar;
 
+    public PageNavigBar(final DataTableActionsBar actionsBar) {
+        this.actionsBar = actionsBar;
         pageSizeContentPanel = new HorizontalPanel();
-        pageSizeContentPanel.getElement().getStyle().setMarginRight(10, Unit.PX);
+        pageSizeContentPanel.getElement().getStyle().setMarginRight(12, Unit.PX);
         pageSizeContentPanel.setVisible(false);
         pageSizeSelector = new ListBox();
+
         pageSizeContentPanel.add(new TargetLabel(i18n.tr("Page Size") + ":", pageSizeSelector));
         pageSizeContentPanel.add(pageSizeSelector);
         pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
-        contentPanel.add(pageSizeContentPanel);
+        addItem(pageSizeContentPanel);
 
-        prevAnchor = new Anchor("&lt;&nbsp;" + i18n.tr("Prev"), true);
-        prevAnchor.setVisible(false);
+        prevAnchor = new Anchor("&lt;&nbsp;" + i18n.tr("Prev"), true, Anchor.DEFAULT_HREF);
+        prevAnchor.setEnabled(false);
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
-        contentPanel.add(prevAnchor);
+        addItem(prevAnchor);
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
         countLabel.getElement().getStyle().setMarginRight(10, Unit.PX);
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        contentPanel.add(countLabel);
+        addItem(countLabel);
 
-        nextAnchor = new Anchor(i18n.tr("Next") + "&nbsp;&gt;", true);
-        nextAnchor.setVisible(false);
-        contentPanel.add(nextAnchor);
+        nextAnchor = new Anchor(i18n.tr("Next") + "&nbsp;&gt;", true, Anchor.DEFAULT_HREF);
+        nextAnchor.setEnabled(false);
+        addItem(nextAnchor);
 
         getElement().getStyle().setProperty("textAlign", "right");
 
@@ -97,8 +94,8 @@ public class DataTableBottomActionsBar extends HorizontalPanel implements DataTa
 
             @Override
             public void onChange(ChangeEvent event) {
-                if (model != null) {
-                    model.setPageSize(Integer.valueOf(pageSizeSelector.getValue(pageSizeSelector.getSelectedIndex())));
+                if (actionsBar.getDataTableModel() != null) {
+                    actionsBar.getDataTableModel().setPageSize(Integer.valueOf(pageSizeSelector.getValue(pageSizeSelector.getSelectedIndex())));
                     // Actually fire event
                     if (pageSizeClickHandler != null) {
                         pageSizeClickHandler.onClick(null);
@@ -135,31 +132,22 @@ public class DataTableBottomActionsBar extends HorizontalPanel implements DataTa
         pageSizeClickHandler = clickHandler;
     }
 
-    public void setDataTableModel(DataTableModel<?> model) {
-        if (this.model != null) {
-            this.model.removeDataTableModelListener(this);
-        }
-        this.model = model;
-        model.addDataTableModelListener(this);
-    }
-
-    @Override
     public void onTableModelChanged(DataTableModelEvent e) {
-        prevAnchor.setVisible(prevActionHandlerRegistration != null && model.getPageNumber() > 0);
-        int from = model.getPageNumber() * model.getPageSize() + 1;
-        int to = from + model.getData().size() - 1;
+        prevAnchor.setEnabled(prevActionHandlerRegistration != null && actionsBar.getDataTableModel().getPageNumber() > 0);
+        int from = actionsBar.getDataTableModel().getPageNumber() * actionsBar.getDataTableModel().getPageSize() + 1;
+        int to = from + actionsBar.getDataTableModel().getData().size() - 1;
         if (from > to) {
             countLabel.setText(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8));
         } else if (from == to) {
             countLabel.setText(String.valueOf(from));
         } else {
-            countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, model.getTotalRows()));
+            countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, actionsBar.getDataTableModel().getTotalRows()));
         }
 
-        nextAnchor.setVisible(nextActionHandlerRegistration != null && model.hasMoreData());
+        nextAnchor.setEnabled(nextActionHandlerRegistration != null && actionsBar.getDataTableModel().hasMoreData());
 
         if (pageSizeOptions != null) {
-            pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(model.getPageSize()));
+            pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(actionsBar.getDataTableModel().getPageSize()));
         }
     }
 
@@ -172,5 +160,4 @@ public class DataTableBottomActionsBar extends HorizontalPanel implements DataTa
             }
         }
     }
-
 }

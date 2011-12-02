@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultDataTableTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        DataTable, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableColumnSelector, DataTableColumnMenu,
+        DataTable, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector, DataTableColumnMenu,
 
         DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem
     }
@@ -118,6 +118,28 @@ public class DefaultDataTableTheme extends Theme {
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
         style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableActionsBarContent);
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableToolBar);
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTablePageNavigBar);
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTablePageNavigBar, " .", DefaultWidgetsTheme.StyleName.Anchor);
+        style.addProperty("color", ThemeColors.foreground, 0.9);
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTablePageNavigBar, " .", DefaultWidgetsTheme.StyleName.Anchor, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style.addProperty("color", ThemeColors.foreground, 0.5);
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableFilter);

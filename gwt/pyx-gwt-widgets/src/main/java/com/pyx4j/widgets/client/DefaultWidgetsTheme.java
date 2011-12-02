@@ -34,6 +34,8 @@ public class DefaultWidgetsTheme extends Theme {
 
         Button, ButtonContent, ButtonText,
 
+        Anchor,
+
         RateIt, RateItBar
     }
 

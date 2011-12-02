@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.actionbar;
 
-import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,11 +47,11 @@ public class Toolbar extends FlowPanel {
 
     public void insertItem(Widget widget, int beforeIndex, boolean floatRight) {
         insert(widget, beforeIndex);
-        widget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         widget.getElement().getStyle().setMarginLeft(6, Unit.PX);
-
         if (floatRight) {
-            widget.getElement().getStyle().setProperty("cssFloat", "right");
+            widget.getElement().getStyle().setFloat(Float.RIGHT);
+        } else {
+            widget.getElement().getStyle().setFloat(Float.LEFT);
         }
     }
 

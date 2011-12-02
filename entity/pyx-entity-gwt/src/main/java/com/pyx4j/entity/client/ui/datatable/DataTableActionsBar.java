@@ -20,21 +20,34 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public class DataTableTopActionsBar extends SimplePanel implements DataTableModelListener {
+public class DataTableActionsBar extends SimplePanel implements DataTableModelListener {
 
     private DataTableModel<?> model;
 
     private final Toolbar toolbar;
 
-    public DataTableTopActionsBar() {
+    private final PageNavigBar pageNavigBar;
+
+    public DataTableActionsBar() {
         setStyleName(DefaultDataTableTheme.StyleName.DataTableActionsBar.name());
 
+        FlowPanel content = new FlowPanel();
+        setWidget(content);
+        content.setStyleName(DefaultDataTableTheme.StyleName.DataTableActionsBarContent.name());
+
         toolbar = new Toolbar();
-        setWidget(toolbar);
+        toolbar.addStyleName(DefaultDataTableTheme.StyleName.DataTableToolBar.name());
+        content.add(toolbar);
+
+        pageNavigBar = new PageNavigBar(this);
+        pageNavigBar.addStyleName(DefaultDataTableTheme.StyleName.DataTablePageNavigBar.name());
+        content.add(pageNavigBar);
+
     }
 
     public void setDataTableModel(DataTableModel<?> model) {
@@ -45,13 +58,21 @@ public class DataTableTopActionsBar extends SimplePanel implements DataTableMode
         model.addDataTableModelListener(this);
     }
 
+    public DataTableModel<?> getDataTableModel() {
+        return model;
+    }
+
     public Toolbar getToolbar() {
         return toolbar;
     }
 
+    public PageNavigBar getPageNavigBar() {
+        return pageNavigBar;
+    }
+
     @Override
     public void onTableModelChanged(DataTableModelEvent e) {
-
+        pageNavigBar.onTableModelChanged(e);
     }
 
 }
