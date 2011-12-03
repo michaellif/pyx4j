@@ -115,7 +115,7 @@ public class OracleDialect extends Dialect {
         StringBuffer msql = new StringBuffer(sql.length() + 128);
         msql.append("SELECT * FROM ( SELECT p_row_.*, rownum p_rownum_ FROM ( ");
         msql.append(sql);
-        msql.append(" ) p_row_ WHERE rownum <= ?) WHERE p_rownum_ >= ?");
+        msql.append(" ) p_row_ WHERE rownum <= ?) WHERE p_rownum_ > ?");
         return msql.toString();
     }
 
