@@ -24,6 +24,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
@@ -33,6 +35,8 @@ public class QuickSearchCriteriaInputPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
+    private static final I18n i18n = I18n.get(QuickSearchCriteriaInputPanel.class);
+
     public QuickSearchCriteriaInputPanel(String id, CompoundIEntityModel<PropertySearchCriteria> model) {
         super(id, model);
 
@@ -41,8 +45,8 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
         DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false, true);
-        provChoice.add(AttributeModifier
-                .replace("onChange", "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], 'Choose One')"));
+        provChoice.add(AttributeModifier.replace("onChange",
+                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.trc("city", "Choose One") + "')"));
         add(provChoice);
 
         // add City drop-down

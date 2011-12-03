@@ -29,6 +29,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.MinimumValidator;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
@@ -36,6 +38,9 @@ import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadio;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
+
+    private static final I18n i18n = I18n.get(AdvancedSearchCriteriaInputPanel.class);
+
     private static final long serialVersionUID = 1L;
 
     public AdvancedSearchCriteriaInputPanel(String id, final CompoundIEntityModel<PropertySearchCriteria> model) {
@@ -55,8 +60,8 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
         DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false, true);
-        provChoice.add(AttributeModifier
-                .replace("onChange", "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], 'Choose One')"));
+        provChoice.add(AttributeModifier.replace("onChange",
+                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.trc("city", "Choose One") + "')"));
         add(provChoice);
 
         // add City drop-down
