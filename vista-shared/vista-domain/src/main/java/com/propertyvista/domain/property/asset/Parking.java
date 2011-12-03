@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @DiscriminatorValue("Parking_BuildingElement")
 public interface Parking extends BuildingElement {
 
-    @I18n
+    @I18n(context = "Parking Type")
     @XmlType(name = "ParkingType")
     public enum Type {
 

@@ -27,16 +27,15 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("Type: {0}, Value: {1}")
 public interface Concession extends IEntity {
 
-    @I18n
+    @I18n(context = "Concession Type")
     @XmlType(name = "ConcessionType")
-    @I18nComment("Concession Type")
     enum Type {
+
         promotionalItem, percentageOff, monetaryOff, free;
 
         @Override
@@ -45,9 +44,10 @@ public interface Concession extends IEntity {
         }
     }
 
-    @I18n
+    @I18n(context = "Concession Term")
     @XmlType(name = "ConcessionTerm")
     enum Term {
+
         firstMonth, lastMonth, term;
 
         @Override
@@ -56,9 +56,10 @@ public interface Concession extends IEntity {
         }
     }
 
-    @I18n
+    @I18n(context = "Concession Condition")
     @XmlType(name = "ConcessionCondition")
     enum Condition {
+
         compliance, none;
 
         @Override
@@ -67,7 +68,7 @@ public interface Concession extends IEntity {
         }
     }
 
-    @I18n
+    @I18n(context = "Concession Status")
     @XmlType(name = "ConcessionStatus")
     public enum Status {
 

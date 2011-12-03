@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 
 public interface Lease extends IEntity {
 
-    @I18n
+    @I18n(context = "Lease Status")
     @XmlType(name = "LeaseStatus")
     public enum Status {
 
