@@ -36,6 +36,7 @@ public interface PropertySearchCriteria extends IEntity {
         map, list
     }
 
+    @I18nComment("Price Selection")
     public static enum PriceRange {
 
         Any(null), lt600(0), gt600(600), gt800(800), gt1000(1000), gt1200(1200);
