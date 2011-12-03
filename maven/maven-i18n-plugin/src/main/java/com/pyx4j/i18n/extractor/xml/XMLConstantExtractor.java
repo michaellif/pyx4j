@@ -75,7 +75,7 @@ public class XMLConstantExtractor {
             public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                 if (qName.endsWith(":i18n")) {
                     i18nTag = true;
-                    //TODO context = attributes.getValue("context");
+                    context = attributes.getValue("context");
                 }
             }
 
