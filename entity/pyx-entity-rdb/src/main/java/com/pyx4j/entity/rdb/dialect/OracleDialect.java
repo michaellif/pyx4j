@@ -71,7 +71,7 @@ public class OracleDialect extends Dialect {
 
     @Override
     public char likeWildCards() {
-        return '*';
+        return '%';
     }
 
     @Override
