@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Property Vista Software Inc.\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-02 19:39-0500\n"
-"PO-Revision-Date: 2011-12-03 07:12+0000\n"
-"Last-Translator: gisele_aubut <gisele@aubutcommunications.com>\n"
+"POT-Creation-Date: 2011-12-04 01:14-0500\n"
+"PO-Revision-Date: 2011-12-04 11:17+0000\n"
+"Last-Translator: vista_i18n <i18n@propertyvista.com>\n"
 "Language-Team: French (Canada) (http://www.transifex.net/projects/p/propertyvista/team/fr_CA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -288,7 +288,7 @@ msgstr "Entreposage supplémentaire"
 msgid "Address"
 msgstr "Adresse"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:63
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:58
 msgid "Address / Postal Code"
 msgstr "Adresse / Code postal"
 
@@ -435,7 +435,7 @@ msgstr "Déjà signé"
 #: com/propertyvista/dto/FloorplanDTO.java:2
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:29
 #: com/propertyvista/pmsite/server/pages/UnitDetailsPage.html:36
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:88
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:83
 #: com/propertyvista/pmsite/server/panels/AptListPanel.html:19
 #: com/propertyvista/portal/domain/dto/AptUnitDTO.java:2
 #: com/propertyvista/portal/domain/dto/FloorplanDTO.java:2
@@ -877,7 +877,7 @@ msgid "Bathroom"
 msgstr "Salle de bain"
 
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:49
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:78
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:73
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Bathrooms"
@@ -896,8 +896,8 @@ msgid "Bedroom"
 msgstr "Chambre à coucher"
 
 #: com/propertyvista/pmsite/server/pages/AptDetailsPage.html:45
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:74
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:24
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:69
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:16
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoSummaryDTO.java:2
@@ -941,7 +941,7 @@ msgid "Bill"
 msgstr "Facturer"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:260
 msgid "Bill B., London, Ontario"
 msgstr "Bill B., London, Ontario"
 
@@ -1129,11 +1129,11 @@ msgstr "Centre d'affaires"
 msgid "Businesses"
 msgstr "Entreprises"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:42
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:37
 msgid "By City"
 msgstr "Par ville"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:46
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:41
 msgid "By Proximity"
 msgstr "À proximité"
 
@@ -1373,20 +1373,6 @@ msgstr "Garde d'enfants"
 msgid "Child Pages"
 msgstr "Pages enfant"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:62
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:47
-msgid "Select Province"
-msgstr "Choisir une province"
-
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:82
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
-msgid "Select City"
-msgstr "Choisir une ville"
-
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 msgid "Circle"
@@ -1396,8 +1382,8 @@ msgstr "Cercle"
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/ref/City.java:0
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:56
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:21
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:51
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:13
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "City"
 msgstr "Ville"
@@ -1614,7 +1600,7 @@ msgstr "Construction"
 msgid "Construction Type"
 msgstr "Type de construction"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:210
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:228
 msgid "Contact"
 msgstr "Contact"
 
@@ -2192,7 +2178,7 @@ msgstr "Ordre d'affichage"
 msgid "Disposal"
 msgstr "Élimination"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:67
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:62
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Distance"
 msgstr "Distance"
@@ -2304,7 +2290,7 @@ msgid "Effective Date"
 msgstr "Date d'entrée en vigueur"
 
 #. java-format
-#: com/propertyvista/pmsite/server/model/WicketUtils.java:349
+#: com/propertyvista/pmsite/server/model/WicketUtils.java:401
 #, java-format
 msgid "Either one of {0} or {1} must be provided"
 msgstr "Soit un de {0} ou {1} doit être fourni"
@@ -2601,6 +2587,10 @@ msgstr "Type de caractéristique"
 msgid "Feature Types"
 msgstr "Types de caractéristiques"
 
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:125
+msgid "Featured Apartments"
+msgstr ""
+
 #: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:104
 #: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorForm.java:92
 #: com/propertyvista/domain/financial/offering/Service.java:2
@@ -2688,7 +2678,7 @@ msgstr "Trouver un logement"
 msgid "Find Apartment"
 msgstr "Trouver logement"
 
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:14
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:6
 #: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:136
 msgid "Find an Apartment"
 msgstr "Trouver un logement"
@@ -3188,7 +3178,7 @@ msgid "I Agree"
 msgstr "Je suis d'accord"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:242
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:260
 msgid ""
 "I just had the pleasure to dealing with your superintendent at my building. "
 "I just moved in three weeks ago and was greeted right away by Manolo the "
@@ -3212,7 +3202,7 @@ msgstr ""
 "trouvé un chez-soi en cet endroit idéal."
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:265
 msgid ""
 "I just wanted to let you know what a great job your superintendent Sean was doing.  He recently repaired my faucet and was very professional and courteous. Not only did he come and fix the issue right away, he also gave me advice on how to avoid this from happening in the future. This building is my home, and having Starlight now taking over showed instant results.\n"
 "Thank you again."
@@ -3513,7 +3503,7 @@ msgid "Items Per Page"
 msgstr "Articles par page"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:247
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:265
 msgid "Jane L."
 msgstr "Jane L."
 
@@ -3793,6 +3783,10 @@ msgstr "Aperçu de la liste"
 msgid "Living Room"
 msgstr "Salon"
 
+#: com/pyx4j/rpc/client/ServiceExecutionInfo.java:41
+msgid "Loading..."
+msgstr ""
+
 #: com/propertyvista/domain/site/News.java:2
 #: com/propertyvista/domain/site/PageCaption.java:2
 #: com/propertyvista/domain/site/PageContent.java:2
@@ -3847,7 +3841,7 @@ msgstr "Casiers"
 
 #: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:64
 #: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:94
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
 #: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:90
 msgid "Log In"
 msgstr "Connexion "
@@ -4323,8 +4317,7 @@ msgstr "Salaire mensuel"
 msgid "Monthly Salary/Dividend"
 msgstr "Salaire/dividende mensuel/ mensuelle"
 
-#: com/propertyvista/pmsite/server/panels/PromoPanel.html:4
-#: com/propertyvista/pmsite/server/panels/TestimPanel.html:4
+#: com/propertyvista/pmsite/server/panels/TestimPanel.java:52
 msgid "More"
 msgstr "Plus"
 
@@ -4552,6 +4545,7 @@ msgstr "Nouvelle carte"
 #: com/propertyvista/domain/site/News.java:0
 #: com/propertyvista/dto/SiteDescriptorDTO.java:2
 #: com/propertyvista/pmsite/server/panels/NewsPanel.html:4
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:209
 msgid "News"
 msgstr "Nouvelles"
 
@@ -4879,7 +4873,7 @@ msgid "Other Price"
 msgstr "Autre prix"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:280
 msgid "Ottawa, Toronto defy national sales trend ... for now"
 msgstr ""
 "Ottawa, Toronto défient la tendance nationale des ventes ... pour l'instant"
@@ -5422,8 +5416,8 @@ msgstr "Adresse précédente"
 
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:2
 #: com/propertyvista/domain/financial/offering/ServiceItem.java:2
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:82
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:27
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:77
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:19
 #: com/propertyvista/portal/domain/dto/FloorplanPropertyDTO.java:2
 #: com/propertyvista/portal/domain/dto/PropertyDTO.java:2
 msgid "Price"
@@ -5476,7 +5470,7 @@ msgstr "Adresse précédente"
 msgid "Priority"
 msgstr "Priorité"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:230
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:248
 msgid "Privacy"
 msgstr "Confidentialité"
 
@@ -5524,10 +5518,6 @@ msgstr "Progrès"
 msgctxt "Concession Type"
 msgid "Promotional Item"
 msgstr "Article promotionnel"
-
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:125
-msgid "Promotions"
-msgstr "Promotions"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:118
 #: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:261
@@ -5630,8 +5620,8 @@ msgstr "Fournisseur"
 #: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:90
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/ref/Province.java:0
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:52
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:18
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:47
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.html:10
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
 msgid "Province"
 msgstr "Province"
@@ -5863,7 +5853,7 @@ msgid "Request for Guarantor or further information"
 msgstr "Demande de garant ou de plus amples informations"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:262
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:280
 msgid ""
 "Resale housing activity in August remained stable for the second consecutive"
 " month, according to new stats from The Canadian Real Estate Association, "
@@ -6155,6 +6145,15 @@ msgstr "Sélectionner"
 msgid "Select Building"
 msgstr "Sélectionner le bâtiment"
 
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:82
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
+msgid "Select City"
+msgstr "Choisir une ville"
+
 #: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceConcessionFolder.java:79
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/ServiceConcessionFolder.java:90
 msgid "Select Concessions"
@@ -6180,6 +6179,11 @@ msgstr "Sélectionner un plan d'étage"
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorViewImpl.java:95
 msgid "Select Lease Type"
 msgstr "Sélectionner le type de bail"
+
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:63
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:48
+msgid "Select Province"
+msgstr "Choisir une province"
 
 #: com/propertyvista/crm/client/ui/crud/building/catalog/service/ServiceEditorViewImpl.java:72
 msgid "Select Service Type"
@@ -6570,7 +6574,7 @@ msgstr "Heure de début"
 msgid "Starting From"
 msgstr "À partir de"
 
-#: com/propertyvista/pmsite/server/pages/BasePage.java:130
+#: com/propertyvista/pmsite/server/pages/BasePage.java:144
 msgid "Stateful components found: "
 msgstr "Composants dynamiques trouvés :"
 
@@ -6719,17 +6723,17 @@ msgstr "Soumise"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Submitted"
-msgstr ""
+msgstr "Soumis"
 
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
 msgctxt "Reservation"
 msgid "Submitted"
-msgstr ""
+msgstr "Soumis"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 msgctxt "Maintenance Request"
 msgid "Submitted"
-msgstr ""
+msgstr "Soumis"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 #: com/propertyvista/misc/EquifaxResult.java:2
@@ -6962,7 +6966,7 @@ msgstr "Terme"
 msgid "Term Type"
 msgstr "Type de terme"
 
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:220
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:238
 msgid "Terms Of Use"
 msgstr "Conditions d'utilisation"
 
@@ -6978,6 +6982,7 @@ msgstr "Témoignage"
 #: com/propertyvista/crm/client/ui/crud/settings/content/site/SiteEditorForm.java:55
 #: com/propertyvista/dto/SiteDescriptorDTO.java:2
 #: com/propertyvista/pmsite/server/panels/TestimPanel.html:3
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:218
 msgid "Testimonials"
 msgstr "Témoignages"
 
@@ -7048,7 +7053,7 @@ msgid "The URL You Tried To Use Is Either Incorrect Or No Longer Valid"
 msgstr "L'URL que vous essayé d'utiliser est incorrect ou n'est plus valide"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:274
 msgid ""
 "The Vancouver housing market may already be unaffordable for many, but there"
 " is enough demand to keep prices rising, according to a new forecast."
@@ -7600,7 +7605,7 @@ msgid "Value Should Be In Range Of 0-100%"
 msgstr "La valeur doit être 0-100%"
 
 #. This is demo content
-#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:256
+#: com/propertyvista/portal/server/preloader/site/AbstractSitePreloader.java:274
 msgid "Vancouver prices to keep rising"
 msgstr "Les prix à Vancouver continueront à augmenter"
 
@@ -8024,9 +8029,9 @@ msgstr "WC séparé"
 msgid "separate WCs"
 msgstr "WC séparés"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:75
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:79
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:83
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:70
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:74
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.html:78
 msgid "to"
 msgstr "à"
 
@@ -8038,8 +8043,9 @@ msgstr "à"
 msgid "yyyy"
 msgstr "yyyy"
 
+#. Price Selection
 #. java-format
-#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:69
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:70
 #, java-format
 msgid ""
 "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
@@ -8050,10 +8056,10 @@ msgstr ""
 
 #. Number Of Bedrooms
 #. java-format
-#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:102
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:103
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr "{0,choice,null#Tout|0#Moins de {1}|0<{0}{1,choice,null# et plus|0<}}"
+msgstr "{0,choice,null#Toutes|0#Moins de {1}|0<{0}{1,choice,null# et plus|0<}}"
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0
