@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-04 12:58-0500\n"
+"POT-Creation-Date: 2011-12-04 16:43-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4083,8 +4083,8 @@ msgid "Other"
 msgstr "Autre"
 
 #. Street Type
-#. Building Amenity Type
 #. Type of foundation
+#. Building Amenity Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
@@ -5197,17 +5197,17 @@ msgstr "Légende secondaire"
 msgid "Seen"
 msgstr "Vu/vue"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:64
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:82
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:79
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:49
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:64
 msgid "Select City"
 msgstr "Choisir une ville"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:63
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:48
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:62
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:47
 msgid "Select Province"
 msgstr "Choisir une province"
 
@@ -5640,17 +5640,17 @@ msgstr "Soumise"
 #: com/propertyvista/domain/tenant/ptapp/MasterApplication.java:1
 msgctxt "Application"
 msgid "Submitted"
-msgstr ""
+msgstr "Soumis"
 
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:1
 msgctxt "Reservation"
 msgid "Submitted"
-msgstr ""
+msgstr "Soumis"
 
 #: com/propertyvista/domain/maintenance/MaintenanceRequestStatus.java:1
 msgctxt "Maintenance Request"
 msgid "Submitted"
-msgstr ""
+msgstr "Soumis"
 
 #: com/propertyvista/misc/EquifaxApproval.java:2
 #: com/propertyvista/misc/EquifaxResult.java:2
@@ -6548,11 +6548,11 @@ msgstr "millisecondes"
 msgid "reCAPTCHA Connection Failed"
 msgstr "Connexion reCAPTCHA a échoué"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:131
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:130
 msgid "separate WC"
 msgstr "WC séparé"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:134
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:133
 msgid "separate WCs"
 msgstr "WC séparés"
 
@@ -6586,7 +6586,8 @@ msgstr ""
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:103
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr "{0,choice,null#Tout|0#Moins de {1}|0<{0}{1,choice,null# et plus|0<}}"
+msgstr ""
+"{0,choice,null#Toutes|0#Moins de {1}|0<{0}{1,choice,null# et plus|0<}}"
 
 #. java-format
 #: com/propertyvista/domain/financial/offering/ChargeItem.java:0

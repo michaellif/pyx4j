@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-04 12:58-0500\n"
+"POT-Creation-Date: 2011-12-04 16:43-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4073,8 +4073,8 @@ msgid "Other"
 msgstr "Другой"
 
 #. Street Type
-#. Building Amenity Type
 #. Type of foundation
+#. Building Amenity Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
@@ -5188,17 +5188,17 @@ msgstr "Вторичные Caption"
 msgid "Seen"
 msgstr "Посещение"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:64
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:82
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:79
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:49
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:64
 msgid "Select City"
 msgstr "Выбрать город"
 
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:63
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:48
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:62
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:47
 msgid "Select Province"
 msgstr "Выберите провинцию"
 
@@ -6534,11 +6534,11 @@ msgstr "миллисекунды"
 msgid "reCAPTCHA Connection Failed"
 msgstr "ReCaptcha Сбой при подключении"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:131
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:130
 msgid "separate WC"
 msgstr "отдельный туалет"
 
-#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:134
+#: com/propertyvista/portal/server/ptapp/services/ApartmentServiceImpl.java:133
 msgid "separate WCs"
 msgstr "отдельный туалет"
 
