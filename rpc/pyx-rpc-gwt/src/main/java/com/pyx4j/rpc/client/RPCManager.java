@@ -99,21 +99,25 @@ public class RPCManager {
 
     public static <I extends Serializable, O extends Serializable> void executeBackground(final Class<? extends Service<I, O>> serviceInterface, I request,
             AsyncCallback<O> callback) {
-        executeImpl(serviceInterface, request, callback, true, 0);
+        executeImpl(ServiceExecutionInfo.BACKGROUND, serviceInterface, request, callback, 0);
     }
 
     public static <I extends Serializable, O extends Serializable> void execute(final Class<? extends Service<I, O>> serviceInterface, I request,
             AsyncCallback<O> callback) {
-        executeImpl(serviceInterface, request, callback, false, 0);
+        executeImpl(ServiceExecutionInfo.DEFAULT, serviceInterface, request, callback, 0);
     }
 
-    private static void executeImpl(final Class<? extends Service<?, ?>> serviceInterface, Serializable request, AsyncCallback<?> callback,
-            boolean executeBackground, int retryAttempt) {
-        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(serviceInterface, request, callback, executeBackground,
-                retryAttempt);
+    public static <I extends Serializable, O extends Serializable> void execute(ServiceExecutionInfo info,
+            final Class<? extends Service<I, O>> serviceInterface, I request, AsyncCallback<O> callback) {
+        executeImpl(info, serviceInterface, request, callback, 0);
+    }
+
+    private static void executeImpl(final ServiceExecutionInfo info, final Class<? extends Service<?, ?>> serviceInterface, Serializable request,
+            AsyncCallback<?> callback, int retryAttempt) {
+        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(info, serviceInterface, request, callback, retryAttempt);
         try {
             runningServicesCount++;
-            fireStatusChangeEvent(When.START, executeBackground, serviceInterface, callback, -1);
+            fireStatusChangeEvent(When.START, info, serviceInterface, callback, -1);
             String name = serviceNames.getServiceName(serviceInterface);
             requestBuilder.executing(name, request);
             service.execute(name, request, userVisitHashCode, serviceHandlingCallback);
@@ -131,7 +135,7 @@ public class RPCManager {
 
         private final long requestStartTime = System.currentTimeMillis();
 
-        private final boolean executeBackground;
+        private final ServiceExecutionInfo info;
 
         private final int retryAttempt;
 
@@ -141,9 +145,9 @@ public class RPCManager {
 
         private Serializable request;
 
-        ServiceHandlingCallback(final Class<? extends Service<?, ?>> serviceInterface, Serializable request, AsyncCallback<?> callback,
-                boolean executeBackground, int retryAttempt) {
-            this.executeBackground = executeBackground;
+        ServiceHandlingCallback(final ServiceExecutionInfo info, final Class<? extends Service<?, ?>> serviceInterface, Serializable request,
+                AsyncCallback<?> callback, int retryAttempt) {
+            this.info = info;
             this.serviceInterface = serviceInterface;
             this.callback = (AsyncCallback<Serializable>) callback;
             this.request = request;
@@ -168,7 +172,7 @@ public class RPCManager {
                 } else if (!(caught instanceof RuntimeExceptionSerializable) && (callback instanceof RecoverableCall)
                         && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
                     log.error("Try to recover {} from service invocation error {}", serviceInterface, caught);
-                    executeImpl(serviceInterface, request, callback, executeBackground, retryAttempt + 1);
+                    executeImpl(info, serviceInterface, request, callback, retryAttempt + 1);
                 } else if (callback != null) {
                     this.callback.onFailure(caught);
                 } else {
@@ -179,7 +183,7 @@ public class RPCManager {
             } finally {
                 callback = null;
                 request = null;
-                fireStatusChangeEvent(When.FAILURE, executeBackground, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
+                fireStatusChangeEvent(When.FAILURE, info, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
             }
         }
 
@@ -204,7 +208,7 @@ public class RPCManager {
             } finally {
                 callback = null;
                 request = null;
-                fireStatusChangeEvent(When.SUCCESS, executeBackground, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
+                fireStatusChangeEvent(When.SUCCESS, info, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
             }
         }
     }
@@ -217,11 +221,10 @@ public class RPCManager {
         return name;
     }
 
-    private static void fireStatusChangeEvent(When when, boolean executeBackground, Class<? extends Service<?, ?>> serviceDescriptorClass,
+    private static void fireStatusChangeEvent(When when, ServiceExecutionInfo info, Class<? extends Service<?, ?>> serviceDescriptorClass,
             Object callbackInstance, long requestDuration) {
         if (eventBus != null) {
-            eventBus.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, executeBackground, serviceDescriptorClass, callbackInstance,
-                    requestDuration));
+            eventBus.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, info, serviceDescriptorClass, callbackInstance, requestDuration));
         }
     }
 

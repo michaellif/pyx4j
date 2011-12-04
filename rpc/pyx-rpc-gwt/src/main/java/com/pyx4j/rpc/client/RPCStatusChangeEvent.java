@@ -23,6 +23,7 @@ package com.pyx4j.rpc.client;
 import com.google.gwt.event.shared.GwtEvent;
 
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.ServiceExecution;
 
 public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
 
@@ -36,7 +37,7 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
 
     private final When when;
 
-    private final boolean executeBackground;
+    private final ServiceExecutionInfo serviceExecutionInfo;
 
     private final Class<? extends Service<?, ?>> serviceDescriptorClass;
 
@@ -44,12 +45,12 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
 
     private final long requestDuration;
 
-    public RPCStatusChangeEvent(When when, boolean rpcIdle, boolean executeBackground, Class<? extends Service<?, ?>> serviceDescriptorClass,
+    public RPCStatusChangeEvent(When when, boolean rpcIdle, ServiceExecutionInfo info, Class<? extends Service<?, ?>> serviceDescriptorClass,
             Object callbackInstance, long requestDuration) {
         super();
         this.when = when;
         this.rpcIdle = rpcIdle;
-        this.executeBackground = executeBackground;
+        this.serviceExecutionInfo = info;
         this.serviceDescriptorClass = serviceDescriptorClass;
         this.callbackInstance = callbackInstance;
         this.requestDuration = requestDuration;
@@ -67,12 +68,16 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
         return serviceDescriptorClass;
     }
 
+    public ServiceExecutionInfo getServiceExecutionInfo() {
+        return serviceExecutionInfo;
+    }
+
     public boolean isRecoverableServiceCall() {
         return callbackInstance instanceof RecoverableCall;
     }
 
     public boolean isBlockingServiceCall() {
-        return callbackInstance instanceof BlockingCall;
+        return (callbackInstance instanceof BlockingCall) || (serviceExecutionInfo.operationType() == ServiceExecution.OperationType.SemiTransparent);
     }
 
     public long getRequestDuration() {
@@ -94,7 +99,7 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
     }
 
     public boolean isExecuteBackground() {
-        return executeBackground;
+        return serviceExecutionInfo.operationType() == ServiceExecution.OperationType.NonBlocking;
     }
 
 }

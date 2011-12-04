@@ -410,7 +410,7 @@ public class TesterEntryPoint implements EntryPoint {
 
     private static void showGlassPanel(GlassStyle glassStyle, int sec) {
         log.info("glassPanel.show");
-        GlassPanel.show(glassStyle);
+        GlassPanel.show(glassStyle, "testing...");
         Timer timer = new Timer() {
             @Override
             public void run() {

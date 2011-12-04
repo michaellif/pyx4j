@@ -25,8 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.pyx4j.i18n.annotations.I18nAnnotation;
+
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@I18nAnnotation(element = "waitCaption")
 public @interface ServiceExecution {
 
     public static enum OperationType {

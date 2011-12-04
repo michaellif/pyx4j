@@ -33,6 +33,8 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.rpc.client.IServiceBase;
+import com.pyx4j.rpc.client.ServiceExecutionInfo;
+import com.pyx4j.rpc.shared.ServiceExecution;
 
 public class IServiceGenerator extends Generator {
 
@@ -56,6 +58,8 @@ public class IServiceGenerator extends Generator {
         if (printWriter != null) {
             ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, implName);
             factory.addImport(IServiceBase.class.getName());
+            factory.addImport(ServiceExecutionInfo.class.getName());
+            factory.addImport(ServiceExecution.OperationType.class.getName().replace('$', '.'));
             factory.setSuperclass(IServiceBase.class.getName());
             factory.addImplementedInterface(interfaceType.getQualifiedSourceName());
             SourceWriter sourceWriter = factory.createSourceWriter(genCtx, printWriter);

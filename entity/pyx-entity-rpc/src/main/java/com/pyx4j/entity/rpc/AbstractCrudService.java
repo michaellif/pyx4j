@@ -24,6 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListService<E> {
 
@@ -31,5 +32,6 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListServ
 
     public void retrieve(AsyncCallback<E> callback, Key entityId);
 
+    @ServiceExecution(waitCaption = "Saving...")
     public void save(AsyncCallback<E> callback, E editableEntity);
 }

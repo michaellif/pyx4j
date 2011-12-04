@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceRequest;
@@ -38,10 +39,21 @@ public abstract class IServiceBase implements IService {
 
     private static int rpcCallCount = 0;
 
+    //TODO move to generated implementations and create only when required
+    protected static final I18n i18n = I18n.get(IServiceBase.class);
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected final void execute(String serviceMethodId, int serviceMethodSignature, AsyncCallback<? extends Serializable> callback, Serializable... args) {
         log.trace("RPC CALL {} #{}", getServiceClassId() + "." + serviceMethodId, ++rpcCallCount);
         RPCManager.execute((Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(getServiceClassId(),
+                serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected final void execute(ServiceExecutionInfo info, String serviceMethodId, int serviceMethodSignature, AsyncCallback<? extends Serializable> callback,
+            Serializable... args) {
+        log.trace("RPC CALL {} #{}", getServiceClassId() + "." + serviceMethodId, ++rpcCallCount);
+        RPCManager.execute(info, (Class<? extends Service<IServiceRequest, Serializable>>) IServiceAdapter.class, new IServiceRequest(getServiceClassId(),
                 serviceMethodId, serviceMethodSignature, args, rpcCallCount), (AsyncCallback) callback);
     }
 

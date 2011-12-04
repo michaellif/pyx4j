@@ -37,6 +37,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.rebind.AbstractGeneratorClassCreator;
 import com.google.gwt.user.rebind.AbstractMethodCreator;
 
+import com.pyx4j.rpc.client.ServiceExecutionInfo;
+import com.pyx4j.rpc.shared.ServiceExecution;
+import com.pyx4j.rpc.shared.ServiceExecution.OperationType;
+
 public class IServiceImplMethodCreator extends AbstractMethodCreator {
 
     private final JClassType asyncCallbackType;
@@ -66,7 +70,25 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
         }
         signatures.add(targetMethod.getName() + signature);
 
+        ServiceExecution serviceExecution = targetMethod.getAnnotation(ServiceExecution.class);
+
         print("execute(");
+        if (serviceExecution != null) {
+            print("new ");
+            print(ServiceExecutionInfo.class.getSimpleName());
+            print("(");
+            OperationType operationType = serviceExecution.operationType();
+            if (operationType == null) {
+                operationType = OperationType.Transparent;
+            }
+            print(OperationType.class.getSimpleName());
+            print(".");
+            print(operationType.name());
+            print(",");
+            print(i18nEscapeSourceString(serviceExecution.waitCaption()));
+
+            print("), ");
+        }
         print("\"");
         print(targetMethod.getName());
         print("\", ");
@@ -103,4 +125,20 @@ public class IServiceImplMethodCreator extends AbstractMethodCreator {
         return s;
     }
 
+    static String escapeSourceString(String value) {
+        if (value == null) {
+            return "null";
+        } else {
+            return "\"" + value.replace("\"", "\\\"").replace("\n", "\\n") + "\"";
+        }
+    }
+
+    static String i18nEscapeSourceString(String value) {
+        String s = escapeSourceString(value);
+        if (s.equals("\"\"") || s.equals("null")) {
+            return "null";
+        } else {
+            return "i18n.tr(" + s + ")";
+        }
+    }
 }
