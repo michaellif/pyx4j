@@ -1375,9 +1375,8 @@ msgstr "Pages enfant"
 
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:62
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:47
-msgctxt "province"
-msgid "Choose One"
-msgstr "Choisir une"
+msgid "Select Province"
+msgstr "Choisir une province"
 
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
 #: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
@@ -1385,9 +1384,8 @@ msgstr "Choisir une"
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
 #: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
-msgctxt "city"
-msgid "Choose One"
-msgstr "Choisir une"
+msgid "Select City"
+msgstr "Choisir une ville"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1

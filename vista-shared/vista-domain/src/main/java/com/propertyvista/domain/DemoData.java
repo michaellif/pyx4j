@@ -17,7 +17,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 
 public class DemoData {
 
-    public static final boolean vistaDemo = false;
+    public static final boolean vistaDemo = true;
 
     public static enum DemoPmc {
         vista, star, redridge, rockville;
