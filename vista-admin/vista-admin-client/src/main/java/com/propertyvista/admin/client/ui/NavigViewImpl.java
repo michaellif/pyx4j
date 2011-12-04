@@ -72,7 +72,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
             @Override
             public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-                GlassPanel.show(GlassStyle.Transparent);
+                GlassPanel.show(GlassStyle.Transparent, null);
             }
         });
         addSelectionHandler(new SelectionHandler<Integer>() {
