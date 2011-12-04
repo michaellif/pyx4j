@@ -101,13 +101,25 @@ public class WicketUtils {
     public static class DropDownList<T> extends DropDownChoice<T> {
         private static final long serialVersionUID = 1L;
 
-        private boolean useDefault;
+        private boolean useDefault = false;
 
-        private boolean useKeys;
+        private boolean useKeys = true;
+
+        private String defaultText = null;
+
+        public DropDownList(String id, IModel<T> model, List<? extends T> choices, final boolean useKeys, final String defaultText) {
+            this(id, model, choices, useKeys, defaultText != null);
+            this.defaultText = defaultText;
+        }
 
         public DropDownList(String id, IModel<T> model, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
             this(id, choices, useKeys, useDefault);
             setModel(model);
+        }
+
+        public DropDownList(String id, List<? extends T> choices, final boolean useKeys, final String defaultText) {
+            this(id, choices, useKeys, defaultText != null);
+            this.defaultText = defaultText;
         }
 
         public DropDownList(String id, List<? extends T> choices, final boolean useKeys, final boolean useDefault) {
@@ -130,7 +142,15 @@ public class WicketUtils {
 
         @Override
         protected CharSequence getDefaultChoice(final String selected) {
-            return useDefault ? super.getDefaultChoice(selected) : "";
+            String defaultChoice = "";
+            if (useDefault) {
+                if (defaultText != null && defaultText.length() > 0) {
+                    defaultChoice = "\n<option selected=\"selected\" value=\"\">" + defaultText + "</option>";
+                } else {
+                    defaultChoice = super.getDefaultChoice(selected).toString();
+                }
+            }
+            return defaultChoice;
         }
 
         @SuppressWarnings("unchecked")

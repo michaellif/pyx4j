@@ -1,14 +1,6 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
-	<script>
-		$(function(){
-			// set City for selected province
-			var sel = document.getElementById('provSelect');
-			if (! sel) return;
-			setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], 'Choose One', selCity);
-		});
-	</script>
 	<script wicket:id="jsCityList"></script>
 
 	<div class="infobox_header">

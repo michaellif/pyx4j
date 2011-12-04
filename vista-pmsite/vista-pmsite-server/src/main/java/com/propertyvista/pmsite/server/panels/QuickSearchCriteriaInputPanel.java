@@ -44,23 +44,28 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         // add Province drop-down
         final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
-        DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false, true);
+        DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false,
+                i18n.tr("Select"));
         provChoice.add(AttributeModifier.replace("onChange",
-                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.trc("city", "Choose One") + "')"));
+                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.tr("Select") + "')"));
         add(provChoice);
 
         // add City drop-down
         List<String> cities;
         String selProv = model.getObject().getEntityValue().province().getValue();
-        if (selProv != null) {
+        if (selProv != null && selProv.length() > 0) {
             cities = provCityMap.get(selProv);
         } else {
             cities = Arrays.asList("- Select Province -");
         }
-        add(new WicketUtils.DropDownList<String>("city", model.bind(criteria.city()), cities, false, true));
+        add(new WicketUtils.DropDownList<String>("city", model.bind(criteria.city()), cities, false, i18n.tr("Select")));
 
         // add JS city list
-        String jsCityList = "\nvar provCity = {};\n";
+        String jsCityList =
+        // set City for selected province
+        "$(function() {\n" + "var sel = document.getElementById('provSelect');\n" + "if (! sel) return;\n"
+                + "setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], '" + i18n.tr("Select") + "', selCity);\n" + "});\n\n"
+                + "var provCity = {};\n";
         for (String _prov : provCityMap.keySet()) {
             String _list = "";
             for (String _city : provCityMap.get(_prov)) {
