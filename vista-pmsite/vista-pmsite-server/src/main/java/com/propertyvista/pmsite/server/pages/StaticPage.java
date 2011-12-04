@@ -16,13 +16,10 @@ package com.propertyvista.pmsite.server.pages;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
@@ -33,9 +30,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
+import com.propertyvista.pmsite.server.panels.StaticNewsPanel;
+import com.propertyvista.pmsite.server.panels.StaticTestimPanel;
 
 public class StaticPage extends BasePage {
 
@@ -62,26 +62,25 @@ public class StaticPage extends BasePage {
         caption = ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(descriptor, ((PMSiteWebRequest) getRequest()).getSiteLocale());
         mainPanel.add(new Label("caption", caption));
 
-        mainPanel.add(new WebComponent("content") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                Response response = getRequestCycle().getResponse();
-
-                EntityQueryCriteria<PageContent> pageContentCriteria = EntityQueryCriteria.create(PageContent.class);
-                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), ((PMSiteWebRequest) getRequest()).getSiteLocale()));
-                pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().descriptor(), descriptor));
-
-                List<PageContent> pages = Persistence.service().query(pageContentCriteria);
-                if (pages.size() == 1) {
-                    response.write(pages.get(0).content().getStringView());
-                }
+        Component content;
+        String contentId = "content";
+        String pageId = PMSiteContentManager.toPageId(descriptor.name().getValue());
+        if ("news".equals(pageId)) {
+            content = new StaticNewsPanel(contentId);
+        } else if ("testimonials".equals(pageId)) {
+            content = new StaticTestimPanel(contentId);
+        } else {
+            String html = "";
+            EntityQueryCriteria<PageContent> pageContentCriteria = EntityQueryCriteria.create(PageContent.class);
+            pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().locale(), ((PMSiteWebRequest) getRequest()).getSiteLocale()));
+            pageContentCriteria.add(PropertyCriterion.eq(pageContentCriteria.proto().descriptor(), descriptor));
+            List<PageContent> pages = Persistence.service().query(pageContentCriteria);
+            if (pages.size() > 0) {
+                html = pages.get(0).content().getStringView();
             }
-
-        });
-
+            content = new Label(contentId, html).setEscapeModelStrings(false);
+        }
+        mainPanel.add(content);
     }
 
     @Override

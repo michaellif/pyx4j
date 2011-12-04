@@ -13,13 +13,16 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.propertyvista.domain.site.News;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 
 public class NewsPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -27,23 +30,44 @@ public class NewsPanel extends Panel {
     public NewsPanel(String id) {
         super(id);
 
-        add(new ListView<News>("newsItem", ((PMSiteWebRequest) getRequest()).getContentManager().getNews(((PMSiteWebRequest) getRequest()).getSiteLocale())) {
+        PMSiteWebRequest request = (PMSiteWebRequest) getRequest();
+        PMSiteContentManager cm = request.getContentManager();
+        final NavigationItem newsNav = cm.getSecondaryNavigItem("news");
+        add(new ListView<News>("newsItem", cm.getNews(request.getSiteLocale())) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<News> item) {
                 News news = item.getModelObject();
                 item.add(new Label("date", news.date().getStringView()));
-                item.add(new Label("headline", news.caption().getStringView()));
+                Component headline = null;
+                String headlineText = news.caption().getStringView();
+                String headlineId = "headline";
+                String itemAnchor = null;
+                if (newsNav != null) {
+                    itemAnchor = "item" + news.getPrimaryKey().asLong();
+                    headline = new PageLink(headlineId, newsNav.getDestination(), newsNav.getPageParameters());
+                    ((PageLink) headline).setText(headlineText).setAnchor(itemAnchor);
+                } else {
+                    headline = new Label(headlineId, headlineText);
+                }
+                item.add(headline);
 
-                //TODO cut it nicely
                 String content = news.content().getStringView();
+                Component readMore = null;
+                String readmoreId = "more";
                 if (content.length() >= 150) {
                     content = content.substring(0, 150) + " ...";
+                    if (newsNav != null) {
+                        readMore = new PageLink(readmoreId, newsNav.getDestination(), newsNav.getPageParameters());
+                        ((PageLink) readMore).setText("&raquo;").setAnchor(itemAnchor).setEscapeModelStrings(false);
+                    }
+                }
+                if (readMore == null) {
+                    readMore = new Label(readmoreId, "").setRenderBodyOnly(true);
                 }
                 item.add(new Label("text", content));
-
-                item.add(new Label("more", "&raquo;").setEscapeModelStrings(false));
+                item.add(readMore);
             }
         });
     }

@@ -256,6 +256,38 @@ public class WicketUtils {
         }
     }
 
+    public static class PageLink extends BookmarkablePageLink<Void> {
+        private static final long serialVersionUID = 1L;
+
+        private String anchor;
+
+        public PageLink(String id, Class<? extends Page> page) {
+            super(id, page);
+        }
+
+        public PageLink(String id, Class<? extends Page> page, PageParameters pp) {
+            super(id, page, pp);
+        }
+
+        public PageLink setText(String text) {
+            setBody(new Model<String>(text));
+            return this;
+        }
+
+        public PageLink setAnchor(String a) {
+            this.anchor = a;
+            return this;
+        }
+
+        @Override
+        protected CharSequence getURL() {
+            String url = super.getURL().toString();
+            if (anchor != null)
+                url += '#' + anchor;
+            return url;
+        }
+    }
+
     public static class LocalizedPageLink extends BookmarkablePageLink<Void> {
         private static final long serialVersionUID = 1L;
 

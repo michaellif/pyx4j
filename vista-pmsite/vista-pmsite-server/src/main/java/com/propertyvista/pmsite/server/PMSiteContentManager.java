@@ -209,10 +209,23 @@ public class PMSiteContentManager implements Serializable {
         return list;
     }
 
+    public NavigationItem getSecondaryNavigItem(String pageId) {
+        for (PageDescriptor pd : siteDescriptor.childPages()) {
+            // look through the secondary pages only
+            PageDescriptor pd2 = getPageDescriptor(pd.childPages(), pageId);
+            if (pd2 != null) {
+                return new NavigationItem(pd2);
+            }
+        }
+        return null;
+    }
+
     private static PageDescriptor getPageDescriptor(List<PageDescriptor> pages, String pageId) {
-        for (PageDescriptor descriptor : pages) {
-            if (pageId != null && pageId.equals(toPageId(descriptor.name().getValue()))) {
-                return descriptor;
+        if (pageId != null) {
+            for (PageDescriptor descriptor : pages) {
+                if (pageId.equals(toPageId(descriptor.name().getValue()))) {
+                    return descriptor;
+                }
             }
         }
         return null;
@@ -230,7 +243,7 @@ public class PMSiteContentManager implements Serializable {
         return params;
     }
 
-    private static String toPageId(String caption) {
+    public static String toPageId(String caption) {
         return caption.toLowerCase().replaceAll("\\s+", "_").trim();
     }
 

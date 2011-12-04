@@ -122,7 +122,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 titles.prospectPortalTitle().setValue(pmcName());
                 titles.copyright().setValue(copyright());
 
-                titles.residentPortalPromotions().setValue(li.i18n.tr("Promotions"));
+                titles.residentPortalPromotions().setValue(li.i18n.tr("Featured Apartments"));
 
                 site.siteTitles().add(titles);
             }
@@ -198,6 +198,24 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 for (LocaleInfo li : siteLocale) {
                     addCaption(childPage, li.i18n.tr(childPageCaption), li.aLocale);
                     addContent(childPage, "careers.html", li.aLocale);
+                }
+                page.childPages().add(childPage);
+            }
+
+            {
+                final String childPageCaption = "News";
+                PageDescriptor childPage = createPage(childPageCaption, PageDescriptor.Type.staticContent);
+                for (LocaleInfo li : siteLocale) {
+                    addCaption(childPage, li.i18n.tr(childPageCaption), li.aLocale);
+                }
+                page.childPages().add(childPage);
+            }
+
+            {
+                final String childPageCaption = "Testimonials";
+                PageDescriptor childPage = createPage(childPageCaption, PageDescriptor.Type.staticContent);
+                for (LocaleInfo li : siteLocale) {
+                    addCaption(childPage, li.i18n.tr(childPageCaption), li.aLocale);
                 }
                 page.childPages().add(childPage);
             }

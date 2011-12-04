@@ -112,6 +112,20 @@ public abstract class BasePage extends WebPage {
         }
     }
 
+    @Override
+    protected void onDetach() {
+        super.onDetach();
+        /*
+         * When RequestAdapter completes, it will store in session all stateful pages (getStatelessHint()
+         * returning false). However, when ListenerInterfaceRequestHandler called, it triggers
+         * setStatelessHint(false) via PageProvider constructor on any page regardless whether it has
+         * stateful components or not (see ListenerInterfaceRequestHandler#respond). So, we set it back
+         * to true here as CommitRequest() method of the RequestAdapter class will call Page.onDetach()
+         * before checking stateless hint. See RequestAdapter#CommitRequest().
+         */
+        setStatelessHint(true);
+    }
+
     private void checkIfPageStateless(Page p) {
         if (!p.isPageStateless()) {
             // find out why
