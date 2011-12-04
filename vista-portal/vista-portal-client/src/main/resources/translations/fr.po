@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-03 12:04-0500\n"
+"POT-Creation-Date: 2011-12-04 24:24-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2917,6 +2917,10 @@ msgstr "Liste"
 #: com/propertyvista/domain/property/asset/unit/AptUnitItem.java:1
 msgid "Living Room"
 msgstr "Salon"
+
+#: com/pyx4j/rpc/client/ServiceExecutionInfo.java:41
+msgid "Loading..."
+msgstr ""
 
 #: com/propertyvista/domain/site/News.java:2
 #: com/propertyvista/domain/site/PageCaption.java:2
@@ -6139,8 +6143,9 @@ msgstr "millisecondes"
 msgid "yyyy"
 msgstr "yyyy"
 
+#. Price Selection
 #. java-format
-#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:69
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:70
 #, java-format
 msgid ""
 "{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
@@ -6151,7 +6156,7 @@ msgstr ""
 
 #. Number Of Bedrooms
 #. java-format
-#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:102
+#: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:103
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
 msgstr "{0,choice,null#Tout|0#Moins de {1}|0<{0}{1,choice,null# et plus|0<}}"

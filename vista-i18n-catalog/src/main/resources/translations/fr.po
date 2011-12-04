@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 #   <gisele@aubutcommunications.com>, 2011.
 #   <leonard@propertyvista.com>, 2011.
@@ -1372,6 +1372,22 @@ msgstr "Garde d'enfants"
 #: com/propertyvista/domain/site/Descriptor.java:2
 msgid "Child Pages"
 msgstr "Pages enfant"
+
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:62
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:47
+msgctxt "province"
+msgid "Choose One"
+msgstr "Choisir une"
+
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:82
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
+msgctxt "city"
+msgid "Choose One"
+msgstr "Choisir une"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
