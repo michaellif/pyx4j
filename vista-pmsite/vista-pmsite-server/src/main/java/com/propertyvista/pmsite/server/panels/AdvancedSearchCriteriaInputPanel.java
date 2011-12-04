@@ -59,10 +59,10 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         // add Province drop-down
         final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
-        DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false, i18n.trc(
-                "province", "Choose One"));
+        DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false,
+                i18n.tr("Select Province"));
         provChoice.add(AttributeModifier.replace("onChange",
-                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.trc("city", "Choose One") + "')"));
+                "setSelectionOptions('citySelect', provCity[this.options[this.selectedIndex].text], '" + i18n.tr("Select City") + "')"));
         add(provChoice);
 
         // add City drop-down
@@ -73,14 +73,14 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         } else {
             cities = Arrays.asList("- Select Province -");
         }
-        add(new WicketUtils.DropDownList<String>("city", model.bind(criteria.city()), cities, false, i18n.trc("city", "Choose One")));
+        add(new WicketUtils.DropDownList<String>("city", model.bind(criteria.city()), cities, false, i18n.tr("Select City")));
 
         // add JS city list
         String jsCityList =
         // set City for selected province
         "$(function() {\n" + "var sel = document.getElementById('provSelect');\n" + "if (! sel) return;\n"
-                + "setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], '" + i18n.trc("city", "Choose One") + "', selCity);\n"
-                + "});\n\n" + "var provCity = {};\n";
+                + "setSelectionOptions('citySelect', provCity[sel.options[sel.selectedIndex].text], '" + i18n.tr("Select City") + "', selCity);\n" + "});\n\n"
+                + "var provCity = {};\n";
         for (String _prov : provCityMap.keySet()) {
             String _list = "";
             for (String _city : provCityMap.get(_prov)) {

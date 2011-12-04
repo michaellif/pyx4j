@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-04 24:24-0500\n"
+"POT-Creation-Date: 2011-12-04 01:14-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1132,22 +1132,6 @@ msgstr "Garde d'enfants"
 #: com/propertyvista/domain/site/Descriptor.java:2
 msgid "Child Pages"
 msgstr "Pages enfant"
-
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:82
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
-msgctxt "city"
-msgid "Choose One"
-msgstr "Choisir une"
-
-#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:62
-#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:47
-msgctxt "province"
-msgid "Choose One"
-msgstr "Choisir une"
 
 #. Street Type
 #: com/propertyvista/domain/contact/AddressStructured.java:1
@@ -5212,6 +5196,20 @@ msgstr "Légende secondaire"
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
 msgid "Seen"
 msgstr "Vu/vue"
+
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:65
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:76
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:82
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:50
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:61
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:67
+msgid "Select City"
+msgstr ""
+
+#: com/propertyvista/pmsite/server/panels/AdvancedSearchCriteriaInputPanel.java:63
+#: com/propertyvista/pmsite/server/panels/QuickSearchCriteriaInputPanel.java:48
+msgid "Select Province"
+msgstr ""
 
 #: com/propertyvista/dto/LeaseDTO.java:2
 msgid "Selected Building"
