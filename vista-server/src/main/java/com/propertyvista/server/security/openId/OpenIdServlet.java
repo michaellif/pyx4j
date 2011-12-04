@@ -80,6 +80,8 @@ public class OpenIdServlet extends HttpServlet {
         out.println("<title>Access " + (signIn ? " Restricted" : " Granted") + " </title></head><body>");
         out.println("<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" href=\"" + location + "\">" + message + "</A>");
         if (signIn) {
+            out.print(IOUtils.getTextResource("signin-wellcome.html", OpenIdServlet.class));
+        } else {
             out.print(IOUtils.getTextResource("login-successful.html", OpenIdServlet.class));
         }
         out.print("</body></html>");
