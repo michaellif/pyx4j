@@ -36,7 +36,7 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState.LegalStatus;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenant;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 

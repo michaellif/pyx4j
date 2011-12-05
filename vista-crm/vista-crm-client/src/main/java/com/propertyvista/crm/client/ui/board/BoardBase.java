@@ -36,11 +36,11 @@ import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.gadgets.GadgetsFactory;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetBase;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
+import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
@@ -137,10 +137,10 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             setLayout(dashboardMetadata.layoutType().getValue());
             // fill the dashboard with gadgets:
             for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
-                IGadgetBase gadget = GadgetsFactory.createGadget(gmd.type().getValue(), gmd);
+                IGadgetInstanceBase gadget = Directory.createGadget(gmd);
                 if (gadget != null) {
                     gadget.setPresenter(presenter);
-                    board.addGadget(gadget, gmd.column().getValue());
+                    board.addGadget(gadget, gmd.docking().column().getValue());
                 }
             }
         }
@@ -153,6 +153,14 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         IGadgetIterator it = board.getGadgetIterator();
         while (it.hasNext()) {
             it.next().start(); // allow gadget execution... 
+        }
+    }
+
+    @Override
+    public void stop() {
+        IGadgetIterator i = board.getGadgetIterator();
+        while (i.hasNext()) {
+            i.next().stop();
         }
     }
 
@@ -169,9 +177,9 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             IGadgetIterator it = board.getGadgetIterator();
             while (it.hasNext()) {
                 IGadget gadget = it.next();
-                if (gadget instanceof IGadgetBase) {
-                    GadgetMetadata gmd = ((IGadgetBase) gadget).getGadgetMetadata(); // gadget meta should be up to date!.. 
-                    gmd.column().setValue(it.getColumn()); // update current gadget column...
+                if (gadget instanceof IGadgetInstanceBase) {
+                    GadgetMetadata gmd = ((IGadgetInstanceBase) gadget).getMetadata(); // gadget meta should be up to date!.. 
+                    gmd.docking().column().setValue(it.getColumn()); // update current gadget column...
                     dashboardMetadata.gadgets().add(gmd);
                 }
             }
@@ -218,6 +226,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
         switch (reason) {
         case addGadget:
+            break;
         case removeGadget:
             break;
         case repositionGadget:
@@ -230,6 +239,8 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             break;
         }
 
+        fireResizeRequests();
+
         if (save && !isReadOnly()) {
             if (showSaveButton) {
                 btnSave.setEnabled(true); // user should manually save the state... 
@@ -239,12 +250,20 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         }
     }
 
+    private void fireResizeRequests() {
+        IGadgetIterator i = board.getGadgetIterator();
+        while (i.hasNext()) {
+            i.next().onResize();
+        }
+    }
+
     protected boolean isGadgetRepositioned() {
         IGadgetIterator it = board.getGadgetIterator();
         for (GadgetMetadata gmd : this.dashboardMetadata.gadgets()) { // iterate on meta-data... 
             if (it.hasNext()) {
                 IGadget gadget = it.next(); // get corresponding gadget from dashboard...
-                if (gadget.getName().compareTo(gmd.name().getValue()) != 0 || it.getColumn() != gmd.column().getValue()) {
+                // FIXME REALLY evil casting... need to do something about the IGagdget interface: add an ID and compare them or something like that...
+                if (!((IGadgetInstanceBase) gadget).getMetadata().equals(gmd) | it.getColumn() != gmd.docking().column().getValue()) {
                     return true; // not the same gadget!?.
                 }
             } else {

@@ -36,7 +36,7 @@ import com.propertyvista.crm.server.util.SeqUtils;
 import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class ArrearsReportServiceImpl implements ArrearsReportService {
     private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);

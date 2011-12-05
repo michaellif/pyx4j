@@ -27,7 +27,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public abstract class BoardViewActivity<V extends BoardView> extends AbstractActivity implements BoardView.Presenter {
 
@@ -128,10 +128,10 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 // GadgetPresenter:
 
     @Override
-    public void save(Key gadgetId, AbstractGadgetSettings settings) {
-        getService().saveSettings(new AsyncCallback<AbstractGadgetSettings>() {
+    public void save(Key gadgetId, GadgetMetadata settings) {
+        getService().saveSettings(new AsyncCallback<GadgetMetadata>() {
             @Override
-            public void onSuccess(AbstractGadgetSettings result) {
+            public void onSuccess(GadgetMetadata result) {
                 view.onSaveSuccess();
             }
 
@@ -143,11 +143,17 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
     }
 
     @Override
-    public void retrieve(Key gadgetId, AsyncCallback<AbstractGadgetSettings> callback) {
+    public void retrieve(Key gadgetId, AsyncCallback<GadgetMetadata> callback) {
         getService().retrieveSettings(callback, gadgetId);
     }
 
     protected boolean isTypedDashboard() {
         return (entityId == null);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        view.stop();
     }
 }

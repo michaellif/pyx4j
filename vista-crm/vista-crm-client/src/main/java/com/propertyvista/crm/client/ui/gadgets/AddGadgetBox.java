@@ -13,69 +13,73 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SingleSelectionModel;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
-import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 
 public class AddGadgetBox extends DialogPanel {
+    private static final GadgetFactoryCellTemplate GADGET_FACTORY_CELL_TEMPLATE = GWT.create(GadgetFactoryCellTemplate.class);
 
-    private final I18n i18n = I18n.get(AddGadgetBox.class);
+    private static final I18n i18n = I18n.get(AddGadgetBox.class);
 
-    private final ListBox gadgetsList = new ListBox();
+    private final CellList<IGadgetFactory> gadgets;
 
-    private final Label gadgetDesc = new Label();
+    private final SingleSelectionModel<IGadgetFactory> selectionModel;
 
-    private IGadget selectedGadget = null;
+    private boolean isOK = false;
 
-    private final DashboardType dashboardType;
-
-    public AddGadgetBox(DashboardType dashboardType) {
+    public AddGadgetBox(final DashboardType dashboardType) {
+        // FIXME styling
         super(false, true);
-        this.dashboardType = dashboardType;
         setCaption(i18n.tr("Gadget Directory"));
 
-        listAvailableGadgets();
+        gadgets = new CellList<IGadgetFactory>(new GadgetFactoryCell());
+        gadgets.setHeight("100%");
 
-        HorizontalPanel gadgets = new HorizontalPanel();
-        gadgets.add(gadgetsList);
-        gadgets.add(gadgetDesc);
-        gadgets.setSpacing(8);
-        gadgets.setWidth("100%");
+        selectionModel = new SingleSelectionModel<IGadgetFactory>();
+        gadgets.setSelectionModel(selectionModel);
 
-        gadgets.setCellWidth(gadgetsList, "60%");
-        gadgetsList.setWidth("100%");
+        SimplePager pager = new SimplePager();
+        pager.setDisplay(gadgets);
+        pager.setPageSize(10);
+        pager.setWidth("100%");
 
-        // style right (description) cell:
-        gadgetDesc.setText(i18n.tr("Select desired gadget in the list..."));
-        Element cell = DOM.getParent(gadgetDesc.getElement());
-        cell.getStyle().setPadding(3, Unit.PX);
-        cell.getStyle().setBorderStyle(BorderStyle.SOLID);
-        cell.getStyle().setBorderWidth(1, Unit.PX);
-        cell.getStyle().setBorderColor("#bbb");
+        final ListDataProvider<IGadgetFactory> provider = new ListDataProvider<IGadgetFactory>();
+        provider.addDataDisplay(gadgets);
+        provider.setList(getAvailableGadgets(dashboardType));
+
+        FormFlexPanel addGadgetBoxPanel = new FormFlexPanel();
+        addGadgetBoxPanel.setWidget(0, 0, gadgets);
+        addGadgetBoxPanel.setWidget(1, 0, pager);
+        addGadgetBoxPanel.getFlexCellFormatter().setHeight(1, 0, "1em");
+        addGadgetBoxPanel.setWidth("100%");
 
         HorizontalPanel buttons = new HorizontalPanel();
         buttons.add(new Button(i18n.tr("Add"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                createSelectedGadget();
+                isOK = true;
                 hide();
             }
         }));
@@ -86,45 +90,44 @@ public class AddGadgetBox extends DialogPanel {
             }
         }));
         buttons.setSpacing(8);
+        addGadgetBoxPanel.setWidget(2, 0, buttons);
+        addGadgetBoxPanel.getFlexCellFormatter().setColSpan(2, 0, 2);
+        addGadgetBoxPanel.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-        VerticalPanel vPanel = new VerticalPanel();
-        vPanel.add(gadgets);
-        vPanel.add(buttons);
-        vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
-        vPanel.setSpacing(8);
-        vPanel.setSize("100%", "100%");
-
-        setContentWidget(vPanel);
-        setSize("600px", "300px");
+        setContentWidget(addGadgetBoxPanel);
+        setSize("100%", "100%");
     }
 
     public IGadget getSelectedGadget() {
-        return selectedGadget;
+        if (isOK) {
+            IGadgetFactory gadgetFactory = selectionModel.getSelectedObject();
+            return gadgetFactory != null ? gadgetFactory.createGadget(null) : null;
+        } else {
+            return null;
+        }
     }
 
-    private void listAvailableGadgets() {
-        gadgetsList.clear();
-        for (GadgetType gadgetType : GadgetType.values()) {
-            if (GadgetsFactory.isGadgetAllowed(gadgetType, dashboardType)) {
-                gadgetsList.addItem(gadgetType.toString(), gadgetType.name());
+    private List<IGadgetFactory> getAvailableGadgets(DashboardType dashboardType) {
+        List<IGadgetFactory> factories = new LinkedList<IGadgetFactory>();
+        for (IGadgetFactory gadgetFactory : Directory.DIRECTORY) {
+            if (gadgetFactory.isAcceptedBy(dashboardType)) {
+                factories.add(gadgetFactory);
             }
         }
-        gadgetsList.setSelectedIndex(-1);
-        gadgetsList.setVisibleItemCount(12);
-        gadgetsList.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                if (gadgetsList.getSelectedIndex() >= 0) {
-                    gadgetDesc.setText(GadgetsFactory.getGadgetDescription(GadgetType.valueOf(gadgetsList.getValue(gadgetsList.getSelectedIndex()))));
-                }
-            }
-        });
+        return factories;
     }
 
-    private void createSelectedGadget() {
-        selectedGadget = null;
-        if (gadgetsList.getSelectedIndex() >= 0) {
-            selectedGadget = GadgetsFactory.createGadget(GadgetType.valueOf(gadgetsList.getValue(gadgetsList.getSelectedIndex())), null);
+    public interface GadgetFactoryCellTemplate extends SafeHtmlTemplates {
+        @Template("<div title=\"{1}\" style=\"text-align: center\">{0}</div>")
+        SafeHtml factoryCellWithTooltipDescription(String name, String description);
+    }
+
+    private class GadgetFactoryCell extends AbstractCell<IGadgetFactory> {
+        @Override
+        public void render(com.google.gwt.cell.client.Cell.Context context, IGadgetFactory value, SafeHtmlBuilder sb) {
+            if (value != null) {
+                sb.append(GADGET_FACTORY_CELL_TEMPLATE.factoryCellWithTooltipDescription(value.getName(), value.getDescription()));
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public interface AbstractMetadataService extends IService {
 
@@ -31,8 +31,8 @@ public interface AbstractMetadataService extends IService {
 
     public void saveMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata editableEntity);
 
-    public void retrieveSettings(AsyncCallback<AbstractGadgetSettings> callback, Key gadgetMetadataId);
+    public void retrieveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId);
 
-    public void saveSettings(AsyncCallback<AbstractGadgetSettings> callback, Key gadgetMetadataId, AbstractGadgetSettings editableEntity);
+    public void saveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId, GadgetMetadata editableEntity);
 
 }

@@ -54,7 +54,7 @@ import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;

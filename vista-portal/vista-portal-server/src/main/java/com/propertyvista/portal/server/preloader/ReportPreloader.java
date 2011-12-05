@@ -19,7 +19,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class ReportPreloader extends AbstractDataPreloader {
 
@@ -37,6 +37,7 @@ public class ReportPreloader extends AbstractDataPreloader {
     @SuppressWarnings("unchecked")
     @Override
     public String delete() {
+        // FIXME should I add here all GadgetSettings types???
         return deleteAll(DashboardMetadata.class, GadgetMetadata.class);
     }
 

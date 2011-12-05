@@ -1,0 +1,374 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2011-04-25
+ * @author Vlad
+ * @version $Id$
+ */
+package com.propertyvista.crm.client.ui.gadgets;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
+import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
+import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
+
+//TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
+public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE extends ListerGadgetBaseMetadata> extends GadgetInstanceBase<GADGET_TYPE> {
+    private static final I18n i18n = I18n.get(ListerGadgetInstanceBase.class);
+
+    protected static final int DEFAULT_PAGE_SIZE = 10;
+
+    private DataTablePanel<E> dataTablePanel;
+
+    private final E proto;
+
+    private final Class<E> entityClass;
+
+    public ListerGadgetInstanceBase(GadgetMetadata gmd, Class<E> entityClass, Class<GADGET_TYPE> gadgetTypeClass) {
+        super(gmd, gadgetTypeClass);
+
+        this.entityClass = entityClass;
+        proto = EntityFactory.getEntityPrototype(entityClass);
+
+        setDefaultPopulator(new Populator() {
+            @Override
+            public void populate() {
+                doPopulate();
+            }
+        });
+    }
+
+    protected final E proto() {
+        return proto;
+    }
+
+    protected abstract boolean isFilterRequired();
+
+    /**
+     * Implement in derived class to fill the page via {@link #setPageData(List, int, int, boolean)}.
+     * 
+     * @param pageNumber
+     */
+    public abstract void populatePage(int pageNumber);
+
+    public abstract List<ColumnDescriptor<E>> defineColumnDescriptors();
+
+    /**
+     * Actions, Override in derived class for your own select item procedure.
+     */
+    protected void onItemSelect(E item) {
+    }
+
+    /**
+     * Convenience method that allows to avoid a lot of unnecessary typing.
+     * 
+     * @param member
+     * @param title
+     *            use <code>null</code> to set default title.
+     * @param visible
+     * @return
+     */
+    protected final ColumnDescriptor<E> col(IObject<?> member, String title, boolean visible) {
+        if (title == null) {
+            return ColumnDescriptorFactory.createColumnDescriptor(proto(), member, visible);
+        } else {
+            return ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), member, title, visible);
+        }
+    }
+
+    protected final ColumnDescriptor<E> col(IObject<?> member, boolean visible) {
+        return col(member, null, visible);
+    }
+
+    protected final ColumnDescriptor<E> colv(IObject<?> member) {
+        return col(member, true);
+    }
+
+    protected final ColumnDescriptor<E> colv(IObject<?> member, String title) {
+        return col(member, title, true);
+    }
+
+    /** Create invisible (hidden) column */
+    protected final ColumnDescriptor<E> colh(IObject<?> member) {
+        return col(member, false);
+    }
+
+    /** Create invisible (hidden) column */
+    protected final ColumnDescriptor<E> colh(IObject<?> member, String title) {
+        return col(member, title, false);
+    }
+
+    private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings() {
+        // FIXME remove the next line when the stringholder string duplication is solved
+        ListerGadgetBaseMetadata settings = EntityFactory.create(ListerGadgetBaseMetadata.class);
+
+        if (settings.columnDescriptors().isEmpty()) {
+            List<ColumnDescriptor<E>> descriptors = defineColumnDescriptors();
+            for (ColumnDescriptor<E> columnDescriptor : descriptors) {
+                ColumnDescriptorEntity columnDescriptorEntity = EntityFactory.create(ColumnDescriptorEntity.class);
+                columnDescriptorEntity.propertyPath().setValue(columnDescriptor.getColumnName());
+                columnDescriptorEntity.title().setValue(columnDescriptor.getColumnTitle());
+                columnDescriptorEntity.visible().setValue(columnDescriptor.isVisible());
+                columnDescriptorEntity.sortingPrecedence().setValue(columnDescriptor.isSortable() ? 1 : null);
+                columnDescriptorEntity.sortAscending().setValue(columnDescriptor.isSortAscending());
+                settings.columnDescriptors().add(columnDescriptorEntity);
+            }
+        }
+
+        List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
+        for (ColumnDescriptorEntity columnDescriptorEntity : settings.columnDescriptors()) {
+            Path propertyPath = new Path(columnDescriptorEntity.propertyPath().getValue());
+            String title = columnDescriptorEntity.title().getValue();
+            boolean visibility = columnDescriptorEntity.visible().getValue();
+            ColumnDescriptor<E> columnDescriptor = col(proto().getMember(propertyPath), title, visibility);
+            // TODO add sorting
+            columnDescriptors.add(columnDescriptor);
+        }
+        return columnDescriptors;
+    }
+
+    protected void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(columnDescriptors);
+    }
+
+    protected boolean isSettingsInstanceOk(GadgetMetadata abstractSettings) {
+        return abstractSettings.isInstanceOf(ListerGadgetBaseMetadata.class);
+    }
+
+    @Override
+    protected GADGET_TYPE createDefaultSettings(Class<GADGET_TYPE> metadataClass) {
+        GADGET_TYPE settings = super.createDefaultSettings(metadataClass);
+        settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
+        settings.pageNumber().setValue(0);
+        return settings;
+    }
+
+    @Override
+    public void start() {
+        getMetadata().pageNumber().setValue(0);
+        super.start();
+    }
+
+    @Override
+    public boolean isSetupable() {
+        return true;
+    }
+
+    @Override
+    public ISetup getSetup() {
+        return new SetupLister();
+    }
+
+    protected Widget initListerWidget() {
+        dataTablePanel = new DataTablePanel<E>(entityClass);
+        dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
+        dataTablePanel.setFilterActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                populate();
+            }
+        });
+        dataTablePanel.setPrevActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                prevListPage();
+            }
+        });
+        dataTablePanel.setNextActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                nextListPage();
+            }
+        });
+        dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+            @Override
+            public void onChange(ColumnDescriptor<E> column) {
+                populate();
+            }
+        });
+        // item selection stuff:
+        dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
+            @Override
+            public void onSelect(int selectedRow) {
+                E item = dataTablePanel.getDataTable().getSelectedItem();
+                if (item != null) {
+                    onItemSelect(item);
+                }
+            }
+        });
+        // FIXME add handler for column selection (store the selected columns in settings)        
+
+        dataTablePanel.setSize("100%", "100%");
+        dataTablePanel.setFilterEnabled(isFilterRequired());
+        dataTablePanel.getDataTable().setHasColumnClickSorting(true);
+        dataTablePanel.getDataTable().setHasCheckboxColumn(false);
+        dataTablePanel.getDataTable().setMarkSelectedRow(false);
+        dataTablePanel.getDataTable().setAutoColumnsWidth(true);
+        dataTablePanel.getDataTable().renderTable();
+        return dataTablePanel;
+    }
+
+    protected IsWidget getListerWidget() {
+        return dataTablePanel;
+    }
+
+    protected List<DataTableFilterData> getListerFilterData() {
+        return dataTablePanel.getFilterData();
+    }
+
+    public int getPageSize() {
+        return getMetadata().pageSize().getValue();
+    }
+
+    /**
+     * Sets page size but does not populate the list: the specified page size will be applied on next population.
+     * 
+     * @param pageSize
+     */
+    public void setPageSize(int pageSize) {
+        getMetadata().pageSize().setValue(pageSize > 1 ? pageSize : DEFAULT_PAGE_SIZE);
+    }
+
+    public int getPageNumber() {
+        return getMetadata().pageNumber().getValue();
+    }
+
+    public List<Sort> getSorting() {
+        return dataTablePanel.getDataTableModel().getSortCriteria();
+    }
+
+    /**
+     * Fills the lister with data for a single page.
+     * 
+     * @param data
+     * @param pageNumber
+     * @param totalRows
+     * @param hasMoreData
+     */
+    public final void setPageData(List<E> data, int pageNumber, int totalRows, boolean hasMoreData) {
+        getMetadata().pageNumber().setValue(pageNumber);
+        if (data.size() == 0 & pageNumber > 0) {
+            prevListPage();
+        } else {
+            dataTablePanel.setPageSize(getMetadata().pageSize().getValue());
+            dataTablePanel.populateData(data, pageNumber, hasMoreData, totalRows);
+        }
+    }
+
+    private void nextListPage() {
+        getMetadata().pageNumber().setValue(getPageNumber() + 1);
+        populate();
+    }
+
+    private void prevListPage() {
+        if (getPageNumber() != 0) {
+            getMetadata().pageNumber().setValue(getPageNumber() - 1);
+            populate();
+        }
+    }
+
+    private void doPopulate() {
+        populatePage(getPageNumber());
+    }
+
+    private class SetupLister implements ISetup {
+
+        protected final FlexTable setupPanel = new FlexTable();
+
+        protected final TextBox itemsPerPage = new TextBox();
+
+        protected final ListBox intervalList = new ListBox(false);
+
+        protected SetupLister() {
+            super();
+
+            setupPanel.setWidget(0, 0, new Label(i18n.tr("Items Per Page") + ":"));
+
+            itemsPerPage.setText(String.valueOf(getMetadata().pageSize().getValue()));
+            itemsPerPage.setWidth("3em");
+            setupPanel.setWidget(0, 1, itemsPerPage);
+
+            setupPanel.setWidget(1, 0, new Label(i18n.tr("Refresh Interval") + ":"));
+
+            for (RefreshInterval i : RefreshInterval.values()) {
+                intervalList.addItem(i.toString(), i.name());
+                if (getMetadata().refreshPeriod().getValue() == i.value()) {
+                    intervalList.setSelectedIndex(intervalList.getItemCount() - 1);
+                }
+            }
+            intervalList.setWidth("100%");
+            setupPanel.setWidget(1, 1, intervalList);
+
+            setupPanel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
+        }
+
+        @Override
+        public Widget asWidget() {
+            return setupPanel;
+        }
+
+        @Override
+        public boolean onStart() {
+            suspend();
+            return true;
+        }
+
+        @Override
+        public boolean onOk() {
+            int itemsPerPageCount = getMetadata().pageSize().getValue();
+            try {
+                itemsPerPageCount = Integer.parseInt(itemsPerPage.getText());
+            } catch (Throwable e) {
+                // TODO ignore? show an error message? return false? make control validate the input?
+            }
+            GWT.isProdMode();
+            setPageSize(itemsPerPageCount);
+            if (intervalList.getSelectedIndex() != -1) {
+                getMetadata().refreshPeriod().setValue(RefreshInterval.valueOf(intervalList.getValue(intervalList.getSelectedIndex())).value());
+            }
+
+            // restart the gadget:
+            stop();
+            start();
+            return true;
+        }
+
+        @Override
+        public void onCancel() {
+            resume();
+        }
+    }
+}

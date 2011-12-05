@@ -14,13 +14,20 @@
 package com.propertvista.generator;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatus;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatus.Category;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChart;
+import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
+import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
+import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
 
 public class DashboardGenerator extends Dashboards {
 
@@ -42,36 +49,22 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue("Displays default system data");
         dmd.layoutType().setValue(LayoutType.One);
 
-        GadgetMetadata gmd;
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.BuildingLister);
-        gmd.name().setValue(GadgetType.BuildingLister.toString());
-        gmd.column().setValue(0);
+        BuildingLister buildingLister = EntityFactory.create(BuildingLister.class);
+        buildingLister.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+        buildingLister.pageSize().setValue(10);
+        buildingLister.pageNumber().setValue(0);
+        buildingLister.refreshPeriod().setValue(-1);
+        buildingLister.docking().column().setValue(0);
+        Persistence.service().persist(buildingLister);
 
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue(GadgetType.BarChartDisplay.toString() + " Demo");
-        gmd.column().setValue(0);
-
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue(GadgetType.LineChartDisplay.toString() + " Demo");
-        gmd.column().setValue(0);
-
-        dmd.gadgets().add(gmd);
+        dmd.gadgets().add(buildingLister);
 
         return dmd;
     }
 
     private DashboardMetadata DefaultBuilding1() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
+
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
@@ -79,86 +72,44 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue("Displays some building data");
         dmd.layoutType().setValue(LayoutType.Two21);
 
-        GadgetMetadata gmd;
-
-//        for (int i = 0; i < 2; ++i) {
-//            gmd = EntityFactory.create(GadgetMetadata.class);
-//            gmd.type().setValue(GadgetType.Demo);
-//            gmd.name().setValue("Gadget #" + i);
-//            gmd.column().setValue(0);
-//
-//            gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
-//            dmd.gadgets().add(gmd);
-//        }
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.BarChartDisplay);
-        gmd.name().setValue(GadgetType.BarChartDisplay.toString() + " Demo");
-        gmd.column().setValue(0);
-
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.LineChartDisplay);
-        gmd.name().setValue(GadgetType.LineChartDisplay.toString() + " Demo");
-        gmd.column().setValue(0);
-
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.PieChartDisplay);
-        gmd.name().setValue(GadgetType.PieChartDisplay.toString() + " Demo");
-        gmd.column().setValue(1);
-
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.GaugeDisplay);
-        gmd.name().setValue(GadgetType.GaugeDisplay.toString() + " Demo");
-        gmd.column().setValue(1);
-
-        dmd.gadgets().add(gmd);
-
+        // TODO add some more cool gadgets
         return dmd;
     }
 
     private DashboardMetadata DefaultBuilding2() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
+
         dmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue("Unit Availability Dashboard");
-        dmd.description().setValue("Displays some building data");
+        dmd.name().setValue("Availability Dashboard");
+        dmd.description().setValue("Contains various availablility gadgets");
         dmd.layoutType().setValue(LayoutType.One);
 
-        GadgetMetadata gmd;
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.UnitAvailabilityReport);
-        gmd.name().setValue(GadgetType.UnitAvailabilityReport.toString() + " Demo");
-        gmd.column().setValue(0);
+        UnitAvailability unitAvailabilityReport = EntityFactory.create(UnitAvailability.class);
+        unitAvailabilityReport.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+        unitAvailabilityReport.refreshPeriod().setValue(-1);
+        unitAvailabilityReport.pageSize().setValue(10);
+        unitAvailabilityReport.pageNumber().setValue(0);
+        unitAvailabilityReport.defaultFilteringButton().setValue(FilterPreset.All);
+        unitAvailabilityReport.docking().column().setValue(0);
+        Persistence.service().persist(unitAvailabilityReport);
+        dmd.gadgets().add(unitAvailabilityReport);
 
-        dmd.gadgets().add(gmd);
+        AvailabilitySummary availabilitySummary = EntityFactory.create(AvailabilitySummary.class);
+        availabilitySummary.user().id().setValue(Key.DORMANT_KEY);
+        availabilitySummary.refreshPeriod().setValue(-1);
+        availabilitySummary.docking().column().setValue(0);
+        Persistence.service().persist(availabilitySummary);
+        dmd.gadgets().add(availabilitySummary);
 
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.AvailabilitySummary);
-        gmd.name().setValue(GadgetType.AvailabilitySummary.toString() + " Demo");
-        gmd.column().setValue(0);
-
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.TurnoverAnalysisGraph);
-        gmd.name().setValue(GadgetType.TurnoverAnalysisGraph.toString() + " Demo");
-        gmd.column().setValue(0);
-
-        dmd.gadgets().add(gmd);
+        TurnoverAnalysisMetadata turnoverAnalysis = EntityFactory.create(TurnoverAnalysisMetadata.class);
+        turnoverAnalysis.user().id().setValue(Key.DORMANT_KEY);
+        turnoverAnalysis.refreshPeriod().setValue(-1);
+        turnoverAnalysis.isTurnoverMeasuredByPercent().setValue(false);
+        turnoverAnalysis.docking().column().setValue(0);
+        Persistence.service().persist(turnoverAnalysis);
+        dmd.gadgets().add(turnoverAnalysis);
 
         return dmd;
     }
@@ -172,49 +123,52 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue("Displays some building data");
         dmd.layoutType().setValue(LayoutType.One);
 
-        GadgetMetadata gmd;
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.TotalArrearsGadget);
-        gmd.name().setValue(GadgetType.TotalArrearsGadget.toString() + " Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
+        ArrearsStatus arrearsStatus = EntityFactory.create(ArrearsStatus.class);
+        arrearsStatus.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+        arrearsStatus.refreshPeriod().setValue(-1);
+        arrearsStatus.pageSize().setValue(10);
+        arrearsStatus.pageNumber().setValue(0);
+        arrearsStatus.category().setValue(Category.Total);
+        arrearsStatus.docking().column().setValue(0);
+        Persistence.service().persist(arrearsStatus);
+        dmd.gadgets().add(arrearsStatus);
 
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.RentArrearsGadget);
-        gmd.name().setValue(GadgetType.RentArrearsGadget.toString() + " Demo");
-        gmd.column().setValue(0);
+        arrearsStatus = EntityFactory.create(ArrearsStatus.class);
+        arrearsStatus.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+        arrearsStatus.refreshPeriod().setValue(-1);
+        arrearsStatus.pageSize().setValue(10);
+        arrearsStatus.pageNumber().setValue(0);
+        arrearsStatus.category().setValue(Category.Rent);
+        arrearsStatus.docking().column().setValue(0);
+        Persistence.service().persist(arrearsStatus);
+        dmd.gadgets().add(arrearsStatus);
 
-        dmd.gadgets().add(gmd);
+        arrearsStatus = EntityFactory.create(ArrearsStatus.class);
+        arrearsStatus.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+        arrearsStatus.refreshPeriod().setValue(-1);
+        arrearsStatus.pageSize().setValue(10);
+        arrearsStatus.pageNumber().setValue(0);
+        arrearsStatus.category().setValue(Category.Parking);
+        arrearsStatus.docking().column().setValue(0);
+        Persistence.service().persist(arrearsStatus);
+        dmd.gadgets().add(arrearsStatus);
 
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.ParkingArrearsGadget);
-        gmd.name().setValue(GadgetType.ParkingArrearsGadget.toString() + " Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
+        arrearsStatus = EntityFactory.create(ArrearsStatus.class);
+        arrearsStatus.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage
+        arrearsStatus.refreshPeriod().setValue(-1);
+        arrearsStatus.pageSize().setValue(10);
+        arrearsStatus.pageNumber().setValue(0);
+        arrearsStatus.category().setValue(Category.Other);
+        arrearsStatus.docking().column().setValue(0);
+        Persistence.service().persist(arrearsStatus);
+        dmd.gadgets().add(arrearsStatus);
 
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.OtherArrearsGadget);
-        gmd.name().setValue(GadgetType.OtherArrearsGadget.toString() + " Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.ArrearsSummaryGadget);
-        gmd.name().setValue(GadgetType.ArrearsSummaryGadget.toString() + " Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
-
-        gmd = EntityFactory.create(GadgetMetadata.class);
-        gmd.user().id().setValue(Key.DORMANT_KEY); // shared for everyone usage 
-        gmd.type().setValue(GadgetType.ArrearsARBalanceComparisonChart);
-        gmd.name().setValue(GadgetType.ArrearsARBalanceComparisonChart.toString() + " Demo");
-        gmd.column().setValue(0);
-        dmd.gadgets().add(gmd);
+        ArrearsYOYAnalysisChart chart = new EntityFactory().create(ArrearsYOYAnalysisChart.class);
+        chart.user().id().setValue(Key.DORMANT_KEY);
+        chart.refreshPeriod().setValue(-1);
+        chart.docking().column().setValue(0);
+        Persistence.service().persist(chart);
+        dmd.gadgets().add(chart);
 
         return dmd;
     }

@@ -39,12 +39,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO;
-import com.propertyvista.domain.dashboard.gadgets.vacancyreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
     private static SortingFactory<UnitAvailabilityStatusDTO> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);

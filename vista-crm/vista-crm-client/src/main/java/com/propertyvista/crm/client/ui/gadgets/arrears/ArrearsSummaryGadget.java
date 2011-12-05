@@ -27,86 +27,101 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.ListerGadgetBase;
+import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata.GadgetType;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class ArrearsSummaryGadget extends ListerGadgetBase<ArrearsSummary> implements IBuildingGadget {
-    FilterData filterData = null;
+public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMeta> {
+    private static final I18n i18n = I18n.get(ArrearsSummaryGadget.class);
 
-    ArrearsReportService service;
+    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<ArrearsSummary, ArrearsSummaryGadgetMeta> implements IBuildingGadget {
+        private static final I18n i18n = I18n.get(ArrearsSummaryGadgetImpl.class);
 
-    private boolean isLoading = false;
+        FilterData filterData = null;
 
-    public ArrearsSummaryGadget(GadgetMetadata gmd) {
-        super(gmd, ArrearsSummary.class);
-        service = GWT.create(ArrearsReportService.class);
-    }
+        ArrearsReportService service;
 
-    @Override
-    protected void selfInit(GadgetMetadata gmd) {
-        gmd.type().setValue(GadgetType.ArrearsSummaryGadget);
-        gmd.name().setValue(GadgetType.ArrearsSummaryGadget.toString());
-    }
+        public ArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
+            super(gmd, ArrearsSummary.class, ArrearsSummaryGadgetMeta.class);
+            service = GWT.create(ArrearsReportService.class);
+        }
 
-    //@formatter:off
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<ColumnDescriptor<ArrearsSummary>> defineColumnDescriptors() {
-        return Arrays.asList(
-                colv(proto().thisMonth(), i18n.tr("Total this month")),
-                colv(proto().monthAgo(), i18n.tr("Total 0-30")),
-                colv(proto().twoMonthsAgo(), i18n.tr("Total 30-60")),
-                colv(proto().threeMonthsAgo(), i18n.tr("Total 60-90")),
-                colv(proto().overFourMonthsAgo(), i18n.tr("Total over 90")),
-                colv(proto().arBalance(), i18n.tr("Total AR Balance")));
-    }
-    //@formatter:on
+        //@formatter:off
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<ColumnDescriptor<ArrearsSummary>> defineColumnDescriptors() {
+            return Arrays.asList(
+                    colv(proto().thisMonth(), i18n.tr("Total this month")),
+                    colv(proto().monthAgo(), i18n.tr("Total 0-30")),
+                    colv(proto().twoMonthsAgo(), i18n.tr("Total 30-60")),
+                    colv(proto().threeMonthsAgo(), i18n.tr("Total 60-90")),
+                    colv(proto().overFourMonthsAgo(), i18n.tr("Total over 90")),
+                    colv(proto().arBalance(), i18n.tr("Total AR Balance")));
+        }
+        //@formatter:on
 
-    @Override
-    public void setFiltering(FilterData filterData) {
-        this.filterData = filterData;
-        populatePage(0);
-    }
+        @Override
+        public void setFiltering(FilterData filterData) {
+            this.filterData = filterData;
+            populatePage(0);
+        }
 
-    @Override
-    public void populatePage(int pageNumber) {
-        if (filterData != null) {
-            if (isRunning() & !isLoading) {
-                final int p = pageNumber;
-                isLoading = true;
+        @Override
+        public void populatePage(final int pageNumber) {
+            if (filterData != null) {
                 service.summary(new AsyncCallback<EntitySearchResult<ArrearsSummary>>() {
                     @Override
                     public void onSuccess(EntitySearchResult<ArrearsSummary> result) {
-                        setPageData(result.getData(), p, result.getTotalRows(), result.hasMoreData());
-                        isLoading = false;
+                        setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
+                        populateSucceded();
                     }
 
                     @Override
                     public void onFailure(Throwable caught) {
-                        isLoading = false;
-                        throw new Error(caught);
+                        populateFailed(caught);
                     }
                 }, new Vector<Key>(filterData.buildings), filterData.toDate == null ? null : new LogicalDate(filterData.toDate),
                         new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
+            } else {
+                setPageData(new ArrayList<ArrearsSummary>(1), 0, 0, false);
+                populateSucceded();
             }
-        } else {
-            setPageData(new ArrayList<ArrearsSummary>(1), 0, 0, false);
+        }
+
+        @Override
+        public Widget initContentPanel() {
+            return initListerWidget();
+        }
+
+        @Override
+        protected boolean isFilterRequired() {
+            return false;
         }
     }
 
-    @Override
-    public Widget asWidget() {
-        return getListerWidget().asWidget();
+    public ArrearsSummaryGadget() {
+        super(ArrearsSummaryGadgetMeta.class);
     }
 
     @Override
-    protected boolean isFilterRequired() {
-        return false;
+    public String getDescription() {
+        return i18n.tr("Shows a short summary of the total arrears");
     }
 
+    @Override
+    public boolean isBuildingGadget() {
+        return true;
+    }
+
+    @Override
+    protected GadgetInstanceBase<ArrearsSummaryGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+        return new ArrearsSummaryGadgetImpl(gadgetMetadata);
+    }
 }

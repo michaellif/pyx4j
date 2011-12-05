@@ -96,4 +96,9 @@ public class BoardViewImpl extends DockLayoutPanel implements BoardView {
     public boolean onSaveFail(Throwable caught) {
         return board.onSaveFail(caught);
     }
+
+    @Override
+    public void stop() {
+        board.stop();
+    }
 }

@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -29,8 +28,7 @@ import com.pyx4j.server.contexts.Context;
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
 import com.propertyvista.domain.User;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.AbstractGadgetSettings;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.server.common.security.VistaContext;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
@@ -87,11 +85,6 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
             if (!Key.DORMANT_KEY.equals(gm.user().getPrimaryKey())) {
                 gm.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
             }
-
-            if (!gm.settings().isNull()) {
-                Persistence.service().merge(gm.settings());
-            }
-
             EntityServicesImpl.secureSave(gm);
         }
 
@@ -100,22 +93,20 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     }
 
     @Override
-    public void retrieveSettings(AsyncCallback<AbstractGadgetSettings> callback, Key gadgetMetadataId) {
+    public void retrieveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId) {
         GadgetMetadata gm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(GadgetMetadata.class, gadgetMetadataId));
         if (!gm.isNull()) {
-            callback.onSuccess(gm.settings());
+            callback.onSuccess(gm);
         } else {
             throw new Error("There is no such gadget! " + gadgetMetadataId.toString());
         }
     }
 
     @Override
-    public void saveSettings(AsyncCallback<AbstractGadgetSettings> callback, Key gadgetMetadataId, AbstractGadgetSettings settings) {
-        GadgetMetadata gm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(GadgetMetadata.class, settings.getPrimaryKey()));
-        if (!gm.isNull()) {
-            gm.settings().set(settings);
+    public void saveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId, GadgetMetadata settings) {
+        //GadgetSettings gm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(GadgetSettings.class, settings.getPrimaryKey()));
+        if (settings != null) {
             EntityServicesImpl.secureSave(settings);
-            EntityServicesImpl.secureSave(gm);
             callback.onSuccess(settings);
         } else {
             throw new Error("There is no such gadget! " + gadgetMetadataId.toString());

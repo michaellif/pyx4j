@@ -19,7 +19,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class DashboardPreloader extends AbstractDataPreloader {
 
