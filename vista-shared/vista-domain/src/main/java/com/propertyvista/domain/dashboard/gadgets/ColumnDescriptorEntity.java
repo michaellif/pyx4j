@@ -23,20 +23,8 @@ import com.pyx4j.entity.shared.IPrimitive;
  * 
  */
 public interface ColumnDescriptorEntity extends IEntity {
-    /** Determines which property of the embodied member to hold. */
+    /** Determines which property of the embodied member to hold. Supposed to be the same thing as <code>ColumnDescriptor.columnName() </code> */
     IPrimitive<String> propertyPath();
-
-    /** Sets title to override the default title of the column. <code>null</code> means use the default one */
-    IPrimitive<String> title();
-
-    IPrimitive<Boolean> visible();
-
-    /**
-     * Determines precedence of this column in comparison of lexicographic order (the lower the number the higher the precedence).
-     * 
-     * <code>null</code> means its is undefined and it's values are not compared durning sorting.
-     */
-    IPrimitive<Integer> sortingPrecedence();
 
     /**
      * Determine if sorting results should be in descending order (the opposite of default ordering).
@@ -45,7 +33,15 @@ public interface ColumnDescriptorEntity extends IEntity {
      */
     IPrimitive<Boolean> sortAscending();
 
-    /** Column width */
-    // TODO this is not yet clear (if it's % or absolute value)
-    IPrimitive<Double> width();
+    IPrimitive<Boolean> sortable();
+
+    /** Sets title to override the default title of the column. <code>null</code> means use the default one */
+    IPrimitive<String> title();
+
+    IPrimitive<String> width();
+
+    IPrimitive<Boolean> wordWrap();
+
+    /** Determines if the column is visible */
+    IPrimitive<Boolean> visiblily();
 }

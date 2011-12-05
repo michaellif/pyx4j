@@ -30,12 +30,12 @@ import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
@@ -126,37 +126,21 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         return col(member, title, false);
     }
 
+    @SuppressWarnings("unchecked")
     private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings() {
-        // FIXME remove the next line when the stringholder string duplication is solved
-        ListerGadgetBaseMetadata settings = EntityFactory.create(ListerGadgetBaseMetadata.class);
-
-        if (settings.columnDescriptors().isEmpty()) {
-            List<ColumnDescriptor<E>> descriptors = defineColumnDescriptors();
-            for (ColumnDescriptor<E> columnDescriptor : descriptors) {
-                ColumnDescriptorEntity columnDescriptorEntity = EntityFactory.create(ColumnDescriptorEntity.class);
-                columnDescriptorEntity.propertyPath().setValue(columnDescriptor.getColumnName());
-                columnDescriptorEntity.title().setValue(columnDescriptor.getColumnTitle());
-                columnDescriptorEntity.visible().setValue(columnDescriptor.isVisible());
-                columnDescriptorEntity.sortingPrecedence().setValue(columnDescriptor.isSortable() ? 1 : null);
-                columnDescriptorEntity.sortAscending().setValue(columnDescriptor.isSortAscending());
-                settings.columnDescriptors().add(columnDescriptorEntity);
-            }
-        }
-
         List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
-        for (ColumnDescriptorEntity columnDescriptorEntity : settings.columnDescriptors()) {
-            Path propertyPath = new Path(columnDescriptorEntity.propertyPath().getValue());
-            String title = columnDescriptorEntity.title().getValue();
-            boolean visibility = columnDescriptorEntity.visible().getValue();
-            ColumnDescriptor<E> columnDescriptor = col(proto().getMember(propertyPath), title, visibility);
-            // TODO add sorting
-            columnDescriptors.add(columnDescriptor);
+        if (getMetadata().columnDescriptors().isEmpty()) {
+            // normally this should happen only once in gadget's lifetime
+            // we do it here because of two reasons:
+            //      1. Preloaded gadgets need this
+            //      2. createDefaultSettings() is called from the base class constructor before we can know the default columns, and
+            //         before the dataTablePanel has been initialized.
+            storeDefaultColumnDescriptorsToSettings(getMetadata());
+        }
+        for (ColumnDescriptorEntity columnDescriptorEntity : getMetadata().columnDescriptors()) {
+            columnDescriptors.add(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, columnDescriptorEntity));
         }
         return columnDescriptors;
-    }
-
-    protected void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
-        dataTablePanel.setColumnDescriptors(columnDescriptors);
     }
 
     protected boolean isSettingsInstanceOk(GadgetMetadata abstractSettings) {
@@ -169,6 +153,13 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
         settings.pageNumber().setValue(0);
         return settings;
+    }
+
+    private void storeDefaultColumnDescriptorsToSettings(GADGET_TYPE settings) {
+        for (ColumnDescriptor<E> columnDescriptor : defineColumnDescriptors()) {
+            ColumnDescriptorEntity entity = EntityFactory.create(ColumnDescriptorEntity.class);
+            settings.columnDescriptors().add(ColumnDescriptorConverter.columnDescriptorToEntity(columnDescriptor, entity));
+        }
     }
 
     @Override
