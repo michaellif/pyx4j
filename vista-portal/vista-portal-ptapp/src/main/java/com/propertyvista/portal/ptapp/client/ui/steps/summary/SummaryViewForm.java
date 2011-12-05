@@ -97,18 +97,23 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
     private SummaryViewPresenter presenter;
 
-    //@formatter:off
-    // parts of lease term panel
     private final FormFlexPanel consessionPanel = new FormFlexPanel();
+
     private final FormFlexPanel includedPanel = new FormFlexPanel();
+
     private final FormFlexPanel excludedPanel = new FormFlexPanel();
+
     private final FormFlexPanel chargedPanel = new FormFlexPanel();
+
     private final FormFlexPanel petsPanel = new FormFlexPanel();
+
     private final FormFlexPanel parkingPanel = new FormFlexPanel();
+
     private final FormFlexPanel storagePanel = new FormFlexPanel();
+
     private final FormFlexPanel otherPanel = new FormFlexPanel();
-    private final FormFlexPanel addonsPanel = new FormFlexPanel();        
-    //@formatter:on
+
+    private final FormFlexPanel addonsPanel = new FormFlexPanel();
 
     public SummaryViewForm() {
         super(SummaryDTO.class, new VistaViewersComponentFactory());
@@ -378,29 +383,36 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
      */
     // TODO should be static (it's not because it uses DecoratorBuilder2)
     private class SignatureView extends CEntityDecoratableEditor<DigitalSignature> {
-        //@formatter:off
+
         private static final String SIGNATURE_PANEL_CAPTION = "Digital Signature";
+
         private static final String ALREADY_SIGNED_MESSAGE = "Already Signed";
 
         FormFlexPanel agreementAndSignaturePanel;
+
         FlowPanel agreedMessagePanel;
+
         VerticalPanel content;
-        
+
         EditableValueValidator<String> signatureValidator;
-        //@formatter:on
 
         public SignatureView(IEditableComponentFactory factory, EditableValueValidator<String> signatureValidator) {
             super(DigitalSignature.class, factory);
+            System.out.println("--- SignatureView.<init> ---");
             setEditable(false);
             this.signatureValidator = signatureValidator;
         }
 
+        private boolean HACK_NO1_contentCreated = false;
+
         @Override
         public IsWidget createContent() {
+            System.out.println("--- SignatureView.createContent ---");
             content = new VerticalPanel();
             content.add(initAgreedContentPanel());
             content.add(initSignatureContentPanel());
             content.setSize("100%", "100%");
+            HACK_NO1_contentCreated = true;
             return content;
         }
 
@@ -421,6 +433,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             // "I Agree" check-box:
             CCheckBox check = new CCheckBox();
             WidgetDecorator agree = new DecoratorBuilder2(inject(proto().agree(), check), 3).build();
+            System.out.println("---agree injected ---");
             agree.asWidget().getElement().getStyle().setMarginLeft(25, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             agreementAndSignaturePanel.setWidget(++row, 0, agree);
@@ -504,13 +517,19 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             agreementAndSignaturePanel.setVisible(isAgreed == null ? false : !isAgreed);
         }
 
+        //TODO this function is a temporary Hack to make it Work. Remove!
         @Override
         public boolean isValid() {
-            return super.isValid() & get(proto().agree()).isValid() & get(proto().fullName()).isValid();
+            if (HACK_NO1_contentCreated) {
+                return super.isValid() & get(proto().agree()).isValid() & get(proto().fullName()).isValid();
+            } else {
+                return super.isValid();
+            }
         }
     }
 
     private class SignatureValidator implements EditableValueValidator<String> {
+
         @Override
         public boolean isValid(CComponent<String, ?> component, String value) {
             return isSignatureValid(value);
@@ -552,9 +571,10 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         }
     }
 
+    //TODO this function is a temporary Hack to make it Work. Remove!
     @Override
     public boolean isValid() {
-        if (!getValue().signed().isBooleanTrue()) {
+        if ((getValue() != null) && !getValue().signed().isBooleanTrue()) {
             return get(proto().application().signature()).isValid();
         } else {
             return true;
