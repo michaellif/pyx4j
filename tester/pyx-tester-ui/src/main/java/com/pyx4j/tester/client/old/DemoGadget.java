@@ -155,4 +155,10 @@ public class DemoGadget extends HTML implements IGadget {
     public void onDelete() {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void onResize() {
+        // TODO Auto-generated method stub
+
+    }
 }
