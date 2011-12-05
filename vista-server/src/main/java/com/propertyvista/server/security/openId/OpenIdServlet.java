@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.IOUtils;
@@ -38,9 +39,18 @@ public class OpenIdServlet extends HttpServlet {
 
     public static String MAPPING = "/o/openid";
 
-    static String DOMAIN = "birchwoodsoftwaregroup.com";
+    static String DOMAIN = getDevelopmentSecurityGoogleAppsDomain();
 
     public static String USER_EMAIL_ATTRIBUTE = DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE;
+
+    private static final String getDevelopmentSecurityGoogleAppsDomain() {
+        String configDomain = System.getProperty("com.propertyvista.dev.domain");
+        if (CommonsStringUtils.isStringSet(configDomain)) {
+            return configDomain;
+        } else {
+            return "birchwoodsoftwaregroup.com";
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
