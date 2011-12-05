@@ -31,7 +31,12 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
 
     @Override
     public String connectionUrl() {
-        return super.connectionUrl() + "?autoReconnect=true" + LOG_CONFIG + (showSql() ? "&autoGenerateTestcaseScript=true" : "");
+        return super.connectionUrl() + LOG_CONFIG + (showSql() ? "&autoGenerateTestcaseScript=true" : "");
+    }
+
+    @Override
+    public boolean isAutoReconnect() {
+        return true;
     }
 
     @Override
