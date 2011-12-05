@@ -33,9 +33,17 @@ public class PropertiesConfiguration {
 
     private final Map<String, String> properties;
 
+    public PropertiesConfiguration(Map<String, String> properties) {
+        this(null, properties);
+    }
+
     public PropertiesConfiguration(String prefix, Map<String, String> properties) {
         this.prefix = prefix;
         this.properties = properties;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
     }
 
     public String getValue(String key) {
