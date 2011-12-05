@@ -108,7 +108,7 @@ msgstr "% Loyer approuvé"
 #: com/pyx4j/forms/client/ui/CContainer.java:149
 #, java-format
 msgid "''{0}'' is not valid, {1}"
-msgstr "''{0}''n'est pas valide,{1}"
+msgstr "''{0}'' n''est pas valide,{1}"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "0 - 30 Days"
@@ -2606,7 +2606,7 @@ msgstr "Femme"
 #: com/pyx4j/forms/client/ui/CContainer.java:163
 #, java-format
 msgid "Field ''{0}'' is not valid, {1}"
-msgstr "Champ ''{0}'' n'est pas valide, {1}"
+msgstr "Champ ''{0}'' n''est pas valide, {1}"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "Field Of Study"

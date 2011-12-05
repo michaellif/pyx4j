@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-04 16:43-0500\n"
+"POT-Creation-Date: 2011-12-05 24:31-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -432,7 +432,7 @@ msgstr "Заявитель"
 msgid "Applicant and Co-applicant must be at least 18 years old"
 msgstr "Заявитель и сотрудничеству заявитель должен быть не менее 18 лет"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:32
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:39
 msgid "Applicants"
 msgstr "Заявители"
 
@@ -1495,7 +1495,7 @@ msgstr "Счетчик Топ Тип"
 msgid "Counter Top Value"
 msgstr "Счетчик Лучшее соотношение цены и"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:65
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:91
 #: com/propertyvista/domain/contact/AddressSimple.java:2
 #: com/propertyvista/domain/contact/AddressStructured.java:2
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
@@ -1859,7 +1859,7 @@ msgstr "Обозначение"
 #: com/propertyvista/crm/client/ui/crud/tenant/TenantEditorForm.java:144
 #: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationEditorForm.java:65
 #: com/propertyvista/crm/client/ui/crud/tenant/lease/LeaseEditorForm.java:67
-#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:65
+#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:66
 #: com/propertyvista/crm/client/ui/crud/unit/UnitItemEditorForm.java:50
 #: com/propertyvista/domain/maintenance/IssueRepairSubject.java:2
 msgid "Details"
@@ -2425,15 +2425,15 @@ msgstr "Прелесть плана этажа"
 msgid "Floorplan Details"
 msgstr "Подробнее о плане этажа"
 
-#: com/propertyvista/crm/client/ui/crud/unit/SelectedUnitLister.java:48
-#: com/propertyvista/crm/client/ui/crud/unit/UnitLister.java:36
+#: com/propertyvista/crm/client/ui/crud/unit/SelectedUnitLister.java:49
+#: com/propertyvista/crm/client/ui/crud/unit/UnitLister.java:39
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 msgid "Floorplan Marketing Name"
 msgstr "Маркетинговое название плана этажа"
 
 #: com/propertyvista/crm/client/ui/crud/unit/SelectedUnitLister.java:47
-#: com/propertyvista/crm/client/ui/crud/unit/UnitLister.java:36
+#: com/propertyvista/crm/client/ui/crud/unit/UnitLister.java:38
 #: com/propertyvista/domain/dashboard/gadgets/availabilityreport/UnitAvailabilityStatus.java:2
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/portal/rpc/portal/dto/TenantGeneralInfoDTO.java:2
@@ -2444,7 +2444,7 @@ msgstr "Имя плана этажа"
 msgid "Floorplan Property"
 msgstr "ПланЫ этажа собственности"
 
-#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:77
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:78
 #: com/propertyvista/portal/domain/dto/PropertyDetailsDTO.java:2
 msgid "Floorplans"
 msgstr "Планы этажа"
@@ -2655,7 +2655,7 @@ msgstr "Гарант должен быть не менее 18 лет"
 msgid "Guarantor(s)"
 msgstr "Гарант (ы)"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:32
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:40
 #: com/propertyvista/crm/client/ui/crud/tenant/screening/TenantScreeningEditorForm.java:81
 #: com/propertyvista/domain/tenant/TenantScreening.java:2
 msgid "Guarantors"
@@ -3333,12 +3333,12 @@ msgstr "Площадь ящика"
 msgid "Locker Areas"
 msgstr "Locker районах"
 
-#: com/propertyvista/crm/client/ui/crud/building/lockers/LockerAreaEditorForm.java:53
+#: com/propertyvista/crm/client/ui/crud/building/lockers/LockerAreaEditorForm.java:54
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 msgid "Lockers"
 msgstr "Шкафы"
 
-#: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:63
+#: com/propertyvista/crm/client/activity/login/ResetPasswordActivity.java:64
 #: com/propertyvista/crm/client/ui/TopRightActionsViewImpl.java:94
 msgid "Log In"
 msgstr "Войдите"
@@ -3546,9 +3546,9 @@ msgstr "Маркетинг и Лизинг"
 msgid "Marketing Blurb"
 msgstr "Маркетинг Blurb"
 
-#: com/propertyvista/crm/client/ui/crud/building/BuildingLister.java:30
+#: com/propertyvista/crm/client/ui/crud/building/BuildingLister.java:98
 #: com/propertyvista/crm/client/ui/crud/building/SelectedBuildingLister.java:47
-#: com/propertyvista/crm/client/ui/gadgets/BuildingListerGadget.java:99
+#: com/propertyvista/crm/client/ui/gadgets/BuildingListerGadget.java:103
 #: com/propertyvista/domain/property/asset/Floorplan.java:2
 msgid "Marketing Name"
 msgstr "Маркетинговое название"
@@ -3943,7 +3943,7 @@ msgstr "Моделирование сети"
 msgid "Never"
 msgstr "Никогда"
 
-#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:124
+#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:125
 msgid "New"
 msgstr "Новый"
 
@@ -4140,7 +4140,7 @@ msgstr "Объект 1"
 msgid "Object 2"
 msgstr "Объект 2"
 
-#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:67
+#: com/propertyvista/crm/client/ui/crud/unit/UnitEditorForm.java:68
 msgid "Occupancy"
 msgstr "Занятие"
 
@@ -4152,7 +4152,7 @@ msgstr "Размещение #"
 msgid "Occupancy %"
 msgstr "Размещение%"
 
-#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:32
+#: com/propertyvista/crm/client/ui/crud/tenant/application/MasterApplicationLister.java:38
 msgid "Occupants"
 msgstr "Оккупанты"
 
@@ -4225,8 +4225,8 @@ msgid "Other"
 msgstr "Другой"
 
 #. Street Type
-#. Type of foundation
 #. Building Amenity Type
+#. Type of foundation
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
@@ -4285,8 +4285,8 @@ msgstr "Принадлежащий"
 msgid "Owned/Rented"
 msgstr "Собственные / Арендованные"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:65
-#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/UnitAvailabilityReportGadget.java:249
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:95
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/UnitAvailabilityReportGadget.java:253
 #: com/propertyvista/domain/dashboard/gadgets/CommonGadgetColumns.java:2
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/asset/Owner.java:0
@@ -4634,11 +4634,11 @@ msgstr "Платформа"
 msgid "Play Ground"
 msgstr "Детская площадка"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:103
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:107
 msgid "Please Attach proof Of Citizenship"
 msgstr "Пожалуйста, приложите подтверждающие гражданство"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:85
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:89
 msgid "Please Attach proof Of Employment"
 msgstr "Пожалуйста, приложите доказательства занятости"
 
@@ -4710,7 +4710,7 @@ msgstr "Всплывающие окна заблокированы"
 msgid "Portal Preferences"
 msgstr "Портал предпочтения"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:65
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:97
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/company/AssignedPortfolio.java:2
 #: com/propertyvista/domain/company/Portfolio.java:0
@@ -4885,8 +4885,8 @@ msgstr "Информация о недвижимости"
 msgid "Property List"
 msgstr "Перечень недвижимости"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:65
-#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/UnitAvailabilityReportGadget.java:249
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:94
+#: com/propertyvista/crm/client/ui/gadgets/availabilityreport/UnitAvailabilityReportGadget.java:254
 #: com/propertyvista/domain/dashboard/gadgets/vacancyreport/UnitVacancyStatus.java:2
 #: com/propertyvista/domain/property/PropertyManager.java:0
 #: com/propertyvista/domain/property/asset/building/Building.java:2
@@ -4929,7 +4929,7 @@ msgstr "Проспект Портал Название"
 msgid "Provider"
 msgstr "Поставщик"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:65
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsListerGadget.java:90
 #: com/propertyvista/domain/dashboard/gadgets/arrears/MockupArrearsState.java:2
 #: com/propertyvista/domain/ref/Province.java:0
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:2
@@ -5514,7 +5514,7 @@ msgid "Services"
 msgstr "Услуги"
 
 #. java-format
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:80
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session Duration {0}, Inactive For {1}"
 msgstr "Длительность сессии {0}, неактивная {1}"
@@ -6123,7 +6123,7 @@ msgstr ""
 msgid "The File Name Cannot Be Empty"
 msgstr "Имя файла не может быть пустым"
 
-#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:71
+#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:72
 msgid ""
 "The Number You Have Entered Is Not A Valid Phone Number. Please Use The "
 "Following Formats: 123-4567 OR 123-456-7890 (Dashes Optional)"
@@ -6132,7 +6132,7 @@ msgstr ""
 "используйте следующие форматы: 123-4567 или 123-456-7890 (тире "
 "дополнительно)"
 
-#: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureItemFolder.java:91
+#: com/propertyvista/crm/client/ui/crud/building/catalog/feature/FeatureItemFolder.java:92
 msgid "The Selected Utility Type Is Included In The Price"
 msgstr "Выбранный тип Утилита входит в цену"
 
@@ -6253,19 +6253,19 @@ msgstr "Принял приложений"
 msgid "Total"
 msgstr "Общий"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:60
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:62
 msgid "Total 0-30"
 msgstr "Всего 0-30"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:60
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:63
 msgid "Total 30-60"
 msgstr "Всего 30-60"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:60
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:64
 msgid "Total 60-90"
 msgstr "Всего 60-90"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:60
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:66
 msgid "Total AR Balance"
 msgstr "Общая сумма баланса АР"
 
@@ -6298,11 +6298,11 @@ msgstr "Всего этажей"
 msgid "Total Units"
 msgstr "Количество секций"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:60
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:65
 msgid "Total over 90"
 msgstr "Всего более 90"
 
-#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:60
+#: com/propertyvista/crm/client/ui/gadgets/arrears/ArrearsSummaryGadget.java:61
 msgid "Total this month"
 msgstr "Всего в этом месяце"
 
@@ -6498,7 +6498,7 @@ msgstr "Группа Вакансия докладе Оборот Анализ"
 msgid "Unit Vacancy Status"
 msgstr "Статус Группа Вакансии"
 
-#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:79
+#: com/propertyvista/crm/client/ui/crud/building/BuildingEditorForm.java:80
 #: com/propertyvista/crm/rpc/CrmSiteMap.java:0
 #: com/propertyvista/domain/financial/offering/extradata/Pet.java:2
 msgid "Units"
@@ -6747,7 +6747,7 @@ msgid "We're Sorry"
 msgstr "Извините ошибка"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:67
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:127
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
 msgid ""
 "We're Sorry But Your Requests Look Similar To Automated Requests Initiated "
 "By Computer Virus Or Spyware Applications. To Protect Our Users, We Can't "

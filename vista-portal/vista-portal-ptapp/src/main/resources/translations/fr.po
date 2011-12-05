@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-04 16:43-0500\n"
+"POT-Creation-Date: 2011-12-05 24:31-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,7 +80,7 @@ msgstr "% Loyer approuvé"
 #: com/pyx4j/forms/client/ui/CContainer.java:149
 #, java-format
 msgid "''{0}'' is not valid, {1}"
-msgstr "''{0}''n'est pas valide,{1}"
+msgstr "''{0}'' n''est pas valide,{1}"
 
 #: com/propertyvista/domain/dashboard/gadgets/arrears/Arrears.java:2
 msgid "0 - 30 Days"
@@ -192,7 +192,7 @@ msgid "Add-On"
 msgstr "Ajout"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:134
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:278
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:283
 #: com/propertyvista/portal/rpc/ptapp/dto/AddOnsDTO.java:0
 msgid "Add-Ons"
 msgstr "Ajouts"
@@ -297,7 +297,7 @@ msgstr "Tous les {0}(s) ont déjà été sélectionnés!"
 msgid "Alley"
 msgstr "Ruelle"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:410
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:422
 msgid "Already Signed"
 msgstr "Déjà signé"
 
@@ -705,7 +705,7 @@ msgid "Bill List"
 msgstr "Liste de facturation"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:130
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:273
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:278
 msgid "Billed Utilities"
 msgstr "Services facturés"
 
@@ -863,7 +863,7 @@ msgstr ""
 " nom d'utilisateur et mots de passe individuels sera automatiquement envoyée"
 " à tous les locataires et les garants"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:84
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/FeatureFolder.java:85
 msgid ""
 "By removing the selected item you will lose the agreed price adjustment! Are"
 " you sure you want to remove it?"
@@ -1449,7 +1449,7 @@ msgstr "Base de données"
 #: com/propertyvista/domain/reservation/ReservationSchedule.java:2
 #: com/propertyvista/domain/site/News.java:2
 #: com/propertyvista/domain/tenant/lead/Appointment.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:481
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:494
 #: com/propertyvista/portal/rpc/portal/dto/MaintananceDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/MessageDTO.java:2
 #: com/propertyvista/portal/rpc/portal/dto/ReservationDTO.java:2
@@ -1633,11 +1633,11 @@ msgid "Details"
 msgstr "Détails"
 
 #: com/propertyvista/domain/tenant/ptapp/DigitalSignature.java:0
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:419
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:431
 msgid "Digital Signature"
 msgstr "Signature numérique"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:521
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:540
 msgid "Digital Signature Must Match Your Name On File"
 msgstr "La signature numérique doit correspondre à votre nom au dossier"
 
@@ -1767,7 +1767,7 @@ msgstr "Situation économique"
 msgid "Economic Status Description"
 msgstr "Description de la situation économique"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:203
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:208
 msgid "Edit"
 msgstr "Modifier"
 
@@ -1920,7 +1920,7 @@ msgid "Eviction Letter Served"
 msgstr "Lettre d'éviction signifiée"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:126
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:269
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:274
 msgid "Excluded Utilities"
 msgstr "Services exclus"
 
@@ -2018,7 +2018,7 @@ msgstr "Femme"
 #: com/pyx4j/forms/client/ui/CContainer.java:163
 #, java-format
 msgid "Field ''{0}'' is not valid, {1}"
-msgstr "Champ ''{0}'' n'est pas valide, {1}"
+msgstr "Champ ''{0}'' n''est pas valide, {1}"
 
 #: com/propertyvista/domain/tenant/income/IncomeInfoStudentIncome.java:2
 msgid "Field Of Study"
@@ -2047,7 +2047,7 @@ msgstr "Filtre "
 
 #: com/propertyvista/domain/property/asset/building/Building.java:2
 #: com/propertyvista/domain/property/asset/unit/AptUnit.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:145
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:150
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Financial"
 msgstr ""
@@ -2227,7 +2227,7 @@ msgstr "Complet"
 msgid "Full Time Employment"
 msgstr "Emploi à temps plein"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:142
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:147
 msgid "Full info"
 msgstr "Infos complètes"
 
@@ -2483,7 +2483,7 @@ msgstr "Comment avez-vous entendu parler de nous?"
 msgid "I Agree"
 msgstr "Je suis d'accord"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:468
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:481
 msgid "IP"
 msgstr "IP"
 
@@ -2510,7 +2510,7 @@ msgstr "En vigueur"
 
 #: com/propertyvista/domain/financial/offering/ServiceCatalog.java:2
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:122
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:265
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:270
 #: com/propertyvista/portal/rpc/ptapp/dto/ApartmentInfoDTO.java:2
 msgid "Included Utilities"
 msgstr "Services inclus"
@@ -2889,14 +2889,14 @@ msgstr "Identification bail "
 msgid "Lease Length"
 msgstr "Terme du bail"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:136
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:141
 msgid "Lease Term/Rent"
 msgstr "Durée de la location/Loyer"
 
 #: com/propertyvista/portal/domain/ptapp/LeaseTerms.java:0
 #: com/propertyvista/portal/domain/ptapp/Summary.java:2
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:113
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:150
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:155
 msgid "Lease Terms"
 msgstr "Conditions de location"
 
@@ -3003,7 +3003,7 @@ msgstr "Casier"
 msgid "Locker Area"
 msgstr "Zone de casiers"
 
-#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:64
+#: com/propertyvista/portal/ptapp/client/activity/ResetPasswordActivity.java:65
 #: com/propertyvista/portal/ptapp/client/ui/TopRightActionsViewImpl.java:90
 msgid "Log In"
 msgstr "Connexion "
@@ -3540,7 +3540,7 @@ msgstr "Simulation de réseau"
 msgid "Never"
 msgstr "Jamais"
 
-#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:124
+#: com/pyx4j/entity/client/ui/datatable/DataTablePanel.java:125
 msgid "New"
 msgstr "Nouveau"
 
@@ -3784,8 +3784,8 @@ msgid "Other"
 msgstr "Autre"
 
 #. Street Type
-#. Type of foundation
 #. Building Amenity Type
+#. Type of foundation
 #: com/propertyvista/domain/contact/AddressStructured.java:1
 #: com/propertyvista/domain/contact/Email.java:1
 #: com/propertyvista/domain/contact/Phone.java:1
@@ -3805,7 +3805,7 @@ msgstr "Autre"
 #: com/propertyvista/domain/tenant/lead/Lead.java:1
 #: com/propertyvista/domain/tenant/lead/Showing.java:1
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:148
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:292
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:297
 msgid "Other"
 msgstr "Autre"
 
@@ -3917,7 +3917,7 @@ msgstr "Parent parente"
 #: com/propertyvista/domain/property/asset/building/BuildingAmenity.java:1
 #: com/propertyvista/dto/ParkingDTO.java:0
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:140
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:284
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:289
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:1
 msgid "Parking"
 msgstr "Stationnement"
@@ -4106,7 +4106,7 @@ msgstr "Dépôt pour animal domestique"
 
 #: com/propertyvista/dto/PetsDTO.java:0
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:136
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:280
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:285
 #: com/propertyvista/portal/rpc/ptapp/dto/AddOnsDTO.java:2
 msgid "Pets"
 msgstr "Animaux domestiques"
@@ -4183,11 +4183,11 @@ msgstr "Plate-forme"
 msgid "Play Ground"
 msgstr "Terrain de jeux"
 
-#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:103
+#: com/propertyvista/common/client/ui/components/editors/dto/InfoViewForm.java:107
 msgid "Please Attach proof Of Citizenship"
 msgstr "Veuillez joindre une preuve de citoyenneté"
 
-#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:85
+#: com/propertyvista/common/client/ui/components/editors/PersonalIncomeEditor.java:89
 msgid "Please Attach proof Of Employment"
 msgstr "Veuillez joindre une preuve d'emploi"
 
@@ -4275,7 +4275,7 @@ msgstr "Pré-autorisée"
 msgid "Pre-Authorized Payment"
 msgstr "Paiement pré-autorisé"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:132
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:137
 msgid "Premises"
 msgstr "Locaux"
 
@@ -4335,7 +4335,7 @@ msgstr "Bâtiment primaire"
 msgid "Primary in Complex"
 msgstr "Primaire dans un complexe"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:181
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:186
 msgid "Print/Download the Summary"
 msgstr "Imprimer/Télécharger le résumé"
 
@@ -4393,7 +4393,7 @@ msgid "Promotional Item"
 msgstr "Article promotionnel"
 
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:118
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:261
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:266
 msgid "Promotions, Discounts and Concessions"
 msgstr "Promotions, remises et réductions"
 
@@ -4925,7 +4925,7 @@ msgid "Services"
 msgstr "Services"
 
 #. java-format
-#: com/pyx4j/essentials/client/SessionInactiveDialog.java:80
+#: com/pyx4j/essentials/client/SessionInactiveDialog.java:81
 #, java-format
 msgid "Session Duration {0}, Inactive For {1}"
 msgstr "Durée de session {0}, inactif pour {1}"
@@ -5162,7 +5162,7 @@ msgstr "Étapes complétées"
 
 #: com/propertyvista/domain/financial/offering/Service.java:1
 #: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:144
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:288
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:293
 msgid "Storage"
 msgstr "Entreposage"
 
@@ -5424,7 +5424,7 @@ msgid "Tenant Screening"
 msgstr "Présélection des locataires"
 
 #: com/propertyvista/domain/tenant/lease/Lease.java:2
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:139
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:144
 #: com/propertyvista/portal/rpc/ptapp/PtSiteMap.java:0
 msgid "Tenants"
 msgstr "Locataires"
@@ -5505,7 +5505,7 @@ msgstr ""
 msgid "The File Name Cannot Be Empty"
 msgstr "Le nom du fichier ne peut être vide"
 
-#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:71
+#: com/propertyvista/common/client/ui/components/c/PhoneFormatter.java:72
 msgid ""
 "The Number You Have Entered Is Not A Valid Phone Number. Please Use The "
 "Following Formats: 123-4567 OR 123-456-7890 (Dashes Optional)"
@@ -6001,7 +6001,7 @@ msgid "We're Sorry"
 msgstr "Nous sommes désolés"
 
 #: com/propertyvista/common/client/VistaUnrecoverableErrorHandler.java:67
-#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:127
+#: com/pyx4j/widgets/client/dialog/UnrecoverableErrorHandlerDialog.java:128
 msgid ""
 "We're Sorry But Your Requests Look Similar To Automated Requests Initiated "
 "By Computer Virus Or Spyware Applications. To Protect Our Users, We Can't "
@@ -6110,7 +6110,7 @@ msgstr "Oui"
 msgid "Yes, Please Enroll Me"
 msgstr "Oui, veuillez m'inscrire"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:439
+#: com/propertyvista/portal/ptapp/client/ui/steps/summary/SummaryViewForm.java:452
 msgid "You Must Agree To The Terms And Conditions To Continue"
 msgstr "Vous devez accepter les conditions pour poursuivre"
 
@@ -6178,7 +6178,7 @@ msgstr "chambres à coucher"
 msgid "eCheque"
 msgstr "echèque"
 
-#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:160
+#: com/propertyvista/portal/ptapp/client/ui/steps/apartment/ApartmentViewForm.java:161
 msgid "for your future home!"
 msgstr "pour votre future maison!"
 
