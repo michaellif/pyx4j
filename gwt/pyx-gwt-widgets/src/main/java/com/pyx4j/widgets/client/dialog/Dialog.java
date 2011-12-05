@@ -184,10 +184,10 @@ public class Dialog extends DialogPanel {
         }
     }
 
-    public void setBody(Widget message) {
-        content.add(message, DockPanel.CENTER);
-        content.setCellHeight(message, "100%");
-        content.setCellWidth(message, "100%");
+    public void setBody(Widget body) {
+        content.add(body, DockPanel.CENTER);
+        content.setCellHeight(body, "100%");
+        content.setCellWidth(body, "100%");
     }
 
     private HorizontalPanel createButtonsPanel() {
