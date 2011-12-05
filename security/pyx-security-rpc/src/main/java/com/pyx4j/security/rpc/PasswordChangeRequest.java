@@ -35,8 +35,10 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface PasswordChangeRequest extends IEntity {
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Key> userPk();
 
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<String> token();
 
     @NotNull
