@@ -55,6 +55,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
 
         private final int value;
 
+        /** Interval in milliseconds */
         public int value() {
             return value;
         }
@@ -66,7 +67,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
     };
 
     /** Refresh Period of the gadget in milliseconds (non positive value means the gadget never has to refresh itself) */
-    IPrimitive<Integer> refreshPeriod();
+    IPrimitive<RefreshInterval> refreshInterval();
 
     @EmbeddedEntity
     GadgetDockingMeta docking();

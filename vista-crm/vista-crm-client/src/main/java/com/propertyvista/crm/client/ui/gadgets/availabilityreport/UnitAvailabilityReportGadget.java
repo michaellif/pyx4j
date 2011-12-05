@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,8 +34,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
@@ -78,7 +81,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         @Override
         protected UnitAvailability createDefaultSettings(Class<UnitAvailability> metadataClass) {
             UnitAvailability settings = super.createDefaultSettings(metadataClass);
-            settings.defaultFilteringButton().setValue(FilterPreset.All);
+            settings.defaultFilteringPreset().setValue(FilterPreset.All);
             return settings;
         }
 
@@ -90,37 +93,27 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
         @Override
         public void populatePage(int pageNumber) {
-            if (this.isEnabled()) {
-                if (filter == null) {
-                    setPageData(new Vector<UnitAvailabilityStatusDTO>(), 0, 0, false);
-                    return;
+            if (filter == null) {
+                setPageData(new Vector<UnitAvailabilityStatusDTO>(), 0, 0, false);
+                return;
+            }
+
+            final int page = pageNumber;
+            final UnitSelectionCriteria select = buttonStateToSelectionCriteria();
+
+            service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>>() {
+                @Override
+                public void onSuccess(EntitySearchResult<UnitAvailabilityStatusDTO> result) {
+                    setPageData(result.getData(), page, result.getTotalRows(), result.hasMoreData());
+                    populateSucceded();
                 }
 
-                final int page = pageNumber;
-                final UnitSelectionCriteria select = buttonStateToSelectionCriteria();
-
-                //@formatter:off
-                service.unitStatusList(
-                        new AsyncCallback<EntitySearchResult<UnitAvailabilityStatusDTO>>() {
-                            @Override
-                            public void onSuccess(EntitySearchResult<UnitAvailabilityStatusDTO> result) {                            
-                                    setPageData(result.getData(), page, result.getTotalRows(), result.hasMoreData());
-                                    populateSucceded();
-                            }
-            
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                populateFailed(caught);
-                            }
-                        },
-                        new Vector<Key>(filter.buildings), 
-                        select.occupied, select.vacant, select.notice, select.rented, select.notrented,  
-                        filter.toDate == null ? null : new LogicalDate(filter.toDate),
-                        new Vector<Sort>(getSorting()), 
-                        pageNumber,
-                        getPageSize());
-                //@formatter:on
-            }
+                @Override
+                public void onFailure(Throwable caught) {
+                    populateFailed(caught);
+                }
+            }, new Vector<Key>(filter.buildings), select.occupied, select.vacant, select.notice, select.rented, select.notrented, filter.toDate == null ? null
+                    : new LogicalDate(filter.toDate), new Vector<Sort>(getSorting()), pageNumber, getPageSize());
         }
 
         @Override
@@ -154,13 +147,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             filteringButtons = Arrays.asList(allButton, vacantButton, noticeButton, vacantNoticeButton, rentedButton, netExposureButton);
 
             int col = -1;
-            // toggle the default button
             for (ToggleButton button : filteringButtons) {
-                if (button.getText().equals(getMetadata().defaultFilteringButton().getValue().toString())) {
-                    button.setDown(true);
-                } else {
-                    button.setDown(false);
-                }
                 controlsPanel.setWidget(0, ++col, button);
             }
 
@@ -173,11 +160,21 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             return gadgetPanel;
         }
 
-        private boolean isEnabled() {
-            return asWidget().isVisible() & isRunning();
+        @Override
+        public void start() {
+            setSelectedFiltering();
+            super.start();
         }
 
-        // TODO override getSetup() to allow the set up of the default button
+        private void setSelectedFiltering() {
+            for (ToggleButton button : filteringButtons) {
+                if (button.getText().equals(getMetadata().defaultFilteringPreset().getValue().toString())) {
+                    button.setDown(true);
+                } else {
+                    button.setDown(false);
+                }
+            }
+        }
 
         // AUXILLIARY STUFF    
         private UnitSelectionCriteria buttonStateToSelectionCriteria() {
@@ -268,6 +265,22 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     col(proto().revenueLost(), true));
         }
         //@formatter:on
+
+        @Override
+        public ISetup getSetup() {
+            return new SetupForm(new CEntityDecoratableEditor<UnitAvailability>(UnitAvailability.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel p = new FormFlexPanel();
+                    int row = -1;
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultFilteringPreset())).build());
+                    return p;
+                }
+            });
+        }
+
     }
 
     public UnitAvailabilityReportGadget() {

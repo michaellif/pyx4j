@@ -41,5 +41,5 @@ public interface UnitAvailability extends ListerGadgetBaseMetadata {
     }
 
     /** Defines the filtering criteria button by its caption */
-    IPrimitive<FilterPreset> defaultFilteringButton();
+    IPrimitive<FilterPreset> defaultFilteringPreset();
 }

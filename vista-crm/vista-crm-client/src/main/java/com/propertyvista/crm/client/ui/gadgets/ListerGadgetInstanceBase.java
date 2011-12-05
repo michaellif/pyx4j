@@ -16,15 +16,9 @@ package com.propertyvista.crm.client.ui.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -38,11 +32,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 
 //TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
@@ -189,7 +184,16 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     @Override
     public ISetup getSetup() {
-        return new SetupLister();
+        return new SetupForm(new CEntityDecoratableEditor<GADGET_TYPE>(metadataClass) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel p = new FormFlexPanel();
+                int row = -1;
+                p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+                p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+                return p;
+            }
+        });
     }
 
     protected Widget initListerWidget() {
@@ -253,15 +257,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         return getMetadata().pageSize().getValue();
     }
 
-    /**
-     * Sets page size but does not populate the list: the specified page size will be applied on next population.
-     * 
-     * @param pageSize
-     */
-    public void setPageSize(int pageSize) {
-        getMetadata().pageSize().setValue(pageSize > 1 ? pageSize : DEFAULT_PAGE_SIZE);
-    }
-
     public int getPageNumber() {
         return getMetadata().pageNumber().getValue();
     }
@@ -304,71 +299,4 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         populatePage(getPageNumber());
     }
 
-    private class SetupLister implements ISetup {
-
-        protected final FlexTable setupPanel = new FlexTable();
-
-        protected final TextBox itemsPerPage = new TextBox();
-
-        protected final ListBox intervalList = new ListBox(false);
-
-        protected SetupLister() {
-            super();
-
-            setupPanel.setWidget(0, 0, new Label(i18n.tr("Items Per Page") + ":"));
-
-            itemsPerPage.setText(String.valueOf(getMetadata().pageSize().getValue()));
-            itemsPerPage.setWidth("3em");
-            setupPanel.setWidget(0, 1, itemsPerPage);
-
-            setupPanel.setWidget(1, 0, new Label(i18n.tr("Refresh Interval") + ":"));
-
-            for (RefreshInterval i : RefreshInterval.values()) {
-                intervalList.addItem(i.toString(), i.name());
-                if (getMetadata().refreshPeriod().getValue() == i.value()) {
-                    intervalList.setSelectedIndex(intervalList.getItemCount() - 1);
-                }
-            }
-            intervalList.setWidth("100%");
-            setupPanel.setWidget(1, 1, intervalList);
-
-            setupPanel.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-        }
-
-        @Override
-        public Widget asWidget() {
-            return setupPanel;
-        }
-
-        @Override
-        public boolean onStart() {
-            suspend();
-            return true;
-        }
-
-        @Override
-        public boolean onOk() {
-            int itemsPerPageCount = getMetadata().pageSize().getValue();
-            try {
-                itemsPerPageCount = Integer.parseInt(itemsPerPage.getText());
-            } catch (Throwable e) {
-                // TODO ignore? show an error message? return false? make control validate the input?
-            }
-            GWT.isProdMode();
-            setPageSize(itemsPerPageCount);
-            if (intervalList.getSelectedIndex() != -1) {
-                getMetadata().refreshPeriod().setValue(RefreshInterval.valueOf(intervalList.getValue(intervalList.getSelectedIndex())).value());
-            }
-
-            // restart the gadget:
-            stop();
-            start();
-            return true;
-        }
-
-        @Override
-        public void onCancel() {
-            resume();
-        }
-    }
 }

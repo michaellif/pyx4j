@@ -24,10 +24,13 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 
 public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IGadgetInstanceBase {
     private static final I18n i18n = I18n.get(GadgetInstanceBase.class);
@@ -52,9 +55,12 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private final T metadata;
 
+    protected final Class<T> metadataClass;
+
     @SuppressWarnings("unchecked")
     public GadgetInstanceBase(GadgetMetadata gmd, Class<T> metadataClass) {
         assert metadataClass != null;
+        this.metadataClass = metadataClass;
 
         metadata = (gmd == null) ? createDefaultSettings(metadataClass) : (T) gmd.cast();
 
@@ -95,7 +101,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
      */
     protected T createDefaultSettings(Class<T> metadataClass) {
         T settings = EntityFactory.create(metadataClass);
-        settings.refreshPeriod().setValue(-1);
+        settings.refreshInterval().setValue(RefreshInterval.Never);
         return settings;
     };
 
@@ -139,6 +145,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
      * Override in child in order to perform recurring actions bound to refresh timer interval.
      */
     protected void onRefreshTimer() {
+        populate();
     }
 
     protected RefreshTimer getRefreshTimer() {
@@ -357,11 +364,11 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
          */
         public void reactivate() {
             deactivate();
-            if ((!isActive() & !getMetadata().refreshPeriod().isNull()) && (getMetadata().refreshPeriod().getValue() > 0)) {
+            if ((!isActive() & !getMetadata().refreshInterval().isNull()) && (getMetadata().refreshInterval().getValue().value() > 0)) {
                 if (GWT.isProdMode()) {
-                    timer.scheduleRepeating(getMetadata().refreshPeriod().getValue());
+                    timer.scheduleRepeating(getMetadata().refreshInterval().getValue().value());
                 } else {
-                    timer.scheduleRepeating(getMetadata().refreshPeriod().getValue() / 60000);
+                    timer.scheduleRepeating(getMetadata().refreshInterval().getValue().value() / 60);
                 }
                 isActive = true;
             }
@@ -381,5 +388,46 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
      */
     protected abstract class Populator {
         public abstract void populate();
+    }
+
+    protected class SetupForm implements ISetup {
+        private final CEntityDecoratableEditor<T> form;
+
+        public SetupForm(CEntityDecoratableEditor<T> form) {
+            assert form != null;
+
+            this.form = form;
+            this.form.initContent();
+        }
+
+        @Override
+        public Widget asWidget() {
+            return form.asWidget();
+        }
+
+        @Override
+        public boolean onStart() {
+            suspend();
+            form.populate(getMetadata().clone(metadataClass));
+            return true;
+        }
+
+        @Override
+        public boolean onOk() {
+            T metadata = form.getValue();
+            Key key = getMetadata().id().getValue();
+            getMetadata().set(metadata);
+            getMetadata().id().setValue(key);
+
+            // restart the gadget:            
+            stop();
+            start();
+            return true;
+        }
+
+        @Override
+        public void onCancel() {
+            resume();
+        }
     }
 }
