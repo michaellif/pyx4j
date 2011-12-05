@@ -84,6 +84,7 @@ public interface BuildingInfo extends IEntity {
     }
 
     @I18n
+    @I18nComment("Construction type")
     public enum ConstructionType {
 
         brick,

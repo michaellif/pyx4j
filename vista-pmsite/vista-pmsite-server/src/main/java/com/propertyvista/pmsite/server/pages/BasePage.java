@@ -141,7 +141,7 @@ public abstract class BasePage extends WebPage {
 
             });
 
-            String message = i18n.tr("Stateful components found: ");
+            String message = "Stateful components found: ";
             if (statefulComponents.size() > 0) {
                 for (Component c : statefulComponents) {
                     message += "\n" + c.getMarkupId();

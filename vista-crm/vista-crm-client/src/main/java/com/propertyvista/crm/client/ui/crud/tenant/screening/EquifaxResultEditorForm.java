@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -76,7 +76,7 @@ public class EquifaxResultEditorForm extends CrmEntityForm<EquifaxResult> {
             resultHolder.setWidget(new Frame(resultDeclinePath));
             break;
         default:
-            resultHolder.setWidget(new HTML(i18n.tr("There is no check results available yet.")));
+            resultHolder.setWidget(new HTML(i18n.tr("There are no check results available yet.")));
             resultHolder.getWidget().getElement().getStyle().setProperty("textAlign", "center");
             resultHolder.getWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
             resultHolder.getWidget().getElement().getStyle().setFontSize(1.3, Unit.EM);
