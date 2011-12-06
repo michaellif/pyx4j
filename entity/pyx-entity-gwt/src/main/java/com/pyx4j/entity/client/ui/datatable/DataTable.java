@@ -81,6 +81,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private List<SortChangeHandler<E>> sortChangeHandlers;
 
+    private List<ColumnSelectionHandler> columnSelectionHandlers;
+
     public DataTable() {
         setStyleName(DefaultDataTableTheme.StyleName.DataTable.name());
         DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
@@ -192,6 +194,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
 
         sortChangeHandlers.add(handler);
+    }
+
+    public void addColumnSelectionChangeHandler(ColumnSelectionHandler handler) {
+        if (columnSelectionHandlers == null) {
+            columnSelectionHandlers = new ArrayList<ColumnSelectionHandler>(2);
+        }
+        columnSelectionHandlers.add(handler);
     }
 
 // UI & behaviour setup:
@@ -513,10 +522,22 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 pp.addCloseHandler(new CloseHandler<PopupPanel>() {
                     @Override
                     public void onClose(CloseEvent<PopupPanel> event) {
+                        boolean hasChanged = false;
                         for (int i = 0; i < columnChecksList.size(); ++i) {
-                            model.getColumnDescriptor(i).setVisible(columnChecksList.get(i).getValue());
+                            boolean isVisible = model.getColumnDescriptor(i).isVisible();
+                            boolean requestedVisible = columnChecksList.get(i).getValue();
+                            if (isVisible != requestedVisible) {
+                                model.getColumnDescriptor(i).setVisible(requestedVisible);
+                                hasChanged = true;
+                            }
+
                         }
-                        renderTable();
+                        if (hasChanged) {
+                            renderTable();
+                            for (ColumnSelectionHandler handler : columnSelectionHandlers) {
+                                handler.onColumSelectionChanged();
+                            }
+                        }
                     }
                 });
                 pp.show();
@@ -592,5 +613,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public interface SortChangeHandler<E> {
         void onChange(ColumnDescriptor<E> column);
+    }
+
+    public interface ColumnSelectionHandler {
+        void onColumSelectionChanged();
     }
 }
