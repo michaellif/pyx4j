@@ -130,6 +130,11 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         filterPanel.setFilterActionHandler(filterActionHandler);
     }
 
+    public void setFirstActionHandler(ClickHandler firstActionHandler) {
+        topActionsBar.getPageNavigBar().setFirstActionHandler(firstActionHandler);
+        bottomActionsBar.getPageNavigBar().setFirstActionHandler(firstActionHandler);
+    }
+
     public void setPrevActionHandler(ClickHandler prevActionHandler) {
         topActionsBar.getPageNavigBar().setPrevActionHandler(prevActionHandler);
         bottomActionsBar.getPageNavigBar().setPrevActionHandler(prevActionHandler);
@@ -138,6 +143,11 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     public void setNextActionHandler(ClickHandler nextActionHandler) {
         topActionsBar.getPageNavigBar().setNextActionHandler(nextActionHandler);
         bottomActionsBar.getPageNavigBar().setNextActionHandler(nextActionHandler);
+    }
+
+    public void setLastActionHandler(ClickHandler lastActionHandler) {
+        topActionsBar.getPageNavigBar().setLastActionHandler(lastActionHandler);
+        bottomActionsBar.getPageNavigBar().setLastActionHandler(lastActionHandler);
     }
 
     public void setPageSizeOptions(List<Integer> pageSizeOptions) {

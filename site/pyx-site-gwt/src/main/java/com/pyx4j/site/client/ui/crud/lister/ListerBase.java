@@ -83,6 +83,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
         });
 
+        dataTablePanel.setFirstActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onFirstPage();
+            }
+        });
         dataTablePanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -93,6 +99,12 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             @Override
             public void onClick(ClickEvent event) {
                 onNextPage();
+            }
+        });
+        dataTablePanel.setLastActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onLastPage();
             }
         });
 
@@ -398,12 +410,20 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     /**
      * Override in derived class to fill pages with data.
      */
+    protected void onFirstPage() {
+        getPresenter().populate(0);
+    }
+
     protected void onPrevPage() {
         getPresenter().populate(getDataTablePanel().getDataTableModel().getPageNumber() - 1);
     }
 
     protected void onNextPage() {
         getPresenter().populate(getDataTablePanel().getDataTableModel().getPageNumber() + 1);
+    }
+
+    protected void onLastPage() {
+        getPresenter().populate(getDataTablePanel().getDataTableModel().getTotalRows() / getDataTablePanel().getDataTableModel().getPageSize());
     }
 
     private void setActionsActive(boolean active) {

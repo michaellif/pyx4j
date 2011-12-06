@@ -34,19 +34,16 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Button extends FocusPanel {
 
-    private Label textLabel;
+    private final HTML textLabel;
 
     private final Image image;
 
     private final ButtonFacesHandler buttonFacesHandler;
-
-    private final SimplePanel contentPanel;
 
     public Button(Image image) {
         this(image, null);
@@ -70,7 +67,7 @@ public class Button extends FocusPanel {
         this(new ButtonFacesHandler(), image, text);
     }
 
-    protected Button(ButtonFacesHandler facesHandler, Image image, final String text) {
+    protected Button(ButtonFacesHandler facesHandler, Image image, String text) {
 
         this.image = image;
 
@@ -80,21 +77,17 @@ public class Button extends FocusPanel {
 
         facesHandler.init(this);
 
-        contentPanel = new SimplePanel();
+        textLabel = new HTML(text);
+        textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
 
-        contentPanel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonContent.name());
-
-        if (text != null) {
-            textLabel = new Label(text);
-            contentPanel.setWidget(textLabel);
-            textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
-        }
         if (image != null) {
-            textLabel.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
-            contentPanel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
+            if (text == null) {
+                textLabel.setHTML("");
+            }
+            setImageVisible(true);
         }
 
-        setWidget(contentPanel);
+        setWidget(textLabel);
 
     }
 
@@ -119,10 +112,10 @@ public class Button extends FocusPanel {
         if (image != null) {
             if (visible) {
                 textLabel.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
-                contentPanel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat");
+                textLabel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat scroll left center");
             } else {
                 textLabel.getElement().getStyle().setProperty("paddingLeft", "0px");
-                contentPanel.getElement().getStyle().setProperty("background", "none");
+                textLabel.getElement().getStyle().setProperty("background", "none");
             }
         }
     }

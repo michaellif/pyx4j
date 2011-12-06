@@ -114,8 +114,14 @@ public class DefaultWidgetsTheme extends Theme {
         style = new Style(".", StyleName.ButtonText);
         style.addProperty("vertical-align", "middle");
         style.addProperty("whiteSpace", "nowrap");
-        style.addProperty("display", "inline-block");
-        style.addProperty("display", "inline-block");
+        style.addProperty("position", "relative");
+        style.addProperty("text-indent", "0");
+        style.addProperty("height", "100%");
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled, " .", StyleName.ButtonText);
+        style.addProperty("opacity", "0.4");
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
@@ -123,7 +129,7 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
+        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.1);
         addStyle(style);
 
     }

@@ -22,18 +22,19 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.client.images.DataTableImages;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.TargetLabel;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -44,9 +45,13 @@ public class PageNavigBar extends Toolbar {
 
     private final Label countLabel;
 
-    private final Anchor prevAnchor;
+    private final Button firstButton;
 
-    private final Anchor nextAnchor;
+    private final Button prevButton;
+
+    private final Button nextButton;
+
+    private final Button lastButton;
 
     private final HorizontalPanel pageSizeContentPanel;
 
@@ -54,9 +59,13 @@ public class PageNavigBar extends Toolbar {
 
     protected List<Integer> pageSizeOptions;
 
+    private HandlerRegistration firstActionHandlerRegistration;
+
     private HandlerRegistration prevActionHandlerRegistration;
 
     private HandlerRegistration nextActionHandlerRegistration;
+
+    private HandlerRegistration lastActionHandlerRegistration;
 
     private ClickHandler pageSizeClickHandler;
 
@@ -74,19 +83,28 @@ public class PageNavigBar extends Toolbar {
         pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
         addItem(pageSizeContentPanel);
 
-        prevAnchor = new Anchor("&lt;&nbsp;" + i18n.tr("Prev"), true, Anchor.DEFAULT_HREF);
-        prevAnchor.setEnabled(false);
-        prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
-        addItem(prevAnchor);
+        firstButton = new Button(new Image(DataTableImages.INSTANCE.first()));
+        firstButton.setVisible(false);
+        firstButton.getElement().getStyle().setMarginRight(3, Unit.PX);
+        addItem(firstButton);
+
+        prevButton = new Button(new Image(DataTableImages.INSTANCE.prev()));
+        prevButton.setVisible(false);
+        prevButton.getElement().getStyle().setMarginRight(5, Unit.PX);
+        addItem(prevButton);
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
-        countLabel.getElement().getStyle().setMarginRight(10, Unit.PX);
-        countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
         addItem(countLabel);
 
-        nextAnchor = new Anchor(i18n.tr("Next") + "&nbsp;&gt;", true, Anchor.DEFAULT_HREF);
-        nextAnchor.setEnabled(false);
-        addItem(nextAnchor);
+        nextButton = new Button(new Image(DataTableImages.INSTANCE.next()));
+        nextButton.setVisible(false);
+        nextButton.getElement().getStyle().setMarginRight(3, Unit.PX);
+        addItem(nextButton);
+
+        lastButton = new Button(new Image(DataTableImages.INSTANCE.last()));
+        lastButton.setVisible(false);
+        addItem(lastButton);
 
         getElement().getStyle().setProperty("textAlign", "right");
 
@@ -105,12 +123,24 @@ public class PageNavigBar extends Toolbar {
         });
     }
 
+    public void setFirstActionHandler(ClickHandler firstActionHandler) {
+        if (firstActionHandlerRegistration != null) {
+            firstActionHandlerRegistration.removeHandler();
+        }
+        if (firstActionHandler != null) {
+            firstActionHandlerRegistration = firstButton.addClickHandler(firstActionHandler);
+        } else {
+            firstActionHandlerRegistration = null;
+        }
+
+    }
+
     public void setPrevActionHandler(ClickHandler prevActionHandler) {
         if (prevActionHandlerRegistration != null) {
             prevActionHandlerRegistration.removeHandler();
         }
         if (prevActionHandler != null) {
-            prevActionHandlerRegistration = prevAnchor.addClickHandler(prevActionHandler);
+            prevActionHandlerRegistration = prevButton.addClickHandler(prevActionHandler);
         } else {
             prevActionHandlerRegistration = null;
         }
@@ -122,10 +152,22 @@ public class PageNavigBar extends Toolbar {
             nextActionHandlerRegistration.removeHandler();
         }
         if (nextActionHandler != null) {
-            nextActionHandlerRegistration = nextAnchor.addClickHandler(nextActionHandler);
+            nextActionHandlerRegistration = nextButton.addClickHandler(nextActionHandler);
         } else {
             nextActionHandlerRegistration = null;
         }
+    }
+
+    public void setLastActionHandler(ClickHandler lastActionHandler) {
+        if (lastActionHandlerRegistration != null) {
+            lastActionHandlerRegistration.removeHandler();
+        }
+        if (lastActionHandler != null) {
+            lastActionHandlerRegistration = lastButton.addClickHandler(lastActionHandler);
+        } else {
+            lastActionHandlerRegistration = null;
+        }
+
     }
 
     public void setPageSizeActionHandler(ClickHandler clickHandler) {
@@ -133,18 +175,24 @@ public class PageNavigBar extends Toolbar {
     }
 
     public void onTableModelChanged(DataTableModelEvent e) {
-        prevAnchor.setEnabled(prevActionHandlerRegistration != null && actionsBar.getDataTableModel().getPageNumber() > 0);
         int from = actionsBar.getDataTableModel().getPageNumber() * actionsBar.getDataTableModel().getPageSize() + 1;
         int to = from + actionsBar.getDataTableModel().getData().size() - 1;
         if (from > to) {
             countLabel.setText(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8));
-        } else if (from == to) {
-            countLabel.setText(String.valueOf(from));
         } else {
             countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, actionsBar.getDataTableModel().getTotalRows()));
         }
 
-        nextAnchor.setEnabled(nextActionHandlerRegistration != null && actionsBar.getDataTableModel().hasMoreData());
+        boolean fitsOnOnePage = actionsBar.getDataTableModel().getPageSize() >= actionsBar.getDataTableModel().getTotalRows();
+        prevButton.setVisible(!fitsOnOnePage);
+        firstButton.setVisible(!fitsOnOnePage);
+        nextButton.setVisible(!fitsOnOnePage);
+        lastButton.setVisible(!fitsOnOnePage);
+
+        prevButton.setEnabled(prevActionHandlerRegistration != null && actionsBar.getDataTableModel().getPageNumber() > 0);
+        firstButton.setEnabled(prevActionHandlerRegistration != null && actionsBar.getDataTableModel().getPageNumber() > 0);
+        nextButton.setEnabled(nextActionHandlerRegistration != null && actionsBar.getDataTableModel().hasMoreData());
+        lastButton.setEnabled(nextActionHandlerRegistration != null && actionsBar.getDataTableModel().hasMoreData());
 
         if (pageSizeOptions != null) {
             pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(actionsBar.getDataTableModel().getPageSize()));
