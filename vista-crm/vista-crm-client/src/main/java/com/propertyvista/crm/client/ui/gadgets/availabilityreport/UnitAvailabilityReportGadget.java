@@ -293,6 +293,11 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
     }
 
     @Override
+    public List<String> getCategories() {
+        return Arrays.asList(i18n.tr("Arrears"));
+    }
+
+    @Override
     public boolean isBuildingGadget() {
         return true;
     }

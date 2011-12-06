@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.availabilityreport;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -162,6 +164,11 @@ public class AvailabiltySummaryGadget extends AbstractGadget<AvailabilitySummary
     public String getDescription() {
         return i18n
                 .tr("Shows a summary of information about all units, including the total number of units, vacancy, notice and net exposure information in both percentages and quantity");
+    }
+
+    @Override
+    public List<String> getCategories() {
+        return Arrays.asList(i18n.tr("Availability"));
     }
 
     @Override

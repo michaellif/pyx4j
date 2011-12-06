@@ -424,6 +424,11 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
     }
 
     @Override
+    public List<String> getCategories() {
+        return Arrays.asList(i18n.tr("Availability"), i18n.tr("Chart"));
+    }
+
+    @Override
     public boolean isBuildingGadget() {
         return true;
     }

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.gadgets;
 
+import java.util.List;
+
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
@@ -23,6 +25,8 @@ public interface IGadgetFactory {
     String getType();
 
     String getName();
+
+    List<String> getCategories();
 
     /** @return Return short explanation of gadget's abilities. */
     String getDescription();

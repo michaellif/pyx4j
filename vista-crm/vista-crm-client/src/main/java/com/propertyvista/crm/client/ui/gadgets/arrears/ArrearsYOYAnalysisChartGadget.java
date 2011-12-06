@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.arrears;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -210,6 +211,11 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
     public String getDescription() {
         return i18n.tr("A graph that visually demonstrates the arrear balance each month over the course of multiple years");
     }
+
+    @Override
+    public java.util.List<String> getCategories() {
+        return Arrays.asList(i18n.tr("Arrears", "Chart"));
+    };
 
     @Override
     public boolean isBuildingGadget() {

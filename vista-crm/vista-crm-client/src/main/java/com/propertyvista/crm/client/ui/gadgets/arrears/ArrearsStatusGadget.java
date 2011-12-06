@@ -197,6 +197,11 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
     }
 
     @Override
+    public List<String> getCategories() {
+        return Arrays.asList(i18n.tr("Arrears"));
+    }
+
+    @Override
     protected GadgetInstanceBase<ArrearsStatus> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsStatusGadgetInstance(gadgetMetadata);
     }

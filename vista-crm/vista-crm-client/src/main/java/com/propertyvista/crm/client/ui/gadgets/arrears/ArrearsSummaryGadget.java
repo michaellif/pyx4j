@@ -116,6 +116,11 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
     }
 
     @Override
+    public List<String> getCategories() {
+        return Arrays.asList("Arrears");
+    }
+
+    @Override
     public boolean isBuildingGadget() {
         return true;
     }

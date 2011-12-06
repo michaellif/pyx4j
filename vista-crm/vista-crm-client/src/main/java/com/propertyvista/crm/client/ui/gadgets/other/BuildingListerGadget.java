@@ -38,10 +38,11 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
+    private static final I18n i18n = I18n.get(BuildingListerGadget.class);
 
     public static class BuildingListerGadgetInstance extends ListerGadgetInstanceBase<BuildingDTO, BuildingLister> {
 
-        private static final I18n i18n = I18n.get(BuildingLister.class);
+        private static final I18n i18n = I18n.get(BuildingListerGadgetInstance.class);
 
         private final AbstractListService<BuildingDTO> service;
 
@@ -118,7 +119,12 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
 
     @Override
     public String getDescription() {
-        return "Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up";
+        return i18n.tr("Table-list-like gadget which displays building data according to prefered rules. Query and display data can be set up");
+    }
+
+    @Override
+    public List<String> getCategories() {
+        return Arrays.asList(i18n.tr("Buildings"));
     }
 
     @Override
