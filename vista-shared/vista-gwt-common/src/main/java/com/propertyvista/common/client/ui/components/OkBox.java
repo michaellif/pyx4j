@@ -13,8 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -82,15 +82,10 @@ public abstract class OkBox extends SimplePanel implements OkOption {
     @Override
     public boolean onClickOk() {
         if (options instanceof OkOption) {
-            GWT.runAsync(new RunAsyncCallback() {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
-                public void onSuccess() {
+                public void execute() {
                     ((OkOption) options).onClickOk();
-                }
-
-                @Override
-                public void onFailure(Throwable reason) {
-                    // TODO Auto-generated method stub
                 }
             });
         }

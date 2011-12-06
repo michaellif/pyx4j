@@ -13,8 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -51,15 +51,10 @@ public abstract class OkCancelBox extends OkBox implements OkCancelOption {
     @Override
     public boolean onClickCancel() {
         if (options instanceof CancelOption) {
-            GWT.runAsync(new RunAsyncCallback() {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
-                public void onSuccess() {
+                public void execute() {
                     ((CancelOption) options).onClickCancel();
-                }
-
-                @Override
-                public void onFailure(Throwable reason) {
-                    // TODO Auto-generated method stub
                 }
             });
         }
