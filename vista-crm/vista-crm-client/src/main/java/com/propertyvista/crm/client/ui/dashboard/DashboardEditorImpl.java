@@ -18,8 +18,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
+import com.pyx4j.widgets.client.dialog.OkOption;
+
+import com.propertyvista.common.client.ui.components.OkBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -32,20 +33,22 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<DashboardType> callback) {
-        new ShowPopUpBox<SelectTypeBox>(new SelectTypeBox()) {
+        final SelectTypeBox box = new SelectTypeBox();
+        box.run(new OkOption() {
             @Override
-            protected void onClose(SelectTypeBox box) {
+            public boolean onClickOk() {
                 callback.onSuccess(box.getSelectedType());
+                return true;
             }
-        };
+        });
     }
 
-    private class SelectTypeBox extends OkCancelBox {
+    private class SelectTypeBox extends OkBox {
 
         private RadioButton system;
 
         public SelectTypeBox() {
-            super(i18n.tr("Select Dashboard Type"), true);
+            super(i18n.tr("Select Dashboard Type"));
             setContent(createContent());
         }
 
@@ -57,11 +60,6 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
             main.setWidth("100%");
             system.setValue(true);
             return main;
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("200px", "100px");
         }
 
         public DashboardType getSelectedType() {

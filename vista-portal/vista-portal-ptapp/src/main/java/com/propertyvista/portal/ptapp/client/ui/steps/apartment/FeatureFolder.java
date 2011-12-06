@@ -22,9 +22,9 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -57,20 +57,20 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
     @Override
     protected void addItem() {
         if (apartmentViewForm != null) {
-            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
+            final SelectFeatureBox box = new SelectFeatureBox(type, apartmentViewForm.getValue());
+            box.run(new OkOption() {
                 @Override
-                protected void onClose(SelectFeatureBox box) {
-                    if (box.getSelectedItems() != null) {
-                        for (ServiceItem item : box.getSelectedItems()) {
-                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                            newItem.item().set(item);
-                            newItem.originalPrice().setValue(item.price().getValue());
-                            newItem.adjustedPrice().setValue(item.price().getValue());
-                            addItem(newItem);
-                        }
+                public boolean onClickOk() {
+                    for (ServiceItem item : box.getSelectedItems()) {
+                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                        newItem.item().set(item);
+                        newItem.originalPrice().setValue(item.price().getValue());
+                        newItem.adjustedPrice().setValue(item.price().getValue());
+                        addItem(newItem);
                     }
+                    return true;
                 }
-            };
+            });
         }
     }
 

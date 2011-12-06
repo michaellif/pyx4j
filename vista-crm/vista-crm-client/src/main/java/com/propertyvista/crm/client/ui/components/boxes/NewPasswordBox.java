@@ -35,10 +35,11 @@ public class NewPasswordBox extends OkCancelBox {
         super(i18n.tr("Change password"));
         this.showOldPassword = showOldPassword;
         setContent(createContent());
+        setSize("350px", "100px");
     }
 
     protected Widget createContent() {
-        okButton.setEnabled(true);
+        getOkButton().setEnabled(true);
 
         VerticalPanel content = new VerticalPanel();
 
@@ -62,21 +63,12 @@ public class NewPasswordBox extends OkCancelBox {
 
     }
 
-    @Override
-    public boolean isOk() {
-        if (super.isOk()) {
-            if (showOldPassword) {
-                return (oldPassword.getValue() != null && newPassword1.getValue() != null && newPassword2.getValue() != null);
-            } else {
-                return (newPassword1.getValue() != null && newPassword2.getValue() != null);
-            }
+    public boolean isValid() {
+        if (showOldPassword) {
+            return (oldPassword.getValue() != null && newPassword1.getValue() != null && newPassword2.getValue() != null);
+        } else {
+            return (newPassword1.getValue() != null && newPassword2.getValue() != null);
         }
-        return false;
-    }
-
-    @Override
-    protected void setSize() {
-        setSize("350px", "100px");
     }
 
     public String getOldPassword() {

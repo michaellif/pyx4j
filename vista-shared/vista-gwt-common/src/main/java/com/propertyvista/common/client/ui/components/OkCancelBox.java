@@ -13,17 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
+import com.pyx4j.widgets.client.dialog.CancelOption;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 /**
  * Draws pop-up dialog box with OK and Cancel buttons and
@@ -32,91 +27,42 @@ import com.pyx4j.widgets.client.dialog.DialogPanel;
  * @author Vlad
  * 
  */
-public abstract class OkCancelBox extends DialogPanel {
-
-    protected final static I18n i18n = I18n.get(OkCancelBox.class);
-
-    protected final SimplePanel content;
-
-    protected final Button okButton;
-
-    protected Button cancelButton;
-
-    protected boolean isCanceled = false;
+public abstract class OkCancelBox extends OkBox implements OkCancelOption {
 
     public OkCancelBox(String caption) {
-        this(caption, false);
+        super(caption);
     }
 
-    public OkCancelBox(String caption, boolean hideCancel) {
-        super(false, true);
-        setCaption(caption);
-
-        HorizontalPanel buttons = new HorizontalPanel();
-        buttons.add(okButton = new Button(i18n.tr("OK"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (onOk()) {
-                    hide();
-                }
-            }
-        }));
-        if (!hideCancel) {
-            buttons.add(cancelButton = new Button(i18n.tr("Cancel"), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    onCancel();
-                    hide();
-                }
-            }));
-        }
-        buttons.setSpacing(8);
-
-        VerticalPanel vPanel = new VerticalPanel();
-        vPanel.add(content = new SimplePanel());
-        vPanel.add(buttons);
-        vPanel.setCellHorizontalAlignment(buttons, HasHorizontalAlignment.ALIGN_CENTER);
-        vPanel.setSpacing(8);
-        vPanel.setSize("100%", "100%");
-
-        setContentWidget(vPanel);
-        setSize();
+    public Button getCancelButton() {
+        return dialog.getCancelButton();
     }
 
-    /**
-     * Call in derived class - supply your inner content of the box.
-     * Note: could be called from within constructor!!!
-     * 
-     * @return widget with user's content.
-     */
-    protected void setContent(Widget w) {
-        this.content.setWidget(w);
-    }
-
-    /**
-     * Override to set your desired size
-     */
-    protected void setSize() {
-        setSize("200px", "100px");
+    public void run(final OkCancelOption okCancelOption) {
+        run(okCancelOption);
     }
 
     /**
      * Override for some meaningful action.
+     * 
+     * Note: always call super.onClickCancel() last.
      * 
      * @return true if dialog close allowed.
      */
-    protected boolean onOk() {
+    @Override
+    public boolean onClickCancel() {
+        if (options instanceof CancelOption) {
+            GWT.runAsync(new RunAsyncCallback() {
+                @Override
+                public void onSuccess() {
+                    ((CancelOption) options).onClickCancel();
+                }
+
+                @Override
+                public void onFailure(Throwable reason) {
+                    // TODO Auto-generated method stub
+                }
+            });
+        }
         return true;
-    }
-
-    /**
-     * Override for some meaningful action.
-     */
-    protected void onCancel() {
-        isCanceled = true;
-    }
-
-    public boolean isOk() {
-        return !isCanceled;
     }
 }

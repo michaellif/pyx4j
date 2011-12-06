@@ -43,17 +43,18 @@ class SelectFeatureBox extends OkCancelBox {
         this.type = type;
         this.apartmentInfo = apartmentInfo;
         setContent(createContent());
+        setSize("300px", "100px");
     }
 
     protected Widget createContent() {
-        okButton.setEnabled(false);
+        getOkButton().setEnabled(false);
 
         if (!getAvailableList().isEmpty()) {
             list = new ListBox(true);
             list.addChangeHandler(new ChangeHandler() {
                 @Override
                 public void onChange(ChangeEvent event) {
-                    okButton.setEnabled(list.getSelectedIndex() >= 0);
+                    getOkButton().setEnabled(list.getSelectedIndex() >= 0);
                 }
             });
 
@@ -82,12 +83,7 @@ class SelectFeatureBox extends OkCancelBox {
     }
 
     @Override
-    protected void setSize() {
-        setSize("350px", "100px");
-    }
-
-    @Override
-    protected boolean onOk() {
+    public boolean onClickOk() {
         selectedItems = new ArrayList<ServiceItem>(4);
         for (int i = 0; i < list.getItemCount(); ++i) {
             if (list.isItemSelected(i)) {
@@ -98,12 +94,7 @@ class SelectFeatureBox extends OkCancelBox {
                 }
             }
         }
-        return super.onOk();
-    }
-
-    @Override
-    protected void onCancel() {
-        selectedItems = null;
+        return super.onClickOk();
     }
 
     protected List<ServiceItem> getSelectedItems() {

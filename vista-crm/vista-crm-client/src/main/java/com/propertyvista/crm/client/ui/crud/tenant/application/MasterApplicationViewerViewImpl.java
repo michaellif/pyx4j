@@ -30,9 +30,9 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -76,16 +76,17 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
         // Add actions:
         approveAction = new Button(APPROVE, new ClickHandler() {
+
             @Override
             public void onClick(ClickEvent event) {
-                new ShowPopUpBox<ActionBox>(new ActionBox(APPROVE)) {
+                final ActionBox box = new ActionBox(APPROVE);
+                box.run(new OkOption() {
                     @Override
-                    protected void onClose(ActionBox box) {
-                        if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Approved));
-                        }
+                    public boolean onClickOk() {
+                        ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Approved));
+                        return true;
                     }
-                };
+                });
             }
         });
         addToolbarItem(approveAction.asWidget());
@@ -93,14 +94,14 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ShowPopUpBox<ActionBox>(new ActionBox(MORE_INFO)) {
+                final ActionBox box = new ActionBox(MORE_INFO);
+                box.run(new OkOption() {
                     @Override
-                    protected void onClose(ActionBox box) {
-                        if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.InformationRequested));
-                        }
+                    public boolean onClickOk() {
+                        ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.InformationRequested));
+                        return true;
                     }
-                };
+                });
             }
         });
         addToolbarItem(moreInfoAction.asWidget());
@@ -108,14 +109,14 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         declineAction = new Button(DECLINE, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ShowPopUpBox<ActionBox>(new ActionBox(DECLINE)) {
+                final ActionBox box = new ActionBox(DECLINE);
+                box.run(new OkOption() {
                     @Override
-                    protected void onClose(ActionBox box) {
-                        if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Declined));
-                        }
+                    public boolean onClickOk() {
+                        ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Declined));
+                        return true;
                     }
-                };
+                });
             }
         });
         addToolbarItem(declineAction.asWidget());
@@ -123,14 +124,14 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         cancelAction = new Button(CANCEL, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ShowPopUpBox<ActionBox>(new ActionBox(CANCEL)) {
+                final ActionBox box = new ActionBox(CANCEL);
+                box.run(new OkOption() {
                     @Override
-                    protected void onClose(ActionBox box) {
-                        if (box.isOk()) {
-                            ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Cancelled));
-                        }
+                    public boolean onClickOk() {
+                        ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Cancelled));
+                        return true;
                     }
-                };
+                });
             }
         });
         addToolbarItem(cancelAction.asWidget());
@@ -138,13 +139,13 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ShowPopUpBox<SelectTenantsBox>(new SelectTenantsBox()) {
+                final SelectTenantsBox box = new SelectTenantsBox();
+                box.run(new OkOption() {
                     @Override
-                    protected void onClose(SelectTenantsBox box) {
-                        if (box.isOk()) {
-                        }
+                    public boolean onClickOk() {
+                        return true;
                     }
-                };
+                });
             }
         });
         addToolbarItem(checkAction.asWidget());
@@ -170,10 +171,11 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         public ActionBox(String title) {
             super(title);
             setContent(createContent());
+            setSize("350px", "100px");
         }
 
         protected Widget createContent() {
-            okButton.setEnabled(true);
+            getOkButton().setEnabled(true);
 
             VerticalPanel content = new VerticalPanel();
             content.add(new HTML(i18n.tr("Please fill the reason:")));
@@ -182,11 +184,6 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             reason.setWidth("100%");
             content.setWidth("100%");
             return content.asWidget();
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("350px", "100px");
         }
 
         public MasterApplicationActionDTO updateValue(Status status) {
@@ -207,16 +204,17 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         public SelectTenantsBox() {
             super(i18n.tr("Select Tenants To Check"));
             setContent(createContent());
+            setSize("350px", "100px");
         }
 
         protected Widget createContent() {
-            okButton.setEnabled(false);
+            getOkButton().setEnabled(false);
 
             list = new ListBox(true);
             list.addChangeHandler(new ChangeHandler() {
                 @Override
                 public void onChange(ChangeEvent event) {
-                    okButton.setEnabled(list.getSelectedIndex() >= 0);
+                    getOkButton().setEnabled(list.getSelectedIndex() >= 0);
                 }
             });
 
@@ -230,12 +228,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         }
 
         @Override
-        protected void setSize() {
-            setSize("350px", "100px");
-        }
-
-        @Override
-        protected boolean onOk() {
+        public boolean onClickOk() {
             selectedItems = new ArrayList<TenantInfoDTO>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
@@ -246,7 +239,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                     }
                 }
             }
-            return super.onOk();
+            return super.onClickOk();
         }
 
         protected List<TenantInfoDTO> getSelectedItems() {

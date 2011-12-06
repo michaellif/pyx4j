@@ -19,9 +19,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -65,20 +65,20 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     protected void addItem() {
         if (apartmentViewForm != null) {
             if (getValue().size() < maxCount) {
-                new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox(type, apartmentViewForm.getValue())) {
+                final SelectFeatureBox box = new SelectFeatureBox(type, apartmentViewForm.getValue());
+                box.run(new OkOption() {
                     @Override
-                    protected void onClose(SelectFeatureBox box) {
-                        if (box.getSelectedItems() != null) {
-                            for (ServiceItem item : box.getSelectedItems()) {
-                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                                newItem.item().set(item);
-                                newItem.originalPrice().setValue(item.price().getValue());
-                                newItem.adjustedPrice().setValue(item.price().getValue());
-                                addItem(newItem);
-                            }
+                    public boolean onClickOk() {
+                        for (ServiceItem item : box.getSelectedItems()) {
+                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                            newItem.item().set(item);
+                            newItem.originalPrice().setValue(item.price().getValue());
+                            newItem.adjustedPrice().setValue(item.price().getValue());
+                            addItem(newItem);
                         }
+                        return true;
                     }
-                };
+                });
             } else {
                 MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more then {0} items here!", maxCount));
             }

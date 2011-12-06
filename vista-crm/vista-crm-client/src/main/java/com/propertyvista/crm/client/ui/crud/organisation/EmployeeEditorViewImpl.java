@@ -18,8 +18,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.boxes.NewPasswordBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -37,14 +37,14 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
 
             @Override
             public void onClick(ClickEvent event) {
-                new ShowPopUpBox<NewPasswordBox>(new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit()))) {
+                final NewPasswordBox box = new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit()));
+                box.run(new OkOption() {
                     @Override
-                    protected void onClose(NewPasswordBox box) {
-                        if (box.isOk()) {
-                            ((EmployeeEditorView.Presenter) presenter).changePassword(box.getOldPassword(), box.getNewPassword1());
-                        }
+                    public boolean onClickOk() {
+                        ((EmployeeEditorView.Presenter) presenter).changePassword(box.getOldPassword(), box.getNewPassword1());
+                        return true;
                     }
-                };
+                });
             }
         });
         addToolbarItem(passwordAction.asWidget());

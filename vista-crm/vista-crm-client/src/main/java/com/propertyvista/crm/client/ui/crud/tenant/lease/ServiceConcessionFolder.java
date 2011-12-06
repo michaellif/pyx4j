@@ -28,10 +28,10 @@ import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -67,16 +67,16 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
         if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            new ShowPopUpBox<SelectConcessionBox>(new SelectConcessionBox()) {
+            final SelectConcessionBox box = new SelectConcessionBox();
+            box.run(new OkOption() {
                 @Override
-                protected void onClose(SelectConcessionBox box) {
-                    if (box.getSelectedItems() != null) {
-                        for (Concession item : box.getSelectedItems()) {
-                            addItem(item);
-                        }
+                public boolean onClickOk() {
+                    for (Concession item : box.getSelectedItems()) {
+                        addItem(item);
                     }
+                    return true;
                 }
-            };
+            });
         }
     }
 
@@ -89,17 +89,18 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
         public SelectConcessionBox() {
             super(i18n.tr("Select Concessions"));
             setContent(createContent());
+            setSize("300px", "100px");
         }
 
         protected Widget createContent() {
-            okButton.setEnabled(false);
+            getOkButton().setEnabled(false);
 
             if (!parent.getValue().selectedConcessions().isEmpty()) {
                 list = new ListBox(true);
                 list.addChangeHandler(new ChangeHandler() {
                     @Override
                     public void onChange(ChangeEvent event) {
-                        okButton.setEnabled(list.getSelectedIndex() >= 0);
+                        getOkButton().setEnabled(list.getSelectedIndex() >= 0);
                     }
                 });
 
@@ -122,12 +123,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
         }
 
         @Override
-        protected void setSize() {
-            setSize("350px", "100px");
-        }
-
-        @Override
-        protected boolean onOk() {
+        public boolean onClickOk() {
             selectedItems = new ArrayList<Concession>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
@@ -138,12 +134,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
                     }
                 }
             }
-            return super.onOk();
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedItems = null;
+            return super.onClickOk();
         }
 
         protected List<Concession> getSelectedItems() {

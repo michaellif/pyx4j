@@ -27,10 +27,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -52,20 +52,20 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            new ShowPopUpBox<SelectFeatureBox>(new SelectFeatureBox()) {
+            final SelectFeatureBox box = new SelectFeatureBox();
+            box.run(new OkOption() {
                 @Override
-                protected void onClose(SelectFeatureBox box) {
-                    if (box.getSelectedItems() != null) {
-                        for (ServiceItem item : box.getSelectedItems()) {
-                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                            newItem.item().set(item);
-                            newItem.originalPrice().setValue(item.price().getValue());
-                            newItem.adjustedPrice().setValue(item.price().getValue());
-                            addItem(newItem);
-                        }
+                public boolean onClickOk() {
+                    for (ServiceItem item : box.getSelectedItems()) {
+                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                        newItem.item().set(item);
+                        newItem.originalPrice().setValue(item.price().getValue());
+                        newItem.adjustedPrice().setValue(item.price().getValue());
+                        addItem(newItem);
                     }
+                    return true;
                 }
-            };
+            });
         }
     }
 
@@ -86,17 +86,18 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         public SelectFeatureBox() {
             super(i18n.tr("Select Features"));
             setContent(createContent());
+            setSize("300px", "100px");
         }
 
         protected Widget createContent() {
-            okButton.setEnabled(false);
+            getOkButton().setEnabled(false);
 
             if (!parent.getValue().selectedFeatureItems().isEmpty()) {
                 list = new ListBox(true);
                 list.addChangeHandler(new ChangeHandler() {
                     @Override
                     public void onChange(ChangeEvent event) {
-                        okButton.setEnabled(list.getSelectedIndex() >= 0);
+                        getOkButton().setEnabled(list.getSelectedIndex() >= 0);
                     }
                 });
 
@@ -126,12 +127,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         }
 
         @Override
-        protected void setSize() {
-            setSize("350px", "100px");
-        }
-
-        @Override
-        protected boolean onOk() {
+        public boolean onClickOk() {
             selectedItems = new ArrayList<ServiceItem>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
@@ -142,12 +138,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                     }
                 }
             }
-            return super.onOk();
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedItems = null;
+            return super.onClickOk();
         }
 
         protected List<ServiceItem> getSelectedItems() {

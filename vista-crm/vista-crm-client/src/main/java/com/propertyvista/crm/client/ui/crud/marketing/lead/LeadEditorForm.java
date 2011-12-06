@@ -29,9 +29,9 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -121,14 +121,14 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new ShowPopUpBox<SelectFloorplanBox>(new SelectFloorplanBox()) {
+                    final SelectFloorplanBox box = new SelectFloorplanBox();
+                    box.run(new OkOption() {
                         @Override
-                        protected void onClose(SelectFloorplanBox box) {
-                            if (box.getSelectedItem() != null) {
-                                ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(box.getSelectedItem());
-                            }
+                        public boolean onClickOk() {
+                            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(box.getSelectedItem());
+                            return true;
                         }
-                    };
+                    });
                 }
             });
             select.asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
@@ -172,15 +172,16 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         public SelectFloorplanBox() {
             super("Building/Floorplan Selection");
             setContent(createContent());
+            setSize("900px", "500px");
         }
 
         protected Widget createContent() {
-            okButton.setEnabled(false);
+            getOkButton().setEnabled(false);
             ((LeadEditorView) getParentView()).getFloorplanListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Floorplan>() {
                 @Override
                 public void onSelect(Floorplan selected) {
                     selectedItem = selected;
-                    okButton.setEnabled(true);
+                    getOkButton().setEnabled(true);
                 }
             });
 
@@ -191,16 +192,6 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             vPanel.add(((LeadEditorView) getParentView()).getFloorplanListerView().asWidget());
             vPanel.setWidth("100%");
             return vPanel;
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("900px", "500px");
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedItem = null;
         }
 
         protected Floorplan getSelectedItem() {

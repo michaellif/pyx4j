@@ -38,10 +38,10 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
@@ -85,17 +85,17 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     @Override
     protected void addItem() {
-        new ShowPopUpBox<SelectTenantBox>(new SelectTenantBox(tenantListerView)) {
+        final SelectTenantBox box = new SelectTenantBox(tenantListerView);
+        box.run(new OkOption() {
             @Override
-            protected void onClose(SelectTenantBox box) {
-                if (box.getSelectedTenant() != null) {
-                    TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
-                    newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
-                    newTenantInLease.tenant().set(box.getSelectedTenant());
-                    addItem(newTenantInLease);
-                }
+            public boolean onClickOk() {
+                TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
+                newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
+                newTenantInLease.tenant().set(box.getSelectedItem());
+                addItem(newTenantInLease);
+                return true;
             }
-        };
+        });
     }
 
     @Override
@@ -238,15 +238,16 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             super(i18n.tr("Select Tenant"));
             this.tenantListerView = tenantListerView;
             setContent(createContent());
+            setSize("700px", "400px");
         }
 
         protected Widget createContent() {
-            okButton.setEnabled(false);
+            getOkButton().setEnabled(false);
             tenantListerView.getLister().addItemSelectionHandler(new ItemSelectionHandler<Tenant>() {
                 @Override
                 public void onSelect(Tenant selectedItem) {
                     selectedTenant = selectedItem;
-                    okButton.setEnabled(true);
+                    getOkButton().setEnabled(true);
                 }
             });
 
@@ -256,17 +257,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             return vPanel;
         }
 
-        @Override
-        protected void setSize() {
-            setSize("700px", "400px");
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedTenant = null;
-        }
-
-        protected Tenant getSelectedTenant() {
+        protected Tenant getSelectedItem() {
             return selectedTenant;
         }
     }

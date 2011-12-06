@@ -42,15 +42,16 @@ public class SelectUnitBox extends OkCancelBox {
         this.unitListerView = unitListerView;
 
         setContent(createContent());
+        setSize("900px", "500px");
     }
 
     protected Widget createContent() {
-        okButton.setEnabled(false);
+        getOkButton().setEnabled(false);
         unitListerView.getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
             @Override
             public void onSelect(AptUnit selectedItem) {
                 selectedUnit = selectedItem;
-                okButton.setEnabled(true);
+                getOkButton().setEnabled(true);
             }
         });
 
@@ -63,17 +64,7 @@ public class SelectUnitBox extends OkCancelBox {
         return vPanel;
     }
 
-    @Override
-    protected void setSize() {
-        setSize("900px", "500px");
-    }
-
-    @Override
-    public boolean isOk() {
-        return (super.isOk() && selectedUnit != null);
-    }
-
-    public AptUnit getSelectedUnit() {
+    public AptUnit getSelectedItem() {
         return selectedUnit;
     }
 }

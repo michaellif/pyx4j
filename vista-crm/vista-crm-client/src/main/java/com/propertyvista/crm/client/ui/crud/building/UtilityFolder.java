@@ -31,10 +31,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -69,16 +69,16 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
     @Override
     protected void addItem() {
-        new ShowPopUpBox<SelectUtilityBox>(new SelectUtilityBox(building)) {
+        final SelectUtilityBox box = new SelectUtilityBox(building);
+        box.run(new OkOption() {
             @Override
-            protected void onClose(SelectUtilityBox box) {
-                if (box.getSelectedItems() != null) {
-                    for (ServiceItemType item : box.getSelectedItems()) {
-                        addItem(item);
-                    }
+            public boolean onClickOk() {
+                for (ServiceItemType item : box.getSelectedItems()) {
+                    addItem(item);
                 }
+                return true;
             }
-        };
+        });
     }
 
     @Override
@@ -115,17 +115,18 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
             super(i18n.tr("Select Utilities"));
             this.building = building;
             setContent(createContent());
+            setSize("300px", "100px");
         }
 
         protected Widget createContent() {
-            okButton.setEnabled(false);
+            getOkButton().setEnabled(false);
 
             if (!building.getValue().availableUtilities().isEmpty()) {
                 list = new ListBox(true);
                 list.addChangeHandler(new ChangeHandler() {
                     @Override
                     public void onChange(ChangeEvent event) {
-                        okButton.setEnabled(list.getSelectedIndex() >= 0);
+                        getOkButton().setEnabled(list.getSelectedIndex() >= 0);
                     }
                 });
 
@@ -152,12 +153,7 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
         }
 
         @Override
-        protected void setSize() {
-            setSize("350px", "100px");
-        }
-
-        @Override
-        protected boolean onOk() {
+        public boolean onClickOk() {
             selectedItems = new ArrayList<ServiceItemType>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
@@ -168,12 +164,7 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
                     }
                 }
             }
-            return super.onOk();
-        }
-
-        @Override
-        protected void onCancel() {
-            selectedItems = null;
+            return super.onClickOk();
         }
 
         protected List<ServiceItemType> getSelectedItems() {

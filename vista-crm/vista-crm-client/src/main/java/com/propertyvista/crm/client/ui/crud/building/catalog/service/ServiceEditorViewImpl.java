@@ -15,20 +15,14 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.EnumSet;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
+import com.propertyvista.common.client.ui.components.OkBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -52,44 +46,30 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        new ShowPopUpBox<SelectTypeBox>(new SelectTypeBox()) {
+        final SelectTypeBox box = new SelectTypeBox();
+        box.run(new OkOption() {
             @Override
-            public void onClose(SelectTypeBox box) {
+            public boolean onClickOk() {
                 defaultCaption = box.getSelectedType().toString();
                 callback.onSuccess(box.getSelectedType());
+                return true;
             }
-        };
+        });
     }
 
-    private class SelectTypeBox extends DialogPanel {
+    private class SelectTypeBox extends OkBox {
 
-        private final I18n i18n = I18n.get(SelectTypeBox.class);
-
-        private final CComboBox<Service.Type> types = new CComboBox<Service.Type>(i18n.tr("Types"), true);
+        private final CComboBox<Service.Type> types;
 
         public SelectTypeBox() {
-            super(false, true);
-            setCaption(i18n.tr("Select Service Type"));
+            super(i18n.tr("Select Service Type"));
 
-            final Button btnOk = new Button(i18n.tr("OK"), new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    hide();
-                }
-            });
-
+            types = new CComboBox<Service.Type>(i18n.tr("Types"), true);
             types.setOptions(EnumSet.allOf(Service.Type.class));
             types.setValue(types.getOptions().get(0));
             types.setWidth("100%");
 
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(types);
-            vPanel.add(btnOk);
-            vPanel.setCellHorizontalAlignment(btnOk, HasHorizontalAlignment.ALIGN_CENTER);
-            vPanel.setSpacing(8);
-            vPanel.setSize("100%", "100%");
-
-            setContentWidget(vPanel);
+            setContent(types.asWidget());
             setSize("250px", "100px");
         }
 

@@ -18,8 +18,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
-import com.propertyvista.common.client.ui.components.ShowPopUpBox;
+import com.pyx4j.widgets.client.dialog.OkOption;
+
+import com.propertyvista.common.client.ui.components.OkBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Tenant;
@@ -33,20 +34,22 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Tenant.Type> callback) {
-        new ShowPopUpBox<SelectTypeBox>(new SelectTypeBox()) {
+        final SelectTypeBox box = new SelectTypeBox();
+        box.run(new OkOption() {
             @Override
-            protected void onClose(SelectTypeBox box) {
+            public boolean onClickOk() {
                 callback.onSuccess(box.getSelectedType());
+                return true;
             }
-        };
+        });
     }
 
-    private class SelectTypeBox extends OkCancelBox {
+    private class SelectTypeBox extends OkBox {
 
         private RadioButton person;
 
         public SelectTypeBox() {
-            super(i18n.tr("Select Tenant Type"), true);
+            super(i18n.tr("Select Tenant Type"));
             setContent(createContent());
         }
 
@@ -58,11 +61,6 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
             main.setWidth("100%");
             person.setValue(true);
             return main;
-        }
-
-        @Override
-        protected void setSize() {
-            setSize("200px", "100px");
         }
 
         public Tenant.Type getSelectedType() {
