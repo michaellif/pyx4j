@@ -112,6 +112,10 @@ public class DefaultDataTableTheme extends Theme {
         style.addGradient(ThemeColors.foreground, 0, ThemeColors.foreground, 0.2);
         addStyle(style);
 
+        style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.ButtonText);
+        style.addProperty("line-height", "22px");
+        addStyle(style);
+
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
         style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0);
         addStyle(style);
