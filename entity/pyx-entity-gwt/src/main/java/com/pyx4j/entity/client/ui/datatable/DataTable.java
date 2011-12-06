@@ -534,8 +534,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                         }
                         if (hasChanged) {
                             renderTable();
-                            for (ColumnSelectionHandler handler : columnSelectionHandlers) {
-                                handler.onColumSelectionChanged();
+                            if (columnSelectionHandlers != null) {
+                                for (ColumnSelectionHandler handler : columnSelectionHandlers) {
+                                    handler.onColumSelectionChanged();
+                                }
                             }
                         }
                     }
