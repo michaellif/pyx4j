@@ -82,10 +82,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         }
 
         for (GadgetMetadata gm : dm.gadgets()) {
-            if (!Key.DORMANT_KEY.equals(gm.user().getPrimaryKey())) {
-                gm.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
-            }
-            EntityServicesImpl.secureSave(gm);
+            persistGadgetMetadata(gm);
         }
 
         EntityServicesImpl.secureSave(dm);
@@ -103,13 +100,19 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     }
 
     @Override
-    public void saveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId, GadgetMetadata settings) {
-        //GadgetSettings gm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(GadgetSettings.class, settings.getPrimaryKey()));
-        if (settings != null) {
-            EntityServicesImpl.secureSave(settings);
-            callback.onSuccess(settings);
+    public void saveSettings(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata) {
+        if (gadgetMetadata != null) {
+            persistGadgetMetadata(gadgetMetadata);
+            callback.onSuccess(gadgetMetadata);
         } else {
-            throw new Error("There is no such gadget! " + gadgetMetadataId.toString());
+            throw new Error("Got null instead of gadget metadata");
         }
+    }
+
+    private void persistGadgetMetadata(GadgetMetadata gadgetMetadata) {
+        if (!Key.DORMANT_KEY.equals(gadgetMetadata.user().getPrimaryKey())) {
+            gadgetMetadata.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
+        }
+        EntityServicesImpl.secureSave(gadgetMetadata);
     }
 }

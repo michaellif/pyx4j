@@ -23,15 +23,21 @@ import com.pyx4j.entity.shared.Path;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 
 public class ColumnDescriptorConverter {
-    public static <E extends IEntity> ColumnDescriptor<E> columnDescriptorFromEntity(Class<E> entityClass, ColumnDescriptorEntity cdEntity) {
-        IEntity proto = EntityFactory.getEntityPrototype(entityClass);
-        IObject<?> member = proto.getMember(new Path(cdEntity.propertyPath().getValue()));
+    public static <E extends IEntity> ColumnDescriptor<E> columnDescriptorFromEntity(Class<E> describedEntityClass,
+            ColumnDescriptorEntity columnDescriptorEntity) {
+        if (columnDescriptorEntity != null && !columnDescriptorEntity.isNull()) {
+            IEntity proto = EntityFactory.getEntityPrototype(describedEntityClass);
+            IObject<?> member = proto.getMember(new Path(columnDescriptorEntity.propertyPath().getValue()));
 
-        ColumnDescriptor<E> columnDescriptor = new MemberColumnDescriptor.Builder(member).title(cdEntity.title().getValue())
-                .ascendingSort(cdEntity.sortAscending().getValue()).sortable(cdEntity.sortable().getValue()).width(cdEntity.width().getValue())
-                .wordWrap(cdEntity.wordWrap().getValue()).visible(cdEntity.visiblily().getValue()).build();
+            ColumnDescriptor<E> columnDescriptor = new MemberColumnDescriptor.Builder(member).title(columnDescriptorEntity.title().getValue())
+                    .ascendingSort(columnDescriptorEntity.sortAscending().getValue()).sortable(columnDescriptorEntity.sortable().getValue())
+                    .width(columnDescriptorEntity.width().getValue()).wordWrap(columnDescriptorEntity.wordWrap().getValue())
+                    .visible(columnDescriptorEntity.visiblily().getValue()).build();
 
-        return columnDescriptor;
+            return columnDescriptor;
+        } else {
+            return null;
+        }
     }
 
     public static <E extends IEntity> ColumnDescriptorEntity columnDescriptorToEntity(ColumnDescriptor<E> columnDescriptor, ColumnDescriptorEntity entity) {

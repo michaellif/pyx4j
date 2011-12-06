@@ -33,7 +33,6 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -98,7 +97,7 @@ public class AddGadgetBox extends DialogPanel {
         setSize("100%", "100%");
     }
 
-    public IGadget getSelectedGadget() {
+    public IGadgetInstanceBase getSelectedGadget() {
         if (isOK) {
             IGadgetFactory gadgetFactory = selectionModel.getSelectedObject();
             return gadgetFactory != null ? gadgetFactory.createGadget(null) : null;

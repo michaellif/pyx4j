@@ -114,10 +114,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
      * Persisting helper - can be used from within derived class in order to load gadget settings,
      * stored in GadgetMetadata separately. Can be called within/after setPresenter invoked!
      */
-    protected void saveSettings() {
-        // FIXME review Gadget Metadata saving and loading: currently this function is not used anywhere
-//        assert (presenter != null);        
-//        presenter.save(gadgetMetadata.getPrimaryKey(), gadgetMetadata.settings());
+    protected void saveMetadata() {
+        assert (presenter != null) : "Failed to to save settings: no presenter was available";
+        presenter.save(getMetadata());
     }
 
     /**
@@ -189,7 +188,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public String getName() {
-        // FIXME talk to someone about this: do we really need this inside the gadget
         return metadata.getEntityMeta().getCaption();
     }
 

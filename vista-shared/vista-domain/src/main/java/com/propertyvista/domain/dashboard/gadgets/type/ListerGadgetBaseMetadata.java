@@ -14,6 +14,7 @@
 package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,4 +31,7 @@ public interface ListerGadgetBaseMetadata extends GadgetMetadata {
 
     @Owned
     IList<ColumnDescriptorEntity> columnDescriptors();
+
+    @EmbeddedEntity
+    ColumnDescriptorEntity primarySortColumn();
 }

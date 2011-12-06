@@ -139,8 +139,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
                 IGadgetInstanceBase gadget = Directory.createGadget(gmd);
                 if (gadget != null) {
-                    gadget.setPresenter(presenter);
-                    board.addGadget(gadget, gmd.docking().column().getValue());
+                    addGadget(gadget, gmd.docking().column().getValue());
                 }
             }
         }
@@ -154,6 +153,16 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         while (it.hasNext()) {
             it.next().start(); // allow gadget execution... 
         }
+    }
+
+    public void addGadget(IGadgetInstanceBase gadget) {
+        gadget.setPresenter(presenter);
+        board.addGadget(gadget);
+    }
+
+    public void addGadget(IGadgetInstanceBase gadget, int column) {
+        gadget.setPresenter(presenter);
+        board.addGadget(gadget, column);
     }
 
     @Override

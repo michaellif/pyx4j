@@ -21,7 +21,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public interface IGadgetInstancePresenter {
 
-    void save(Key gadgetId, GadgetMetadata settings);
+    void save(GadgetMetadata gadgetMetadata);
 
     void retrieve(Key gadgetId, AsyncCallback<GadgetMetadata> callback);
 }

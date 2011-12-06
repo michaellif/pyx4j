@@ -34,11 +34,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.IBoard;
-import com.pyx4j.widgets.client.dashboard.IGadget;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
+import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardPanel extends BoardBase implements DashboardView {
@@ -185,9 +185,9 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                     agb.addCloseHandler(new CloseHandler<PopupPanel>() {
                         @Override
                         public void onClose(CloseEvent<PopupPanel> event) {
-                            IGadget gadget = agb.getSelectedGadget();
+                            IGadgetInstanceBase gadget = agb.getSelectedGadget();
                             if (gadget != null) {
-                                getBoard().addGadget(gadget);
+                                addGadget(gadget);
                                 gadget.start();
                             }
                         }

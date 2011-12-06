@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.gadgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -40,7 +41,6 @@ import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 
-//TODO column selection doesn't trigger presenter's populate() call (must hack into DataTable in order to do that or implement the whole thing using GWT CellTable)
 public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE extends ListerGadgetBaseMetadata> extends GadgetInstanceBase<GADGET_TYPE> {
     private static final I18n i18n = I18n.get(ListerGadgetInstanceBase.class);
 
@@ -70,6 +70,80 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         return proto;
     }
 
+    protected Widget initListerWidget() {
+        dataTablePanel = new DataTablePanel<E>(entityClass);
+        dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
+        dataTablePanel.setFilterActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                populate();
+            }
+        });
+        dataTablePanel.setPrevActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                prevListPage();
+            }
+        });
+        dataTablePanel.setNextActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                nextListPage();
+            }
+        });
+        dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
+            @Override
+            public void onChange(ColumnDescriptor<E> column) {
+                for (ColumnDescriptorEntity entity : getMetadata().columnDescriptors()) {
+                    if (entity.propertyPath().getValue().equals(column.getColumnName())) {
+                        entity.sortAscending().setValue(column.isSortAscending());
+                        getMetadata().primarySortColumn().set(entity);
+                        break;
+                    }
+                }
+                // warning: both calls are async
+                saveMetadata();
+                populate();
+            }
+        });
+        dataTablePanel.getDataTable().addColumnSelectionChangeHandler(new DataTable.ColumnSelectionHandler() {
+            @Override
+            public void onColumSelectionChanged() {
+                Iterator<ColumnDescriptor<E>> columnDescriptors = dataTablePanel.getDataTableModel().getColumnDescriptors().iterator();
+                Iterator<ColumnDescriptorEntity> columnDescriptorEntities = getMetadata().columnDescriptors().iterator();
+                while (columnDescriptors.hasNext()) {
+                    assert columnDescriptorEntities.hasNext() : "DataTable's column descriptors and gadget metadata's column descriptor arrays don't match";
+                    ColumnDescriptorEntity entity = columnDescriptorEntities.next();
+                    ColumnDescriptorConverter.columnDescriptorToEntity(columnDescriptors.next(), entity);
+                }
+                saveMetadata();
+            }
+        });
+        // user defined item selection handler:
+        dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
+            @Override
+            public void onSelect(int selectedRow) {
+                E item = dataTablePanel.getDataTable().getSelectedItem();
+                if (item != null) {
+                    onItemSelect(item);
+                }
+            }
+        });
+
+        dataTablePanel.setSize("100%", "100%");
+        dataTablePanel.setFilterEnabled(isFilterRequired());
+        dataTablePanel.getDataTable().setHasColumnClickSorting(true);
+        dataTablePanel.getDataTable().setHasCheckboxColumn(false);
+        dataTablePanel.getDataTable().setMarkSelectedRow(false);
+        dataTablePanel.getDataTable().setAutoColumnsWidth(true);
+        dataTablePanel.getDataTable().renderTable();
+        return dataTablePanel;
+    }
+
+    protected IsWidget getListerWidget() {
+        return dataTablePanel;
+    }
+
     protected abstract boolean isFilterRequired();
 
     /**
@@ -96,6 +170,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
      * @param visible
      * @return
      */
+    // FIXME get rid of this
     protected final ColumnDescriptor<E> col(IObject<?> member, String title, boolean visible) {
         if (title == null) {
             return ColumnDescriptorFactory.createColumnDescriptor(proto(), member, visible);
@@ -143,10 +218,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         return columnDescriptors;
     }
 
-    protected boolean isSettingsInstanceOk(GadgetMetadata abstractSettings) {
-        return abstractSettings.isInstanceOf(ListerGadgetBaseMetadata.class);
-    }
-
     @Override
     protected GADGET_TYPE createDefaultSettings(Class<GADGET_TYPE> metadataClass) {
         GADGET_TYPE settings = super.createDefaultSettings(metadataClass);
@@ -165,6 +236,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     @Override
     public void start() {
         getMetadata().pageNumber().setValue(0);
+        dataTablePanel.getDataTableModel().setSortColumn(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, getMetadata().primarySortColumn()));
         super.start();
     }
 
@@ -185,59 +257,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                 return p;
             }
         });
-    }
-
-    protected Widget initListerWidget() {
-        dataTablePanel = new DataTablePanel<E>(entityClass);
-        dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
-        dataTablePanel.setFilterActionHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                populate();
-            }
-        });
-        dataTablePanel.setPrevActionHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                prevListPage();
-            }
-        });
-        dataTablePanel.setNextActionHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                nextListPage();
-            }
-        });
-        dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
-            @Override
-            public void onChange(ColumnDescriptor<E> column) {
-                populate();
-            }
-        });
-        // item selection stuff:
-        dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
-            @Override
-            public void onSelect(int selectedRow) {
-                E item = dataTablePanel.getDataTable().getSelectedItem();
-                if (item != null) {
-                    onItemSelect(item);
-                }
-            }
-        });
-        // FIXME add handler for column selection (store the selected columns in settings)        
-
-        dataTablePanel.setSize("100%", "100%");
-        dataTablePanel.setFilterEnabled(isFilterRequired());
-        dataTablePanel.getDataTable().setHasColumnClickSorting(true);
-        dataTablePanel.getDataTable().setHasCheckboxColumn(false);
-        dataTablePanel.getDataTable().setMarkSelectedRow(false);
-        dataTablePanel.getDataTable().setAutoColumnsWidth(true);
-        dataTablePanel.getDataTable().renderTable();
-        return dataTablePanel;
-    }
-
-    protected IsWidget getListerWidget() {
-        return dataTablePanel;
     }
 
     protected List<DataTableFilterData> getListerFilterData() {

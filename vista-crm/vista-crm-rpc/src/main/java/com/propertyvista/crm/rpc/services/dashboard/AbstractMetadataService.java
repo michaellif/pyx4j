@@ -33,6 +33,6 @@ public interface AbstractMetadataService extends IService {
 
     public void retrieveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId);
 
-    public void saveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId, GadgetMetadata editableEntity);
+    public void saveSettings(AsyncCallback<GadgetMetadata> callback, GadgetMetadata gadgetMetadata);
 
 }

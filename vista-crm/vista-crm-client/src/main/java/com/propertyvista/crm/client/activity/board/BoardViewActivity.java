@@ -128,10 +128,11 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
 // GadgetPresenter:
 
     @Override
-    public void save(Key gadgetId, GadgetMetadata settings) {
+    public void save(final GadgetMetadata gadgetMetadata) {
         getService().saveSettings(new AsyncCallback<GadgetMetadata>() {
             @Override
             public void onSuccess(GadgetMetadata result) {
+                gadgetMetadata.set(result);
                 view.onSaveSuccess();
             }
 
@@ -139,7 +140,7 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
             public void onFailure(Throwable caught) {
                 onSaveFail(caught);
             }
-        }, gadgetId, settings);
+        }, gadgetMetadata);
     }
 
     @Override
