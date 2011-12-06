@@ -17,10 +17,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -42,6 +44,23 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
             return new PageContentEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        this.addValueValidator(new EditableValueValidator<IList<PageContent>>() {
+
+            @Override
+            public boolean isValid(CComponent<IList<PageContent>, ?> component, IList<PageContent> value) {
+                return !value.isEmpty();
+            }
+
+            @Override
+            public String getValidationMessage(CComponent<IList<PageContent>, ?> component, IList<PageContent> value) {
+                return i18n.tr("At least one content item is necessary");
+            }
+        });
     }
 
     @Override
@@ -89,5 +108,4 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         }
 
     }
-
 }
