@@ -105,6 +105,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     @Override
     public void removeTenat(AsyncCallback<Boolean> callback, Key entityId) {
+        // TODO if should physically remove it here or just break relation to Lease (TenantInLease.lease().set(null))? 
         Persistence.service().delete(Persistence.service().retrieve(TenantInLease.class, entityId));
         callback.onSuccess(true);
     }

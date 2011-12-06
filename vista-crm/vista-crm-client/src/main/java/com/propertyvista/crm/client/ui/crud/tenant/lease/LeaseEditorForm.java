@@ -168,7 +168,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     0,
                     0,
                     inject(proto().tenants(), new TenantInLeaseFolder(this, ((LeaseEditorView) getParentView()).getTenantListerView(),
-                            (LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter())));
+                            (LeaseEditorView) getParentView())));
         } else {
             main.setWidget(0, 0, inject(proto().tenants(), new TenantInLeaseFolder(this)));
         }

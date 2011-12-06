@@ -48,6 +48,7 @@ import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.TenantInLease.Relationship;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
@@ -58,17 +59,17 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     private final IListerView<Tenant> tenantListerView;
 
-    private final LeaseEditorView.Presenter presenter;
+    private final LeaseEditorView view;
 
     public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent) {
         this(parent, null, null); // view mode constructor
     }
 
-    public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent, IListerView<Tenant> tenantListerView, LeaseEditorView.Presenter presenter) {
+    public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent, IListerView<Tenant> tenantListerView, LeaseEditorView view) {
         super(TenantInLease.class, parent.isEditable());
         this.parent = parent;
         this.tenantListerView = tenantListerView;
-        this.presenter = presenter;
+        this.view = view;
     }
 
     @Override
@@ -90,17 +91,32 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             @Override
             public boolean onClickOk() {
                 TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
+
                 newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
                 newTenantInLease.tenant().set(box.getSelectedItem());
+                if (!isApplicantPresent()) {
+                    newTenantInLease.role().setValue(Role.Applicant);
+                    newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
+                }
+
                 addItem(newTenantInLease);
                 return true;
             }
         });
     }
 
+    private boolean isApplicantPresent() {
+        for (TenantInLease til : getValue()) {
+            if (Role.Applicant == til.role().getValue()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void removeItem(CEntityFolderItem<TenantInLease> item) {
-        presenter.removeTenat(item.getValue());
+        ((LeaseEditorView.Presenter) view.getPresenter()).removeTenat(item.getValue());
         super.removeItem(item);
     }
 
