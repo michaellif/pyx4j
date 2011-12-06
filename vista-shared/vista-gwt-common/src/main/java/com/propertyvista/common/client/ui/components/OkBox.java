@@ -46,6 +46,7 @@ public abstract class OkBox extends SimplePanel implements OkOption {
         dialog = new Dialog(caption, this);
         dialog.setBody(content);
         dialog.setPixelSize(200, 100);
+
         content.getElement().getStyle().setMargin(6, Unit.PX);
     }
 
@@ -67,6 +68,11 @@ public abstract class OkBox extends SimplePanel implements OkOption {
         return dialog.getOkButton();
     }
 
+    /**
+     * Call to show the dialog and process result.
+     * 
+     * @param okOption
+     */
     public void run(final OkOption okOption) {
         options = okOption;
         dialog.show();

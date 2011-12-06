@@ -37,6 +37,11 @@ public abstract class OkCancelBox extends OkBox implements OkCancelOption {
         return dialog.getCancelButton();
     }
 
+    /**
+     * Call to show the dialog and process result.
+     * 
+     * @param okOption
+     */
     public void run(final OkCancelOption okCancelOption) {
         run(okCancelOption);
     }
