@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.SiteDescriptor;
@@ -47,11 +48,13 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
     @Override
     protected void createNewEntity(AsyncCallback<PageDescriptor> callback) {
 
-        PageDescriptor entity = EntityFactory.create(entityClass);
-
         if (pageParentArg == null) {
             throw new Error("Incorrect parentClass argument");
         }
+
+        PageDescriptor entity = EntityFactory.create(PageDescriptor.class);
+        entity.type().setValue(Type.staticContent);
+
         switch (pageParentArg) {
         case page:
             entity.parent().set(EntityFactory.create(PageDescriptor.class));
@@ -60,7 +63,10 @@ public class PageEditorActivity extends EditorActivityBase<PageDescriptor> imple
             entity.parent().set(EntityFactory.create(SiteDescriptor.class));
             break;
         }
-        entity.type().setValue(Type.staticContent);
+
+        // add at least one content item:
+        PageContent content = EntityFactory.create(PageContent.class);
+        entity.content().add(content);
 
         callback.onSuccess(entity);
     }
