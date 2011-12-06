@@ -70,6 +70,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         this.parent = parent;
         this.tenantListerView = tenantListerView;
         this.view = view;
+        setOrderable(false);
     }
 
     @Override
