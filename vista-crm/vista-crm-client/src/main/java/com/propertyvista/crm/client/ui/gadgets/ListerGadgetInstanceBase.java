@@ -79,6 +79,12 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                 populate();
             }
         });
+        dataTablePanel.setFirstActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                firstListPage();
+            }
+        });
         dataTablePanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -89,6 +95,12 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
             @Override
             public void onClick(ClickEvent event) {
                 nextListPage();
+            }
+        });
+        dataTablePanel.setLastActionHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                lastListPage();
             }
         });
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
@@ -293,6 +305,11 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         }
     }
 
+    private void firstListPage() {
+        getMetadata().pageNumber().setValue(0);
+        populate();
+    }
+
     private void nextListPage() {
         getMetadata().pageNumber().setValue(getPageNumber() + 1);
         populate();
@@ -303,6 +320,11 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
             getMetadata().pageNumber().setValue(getPageNumber() - 1);
             populate();
         }
+    }
+
+    private void lastListPage() {
+        getMetadata().pageNumber().setValue(dataTablePanel.getDataTableModel().getTotalRows() / dataTablePanel.getDataTableModel().getPageSize());
+        populate();
     }
 
     private void doPopulate() {
