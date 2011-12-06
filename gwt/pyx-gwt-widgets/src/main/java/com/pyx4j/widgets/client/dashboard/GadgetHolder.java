@@ -294,16 +294,16 @@ final class GadgetHolder extends SimplePanel {
         buttons.add(new Button(i18n.tr("OK"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                setupGadget.onOk();
                 switchViewToNormal();
+                setupGadget.onOk();
                 root.onEvent(Reason.updateGadget);
             }
         }));
         buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                setupGadget.onCancel();
                 switchViewToNormal();
+                setupGadget.onCancel();
             }
         }));
         buttons.setSpacing(10);
