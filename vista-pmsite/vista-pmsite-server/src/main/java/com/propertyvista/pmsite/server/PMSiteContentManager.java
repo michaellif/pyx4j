@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -321,6 +322,11 @@ public class PMSiteContentManager implements Serializable {
             if (city != null) {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
+        } else {
+            // do vicinity search within the given searchRadius of the centerPoint
+            Integer searchRadiusKm = searchCriteria.distance().getValue();
+            GeoPoint centerPoint = searchCriteria.geolocation().getValue();
+            // ... define dbCriteria here ...
         }
         final List<Building> buildings = Persistence.service().query(dbCriteria);
         ArrayList<Building> remove = new ArrayList<Building>();
