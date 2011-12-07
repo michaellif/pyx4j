@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -138,6 +139,7 @@ public interface AptUnitItem extends IEntity {
 
     // ----------- Info --------------------------
 
+    @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "unitDetailType")
     IPrimitive<Type> type();
