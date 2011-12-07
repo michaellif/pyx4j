@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,7 +27,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
@@ -60,9 +60,9 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
     @Override
     protected void addItem() {
         final SelectConcessionBox box = new SelectConcessionBox();
-        box.run(new OkResult() {
+        box.run(new Command() {
             @Override
-            public void onOk() {
+            public void execute() {
                 for (Concession item : box.getSelectedItems()) {
                     addItem(item);
                 }

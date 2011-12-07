@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -28,9 +29,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
  */
 public abstract class OkCancelBox extends OkBox implements OkCancelOption {
 
-    public interface OkCancelResult extends OkResult {
-        void onCancel();
-    }
+    private Command cancelCommand;
 
     public OkCancelBox(String caption) {
         super(caption);
@@ -41,12 +40,14 @@ public abstract class OkCancelBox extends OkBox implements OkCancelOption {
     }
 
     /**
-     * Call to show the dialog and process result.
+     * Call to show the dialog and process results.
      * 
-     * @param okOption
+     * @param okResult
+     * @param cancelResult
      */
-    public void run(OkCancelResult okCancelOption) {
-        run(okCancelOption);
+    public void run(Command okResult, Command cancelResult) {
+        cancelCommand = cancelResult;
+        run(okResult);
     }
 
     /**
@@ -58,11 +59,11 @@ public abstract class OkCancelBox extends OkBox implements OkCancelOption {
      */
     @Override
     public boolean onClickCancel() {
-        if (options instanceof OkCancelResult) {
+        if (cancelCommand != null) {
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    ((OkCancelResult) options).onCancel();
+                    cancelCommand.execute();
                 }
             });
         }

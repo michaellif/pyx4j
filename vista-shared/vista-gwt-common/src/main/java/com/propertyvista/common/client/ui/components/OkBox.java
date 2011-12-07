@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui.components;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,17 +34,13 @@ import com.pyx4j.widgets.client.dialog.OkOption;
  */
 public abstract class OkBox extends SimplePanel implements OkOption {
 
-    public interface OkResult {
-        void onOk();
-    }
-
     protected final static I18n i18n = I18n.get(OkBox.class);
 
     protected final SimplePanel content = new SimplePanel();
 
     protected final Dialog dialog;
 
-    protected OkResult options;
+    private Command okCommand;
 
     public OkBox(String caption) {
         dialog = new Dialog(caption, this);
@@ -74,10 +71,17 @@ public abstract class OkBox extends SimplePanel implements OkOption {
     /**
      * Call to show the dialog and process result.
      * 
-     * @param okOption
+     * @param okResult
      */
-    public void run(OkResult okOption) {
-        options = okOption;
+    public void run(Command okResult) {
+        okCommand = okResult;
+        show();
+    }
+
+    /**
+     * Call to show the dialog.
+     */
+    public void show() {
         dialog.show();
     }
 
@@ -90,14 +94,15 @@ public abstract class OkBox extends SimplePanel implements OkOption {
      */
     @Override
     public boolean onClickOk() {
-        if (options instanceof OkResult) {
+        if (okCommand != null) {
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    options.onOk();
+                    okCommand.execute();
                 }
             });
         }
+
         return true;
     }
 }

@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -31,7 +32,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -80,9 +80,9 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(APPROVE);
-                box.run(new OkResult() {
+                box.run(new Command() {
                     @Override
-                    public void onOk() {
+                    public void execute() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Approved));
                     }
                 });
@@ -94,9 +94,9 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(MORE_INFO);
-                box.run(new OkResult() {
+                box.run(new Command() {
                     @Override
-                    public void onOk() {
+                    public void execute() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.InformationRequested));
                     }
                 });
@@ -108,9 +108,9 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(DECLINE);
-                box.run(new OkResult() {
+                box.run(new Command() {
                     @Override
-                    public void onOk() {
+                    public void execute() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Declined));
                     }
                 });
@@ -122,9 +122,9 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(CANCEL);
-                box.run(new OkResult() {
+                box.run(new Command() {
                     @Override
-                    public void onOk() {
+                    public void execute() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Cancelled));
                     }
                 });
@@ -136,9 +136,9 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final SelectTenantsBox box = new SelectTenantsBox();
-                box.run(new OkResult() {
+                box.run(new Command() {
                     @Override
-                    public void onOk() {
+                    public void execute() {
                     }
                 });
             }

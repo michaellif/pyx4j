@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
 import java.util.EnumSet;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 
 import com.propertyvista.common.client.ui.components.OkBox;
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -34,9 +34,9 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Feature.Type> callback) {
         final SelectTypeBox box = new SelectTypeBox();
-        box.run(new OkResult() {
+        box.run(new Command() {
             @Override
-            public void onOk() {
+            public void execute() {
                 defaultCaption = box.getSelectedType().toString();
                 callback.onSuccess(box.getSelectedType());
             }

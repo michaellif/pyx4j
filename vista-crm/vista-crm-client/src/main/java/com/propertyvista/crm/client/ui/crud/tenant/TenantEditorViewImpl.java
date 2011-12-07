@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.common.client.ui.components.OkBox;
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Tenant;
@@ -34,9 +34,9 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Tenant.Type> callback) {
         final SelectTypeBox box = new SelectTypeBox();
-        box.run(new OkResult() {
+        box.run(new Command() {
             @Override
-            public void onOk() {
+            public void execute() {
                 callback.onSuccess(box.getSelectedType());
             }
         });

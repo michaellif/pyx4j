@@ -15,11 +15,11 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.components.boxes.NewPasswordBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -38,9 +38,9 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
             @Override
             public void onClick(ClickEvent event) {
                 final NewPasswordBox box = new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit()));
-                box.run(new OkResult() {
+                box.run(new Command() {
                     @Override
-                    public void onOk() {
+                    public void execute() {
                         ((EmployeeEditorView.Presenter) presenter).changePassword(box.getOldPassword(), box.getNewPassword1());
                     }
                 });

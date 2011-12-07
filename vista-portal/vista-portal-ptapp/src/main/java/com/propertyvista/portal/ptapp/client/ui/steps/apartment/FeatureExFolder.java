@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -21,7 +23,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -66,9 +67,9 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
         if (apartmentViewForm != null) {
             if (getValue().size() < maxCount) {
                 final SelectFeatureBox box = new SelectFeatureBox(type, apartmentViewForm.getValue());
-                box.run(new OkResult() {
+                box.run(new Command() {
                     @Override
-                    public void onOk() {
+                    public void execute() {
                         for (ServiceItem item : box.getSelectedItems()) {
                             ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                             newItem.item().set(item);

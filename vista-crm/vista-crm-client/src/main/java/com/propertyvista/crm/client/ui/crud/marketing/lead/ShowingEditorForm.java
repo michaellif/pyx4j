@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -23,7 +24,6 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
@@ -60,9 +60,9 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
                 public void onClick(ClickEvent event) {
                     final SelectUnitBox box = new SelectUnitBox(((ShowingEditorView) getParentView()).getBuildingListerView(),
                             ((ShowingEditorView) getParentView()).getUnitListerView());
-                    box.run(new OkResult() {
+                    box.run(new Command() {
                         @Override
-                        public void onOk() {
+                        public void execute() {
                             ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
                         }
                     });

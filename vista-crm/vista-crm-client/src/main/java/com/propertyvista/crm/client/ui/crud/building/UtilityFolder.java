@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,7 +34,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.dto.BuildingDTO;
@@ -70,9 +70,9 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
     @Override
     protected void addItem() {
         final SelectUtilityBox box = new SelectUtilityBox(building);
-        box.run(new OkResult() {
+        box.run(new Command() {
             @Override
-            public void onOk() {
+            public void execute() {
                 for (ServiceItemType item : box.getSelectedItems()) {
                     addItem(item);
                 }

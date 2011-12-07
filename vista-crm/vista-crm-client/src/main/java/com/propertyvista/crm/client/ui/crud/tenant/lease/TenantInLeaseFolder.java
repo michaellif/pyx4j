@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -40,7 +41,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
@@ -88,9 +88,9 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
     @Override
     protected void addItem() {
         final SelectTenantBox box = new SelectTenantBox(tenantListerView);
-        box.run(new OkResult() {
+        box.run(new Command() {
             @Override
-            public void onOk() {
+            public void execute() {
                 TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
 
                 newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());

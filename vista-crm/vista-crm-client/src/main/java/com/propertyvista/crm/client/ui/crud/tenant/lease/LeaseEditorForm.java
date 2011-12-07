@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -33,7 +34,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
@@ -122,9 +122,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     final SelectUnitBox box = new SelectUnitBox(((LeaseEditorView) getParentView()).getBuildingListerView(),
                             ((LeaseEditorView) getParentView()).getUnitListerView());
-                    box.run(new OkResult() {
+                    box.run(new Command() {
                         @Override
-                        public void onOk() {
+                        public void execute() {
                             ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
                         }
                     });
@@ -188,9 +188,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Building/Unit First"));
                     } else {
                         final SelectServiceItemBox box = new SelectServiceItemBox();
-                        box.run(new OkResult() {
+                        box.run(new Command() {
                             @Override
-                            public void onOk() {
+                            public void execute() {
                                 ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
                             }
                         });

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import java.util.EnumSet;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -25,7 +26,6 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.common.client.ui.components.OkBox;
-import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
@@ -80,9 +80,9 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
         final SelectTypeBox box = new SelectTypeBox();
-        box.run(new OkResult() {
+        box.run(new Command() {
             @Override
-            public void onOk() {
+            public void execute() {
                 callback.onSuccess(box.getSelectedType());
             }
         });
