@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -37,8 +39,9 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase;
-import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
+import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.AddGadgetBoxDirectory;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardPanel extends BoardBase implements DashboardView {
@@ -174,7 +177,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
             addGadget.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final AddGadgetBox agb = new AddGadgetBox(getDashboardMetadata().type().getValue());
+                    final AddGadgetBoxDirectory agb = new AddGadgetBoxDirectory(getDashboardMetadata().type().getValue());
                     agb.setPopupPositionAndShow(new PositionCallback() {
                         @Override
                         public void setPosition(int offsetWidth, int offsetHeight) {
@@ -185,10 +188,15 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                     agb.addCloseHandler(new CloseHandler<PopupPanel>() {
                         @Override
                         public void onClose(CloseEvent<PopupPanel> event) {
-                            IGadgetInstanceBase gadget = agb.getSelectedGadget();
-                            if (gadget != null) {
-                                addGadget(gadget);
-                                gadget.start();
+                            List<AbstractGadget<?>> gadgets = agb.getSelectedGadgets();
+                            if (gadgets != null) { // if null means cancel
+                                for (AbstractGadget<?> gadget : gadgets) {
+                                    IGadgetInstanceBase instance = gadget.createGadget(null);
+                                    if (instance != null) {
+                                        addGadget(instance);
+                                        instance.start();
+                                    }
+                                }
                             }
                         }
                     });
