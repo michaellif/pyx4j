@@ -258,7 +258,7 @@ public class VistaTheme extends Theme {
 
         String prefix = VistaTabLayoutPanel.TAB_DIASBLED_STYLE;
         style = new Style(Selector.valueOf(prefix));
-//            style.addProperty("background-color", ThemeColor.DISABLED_TEXT_BACKGROUND);
+        style.addProperty("background", ThemeColors.object1, 0.6);
         style.addProperty("color", ThemeColors.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);

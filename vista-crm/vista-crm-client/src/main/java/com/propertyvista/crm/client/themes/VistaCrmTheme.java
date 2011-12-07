@@ -105,6 +105,7 @@ public class VistaCrmTheme extends VistaTheme {
 
         initSectionSeparatorStyle();
         initVistaDecoratorsPanelStyles();
+
         initDashboardView();
         initDashboardReport();
 

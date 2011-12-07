@@ -73,9 +73,11 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
         disableMode = disable;
         for (IsWidget w : disableTabs) {
             if (disable) {
-                getTabWidget(w).asWidget().addStyleName(TAB_DIASBLED_STYLE);
+//                getTabWidget(w).asWidget().addStyleName(TAB_DIASBLED_STYLE);
+                getTabWidget(w).asWidget().getParent().addStyleName(TAB_DIASBLED_STYLE);
             } else {
-                getTabWidget(w).asWidget().removeStyleName(TAB_DIASBLED_STYLE);
+//                getTabWidget(w).asWidget().removeStyleName(TAB_DIASBLED_STYLE);
+                getTabWidget(w).asWidget().getParent().removeStyleName(TAB_DIASBLED_STYLE);
             }
         }
 
@@ -97,6 +99,15 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
         }
     }
 
+    @Override
+    public void selectTab(Widget child) {
+        if (disableMode && isDisabledTab(child)) {
+            return; // ignore mouse click selection of disabled tabs
+        } else {
+            super.selectTab(child);
+        }
+    }
+
     protected void selectFirstAvailableTab(boolean fireEvents) {
         if (disableMode) {
             for (int i = getWidgetCount() - 1; i >= 0; --i) { // iterate backward! - the tabs stored in reverse order!?
@@ -109,7 +120,7 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
         }
     }
 
-    protected boolean isDisabledTab(IsWidget widget) {
+    protected boolean isDisabledTab(Widget widget) {
         return disableTabs.contains(widget);
     }
 
