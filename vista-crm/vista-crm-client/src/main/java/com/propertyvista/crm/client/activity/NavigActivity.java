@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.activity;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -137,9 +139,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 CrmImages.INSTANCE.dashboardsActive());
         folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
 
-// TODO: this folder is populated below (in fillDashboards())... 
-//        so we should decide how many system dashborads we'll have and if > 1 
-//        - should we show here link to 'most' system one ;)            
+// TODO: this folder is populated below (in fillDashboards())...
+//        so we should decide how many system dashborads we'll have and if > 1
+//        - should we show here link to 'most' system one ;)
 //        folder.addNavigItem(new CrmSiteMap.Dashboard.System());
 
         fillDashboards(folder);
@@ -162,13 +164,23 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         });
     }
 
+    static final Comparator<DashboardMetadata> ORDER_BY_NAME = new Comparator<DashboardMetadata>() {
+        @Override
+        public int compare(DashboardMetadata e1, DashboardMetadata e2) {
+            return e1.name().getValue().toLowerCase().compareTo(e2.name().getValue().toLowerCase());
+        }
+    };
+
     private void fillDashboards(final NavigFolder folder) {
         DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
         service.listMetadata(new DefaultAsyncCallback<Vector<DashboardMetadata>>() {
             @Override
             public void onSuccess(Vector<DashboardMetadata> result) {
-                for (DashboardMetadata dmd : result) {
-                    folder.addNavigItem(new CrmSiteMap.Dashboard().formDashboardPlace(dmd.getPrimaryKey(), dmd.name().getStringView()));
+
+                Collections.sort(result, ORDER_BY_NAME);
+                int j = result.size();
+                for (int i = 0; i < j; i++) {
+                    folder.addNavigItem(new CrmSiteMap.Dashboard().formDashboardPlace(result.get(i).getPrimaryKey(), result.get(i).name().getStringView()));
                 }
                 // update UI:
                 view.setNavigFolders(currentfolders);
