@@ -35,6 +35,7 @@ import com.propertyvista.domain.ref.Province;
 @DiscriminatorValue("Vehicle_ChargeItemExtraData")
 public interface Vehicle extends ChargeItemExtraData {
 
+    @NotNull
     @BusinessEqualValue
     IPrimitive<String> plateNumber();
 
@@ -48,6 +49,7 @@ public interface Vehicle extends ChargeItemExtraData {
 
     IPrimitive<String> model();
 
+    @NotNull
     @Caption(name = "Province/State")
     @Editor(type = EditorType.combo)
     Province province();
