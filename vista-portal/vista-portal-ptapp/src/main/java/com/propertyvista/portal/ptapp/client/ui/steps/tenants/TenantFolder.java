@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
@@ -82,7 +84,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
         private Widget relationship, takeOwnership;
 
-        private CComponent email;
+        private CComponent<?, ?> email;
 
         private CComboBox<Role> role;
 
@@ -103,6 +105,24 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 relationship = comp.asWidget();
             } else if (proto().takeOwnership() == column.getObject()) {
                 takeOwnership = comp.asWidget();
+                ((CComponent<Boolean, ?>) comp).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+                        if (event.getValue()) {
+                            MessageDialog.confirm(i18n.tr("Confirm"),
+                                    i18n.tr("By Checking This Box I Agree That The Main Applicant Will Have Full Access To My Account"), new Command() {
+                                        @Override
+                                        public void execute() {
+                                        }
+                                    }, new Command() {
+                                        @Override
+                                        public void execute() {
+                                            get(proto().takeOwnership()).setValue(false);
+                                        }
+                                    });
+                        }
+                    }
+                });
             }
 
             return comp;
