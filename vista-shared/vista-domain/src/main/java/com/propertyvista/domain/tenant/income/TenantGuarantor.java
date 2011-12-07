@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 
+@ToStringFormat("{0}, {1}")
 public interface TenantGuarantor extends IUserEntity, Person {
 
     @I18n
@@ -42,7 +44,7 @@ public interface TenantGuarantor extends IUserEntity, Person {
         }
     }
 
-    @ToString(index = 0)
+    @ToString(index = 10)
     @NotNull
     IPrimitive<Relationship> relationship();
 
