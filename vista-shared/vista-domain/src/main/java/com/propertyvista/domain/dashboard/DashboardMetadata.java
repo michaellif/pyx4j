@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.dashboard;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -27,6 +28,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
+@Caption(name = "Dashboard")
 public interface DashboardMetadata extends ISharedUserEntity {
 
     @I18n
