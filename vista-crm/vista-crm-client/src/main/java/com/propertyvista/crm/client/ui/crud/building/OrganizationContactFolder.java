@@ -37,7 +37,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         }
     }
 
-    static class OrganizationContactEditor extends CEntityDecoratableEditor<OrganizationContact> {
+    static public class OrganizationContactEditor extends CEntityDecoratableEditor<OrganizationContact> {
 
         public OrganizationContactEditor() {
             super(OrganizationContact.class);
@@ -48,17 +48,12 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
-            //TODO
-//                if (parent.isEditable()) {
-//                    main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person()), 35).build());
-//                } else {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person()), 35).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
-//                }
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
 
             return main;
         }
