@@ -98,4 +98,19 @@ public class MessageDialog {
         });
     }
 
+    public static void confirm(String title, String text, final Command onConfirmed, final Command onRefuted) {
+        show(title, text, Dialog.Type.Confirm, new YesNoOption() {
+            @Override
+            public boolean onClickYes() {
+                onConfirmed.execute();
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                onRefuted.execute();
+                return true;
+            }
+        });
+    }
 }
