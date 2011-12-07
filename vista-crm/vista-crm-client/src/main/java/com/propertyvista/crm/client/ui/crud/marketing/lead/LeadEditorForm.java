@@ -29,8 +29,8 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
@@ -122,11 +122,10 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
                 @Override
                 public void onClick(ClickEvent event) {
                     final SelectFloorplanBox box = new SelectFloorplanBox();
-                    box.run(new OkOption() {
+                    box.run(new OkResult() {
                         @Override
-                        public boolean onClickOk() {
+                        public void onOk() {
                             ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(box.getSelectedItem());
-                            return true;
                         }
                     });
                 }

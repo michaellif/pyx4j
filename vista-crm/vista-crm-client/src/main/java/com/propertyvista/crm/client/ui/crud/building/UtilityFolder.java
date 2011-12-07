@@ -31,9 +31,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.dto.BuildingDTO;
@@ -70,13 +70,12 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
     @Override
     protected void addItem() {
         final SelectUtilityBox box = new SelectUtilityBox(building);
-        box.run(new OkOption() {
+        box.run(new OkResult() {
             @Override
-            public boolean onClickOk() {
+            public void onOk() {
                 for (ServiceItemType item : box.getSelectedItems()) {
                     addItem(item);
                 }
-                return true;
             }
         });
     }

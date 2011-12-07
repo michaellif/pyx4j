@@ -18,9 +18,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.dialog.OkOption;
-
 import com.propertyvista.common.client.ui.components.OkBox;
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -34,11 +33,10 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
     @Override
     public void showSelectTypePopUp(final AsyncCallback<DashboardType> callback) {
         final SelectTypeBox box = new SelectTypeBox();
-        box.run(new OkOption() {
+        box.run(new OkResult() {
             @Override
-            public boolean onClickOk() {
+            public void onOk() {
                 callback.onSuccess(box.getSelectedType());
-                return true;
             }
         });
     }

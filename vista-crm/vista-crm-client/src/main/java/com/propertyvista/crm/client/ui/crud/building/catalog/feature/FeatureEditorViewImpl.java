@@ -18,9 +18,9 @@ import java.util.EnumSet;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.components.OkBox;
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -34,12 +34,11 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Feature.Type> callback) {
         final SelectTypeBox box = new SelectTypeBox();
-        box.run(new OkOption() {
+        box.run(new OkResult() {
             @Override
-            public boolean onClickOk() {
+            public void onOk() {
                 defaultCaption = box.getSelectedType().toString();
                 callback.onSuccess(box.getSelectedType());
-                return true;
             }
         });
     }

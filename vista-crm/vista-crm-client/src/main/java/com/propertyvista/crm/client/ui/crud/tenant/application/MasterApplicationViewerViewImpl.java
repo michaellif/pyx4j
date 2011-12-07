@@ -30,8 +30,8 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -80,11 +80,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(APPROVE);
-                box.run(new OkOption() {
+                box.run(new OkResult() {
                     @Override
-                    public boolean onClickOk() {
+                    public void onOk() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Approved));
-                        return true;
                     }
                 });
             }
@@ -95,11 +94,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(MORE_INFO);
-                box.run(new OkOption() {
+                box.run(new OkResult() {
                     @Override
-                    public boolean onClickOk() {
+                    public void onOk() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.InformationRequested));
-                        return true;
                     }
                 });
             }
@@ -110,11 +108,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(DECLINE);
-                box.run(new OkOption() {
+                box.run(new OkResult() {
                     @Override
-                    public boolean onClickOk() {
+                    public void onOk() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Declined));
-                        return true;
                     }
                 });
             }
@@ -125,11 +122,10 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final ActionBox box = new ActionBox(CANCEL);
-                box.run(new OkOption() {
+                box.run(new OkResult() {
                     @Override
-                    public boolean onClickOk() {
+                    public void onOk() {
                         ((MasterApplicationViewerView.Presenter) presenter).action(box.updateValue(Status.Cancelled));
-                        return true;
                     }
                 });
             }
@@ -140,10 +136,9 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             @Override
             public void onClick(ClickEvent event) {
                 final SelectTenantsBox box = new SelectTenantsBox();
-                box.run(new OkOption() {
+                box.run(new OkResult() {
                     @Override
-                    public boolean onClickOk() {
-                        return true;
+                    public void onOk() {
                     }
                 });
             }

@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.DialogOptions;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 /**
@@ -34,18 +33,22 @@ import com.pyx4j.widgets.client.dialog.OkOption;
  */
 public abstract class OkBox extends SimplePanel implements OkOption {
 
+    public interface OkResult {
+        void onOk();
+    }
+
     protected final static I18n i18n = I18n.get(OkBox.class);
 
     protected final SimplePanel content = new SimplePanel();
 
     protected final Dialog dialog;
 
-    protected DialogOptions options;
+    protected OkResult options;
 
     public OkBox(String caption) {
         dialog = new Dialog(caption, this);
         dialog.setBody(content);
-        dialog.setPixelSize(200, 100);
+        dialog.setSize("200px", "100px");
 
         content.getElement().getStyle().setMargin(6, Unit.PX);
     }
@@ -73,7 +76,7 @@ public abstract class OkBox extends SimplePanel implements OkOption {
      * 
      * @param okOption
      */
-    public void run(final OkOption okOption) {
+    public void run(OkResult okOption) {
         options = okOption;
         dialog.show();
     }
@@ -87,11 +90,11 @@ public abstract class OkBox extends SimplePanel implements OkOption {
      */
     @Override
     public boolean onClickOk() {
-        if (options instanceof OkOption) {
+        if (options instanceof OkResult) {
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    ((OkOption) options).onClickOk();
+                    options.onOk();
                 }
             });
         }

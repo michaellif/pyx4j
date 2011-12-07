@@ -24,9 +24,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorForm;
@@ -59,13 +59,12 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
     @Override
     protected void addItem() {
         final SelectFeatureBox box = new SelectFeatureBox(featureListerVeiw);
-        box.run(new OkOption() {
+        box.run(new OkResult() {
             @Override
-            public boolean onClickOk() {
+            public void onOk() {
                 for (Feature item : box.getSelectedItems()) {
                     addItem(item);
                 }
-                return true;
             }
         });
     }

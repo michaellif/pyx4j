@@ -38,9 +38,9 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
@@ -88,9 +88,9 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
     @Override
     protected void addItem() {
         final SelectTenantBox box = new SelectTenantBox(tenantListerView);
-        box.run(new OkOption() {
+        box.run(new OkResult() {
             @Override
-            public boolean onClickOk() {
+            public void onOk() {
                 TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
 
                 newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
@@ -101,7 +101,6 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 }
 
                 addItem(newTenantInLease);
-                return true;
             }
         });
     }

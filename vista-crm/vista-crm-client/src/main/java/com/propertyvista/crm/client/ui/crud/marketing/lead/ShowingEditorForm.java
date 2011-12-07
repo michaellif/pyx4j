@@ -22,8 +22,8 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
@@ -60,11 +60,10 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
                 public void onClick(ClickEvent event) {
                     final SelectUnitBox box = new SelectUnitBox(((ShowingEditorView) getParentView()).getBuildingListerView(),
                             ((ShowingEditorView) getParentView()).getUnitListerView());
-                    box.run(new OkOption() {
+                    box.run(new OkResult() {
                         @Override
-                        public boolean onClickOk() {
+                        public void onOk() {
                             ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
-                            return true;
                         }
                     });
                 }

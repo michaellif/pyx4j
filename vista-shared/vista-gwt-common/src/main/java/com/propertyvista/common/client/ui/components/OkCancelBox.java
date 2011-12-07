@@ -17,7 +17,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.Button;
 
-import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 /**
@@ -28,6 +27,10 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
  * 
  */
 public abstract class OkCancelBox extends OkBox implements OkCancelOption {
+
+    public interface OkCancelResult extends OkResult {
+        void onCancel();
+    }
 
     public OkCancelBox(String caption) {
         super(caption);
@@ -42,7 +45,7 @@ public abstract class OkCancelBox extends OkBox implements OkCancelOption {
      * 
      * @param okOption
      */
-    public void run(final OkCancelOption okCancelOption) {
+    public void run(OkCancelResult okCancelOption) {
         run(okCancelOption);
     }
 
@@ -55,11 +58,11 @@ public abstract class OkCancelBox extends OkBox implements OkCancelOption {
      */
     @Override
     public boolean onClickCancel() {
-        if (options instanceof CancelOption) {
+        if (options instanceof OkCancelResult) {
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    ((CancelOption) options).onClickCancel();
+                    ((OkCancelResult) options).onCancel();
                 }
             });
         }

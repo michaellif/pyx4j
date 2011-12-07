@@ -19,9 +19,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -66,9 +66,9 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
         if (apartmentViewForm != null) {
             if (getValue().size() < maxCount) {
                 final SelectFeatureBox box = new SelectFeatureBox(type, apartmentViewForm.getValue());
-                box.run(new OkOption() {
+                box.run(new OkResult() {
                     @Override
-                    public boolean onClickOk() {
+                    public void onOk() {
                         for (ServiceItem item : box.getSelectedItems()) {
                             ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                             newItem.item().set(item);
@@ -76,7 +76,6 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                             newItem.adjustedPrice().setValue(item.price().getValue());
                             addItem(newItem);
                         }
-                        return true;
                     }
                 });
             } else {

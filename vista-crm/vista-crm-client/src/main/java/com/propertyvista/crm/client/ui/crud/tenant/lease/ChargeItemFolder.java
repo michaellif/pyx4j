@@ -27,9 +27,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ChargeItem;
@@ -53,9 +53,9 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
             final SelectFeatureBox box = new SelectFeatureBox();
-            box.run(new OkOption() {
+            box.run(new OkResult() {
                 @Override
-                public boolean onClickOk() {
+                public void onOk() {
                     for (ServiceItem item : box.getSelectedItems()) {
                         ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                         newItem.item().set(item);
@@ -63,7 +63,6 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                         newItem.adjustedPrice().setValue(item.price().getValue());
                         addItem(newItem);
                     }
-                    return true;
                 }
             });
         }

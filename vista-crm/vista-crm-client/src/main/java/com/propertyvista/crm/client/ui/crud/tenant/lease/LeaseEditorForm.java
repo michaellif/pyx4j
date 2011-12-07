@@ -32,8 +32,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
+import com.propertyvista.common.client.ui.components.OkBox.OkResult;
 import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
@@ -122,11 +122,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
                     final SelectUnitBox box = new SelectUnitBox(((LeaseEditorView) getParentView()).getBuildingListerView(),
                             ((LeaseEditorView) getParentView()).getUnitListerView());
-                    box.run(new OkOption() {
+                    box.run(new OkResult() {
                         @Override
-                        public boolean onClickOk() {
+                        public void onOk() {
                             ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
-                            return true;
                         }
                     });
                 }
@@ -189,11 +188,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Building/Unit First"));
                     } else {
                         final SelectServiceItemBox box = new SelectServiceItemBox();
-                        box.run(new OkOption() {
+                        box.run(new OkResult() {
                             @Override
-                            public boolean onClickOk() {
+                            public void onOk() {
                                 ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
-                                return true;
                             }
                         });
                     }
