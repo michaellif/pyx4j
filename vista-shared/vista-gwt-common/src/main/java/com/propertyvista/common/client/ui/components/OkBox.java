@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 /**
  * Draws pop-up dialog box with OK and Cancel buttons and
- * user definable content (by means of {@link #createContent()}) inside.
+ * user definable content (by means of {@link #setContent()}) inside.
  * 
  * @author Vlad
  * 
