@@ -66,6 +66,17 @@ public abstract class JettyLaunch {
         return "./logs/jetty.request.log";
     }
 
+    protected String getSessionCookiePath() {
+        return "/";
+    }
+
+    /**
+     * @return the max age to set on the session cookie, in seconds
+     */
+    protected int getSessionMaxAge() {
+        return 60 * 60;
+    }
+
     public boolean isRunningInDeveloperEnviroment() {
         return true;
     }
@@ -120,6 +131,11 @@ public abstract class JettyLaunch {
         webAppContext.setParentLoaderPriority(true);
         webAppContext.getInitParams().put("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
         webAppContext.setResourceBase(jettyLaunch.getWarResourceBase());
+
+        if (jettyLaunch.getSessionCookiePath() != null) {
+            webAppContext.getSessionHandler().getSessionManager().setSessionPath(jettyLaunch.getSessionCookiePath());
+        }
+        webAppContext.getSessionHandler().getSessionManager().setMaxCookieAge(jettyLaunch.getSessionMaxAge());
 
         if (jettyLaunch.getHashLoginServiceConfig() != null) {
             webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", jettyLaunch.getHashLoginServiceConfig()));
