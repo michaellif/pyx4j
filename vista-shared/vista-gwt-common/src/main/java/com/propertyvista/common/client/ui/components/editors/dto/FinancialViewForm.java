@@ -14,8 +14,10 @@
 package com.propertyvista.common.client.ui.components.editors.dto;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -47,6 +49,7 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
+        VerticalPanel adjust = new VerticalPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, proto().incomes().getMeta().getCaption());
@@ -55,12 +58,15 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
 
         Image info = new Image(ImageFactory.getImages().formTooltipInfo());
         info.setTitle("A Guarantor Is An Individual That Will Guarantee The Term Of The Lease. The Guarantor Cannot Be An Occupant Of the Suite And Is There To Assist The Applicant In The Approval Process. The Guarantor(s) Will Receive A Seperate Email With Instructions To Complete The Applications. Reminder: Only Completed Applications Will Be Processed.");
+        adjust.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+        adjust.add(info);
+        adjust.setCellHeight(info, "26");
 
         main.setH1(++row, 0, 1, proto().assets().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
-        main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), info);
+        main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), adjust);
         main.setWidget(++row, 0, inject(proto().guarantors(), new TenantGuarantorFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
