@@ -45,6 +45,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.RequestDebug;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Lifecycle;
 
 @SuppressWarnings("serial")
 public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteServiceServlet implements RemoteService {
@@ -184,7 +185,11 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
             throw new IncompatibleRemoteServiceException();
         }
 
-        return implementation.execute(realServiceName, serviceRequest, userVisitHashCode);
+        try {
+            return implementation.execute(realServiceName, serviceRequest, userVisitHashCode);
+        } finally {
+            Lifecycle.endRpcRequest();
+        }
     }
 
     /**

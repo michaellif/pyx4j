@@ -42,6 +42,8 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
 
     private static SessionMonitor instance;
 
+    private final boolean TODO_IWC = true;
+
     private boolean monitoring = false;
 
     private long maxInactiveIntervalMillis;
@@ -115,8 +117,10 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
 
     protected SessionMonitor() {
         RPCManager.addRPCStatusChangeHandler(this);
-        if (Storage.isSupported()) {
-            Storage.addStorageEventHandler(this);
+        if (TODO_IWC) {
+            if (Storage.isSupported()) {
+                Storage.addStorageEventHandler(this);
+            }
         }
     }
 
@@ -180,9 +184,11 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
         } else {
             sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode()) + String.valueOf(sessionCookieValue.hashCode());
         }
-        if (Storage.isSupported()) {
-            log.debug("set session code {}", sessionCookieValueHashCode);
-            Storage.getLocalStorageIfSupported().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
+        if (TODO_IWC) {
+            if (Storage.isSupported()) {
+                log.debug("set session code {}", sessionCookieValueHashCode);
+                Storage.getLocalStorageIfSupported().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
+            }
         }
     }
 
@@ -209,6 +215,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
     }
 
     private void checkSessionCookie() {
+        // Look for Cookie changed externally, e.g. other tab of windows of the same browser
         if ((monitoring) && (this.sessionCookieValue != null)) {
             String currentSessionCookie = Cookies.getCookie(sessionCookieName);
             if (!this.sessionCookieValue.equals(currentSessionCookie)) {
@@ -216,6 +223,8 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
                     log.debug("Session COOKIE CHANGED {}->{} ", sessionCookieValue, currentSessionCookie);
                     logChangeSessionCookieOnce = false;
                 }
+                // Avoid infinite loop
+                sessionCookieValue = currentSessionCookie;
                 onSessionInactive(false);
             }
         }

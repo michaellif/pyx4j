@@ -120,6 +120,16 @@ public class Lifecycle {
         }
     }
 
+    public static void endRpcRequest() {
+        if (Context.getRequest().getAttribute(END_SESSION_ATR) != null) {
+            // Remove Session Cookie 
+            Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
+            c.setPath("/");
+            c.setMaxAge(0);
+            Context.getResponse().addCookie(c);
+        }
+    }
+
     public static void beginAnonymousSession() {
         HttpSession session = Context.getSession();
         if (session == null) {
