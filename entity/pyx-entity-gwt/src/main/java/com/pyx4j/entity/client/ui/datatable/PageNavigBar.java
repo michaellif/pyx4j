@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -73,15 +74,8 @@ public class PageNavigBar extends Toolbar {
 
     public PageNavigBar(final DataTableActionsBar actionsBar) {
         this.actionsBar = actionsBar;
-        pageSizeContentPanel = new HorizontalPanel();
-        pageSizeContentPanel.getElement().getStyle().setMarginRight(12, Unit.PX);
-        pageSizeContentPanel.setVisible(false);
-        pageSizeSelector = new ListBox();
 
-        pageSizeContentPanel.add(new TargetLabel(i18n.tr("Page Size") + ":", pageSizeSelector));
-        pageSizeContentPanel.add(pageSizeSelector);
-        pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
-        addItem(pageSizeContentPanel);
+        getElement().getStyle().setProperty("textAlign", "right");
 
         firstButton = new Button(new Image(DataTableImages.INSTANCE.first()));
         firstButton.setVisible(false);
@@ -95,6 +89,7 @@ public class PageNavigBar extends Toolbar {
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
         countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
+        countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         addItem(countLabel);
 
         nextButton = new Button(new Image(DataTableImages.INSTANCE.next()));
@@ -106,7 +101,15 @@ public class PageNavigBar extends Toolbar {
         lastButton.setVisible(false);
         addItem(lastButton);
 
-        getElement().getStyle().setProperty("textAlign", "right");
+        pageSizeContentPanel = new HorizontalPanel();
+        pageSizeContentPanel.getElement().getStyle().setMarginRight(12, Unit.PX);
+        pageSizeContentPanel.setVisible(false);
+        pageSizeSelector = new ListBox();
+
+        pageSizeContentPanel.add(new TargetLabel(i18n.tr("Page Size") + ":", pageSizeSelector));
+        pageSizeContentPanel.add(pageSizeSelector);
+        pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
+        addItem(pageSizeContentPanel);
 
         pageSizeSelector.addChangeHandler(new ChangeHandler() {
 
