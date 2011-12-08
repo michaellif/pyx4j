@@ -16,10 +16,12 @@ package com.propertyvista.crm.client.ui.components.boxes;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -27,7 +29,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 //
 // Selection Boxes:
 //
-public class SelectUnitBox extends OkCancelBox {
+public abstract class SelectUnitBox extends OkCancelDialog {
+
+    private static I18n i18n = I18n.get(VistaBoxFolder.class);
 
     private AptUnit selectedUnit;
 
@@ -41,11 +45,11 @@ public class SelectUnitBox extends OkCancelBox {
         this.buildingListerView = buildingListerView;
         this.unitListerView = unitListerView;
 
-        setContent(createContent());
+        setBody(createBody());
         setSize("900px", "500px");
     }
 
-    protected Widget createContent() {
+    protected Widget createBody() {
         getOkButton().setEnabled(false);
         unitListerView.getLister().addItemSelectionHandler(new ItemSelectionHandler<AptUnit>() {
             @Override

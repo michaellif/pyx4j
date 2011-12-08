@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.List;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,16 +22,19 @@ import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorForm;
 import com.propertyvista.domain.financial.offering.Feature;
 
 class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
+
+    private static I18n i18n = I18n.get(ServiceFeatureFolder.class);
 
     private final IListerView<Feature> featureListerVeiw;
 
@@ -58,20 +60,18 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
 
     @Override
     protected void addItem() {
-        final SelectFeatureBox box = new SelectFeatureBox(featureListerVeiw);
-        box.run(new Command() {
+        new SelectFeatureBox(featureListerVeiw) {
             @Override
-            public void execute() {
-                for (Feature item : box.getSelectedItems()) {
+            public boolean onClickOk() {
+                for (Feature item : getSelectedItems()) {
                     addItem(item);
                 }
+                return true;
             }
-        });
+        }.show();
     }
 
-    private class SelectFeatureBox extends OkCancelBox {
-
-        private List<Feature> selectedFeatures;
+    private abstract class SelectFeatureBox extends OkCancelDialog {
 
         private final IListerView<Feature> featureListerVeiw;
 
@@ -79,11 +79,11 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
             super(i18n.tr("Select Features"));
             this.featureListerVeiw = featureListerVeiw;
             featureListerVeiw.getLister().releaseSelection();
-            setContent(createContent());
+            setBody(createBody());
             setSize("700px", "200px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
             featureListerVeiw.getLister().addItemSelectionHandler(new ItemSelectionHandler<Feature>() {
                 @Override
@@ -98,13 +98,8 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
             return vPanel;
         }
 
-        @Override
-        public boolean onClickOk() {
-            selectedFeatures = featureListerVeiw.getLister().getSelectedItems();
-            return super.onClickOk();
-        }
-
         protected List<Feature> getSelectedItems() {
+            List<Feature> selectedFeatures = featureListerVeiw.getLister().getSelectedItems();
             return selectedFeatures;
         }
     }

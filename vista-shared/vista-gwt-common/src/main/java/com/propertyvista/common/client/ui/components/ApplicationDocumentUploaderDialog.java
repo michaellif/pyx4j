@@ -41,7 +41,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
 
     @SuppressWarnings("unchecked")
     public ApplicationDocumentUploaderDialog(String title, final Key tenantId) {
-        dialog = new Dialog(title, this);
+        dialog = new Dialog(title, this, null);
 
         uploadPanel = new UploadPanel<ApplicationDocumentUploadDTO>(
                 (UploadService<ApplicationDocumentUploadDTO>) GWT.create(ApplicationDocumentUploadService.class)) {

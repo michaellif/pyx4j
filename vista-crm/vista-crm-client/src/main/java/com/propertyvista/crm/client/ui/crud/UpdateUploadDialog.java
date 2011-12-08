@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -41,7 +40,7 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
 
     @SuppressWarnings("unchecked")
     private UpdateUploadDialog() {
-        dialog = new Dialog(i18n.tr("Upload Update.xml"), this);
+        dialog = new Dialog(i18n.tr("Upload Update.xml"), this, null);
 
         uploadPanel = new UploadPanel<UpdateUploadDTO>((UploadService<UpdateUploadDTO>) GWT.create(UpdateUploadService.class)) {
 

@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
@@ -37,13 +36,13 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
 
             @Override
             public void onClick(ClickEvent event) {
-                final NewPasswordBox box = new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit()));
-                box.run(new Command() {
+                new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit())) {
                     @Override
-                    public void execute() {
-                        ((EmployeeEditorView.Presenter) presenter).changePassword(box.getOldPassword(), box.getNewPassword1());
+                    public boolean onClickOk() {
+                        ((EmployeeEditorView.Presenter) presenter).changePassword(getOldPassword(), getNewPassword1());
+                        return true;
                     }
-                });
+                }.show();
             }
         });
         addToolbarItem(passwordAction.asWidget());

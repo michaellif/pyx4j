@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,9 +27,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -52,19 +51,19 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            final SelectFeatureBox box = new SelectFeatureBox();
-            box.run(new Command() {
+            new SelectFeatureBox() {
                 @Override
-                public void execute() {
-                    for (ServiceItem item : box.getSelectedItems()) {
+                public boolean onClickOk() {
+                    for (ServiceItem item : getSelectedItems()) {
                         ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());
                         newItem.adjustedPrice().setValue(item.price().getValue());
                         addItem(newItem);
                     }
+                    return true;
                 }
-            });
+            }.show();
         }
     }
 
@@ -76,19 +75,17 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         return super.create(member);
     }
 
-    private class SelectFeatureBox extends OkCancelBox {
+    private abstract class SelectFeatureBox extends OkCancelDialog {
 
         private ListBox list;
 
-        private List<ServiceItem> selectedItems;
-
         public SelectFeatureBox() {
             super(i18n.tr("Select Features"));
-            setContent(createContent());
+            setBody(createBody());
             setSize("300px", "100px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
 
             if (!parent.getValue().selectedFeatureItems().isEmpty()) {
@@ -125,9 +122,8 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
             }
         }
 
-        @Override
-        public boolean onClickOk() {
-            selectedItems = new ArrayList<ServiceItem>(4);
+        protected List<ServiceItem> getSelectedItems() {
+            List<ServiceItem> selectedItems = new ArrayList<ServiceItem>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
                     for (ServiceItem item : parent.getValue().selectedFeatureItems()) {
@@ -137,10 +133,6 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                     }
                 }
             }
-            return super.onClickOk();
-        }
-
-        protected List<ServiceItem> getSelectedItems() {
             return selectedItems;
         }
     }

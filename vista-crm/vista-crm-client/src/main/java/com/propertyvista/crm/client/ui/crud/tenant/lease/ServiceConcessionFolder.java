@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,16 +27,19 @@ import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.dto.LeaseDTO;
 
 class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
+
+    private static final I18n i18n = I18n.get(ServiceConcessionFolder.class);
 
     private final CEntityEditor<LeaseDTO> parent;
 
@@ -67,31 +69,29 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
         if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            final SelectConcessionBox box = new SelectConcessionBox();
-            box.run(new Command() {
+            new SelectConcessionBox() {
                 @Override
-                public void execute() {
-                    for (Concession item : box.getSelectedItems()) {
+                public boolean onClickOk() {
+                    for (Concession item : getSelectedItems()) {
                         addItem(item);
                     }
+                    return true;
                 }
-            });
+            }.show();
         }
     }
 
-    private class SelectConcessionBox extends OkCancelBox {
+    private abstract class SelectConcessionBox extends OkCancelDialog {
 
         private ListBox list;
 
-        private List<Concession> selectedItems;
-
         public SelectConcessionBox() {
             super(i18n.tr("Select Concessions"));
-            setContent(createContent());
+            setBody(createBody());
             setSize("300px", "100px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
 
             if (!parent.getValue().selectedConcessions().isEmpty()) {
@@ -121,9 +121,8 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
             }
         }
 
-        @Override
-        public boolean onClickOk() {
-            selectedItems = new ArrayList<Concession>(4);
+        protected List<Concession> getSelectedItems() {
+            List<Concession> selectedItems = new ArrayList<Concession>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
                     for (Concession item : parent.getValue().selectedConcessions()) {
@@ -133,10 +132,6 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
                     }
                 }
             }
-            return super.onClickOk();
-        }
-
-        protected List<Concession> getSelectedItems() {
             return selectedItems;
         }
     }

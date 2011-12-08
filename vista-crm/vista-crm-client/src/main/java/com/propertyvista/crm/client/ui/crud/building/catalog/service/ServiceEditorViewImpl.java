@@ -15,14 +15,13 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.EnumSet;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.dialog.OkDialog;
 
-import com.propertyvista.common.client.ui.components.OkBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -46,17 +45,17 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        final SelectTypeBox box = new SelectTypeBox();
-        box.run(new Command() {
+        new SelectTypeBox() {
             @Override
-            public void execute() {
-                defaultCaption = box.getSelectedType().toString();
-                callback.onSuccess(box.getSelectedType());
+            public boolean onClickOk() {
+                defaultCaption = getSelectedType().toString();
+                callback.onSuccess(getSelectedType());
+                return true;
             }
-        });
+        }.show();
     }
 
-    private class SelectTypeBox extends OkBox {
+    private abstract class SelectTypeBox extends OkDialog {
 
         private final CComboBox<Service.Type> types;
 
@@ -68,7 +67,7 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
             types.setValue(types.getOptions().get(0));
             types.setWidth("100%");
 
-            setContent(types.asWidget());
+            setBody(types.asWidget());
             setSize("250px", "100px");
         }
 

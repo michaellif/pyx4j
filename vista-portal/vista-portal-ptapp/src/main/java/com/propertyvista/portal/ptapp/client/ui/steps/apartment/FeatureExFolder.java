@@ -13,13 +13,12 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
-import com.google.gwt.user.client.Command;
-
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
@@ -28,6 +27,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 
 public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
+
+    private static final I18n i18n = I18n.get(FeatureExFolder.class);
 
     private final Feature.Type type;
 
@@ -66,19 +67,19 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     protected void addItem() {
         if (apartmentViewForm != null) {
             if (getValue().size() < maxCount) {
-                final SelectFeatureBox box = new SelectFeatureBox(type, apartmentViewForm.getValue());
-                box.run(new Command() {
+                new SelectFeatureBox(type, apartmentViewForm.getValue()) {
                     @Override
-                    public void execute() {
-                        for (ServiceItem item : box.getSelectedItems()) {
+                    public boolean onClickOk() {
+                        for (ServiceItem item : getSelectedItems()) {
                             ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                             newItem.item().set(item);
                             newItem.originalPrice().setValue(item.price().getValue());
                             newItem.adjustedPrice().setValue(item.price().getValue());
                             addItem(newItem);
                         }
+                        return true;
                     }
-                });
+                }.show();
             } else {
                 MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more then {0} items here!", maxCount));
             }

@@ -39,7 +39,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     @SuppressWarnings("unchecked")
     public FileUploadDialog() {
-        dialog = new Dialog(i18n.tr("Upload Image File"), this);
+        dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
         uploadPanel = new UploadPanel<IEntity>((UploadService<IEntity>) GWT.create(MediaUploadService.class)) {
 

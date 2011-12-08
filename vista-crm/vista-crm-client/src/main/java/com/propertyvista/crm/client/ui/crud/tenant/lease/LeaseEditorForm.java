@@ -18,7 +18,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -33,8 +32,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
@@ -120,14 +119,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedDates(value.leaseFrom().getValue(), value
                             .leaseTo().getValue());
 
-                    final SelectUnitBox box = new SelectUnitBox(((LeaseEditorView) getParentView()).getBuildingListerView(),
-                            ((LeaseEditorView) getParentView()).getUnitListerView());
-                    box.run(new Command() {
+                    new SelectUnitBox(((LeaseEditorView) getParentView()).getBuildingListerView(), ((LeaseEditorView) getParentView()).getUnitListerView()) {
                         @Override
-                        public void execute() {
-                            ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
+                        public boolean onClickOk() {
+                            ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
+                            return true;
                         }
-                    });
+                    }.show();
                 }
             }));
             main.setWidget(++row, 0, unitPanel);
@@ -187,13 +185,13 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
                         MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Building/Unit First"));
                     } else {
-                        final SelectServiceItemBox box = new SelectServiceItemBox();
-                        box.run(new Command() {
+                        new SelectServiceItemBox() {
                             @Override
-                            public void execute() {
-                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(box.getSelectedItem());
+                            public boolean onClickOk() {
+                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(getSelectedItem());
+                                return true;
                             }
-                        });
+                        }.show();
                     }
                 }
             }));
@@ -216,17 +214,17 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
 //
 // Selection Boxes:
-    private class SelectServiceItemBox extends OkCancelBox {
+    private abstract class SelectServiceItemBox extends OkCancelDialog {
 
         private CComboBox<ServiceItem> combo;
 
         public SelectServiceItemBox() {
             super(i18n.tr("Service Item Selection"));
-            setContent(createContent());
+            setBody(createBody());
             setSize("400px", "100px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
 
             if (!getValue().selectedServiceItems().isEmpty()) {

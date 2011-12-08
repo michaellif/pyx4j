@@ -22,17 +22,19 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-class SelectFeatureBox extends OkCancelBox {
+abstract class SelectFeatureBox extends OkCancelDialog {
+
+    private static I18n i18n = I18n.get(OkCancelDialog.class);
 
     private ListBox list;
-
-    private List<ServiceItem> selectedItems;
 
     private final Feature.Type type;
 
@@ -42,11 +44,11 @@ class SelectFeatureBox extends OkCancelBox {
         super(i18n.tr("Select {0}(s)", type));
         this.type = type;
         this.apartmentInfo = apartmentInfo;
-        setContent(createContent());
+        setBody(createBody());
         setSize("300px", "100px");
     }
 
-    protected Widget createContent() {
+    protected Widget createBody() {
         getOkButton().setEnabled(false);
 
         if (!getAvailableList().isEmpty()) {
@@ -82,9 +84,8 @@ class SelectFeatureBox extends OkCancelBox {
         }
     }
 
-    @Override
-    public boolean onClickOk() {
-        selectedItems = new ArrayList<ServiceItem>(4);
+    protected List<ServiceItem> getSelectedItems() {
+        List<ServiceItem> selectedItems = new ArrayList<ServiceItem>(4);
         for (int i = 0; i < list.getItemCount(); ++i) {
             if (list.isItemSelected(i)) {
                 for (ServiceItem item : getAvailableList()) {
@@ -94,10 +95,6 @@ class SelectFeatureBox extends OkCancelBox {
                 }
             }
         }
-        return super.onClickOk();
-    }
-
-    protected List<ServiceItem> getSelectedItems() {
         return selectedItems;
     }
 

@@ -17,7 +17,6 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -30,8 +29,8 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -121,13 +120,13 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final SelectFloorplanBox box = new SelectFloorplanBox();
-                    box.run(new Command() {
+                    new SelectFloorplanBox() {
                         @Override
-                        public void execute() {
-                            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(box.getSelectedItem());
+                        public boolean onClickOk() {
+                            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItem());
+                            return true;
                         }
-                    });
+                    }.show();
                 }
             });
             select.asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
@@ -164,17 +163,17 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     //
     //Selection Boxes:
 
-    private class SelectFloorplanBox extends OkCancelBox {
+    private abstract class SelectFloorplanBox extends OkCancelDialog {
 
         private Floorplan selectedItem;
 
         public SelectFloorplanBox() {
             super("Building/Floorplan Selection");
-            setContent(createContent());
+            setBody(createBody());
             setSize("900px", "500px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
             ((LeadEditorView) getParentView()).getFloorplanListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Floorplan>() {
                 @Override

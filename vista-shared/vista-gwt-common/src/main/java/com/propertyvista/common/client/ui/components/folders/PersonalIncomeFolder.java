@@ -17,12 +17,15 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.editors.PersonalIncomeEditor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
+
+    private static final I18n i18n = I18n.get(PersonalIncomeFolder.class);
 
     public PersonalIncomeFolder(boolean modifyable) {
         super(PersonalIncome.class, modifyable);

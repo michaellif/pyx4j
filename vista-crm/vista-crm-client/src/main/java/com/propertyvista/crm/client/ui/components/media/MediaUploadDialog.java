@@ -41,7 +41,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
 
     @SuppressWarnings("unchecked")
     public MediaUploadDialog() {
-        dialog = new Dialog(i18n.tr("Upload Image File"), this);
+        dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
         uploadPanel = new UploadPanel<MediaUploadDTO>((UploadService<MediaUploadDTO>) GWT.create(MediaUploadService.class)) {
 

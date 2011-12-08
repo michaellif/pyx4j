@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,9 +31,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -69,15 +68,15 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
     @Override
     protected void addItem() {
-        final SelectUtilityBox box = new SelectUtilityBox(building);
-        box.run(new Command() {
+        new SelectUtilityBox(building) {
             @Override
-            public void execute() {
-                for (ServiceItemType item : box.getSelectedItems()) {
+            public boolean onClickOk() {
+                for (ServiceItemType item : getSelectedItems()) {
                     addItem(item);
                 }
+                return true;
             }
-        });
+        }.show();
     }
 
     @Override
@@ -102,22 +101,20 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
     }
 
-    private class SelectUtilityBox extends OkCancelBox {
+    private abstract class SelectUtilityBox extends OkCancelDialog {
 
         private ListBox list;
-
-        private List<ServiceItemType> selectedItems;
 
         private final CEntityEditor<BuildingDTO> building;
 
         public SelectUtilityBox(CEntityEditor<BuildingDTO> building) {
             super(i18n.tr("Select Utilities"));
             this.building = building;
-            setContent(createContent());
+            setBody(createBody());
             setSize("300px", "100px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
 
             if (!building.getValue().availableUtilities().isEmpty()) {
@@ -151,9 +148,8 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
             }
         }
 
-        @Override
-        public boolean onClickOk() {
-            selectedItems = new ArrayList<ServiceItemType>(4);
+        protected List<ServiceItemType> getSelectedItems() {
+            List<ServiceItemType> selectedItems = new ArrayList<ServiceItemType>(4);
             for (int i = 0; i < list.getItemCount(); ++i) {
                 if (list.isItemSelected(i)) {
                     for (ServiceItemType item : building.getValue().availableUtilities()) {
@@ -163,10 +159,6 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
                     }
                 }
             }
-            return super.onClickOk();
-        }
-
-        protected List<ServiceItemType> getSelectedItems() {
             return selectedItems;
         }
     }

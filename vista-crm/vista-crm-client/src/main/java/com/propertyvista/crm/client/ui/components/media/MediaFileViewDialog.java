@@ -32,10 +32,9 @@ public class MediaFileViewDialog extends VerticalPanel implements OkOption {
     Key mediaId;
 
     public void show() {
-        Dialog dialog = new Dialog(title, this);
+        Dialog dialog = new Dialog(title, this, this);
         this.add(new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/"
                 + ThumbnailSize.large.name() + "." + ImageConsts.THUMBNAIL_TYPE));
-        dialog.setBody(this);
         dialog.show();
     }
 

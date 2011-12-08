@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -30,6 +31,8 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
 class PageContentFolder extends VistaBoxFolder<PageContent> {
+
+    private static final I18n i18n = I18n.get(PageContentFolder.class);
 
     private final CEntityEditor<PageDescriptor> parent;
 

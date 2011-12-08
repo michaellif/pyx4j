@@ -56,19 +56,19 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
     @Override
     protected void addItem() {
         if (apartmentViewForm != null) {
-            final SelectFeatureBox box = new SelectFeatureBox(type, apartmentViewForm.getValue());
-            box.run(new Command() {
+            new SelectFeatureBox(type, apartmentViewForm.getValue()) {
                 @Override
-                public void execute() {
-                    for (ServiceItem item : box.getSelectedItems()) {
+                public boolean onClickOk() {
+                    for (ServiceItem item : getSelectedItems()) {
                         ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());
                         newItem.adjustedPrice().setValue(item.price().getValue());
                         addItem(newItem);
                     }
+                    return true;
                 }
-            });
+            }.show();
         }
     }
 

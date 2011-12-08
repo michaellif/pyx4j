@@ -21,7 +21,6 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,9 +38,9 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
@@ -87,22 +86,23 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     @Override
     protected void addItem() {
-        final SelectTenantBox box = new SelectTenantBox(tenantListerView);
-        box.run(new Command() {
+        new SelectTenantBox(tenantListerView) {
             @Override
-            public void execute() {
+            public boolean onClickOk() {
                 TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
 
                 newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
-                newTenantInLease.tenant().set(box.getSelectedItem());
+                newTenantInLease.tenant().set(getSelectedItem());
                 if (!isApplicantPresent()) {
                     newTenantInLease.role().setValue(Role.Applicant);
                     newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
                 }
 
                 addItem(newTenantInLease);
+
+                return true;
             }
-        });
+        }.show();
     }
 
     private boolean isApplicantPresent() {
@@ -244,7 +244,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         }
     }
 
-    private class SelectTenantBox extends OkCancelBox {
+    private abstract class SelectTenantBox extends OkCancelDialog {
 
         private final IListerView<Tenant> tenantListerView;
 
@@ -253,11 +253,11 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         public SelectTenantBox(IListerView<Tenant> tenantListerView) {
             super(i18n.tr("Select Tenant"));
             this.tenantListerView = tenantListerView;
-            setContent(createContent());
+            setBody(createBody());
             setSize("700px", "400px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
             tenantListerView.getLister().addItemSelectionHandler(new ItemSelectionHandler<Tenant>() {
                 @Override

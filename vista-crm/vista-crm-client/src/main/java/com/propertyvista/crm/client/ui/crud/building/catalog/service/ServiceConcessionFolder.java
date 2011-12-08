@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.List;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,16 +22,19 @@ import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.OkCancelBox;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
 
 class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
+
+    private static I18n i18n = I18n.get(ServiceConcessionFolder.class);
 
     private final IListerView<Concession> concessionListerVeiw;
 
@@ -59,29 +61,27 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
     @Override
     protected void addItem() {
-        final SelectConcessionBox box = new SelectConcessionBox();
-        box.run(new Command() {
+        new SelectConcessionBox() {
             @Override
-            public void execute() {
-                for (Concession item : box.getSelectedItems()) {
+            public boolean onClickOk() {
+                for (Concession item : getSelectedItems()) {
                     addItem(item);
                 }
+                return true;
             }
-        });
+        }.show();
     }
 
-    private class SelectConcessionBox extends OkCancelBox {
-
-        private List<Concession> selectedConcessions;
+    private abstract class SelectConcessionBox extends OkCancelDialog {
 
         public SelectConcessionBox() {
             super(i18n.tr("Select Concessions"));
             concessionListerVeiw.getLister().releaseSelection();
-            setContent(createContent());
+            setBody(createBody());
             setSize("700px", "200px");
         }
 
-        protected Widget createContent() {
+        protected Widget createBody() {
             getOkButton().setEnabled(false);
             concessionListerVeiw.getLister().addItemSelectionHandler(new ItemSelectionHandler<Concession>() {
                 @Override
@@ -96,13 +96,8 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
             return vPanel;
         }
 
-        @Override
-        public boolean onClickOk() {
-            selectedConcessions = concessionListerVeiw.getLister().getSelectedItems();
-            return super.onClickOk();
-        }
-
         protected List<Concession> getSelectedItems() {
+            List<Concession> selectedConcessions = concessionListerVeiw.getLister().getSelectedItems();
             return selectedConcessions;
         }
     }

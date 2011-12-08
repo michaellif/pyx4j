@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -58,14 +57,13 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
             unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final SelectUnitBox box = new SelectUnitBox(((ShowingEditorView) getParentView()).getBuildingListerView(),
-                            ((ShowingEditorView) getParentView()).getUnitListerView());
-                    box.run(new Command() {
+                    new SelectUnitBox(((ShowingEditorView) getParentView()).getBuildingListerView(), ((ShowingEditorView) getParentView()).getUnitListerView()) {
                         @Override
-                        public void execute() {
-                            ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(box.getSelectedItem());
+                        public boolean onClickOk() {
+                            ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
+                            return true;
                         }
-                    });
+                    }.show();
                 }
             }));
             main.setWidget(++row, 0, unitPanel);

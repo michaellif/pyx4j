@@ -18,10 +18,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.OkCancelBox;
+public abstract class NewPasswordBox extends OkCancelDialog {
 
-public class NewPasswordBox extends OkCancelBox {
+    private static I18n i18n = I18n.get(NewPasswordBox.class);
 
     private final CPasswordTextField oldPassword = new CPasswordTextField();
 
@@ -34,11 +36,11 @@ public class NewPasswordBox extends OkCancelBox {
     public NewPasswordBox(boolean showOldPassword) {
         super(i18n.tr("Change password"));
         this.showOldPassword = showOldPassword;
-        setContent(createContent());
+        setBody(createBody());
         setSize("350px", "100px");
     }
 
-    protected Widget createContent() {
+    protected Widget createBody() {
         getOkButton().setEnabled(true);
 
         VerticalPanel content = new VerticalPanel();

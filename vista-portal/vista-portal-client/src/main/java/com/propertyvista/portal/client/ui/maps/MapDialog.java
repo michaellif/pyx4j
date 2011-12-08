@@ -24,7 +24,9 @@ public class MapDialog extends Dialog {
     private static I18n i18n = I18n.get(MapDialog.class);
 
     public MapDialog(PropertyDTO property) {
-        super(i18n.tr("Location"), new OkOption() {
+        super(i18n.tr("Location"));
+
+        setDialogOptions(new OkOption() {
 
             @Override
             public boolean onClickOk() {

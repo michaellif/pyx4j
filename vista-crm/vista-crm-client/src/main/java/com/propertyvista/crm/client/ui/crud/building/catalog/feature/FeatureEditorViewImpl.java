@@ -15,12 +15,11 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
 import java.util.EnumSet;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.widgets.client.dialog.OkDialog;
 
-import com.propertyvista.common.client.ui.components.OkBox;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -33,17 +32,18 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Feature.Type> callback) {
-        final SelectTypeBox box = new SelectTypeBox();
-        box.run(new Command() {
+        new SelectTypeBox() {
+
             @Override
-            public void execute() {
-                defaultCaption = box.getSelectedType().toString();
-                callback.onSuccess(box.getSelectedType());
+            public boolean onClickOk() {
+                defaultCaption = getSelectedType().toString();
+                callback.onSuccess(getSelectedType());
+                return true;
             }
-        });
+        }.show();
     }
 
-    private class SelectTypeBox extends OkBox {
+    private abstract class SelectTypeBox extends OkDialog {
 
         private final CComboBox<Feature.Type> types;
 
@@ -55,7 +55,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
             types.setValue(types.getOptions().get(0));
             types.setWidth("100%");
 
-            setContent(types.asWidget());
+            setBody(types.asWidget());
             setSize("250px", "100px");
         }
 

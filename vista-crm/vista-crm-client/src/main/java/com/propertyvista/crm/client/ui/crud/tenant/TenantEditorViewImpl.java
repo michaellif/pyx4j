@@ -13,13 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.common.client.ui.components.OkBox;
+import com.pyx4j.widgets.client.dialog.OkDialog;
+
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Tenant;
@@ -33,32 +32,30 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Tenant.Type> callback) {
-        final SelectTypeBox box = new SelectTypeBox();
-        box.run(new Command() {
+        new SelectTypeBox() {
             @Override
-            public void execute() {
-                callback.onSuccess(box.getSelectedType());
+            public boolean onClickOk() {
+                callback.onSuccess(getSelectedType());
+                return true;
             }
-        });
+        }.show();
     }
 
-    private class SelectTypeBox extends OkBox {
+    private abstract class SelectTypeBox extends OkDialog {
 
         private RadioButton person;
 
         public SelectTypeBox() {
             super(i18n.tr("Select Tenant Type"));
-            setContent(createContent());
-        }
 
-        protected Widget createContent() {
             HorizontalPanel main = new HorizontalPanel();
             main.add(person = new RadioButton(i18n.tr("Type"), Tenant.Type.person.toString()));
             main.add(new RadioButton(i18n.tr("Type"), Tenant.Type.company.toString()));
             main.setSpacing(8);
             main.setWidth("100%");
             person.setValue(true);
-            return main;
+
+            setBody(main);
         }
 
         public Tenant.Type getSelectedType() {

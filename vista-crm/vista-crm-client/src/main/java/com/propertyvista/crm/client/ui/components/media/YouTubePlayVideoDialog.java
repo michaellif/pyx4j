@@ -40,7 +40,7 @@ public class YouTubePlayVideoDialog extends VerticalPanel implements CancelOptio
     YouTubePlayerWidget player;
 
     public void show() {
-        Dialog dialog = new Dialog(title, this);
+        Dialog dialog = new Dialog(title, this, null);
         player = new YouTubePlayerWidget(630, 483) {
             @Override
             protected void onReady() {

@@ -47,7 +47,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
 
     @SuppressWarnings("unchecked")
     private ImportUploadDialog(PmcDTO pmc) {
-        dialog = new Dialog(i18n.tr("Upload Import.xml"), this);
+        dialog = new Dialog(i18n.tr("Upload Import.xml"), this, null);
 
         uploadPanel = new UploadPanel<PmcImportDTO>((UploadService<PmcImportDTO>) GWT.create(ImportUploadService.class)) {
             @Override
