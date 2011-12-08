@@ -50,8 +50,6 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
     public SignatureFolder() {
         super(DigitalSignature.class, false);
-//        inheritContainerAccessRules(false);
-//        setEditable(true);
     }
 
     @Override
@@ -67,7 +65,6 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
         public DigitalSignatureEditor() {
             super(DigitalSignature.class);
             inheritContainerAccessRules(false);
-            setEditable(true);
         }
 
         @Override
@@ -86,6 +83,12 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
             main.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignature.name());
             return main;
+        }
+
+        @Override
+        public void populate(DigitalSignature entity) {
+            setEditable(!(entity.agree().isBooleanTrue() && new SignatureValidator().isValid(null, entity.fullName().getValue())));
+            super.populate(entity);
         }
 
         @Override
