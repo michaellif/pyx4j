@@ -18,9 +18,11 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
@@ -47,7 +49,19 @@ public class AdvancedSearchCriteriaPanel extends Panel {
 
             @Override
             public void onSubmit() {
-                setResponsePage(AptListPage.class, PageParamsUtil.convertToPageParameters(model.getObject().getEntityValue()));
+                PropertySearchCriteria criteria = model.getObject().getEntityValue();
+                // see if we get geolocation parameter
+                PageParameters pp = getPage().getPageParameters();
+                String gl = pp.get("geolocation").toString();
+                if (gl != null && gl.length() > 0) {
+                    String[] glArr = gl.split(":");
+                    try {
+                        criteria.geolocation().setValue(new GeoPoint(Double.parseDouble(glArr[0]), Double.parseDouble(glArr[1])));
+                    } catch (NumberFormatException ignore) {
+                        // ignore
+                    }
+                }
+                setResponsePage(AptListPage.class, PageParamsUtil.convertToPageParameters(criteria));
             }
 
         };

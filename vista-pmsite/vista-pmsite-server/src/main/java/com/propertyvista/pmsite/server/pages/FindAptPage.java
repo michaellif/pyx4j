@@ -52,6 +52,7 @@ public class FindAptPage extends BasePage {
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
                 ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
         response.renderCSSReference(refCSS);
+        response.renderJavaScriptReference("http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAfWHWzhfYNuypHiKXdxVi1hQNAqXoqeDSmjSd0LqmyIBhhU5npBSrKP1emJkpH44tWO17lL5gHAI_vg&sensor=false");
         super.renderHead(response);
 
     }

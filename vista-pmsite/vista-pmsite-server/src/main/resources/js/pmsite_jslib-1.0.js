@@ -137,3 +137,51 @@ function popup_open(elt, opts) {
 
     return false;
 }
+function popup_msg(text) {
+	var msgBox = document.createElement('DIV');
+	$(msgBox).html(text).addClass('popup_msg');
+	popup_open(msgBox);
+}
+function submitGeolocationV2(form) {
+	$form = $(form);
+	var $typeSel = $(".searchTypeSelButton", $form).children('input[type="radio"]');
+	// if search by City, submit right away
+	var srchType = '';
+	$typeSel.each(function() {
+		if (this.checked) {
+			srchType = this.value;
+			return false;
+		}
+	});
+	if (srchType == 'searchType:searchByCity') {
+		form.submit();
+		return;
+	}
+	var address = $('[jsparam=location]', $form).val();
+	if (address.length < 10) {
+		popup_msg('Insufficient input. Please provide more details such as country, city or postal code.');
+		return false;
+	}
+	var gc = new GClientGeocoder();
+	if (!gc) {
+		console.log('Could not create geocoder');
+		return;
+	}
+	var geolocInp = $('[jsparam=geolocation]', $form).get(0);
+    var callback = function(result) {
+		console.log(result);
+		if (result.Status.code != 200 || !result.Placemark.length) {
+			popup_msg('Adress search failed. Please try again later.');
+			retun;
+		}
+		if (result.Placemark.length > 1) {
+			popup_msg('Adress search failed. Please provide more details such as country, city or postal code.');
+			retun;
+		}
+		var coord = result.Placemark[0].Point.coordinates;
+		var areaStr = coord[1] + '/' + coord[0];
+		geolocInp.value = areaStr;
+		form.submit();
+    };
+	gc.getLocations(address, callback);
+}

@@ -323,7 +323,7 @@ public class PMSiteContentManager implements Serializable {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
         } else {
-            // do vicinity search within the given searchRadius of the centerPoint
+            // TODO vicinity search within the given searchRadius of the centerPoint
             Integer searchRadiusKm = searchCriteria.distance().getValue();
             GeoPoint centerPoint = searchCriteria.geolocation().getValue();
             // ... define dbCriteria here ...

@@ -34,11 +34,11 @@
 	<div class="searchTypeSelBox">
 		<div wicket:id="searchType">
 		    <div class="searchTypeSelButton" name="search_bycity_box">
-		    	<input wicket:id="searchByCity" type="radio"/>
+		    	<input name="searchType" wicket:id="searchByCity" type="radio"/>
 				<label><wicket:i18n>By City</wicket:i18n></label>
 	    	</div>
     		<div class="searchTypeSelButton" name="search_byprox_box">
-	    		<input wicket:id="searchByProx" type="radio"/>
+	    		<input name="searchType" wicket:id="searchByProx" type="radio"/>
     			<label><wicket:i18n>By Proximity</wicket:i18n></label>
 			</div>	  
 		</div>
@@ -57,7 +57,8 @@
     <div class="searchTypeBox inputBlockFrame" name="search_byprox_box_input">
 		<div class="searchField">
 			<label><wicket:i18n>Address / Postal Code</wicket:i18n></label>
-			<input wicket:id="location" type="text"/>
+			<input wicket:id="location" type="text" jsparam="location" />
+			<input wicket:id="geolocation" type="hidden" jsparam="geolocation" />
 		</div>
 		<div class="searchField">
 			<label><wicket:i18n>Distance</wicket:i18n></label>

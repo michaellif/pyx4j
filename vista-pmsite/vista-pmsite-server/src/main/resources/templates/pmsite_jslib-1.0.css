@@ -18,6 +18,10 @@
         width:32px; height:32px;
         cursor:pointer;
 }
+.popup_msg {
+	max-width:400px;
+	padding:40px;
+}
 .googleMapsTimeout-error {
 	text-align:center;
 	position:relative; top:50%;

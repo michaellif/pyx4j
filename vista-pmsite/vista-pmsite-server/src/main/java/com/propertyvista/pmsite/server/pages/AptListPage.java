@@ -33,6 +33,7 @@ import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -88,6 +89,11 @@ public class AptListPage extends BasePage {
         }
 
         PropertySearchCriteria criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, argsE);
+        // GeoPoint will not convert from string, so we will do it explicitly
+        // TODO Nedds to be handled on the IEntity level
+        if (argsE.get("geolocation") != null) {
+            criteria.geolocation().setValue(GeoPoint.valueOf(argsE.get("geolocation").get(0)));
+        }
         List<String> amenities = argsE.get("amenities");
         if (amenities != null) {
             for (int i = 0; i < amenities.size(); i++) {

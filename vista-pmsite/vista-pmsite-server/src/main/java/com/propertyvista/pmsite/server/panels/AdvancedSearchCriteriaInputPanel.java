@@ -16,6 +16,7 @@ package com.propertyvista.pmsite.server.panels;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -23,12 +24,15 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.validator.MinimumValidator;
 
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
@@ -93,13 +97,36 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new Label("jsCityList", jsCityList).setEscapeModelStrings(false));
 
         // add location input
-        TextField<String> lctnInput = new TextField<String>("location", model.bind(criteria.location()));
-        add(lctnInput);
+        add(new TextField<String>("location", model.bind(criteria.location())));
+        add(new HiddenField<GeoPoint>("geolocation", model.bind(criteria.geolocation())) {
+            private static final long serialVersionUID = 1L;
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public <C> IConverter<C> getConverter(Class<C> type) {
+                if (!GeoPoint.class.isAssignableFrom(type)) {
+                    return super.getConverter(type);
+                }
+
+                return (IConverter<C>) new IConverter<GeoPoint>() {
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public GeoPoint convertToObject(String value, Locale locale) {
+                        return GeoPoint.valueOf(value);
+                    }
+
+                    @Override
+                    public String convertToString(GeoPoint value, Locale locale) {
+                        return value.toString();
+                    }
+
+                };
+            }
+        });
 
         // add distance input
-        TextField<Integer> distInput = new TextField<Integer>("distance");
-        distInput.add(new MinimumValidator<Integer>(1));
-        add(distInput);
+        add(new TextField<Integer>("distance").add(new MinimumValidator<Integer>(1)));
 
         // add common fields
         // bedrooms
