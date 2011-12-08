@@ -27,11 +27,6 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
     }
 
     @Override
-    public String getWarResourceBase() {
-        return "src/main/webapp";
-    }
-
-    @Override
     public String getContextPath() {
         return "/vista";
     }

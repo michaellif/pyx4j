@@ -27,11 +27,6 @@ public class PaymentPadJettyLaunch extends JettyLaunch {
     }
 
     @Override
-    public String getWarResourceBase() {
-        return "src/main/webapp";
-    }
-
-    @Override
     public String getContextPath() {
         return "/";
     }
