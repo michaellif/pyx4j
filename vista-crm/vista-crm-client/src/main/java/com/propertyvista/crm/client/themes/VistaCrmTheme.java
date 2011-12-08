@@ -45,6 +45,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
+import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.AddGadgetBoxDirectory;
 
 public class VistaCrmTheme extends VistaTheme {
 
@@ -112,6 +113,8 @@ public class VistaCrmTheme extends VistaTheme {
         initTabPanelStyles();
         initDialogBoxStyles();
         initMenuBarStyles();
+
+        initGadgetDirectoryStyles();
 
     }
 
@@ -582,6 +585,16 @@ public class VistaCrmTheme extends VistaTheme {
         // overriding gwt-dnd styles:
         style = new Style(".dragdrop-handle");
 //        style.addProperty("cursor", "pointer");
+        addStyle(style);
+    }
+
+    private void initGadgetDirectoryStyles() {
+        String prefix = AddGadgetBoxDirectory.STYLE;
+        Style style = new Style("." + prefix + " ." + AddGadgetBoxDirectory.GADGET_DIRECTORY_CELL_STYLE);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "outset");
+        style.addProperty("margin", "0.2em");
+        style.addProperty("padding", "0.5em 1em");
         addStyle(style);
     }
 

@@ -18,26 +18,25 @@ import java.util.List;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.cellview.client.CellTree.Resources;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
@@ -47,15 +46,21 @@ import com.propertyvista.crm.client.ui.gadgets.util.Collections2;
 import com.propertyvista.crm.client.ui.gadgets.util.Predicate;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
-// TODO change styling
+// TODO review styling/learn how to use the standard GWT resources
 public class AddGadgetBoxDirectory extends DialogPanel {
+    public static final String STYLE = "GadgetDirectory";
+
+    public static final String GADGET_DIRECTORY_CELL_STYLE = "GadgetDirectoryCell";
+
     private static final I18n i18n = I18n.get(AddGadgetBoxDirectory.class);
 
-    private static final String DIALOG_WIDTH = "80em";
+    private static final double DIALOG_WIDTH = 60;
 
-    private static final String DIALOG_HEIGHT = "50em";
+    private static final double DIALOG_HEIGHT = 40;
 
-    private static final String BUTTONS_PANEL_HEIGHT = "5em";
+    private static final double GADGETS_DIRECTORY_BROWSER_HEIGHT = 30;
+
+    private static final double SELECTED_GADGETS_HEIGHT = 10;
 
     private final ListDataProvider<AbstractGadget<?>> selectedGadgetsListProvider;
 
@@ -67,10 +72,9 @@ public class AddGadgetBoxDirectory extends DialogPanel {
      */
     public AddGadgetBoxDirectory(final DashboardType dashboardType) {
         super(false, true);
-        selectedGadgetsListProvider = new ListDataProvider<AbstractGadget<?>>();
-
-        setContentWidget(createContentPanel(dashboardType, selectedGadgetsListProvider));
-        setSize(DIALOG_WIDTH, DIALOG_HEIGHT);
+        setSize(getDialogWidth(), getDialogHeight());
+        setCaption(i18n.tr("Gadget Directory"));
+        setContentWidget(new SimplePanel(createContentPanel(dashboardType, selectedGadgetsListProvider = new ListDataProvider<AbstractGadget<?>>())));
     }
 
     public List<AbstractGadget<?>> getSelectedGadgets() {
@@ -78,53 +82,68 @@ public class AddGadgetBoxDirectory extends DialogPanel {
     }
 
     private Widget createContentPanel(DashboardType dashboardType, ListDataProvider<AbstractGadget<?>> selectedGadgetsListProvider) {
+        VerticalPanel content = new VerticalPanel();
+        content.setSize("100%", "100%");
+        content.setStylePrimaryName(STYLE);
+        content.setSpacing(10);
 
-        DockPanel content = new DockPanel();
+        HorizontalPanel directoryPanel = new HorizontalPanel();
+        directoryPanel.setSize("100%", "100%");
 
-        int row = -1;
-        FormFlexPanel panel = new FormFlexPanel();
-        panel.setSize("100%", "100%");
-
+        Widget w;
         ListDataProvider<AbstractGadget<?>> gadgetListProvider = new ListDataProvider<AbstractGadget<?>>();
-        panel.setWidget(++row, 0, createCategoriesPanel(gadgetListProvider, dashboardType));
-        panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
-        panel.getFlexCellFormatter().setWidth(row, 0, "30%");
+        w = createCategoriesPanel(gadgetListProvider, dashboardType);
+        w.setHeight(getDirectoryBrowserHeight());
+        directoryPanel.add(w);
+        directoryPanel.setCellWidth(w, "30%");
+        setBoxStyle(w.getElement().getParentElement().getStyle());
 
-        panel.setWidget(row, 1, createGadgetsPanel(gadgetListProvider, null, new GadgetAdditionCell(selectedGadgetsListProvider.getList())));
-        panel.getFlexCellFormatter().setWidth(row, 1, "70%");
-        panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
-        content.add(panel, DockPanel.CENTER);
-        content.setCellHeight(panel, "100%");
+        w = createGadgetsListPanel(gadgetListProvider, null, new GadgetAdditionCell(selectedGadgetsListProvider.getList()));
+        w.setHeight(getDirectoryBrowserHeight());
+        directoryPanel.add(w);
+        directoryPanel.setCellWidth(w, "70%");
+        setBoxStyle(w.getElement().getParentElement().getStyle());
 
-        Widget buttonsPanel = createButtonsPanel();
-        content.add(buttonsPanel, DockPanel.SOUTH);
+        content.add(directoryPanel);
+        content.setCellHeight(directoryPanel, "100%");
+        content.setCellWidth(directoryPanel, getDirectoryBrowserHeight());
+
+        Widget buttonsPanel = createButtonsPanel(selectedGadgetsListProvider);
+        content.add(buttonsPanel);
         content.setCellHorizontalAlignment(buttonsPanel, HasHorizontalAlignment.ALIGN_CENTER);
-        content.setCellHeight(buttonsPanel, BUTTONS_PANEL_HEIGHT);
 
-        final MultiSelectionModel<AbstractGadget<?>> selectedGadgetsSelectionModel = new MultiSelectionModel<AbstractGadget<?>>();
+        Widget selectedGadgetsPanel = createGadgetsListPanel(selectedGadgetsListProvider, null, new GadgetDescriptionCell());
+        selectedGadgetsPanel.setHeight(getSelectedGadgetsHeight());
+        content.add(selectedGadgetsPanel);
+        setBoxStyle(selectedGadgetsPanel.getElement().getParentElement().getStyle());
 
-        Widget selectedGadgetsPanel = createGadgetsPanel(selectedGadgetsListProvider, selectedGadgetsSelectionModel, new GadgetDescriptionCell());
-        content.add(selectedGadgetsPanel, DockPanel.SOUTH);
-        content.setCellHorizontalAlignment(selectedGadgetsPanel, HasHorizontalAlignment.ALIGN_CENTER);
-        content.setCellWidth(selectedGadgetsPanel, "30em");
-        content.setCellHeight(selectedGadgetsPanel, "15em");
+        Widget cancelButton = new Button(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                hide();
+            }
+        });
+        content.add(cancelButton);
+        content.setCellHorizontalAlignment(cancelButton, HasHorizontalAlignment.ALIGN_CENTER);
 
         return content;
     }
 
-    private Widget createButtonsPanel() {
+    private Widget createButtonsPanel(final ListDataProvider<AbstractGadget<?>> selectedGadgetsProvider) {
         HorizontalPanel buttons = new HorizontalPanel();
-        buttons.add(new Button(i18n.tr("Add"), new ClickHandler() {
+        buttons.add(new Button(i18n.tr("Add Selected"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                isOK = true;
-                hide();
+                if (!selectedGadgetsProvider.getList().isEmpty()) {
+                    isOK = true;
+                    hide();
+                }
             }
         }));
-        buttons.add(new Button(i18n.tr("Cancel"), new ClickHandler() {
+        buttons.add(new Button(i18n.tr("Clear"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                hide();
+                selectedGadgetsProvider.getList().clear();
             }
         }));
         buttons.setSpacing(8);
@@ -173,33 +192,47 @@ public class AddGadgetBoxDirectory extends DialogPanel {
 
         // TODO remove the workaround when it's not required
         // WORKAROUND START (see: http://code.google.com/p/google-web-toolkit/issues/detail?id=6359 for more details)
-        Resources resource = GWT.create(Resources.class);
-        StyleInjector.injectAtEnd("." + resource.cellTreeStyle().cellTreeTopItem() + " {margin-top: 0px;}");
+        Resources resources = GWT.create(CellTree.BasicResources.class);
+        StyleInjector.injectAtEnd("." + resources.cellTreeStyle().cellTreeTopItem() + " {margin-top: 0px;}");
         // WORKAROUND END
-        CellTree categoriesTree = new CellTree(new GadgetCategoryTreeViewModel(selectionModel, supportedGadgetP), null, resource);
+        CellTree categoriesTree = new CellTree(new GadgetCategoryTreeViewModel(selectionModel, supportedGadgetP), null, resources);
+        categoriesTree.setAnimationEnabled(true);
         return categoriesTree;
     }
 
-    private Widget createGadgetsPanel(final ListDataProvider<AbstractGadget<?>> gadgetListProvider, final SelectionModel<AbstractGadget<?>> selectionModel,
+    private Widget createGadgetsListPanel(final ListDataProvider<AbstractGadget<?>> gadgetListProvider, final SelectionModel<AbstractGadget<?>> selectionModel,
             Cell<AbstractGadget<?>> gadgetCell) {
-        DockPanel gadgetsPanel = new DockPanel();
+
+        CellList<AbstractGadget<?>> gadgetList = new CellList<AbstractGadget<?>>(new StyledCell<AbstractGadget<?>>(gadgetCell, GADGET_DIRECTORY_CELL_STYLE));
+        gadgetList.setSelectionModel(selectionModel);
+        gadgetListProvider.addDataDisplay(gadgetList);
+
+        ScrollPanel gadgetsPanel = new ScrollPanel(gadgetList);
         gadgetsPanel.setHeight("100%");
         gadgetsPanel.setWidth("100%");
 
-        CellList<AbstractGadget<?>> gadgetList = new CellList<AbstractGadget<?>>(gadgetCell);
-        gadgetList.setSelectionModel(selectionModel);
-        gadgetListProvider.addDataDisplay(gadgetList);
-        gadgetsPanel.add(gadgetList, DockPanel.CENTER);
-        gadgetsPanel.setCellHeight(gadgetList, "100%");
-
-        SimplePager pager = new SimplePager();
-        pager.setDisplay(gadgetList);
-        pager.setPageSize(10);
-
-        gadgetsPanel.add(pager, DockPanel.SOUTH);
-        gadgetsPanel.setCellHeight(pager, "2em");
-        gadgetsPanel.setCellHorizontalAlignment(pager, HasHorizontalAlignment.ALIGN_CENTER);
-
         return gadgetsPanel;
+    }
+
+    private static String getDirectoryBrowserHeight() {
+        return "" + GADGETS_DIRECTORY_BROWSER_HEIGHT + "em";
+    }
+
+    private static String getSelectedGadgetsHeight() {
+        return "" + SELECTED_GADGETS_HEIGHT + "em";
+    }
+
+    private static String getDialogWidth() {
+        return "" + DIALOG_WIDTH + "em";
+    }
+
+    private static String getDialogHeight() {
+        return "" + DIALOG_HEIGHT + "em";
+    }
+
+    private static void setBoxStyle(Style style) {
+        style.setProperty("padding", "5px");
+        style.setProperty("borderStyle", "inset");
+        style.setProperty("borderWidth", "1px");
     }
 }

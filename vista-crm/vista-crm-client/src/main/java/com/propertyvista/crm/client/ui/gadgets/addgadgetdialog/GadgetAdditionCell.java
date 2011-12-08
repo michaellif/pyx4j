@@ -37,14 +37,30 @@ public class GadgetAdditionCell extends CompositeCell<AbstractGadget<?>> {
 
     @Override
     public void render(com.google.gwt.cell.client.Cell.Context context, AbstractGadget<?> value, SafeHtmlBuilder sb) {
-        sb.appendHtmlConstant("<div style=\"border-width: 1px; border-style: outset\">");
-        super.render(context, value, sb);
-        sb.appendHtmlConstant("</div>");
+
+        if (value != null) {
+            sb.appendHtmlConstant("<table style=\"width:100%; height:100%;\"><tbody><tr>");
+            super.render(context, value, sb);
+            sb.appendHtmlConstant("</tr></tbody></table>");
+        }
+    }
+
+    @Override
+    protected <X> void render(com.google.gwt.cell.client.Cell.Context context, AbstractGadget<?> value, SafeHtmlBuilder sb,
+            HasCell<AbstractGadget<?>, X> hasCell) {
+        Cell<X> cell = hasCell.getCell();
+        if (cell instanceof GadgetDescriptionCell) {
+            sb.appendHtmlConstant("<td style=\"padding-right : 1em; width:100%;\">");
+        } else {
+            sb.appendHtmlConstant("<td>");
+        }
+        cell.render(context, hasCell.getValue(value), sb);
+        sb.appendHtmlConstant("</td>");
     }
 
     @Override
     protected Element getContainerElement(Element parent) {
-        return parent.getFirstChildElement();
+        return parent.getFirstChildElement().getFirstChildElement().getFirstChildElement();
     }
 
     private static List<HasCell<AbstractGadget<?>, ?>> createCells(final List<AbstractGadget<?>> selectedGadgetsList) {
