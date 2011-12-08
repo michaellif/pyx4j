@@ -100,7 +100,7 @@ public class PtAppTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX));
-        style.addProperty("background-color", ThemeColors.OBJECT_TONE4);
+        style.addProperty("background-color", ThemeColors.object1, 0.4);
         style.addProperty("margin", "0.4em 0 0.4em 0");
         style.addProperty("width", "930px");
         addStyle(style);
@@ -108,7 +108,7 @@ public class PtAppTheme extends VistaTheme {
         style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-color", ThemeColors.OBJECT_TONE4);
+        style.addProperty("border-top-color", ThemeColors.object1, 0.4);
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
         addStyle(style);
@@ -302,7 +302,7 @@ public class PtAppTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Label, SecondNavigViewImpl.StyleDependent.current));
-        style.addProperty("color", ThemeColors.TEXT);
+        style.addProperty("color", ThemeColors.foreground);
         addStyle(style);
     }
 
