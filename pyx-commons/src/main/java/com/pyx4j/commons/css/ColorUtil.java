@@ -117,7 +117,13 @@ public class ColorUtil {
         assert hue >= 0 && hue <= 1 : "hue should be between 0 and 1";
         assert saturation >= 0 && saturation <= 1 : "saturation should be between 0 and 1";
         assert brightness >= 0 && brightness <= 1 : "brightness should be between 0 and 1";
-        assert vibrance >= 0 && vibrance <= 2 : "vibrance should be between 0 and 1";
+
+        if (vibrance < 0 || vibrance > 2) {
+            System.out.println("++++++++++++++++");
+        }
+
+        assert vibrance >= 0 && vibrance <= 2 : "vibrance should be between 0 and 2";
+
         if (vibrance > 1) {
             float ns = saturation + (1 - saturation) * (vibrance - 1);
             float nb = brightness - brightness * (vibrance - 1);
