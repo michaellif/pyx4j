@@ -27,7 +27,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 import com.pyx4j.webstorage.client.StorageEvent.NativeStorageEvent;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 /**
  * 
@@ -44,7 +43,8 @@ public final class HTML5Storage extends JavaScriptObject {
 
     public static final boolean isSupported() {
         // No not run in IE hosted mode since browser will crash
-        if (BrowserType.isIE() && !GWT.isScript()) {
+        // TODO BrowserType.isIE()
+        if (false && !GWT.isScript()) {
             return false;
         } else {
             return isSupportedNative();
