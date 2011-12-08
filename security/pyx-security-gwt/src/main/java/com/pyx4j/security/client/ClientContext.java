@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -48,6 +47,7 @@ import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.webstorage.client.HTML5Storage;
 
 public class ClientContext {
 
@@ -107,6 +107,7 @@ public class ClientContext {
                         ClientContext.obtainAuthenticationData(null, null, true, false, null);
                     }
                 } else if (event.getSystemNotification() instanceof UserVisitChangedSystemNotification) {
+                    log.debug("Authorization Changed");
                     userVisit = ((UserVisitChangedSystemNotification) event.getSystemNotification()).getUserVisit();
                     if (userVisit != null) {
                         RPCManager.setUserVisitHashCode(userVisit.getServerSideHashCode());
@@ -131,7 +132,9 @@ public class ClientContext {
         if (userVisit == null) {
             return -1;
         } else {
-            return userVisit.hashCode() * 0x1F + ClientSecurityController.instance().getAcl().hashCode();
+            return userVisit.hashCode();
+            /** 0x1F + ClientSecurityController.instance().getAcl().hashCode(); */
+
         }
     }
 
@@ -174,45 +177,51 @@ public class ClientContext {
         return ClientEventBus.addHandler(ContextChangeEvent.TYPE, handler);
     }
 
+    static boolean authenticationChanging = false;
+
     public static void authenticated(AuthenticationResponse authenticationResponse) {
-        authenticationObtained = true;
-        userVisit = authenticationResponse.getUserVisit();
-        if (authenticationResponse.getLogoutURL() != null) {
-            logoutURL = authenticationResponse.getLogoutURL();
-        }
-        if (authenticationResponse.getSessionCookieName() != null) {
-            serverSession = new ServerSession(authenticationResponse.getSessionCookieName(), authenticationResponse.getMaxInactiveInterval());
-        } else {
-            // Session ends.
-            if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
-                RPCManager.setSessionToken(null, null);
-                Cookies.removeCookie(serverSession.getSessionCookieName());
+        try {
+            authenticationObtained = true;
+            userVisit = authenticationResponse.getUserVisit();
+            if (authenticationResponse.getLogoutURL() != null) {
+                logoutURL = authenticationResponse.getLogoutURL();
             }
-            serverSession = null;
-        }
-        String sessionToken = authenticationResponse.getSessionToken();
-        if (sessionToken != null) {
-            if (sessionToken.equals("")) {
-                ClientContext.sessionToken = null;
+            if (authenticationResponse.getSessionCookieName() != null) {
+                serverSession = new ServerSession(authenticationResponse.getSessionCookieName(), authenticationResponse.getMaxInactiveInterval());
             } else {
-                ClientContext.sessionToken = sessionToken;
+                // Session ends.
+                if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
+                    RPCManager.setSessionToken(null, null);
+                    Cookies.removeCookie(serverSession.getSessionCookieName());
+                }
+                serverSession = null;
             }
-            RPCManager.setSessionToken(ClientContext.sessionToken, authenticationResponse.getAclTimeStamp());
-        }
-        if (userVisit != null) {
-            RPCManager.setUserVisitHashCode(userVisit.getServerSideHashCode());
-        } else {
-            RPCManager.setUserVisitHashCode(null);
-        }
-        log.info("Authenticated {}", userVisit);
-        attributes.clear();
-        ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
-        ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
-        if (Storage.isSupported()) {
-            Storage.getLocalStorageIfSupported().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
-        }
-        if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
-            RPCManager.enableAppEngineUsageStats();
+            String sessionToken = authenticationResponse.getSessionToken();
+            if (sessionToken != null) {
+                if (sessionToken.equals("")) {
+                    ClientContext.sessionToken = null;
+                } else {
+                    ClientContext.sessionToken = sessionToken;
+                }
+                RPCManager.setSessionToken(ClientContext.sessionToken, authenticationResponse.getAclTimeStamp());
+            }
+            if (HTML5Storage.isSupported()) {
+                HTML5Storage.getLocalStorage().setItem(TOKEN_STORAGE_ATTRIBUTE, sessionToken);
+            }
+            if (userVisit != null) {
+                RPCManager.setUserVisitHashCode(userVisit.getServerSideHashCode());
+            } else {
+                RPCManager.setUserVisitHashCode(null);
+            }
+            log.info("Authenticated {}", userVisit);
+            attributes.clear();
+            ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
+            ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
+            if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
+                RPCManager.enableAppEngineUsageStats();
+            }
+        } finally {
+            authenticationChanging = false;
         }
     }
 
@@ -382,8 +391,8 @@ public class ClientContext {
             };
 
             if (service != null) {
-                if ((authenticationToken == null) && Storage.isSupported()) {
-                    authenticationToken = Storage.getLocalStorageIfSupported().getItem(TOKEN_STORAGE_ATTRIBUTE);
+                if ((authenticationToken == null) && HTML5Storage.isSupported()) {
+                    authenticationToken = HTML5Storage.getLocalStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
                 }
                 log.debug("authenticate {}", authenticationToken);
                 service.authenticate(callback, authenticationToken);

@@ -162,6 +162,7 @@ public class RPCManager {
                     RuntimeExceptionNotificationsWrapper wrapper = (RuntimeExceptionNotificationsWrapper) caught;
                     if (eventBus != null) {
                         for (Serializable systemNotification : wrapper.getSystemNotifications()) {
+                            log.debug("systemNotification {}", systemNotification.getClass());
                             eventBus.fireEvent(new SystemNotificationEvent(systemNotification));
                         }
                     }
@@ -195,6 +196,7 @@ public class RPCManager {
                     SystemNotificationsWrapper wrapper = (SystemNotificationsWrapper) result;
                     if (eventBus != null) {
                         for (Serializable systemNotification : wrapper.getSystemNotifications()) {
+                            log.debug("systemNotification {}", systemNotification.getClass());
                             eventBus.fireEvent(new SystemNotificationEvent(systemNotification));
                         }
                     }

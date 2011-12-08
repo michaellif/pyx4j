@@ -5,6 +5,8 @@
 	<inherits name='com.pyx4j.security.SecurityShared'/>
 	<inherits name='com.pyx4j.security.RPC'/>
 	
+    <inherits name='com.pyx4j.webstorage.HTML5Storage'/>
+    
     <replace-with class="com.pyx4j.security.client.ClientSecurityController">
         <when-type-is class="com.pyx4j.security.shared.SecurityController"/>
     </replace-with>

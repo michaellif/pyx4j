@@ -24,8 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.storage.client.Storage;
-import com.google.gwt.storage.client.StorageEvent;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 
@@ -35,14 +33,15 @@ import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
 import com.pyx4j.rpc.client.RPCStatusChangeHandler;
+import com.pyx4j.webstorage.client.HTML5Storage;
+import com.pyx4j.webstorage.client.StorageEvent;
+import com.pyx4j.webstorage.client.StorageEventHandler;
 
-public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Handler {
+public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SessionMonitor.class);
 
     private static SessionMonitor instance;
-
-    private final boolean TODO_IWC = true;
 
     private boolean monitoring = false;
 
@@ -117,10 +116,8 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
 
     protected SessionMonitor() {
         RPCManager.addRPCStatusChangeHandler(this);
-        if (TODO_IWC) {
-            if (Storage.isSupported()) {
-                Storage.addStorageEventHandler(this);
-            }
+        if (HTML5Storage.isSupported()) {
+            HTML5Storage.addStorageEventHandler(this);
         }
     }
 
@@ -182,13 +179,12 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
         if (sessionCookieValue == null) {
             sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode());
         } else {
-            sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode()) + String.valueOf(sessionCookieValue.hashCode());
+            sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode()) + "*" + String.valueOf(sessionCookieValue.hashCode());
         }
-        if (TODO_IWC) {
-            if (Storage.isSupported()) {
-                log.debug("set session code {}", sessionCookieValueHashCode);
-                Storage.getLocalStorageIfSupported().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
-            }
+
+        if (HTML5Storage.isSupported()) {
+            log.debug("set session code {}", sessionCookieValueHashCode);
+            HTML5Storage.getLocalStorage().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
         }
     }
 
@@ -221,7 +217,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
             if (!this.sessionCookieValue.equals(currentSessionCookie)) {
                 if (logChangeSessionCookieOnce) {
                     log.debug("Session COOKIE CHANGED {}->{} ", sessionCookieValue, currentSessionCookie);
-                    logChangeSessionCookieOnce = false;
+                    //logChangeSessionCookieOnce = false;
                 }
                 // Avoid infinite loop
                 sessionCookieValue = currentSessionCookie;
@@ -232,14 +228,15 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
 
     @Override
     public void onStorageChange(StorageEvent event) {
-        //TODO make it work!
-        String newHashCode = event.getNewValue();
-        //Storage.getLocalStorageIfSupported().getItem(SESSION_ID_KEY);
+        if (ClientContext.authenticationChanging) {
+            // Avoid infinite loop if Event handlers are changing Storage 
+            return;
+        }
+        String newHashCode = HTML5Storage.getLocalStorage().getItem(SESSION_ID_KEY);
         if (!CommonsStringUtils.equals(sessionCookieValueHashCode, newHashCode)) {
-            log.debug("Session change {} -> {}", sessionCookieValueHashCode, newHashCode);
+            log.debug("SessionHash change {} -> {}", sessionCookieValueHashCode, newHashCode);
             ClientContext.obtainAuthenticationData(null, null, true, false, null);
         }
 
     }
-
 }
