@@ -197,6 +197,7 @@ public class AddGadgetBoxDirectory extends DialogPanel {
         // WORKAROUND END
         CellTree categoriesTree = new CellTree(new GadgetCategoryTreeViewModel(selectionModel, supportedGadgetP), null, resources);
         categoriesTree.setAnimationEnabled(true);
+        categoriesTree.getRootTreeNode().setChildOpen(0, true);
         return categoriesTree;
     }
 

@@ -326,51 +326,40 @@ public class VistaCrmTheme extends VistaTheme {
         // Toggle Button
         buttonEx = Selector.valueOf("gwt-ToggleButton");
         style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
-        style.addProperty("background-color", ThemeColors.foreground, 0.8);
-        style.addProperty("border-width", "0px");
+        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "black");
         style.addProperty("margin", "0.2em 0.2em");
         style.addProperty("padding", "0.2em 0.5em");
         style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-up");
         style = new Style(buttonEx);
-        style.addProperty("background-color", ThemeColors.foreground, 0.4);
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.4);
-        style.addProperty("border-top-color", ThemeColors.foreground, 0.4);
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.95);
-        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.95);
+        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
+        style.addProperty("border-style", "outset");
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
         style = new Style(buttonEx);
-        style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColors.foreground, 0.4);
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.1);
-        style.addProperty("border-top-color", ThemeColors.foreground, 0.1);
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.95);
-        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.95);
+        style.addGradient(ThemeColors.foreground, 0.0, ThemeColors.foreground, 0.2);
+        style.addProperty("border-style", "outset");
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down");
         style = new Style(buttonEx);
-        style.addProperty("background-color", ThemeColors.foreground, 0.8);
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.95);
-        style.addProperty("border-top-color", ThemeColors.foreground, 0.95);
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.1);
-        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.1);
+        style.addGradient(ThemeColors.foreground, 0.3, ThemeColors.foreground, 0.1);
+        style.addProperty("border-style", "inset");
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down-hovering");
         style = new Style(buttonEx);
-        style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColors.foreground, 0.8);
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.95);
-        style.addProperty("border-top-color", ThemeColors.foreground, 0.95);
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.1);
-        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.1);
+        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.1);
+        style.addProperty("cursor", "pointer");
+        style.addProperty("border-style", "inset");
         addStyle(style);
 
         //
@@ -591,11 +580,24 @@ public class VistaCrmTheme extends VistaTheme {
     private void initGadgetDirectoryStyles() {
         String prefix = AddGadgetBoxDirectory.STYLE;
         Style style = new Style("." + prefix + " ." + AddGadgetBoxDirectory.GADGET_DIRECTORY_CELL_STYLE);
+        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
+        style.addProperty("color", ThemeColors.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
         style.addProperty("margin", "0.2em");
         style.addProperty("padding", "0.5em 1em");
         addStyle(style);
+
+        style = new Style("." + prefix + " ." + AddGadgetBoxDirectory.GADGET_DIRECTORY_CELL_STYLE + ":hover");
+        style.addGradient(ThemeColors.foreground, 0.0, ThemeColors.foreground, 0.1);
+        style.addProperty("cursor", "default");
+        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "outset");
+        style.addProperty("margin", "0.2em");
+        style.addProperty("padding", "0.5em 1em");
+        addStyle(style);
+
     }
 
 }
