@@ -34,7 +34,7 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
 
 public class PtAppTheme extends VistaTheme {
 
@@ -115,13 +115,13 @@ public class PtAppTheme extends VistaTheme {
     }
 
     protected void initVistaSummaryViewStyles() {
-        String prefix = SummaryViewForm.DEFAULT_STYLE_PREFIX;
+        String prefix = SignatureFolder.DEFAULT_STYLE_PREFIX;
 
-        Style style = new Style(Selector.valueOf(prefix, SummaryViewForm.StyleSuffix.DigitalSignature));
-        style.addProperty("background-color", "#50585F");
+        Style style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.DigitalSignature));
+        style.addProperty("color", ThemeColors.foreground);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SummaryViewForm.StyleSuffix.DigitalSignatureLabel));
+        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.DigitalSignatureLabel));
         style.addProperty("color", "#fff");
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
@@ -129,7 +129,7 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("text-shadow", "0 -1px 0 #333333");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SummaryViewForm.StyleSuffix.DigitalSignatureEdit));
+        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.DigitalSignatureEdit));
         addStyle(style);
     }
 

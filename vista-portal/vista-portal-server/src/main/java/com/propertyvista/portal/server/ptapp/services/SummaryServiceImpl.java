@@ -35,6 +35,7 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -62,9 +63,9 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         Summary summary = EntityFactory.create(Summary.class);
         summary.setValue(summaryDTO.getValue());
 
-        if (!summaryDTO.signed().isBooleanTrue() && summary.application().signature().agree().isBooleanTrue()) {
+        if (!summaryDTO.signed().isBooleanTrue() /* && summary.application().signature().agree().isBooleanTrue() */) {
             //TODO validate signature
-            Persistence.service().merge(summary.application().signature());
+            Persistence.service().merge(summary.application().signatures());
             Persistence.service().merge(summary.application());
         }
 
@@ -82,9 +83,6 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             summary.application().set(PtAppContext.getCurrentUserApplication());
         } else {
             Persistence.service().retrieve(summary.application());
-            if (!summary.application().signature().isNull()) {
-                Persistence.service().retrieve(summary.application().signature());
-            }
         }
 
         return createSummaryDTO(summary);
@@ -94,7 +92,12 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
         summary.setValue(dbo.getValue());
-        summary.signed().set(dbo.application().signature().agree());
+
+        boolean allSigned = true;
+        for (DigitalSignature sig : summary.application().signatures()) {
+            allSigned = (allSigned && sig.agree().isBooleanTrue());
+        }
+        summary.signed().setValue(allSigned);
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
         summary.apartmentSummary().add(createApartmentSummary(summary.selectedUnit()));
@@ -114,8 +117,12 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             summary.tenantFinancials().add(tfs.retrieveData(tr));
         }
 
-        summary.application().signature().timestamp().setValue(new Date());
-        summary.application().signature().ipAddress().setValue(Context.getRequestRemoteAddr());
+        if (!allSigned) { // update date and ip:
+            for (DigitalSignature sig : summary.application().signatures()) {
+                sig.timestamp().setValue(new Date());
+                sig.ipAddress().setValue(Context.getRequestRemoteAddr());
+            }
+        }
 
         // TODO This should be taken from building policy
         summary.leaseTerms().set(Persistence.service().retrieve(EntityQueryCriteria.create(LeaseTerms.class)));

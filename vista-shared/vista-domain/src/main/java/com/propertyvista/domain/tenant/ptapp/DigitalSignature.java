@@ -22,20 +22,24 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.TenantInLease;
+
 public interface DigitalSignature extends IEntity {
+
+    TenantInLease tenant();
 
     @Format("MM/dd/yyyy hh:mm a")
     @MemberColumn(name = "signDate")
     IPrimitive<Date> timestamp();
 
+    @Caption(name = "IP Address")
     IPrimitive<String> ipAddress();
 
     @NotNull
-    @Caption(name = "I Agree")
+    @Caption(name = "I Agree with Lease Terms")
     IPrimitive<Boolean> agree();
 
     @NotNull
     @Caption(name = "Type Your Full Name")
     IPrimitive<String> fullName();
-
 }

@@ -29,6 +29,11 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
  */
 public interface Application extends IUserEntity {
 
+    @Owner
+    @Detached
+    @ReadOnly
+    MasterApplication belongsTo();
+
     @Owned
     IList<ApplicationWizardStep> steps();
 
@@ -37,10 +42,6 @@ public interface Application extends IUserEntity {
     @Detached
     Lease lease();
 
-    @Owner
-    @Detached
-    @ReadOnly
-    MasterApplication belongsTo();
-
-    DigitalSignature signature();
+    @Owned
+    IList<DigitalSignature> signatures();
 }
