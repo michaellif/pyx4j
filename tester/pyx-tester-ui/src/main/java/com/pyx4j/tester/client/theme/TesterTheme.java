@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
+import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
 public class TesterTheme extends Theme {
 
@@ -63,6 +64,8 @@ public class TesterTheme extends Theme {
 
         addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultCCOmponentsTheme());
+
+        addTheme(new DefaultDialogTheme());
 
         initGeneralStyles();
         initBodyStyles();

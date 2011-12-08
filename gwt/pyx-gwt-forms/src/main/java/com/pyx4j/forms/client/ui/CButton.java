@@ -45,7 +45,7 @@ public class CButton extends CFocusComponent<Void, NativeButton> {
     public void setLabel(String label) {
         this.label = label;
         if (isWidgetCreated()) {
-            asWidget().setText(label);
+            asWidget().setTextLabel(label);
         }
     }
 

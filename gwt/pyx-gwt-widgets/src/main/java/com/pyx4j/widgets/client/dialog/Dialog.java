@@ -91,7 +91,7 @@ public class Dialog extends DialogPanel {
 
     private boolean allowEnterKeyForDefaultButton;
 
-    protected final HorizontalPanel buttonsPanel;
+    protected HorizontalPanel buttonsPanel;
 
     private Button yesButton;
 
@@ -111,7 +111,9 @@ public class Dialog extends DialogPanel {
 
     private Button custom4Button;
 
-    private final DialogOptions options;
+    private DialogOptions options;
+
+    private Widget body;
 
     private final ContentPanel content;
 
@@ -124,40 +126,48 @@ public class Dialog extends DialogPanel {
 
     private Element documentActiveElement;
 
+    private HandlerRegistration closeHandlerRegistration;
+
     private static final List<Dialog> openDialogs = new Vector<Dialog>();
 
-    public Dialog(String message) {
-        this(i18n.tr("Information"), message, Type.Info, new OkOption() {
-
-            @Override
-            public boolean onClickOk() {
-                return true;
-            }
-        });
-
+    public Dialog(String caption) {
+        this(caption, null, null);
     }
 
-    public Dialog(String caption, String message, Type type, DialogOptions options) {
-        this(caption, options);
-        MessagePanel messagePanel = new MessagePanel(message, type);
-        setBody(messagePanel);
-        setPixelSize(500, 200);
-    }
-
-    public Dialog(String caption, DialogOptions options) {
+    public Dialog(String caption, DialogOptions options, Widget body) {
         super(false, true);
         setGlassEnabled(true);
         setCaption(caption);
 
-        this.options = options;
-
         content = new ContentPanel();
+        setContentWidget(content);
 
+        setDialogOptions(options);
+
+        setBody(body);
+    }
+
+    public void setBody(Widget body) {
+        if (this.body != null) {
+            content.remove(this.body);
+        }
+
+        this.body = body;
+        if (body != null) {
+            content.add(body, DockPanel.CENTER);
+            content.setCellHeight(body, "100%");
+            content.setCellWidth(body, "100%");
+        }
+    }
+
+    public void setDialogOptions(DialogOptions options) {
+        this.options = options;
+        if (buttonsPanel != null) {
+            content.remove(buttonsPanel);
+        }
         buttonsPanel = createButtonsPanel();
         content.add(buttonsPanel, DockPanel.SOUTH);
         content.setCellHeight(buttonsPanel, "1px");
-
-        setContentWidget(content);
 
         this.addKeyDownHandler(new KeyDownHandler() {
 
@@ -179,15 +189,13 @@ public class Dialog extends DialogPanel {
             }
         });
 
-        if (options instanceof CloseHandler) {
-            this.addCloseHandler((CloseHandler<PopupPanel>) options);
+        if (closeHandlerRegistration != null) {
+            closeHandlerRegistration.removeHandler();
         }
-    }
+        if (options instanceof CloseHandler) {
+            closeHandlerRegistration = this.addCloseHandler((CloseHandler<PopupPanel>) options);
+        }
 
-    public void setBody(Widget body) {
-        content.add(body, DockPanel.CENTER);
-        content.setCellHeight(body, "100%");
-        content.setCellWidth(body, "100%");
     }
 
     private HorizontalPanel createButtonsPanel() {

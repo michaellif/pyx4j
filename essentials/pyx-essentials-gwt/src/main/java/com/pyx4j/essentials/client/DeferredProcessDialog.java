@@ -63,8 +63,7 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
         this.setWidget(messagePenel = new VerticalPanel());
         messagePenel.add(message1 = new HTML(initialMessage));
         messagePenel.add(message2 = new HTML(""));
-        dialog = new Dialog(title, this);
-        dialog.setBody(this);
+        dialog = new Dialog(title, this, this);
         dialog.getCloseButton().setVisible(false);
     }
 

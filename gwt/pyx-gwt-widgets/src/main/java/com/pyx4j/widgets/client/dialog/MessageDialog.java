@@ -10,14 +10,19 @@ package com.pyx4j.widgets.client.dialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
+import com.pyx4j.i18n.shared.I18n;
 
-public class MessageDialog {
+public class MessageDialog extends Dialog {
+
+    private static I18n i18n = I18n.get(MessageDialog.class);
+
+    public MessageDialog(String caption, String message, Type type, DialogOptions options) {
+        super(caption, options, new MessagePanel(message, type));
+        setPixelSize(500, 200);
+    }
 
     public static void error(String title, String text) {
         show(title, text, Type.Error);
@@ -35,6 +40,10 @@ public class MessageDialog {
         show(title, text, Type.Warning);
     }
 
+    public static void info(String text) {
+        show(i18n.tr("Information"), text, Type.Info);
+    }
+
     public static void info(String title, String text) {
         show(title, text, Type.Info);
     }
@@ -48,17 +57,23 @@ public class MessageDialog {
         });
     }
 
-    public static void show(final String title, final String text, final Type type, final DialogOptions options) {
-        show(title, text, type, options, false);
-    }
-
-    public static void prefetch() {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    public static void confirm(String title, String text, final Command onConfirmed) {
+        show(title, text, Dialog.Type.Confirm, new YesNoOption() {
             @Override
-            public void execute() {
-                show(null, null, null, null, true);
+            public boolean onClickYes() {
+                onConfirmed.execute();
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                return true;
             }
         });
+    }
+
+    public static void show(final String title, final String text, final Type type, final DialogOptions options) {
+        show(title, text, type, options, false);
     }
 
     /*
@@ -77,23 +92,8 @@ public class MessageDialog {
             @Override
             public void onSuccess() {
                 if (!prefetch) {
-                    new Dialog(title, text, type, options).show();
+                    new MessageDialog(title, text, type, options).show();
                 }
-            }
-        });
-    }
-
-    public static void confirm(String title, String text, final Command onConfirmed) {
-        show(title, text, Dialog.Type.Confirm, new YesNoOption() {
-            @Override
-            public boolean onClickYes() {
-                onConfirmed.execute();
-                return true;
-            }
-
-            @Override
-            public boolean onClickNo() {
-                return true;
             }
         });
     }

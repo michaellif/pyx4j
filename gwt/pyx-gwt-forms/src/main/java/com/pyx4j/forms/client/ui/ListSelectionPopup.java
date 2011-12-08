@@ -33,9 +33,11 @@ public abstract class ListSelectionPopup<E> extends Dialog {
     private AvailableSelectedBox selectedBox;
 
     public ListSelectionPopup(String title, OkCancelOption callback) {
-        super(title == null ? "Selection Dialog" : title, callback);
+        super(title == null ? "Selection Dialog" : title);
         ListBoxDisplayProperties displayProperties = new ListBoxDisplayProperties();
         displayProperties.visibleItemCount = 4;
+
+        setDialogOptions(callback);
         setBody(selectedBox = new AvailableSelectedBox(displayProperties));
     }
 

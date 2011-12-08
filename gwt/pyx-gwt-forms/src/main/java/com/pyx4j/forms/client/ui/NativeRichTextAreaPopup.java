@@ -67,7 +67,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
                 }
                 final RichTextAreaPopupPanel editor = new RichTextAreaPopupPanel();
                 editor.setSize("600px", "200px");
-                Dialog dialog = new Dialog(NativeRichTextAreaPopup.this.textArea.getTitle() + " Editor", editor) {
+                Dialog dialog = new Dialog(NativeRichTextAreaPopup.this.textArea.getTitle() + " Editor", editor, editor) {
                     @Override
                     protected void setupFocusManager() {
                         //no impl
@@ -79,7 +79,6 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
                         shown = false;
                     }
                 };
-                dialog.setBody(editor);
                 shown = true;
                 dialog.show();
 

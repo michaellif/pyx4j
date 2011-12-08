@@ -26,7 +26,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
-public class NativeButton extends com.google.gwt.user.client.ui.Button implements INativeFocusComponent<Void> {
+import com.pyx4j.widgets.client.Button;
+
+public class NativeButton extends Button implements INativeFocusComponent<Void> {
 
     private Command comand;
 

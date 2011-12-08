@@ -35,6 +35,19 @@ public class KeysTestDialog {
 
     public static void show() {
 
+        final Label log = new Label();
+
+        VerticalPanel inputPanel = new VerticalPanel();
+
+        HorizontalPanel panel = new HorizontalPanel();
+        inputPanel.add(panel);
+
+        TextBox text;
+        panel.add(new Label("Enter"));
+        panel.add(text = new TextBox());
+
+        inputPanel.add(log);
+
         Dialog dialog = new Dialog("Keys Test", new Custom1Option() {
 
             @Override
@@ -52,22 +65,7 @@ public class KeysTestDialog {
                 return null;
             }
 
-        });
-
-        final Label log = new Label();
-
-        VerticalPanel inputPanel = new VerticalPanel();
-
-        HorizontalPanel panel = new HorizontalPanel();
-        inputPanel.add(panel);
-
-        TextBox text;
-        panel.add(new Label("Enter"));
-        panel.add(text = new TextBox());
-
-        inputPanel.add(log);
-
-        dialog.setBody(inputPanel);
+        }, inputPanel);
 
         text.addKeyDownHandler(new KeyDownHandler() {
 

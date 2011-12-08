@@ -23,6 +23,8 @@ package com.pyx4j.tester.client.view.widget;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -31,7 +33,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidgetBasicView {
 
@@ -82,6 +86,20 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
         });
 
         main.setWidget(++row, 0, btn);
+
+        main.setHR(++row, 0, 1);
+
+        final Button dialogButton = new Button("Long message Dialog");
+        dialogButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                MessageDialog
+                        .info("Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog<br>Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message");
+            }
+        });
+
+        main.setWidget(++row, 0, dialogButton);
 
         add(main);
     }

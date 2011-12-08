@@ -66,6 +66,7 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.GlueOption;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 import com.pyx4j.widgets.client.photoalbum.BasicPhotoAlbumModel;
@@ -442,8 +443,7 @@ public class TesterEntryPoint implements EntryPoint {
 
         @Override
         public void onClick(ClickEvent event) {
-            Dialog dialog = new Dialog("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
-            dialog.show();
+            MessageDialog.info("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
         }
     }
 
@@ -472,8 +472,7 @@ public class TesterEntryPoint implements EntryPoint {
                 @Override
                 public boolean onClickYes() {
                     log.info("onClickYes");
-                    Dialog dialog = new Dialog("Yes");
-                    dialog.show();
+                    MessageDialog.info("Yes");
                     return false;
                 }
 
@@ -509,7 +508,7 @@ public class TesterEntryPoint implements EntryPoint {
                 public IDebugId getCustom1DebugID() {
                     return null;
                 }
-            });
+            }, null);
 
             VerticalPanel inputPanel = new VerticalPanel();
 

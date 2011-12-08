@@ -77,18 +77,24 @@ public class Button extends FocusPanel {
 
         facesHandler.init(this);
 
-        textLabel = new HTML(text);
+        textLabel = new HTML();
+        setTextLabel(text);
+
         textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
 
         if (image != null) {
-            if (text == null) {
-                textLabel.setHTML("");
-            }
             setImageVisible(true);
         }
 
         setWidget(textLabel);
 
+    }
+
+    public void setTextLabel(String label) {
+        if (label == null) {
+            label = "";
+        }
+        textLabel.setHTML(label);
     }
 
     @Override
