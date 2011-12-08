@@ -20,15 +20,10 @@
  */
 package com.pyx4j.security.client;
 
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.logical.shared.InitializeEvent;
-import com.google.gwt.event.logical.shared.InitializeHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.storage.client.StorageEvent;
 import com.google.gwt.user.client.Cookies;
@@ -36,18 +31,16 @@ import com.google.gwt.user.client.Timer;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
 import com.pyx4j.rpc.client.RPCStatusChangeHandler;
-import com.pyx4j.security.shared.Behavior;
 
 public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Handler {
 
     private static final Logger log = LoggerFactory.getLogger(SessionMonitor.class);
 
     private static SessionMonitor instance;
-
-    private SessionInactiveHandler sessionInactiveHandler;
 
     private boolean monitoring = false;
 
@@ -71,29 +64,36 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
 
     public static void startMonitoring() {
         if (instance == null) {
-            initialize(ClientSecurityController.instance());
+            initialize();
         }
     }
 
-    static void initialize(ClientSecurityController clientSecurityController) {
+    static void initialize() {
+        if (instance != null) {
+            return;
+        }
         instance = new SessionMonitor();
-        clientSecurityController.addInitializeHandler(new InitializeHandler() {
+        ClientSecurityController.addContextInitializeHandler(new ContextInitializeHandler() {
+
             @Override
-            public void onInitialize(InitializeEvent event) {
+            public void onContextInitialize(ContextInitializeEvent event) {
                 instance.update();
+
             }
         });
-        clientSecurityController.addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
+        ClientSecurityController.addSecurityControllerHandler(new SecurityControllerHandler() {
+
             @Override
-            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
+            public void onSecurityContextChange(SecurityControllerEvent event) {
                 instance.onAuthenticationChange();
+
             }
         });
     }
 
-    public static void setSessionInactiveHandler(SessionInactiveHandler sessionInactiveHandler) {
+    public static HandlerRegistration addSessionInactiveHandler(SessionInactiveHandler handler) {
         startMonitoring();
-        instance.sessionInactiveHandler = sessionInactiveHandler;
+        return ClientEventBus.addHandler(SessionInactiveEvent.TYPE, handler);
 
     }
 
@@ -196,9 +196,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
     }
 
     protected void onSessionInactive(boolean timeout) {
-        if (sessionInactiveHandler != null) {
-            sessionInactiveHandler.onSessionInactive(timeout);
-        }
+        ClientEventBus.fireEvent(new SessionInactiveEvent(timeout));
     }
 
     private void checkActivity() {
@@ -225,7 +223,9 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEvent.Hand
 
     @Override
     public void onStorageChange(StorageEvent event) {
-        String newHashCode = Storage.getLocalStorageIfSupported().getItem(SESSION_ID_KEY);
+        //TODO make it work!
+        String newHashCode = event.getNewValue();
+        //Storage.getLocalStorageIfSupported().getItem(SESSION_ID_KEY);
         if (!CommonsStringUtils.equals(sessionCookieValueHashCode, newHashCode)) {
             log.debug("Session change {} -> {}", sessionCookieValueHashCode, newHashCode);
             ClientContext.obtainAuthenticationData(null, null, true, false, null);

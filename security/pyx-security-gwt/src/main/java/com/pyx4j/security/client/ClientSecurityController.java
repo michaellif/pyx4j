@@ -26,29 +26,18 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.logical.shared.HasInitializeHandlers;
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
-import com.google.gwt.event.logical.shared.InitializeEvent;
-import com.google.gwt.event.logical.shared.InitializeHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 
-public class ClientSecurityController extends SecurityController implements HasValueChangeHandlers<Set<Behavior>>, HasInitializeHandlers {
+public class ClientSecurityController extends SecurityController {
 
     private static Logger log = LoggerFactory.getLogger(ClientSecurityController.class);
-
-    private EventBus eventBus;
 
     private final AclImpl acl = new AclImpl();
 
@@ -82,7 +71,7 @@ public class ClientSecurityController extends SecurityController implements HasV
     }
 
     public ClientSecurityController() {
-        SessionMonitor.initialize(this);
+        SessionMonitor.initialize();
     }
 
     public static ClientSecurityController instance() {
@@ -101,12 +90,12 @@ public class ClientSecurityController extends SecurityController implements HasV
         }
         //TODO do not fire change event all the time for now.  Problem in login places
         acl.behaviours = behaviours;
-        ValueChangeEvent.fire(this, acl.behaviours);
+        ClientEventBus.fireEvent(new SecurityControllerEvent(acl.behaviours));
 
         if (!initialized) {
             initialized = true;
             log.debug("Client security initialized");
-            InitializeEvent.fire(this);
+            ClientEventBus.fireEvent(new ContextInitializeEvent());
         }
         return acl;
     }
@@ -121,28 +110,12 @@ public class ClientSecurityController extends SecurityController implements HasV
         return acl;
     }
 
-    protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {
-        if (eventBus == null) {
-            eventBus = new SimpleEventBus();
-        }
-        return eventBus.addHandler(type, handler);
+    public static HandlerRegistration addSecurityControllerHandler(SecurityControllerHandler handler) {
+        return ClientEventBus.addHandler(SecurityControllerEvent.getType(), handler);
     }
 
-    @Override
-    public void fireEvent(GwtEvent<?> event) {
-        if (eventBus != null) {
-            eventBus.fireEvent(event);
-        }
-    }
-
-    @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Set<Behavior>> handler) {
-        return addHandler(handler, ValueChangeEvent.getType());
-    }
-
-    @Override
-    public HandlerRegistration addInitializeHandler(InitializeHandler handler) {
-        return addHandler(handler, InitializeEvent.getType());
+    public static HandlerRegistration addContextInitializeHandler(ContextInitializeHandler handler) {
+        return ClientEventBus.addHandler(ContextInitializeEvent.TYPE, handler);
     }
 
 }

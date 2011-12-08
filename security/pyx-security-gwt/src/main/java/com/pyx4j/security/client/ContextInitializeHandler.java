@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 20, 2011
+ * Created on Dec 7, 2011
  * @author vlads
  * @version $Id$
  */
@@ -22,8 +22,8 @@ package com.pyx4j.security.client;
 
 import com.google.gwt.event.shared.EventHandler;
 
-public interface SessionInactiveHandler extends EventHandler {
+public interface ContextInitializeHandler extends EventHandler {
 
-    void onSessionInactive(SessionInactiveEvent event);
+    void onContextInitialize(ContextInitializeEvent event);
 
 }

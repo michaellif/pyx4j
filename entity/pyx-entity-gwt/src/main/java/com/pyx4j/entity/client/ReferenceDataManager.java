@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -44,7 +43,8 @@ import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.security.client.ClientSecurityController;
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 
 /**
  * Cache Reference Data
@@ -60,12 +60,14 @@ public class ReferenceDataManager {
     private static EventBus eventBus;
 
     static {
-        ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
+        ClientSecurityController.addSecurityControllerHandler(new SecurityControllerHandler() {
             @Override
-            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
+            public void onSecurityContextChange(SecurityControllerEvent event) {
                 ReferenceDataManager.invalidate();
+
             }
         });
+
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

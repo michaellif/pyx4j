@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -39,7 +40,7 @@ public class SessionInactiveDialog implements SessionInactiveHandler {
     private static boolean shown;
 
     public static void register() {
-        SessionMonitor.setSessionInactiveHandler(new SessionInactiveDialog());
+        SessionMonitor.addSessionInactiveHandler(new SessionInactiveDialog());
     }
 
     private static class ShowOnceDialogOptions implements OkOption, CloseHandler<PopupPanel> {
@@ -57,11 +58,12 @@ public class SessionInactiveDialog implements SessionInactiveHandler {
     };
 
     @Override
-    public void onSessionInactive(final boolean timeout) {
+    public void onSessionInactive(SessionInactiveEvent event) {
         if (shown) {
             return;
         }
         shown = true;
+        boolean timeout = event.isTimeout();
 
         String title = timeout ? i18n.tr("Session Inactive") : i18n.tr("Your Session Has Been Terminated");
         String reasonMessage;
@@ -84,4 +86,5 @@ public class SessionInactiveDialog implements SessionInactiveHandler {
 
         MessageDialog.show(title, reasonMessage, Dialog.Type.Info, new ShowOnceDialogOptions());
     }
+
 }

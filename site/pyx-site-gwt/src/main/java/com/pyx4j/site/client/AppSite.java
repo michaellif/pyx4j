@@ -26,15 +26,18 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
@@ -54,8 +57,6 @@ public abstract class AppSite implements EntryPoint {
 
     private final PlaceHistoryHandler historyHandler;
 
-    private final AppSiteEventBus eventBus;
-
     private final AppPlaceContorller placeController;
 
     public AppSite(Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
@@ -66,8 +67,7 @@ public abstract class AppSite implements EntryPoint {
 
         historyMapper = new AppPlaceHistoryMapper(siteMapClass);
         historyHandler = new PlaceHistoryHandler(historyMapper);
-        eventBus = new AppSiteEventBus();
-        placeController = new AppPlaceContorller(eventBus, dispatcher);
+        placeController = new AppPlaceContorller(ClientEventBus.instance, dispatcher);
     }
 
     public AppSite(Class<? extends SiteMap> siteMapClass) {
@@ -95,8 +95,8 @@ public abstract class AppSite implements EntryPoint {
         return (AppPlace) getPlaceController().getWhere();
     }
 
-    public static AppSiteEventBus getEventBus() {
-        return instance().eventBus;
+    public static EventBus getEventBus() {
+        return ClientEventBus.instance;
     }
 
     public static AppPlaceContorller getPlaceController() {
@@ -113,6 +113,9 @@ public abstract class AppSite implements EntryPoint {
     public void onModuleLoad() {
         if (ApplicationMode.isDevelopment()) {
             ClientLogger.setDebugOn(true);
+            if (Window.Location.getParameter("trace") != null) {
+                ClientLogger.setTraceOn(true);
+            }
         }
         log.debug("{}", BrowserType.getCompiledType());
         onSiteLoad();
