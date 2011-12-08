@@ -38,7 +38,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.CSSClass;
-import com.pyx4j.widgets.client.util.BrowserType;
+import com.pyx4j.gwt.commons.BrowserType;
 
 public class Slideshow extends AbsolutePanel {
 

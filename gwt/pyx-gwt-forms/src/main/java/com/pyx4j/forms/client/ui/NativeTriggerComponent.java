@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.widgets.client.util.BrowserType;
+import com.pyx4j.gwt.commons.BrowserType;
 
 public abstract class NativeTriggerComponent<E> extends HorizontalPanel implements Focusable, HasDoubleClickHandlers, INativeFocusComponent<E> {
 

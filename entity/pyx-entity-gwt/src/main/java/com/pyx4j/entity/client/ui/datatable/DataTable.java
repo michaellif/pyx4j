@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.widgets.client.util.BrowserType;
+import com.pyx4j.gwt.commons.BrowserType;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
 

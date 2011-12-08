@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.util;
+package com.pyx4j.gwt.commons;
 
 import com.google.gwt.core.client.GWT;
 

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.UIObject;
 
-import com.pyx4j.widgets.client.util.BrowserType;
+import com.pyx4j.gwt.commons.BrowserType;
 
 /**
  * For details see: http://www.quirksmode.org/css/cursor.html

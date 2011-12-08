@@ -30,12 +30,12 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class Base64ImageView extends VerticalPanel implements CancelOption, Custom1Option, Custom2Option {
 

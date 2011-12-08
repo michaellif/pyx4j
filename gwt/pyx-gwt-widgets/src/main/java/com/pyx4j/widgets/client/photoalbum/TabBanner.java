@@ -36,8 +36,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class TabBanner extends AbsolutePanel {
 

@@ -44,9 +44,9 @@ import com.pyx4j.dnd.client.DragStartEvent;
 import com.pyx4j.dnd.client.DragStartHandler;
 import com.pyx4j.dnd.client.DropEvent;
 import com.pyx4j.dnd.client.DropHandler;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class DnDDemo implements EntryPoint {
 

@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.widgets.client.util.BrowserType;
+import com.pyx4j.gwt.commons.BrowserType;
 
 public class BoxFolderItemToolbar extends HorizontalPanel {
 

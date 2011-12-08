@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplUnknown">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplIE9">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="ie9"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplIE8">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="ie8"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplIE6">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="ie6"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplMozilla">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+        <any>
+            <when-property-is name="user.agent" value="gecko"/>
+        </any>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplMozilla18">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+        <any>
+            <when-property-is name="user.agent" value="gecko1_8"/>
+        </any>
+    </replace-with>
+    
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplSafari">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.gwt.commons.BrowserType.ImplOpera">
+        <when-type-is class="com.pyx4j.gwt.commons.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="opera"/>
+    </replace-with>
+
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.gwt.commons.BrowserType.*" />
+
+</module>

@@ -32,10 +32,10 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportServices;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class ReportDialog extends DeferredProcessDialog {
 

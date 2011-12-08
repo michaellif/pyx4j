@@ -37,12 +37,12 @@ import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
