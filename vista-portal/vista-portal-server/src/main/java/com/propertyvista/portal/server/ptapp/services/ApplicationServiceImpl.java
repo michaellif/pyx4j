@@ -94,7 +94,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         if (currentStep != null) {
             int idx = progress.steps().indexOf(currentStep);
             if (idx == -1) {
-                throw new Error("Invalid Step recived");
+                throw new Error("Invalid Step received");
             }
 
             currentStep = progress.steps().get(idx);
@@ -102,7 +102,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             if (currentSubstep != null) {
                 int idxSub = currentStep.substeps().indexOf(currentSubstep);
                 if (idxSub == -1) {
-                    throw new Error("Invalid Substep recived");
+                    throw new Error("Invalid Substep received");
                 }
                 currentSubstep = currentStep.substeps().get(idxSub);
                 currentSubstep.status().setValue(ApplicationWizardStep.Status.complete);

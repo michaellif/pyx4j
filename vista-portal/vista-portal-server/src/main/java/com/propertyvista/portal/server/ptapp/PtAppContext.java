@@ -18,12 +18,16 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.server.common.security.VistaContext;
@@ -71,5 +75,17 @@ public class PtAppContext extends VistaContext {
 
     public static Lease getCurrentUserLease() {
         return Persistence.service().retrieve(Lease.class, PtAppContext.getCurrentUserApplication().lease().getPrimaryKey());
+    }
+
+    public static Tenant getCurrentUserTenant() {
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static TenantInLease getCurrentUserTenantInLease() {
+        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getCurrentUserTenant()));
+        return Persistence.service().retrieve(criteria);
     }
 }

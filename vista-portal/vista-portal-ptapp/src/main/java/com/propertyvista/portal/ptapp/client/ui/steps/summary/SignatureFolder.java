@@ -15,12 +15,10 @@ package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -31,8 +29,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
+import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
 
 public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
@@ -87,12 +85,13 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
         @Override
         public void populate(DigitalSignature entity) {
-            setEditable(!(entity.agree().isBooleanTrue() && new SignatureValidator().isValid(null, entity.fullName().getValue())));
+            setEditable(!(entity.agree().isBooleanTrue() && DigitalSignatureValidation.isSignatureValid(entity.tenant().tenant(), entity.fullName().getValue())));
             super.populate(entity);
         }
 
         @Override
         public void addValidations() {
+            super.addValidations();
 
             get(proto().agree()).addValueValidator(new EditableValueValidator<Boolean>() {
                 @Override
@@ -106,47 +105,17 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
                 }
             });
 
-            get(proto().fullName()).addValueValidator(new SignatureValidator());
-
-            super.addValidations();
-        }
-
-        private class SignatureValidator implements EditableValueValidator<String> {
-            @Override
-            public boolean isValid(CComponent<String, ?> component, String value) {
-                return isSignatureValid(value);
-            }
-
-            @Override
-            public String getValidationMessage(CComponent<String, ?> component, String value) {
-                return i18n.tr("Digital Signature Must Match Your Name On File");
-            }
-
-            public boolean isSignatureValid(String signature) {
-                if (CommonsStringUtils.isEmpty(signature)) {
-                    return false;
+            get(proto().fullName()).addValueValidator(new EditableValueValidator<String>() {
+                @Override
+                public boolean isValid(CComponent<String, ?> component, String value) {
+                    return DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), value);
                 }
 
-                Tenant tenant = getValue().tenant().tenant();
-                return isCombinationMatch(signature, tenant.person().name().firstName(), tenant.person().name().lastName(), tenant.person().name().middleName());
-            }
-
-            private boolean isCombinationMatch(String signature, IPrimitive<String> value1, IPrimitive<String> value2, IPrimitive<String> value3) {
-                signature = signature.trim().toLowerCase().replaceAll("\\s+", " ");
-                String s1 = CommonsStringUtils.nvl(value1.getValue()).trim().toLowerCase();
-                String s2 = CommonsStringUtils.nvl(value2.getValue()).trim().toLowerCase();
-                String s3 = CommonsStringUtils.nvl(value3.getValue()).trim().toLowerCase();
-                if ((signature.equals(CommonsStringUtils.nvl_concat(s1, s2, " ")) || (signature.equals(CommonsStringUtils.nvl_concat(s2, s1, " "))))) {
-                    return true;
+                @Override
+                public String getValidationMessage(CComponent<String, ?> component, String value) {
+                    return i18n.tr("Digital Signature Must Match Your Name On File");
                 }
-                if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s1, s3, " "), s2, " ")))) {
-                    return true;
-                }
-                if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s2, s3, " "), s1, " ")))) {
-                    return true;
-                }
-                return false;
-            }
+            });
         }
     }
 }

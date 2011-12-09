@@ -43,6 +43,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
+import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.report.SummaryReport;
 import com.propertyvista.server.common.util.TenantConverter;
@@ -63,15 +64,18 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         Summary summary = EntityFactory.create(Summary.class);
         summary.setValue(summaryDTO.getValue());
 
-        if (!summaryDTO.signed().isBooleanTrue() /* && summary.application().signature().agree().isBooleanTrue() */) {
-            //TODO validate signature
-            Persistence.service().merge(summary.application().signatures());
-            Persistence.service().merge(summary.application());
+        for (DigitalSignature sig : summary.application().signatures()) {
+            if (!sig.agree().isBooleanTrue() || !DigitalSignatureValidation.isSignatureValid(sig.tenant().tenant(), sig.fullName().getValue())) {
+                // reset all if mismatch:
+                sig.agree().setValue(false);
+                sig.fullName().setValue(null);
+            }
+            Persistence.service().merge(sig);
         }
 
         saveApplicationEntity(summary);
 
-//        createSummaryDTO(summary);
+        createSummaryDTO(summary);
         callback.onSuccess(summaryDTO);
     }
 
@@ -96,7 +100,13 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         boolean allSigned = true;
         for (DigitalSignature sig : summary.application().signatures()) {
             allSigned = (allSigned && sig.agree().isBooleanTrue());
+
+            if (!sig.agree().isBooleanTrue()) { // update timestamp and IP for non-signed signatures:
+                sig.timestamp().setValue(new Date());
+                sig.ipAddress().setValue(Context.getRequestRemoteAddr());
+            }
         }
+
         summary.signed().setValue(allSigned);
 
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
@@ -115,13 +125,6 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
             summary.tenantsWithInfo().add(tis.retrieveData(tr));
             summary.tenantFinancials().add(tfs.retrieveData(tr));
-        }
-
-        if (!allSigned) { // update date and ip:
-            for (DigitalSignature sig : summary.application().signatures()) {
-                sig.timestamp().setValue(new Date());
-                sig.ipAddress().setValue(Context.getRequestRemoteAddr());
-            }
         }
 
         // TODO This should be taken from building policy

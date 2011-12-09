@@ -113,7 +113,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
                         break;
                     }
                 }
-                if (!alreadyPresent) {
+                if (!alreadyPresent) { // create signature if still absent: 
                     DigitalSignature sig = EntityFactory.create(DigitalSignature.class);
                     sig.tenant().set(tenantInLease);
                     application.signatures().add(sig);
