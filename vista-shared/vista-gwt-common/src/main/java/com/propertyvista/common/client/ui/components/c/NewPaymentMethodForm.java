@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -176,7 +176,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
     }
 
     public void onBillingAddressSameAsCurrentOne(boolean set) {
-        // Implements meaningful in derived classes...  
+        // Implements meaningful in derived classes...
     }
 
     private void setInstrumentsVisibility(PaymentType value) {
@@ -205,9 +205,9 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().bankName())));
 
                 CheckPanel checkPanel = new CheckPanel(this);
+                checkPanel.add(proto().checkNo(), 58);
                 checkPanel.add(proto().routingNo(), 85);
                 checkPanel.add(proto().accountNo(), 85);
-                checkPanel.add(proto().checkNo(), 58);
 
                 panel.add(checkPanel);
 
@@ -278,7 +278,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
         public CheckPanel(CEntityEditor<EcheckInfo> entityComponent) {
             this.entityComponent = entityComponent;
-            setWidget(1, 0, new Image(VistaImages.INSTANCE.chequeGuide()));
+            setWidget(1, 0, new Image(VistaImages.INSTANCE.canadianChequeGuide()));
             getFlexCellFormatter().setColSpan(1, 0, 3);
         }
 
