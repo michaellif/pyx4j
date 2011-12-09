@@ -133,7 +133,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                         @Override
                         public void execute() {
                             getMetadata().pageNumber().setValue(0);
-                            populate();
+                            populate(false);
                         }
                     });
                 }

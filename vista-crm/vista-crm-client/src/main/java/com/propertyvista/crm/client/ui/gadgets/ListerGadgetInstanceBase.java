@@ -76,7 +76,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         dataTablePanel.setFilterActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                populate();
+                populate(false);
             }
         });
         dataTablePanel.setFirstActionHandler(new ClickHandler() {
@@ -115,7 +115,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                 }
                 // warning: both calls are async
                 saveMetadata();
-                populate();
+                populate(false);
             }
         });
         dataTablePanel.getDataTable().addColumnSelectionChangeHandler(new DataTable.ColumnSelectionHandler() {
@@ -249,6 +249,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     public void start() {
         getMetadata().pageNumber().setValue(0);
         dataTablePanel.getDataTableModel().setSortColumn(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, getMetadata().primarySortColumn()));
+        dataTablePanel.getDataTable().renderTable();
         super.start();
     }
 
@@ -307,24 +308,24 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     private void firstListPage() {
         getMetadata().pageNumber().setValue(0);
-        populate();
+        populate(false);
     }
 
     private void nextListPage() {
         getMetadata().pageNumber().setValue(getPageNumber() + 1);
-        populate();
+        populate(false);
     }
 
     private void prevListPage() {
         if (getPageNumber() != 0) {
             getMetadata().pageNumber().setValue(getPageNumber() - 1);
-            populate();
+            populate(false);
         }
     }
 
     private void lastListPage() {
         getMetadata().pageNumber().setValue(dataTablePanel.getDataTableModel().getTotalRows() / dataTablePanel.getDataTableModel().getPageSize());
-        populate();
+        populate(false);
     }
 
     private void doPopulate() {

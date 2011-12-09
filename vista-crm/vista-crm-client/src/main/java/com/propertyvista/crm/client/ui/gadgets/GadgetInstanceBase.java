@@ -197,15 +197,20 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         return "";
     }
 
+    /** Set a callback that will run on each time refresh period and when {@link #populate(boolean)} or {@link #populate()} are exectuted. */
     protected void setDefaultPopulator(Populator populator) {
         this.defaultPopulator = populator;
     }
 
     protected void populate() {
-        populate(defaultPopulator);
+        populate(defaultPopulator, true);
     }
 
-    protected void populate(final Populator populator) {
+    protected void populate(boolean showLoadingPanel) {
+        populate(defaultPopulator, showLoadingPanel);
+    }
+
+    protected void populate(final Populator populator, boolean showLoadingPanel) {
         if (populator == null) {
             if (!GWT.isProdMode()) {
                 throw new Error("no populator provided (use setPopulator() or execute populateStart() with non null parameter!");
@@ -213,11 +218,12 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         }
         if (isRunning() & asWidget().isVisible() & asWidget().isAttached() & !isLoading) {
             refreshTimer.deactivate();
-
-            loadingPanel.setPixelSize(contentPanel.getElement().getClientWidth(), contentPanel.getElement().getClientHeight());
-            loadingPanel.setVisible(true);
+            if (showLoadingPanel) {
+                loadingPanel.setPixelSize(contentPanel.getElement().getClientWidth(), contentPanel.getElement().getClientHeight());
+                loadingPanel.setVisible(true);
+                contentPanel.setVisible(false);
+            }
             errorPanel.setVisible(false);
-            contentPanel.setVisible(false);
             isLoading = true;
 
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -257,7 +263,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     @Override
     public void start() {
         isRunning = true;
-        populate(defaultPopulator);
+        populate(defaultPopulator, true);
     }
 
     @Override
