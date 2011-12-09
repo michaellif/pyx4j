@@ -14,22 +14,17 @@
 package com.propertyvista.crm.client.ui.gadgets.addgadgetdialog;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.StyleInjector;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTree;
 import com.google.gwt.user.cellview.client.CellTree.Resources;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -38,21 +33,25 @@ import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
+import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
+import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.util.Collections2;
 import com.propertyvista.crm.client.ui.gadgets.util.Predicate;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 // TODO review styling/learn how to use the standard GWT resources
-public class GadgetDirectory extends DialogPanel {
-    public static final String STYLE = "GadgetDirectory";
+public class GadgetDirectoryDialog extends Dialog implements OkOptionText, OkCancelOption {
+    public static final String STYLE = "GadgetDirectoryDialog";
 
     public static final String GADGET_DIRECTORY_CELL_STYLE = "GadgetDirectoryCell";
 
-    private static final I18n i18n = I18n.get(GadgetDirectory.class);
+    private static final I18n i18n = I18n.get(GadgetDirectoryDialog.class);
 
     private static final double DIALOG_WIDTH = 60;
 
@@ -64,25 +63,18 @@ public class GadgetDirectory extends DialogPanel {
 
     private final ListDataProvider<IGadgetFactory> selectedGadgetsListProvider;
 
-    private boolean isOK = false;
+    private final BoardBase board;
 
     /**
      * @param dashboardType
      *            <b>Warning:</b> <code>null</code> won't be tolerated here!
      */
-    public GadgetDirectory(final DashboardType dashboardType) {
-        super(false, true);
+    public GadgetDirectoryDialog(BoardBase board) {
+        super(i18n.tr("Gadget Directory"));
+        setDialogOptions(this);
         setSize(getDialogWidth(), getDialogHeight());
-        setCaption(i18n.tr("Gadget Directory"));
-        // we add another panel to keep our own style (because setContentWidget() will try to screw our content style and change it) 
-        Widget contentPanel = new SimplePanel(createContentPanel(dashboardType, selectedGadgetsListProvider = new ListDataProvider<IGadgetFactory>()));
-        setContentWidget(contentPanel);
-        contentPanel.getElement().getStyle().clearProperty("width");
-        contentPanel.getElement().getStyle().clearProperty("height");
-    }
-
-    public List<IGadgetFactory> getSelectedGadgets() {
-        return isOK ? selectedGadgetsListProvider.getList() : null;
+        setBody(createContentPanel(board.getDashboardMetadata().type().getValue(), selectedGadgetsListProvider = new ListDataProvider<IGadgetFactory>()));
+        this.board = board;
     }
 
     private Widget createContentPanel(DashboardType dashboardType, ListDataProvider<IGadgetFactory> selectedGadgetsListProvider) {
@@ -119,33 +111,7 @@ public class GadgetDirectory extends DialogPanel {
         content.add(selectedGadgetsPanel);
         setBoxStyle(selectedGadgetsPanel.getElement().getStyle());
 
-        Widget buttonsPanel = createButtonsPanel(selectedGadgetsListProvider);
-        content.add(buttonsPanel);
-        content.setCellHorizontalAlignment(buttonsPanel, HasHorizontalAlignment.ALIGN_CENTER);
-
         return content;
-    }
-
-    private Widget createButtonsPanel(final ListDataProvider<IGadgetFactory> selectedGadgetsProvider) {
-        HorizontalPanel buttons = new HorizontalPanel();
-        buttons.add(new Button(i18n.tr("Add Selected"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (!selectedGadgetsProvider.getList().isEmpty()) {
-                    isOK = true;
-                    hide();
-                }
-            }
-        }));
-        buttons.add(new Button(i18n.tr("Close"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                isOK = false;
-                hide();
-            }
-        }));
-        buttons.setSpacing(8);
-        return buttons;
     }
 
     private Widget createCategoriesPanel(final ListDataProvider<IGadgetFactory> gadgetListProvider, DashboardType dashboardType) {
@@ -193,6 +159,9 @@ public class GadgetDirectory extends DialogPanel {
         Resources resources = GWT.create(CellTree.BasicResources.class);
         StyleInjector.injectAtEnd("." + resources.cellTreeStyle().cellTreeTopItem() + " {margin-top: 0px;}");
         // WORKAROUND END
+
+        // remove padding
+        StyleInjector.injectAtEnd("." + resources.cellTreeStyle().cellTreeItem() + " {padding: 0px;}");
         CellTree categoriesTree = new CellTree(new GadgetCategoryTreeViewModel(selectionModel, supportedGadgetP), null, resources);
         categoriesTree.setAnimationEnabled(true);
         categoriesTree.getRootTreeNode().setChildOpen(0, true);
@@ -233,5 +202,32 @@ public class GadgetDirectory extends DialogPanel {
         style.setProperty("padding", "5px");
         style.setProperty("borderStyle", "inset");
         style.setProperty("borderWidth", "1px");
+    }
+
+    @Override
+    public boolean onClickOk() {
+        if (selectedGadgetsListProvider.getList().isEmpty()) {
+            return false;
+        } else {
+            // TODO reverse list because addGadget() adds gadget to at the top
+            for (IGadgetFactory gadget : selectedGadgetsListProvider.getList()) {
+                IGadgetInstanceBase instance = gadget.createGadget(null);
+                if (instance != null) {
+                    board.addGadget(instance);
+                    instance.start();
+                }
+            }
+            return true;
+        }
+    }
+
+    @Override
+    public boolean onClickCancel() {
+        return true;
+    }
+
+    @Override
+    public String optionTextOk() {
+        return i18n.tr("Add Selected");
     }
 }

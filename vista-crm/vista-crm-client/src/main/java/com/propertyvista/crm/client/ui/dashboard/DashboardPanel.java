@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -22,14 +20,9 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -39,9 +32,7 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
-import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectory;
+import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardPanel extends BoardBase implements DashboardView {
@@ -177,30 +168,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
             addGadget.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final GadgetDirectory agb = new GadgetDirectory(getDashboardMetadata().type().getValue());
-                    agb.setPopupPositionAndShow(new PositionCallback() {
-                        @Override
-                        public void setPosition(int offsetWidth, int offsetHeight) {
-                            agb.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
-                        }
-                    });
-
-                    agb.addCloseHandler(new CloseHandler<PopupPanel>() {
-                        @Override
-                        public void onClose(CloseEvent<PopupPanel> event) {
-                            List<IGadgetFactory> gadgets = agb.getSelectedGadgets();
-                            if (gadgets != null) { // if null means cancel
-                                for (IGadgetFactory gadget : gadgets) {
-                                    IGadgetInstanceBase instance = gadget.createGadget(null);
-                                    if (instance != null) {
-                                        addGadget(instance);
-                                        instance.start();
-                                    }
-                                }
-                            }
-                        }
-                    });
-
+                    final GadgetDirectoryDialog agb = new GadgetDirectoryDialog(DashboardPanel.this);
                     agb.show();
                 }
             });

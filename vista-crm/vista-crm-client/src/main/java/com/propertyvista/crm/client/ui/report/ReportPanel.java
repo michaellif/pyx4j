@@ -20,24 +20,18 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardLayout;
 import com.pyx4j.widgets.client.dashboard.IBoard;
-import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.Reportboard;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase;
-import com.propertyvista.crm.client.ui.gadgets.AddGadgetBox;
+import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class ReportPanel extends BoardBase implements ReportView {
@@ -90,24 +84,13 @@ public class ReportPanel extends BoardBase implements ReportView {
             addGadget.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final AddGadgetBox agb = new AddGadgetBox(getDashboardMetadata().type().getValue());
-                    agb.setPopupPositionAndShow(new PositionCallback() {
-                        @Override
-                        public void setPosition(int offsetWidth, int offsetHeight) {
-                            agb.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
-                        }
-                    });
-
-                    agb.addCloseHandler(new CloseHandler<PopupPanel>() {
-                        @Override
-                        public void onClose(CloseEvent<PopupPanel> event) {
-                            IGadget gadget = agb.getSelectedGadget();
-                            if (gadget != null) {
-                                getBoard().insertGadget(gadget, (gadget.isFullWidth() ? -1 : 0), 0);
-                                gadget.start();
-                            }
-                        }
-                    });
+                    final GadgetDirectoryDialog agb = new GadgetDirectoryDialog(ReportPanel.this);
+//                    agb.setPopupPositionAndShow(new PositionCallback() {
+//                        @Override
+//                        public void setPosition(int offsetWidth, int offsetHeight) {
+//                            agb.setPopupPosition((Window.getClientWidth() - offsetWidth) / 2, (Window.getClientHeight() - offsetHeight) / 2);
+//                        }
+//                    });
 
                     agb.show();
                 }
