@@ -42,6 +42,7 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
@@ -214,7 +215,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
 
     @Override
     public java.util.List<String> getCategories() {
-        return Arrays.asList(i18n.tr("Arrears", "Chart"));
+        return Arrays.asList(Directory.Categories.Arrears.toString(), Directory.Categories.Chart.toString());
     };
 
     @Override

@@ -40,19 +40,19 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.Directory;
+import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.util.Collections2;
 import com.propertyvista.crm.client.ui.gadgets.util.Predicate;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 // TODO review styling/learn how to use the standard GWT resources
-public class AddGadgetBoxDirectory extends DialogPanel {
+public class GadgetDirectory extends DialogPanel {
     public static final String STYLE = "GadgetDirectory";
 
     public static final String GADGET_DIRECTORY_CELL_STYLE = "GadgetDirectoryCell";
 
-    private static final I18n i18n = I18n.get(AddGadgetBoxDirectory.class);
+    private static final I18n i18n = I18n.get(GadgetDirectory.class);
 
     private static final double DIALOG_WIDTH = 60;
 
@@ -62,7 +62,7 @@ public class AddGadgetBoxDirectory extends DialogPanel {
 
     private static final double SELECTED_GADGETS_HEIGHT = 10;
 
-    private final ListDataProvider<AbstractGadget<?>> selectedGadgetsListProvider;
+    private final ListDataProvider<IGadgetFactory> selectedGadgetsListProvider;
 
     private boolean isOK = false;
 
@@ -70,66 +70,63 @@ public class AddGadgetBoxDirectory extends DialogPanel {
      * @param dashboardType
      *            <b>Warning:</b> <code>null</code> won't be tolerated here!
      */
-    public AddGadgetBoxDirectory(final DashboardType dashboardType) {
+    public GadgetDirectory(final DashboardType dashboardType) {
         super(false, true);
         setSize(getDialogWidth(), getDialogHeight());
         setCaption(i18n.tr("Gadget Directory"));
-        setContentWidget(new SimplePanel(createContentPanel(dashboardType, selectedGadgetsListProvider = new ListDataProvider<AbstractGadget<?>>())));
+        // we add another panel to keep our own style (because setContentWidget() will try to screw our content style and change it) 
+        Widget contentPanel = new SimplePanel(createContentPanel(dashboardType, selectedGadgetsListProvider = new ListDataProvider<IGadgetFactory>()));
+        setContentWidget(contentPanel);
+        contentPanel.getElement().getStyle().clearProperty("width");
+        contentPanel.getElement().getStyle().clearProperty("height");
     }
 
-    public List<AbstractGadget<?>> getSelectedGadgets() {
+    public List<IGadgetFactory> getSelectedGadgets() {
         return isOK ? selectedGadgetsListProvider.getList() : null;
     }
 
-    private Widget createContentPanel(DashboardType dashboardType, ListDataProvider<AbstractGadget<?>> selectedGadgetsListProvider) {
+    private Widget createContentPanel(DashboardType dashboardType, ListDataProvider<IGadgetFactory> selectedGadgetsListProvider) {
         VerticalPanel content = new VerticalPanel();
         content.setSize("100%", "100%");
         content.setStylePrimaryName(STYLE);
         content.setSpacing(10);
 
-        HorizontalPanel directoryPanel = new HorizontalPanel();
-        directoryPanel.setSize("100%", "100%");
+        HorizontalPanel directoryBrowserPanel = new HorizontalPanel();
+        directoryBrowserPanel.setSize("100%", "100%");
 
         Widget w;
-        ListDataProvider<AbstractGadget<?>> gadgetListProvider = new ListDataProvider<AbstractGadget<?>>();
+        ListDataProvider<IGadgetFactory> gadgetListProvider = new ListDataProvider<IGadgetFactory>();
         w = createCategoriesPanel(gadgetListProvider, dashboardType);
         w.setHeight(getDirectoryBrowserHeight());
-        directoryPanel.add(w);
-        directoryPanel.setCellWidth(w, "30%");
+        directoryBrowserPanel.add(w);
+        directoryBrowserPanel.setCellWidth(w, "30%");
         setBoxStyle(w.getElement().getParentElement().getStyle());
 
         w = createGadgetsListPanel(gadgetListProvider, null, new GadgetAdditionCell(selectedGadgetsListProvider.getList()));
         w.setHeight(getDirectoryBrowserHeight());
-        directoryPanel.add(w);
-        directoryPanel.setCellWidth(w, "70%");
+        directoryBrowserPanel.add(w);
+        directoryBrowserPanel.setCellWidth(w, "70%");
         setBoxStyle(w.getElement().getParentElement().getStyle());
 
-        content.add(directoryPanel);
-        content.setCellHeight(directoryPanel, "100%");
-        content.setCellWidth(directoryPanel, getDirectoryBrowserHeight());
+        content.add(directoryBrowserPanel);
+        content.setCellHeight(directoryBrowserPanel, "100%");
+        content.setCellWidth(directoryBrowserPanel, getDirectoryBrowserHeight());
+
+        com.google.gwt.user.client.ui.CaptionPanel selectedGadgetsPanel = new com.google.gwt.user.client.ui.CaptionPanel(i18n.tr("Selected"));
+        selectedGadgetsPanel.add(createGadgetsListPanel(selectedGadgetsListProvider, null, new SelectedGadgetCell(selectedGadgetsListProvider.getList())));
+        selectedGadgetsPanel.setHeight(getSelectedGadgetsHeight());
+        content.setCellHorizontalAlignment(selectedGadgetsPanel, HasHorizontalAlignment.ALIGN_CENTER);
+        content.add(selectedGadgetsPanel);
+        setBoxStyle(selectedGadgetsPanel.getElement().getStyle());
 
         Widget buttonsPanel = createButtonsPanel(selectedGadgetsListProvider);
         content.add(buttonsPanel);
         content.setCellHorizontalAlignment(buttonsPanel, HasHorizontalAlignment.ALIGN_CENTER);
 
-        Widget selectedGadgetsPanel = createGadgetsListPanel(selectedGadgetsListProvider, null, new GadgetDescriptionCell());
-        selectedGadgetsPanel.setHeight(getSelectedGadgetsHeight());
-        content.add(selectedGadgetsPanel);
-        setBoxStyle(selectedGadgetsPanel.getElement().getParentElement().getStyle());
-
-        Widget cancelButton = new Button(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                hide();
-            }
-        });
-        content.add(cancelButton);
-        content.setCellHorizontalAlignment(cancelButton, HasHorizontalAlignment.ALIGN_CENTER);
-
         return content;
     }
 
-    private Widget createButtonsPanel(final ListDataProvider<AbstractGadget<?>> selectedGadgetsProvider) {
+    private Widget createButtonsPanel(final ListDataProvider<IGadgetFactory> selectedGadgetsProvider) {
         HorizontalPanel buttons = new HorizontalPanel();
         buttons.add(new Button(i18n.tr("Add Selected"), new ClickHandler() {
             @Override
@@ -140,31 +137,32 @@ public class AddGadgetBoxDirectory extends DialogPanel {
                 }
             }
         }));
-        buttons.add(new Button(i18n.tr("Clear"), new ClickHandler() {
+        buttons.add(new Button(i18n.tr("Close"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                selectedGadgetsProvider.getList().clear();
+                isOK = false;
+                hide();
             }
         }));
         buttons.setSpacing(8);
         return buttons;
     }
 
-    private Widget createCategoriesPanel(final ListDataProvider<AbstractGadget<?>> gadgetListProvider, DashboardType dashboardType) {
-        final Predicate<AbstractGadget<?>> supportedGadgetP;
+    private Widget createCategoriesPanel(final ListDataProvider<IGadgetFactory> gadgetListProvider, DashboardType dashboardType) {
+        final Predicate<IGadgetFactory> supportedGadgetP;
         switch (dashboardType) {
         case building:
-            supportedGadgetP = new Predicate<AbstractGadget<?>>() {
+            supportedGadgetP = new Predicate<IGadgetFactory>() {
                 @Override
-                public boolean apply(AbstractGadget<?> paramT) {
+                public boolean apply(IGadgetFactory paramT) {
                     return paramT.isBuildingGadget();
                 }
             };
             break;
         case system:
-            supportedGadgetP = new Predicate<AbstractGadget<?>>() {
+            supportedGadgetP = new Predicate<IGadgetFactory>() {
                 @Override
-                public boolean apply(AbstractGadget<?> paramT) {
+                public boolean apply(IGadgetFactory paramT) {
                     return !paramT.isBuildingGadget();
                 }
             };
@@ -175,7 +173,7 @@ public class AddGadgetBoxDirectory extends DialogPanel {
 
         final SingleSelectionModel<GadgetCategoryWrapper> selectionModel = new SingleSelectionModel<GadgetCategoryWrapper>();
         // TODO this is a HACK to show all the gadgets at the root node without root node being selected (i.e. to show all the gadgets by default when the add gadget dialog opens) : find some way to select the root node programmatically
-        gadgetListProvider.getList().addAll(new ArrayList<AbstractGadget<?>>(Collections2.filter(Directory.DIRECTORY, supportedGadgetP)));
+        gadgetListProvider.getList().addAll(new ArrayList<IGadgetFactory>(Collections2.filter(Directory.DIRECTORY, supportedGadgetP)));
 
         selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
             @Override
@@ -185,7 +183,7 @@ public class AddGadgetBoxDirectory extends DialogPanel {
                 if (gadgetCategoryWrapper != null) {
                     gadgetListProvider.getList().addAll(gadgetCategoryWrapper.getGadgets());
                 } else {
-                    gadgetListProvider.getList().addAll(new ArrayList<AbstractGadget<?>>(Collections2.filter(Directory.DIRECTORY, supportedGadgetP)));
+                    gadgetListProvider.getList().addAll(new ArrayList<IGadgetFactory>(Collections2.filter(Directory.DIRECTORY, supportedGadgetP)));
                 }
             }
         });
@@ -201,10 +199,10 @@ public class AddGadgetBoxDirectory extends DialogPanel {
         return categoriesTree;
     }
 
-    private Widget createGadgetsListPanel(final ListDataProvider<AbstractGadget<?>> gadgetListProvider, final SelectionModel<AbstractGadget<?>> selectionModel,
-            Cell<AbstractGadget<?>> gadgetCell) {
+    private Widget createGadgetsListPanel(final ListDataProvider<IGadgetFactory> gadgetListProvider, final SelectionModel<IGadgetFactory> selectionModel,
+            Cell<IGadgetFactory> gadgetCell) {
 
-        CellList<AbstractGadget<?>> gadgetList = new CellList<AbstractGadget<?>>(new StyledCell<AbstractGadget<?>>(gadgetCell, GADGET_DIRECTORY_CELL_STYLE));
+        CellList<IGadgetFactory> gadgetList = new CellList<IGadgetFactory>(new StyledCell<IGadgetFactory>(gadgetCell, GADGET_DIRECTORY_CELL_STYLE));
         gadgetList.setSelectionModel(selectionModel);
         gadgetListProvider.addDataDisplay(gadgetList);
 

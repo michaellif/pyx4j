@@ -39,9 +39,9 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase;
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.AddGadgetBoxDirectory;
+import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectory;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardPanel extends BoardBase implements DashboardView {
@@ -177,7 +177,7 @@ public class DashboardPanel extends BoardBase implements DashboardView {
             addGadget.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    final AddGadgetBoxDirectory agb = new AddGadgetBoxDirectory(getDashboardMetadata().type().getValue());
+                    final GadgetDirectory agb = new GadgetDirectory(getDashboardMetadata().type().getValue());
                     agb.setPopupPositionAndShow(new PositionCallback() {
                         @Override
                         public void setPosition(int offsetWidth, int offsetHeight) {
@@ -188,9 +188,9 @@ public class DashboardPanel extends BoardBase implements DashboardView {
                     agb.addCloseHandler(new CloseHandler<PopupPanel>() {
                         @Override
                         public void onClose(CloseEvent<PopupPanel> event) {
-                            List<AbstractGadget<?>> gadgets = agb.getSelectedGadgets();
+                            List<IGadgetFactory> gadgets = agb.getSelectedGadgets();
                             if (gadgets != null) { // if null means cancel
-                                for (AbstractGadget<?> gadget : gadgets) {
+                                for (IGadgetFactory gadget : gadgets) {
                                     IGadgetInstanceBase instance = gadget.createGadget(null);
                                     if (instance != null) {
                                         addGadget(instance);

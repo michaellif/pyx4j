@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
@@ -198,7 +199,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
     @Override
     public List<String> getCategories() {
-        return Arrays.asList(i18n.tr("Arrears"));
+        return Arrays.asList(Directory.Categories.Arrears.toString());
     }
 
     @Override

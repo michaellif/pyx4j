@@ -20,11 +20,16 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> implements IGadgetFactory {
+public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> implements IGadgetFactory, Cloneable {
 
-    private final String type;
+    protected final String type;
 
-    private final String name;
+    protected final String name;
+
+    protected AbstractGadget(String type, String name) {
+        this.type = type;
+        this.name = name;
+    }
 
     protected AbstractGadget(Class<GADGET_TYPE> gadgetMetadataClassLiteral) {
         GADGET_TYPE gadgetMetadataProto = EntityFactory.getEntityPrototype(gadgetMetadataClassLiteral);

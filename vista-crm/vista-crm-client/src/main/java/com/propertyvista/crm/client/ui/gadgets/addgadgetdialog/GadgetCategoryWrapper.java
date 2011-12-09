@@ -22,13 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
 
 public class GadgetCategoryWrapper {
     private final String category;
 
-    private final List<AbstractGadget<?>> gadgets;
+    private final List<IGadgetFactory> gadgets;
 
     private final boolean hasSubCategories;
 
@@ -42,11 +41,11 @@ public class GadgetCategoryWrapper {
      * @param gadgets
      *            must not be <code>null</code>, and contain at least one gadget.
      */
-    public GadgetCategoryWrapper(String category, List<AbstractGadget<?>> gadgets) {
+    public GadgetCategoryWrapper(String category, List<IGadgetFactory> gadgets) {
         this(category, new LinkedList<String>(), gadgets);
     }
 
-    private GadgetCategoryWrapper(String category, List<String> history, List<AbstractGadget<?>> gadgets) {
+    private GadgetCategoryWrapper(String category, List<String> history, List<IGadgetFactory> gadgets) {
         this.gadgets = gadgets;
         this.category = category;
         this.toString = category + " (" + gadgets.size() + ")";
@@ -68,12 +67,12 @@ public class GadgetCategoryWrapper {
     public List<GadgetCategoryWrapper> partition() {
         List<GadgetCategoryWrapper> partition;
         if (hasSubCategories) {
-            Map<String, List<AbstractGadget<?>>> partitionMap = new HashMap<String, List<AbstractGadget<?>>>();
-            for (AbstractGadget<?> gadget : gadgets) {
+            Map<String, List<IGadgetFactory>> partitionMap = new HashMap<String, List<IGadgetFactory>>();
+            for (IGadgetFactory gadget : gadgets) {
                 for (String subCategory : gadget.getCategories()) {
                     if (!history.contains(subCategory)) {
                         if (!partitionMap.containsKey(subCategory)) {
-                            partitionMap.put(subCategory, new LinkedList<AbstractGadget<?>>());
+                            partitionMap.put(subCategory, new LinkedList<IGadgetFactory>());
                         }
                         partitionMap.get(subCategory).add(gadget);
                     }
@@ -81,7 +80,7 @@ public class GadgetCategoryWrapper {
             }
 
             partition = new ArrayList<GadgetCategoryWrapper>(partitionMap.size());
-            for (Entry<String, List<AbstractGadget<?>>> entry : partitionMap.entrySet()) {
+            for (Entry<String, List<IGadgetFactory>> entry : partitionMap.entrySet()) {
                 partition.add(new GadgetCategoryWrapper(entry.getKey(), history, entry.getValue()));
             }
         } else {
@@ -91,7 +90,7 @@ public class GadgetCategoryWrapper {
         return partition;
     }
 
-    public Collection<AbstractGadget<?>> getGadgets() {
+    public Collection<IGadgetFactory> getGadgets() {
         return Collections.unmodifiableCollection(this.gadgets);
     }
 

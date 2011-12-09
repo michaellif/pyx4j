@@ -37,6 +37,7 @@ import com.pyx4j.widgets.client.dialog.DialogPanel;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
+@Deprecated
 public class AddGadgetBox extends DialogPanel {
     private static final GadgetFactoryCellTemplate GADGET_FACTORY_CELL_TEMPLATE = GWT.create(GadgetFactoryCellTemplate.class);
 
@@ -49,7 +50,6 @@ public class AddGadgetBox extends DialogPanel {
     private boolean isOK = false;
 
     public AddGadgetBox(final DashboardType dashboardType) {
-        // FIXME styling
         super(false, true);
         setCaption(i18n.tr("Gadget Directory"));
 

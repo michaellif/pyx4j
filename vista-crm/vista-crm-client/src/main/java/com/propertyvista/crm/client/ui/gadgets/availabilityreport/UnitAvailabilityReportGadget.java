@@ -39,6 +39,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
@@ -294,7 +295,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
     @Override
     public List<String> getCategories() {
-        return Arrays.asList(i18n.tr("Arrears"));
+        return Arrays.asList(Directory.Categories.Availability.toString());
     }
 
     @Override

@@ -16,23 +16,26 @@ package com.propertyvista.crm.client.ui.gadgets.addgadgetdialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CompositeCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.HasCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.GadgetCloner;
 import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
 
-public class GadgetAdditionCell extends CompositeCell<IGadgetFactory> {
-    private static final I18n i18n = I18n.get(GadgetAdditionCell.class);
+public class SelectedGadgetCell extends CompositeCell<IGadgetFactory> {
+    private final static I18n i18n = I18n.get(SelectedGadgetCell.class);
 
-    public GadgetAdditionCell(final List<IGadgetFactory> selectedGadgetsList) {
+    private final static GadgetCellTemplates TEMPLATES = GWT.create(GadgetCellTemplates.class);
+
+    public SelectedGadgetCell(final List<IGadgetFactory> selectedGadgetsList) {
         super(createCells(selectedGadgetsList));
     }
 
@@ -49,7 +52,7 @@ public class GadgetAdditionCell extends CompositeCell<IGadgetFactory> {
     @Override
     protected <X> void render(com.google.gwt.cell.client.Cell.Context context, IGadgetFactory value, SafeHtmlBuilder sb, HasCell<IGadgetFactory, X> hasCell) {
         Cell<X> cell = hasCell.getCell();
-        if (cell instanceof GadgetDescriptionCell) {
+        if (!(cell instanceof ActionCell)) {
             sb.appendHtmlConstant("<td style=\"padding-right : 1em; width:100%;\">");
         } else {
             sb.appendHtmlConstant("<td>");
@@ -65,8 +68,17 @@ public class GadgetAdditionCell extends CompositeCell<IGadgetFactory> {
 
     private static List<HasCell<IGadgetFactory, ?>> createCells(final List<IGadgetFactory> selectedGadgetsList) {
         List<HasCell<IGadgetFactory, ?>> hasCells = new ArrayList<HasCell<IGadgetFactory, ?>>(2);
+
         hasCells.add(new HasCell<IGadgetFactory, IGadgetFactory>() {
-            private final GadgetDescriptionCell description = new GadgetDescriptionCell();
+            private final Cell<IGadgetFactory> description = new AbstractCell<IGadgetFactory>() {
+
+                @Override
+                public void render(com.google.gwt.cell.client.Cell.Context context, IGadgetFactory value, SafeHtmlBuilder sb) {
+                    if (value != null) {
+                        sb.append(TEMPLATES.gadgetCellWithTooltipDescription(value.getName(), value.getDescription()));
+                    }
+                }
+            };
 
             @Override
             public Cell<IGadgetFactory> getCell() {
@@ -84,18 +96,19 @@ public class GadgetAdditionCell extends CompositeCell<IGadgetFactory> {
             }
         });
         hasCells.add(new HasCell<IGadgetFactory, IGadgetFactory>() {
-            final ActionCell<IGadgetFactory> addGadgetButtonCell = new ActionCell<IGadgetFactory>(i18n.tr("Select"), new ActionCell.Delegate<IGadgetFactory>() {
-                @Override
-                public void execute(IGadgetFactory gadget) {
-                    if (gadget != null) {
-                        selectedGadgetsList.add(GadgetCloner.clone(gadget));
-                    }
-                }
-            });
+            final ActionCell<IGadgetFactory> removeGadgetButtonCell = new ActionCell<IGadgetFactory>(i18n.tr("Remove"),
+                    new ActionCell.Delegate<IGadgetFactory>() {
+                        @Override
+                        public void execute(IGadgetFactory gadget) {
+                            if (gadget != null) {
+                                selectedGadgetsList.remove(gadget);
+                            }
+                        }
+                    });
 
             @Override
             public Cell<IGadgetFactory> getCell() {
-                return addGadgetButtonCell;
+                return removeGadgetButtonCell;
             }
 
             @Override

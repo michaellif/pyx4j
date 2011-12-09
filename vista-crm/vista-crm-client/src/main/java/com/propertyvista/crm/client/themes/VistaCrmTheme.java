@@ -45,7 +45,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
-import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.AddGadgetBoxDirectory;
+import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectory;
 
 public class VistaCrmTheme extends VistaTheme {
 
@@ -578,8 +578,9 @@ public class VistaCrmTheme extends VistaTheme {
     }
 
     private void initGadgetDirectoryStyles() {
-        String prefix = AddGadgetBoxDirectory.STYLE;
-        Style style = new Style("." + prefix + " ." + AddGadgetBoxDirectory.GADGET_DIRECTORY_CELL_STYLE);
+        String prefix = GadgetDirectory.STYLE;
+
+        Style style = new Style("." + prefix + " ." + GadgetDirectory.GADGET_DIRECTORY_CELL_STYLE);
         style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
         style.addProperty("color", ThemeColors.foreground);
         style.addProperty("border-width", "1px");
@@ -588,14 +589,6 @@ public class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding", "0.5em 1em");
         addStyle(style);
 
-        style = new Style("." + prefix + " ." + AddGadgetBoxDirectory.GADGET_DIRECTORY_CELL_STYLE + ":hover");
-        style.addGradient(ThemeColors.foreground, 0.0, ThemeColors.foreground, 0.1);
-        style.addProperty("cursor", "default");
-        style.addProperty("color", ThemeColors.foreground);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
-        style.addProperty("margin", "0.2em");
-        style.addProperty("padding", "0.5em 1em");
         addStyle(style);
 
     }

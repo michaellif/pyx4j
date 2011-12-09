@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.gadgets;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pyx4j.i18n.shared.I18nEnum;
+
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadget;
@@ -27,10 +29,19 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 /** Global container of all possible gadgets */
 public class Directory {
-    //@formatter:off
-    @SuppressWarnings("unchecked")
-    public static List<AbstractGadget<?>> DIRECTORY = Arrays.asList(
-        new BuildingListerGadget(),
+    public enum Categories {
+        Availability, Arrears, Chart, Buildings;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+
+    }
+
+    //@formatter:off    
+    public static List<IGadgetFactory> DIRECTORY = Arrays.asList(
+        (IGadgetFactory)new BuildingListerGadget(),
         
         new ArrearsStatusGadget(),
         new ArrearsSummaryGadget(),
@@ -47,7 +58,7 @@ public class Directory {
             return null;
         }
         String requestedGadgetType = gadgetMetadata.cast().getObjectClass().getName();
-        for (AbstractGadget<?> g : DIRECTORY) {
+        for (IGadgetFactory g : DIRECTORY) {
             if (g.getType().equals(requestedGadgetType)) {
                 return g.createGadget(gadgetMetadata);
             }

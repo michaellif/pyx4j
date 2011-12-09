@@ -29,6 +29,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
@@ -124,7 +125,7 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
 
     @Override
     public List<String> getCategories() {
-        return Arrays.asList(i18n.tr("Buildings"));
+        return Arrays.asList(Directory.Categories.Buildings.toString());
     }
 
     @Override

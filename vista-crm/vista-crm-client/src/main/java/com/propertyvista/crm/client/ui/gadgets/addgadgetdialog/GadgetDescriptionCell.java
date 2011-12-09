@@ -17,13 +17,13 @@ import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
-import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.IGadgetFactory;
 
-public class GadgetDescriptionCell extends AbstractCell<AbstractGadget<?>> {
+public class GadgetDescriptionCell extends AbstractCell<IGadgetFactory> {
     private static final GadgetCellTemplates GADGET_CELL_TEMPLATES = GWT.create(GadgetCellTemplates.class);
 
     @Override
-    public void render(com.google.gwt.cell.client.Cell.Context context, AbstractGadget<?> value, SafeHtmlBuilder sb) {
+    public void render(com.google.gwt.cell.client.Cell.Context context, IGadgetFactory value, SafeHtmlBuilder sb) {
         if (value != null) {
             sb.append(GADGET_CELL_TEMPLATES.gadgetCellWithInlineDescription(value.getName(), value.getDescription()));
         }

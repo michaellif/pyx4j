@@ -34,6 +34,7 @@ import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
@@ -168,7 +169,7 @@ public class AvailabiltySummaryGadget extends AbstractGadget<AvailabilitySummary
 
     @Override
     public List<String> getCategories() {
-        return Arrays.asList(i18n.tr("Availability"));
+        return Arrays.asList(Directory.Categories.Availability.toString());
     }
 
     @Override
