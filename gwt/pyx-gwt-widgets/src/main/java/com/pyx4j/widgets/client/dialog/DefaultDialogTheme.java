@@ -61,6 +61,8 @@ public class DefaultDialogTheme extends Theme {
 
         style = new Style(".", StyleName.DialogContent);
         style.addProperty("background-color", ThemeColors.background);
+        style.addProperty("padding", "10px 10px 0 10px");
+
         addStyle(style);
 
     }

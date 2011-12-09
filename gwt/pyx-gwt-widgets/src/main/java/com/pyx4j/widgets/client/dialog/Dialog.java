@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -155,12 +154,9 @@ public class Dialog extends DialogPanel {
 
         this.body = body;
         if (body != null) {
-            SimplePanel contentHolder = new SimplePanel();
-            contentHolder.getElement().getStyle().setPadding(10, Unit.PX);
-            contentHolder.setWidget(body);
-            content.add(contentHolder, DockPanel.CENTER);
-            content.setCellHeight(contentHolder, "100%");
-            content.setCellWidth(contentHolder, "100%");
+            content.add(body, DockPanel.CENTER);
+            content.setCellHeight(body, "100%");
+            content.setCellWidth(body, "100%");
         }
     }
 
