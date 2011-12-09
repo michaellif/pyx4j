@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,6 +27,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 
 public interface DigitalSignature extends IEntity {
 
+    @ToString
     TenantInLease tenant();
 
     @Format("MM/dd/yyyy hh:mm a")

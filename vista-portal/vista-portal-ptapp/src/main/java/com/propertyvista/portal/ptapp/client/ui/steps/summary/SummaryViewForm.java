@@ -107,7 +107,6 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         int row = -1;
 
         main.setH1(++row, 0, 1, i18n.tr("Premises"));
-
         main.setWidget(++row, 0, inject(proto().apartmentSummary(), new ApartmentView()));
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Term/Rent"));
@@ -116,7 +115,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setH1(++row, 0, 1, i18n.tr("Tenants"), createEditLink(new PtSiteMap.Tenants()));
         main.setWidget(++row, 0, inject(proto().tenantList().tenants(), new TenantFolder(false)));
 
-        main.setH1(++row, 0, 1, i18n.tr("Full info"), createEditLink(new PtSiteMap.Info()));
+        main.setH1(++row, 0, 1, i18n.tr("Information"), createEditLink(new PtSiteMap.Info()));
         main.setWidget(++row, 0, inject(proto().tenantsWithInfo(), createTenantView()));
 
         main.setH1(++row, 0, 1, i18n.tr("Financial"), createEditLink(new PtSiteMap.Financial()));
@@ -124,10 +123,12 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
         main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(this)));
 
+        main.setBR(++row, 0, 1);
+
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
         main.setWidget(++row, 0, new LeaseTermsCheck());
 
-        main.setH1(++row, 0, 1, i18n.tr("Digital Signatures"));
+        main.setH1(++row, 0, 1, i18n.tr("Digital Signature(s)"));
         main.setWidget(++row, 0, inject(proto().application().signatures(), new SignatureFolder()));
 
         return main;
@@ -225,9 +226,12 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
         public LeaseTermView() {
             int row = -1;
-            setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseFrom()), 8).build());
-            setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseTo()), 8).build());
-            setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedUnit().unitRent()), 8).build());
+
+            FormFlexPanel leasePanel = new FormFlexPanel();
+            leasePanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseFrom()), 8).build());
+            leasePanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().selectedUnit().leaseTo()), 8).build());
+            leasePanel.setWidget(1, 0, new DecoratorBuilder(inject(proto().selectedUnit().unitRent()), 8).build());
+            setWidget(++row, 0, leasePanel);
 
             consessionPanel.setH2(0, 0, 1, i18n.tr("Promotions, Discounts and Concessions"));
             consessionPanel.setWidget(1, 0, inject(proto().selectedUnit().concessions(), new ConcessionsFolder()));
