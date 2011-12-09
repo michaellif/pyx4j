@@ -21,4 +21,6 @@
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.crm.client.*" />
     
+    <!--  disable class names obfuscation -->
+    <set-configuration-property name="CssResource.style" value="stable-notype"/>
 </module>
