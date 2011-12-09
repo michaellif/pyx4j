@@ -21,12 +21,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
@@ -50,15 +50,15 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
         VerticalPanel adjust = new VerticalPanel();
+        Image info = new Image(VistaImages.INSTANCE.formTooltipHoverInfo().getSafeUri());
 
         int row = -1;
         main.setH1(++row, 0, 1, proto().incomes().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
-        Image info = new Image(ImageFactory.getImages().formTooltipInfo());
         info.setTitle("A Guarantor Is An Individual That Will Guarantee The Term Of The Lease. The Guarantor Cannot Be An Occupant Of the Suite And Is There To Assist The Applicant In The Approval Process. The Guarantor(s) Will Receive A Seperate Email With Instructions To Complete The Applications. Reminder: Only Completed Applications Will Be Processed.");
-        adjust.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+        adjust.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         adjust.add(info);
         adjust.setCellHeight(info, "26");
 
