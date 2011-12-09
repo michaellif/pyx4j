@@ -159,8 +159,7 @@ public class GadgetDirectoryDialog extends Dialog implements OkOptionText, OkCan
         Resources resources = GWT.create(CellTree.BasicResources.class);
         StyleInjector.injectAtEnd("." + resources.cellTreeStyle().cellTreeTopItem() + " {margin-top: 0px;}");
         // WORKAROUND END
-
-        // remove padding
+        // remove padding (i don't really know why it must be done here and not in the theme, but it that the way it works)
         StyleInjector.injectAtEnd("." + resources.cellTreeStyle().cellTreeItem() + " {padding: 0px;}");
         CellTree categoriesTree = new CellTree(new GadgetCategoryTreeViewModel(selectionModel, supportedGadgetP), null, resources);
         categoriesTree.setAnimationEnabled(true);
@@ -171,7 +170,7 @@ public class GadgetDirectoryDialog extends Dialog implements OkOptionText, OkCan
     private Widget createGadgetsListPanel(final ListDataProvider<IGadgetFactory> gadgetListProvider, final SelectionModel<IGadgetFactory> selectionModel,
             Cell<IGadgetFactory> gadgetCell) {
 
-        CellList<IGadgetFactory> gadgetList = new CellList<IGadgetFactory>(new StyledCell<IGadgetFactory>(gadgetCell, GADGET_DIRECTORY_CELL_STYLE));
+        CellList<IGadgetFactory> gadgetList = new CellList<IGadgetFactory>(gadgetCell);
         gadgetList.setSelectionModel(selectionModel);
         gadgetListProvider.addDataDisplay(gadgetList);
 

@@ -21,10 +21,7 @@ class GadgetCategoryCell extends AbstractCell<GadgetCategoryWrapper> {
     @Override
     public void render(com.google.gwt.cell.client.Cell.Context context, GadgetCategoryWrapper value, SafeHtmlBuilder sb) {
         if (value != null) {
-            // TODO enclosing div is temporary until I find out how to deal with resources (I don't like the idea of setting style for each cell) and customize style resource for CellTree value cell
-            sb.appendHtmlConstant("<div style=\"text-align: left; font-weight: bold;\">");
             sb.appendHtmlConstant(value.toString());
-            sb.appendHtmlConstant("</div>");
         }
     }
 }

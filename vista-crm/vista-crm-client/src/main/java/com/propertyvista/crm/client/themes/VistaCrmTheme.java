@@ -588,8 +588,9 @@ public class VistaCrmTheme extends VistaTheme {
     private void initGadgetDirectoryStyles() {
         String prefix = GadgetDirectoryDialog.STYLE;
 
-        Style style = new Style("." + prefix + " ." + GadgetDirectoryDialog.GADGET_DIRECTORY_CELL_STYLE);
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
+        // GADGETS LIST
+        Style style = new Style("." + prefix + " .cellListOddItem");
+        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.4);
         style.addProperty("color", ThemeColors.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
@@ -597,8 +598,34 @@ public class VistaCrmTheme extends VistaTheme {
         style.addProperty("padding", "0.5em 1em");
         addStyle(style);
 
+        style = new Style("." + prefix + " .cellListEvenItem");
+        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.4);
+        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "outset");
+        style.addProperty("margin", "0.2em");
+        style.addProperty("padding", "0.5em 1em");
         addStyle(style);
 
+        // CATEGORIES TREE
+        style = new Style("." + prefix + " .cellTreeItem");
+        style.addProperty("color", ThemeColors.foreground);
+        addStyle(style);
+
+        style = new Style("." + prefix + " .cellTreeSelectedItem");
+        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.4);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "outset");
+        addStyle(style);
+
+        style = new Style("." + prefix + " .cellTreeKeyboardSelectedItem");
+        style.addProperty("background-color", ThemeColors.object2);
+        addStyle(style);
+
+        style = new Style("." + prefix + " .cellTreeItemValue");
+        style.addProperty("text-align", "left");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
     }
 
 }
