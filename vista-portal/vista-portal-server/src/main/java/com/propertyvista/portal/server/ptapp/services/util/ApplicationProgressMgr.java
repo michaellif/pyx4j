@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.ptapp.services.util;
 
 import java.util.List;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -54,28 +53,6 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         return (TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18));
     }
 
-    public static boolean shouldEnterInformation(TenantInLease tenant, LogicalDate birthDate) {
-        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
-            return true;
-        }
-        if (!tenant.takeOwnership().isBooleanTrue()) {
-            return false;
-        }
-        return (TimeUtils.isOlderThen(birthDate, 18));
-    }
-
-    public static boolean shouldEnterInformation(TenantInLeaseDTO tenant, LogicalDate birthDate) {
-        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
-        if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
-            return true;
-        }
-        if (!tenant.takeOwnership().isBooleanTrue()) {
-            return false;
-        }
-        return (TimeUtils.isOlderThen(birthDate, 18));
-    }
-
     public static void invalidateChargesStep() {
         Application app = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
         ApplicationWizardStep chargesStep = findWizardStep(app, PtSiteMap.Charges.class);
@@ -99,7 +76,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         infoStep.substeps().clear();
         financialStep.substeps().clear();
         for (TenantInLeaseDTO tenant : tenants) {
-            if (shouldEnterInformation(tenant, tenant.tenant().person().birthDate().getValue())) {
+            if (shouldEnterInformation(tenant)) {
                 ApplicationWizardSubstep infoSubstep = merge(tenant, infoSubSteps);
                 infoStep.substeps().add(infoSubstep);
                 updateParentStepStatus(infoStep, infoSubstep);

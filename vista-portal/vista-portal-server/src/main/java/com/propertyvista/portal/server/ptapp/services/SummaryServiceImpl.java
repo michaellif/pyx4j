@@ -45,6 +45,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.report.SummaryReport;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
@@ -123,7 +124,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
 
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
-            if (tenantInLease.takeOwnership().isBooleanTrue()) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
                 summary.tenantsWithInfo().add(tis.retrieveData(tr));
                 summary.tenantFinancials().add(tfs.retrieveData(tr));
             }

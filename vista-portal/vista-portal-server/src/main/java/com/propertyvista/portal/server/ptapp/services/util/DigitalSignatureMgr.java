@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
@@ -42,7 +41,7 @@ public class DigitalSignatureMgr {
 
         // check/create signature for every tenant which needs it: 
         for (TenantInLease tenantInLease : tenants) {
-            if (Role.Applicant == tenantInLease.role().getValue() || tenantInLease.takeOwnership().isBooleanTrue()) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
                 boolean alreadyPresent = false;
                 for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
                     DigitalSignature sig = it.next();
