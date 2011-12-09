@@ -37,6 +37,7 @@ import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
+import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -110,7 +111,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             Persistence.service().delete(orphan);
         }
 
-//        DigitalSignatureMgr.update(application, lease.tenants());
+        DigitalSignatureMgr.update(application, lease.tenants());
         ApplicationProgressMgr.syncroizeApplicationProgress(tenants.tenants());
 
         // we need to load charges and re-calculate them

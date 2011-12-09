@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.services.util;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -43,11 +44,12 @@ public class DigitalSignatureMgr {
         for (TenantInLease tenantInLease : tenants) {
             if (Role.Applicant == tenantInLease.role().getValue() || tenantInLease.takeOwnership().isBooleanTrue()) {
                 boolean alreadyPresent = false;
-                for (DigitalSignature sig : existingSignatures) {
+                for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
+                    DigitalSignature sig = it.next();
                     if (tenantInLease.equals(sig.tenant())) {
                         alreadyPresent = true;
                         application.signatures().add(sig);
-                        existingSignatures.remove(sig);
+                        it.remove();
                         break;
                     }
                 }
@@ -60,11 +62,11 @@ public class DigitalSignatureMgr {
             }
         }
 
-        Persistence.service().persist(application);
+        Persistence.service().merge(application);
 
-        // remove orphan ones:
-        for (DigitalSignature orphan : existingSignatures) {
-            Persistence.service().delete(orphan);
-        }
+//        // remove orphan ones:
+//        for (DigitalSignature orphan : existingSignatures) {
+//            Persistence.service().delete(orphan);
+//        }
     }
 }
