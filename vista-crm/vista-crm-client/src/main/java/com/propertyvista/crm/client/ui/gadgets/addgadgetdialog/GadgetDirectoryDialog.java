@@ -14,6 +14,8 @@
 package com.propertyvista.crm.client.ui.gadgets.addgadgetdialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
@@ -208,13 +210,13 @@ public class GadgetDirectoryDialog extends Dialog implements OkOptionText, OkCan
         if (selectedGadgetsListProvider.getList().isEmpty()) {
             return false;
         } else {
-            // TODO reverse list because addGadget() adds gadget to at the top
-            for (IGadgetFactory gadget : selectedGadgetsListProvider.getList()) {
+            // reverse list because addGadget() inserts gadgets from the top
+            List<IGadgetFactory> gadgets = new ArrayList<IGadgetFactory>(selectedGadgetsListProvider.getList());
+            Collections.reverse(gadgets);
+            for (IGadgetFactory gadget : gadgets) {
                 IGadgetInstanceBase instance = gadget.createGadget(null);
-                if (instance != null) {
-                    board.addGadget(instance);
-                    instance.start();
-                }
+                board.addGadget(instance);
+                instance.start();
             }
             return true;
         }
