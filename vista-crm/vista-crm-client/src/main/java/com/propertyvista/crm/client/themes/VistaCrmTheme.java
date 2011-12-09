@@ -137,6 +137,14 @@ public class VistaCrmTheme extends VistaTheme {
         addStyle(style);
     }
 
+    @Override
+    protected void initBodyStyles() {
+        super.initBodyStyles();
+        Style style = new Style("body");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+    }
+
     protected void intitNavigationStyles() {
         String prefix = NavigViewImpl.DEFAULT_STYLE_PREFIX;
 
