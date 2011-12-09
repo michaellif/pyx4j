@@ -248,7 +248,6 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                         getOkButton().setEnabled((event.getValue()) != null);
                     }
                 });
-                combo.setWidth("100%");
 
                 return combo.asWidget();
             } else {
