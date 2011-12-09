@@ -28,16 +28,15 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -103,32 +102,15 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             // update current tenants:
             tenantInApplication.setPrimaryKey(tenantInLease.getPrimaryKey());
             currentTenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
-
-            // update digital signatures:
-            if (Role.Applicant == tenantInLease.role().getValue() || tenantInLease.takeOwnership().isBooleanTrue()) {
-                boolean alreadyPresent = false;
-                for (DigitalSignature sig : application.signatures()) {
-                    if (tenantInLease.equals(sig.tenant())) {
-                        alreadyPresent = true;
-                        break;
-                    }
-                }
-                if (!alreadyPresent) { // create signature if still absent: 
-                    DigitalSignature sig = EntityFactory.create(DigitalSignature.class);
-                    sig.tenant().set(tenantInLease);
-                    application.signatures().add(sig);
-                    Persistence.service().persist(sig);
-                }
-            }
         }
 
-        Persistence.service().persist(application);
         Persistence.service().persist(lease);
 
         for (TenantInLease orphan : existingTenants) {
             Persistence.service().delete(orphan);
         }
 
+//        DigitalSignatureMgr.update(application, lease.tenants());
         ApplicationProgressMgr.syncroizeApplicationProgress(tenants.tenants());
 
         // we need to load charges and re-calculate them

@@ -123,8 +123,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
 
             summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
-            summary.tenantsWithInfo().add(tis.retrieveData(tr));
-            summary.tenantFinancials().add(tfs.retrieveData(tr));
+            if (tenantInLease.takeOwnership().isBooleanTrue()) {
+                summary.tenantsWithInfo().add(tis.retrieveData(tr));
+                summary.tenantFinancials().add(tfs.retrieveData(tr));
+            }
         }
 
         // TODO This should be taken from building policy
