@@ -20,9 +20,6 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
@@ -45,11 +42,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMoveHandler, MouseUpHandler, MouseDownHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(DialogPanel.class);
 
     private static final int DRAG_ZONE_WIDTH = 5;
 
@@ -88,7 +84,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
 
     private final DockPanel container;
 
-    private Widget contentWidget;
+    private final SimplePanel contentHolder;
 
     private int clientWindowLeft;
 
@@ -134,6 +130,11 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         captionPanel = new CaptionPanel();
         container.add(captionPanel, DockPanel.NORTH);
 
+        contentHolder = new SimplePanel();
+        contentHolder.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContentHolder.name());
+        container.add(contentHolder, DockPanel.CENTER);
+        container.setCellHeight(contentHolder, "100%");
+
         setWidget(container);
 
         addDomHandler(this, MouseMoveEvent.getType());
@@ -143,19 +144,8 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
     }
 
     public void setContentWidget(Widget widget) {
-
-        if (contentWidget != null) {
-            container.remove(contentWidget);
-        }
-
-        contentWidget = widget;
-
-        container.add(contentWidget, DockPanel.CENTER);
-        contentWidget.setSize("100%", "100%");
-
-        contentWidget.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
-        container.setCellHeight(contentWidget, "100%");
-
+        contentHolder.setWidget(widget);
+        widget.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
     }
 
     public void setCaption(String caption) {
@@ -271,8 +261,8 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
             setPixelSize(width - 2 * DRAG_ZONE_WIDTH, height - 2 * DRAG_ZONE_WIDTH);
             setPopupPosition(left, top);
 
-            if (contentWidget instanceof RequiresResize) {
-                ((RequiresResize) contentWidget).onResize();
+            if (contentHolder.getWidget() instanceof RequiresResize) {
+                ((RequiresResize) contentHolder.getWidget()).onResize();
             }
 
         }

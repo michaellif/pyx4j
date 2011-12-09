@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColors;
 public class DefaultDialogTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Dialog, DialogCaption, DialogResizer, DialogContent,
+        Dialog, DialogCaption, DialogResizer, DialogContent, DialogContentHolder
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -42,7 +42,7 @@ public class DefaultDialogTheme extends Theme {
 
     protected void initStyles() {
         Style style = new Style(".", StyleName.Dialog);
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
+        style.addProperty("background-color", ThemeColors.object1, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.DialogCaption);
@@ -59,10 +59,14 @@ public class DefaultDialogTheme extends Theme {
         style.addProperty("opacity", "0.95");
         addStyle(style);
 
-        style = new Style(".", StyleName.DialogContent);
+        style = new Style(".", StyleName.DialogContentHolder);
         style.addProperty("background-color", ThemeColors.background);
-        style.addProperty("padding", "10px 10px 0 10px");
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
+        addStyle(style);
 
+        style = new Style(".", StyleName.DialogContent);
+        style.addProperty("padding", "10px");
         addStyle(style);
 
     }
