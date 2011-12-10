@@ -373,11 +373,17 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public void setValue(DATA_TYPE value) {
+        setValue(value, false);
+    }
+
+    public void setValue(DATA_TYPE value, boolean fireEvent) {
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             setNativeValue(value);
             revalidate();
-            ValueChangeEvent.fire(this, value);
+            if (fireEvent) {
+                ValueChangeEvent.fire(this, value);
+            }
         }
     }
 
