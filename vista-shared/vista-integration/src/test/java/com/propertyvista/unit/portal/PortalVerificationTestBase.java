@@ -51,7 +51,7 @@ import com.propertyvista.server.common.util.TenantConverter;
 abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
 
     protected static boolean shouldEnterInformation(TenantSummaryGDO tenantSummary) {
-        return ApplicationProgressMgr.shouldEnterInformation(tenantSummary.tenantInLease(), tenantSummary.tenant().person().birthDate().getValue());
+        return ApplicationProgressMgr.shouldEnterInformation(tenantSummary.tenantInLease());
     }
 
     protected void assertAptUnitForm(IDebugId formDebugId, AptUnitDTO aUnit) {
