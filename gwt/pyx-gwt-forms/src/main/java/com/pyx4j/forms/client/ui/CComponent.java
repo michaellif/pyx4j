@@ -373,7 +373,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public void setValue(DATA_TYPE value) {
-        setValue(value, false);
+        setValue(value, true);
     }
 
     public void setValue(DATA_TYPE value, boolean fireEvent) {
