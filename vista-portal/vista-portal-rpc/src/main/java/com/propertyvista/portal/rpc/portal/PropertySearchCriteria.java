@@ -24,6 +24,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+
 @Transient
 public interface PropertySearchCriteria extends IEntity {
 
@@ -127,6 +129,10 @@ public interface PropertySearchCriteria extends IEntity {
             return choice;
         }
 
+        public Integer getBeds() {
+            return beds;
+        }
+
         @Override
         public String toString() {
             return I18nEnum.toString(this);
@@ -155,22 +161,19 @@ public interface PropertySearchCriteria extends IEntity {
             return choice;
         }
 
+        public Integer getBaths() {
+            return bath;
+        }
+
         @Override
         public String toString() {
             return I18nEnum.toString(this);
         }
     }
 
-    @I18n
-    public static enum AmenityType {
-
-        Elevator, Fitness, Parking, Pool, Garage;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
+    public static final BuildingAmenity.Type[] AmenityChoice = { BuildingAmenity.Type.elevator, BuildingAmenity.Type.fitness, BuildingAmenity.Type.garage,
+            BuildingAmenity.Type.laundry, BuildingAmenity.Type.parking, BuildingAmenity.Type.pool, BuildingAmenity.Type.concierge,
+            BuildingAmenity.Type.childCare };
 
     @NotNull
     @Caption(name = "Search By")
@@ -198,7 +201,7 @@ public interface PropertySearchCriteria extends IEntity {
 
     IPrimitive<Integer> maxPrice();
 
-    IPrimitiveSet<AmenityType> amenities();
+    IPrimitiveSet<BuildingAmenity.Type> amenities();
 
     /**
      * don't use in criteria

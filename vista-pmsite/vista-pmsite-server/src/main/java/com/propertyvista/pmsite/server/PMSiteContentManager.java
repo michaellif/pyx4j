@@ -16,18 +16,24 @@ package com.propertyvista.pmsite.server;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -53,12 +59,16 @@ import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BathroomChoice;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomChoice;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private static Logger log = LoggerFactory.getLogger(PMSiteContentManager.class);
 
     private static final I18n i18n = I18n.get(PMSiteContentManager.class);
 
@@ -328,7 +338,83 @@ public class PMSiteContentManager implements Serializable {
             GeoPoint centerPoint = searchCriteria.geolocation().getValue();
             // ... define dbCriteria here ...
         }
+
+        // create floorplan criteria
+        EntityQueryCriteria<Floorplan> fpCriteria = EntityQueryCriteria.create(Floorplan.class);
+
+        // 1. filter units
+        EntityQueryCriteria<AptUnit> auCriteria = EntityQueryCriteria.create(AptUnit.class);
+        // price
+        Integer minPrice = searchCriteria.minPrice().getValue();
+        if (minPrice != null) {
+            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.GREATER_THAN_OR_EQUAL, minPrice));
+        }
+        Integer maxPrice = searchCriteria.maxPrice().getValue();
+        if (maxPrice != null && maxPrice > 0) {
+            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, maxPrice));
+        }
+        // prepare new floorplan list 1
+        final Set<Key> fpSet1 = new HashSet<Key>();
+        for (AptUnit unit : Persistence.service().query(auCriteria)) {
+            fpSet1.add(unit.floorplan().getPrimaryKey());
+        }
+        if (fpSet1.size() > 0) {
+            fpCriteria.add(PropertyCriterion.in(fpCriteria.proto().id(), fpSet1.toArray((Serializable[]) new Key[0])));
+        } else {
+            // nothing found, exit now
+            return null;
+        }
+
+        // 2. filter amenities (single match gets building in)
+        EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+        if (searchCriteria.amenities().size() > 0) {
+            amCriteria.add(PropertyCriterion.in(amCriteria.proto().type(), searchCriteria.amenities().toArray((Serializable[]) new BuildingAmenity.Type[0])));
+            // prepare new building filter list 1
+            final Set<Key> bldFilter1 = new HashSet<Key>();
+            for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
+                bldFilter1.add(am.belongsTo().getPrimaryKey());
+            }
+            // filter floorplans with amenities
+            if (bldFilter1.size() > 0) {
+                dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1.toArray((Serializable[]) new Key[0])));
+            } else {
+                // nothing found, exit now
+                return null;
+            }
+        }
+        // beds
+        BedroomChoice minBeds = searchCriteria.minBeds().getValue();
+        if (minBeds != null && minBeds != BedroomChoice.Any) {
+            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bedrooms(), Restriction.GREATER_THAN_OR_EQUAL, minBeds.getBeds()));
+        }
+        BedroomChoice maxBeds = searchCriteria.maxBeds().getValue();
+        if (maxBeds != null && maxBeds != BedroomChoice.Any) {
+            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bedrooms(), Restriction.LESS_THAN_OR_EQUAL, minBeds.getBeds()));
+        }
+        // baths
+        BathroomChoice minBaths = searchCriteria.minBaths().getValue();
+        if (minBaths != null && minBaths != BathroomChoice.Any) {
+            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bathrooms(), Restriction.GREATER_THAN_OR_EQUAL, minBaths.getBaths()));
+        }
+        BathroomChoice maxBaths = searchCriteria.maxBaths().getValue();
+        if (maxBaths != null && maxBaths != BathroomChoice.Any) {
+            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bathrooms(), Restriction.LESS_THAN_OR_EQUAL, minBaths.getBaths()));
+        }
+        // prepare building filter list 2
+        final Set<Key> bldFilter2 = new HashSet<Key>();
+        for (Floorplan fp : Persistence.service().query(fpCriteria)) {
+            bldFilter2.add(fp.building().getPrimaryKey());
+        }
+        // now filter buildings
+        if (bldFilter2.size() > 0) {
+            dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter2.toArray((Serializable[]) new Key[0])));
+        } else {
+            // nothing found, exit now
+            return null;
+        }
+        // get buildings
         final List<Building> buildings = Persistence.service().query(dbCriteria);
+        // sanity check
         ArrayList<Building> remove = new ArrayList<Building>();
         for (Building bld : buildings) {
             // do some sanity check
@@ -346,6 +432,7 @@ public class PMSiteContentManager implements Serializable {
             }
         }
         buildings.removeAll(remove);
+        log.info("Found buildings: " + buildings.size());
 
         return buildings;
     }

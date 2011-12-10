@@ -24,6 +24,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
 
@@ -39,6 +41,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
@@ -50,7 +53,6 @@ import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourc
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.AmenityType;
 
 public class AptListPage extends BasePage {
 
@@ -97,7 +99,7 @@ public class AptListPage extends BasePage {
         List<String> amenities = argsE.get("amenities");
         if (amenities != null) {
             for (int i = 0; i < amenities.size(); i++) {
-                criteria.amenities().add(AmenityType.valueOf(amenities.get(i)));
+                criteria.amenities().add(BuildingAmenity.Type.valueOf(amenities.get(i)));
             }
         }
         if (criteria.searchType().getValue() == null) {
@@ -120,6 +122,11 @@ public class AptListPage extends BasePage {
 
         add(form);
 
+        IRequestHandler curHandler = getRequestCycle().getActiveRequestHandler();
+        if (ListenerInterfaceRequestHandler.class.isAssignableFrom(curHandler.getClass())) {
+            // asked for the form - no need to render any data
+            return;
+        }
         ViewMode viewMode = ViewMode.map;
         if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
             // check view mode - Map/List

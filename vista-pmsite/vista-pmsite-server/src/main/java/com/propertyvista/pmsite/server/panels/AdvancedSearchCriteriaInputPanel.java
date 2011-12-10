@@ -35,6 +35,7 @@ import org.apache.wicket.validation.validator.MinimumValidator;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
@@ -144,8 +145,8 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new TextField<Integer>("maxPrice", model.bind(criteria.maxPrice())).add(new MinimumValidator<Integer>(100)));
 
         // amenities
-        CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType> checkBoxMultipleChoice = new CheckBoxMultipleChoice<PropertySearchCriteria.AmenityType>(
-                "amenities", model.bind(criteria.amenities()), Arrays.asList(PropertySearchCriteria.AmenityType.values()));
+        CheckBoxMultipleChoice<BuildingAmenity.Type> checkBoxMultipleChoice = new CheckBoxMultipleChoice<BuildingAmenity.Type>("amenities", model.bind(criteria
+                .amenities()), Arrays.asList(PropertySearchCriteria.AmenityChoice));
         add(checkBoxMultipleChoice);
     }
 }
