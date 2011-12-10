@@ -66,6 +66,7 @@ public class TenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuaran
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 9).build());
 
         int col = 1;
         if (!isEditable() || !isTwoColumns()) {
