@@ -360,6 +360,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         if (!isValuesEquals(getValue(), value)) {
             setNativeValue(value);
             update(value);
+            onEditingStop();
         }
     }
 
