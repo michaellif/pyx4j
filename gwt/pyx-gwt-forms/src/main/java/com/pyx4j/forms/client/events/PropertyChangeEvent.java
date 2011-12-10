@@ -114,7 +114,7 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
 }

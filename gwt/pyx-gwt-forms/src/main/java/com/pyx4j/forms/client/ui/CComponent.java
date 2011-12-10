@@ -458,10 +458,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         return visited;
     }
 
-    public void setVisited(boolean visited) {
-        this.visited = visited;
-        if (this.visited) {
-            revalidate();
+    public void setVisited(boolean newVisited) {
+        if (newVisited != visited) {
+            visited = newVisited;
+            if (this.visited) {
+                revalidate();
+            }
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visited);
         }
     }
 
@@ -553,7 +556,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public void onEditingStop() {
         if (isEnabled() && isVisible() && isEditable()) {
-            visited = true;
             editing = false;
             parseFailed = false;
             try {
@@ -563,6 +565,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 // Initiate not valid state:
                 validationMessage = e.getMessage();
                 setValid(false);
+                setVisited(true);
+            }
+
+            //mark as visited if 
+            if (!isValueEmpty() && !isVisited()) {
+                setVisited(true);
             }
         }
     }
