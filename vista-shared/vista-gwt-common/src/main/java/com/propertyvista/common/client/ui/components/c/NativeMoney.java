@@ -28,7 +28,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
 import com.pyx4j.forms.client.ui.INativeFocusComponent;
 import com.pyx4j.widgets.client.TextBox;
 
@@ -142,12 +145,15 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     }
 
     @Override
-    public void setValid(boolean valid) {
-        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
-        if (valid) {
-            removeStyleDependentName(dependentSuffix);
-        } else {
-            addStyleDependentName(dependentSuffix);
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (cComponent.isValid()) {
+                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (cComponent.isVisited()) {
+                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 

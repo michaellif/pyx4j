@@ -32,8 +32,6 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.common.client.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
@@ -183,10 +181,6 @@ public class PortalTheme extends VistaTheme {
         style.addProperty("border-top-color", ThemeColors.object1, 0.4);
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
-        style.addProperty("padding-top", "2px");
         addStyle(style);
 
         String gwtButton = (".gwt-Button");

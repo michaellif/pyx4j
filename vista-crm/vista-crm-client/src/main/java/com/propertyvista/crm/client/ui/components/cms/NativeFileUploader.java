@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.forms.client.ui.NativeTriggerComponent;
@@ -135,7 +136,7 @@ public class NativeFileUploader extends NativeTriggerComponent<File> implements 
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
         // TODO Auto-generated method stub
 
     }

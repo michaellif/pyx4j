@@ -108,7 +108,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + i18n.tr("New Item..."));
             form.setActiveTab(0);
         } else {
-            ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + value.getStringView());
+            ((CrmTitleBar) getHeader()).setCaption(defaultCaption + " " + (value == null ? "" : value.getStringView()));
         }
 
         super.populate(value);
