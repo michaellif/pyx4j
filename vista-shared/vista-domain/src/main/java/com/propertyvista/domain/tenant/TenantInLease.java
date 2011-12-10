@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -33,6 +34,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@ToStringFormat("{0} - {1}, {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface TenantInLease extends IBoundToApplication {
 
@@ -94,11 +96,11 @@ public interface TenantInLease extends IBoundToApplication {
     @ToString(index = 0)
     Tenant tenant();
 
-    @ToString(index = 1)
+    @ToString(index = 2)
     @NotNull
     IPrimitive<Relationship> relationship();
 
-    @ToString(index = 2)
+    @ToString(index = 1)
     @NotNull
     @MemberColumn(name = "status")
     IPrimitive<Role> role();
