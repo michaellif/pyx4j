@@ -150,7 +150,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
             if (!applicant && !value.tenant().person().birthDate().isNull()) {
                 if (ValidationUtils.isOlderThen18(value.tenant().person().birthDate().getValue())) {
-                    enableStatusAndOwnership();
+                    enableRoleAndOwnership();
                 } else {
                     setMandatoryDependant();
                 }
@@ -184,11 +184,11 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                        TenantInLease.Role status = getValue().role().getValue();
-                        if ((status == null) || (status == TenantInLease.Role.Dependent)) {
+                        TenantInLease.Role role = getValue().role().getValue();
+                        if ((role == null) || (role == TenantInLease.Role.Dependent)) {
                             if (ValidationUtils.isOlderThen18(event.getValue())) {
                                 boolean currentEditableState = get(proto().role()).isEditable();
-                                enableStatusAndOwnership();
+                                enableRoleAndOwnership();
                                 if (!currentEditableState) {
                                     get(proto().role()).setValue(null);
                                 }
@@ -200,6 +200,14 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 });
 
                 get(proto().role()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Role>(get(proto().tenant().person().birthDate())));
+                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<TenantInLease.Role>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Role> event) {
+                        if (Role.Dependent == event.getValue() && !ValidationUtils.isOlderThen18(get(proto().tenant().person().birthDate()).getValue())) {
+                            setMandatoryDependant();
+                        }
+                    }
+                });
             }
         }
 
@@ -211,7 +219,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
             get(proto().takeOwnership()).setEnabled(false);
         }
 
-        private void enableStatusAndOwnership() {
+        private void enableRoleAndOwnership() {
             get(proto().role()).setEditable(true);
             get(proto().takeOwnership()).setEnabled(true);
         }

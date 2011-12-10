@@ -180,7 +180,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
             if (!applicant && !value.tenant().person().birthDate().isNull()) {
                 if (ValidationUtils.isOlderThen18(value.tenant().person().birthDate().getValue())) {
-                    enableStatusAndOwnership();
+                    enableRole();
                 } else {
                     setMandatoryDependant();
                 }
@@ -215,11 +215,11 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                        TenantInLease.Role status = getValue().role().getValue();
-                        if ((status == null) || (status == TenantInLease.Role.Dependent)) {
+                        TenantInLease.Role role = getValue().role().getValue();
+                        if ((role == null) || (role == TenantInLease.Role.Dependent)) {
                             if (ValidationUtils.isOlderThen18(event.getValue())) {
                                 boolean currentEditableState = get(proto().role()).isEditable();
-                                enableStatusAndOwnership();
+                                enableRole();
                                 if (!currentEditableState) {
                                     get(proto().role()).setValue(null);
                                 }
@@ -239,7 +239,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             get(proto().role()).setEditable(false);
         }
 
-        private void enableStatusAndOwnership() {
+        private void enableRole() {
             get(proto().role()).setEditable(true);
         }
     }
