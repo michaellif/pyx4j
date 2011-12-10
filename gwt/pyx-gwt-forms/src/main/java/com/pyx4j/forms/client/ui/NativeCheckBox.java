@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CCheckBox.Alignment;
 import com.pyx4j.widgets.client.CheckBox;
 
@@ -105,7 +106,7 @@ public class NativeCheckBox extends CheckBox implements INativeFocusComponent<Bo
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
 }

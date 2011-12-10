@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.TextBox;
 
 public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E> {
@@ -102,11 +104,15 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     }
 
     @Override
-    public void setValid(boolean valid) {
-        if (valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
             removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (delegate.getCComponent().isVisited()) {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (delegate.getCComponent().isValid()) {
+                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (delegate.getCComponent().isVisited()) {
+                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 

@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.List;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
 public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
@@ -58,7 +59,7 @@ public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
 }

@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.ListBox;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
 //TODO doesn't follow convention on calling onEditStop+update
@@ -164,7 +165,7 @@ public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
 }

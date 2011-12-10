@@ -25,6 +25,8 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+
 public class NativeLabel<E> extends HTML implements INativeReference<E> {
 
     private final CAbstractLabel<E> cComponent;
@@ -97,7 +99,7 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
         // do nothing - actually it's valid always...
     }
 

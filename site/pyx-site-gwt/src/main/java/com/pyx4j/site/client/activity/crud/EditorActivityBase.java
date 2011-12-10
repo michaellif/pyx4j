@@ -107,9 +107,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+        view.populate(null);
         view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
-        panel.setWidget(view);
+        containerWidget.setWidget(view);
         populate();
     }
 

@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.DOM;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.widgets.client.TextArea;
 
 public class NativeTextArea extends TextArea implements INativeFocusComponent<String> {
@@ -90,7 +91,7 @@ public class NativeTextArea extends TextArea implements INativeFocusComponent<St
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
 }

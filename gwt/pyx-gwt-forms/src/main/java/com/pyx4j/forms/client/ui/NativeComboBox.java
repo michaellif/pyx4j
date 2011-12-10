@@ -27,6 +27,8 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
 
@@ -261,11 +263,15 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
     }
 
     @Override
-    public void setValid(boolean valid) {
-        if (valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
             removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (comboBox.isVisited()) {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
+            if (comboBox.isValid()) {
+                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (comboBox.isVisited()) {
+                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 

@@ -28,6 +28,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.widgets.client.RichTextArea;
 import com.pyx4j.widgets.client.richtext.BasikRichTextToolbar;
 
@@ -190,7 +191,7 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
     @Override

@@ -29,6 +29,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
 public class NativeCaptcha extends CaptchaComposite implements INativeFocusComponent<Pair<String, String>> {
@@ -94,11 +96,15 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
     }
 
     @Override
-    public void setValid(boolean valid) {
-        if (valid) {
-            getResponseTextBox().removeStyleDependentName(StyleDependent.invalid.name());
-        } else if (component.isVisited()) {
-            getResponseTextBox().addStyleDependentName(StyleDependent.invalid.name());
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
+            getResponseTextBox().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (component.isValid()) {
+                getResponseTextBox().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (component.isVisited()) {
+                getResponseTextBox().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 

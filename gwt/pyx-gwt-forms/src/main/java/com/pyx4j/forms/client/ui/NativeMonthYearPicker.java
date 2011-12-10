@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.widgets.client.MonthYearPicker;
 
 public class NativeMonthYearPicker extends MonthYearPicker implements INativeFocusComponent<Date> {
@@ -121,7 +122,7 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
     @Override

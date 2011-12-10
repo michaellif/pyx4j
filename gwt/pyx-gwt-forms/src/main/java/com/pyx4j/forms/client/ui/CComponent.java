@@ -41,7 +41,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.GWTJava5Helper;
-import com.pyx4j.commons.ICloneable;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -261,8 +260,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         applyAccessibilityRules();
         asWidget().setWidth(getWidth());
         asWidget().setHeight(getHeight());
-        asWidget().setValid(isValid());
         setNativeValue(getValue());
+        this.addPropertyChangeHandler(asWidget());
     }
 
     public boolean isWidgetCreated() {
@@ -341,9 +340,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     protected void setValid(boolean newValid) {
         if (newValid != valid) {
             valid = newValid;
-            if (isWidgetCreated()) {
-                asWidget().setValid(valid);
-            }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
     }
@@ -401,25 +397,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
         this.value = value;
         setNativeValue(value);
-        /*
-         * Note: isValueEmpty() is overrided in some ancestors (CTextFieldBase) to check value emptiness of native component.
-         * In case of form RE-population that native component already created and holds some PREVIOUS value!.. So it's necessary
-         * to set native component to populating value BEFORE evaluation of visited status!
-         */
-        this.visited = !isValueEmpty();
-
-        revalidate();
+        setVisited(false);
 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
     }
 
-    @SuppressWarnings("unchecked")
-    public void populateMutable(ICloneable<DATA_TYPE> value) {
-        populate((DATA_TYPE) value);
-    }
-
     public boolean isValueEmpty() {
-        return (getValue() == null);
+        return getValue() == null;
     }
 
     public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
@@ -535,8 +519,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
 
         return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
-                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getTooltip()
-                + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
+                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isVisited=" + isVisited() + "; isValid=" + isValid()
+                + "; toolTip=" + getTooltip() + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
     public String shortDebugInfo() {

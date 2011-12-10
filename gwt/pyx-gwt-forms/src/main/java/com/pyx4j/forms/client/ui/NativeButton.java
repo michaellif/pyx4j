@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.widgets.client.Button;
 
 public class NativeButton extends Button implements INativeFocusComponent<Void> {
@@ -88,8 +89,6 @@ public class NativeButton extends Button implements INativeFocusComponent<Void> 
     }
 
     @Override
-    public void setValid(boolean valid) {
-        // TODO Auto-generated method stub
-
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 }

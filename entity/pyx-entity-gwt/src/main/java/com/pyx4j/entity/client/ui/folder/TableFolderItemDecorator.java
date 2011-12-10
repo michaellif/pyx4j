@@ -37,6 +37,7 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
@@ -93,8 +94,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         contentHolder.setWidget(folderItem.createContent());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
-            public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.valid) {
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.valid)) {
                     validationMessageHolder.setHTML(folderItem.getValidationResults().getMessagesText(true));
                 }
             }

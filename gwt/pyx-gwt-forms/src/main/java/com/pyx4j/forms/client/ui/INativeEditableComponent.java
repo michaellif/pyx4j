@@ -22,7 +22,25 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-public interface INativeEditableComponent<E> extends INativeComponent {
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
+
+public interface INativeEditableComponent<E> extends IsWidget, PropertyChangeHandler {
+
+    public void setEnabled(boolean enabled);
+
+    public boolean isEnabled();
+
+    public void setVisible(boolean visible);
+
+    public boolean isVisible();
+
+    public CComponent<?, ?> getCComponent();
+
+    public void setWidth(String width);
+
+    public void setHeight(String height);
 
     public void setEditable(boolean editable);
 
@@ -31,7 +49,5 @@ public interface INativeEditableComponent<E> extends INativeComponent {
     void setNativeValue(E value);
 
     E getNativeValue() throws ParseException;
-
-    void setValid(boolean valid);
 
 }

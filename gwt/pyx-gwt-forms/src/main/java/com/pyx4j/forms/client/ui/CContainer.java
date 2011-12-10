@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -73,7 +74,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            if (PropertyChangeEvent.PropertyName.valid.equals(event.getPropertyName())) {
+                            if (event.isEventOfType(PropertyName.valid)) {
                                 log.trace("CContainer.onPropertyChange fired from {}. Changed property is {}.", shortDebugInfo(), event.getPropertyName());
                                 revalidate();
                                 PropertyChangeEvent.fire(CContainer.this, PropertyChangeEvent.PropertyName.valid);

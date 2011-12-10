@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
@@ -97,9 +98,6 @@ public class WidgetDecorator extends FlexTable {
 
         Cursor.setDefault(label.getElement());
 
-        if (nativeComponent == null) {
-            throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
-        }
         if (nativeComponent instanceof NativeCheckBox) {
             ((NativeCheckBox) nativeComponent).setText(null);
         }
@@ -132,16 +130,16 @@ public class WidgetDecorator extends FlexTable {
 
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
-            public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     label.setVisible(component.isVisible());
                     setVisible(component.isVisible());
-                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
                     label.setText(component.getTitle() + ":");
-                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.valid) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
                     renderValidationMessage();
+                    renderMandatoryStar();
                 }
-                renderMandatoryStar();
             }
         });
 
@@ -199,35 +197,29 @@ public class WidgetDecorator extends FlexTable {
     }
 
     protected void renderMandatoryStar() {
-        if (component instanceof CComponent<?, ?>) {
-            if (!((CComponent<?, ?>) component).isMandatoryConditionMet()) {
-                if (mandatoryImage == null) {
-                    mandatoryImage = new Image();
-                    mandatoryImage.setResource(ImageFactory.getImages().mandatory());
-                    mandatoryImage.setTitle("This field is mandatory");
-                }
-                mandatoryImageHolder.add(mandatoryImage);
-            } else {
-                mandatoryImageHolder.clear();
+        if (!((CComponent<?, ?>) component).isMandatoryConditionMet()) {
+            if (mandatoryImage == null) {
+                mandatoryImage = new Image();
+                mandatoryImage.setResource(ImageFactory.getImages().mandatory());
+                mandatoryImage.setTitle("This field is mandatory");
             }
+            mandatoryImageHolder.add(mandatoryImage);
         } else {
             mandatoryImageHolder.clear();
         }
     }
 
     protected void renderValidationMessage() {
-        if (component instanceof CComponent<?, ?>) {
-            CComponent<?, ?> editableComponent = component;
-            if (!editableComponent.isValid()) {
-                if (!editableComponent.isMandatoryConditionMet()) {
-                    validationLabel.setText(editableComponent.getMandatoryValidationMessage());
-                } else {
-                    validationLabel.setText(editableComponent.getValidationMessage());
-                }
+        if (component.isVisited() && !component.isValid()) {
+            if (!component.isMandatoryConditionMet()) {
+                validationLabel.setText(component.getMandatoryValidationMessage());
             } else {
-                validationLabel.setText(null);
+                validationLabel.setText(component.getValidationMessage());
             }
+        } else {
+            validationLabel.setText(null);
         }
+
     }
 
     public static class Builder {

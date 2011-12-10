@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.Comparator;
 import java.util.List;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -95,7 +96,7 @@ public abstract class ListSelectionPopup<E> extends Dialog {
         }
 
         @Override
-        public void setValid(boolean valid) {
+        public void onPropertyChange(PropertyChangeEvent event) {
         }
 
     }

@@ -33,6 +33,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.HtmlArea;
@@ -263,7 +264,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
 }

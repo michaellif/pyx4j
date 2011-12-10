@@ -48,6 +48,8 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         valid,
 
+        visited,
+
         repopulated
 
     };
@@ -104,6 +106,15 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
     public PropertyName getPropertyName() {
         return propertyName;
+    }
+
+    public boolean isEventOfType(PropertyName... type) {
+        for (PropertyName propertyName : type) {
+            if (propertyName == getPropertyName()) {
+                return true;
+            }
+        }
+        return true;
     }
 
 }

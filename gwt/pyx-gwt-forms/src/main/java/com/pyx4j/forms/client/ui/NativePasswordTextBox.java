@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.PasswordTextBox;
 
 public class NativePasswordTextBox extends PasswordTextBox implements INativeTextComponent<String> {
@@ -74,11 +76,15 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
     }
 
     @Override
-    public void setValid(boolean valid) {
-        if (valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
             removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (delegate.getCComponent().isVisited()) {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (delegate.getCComponent().isValid()) {
+                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (delegate.getCComponent().isVisited()) {
+                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 

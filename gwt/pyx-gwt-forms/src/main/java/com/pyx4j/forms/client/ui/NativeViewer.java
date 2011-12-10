@@ -25,6 +25,8 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+
 public class NativeViewer<E> extends SimplePanel implements INativeFocusComponent<E> {
 
     private final CViewer<E> cComponent;
@@ -94,7 +96,7 @@ public class NativeViewer<E> extends SimplePanel implements INativeFocusComponen
     }
 
     @Override
-    public void setValid(boolean valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
         // do nothing - actually it's valid always...
     }
 

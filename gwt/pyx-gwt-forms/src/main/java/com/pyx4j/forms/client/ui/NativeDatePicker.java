@@ -28,6 +28,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+
 public class NativeDatePicker extends NativeTriggerComponent<Date> implements INativeTextComponent<Date> {
 
     private final NativeTextBox<Date> textBox;
@@ -125,11 +128,15 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     }
 
     @Override
-    public void setValid(boolean valid) {
-        if (valid) {
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
             textBox.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (datePicker.isVisited()) {
-            textBox.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (datePicker.isValid()) {
+                textBox.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (datePicker.isVisited()) {
+                textBox.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 
