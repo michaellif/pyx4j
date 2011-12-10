@@ -74,6 +74,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().incomeSource()), 25).build());
         }
 
+        main.setBR(++row, 0, 0);
         main.setWidget(++row, 0, inject(proto().employer(), createEmployerEditor()));
         main.setWidget(++row, 0, inject(proto().seasonallyEmployed(), createSeasonallyEmployedEditor()));
         main.setWidget(++row, 0, inject(proto().selfEmployed(), createSelfEmployedEditor()));
