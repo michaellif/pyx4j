@@ -374,6 +374,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public void setValue(DATA_TYPE value) {
         setValue(value, true);
+// TODO: should be 
+//        setValue(value, false);
+// but leaved it for backward compatibility!?        
     }
 
     public void setValue(DATA_TYPE value, boolean fireEvent) {
