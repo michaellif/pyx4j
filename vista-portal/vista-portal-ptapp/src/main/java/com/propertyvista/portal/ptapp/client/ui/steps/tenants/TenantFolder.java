@@ -204,10 +204,10 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
         }
 
         private void setMandatoryDependant() {
-            get(proto().role()).setValue(TenantInLease.Role.Dependent);
+            get(proto().role()).setValue(TenantInLease.Role.Dependent, false);
             get(proto().role()).setEditable(false);
 
-            get(proto().takeOwnership()).setValue(true);
+            get(proto().takeOwnership()).setValue(true, false);
             get(proto().takeOwnership()).setEnabled(false);
         }
 
