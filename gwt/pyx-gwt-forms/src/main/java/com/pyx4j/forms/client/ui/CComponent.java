@@ -46,6 +46,7 @@ import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> implements HasHandlers,
@@ -83,18 +84,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     private List<EditableValueValidator<? super DATA_TYPE>> validators;
 
-    private boolean mandatory = false;
-
     // Have been changed after population
     private boolean visited = false;
 
     private boolean editing = false;
 
-    private boolean valid = true;
-
-    private String validationMessage;
-
-    private boolean parseFailed;
+    private EditableValueValidator<DATA_TYPE> failedValidator;
 
     public CComponent() {
         this(null);
@@ -334,28 +329,21 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public boolean isValid() {
-        return valid;
-    }
-
-    protected void setValid(boolean newValid) {
-        if (newValid != valid) {
-            valid = newValid;
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
-        }
+        return failedValidator == null;
     }
 
     public void revalidate() {
-        boolean newValid =
 
-        !isVisible() ||
+        EditableValueValidator<DATA_TYPE> newFailedValidator = null;
 
-        !isEditable() ||
+        if (isVisible() && isEditable() && isEnabled()) {
+            newFailedValidator = getValidationResult();
+        }
 
-        !isEnabled() ||
-
-        (isMandatoryConditionMet() && (isValueEmpty() || isValidationConditionMet()));
-
-        setValid(newValid);
+        if (newFailedValidator != failedValidator) {
+            failedValidator = newFailedValidator;
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
+        }
     }
 
     protected boolean update(DATA_TYPE value) {
@@ -369,12 +357,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public void setValue(DATA_TYPE value) {
-        setValue(value, true);
-// TODO: should be 
-//        setValue(value, false);
-// but leaved it for backward compatibility!?        
+        if (!isValuesEquals(getValue(), value)) {
+            setNativeValue(value);
+            update(value);
+        }
     }
 
+    @Deprecated
     public void setValue(DATA_TYPE value, boolean fireEvent) {
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
@@ -398,6 +387,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         this.value = value;
         setNativeValue(value);
         setVisited(false);
+
+        revalidate();
 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
     }
@@ -427,27 +418,32 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public boolean isMandatory() {
-        return mandatory;
+        if (validators == null) {
+            return false;
+        }
+        for (EditableValueValidator<?> validator : validators) {
+            if (validator instanceof MandatoryValidator) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setMandatory(boolean mandatory) {
-        if (this.mandatory != mandatory) {
-            this.mandatory = mandatory;
+        if (isMandatory() != mandatory) {
+            addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
+            revalidate();
         }
-        revalidate();
+    }
+
+    public boolean isMandatoryConditionMet() {
+        return !(failedValidator instanceof MandatoryValidator);
     }
 
     public String getValidationMessage() {
-        if (!isMandatoryConditionMet()) {
-            return getMandatoryValidationMessage();
-        } else {
-            return validationMessage;
-        }
-    }
+        return failedValidator == null ? null : failedValidator.getValidationMessage(this, getValue());
 
-    public String getMandatoryValidationMessage() {
-        return mandatoryValidationMessage;
     }
 
     public void setMandatoryValidationMessage(String message) {
@@ -495,21 +491,15 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected boolean isValidationConditionMet() {
+    private EditableValueValidator getValidationResult() {
         if (validators != null) {
-            validationMessage = null;
             for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
                 if (!validator.isValid((CComponent) this, getValue())) {
-                    validationMessage = validator.getValidationMessage((CComponent) this, getValue());
-                    return false;
+                    return validator;
                 }
             }
         }
-        return true;
-    }
-
-    public boolean isMandatoryConditionMet() {
-        return !isEnabled() || !isEditable() || !isMandatory() || !isValueEmpty();
+        return null;
     }
 
     @Override
@@ -557,25 +547,16 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void onEditingStop() {
         if (isEnabled() && isVisible() && isEditable()) {
             editing = false;
-            parseFailed = false;
             try {
                 update(asWidget().getNativeValue());
             } catch (ParseException e) {
-                parseFailed = true;
-                // Initiate not valid state:
-                validationMessage = e.getMessage();
-                setValid(false);
-                setVisited(true);
+                update(null);
             }
 
-            //mark as visited if 
             if (!isValueEmpty() && !isVisited()) {
                 setVisited(true);
             }
         }
     }
 
-    public boolean isParseFailed() {
-        return parseFailed;
-    }
 }
