@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -126,14 +127,11 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
-            public boolean isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts());
+            public ValidationFailure isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationFailure(i18n
+                        .tr("Duplicate contacts specified"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
-                return i18n.tr("Duplicate contacts specified");
-            }
         });
     }
 

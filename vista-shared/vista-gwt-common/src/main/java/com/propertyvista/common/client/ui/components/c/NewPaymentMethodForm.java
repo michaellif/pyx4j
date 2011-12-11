@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -242,21 +243,17 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                     ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
 
                         @Override
-                        public boolean isValid(CComponent<Date, ?> component, Date value) {
+                        public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                             if (value == null) {
-                                return true;
+                                return null;
                             } else {
                                 Date now = new Date();
                                 @SuppressWarnings("deprecation")
                                 Date thisMonth = new Date(now.getYear(), now.getMonth(), 1);
-                                return value.compareTo(thisMonth) >= 0;
+                                return value.compareTo(thisMonth) >= 0 ? null : new ValidationFailure(i18n.tr("Card expiry should be a future date"));
                             }
                         }
 
-                        @Override
-                        public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                            return i18n.tr("Card expiry should be a future date");
-                        }
                     });
                 }
                 return comp;

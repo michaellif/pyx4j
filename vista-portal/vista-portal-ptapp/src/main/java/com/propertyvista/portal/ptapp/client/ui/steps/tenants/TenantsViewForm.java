@@ -20,6 +20,7 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -47,29 +48,22 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
         super.addValueValidator(new EditableValueValidator<TenantInApplicationListDTO>() {
 
             @Override
-            public boolean isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().tenants());
+            public ValidationFailure isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().tenants()) ? null : new ValidationFailure(i18n.tr("Duplicate Tenants Specified"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
-                return i18n.tr("Duplicate Tenants Specified");
-            }
         });
 
         maxTenants = proto().tenants().getMeta().getLength();
         super.addValueValidator(new EditableValueValidator<TenantInApplicationListDTO>() {
 
             @Override
-            public boolean isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
+            public ValidationFailure isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 int size = getValue().tenants().size();
-                return (size <= maxTenants) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue())));
+                return (size <= maxTenants) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue()))) ? null
+                        : new ValidationFailure(i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
-                return i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants");
-            }
         });
     }
 }

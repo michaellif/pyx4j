@@ -22,6 +22,7 @@ import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -89,14 +90,10 @@ public class TenantGuarantorEditor extends CEntityDecoratableEditor<TenantGuaran
         get(proto().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
-            public boolean isValid(CComponent<Date, ?> component, Date value) {
-                return ValidationUtils.isOlderThen18(value);
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                return ValidationUtils.isOlderThen18(value) ? null : new ValidationFailure(i18n.tr("Guarantor Should Be At Least 18 Years Old"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("Guarantor Should Be At Least 18 Years Old");
-            }
         });
     }
 }

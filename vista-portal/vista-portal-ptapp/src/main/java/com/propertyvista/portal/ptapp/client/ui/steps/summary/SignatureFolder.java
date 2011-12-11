@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
@@ -95,26 +96,19 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
             get(proto().agree()).addValueValidator(new EditableValueValidator<Boolean>() {
                 @Override
-                public boolean isValid(CComponent<Boolean, ?> component, Boolean value) {
-                    return value == Boolean.TRUE;
+                public ValidationFailure isValid(CComponent<Boolean, ?> component, Boolean value) {
+                    return value == Boolean.TRUE ? null : new ValidationFailure(i18n.tr("You Must Agree To The Terms And Conditions To Continue"));
                 }
 
-                @Override
-                public String getValidationMessage(CComponent<Boolean, ?> component, Boolean value) {
-                    return i18n.tr("You Must Agree To The Terms And Conditions To Continue");
-                }
             });
 
             get(proto().fullName()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public boolean isValid(CComponent<String, ?> component, String value) {
-                    return DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), value);
+                public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+                    return DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), value) ? null : new ValidationFailure(i18n
+                            .tr("Digital Signature Must Match Your Name On File"));
                 }
 
-                @Override
-                public String getValidationMessage(CComponent<String, ?> component, String value) {
-                    return i18n.tr("Digital Signature Must Match Your Name On File");
-                }
             });
         }
     }

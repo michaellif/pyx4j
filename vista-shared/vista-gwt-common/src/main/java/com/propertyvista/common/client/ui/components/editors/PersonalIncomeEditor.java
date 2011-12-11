@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
@@ -182,30 +183,24 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
     private void validationOfStartStopDates(final CEntityEditor<? extends IIncomeInfo> comp) {
         comp.get(comp.proto().starts()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public boolean isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = comp.getValue().ends();
-                return (value != null) && (date.isNull() || value.before(date.getValue()));
+                return (value != null) && (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
+                        .tr("The Start Date Cannot Be Equal To The End Date Or After It"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The Start Date Cannot Be Equal To The End Date Or After It");
-            }
         });
 
         comp.get(comp.proto().starts()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().ends())));
 
         comp.get(comp.proto().ends()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public boolean isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = comp.getValue().starts();
-                return (value != null) && (date.isNull() || value.after(date.getValue()));
+                return (value != null) && (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
+                        .tr("The End Date Chosen Cannot Be The Same As The Start Date Or Before It"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The End Date Chosen Cannot Be The Same As The Start Date Or Before It");
-            }
         });
 
         comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().starts())));

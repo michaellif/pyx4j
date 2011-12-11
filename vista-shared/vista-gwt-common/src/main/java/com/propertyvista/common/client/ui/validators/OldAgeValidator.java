@@ -17,7 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.i18n.annotations.I18nComment;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 public class OldAgeValidator implements EditableValueValidator<Date> {
@@ -26,14 +26,12 @@ public class OldAgeValidator implements EditableValueValidator<Date> {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean isValid(CComponent<Date, ?> component, Date value) {
+    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+        if (value == null) {
+            return null;
+        }
         Date current = new Date();
-        return current.getYear() - value.getYear() < 150;
+        return current.getYear() - value.getYear() < 150 ? null : new ValidationFailure(i18n.tr("Age cannot be greater than 150 years"));
     }
 
-    @Override
-    @I18nComment("User input validation message")
-    public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-        return i18n.tr("Age cannot be greater than 150 years");
-    }
 }

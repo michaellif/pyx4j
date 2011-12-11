@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 public class PastDateValidation {
@@ -28,14 +29,10 @@ public class PastDateValidation {
     public PastDateValidation(CComponent<LogicalDate, ?> value) {
         value.addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public boolean isValid(CComponent<Date, ?> component, Date value) {
-                return (value != null) && value.before(TimeUtils.today());
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                return (value != null) && value.before(TimeUtils.today()) ? null : new ValidationFailure(i18n.tr("The Date Must Be Earlier Than Today's Date"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("The Date Must Be Earlier Than Today's Date");
-            }
         });
     }
 }

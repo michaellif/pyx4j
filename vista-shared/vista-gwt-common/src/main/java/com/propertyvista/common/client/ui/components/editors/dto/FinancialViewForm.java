@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -83,14 +84,11 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         this.addValueValidator(new EditableValueValidator<TenantFinancialDTO>() {
 
             @Override
-            public boolean isValid(CComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
-                return (value.assets().size() > 0) || (value.incomes().size() > 0);
+            public ValidationFailure isValid(CComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
+                return (value.assets().size() > 0) || (value.incomes().size() > 0) ? null : new ValidationFailure(i18n
+                        .tr("At least one source of income or one asset is required"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
-                return i18n.tr("At least one source of income or one asset is required");
-            }
         });
     }
 }

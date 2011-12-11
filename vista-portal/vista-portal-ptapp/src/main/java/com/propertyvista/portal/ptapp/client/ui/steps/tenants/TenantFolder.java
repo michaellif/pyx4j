@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -164,20 +165,17 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
             get(proto().tenant().person().birthDate()).addValueValidator(new BirthdayDateValidator());
             get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
                 @Override
-                public boolean isValid(CComponent<Date, ?> component, Date value) {
+                public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                     TenantInLease.Role status = getValue().role().getValue();
                     if ((status == TenantInLease.Role.Applicant) || (status == TenantInLease.Role.CoApplicant)) {
                         // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
-                        return ValidationUtils.isOlderThen18(value);
+                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationFailure(i18n
+                                .tr("Applicant and Co-Applicant must be at least 18 years old"));
                     } else {
-                        return true;
+                        return null;
                     }
                 }
 
-                @Override
-                public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                    return TenantsViewForm.i18n.tr("Applicant and Co-Applicant must be at least 18 years old");
-                }
             });
 
             if (!applicant) { // all this stuff isn't for primary applicant:  

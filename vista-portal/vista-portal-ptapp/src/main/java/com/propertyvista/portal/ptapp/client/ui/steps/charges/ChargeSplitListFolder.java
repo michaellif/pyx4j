@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -75,7 +76,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         this.addValueValidator(new EditableValueValidator<IList<TenantCharge>>() {
 
             @Override
-            public boolean isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
+            public ValidationFailure isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
                 int totalPrc = 0;
                 boolean first = true;
                 for (TenantCharge charge : value) {
@@ -89,13 +90,9 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
                         totalPrc += p.intValue();
                     }
                 }
-                return totalPrc <= 100;
+                return totalPrc <= 100 ? null : new ValidationFailure(i18n.tr("Sum Of All Percentages Cannot Exceed 100%"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
-                return i18n.tr("Sum Of All Percentages Cannot Exceed 100%");
-            }
         });
     }
 

@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
@@ -132,15 +133,11 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public boolean isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                return (date.isNull() || value.before(date.getValue()));
+                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n.tr("Move In Date must be less then Move Out Date"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("Move In Date must be less then Move Out Date");
-            }
         });
 
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
@@ -153,15 +150,12 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
-            public boolean isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue()));
+                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
+                        .tr("Move Out Date must be greater then Move In Date"));
             }
 
-            @Override
-            public String getValidationMessage(CComponent<Date, ?> component, Date value) {
-                return i18n.tr("Move Out Date must be greater then Move In Date");
-            }
         });
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(

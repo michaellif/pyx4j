@@ -17,6 +17,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
@@ -45,23 +46,20 @@ public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
 
         this.addValueValidator(new EditableValueValidator<IList<PersonalIncome>>() {
             @Override
-            public boolean isValid(CComponent<IList<PersonalIncome>, ?> component, IList<PersonalIncome> value) {
+            public ValidationFailure isValid(CComponent<IList<PersonalIncome>, ?> component, IList<PersonalIncome> value) {
                 if (value.size() == 1) {
                     PersonalIncome income = value.get(0);
                     switch (income.incomeSource().getValue()) {
                     case fulltime:
                     case parttime:
-                        return (income.employer().ends().getValue().getTime() - income.employer().starts().getValue().getTime()) > 365 * 24 * 60 * 60 * 1000l;
+                        return (income.employer().ends().getValue().getTime() - income.employer().starts().getValue().getTime()) > 365 * 24 * 60 * 60 * 1000l ? null
+                                : new ValidationFailure(i18n.tr("You need to enter previous employment information"));
                         // valid, if more than 1 year, otherwise - previous employment needed! 
                     }
                 }
-                return true;
+                return null;
             }
 
-            @Override
-            public String getValidationMessage(CComponent<IList<PersonalIncome>, ?> component, IList<PersonalIncome> value) {
-                return i18n.tr("You need to enter previous employment information");
-            }
         });
     }
 }

@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
@@ -64,13 +65,8 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
         public void addValidations() {
             get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
                 @Override
-                public boolean isValid(CComponent<Double, ?> component, Double value) {
-                    return (value == null) || ((value >= 0) && (value <= 100));
-                }
-
-                @Override
-                public String getValidationMessage(CComponent<Double, ?> component, Double value) {
-                    return VistaTableFolder.i18n.tr("Value Should Be In Range Of 0-100%");
+                public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
+                    return (value == null) || ((value >= 0) && (value <= 100)) ? null : new ValidationFailure(i18n.tr("Value Should Be In Range Of 0-100%"));
                 }
 
             });

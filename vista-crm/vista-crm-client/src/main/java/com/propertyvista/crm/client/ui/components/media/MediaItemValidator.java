@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.components.media;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.media.Media;
@@ -24,11 +25,11 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
     private static I18n i18n = I18n.get(MediaItemValidator.class);
 
     @Override
-    public boolean isValid(CComponent<Media, ?> component, Media value) {
-        if (value.type().isNull()) {
-            return false;
-        }
+    public ValidationFailure isValid(CComponent<Media, ?> component, Media value) {
         boolean valid = true;
+        if (value.type().isNull()) {
+            valid = false;
+        }
         switch (value.type().getValue()) {
         case file:
             valid = !value.file().isNull();
@@ -40,11 +41,7 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
             valid = !value.youTubeVideoID().isNull();
             break;
         }
-        return valid;
+        return valid ? null : new ValidationFailure(i18n.tr("Media source cannot be empty!"));
     }
 
-    @Override
-    public String getValidationMessage(CComponent<Media, ?> component, Media value) {
-        return i18n.tr("Media source cannot be empty!");
-    }
 }
