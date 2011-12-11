@@ -163,8 +163,4 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
         return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
     }
 
-    @Override
-    public boolean isParsedSuccesfully() {
-        return !delegate.isParseFailed();
-    }
 }

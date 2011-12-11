@@ -32,8 +32,6 @@ public class NativeTextBoxDelegate<E> {
 
     private final INativeTextComponent<E> nativeTextBox;
 
-    private boolean parseFailed = false;
-
     public NativeTextBoxDelegate(final INativeTextComponent<E> nativeTextBox, final CTextFieldBase<E, ?> cTextField) {
         super();
         this.nativeTextBox = nativeTextBox;
@@ -63,16 +61,10 @@ public class NativeTextBoxDelegate<E> {
 
     public E getNativeValue() throws ParseException {
         try {
-            parseFailed = false;
             return cTextBox.getFormat().parse(nativeTextBox.getNativeText());
         } catch (ParseException e) {
-            parseFailed = true;
             throw e;
         }
-    }
-
-    public boolean isParseFailed() {
-        return parseFailed;
     }
 
     public CTextFieldBase<E, ?> getCComponent() {

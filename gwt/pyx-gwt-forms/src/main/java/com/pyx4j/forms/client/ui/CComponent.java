@@ -356,17 +356,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         return false;
     }
 
-    public void setValue(DATA_TYPE value) {
-        if (!isValuesEquals(getValue(), value)) {
-            setNativeValue(value);
-            update(value);
-            onEditingStop();
-        }
-    }
-
-    @Deprecated
     public void setValue(DATA_TYPE value, boolean fireEvent) {
-        if (!isValuesEquals(getValue(), value)) {
+        if (getValue() != value) {
             this.value = value;
             setNativeValue(value);
             revalidate();
@@ -374,6 +365,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 ValueChangeEvent.fire(this, value);
             }
         }
+    }
+
+    public void setValue(DATA_TYPE value) {
+        setValue(value, true);
     }
 
     public DATA_TYPE getValue() {
@@ -385,12 +380,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
      */
     public void populate(DATA_TYPE value) {
 
-        this.value = value;
-        setNativeValue(value);
+        setValue(value, false);
+
         setVisited(false);
-
-        revalidate();
-
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
     }
 
@@ -554,9 +546,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 update(null);
             }
 
-            if (!isValueEmpty() && !isVisited()) {
-                setVisited(true);
-            }
+            setVisited(true);
         }
     }
 

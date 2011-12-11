@@ -88,8 +88,4 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
         }
     }
 
-    @Override
-    public boolean isParsedSuccesfully() {
-        return !delegate.isParseFailed();
-    }
 }

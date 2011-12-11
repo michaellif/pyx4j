@@ -140,8 +140,4 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
         }
     }
 
-    @Override
-    public boolean isParsedSuccesfully() {
-        return textBox.isParsedSuccesfully();
-    }
 }

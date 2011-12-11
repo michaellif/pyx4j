@@ -8,6 +8,9 @@
  */
 package com.pyx4j.forms.client.validators;
 
+import java.text.ParseException;
+
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 
@@ -30,7 +33,13 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
     @Override
     public boolean isValid(CComponent<E, ?> component, E value) {
         if (component instanceof CTextFieldBase) {
-            return ((CTextFieldBase<?, ?>) component).isParsedSuccesfully();
+            if (component.isWidgetCreated()) {
+                try {
+                    return EqualsHelper.equals(component.asWidget().getNativeValue(), value);
+                } catch (ParseException e) {
+                    return false;
+                }
+            }
         }
         return false;
     }

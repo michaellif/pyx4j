@@ -92,22 +92,6 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         return super.isValueEmpty() || ((getValue() instanceof String) && CommonsStringUtils.isEmpty((String) getValue()));
     }
 
-    public boolean isParsedSuccesfully() {
-        if (isWidgetCreated()) {
-            return asWidget().isParsedSuccesfully();
-        }
-        return true;
-    }
-
-    @Override
-    public void onEditingStop() {
-        super.onEditingStop();
-
-        if (isParsedSuccesfully()) {
-            setNativeValue(getValue());
-        }
-    }
-
     @Override
     protected boolean update(DATA_TYPE value) {
         boolean res = super.update(value);
