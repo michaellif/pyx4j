@@ -34,7 +34,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
     public CPhoneField(String title) {
         super(title);
         setFormat(new PhoneFormat());
-        addValueValidator(new TextBoxParserValidator<String>("Not a valid phone number. Must be in the format 123-4567 or 123-456-7890 (dashes optional)"));
+        addValueValidator(new TextBoxParserValidator<String>());
     }
 
     @Override

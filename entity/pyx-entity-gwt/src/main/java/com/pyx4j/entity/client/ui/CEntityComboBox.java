@@ -54,9 +54,13 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.i18n.shared.I18n;
 
 public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
+
+    private static I18n i18n = I18n.get(CEntityComboBox.class);
 
     private static final Logger log = LoggerFactory.getLogger(CEntityComboBox.class);
 
@@ -222,14 +226,10 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                     log.error("can't load {} {}", getTitle(), caught);
                     if (unavailableValidator == null) {
                         unavailableValidator = new EditableValueValidator<E>() {
-                            @Override
-                            public String getValidationMessage(CComponent<E, ?> component, E value) {
-                                return "Reference data unavailable";
-                            }
 
                             @Override
-                            public boolean isValid(CComponent<E, ?> component, E value) {
-                                return !isUnavailable;
+                            public ValidationFailure isValid(CComponent<E, ?> component, E value) {
+                                return !isUnavailable ? null : new ValidationFailure(i18n.tr("Reference data unavailable"));
                             }
                         };
                     }

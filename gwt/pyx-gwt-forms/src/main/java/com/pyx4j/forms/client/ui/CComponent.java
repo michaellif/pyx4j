@@ -46,7 +46,9 @@ import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> implements HasHandlers,
@@ -89,7 +91,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     private boolean editing = false;
 
-    private EditableValueValidator<DATA_TYPE> failedValidator;
+    private ValidationFailure validationFailure;
 
     public CComponent() {
         this(null);
@@ -329,19 +331,19 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public boolean isValid() {
-        return failedValidator == null;
+        return validationFailure == null;
     }
 
     public void revalidate() {
 
-        EditableValueValidator<DATA_TYPE> newFailedValidator = null;
+        ValidationFailure newValidationFailure = null;
 
         if (isVisible() && isEditable() && isEnabled()) {
-            newFailedValidator = getValidationResult();
+            newValidationFailure = getValidationResult();
         }
 
-        if (newFailedValidator != failedValidator) {
-            failedValidator = newFailedValidator;
+        if (newValidationFailure != validationFailure) {
+            validationFailure = newValidationFailure;
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
     }
@@ -431,11 +433,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public boolean isMandatoryConditionMet() {
-        return !(failedValidator instanceof MandatoryValidator);
+        return !(validationFailure instanceof MandatoryValidationFailure);
     }
 
     public String getValidationMessage() {
-        return failedValidator == null ? null : failedValidator.getValidationMessage(this, getValue());
+        return validationFailure == null ? null : validationFailure.getMessage();
 
     }
 
@@ -484,11 +486,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private EditableValueValidator getValidationResult() {
+    private ValidationFailure getValidationResult() {
         if (validators != null) {
             for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
-                if (!validator.isValid((CComponent) this, getValue())) {
-                    return validator;
+                ValidationFailure failure = validator.isValid((CComponent) this, getValue());
+                if (failure != null) {
+                    return failure;
                 }
             }
         }

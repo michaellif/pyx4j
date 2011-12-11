@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeFocusComponent<DATA_TYPE>> extends CFocusComponent<DATA_TYPE, WIDGET_TYPE> {
@@ -77,19 +78,14 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         }
 
         @Override
-        public String getValidationMessage(CComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
-            return validationMessage;
-        }
-
-        @Override
-        public boolean isValid(CComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
+        public ValidationFailure isValid(CComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
             if (value == null) {
-                return true;
+                return null;
             }
             if (value instanceof String) {
-                return ((String) value).length() <= length;
+                return ((String) value).length() <= length ? null : new ValidationFailure(validationMessage);
             } else {
-                return true;
+                return null;
             }
         }
     }

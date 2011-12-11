@@ -47,7 +47,7 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
         super(title);
         this.setMandatory(mandatory);
         setFormat(new EmailFormat());
-        addValueValidator(new TextBoxParserValidator<String>(i18n.tr("Not A Valid Email")));
+        addValueValidator(new TextBoxParserValidator<String>());
     }
 
     @Override

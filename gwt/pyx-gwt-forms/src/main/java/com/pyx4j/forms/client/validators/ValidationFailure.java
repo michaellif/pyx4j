@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Dec 10, 2011
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.forms.client.validators;
 
-import com.pyx4j.forms.client.ui.CComponent;
+public class ValidationFailure {
 
-/**
- * Created on 2008-08-01
- */
-public interface EditableValueValidator<E> {
+    private final String message;
 
-    /**
-     * 
-     * null if valid, validation message if not
-     */
-    public ValidationFailure isValid(CComponent<E, ?> component, E value);
+    public ValidationFailure(String message) {
+        super();
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 
 }

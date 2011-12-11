@@ -9,11 +9,14 @@
 package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 
 /**
  *
  */
 public class RegexValidator<E> implements EditableValueValidator<E> {
+
+    private static I18n i18n = I18n.get(RegexValidator.class);
 
     public static final String DIGITS_ONLY_REGEX = "^\\d*$";
 
@@ -31,14 +34,14 @@ public class RegexValidator<E> implements EditableValueValidator<E> {
     }
 
     @Override
-    public boolean isValid(CComponent<E, ?> component, E value) {
-        return (component.isValueEmpty() && !component.isMandatory()) || ((value != null) && (value.toString().matches(regex)));
+    public ValidationFailure isValid(CComponent<E, ?> component, E value) {
+        return (component.isValueEmpty() && !component.isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null : new ValidationFailure(
+                getValidationMessage());
     }
 
-    @Override
-    public String getValidationMessage(CComponent<E, ?> component, E value) {
+    private String getValidationMessage() {
         if (validationMessage == null) {
-            return "This field should have the following format:" + regex;
+            return i18n.tr("This field should have the following format") + ":" + regex;
         } else {
             return validationMessage;
         }

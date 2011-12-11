@@ -24,6 +24,7 @@ import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
@@ -32,10 +33,13 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
 
     private TextBoxParserValidator<E> validator;
 
+    private final String validationMessage;
+
     public CNumberField(String title, String validationMessage) {
         super(title);
+        this.validationMessage = validationMessage;
         setFormat(new DefaultNumberFormat());
-        validator = new TextBoxParserValidator<E>(validationMessage);
+        validator = new TextBoxParserValidator<E>();
         addValueValidator(validator);
     }
 
@@ -65,7 +69,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
             try {
                 return valueOf(string);
             } catch (NumberFormatException e) {
-                throw new ParseException("DefaultNumberFormat", 0);
+                throw new ParseException(validationMessage, 0);
             }
         }
 
@@ -82,23 +86,24 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         private final E to;
 
         public NumberFieldRangeValidator(E from, E to) {
-            super(i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
+            super();
             this.from = from;
             this.to = to;
         }
 
         @Override
-        public boolean isValid(CComponent<E, ?> component, E value) {
-            if (super.isValid(component, value)) {
+        public ValidationFailure isValid(CComponent<E, ?> component, E value) {
+            ValidationFailure failure = super.isValid(component, value);
+            if (failure == null) {
                 if (value == null) {
-                    return true;
+                    return null;
                 } else if (isInRange(value, from, to)) {
-                    return true;
+                    return null;
                 } else {
-                    return false;
+                    return new ValidationFailure(i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
                 }
             } else {
-                return false;
+                return failure;
             }
         }
     }

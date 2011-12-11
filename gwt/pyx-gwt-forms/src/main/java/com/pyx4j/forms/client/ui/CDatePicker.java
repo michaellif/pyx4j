@@ -27,6 +27,8 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
@@ -48,6 +50,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
     public CDatePicker(String title) {
         super(title);
         setFormat(new DateFormat());
+        addValueValidator(new TextBoxParserValidator<Date>());
     }
 
     @Override
@@ -75,8 +78,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
     class PastDateSelectionAllowedValidator implements EditableValueValidator<Date> {
 
-        @Override
-        public String getValidationMessage(CComponent<Date, ?> component, Date value) {
+        private String getValidationMessage() {
             if (dateConditionValidationMessage == null) {
                 return i18n.tr("Date must be equal or greater than today's date");
             } else {
@@ -86,14 +88,14 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
         @Override
         @SuppressWarnings("deprecation")
-        public boolean isValid(CComponent<Date, ?> component, Date value) {
+        public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
             Date selectedDate = getValue();
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();
                 Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
-                return selectedDate.compareTo(today) >= 0;
+                return selectedDate.compareTo(today) >= 0 ? null : new ValidationFailure(getValidationMessage());
             } else {
-                return true;
+                return null;
             }
         }
 

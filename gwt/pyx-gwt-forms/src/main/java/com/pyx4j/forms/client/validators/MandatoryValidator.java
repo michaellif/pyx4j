@@ -19,13 +19,8 @@ public class MandatoryValidator<E> implements EditableValueValidator<E> {
     }
 
     @Override
-    public String getValidationMessage(CComponent<E, ?> component, E value) {
-        return validationMessage;
-    }
-
-    @Override
-    public boolean isValid(CComponent<E, ?> component, E value) {
-        return !component.isValueEmpty();
+    public MandatoryValidationFailure isValid(CComponent<E, ?> component, E value) {
+        return !component.isValueEmpty() ? null : new MandatoryValidationFailure(validationMessage);
     }
 
 }
