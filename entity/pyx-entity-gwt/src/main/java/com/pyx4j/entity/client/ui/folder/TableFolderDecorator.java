@@ -24,6 +24,7 @@ import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleNa
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableHeader;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableHeaderLabel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
@@ -34,17 +35,24 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
     private final HorizontalPanel header;
 
     private boolean showHeader = true;
+
+    private CEntityFolder<E> folder;
+
+    private final List<Image> mandatoryImages = new ArrayList<Image>();
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
         this(columns, EntityFolderImages.INSTANCE, null, false);
@@ -76,6 +84,18 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
             if (caption == "") {
                 caption = "&nbsp";
             }
+
+            if (column.getObject().getMeta().isValidatorAnnotationPresent(NotNull.class)) {
+                Image mandatoryImage = new Image();
+                mandatoryImage.setResource(ImageFactory.getImages().mandatory());
+                mandatoryImage.setTitle("This field is mandatory");
+                mandatoryImage.setVisible(false);
+
+                headerLabelPanel.add(mandatoryImage);
+                headerLabelPanel.setCellWidth(mandatoryImage, "1px");
+                mandatoryImages.add(mandatoryImage);
+            }
+
             HTML label = new HTML(caption);
             label.getElement().getStyle().setMarginLeft(3, Unit.PX);
             headerLabelPanel.add(label);
@@ -102,6 +122,33 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
         if (isAddable()) {
             add(getActionsPanel());
+        }
+    }
+
+    @Override
+    public void setComponent(CEntityFolder<E> folder) {
+        this.folder = folder;
+        super.setComponent(folder);
+        folder.addPropertyChangeHandler(new PropertyChangeHandler() {
+
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                applyFolderProperties();
+            }
+        });
+
+        applyFolderProperties();
+    }
+
+    private void applyFolderProperties() {
+        if (folder.isEditable() && folder.isEnabled()) {
+            renderMandatoryStars(true);
+        }
+    }
+
+    private void renderMandatoryStars(boolean visible) {
+        for (Image image : mandatoryImages) {
+            image.setVisible(visible);
         }
     }
 

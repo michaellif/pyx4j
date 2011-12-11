@@ -542,6 +542,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public void onEditingStop() {
         if (isEnabled() && isVisible() && isEditable()) {
+            boolean isOrigEmpty = isValueEmpty();
             editing = false;
             try {
                 update(asWidget().getNativeValue());
@@ -549,7 +550,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 update(null);
             }
 
-            setVisited(true);
+            if (!isOrigEmpty || (isOrigEmpty && !isValueEmpty())) {
+                setVisited(true);
+            }
         }
     }
 
