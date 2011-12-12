@@ -13,11 +13,13 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type.demo;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 @DiscriminatorValue("PieChart2D")
+@Caption(name = "Pie Chart 2D")
 public interface PieChart2D extends GadgetMetadata {
 
 }

@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.gadgets.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Overflow;
@@ -21,6 +22,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.BarChart2D;
@@ -30,85 +32,118 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
+import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class BarChart2DGadget extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> {
+public class BarChart2DGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> {
+    private static final I18n i18n = I18n.get(BarChart2DGadget.class);
 
-    private final SimplePanel panel;
+    public static class BarChart2DGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> {
 
-    public BarChart2DGadget(GadgetMetadata gmd) {
-        super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D.class);
-        panel = new SimplePanel();
+        private SimplePanel panel;
 
-        DataSource ds = new DataSource();
-        List<Double> values = new ArrayList<Double>(5);
-        values.add(80d);
-        values.add(60d);
-        values.add(10d);
-        ds.addDataSet(ds.new Metric("Building 1"), values);
+        public BarChart2DGadgetInstance(GadgetMetadata gmd) {
+            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D.class);
+            setDefaultPopulator(new Populator() {
+                @Override
+                public void populate() {
+                    populateSucceded();
+                }
+            });
+        }
 
-        values = new ArrayList<Double>(5);
-        values.add(80d);
-        values.add(58d);
-        values.add(35d);
-        ds.addDataSet(ds.new Metric("Building 2"), values);
+        @Override
+        public Widget initContentPanel() {
+            panel = new SimplePanel();
 
-        values = new ArrayList<Double>(5);
-        values.add(38d);
-        values.add(54d);
-        values.add(13d);
-        ds.addDataSet(ds.new Metric("Building 3"), values);
+            DataSource ds = new DataSource();
+            List<Double> values = new ArrayList<Double>(5);
+            values.add(80d);
+            values.add(60d);
+            values.add(10d);
+            ds.addDataSet(ds.new Metric("Building 1"), values);
 
-        values = new ArrayList<Double>(5);
-        values.add(38d);
-        values.add(30d);
-        values.add(41d);
-        ds.addDataSet(ds.new Metric("Building 4"), values);
+            values = new ArrayList<Double>(5);
+            values.add(80d);
+            values.add(58d);
+            values.add(35d);
+            ds.addDataSet(ds.new Metric("Building 2"), values);
 
-        values = new ArrayList<Double>(5);
-        values.add(28d);
-        values.add(30d);
-        values.add(7d);
-        ds.addDataSet(ds.new Metric("Building 5"), values);
+            values = new ArrayList<Double>(5);
+            values.add(38d);
+            values.add(54d);
+            values.add(13d);
+            ds.addDataSet(ds.new Metric("Building 3"), values);
 
-        values = new ArrayList<Double>(6);
-        values.add(18d);
-        values.add(60d);
-        values.add(17d);
-        ds.addDataSet(ds.new Metric("Building 6"), values);
+            values = new ArrayList<Double>(5);
+            values.add(38d);
+            values.add(30d);
+            values.add(41d);
+            ds.addDataSet(ds.new Metric("Building 4"), values);
 
-        List<String> sd = new ArrayList<String>(3);
-        sd.add("2008");
-        sd.add("2009");
-        sd.add("2010");
-        ds.setSeriesDescription(sd);
+            values = new ArrayList<Double>(5);
+            values.add(28d);
+            values.add(30d);
+            values.add(7d);
+            ds.addDataSet(ds.new Metric("Building 5"), values);
 
-        SvgFactory factory = new SvgFactoryForGwt();
+            values = new ArrayList<Double>(6);
+            values.add(18d);
+            values.add(60d);
+            values.add(17d);
+            ds.addDataSet(ds.new Metric("Building 6"), values);
 
-        GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 700, 200);
-        config.setLegend(true);
-        config.setGridType(GridType.Both);
-        config.setTheme(ChartTheme.Bright);
+            List<String> sd = new ArrayList<String>(3);
+            sd.add("2008");
+            sd.add("2009");
+            sd.add("2010");
+            ds.setSeriesDescription(sd);
 
-        SvgRoot svgroot = factory.getSvgRoot();
-        svgroot.add(new BarChart2D(config));
+            SvgFactory factory = new SvgFactoryForGwt();
 
-        panel.add((Widget) svgroot);
-        panel.setSize("700px", "200px");
-        panel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+            GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, 700, 200);
+            config.setLegend(true);
+            config.setGridType(GridType.Both);
+            config.setTheme(ChartTheme.Bright);
 
+            SvgRoot svgroot = factory.getSvgRoot();
+            svgroot.add(new BarChart2D(config));
+
+            panel.add((Widget) svgroot);
+            panel.setSize("700px", "200px");
+            panel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+
+            ScrollPanel scroll = new ScrollPanel(panel);
+            scroll.setWidth("100%");
+
+            return scroll;
+        }
+    }
+
+    public BarChart2DGadget() {
+        super(com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D.class);
     }
 
     @Override
-    public Widget asWidget() {
-        ScrollPanel scroll = new ScrollPanel(panel);
-        scroll.setWidth("100%");
-        return scroll;
+    public List<String> getCategories() {
+        return Arrays.asList(Directory.Categories.Demo.toString(), Directory.Categories.Chart.toString());
     }
 
     @Override
-    public Widget initContentPanel() {
-        return null;
+    public String getDescription() {
+        return i18n.tr("Demo that displays a 2D Bar Chart");
     }
+
+    @Override
+    public boolean isBuildingGadget() {
+        return false;
+    }
+
+    @Override
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.BarChart2D> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+        return new BarChart2DGadgetInstance(gadgetMetadata);
+    }
+
 }

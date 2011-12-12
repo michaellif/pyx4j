@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.gadgets.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Overflow;
@@ -21,6 +22,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.ArcBasedChartConfigurator;
@@ -29,53 +31,86 @@ import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.Gauge;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
+import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
+import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class GaugeGadget extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge> {
+public class GaugeGadget extends AbstractGadget<com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge> {
+    private static final I18n i18n = I18n.get(GaugeGadget.class);
 
-    private final SimplePanel panel;
+    public static class GaugeGadgetInstance extends GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge> {
 
-    public GaugeGadget(GadgetMetadata gmd) {
-        super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge.class);
-        panel = new SimplePanel();
-        DataSource ds = new DataSource();
-        List<Double> values = new ArrayList<Double>(1);
-        values.add(32d);
-        ds.addDataSet(ds.new Metric("Building 1"), values);
-        ds.addSeriesDescription("2008");
+        private SimplePanel panel;
 
-        SvgFactory factory = new SvgFactoryForGwt();
+        public GaugeGadgetInstance(GadgetMetadata gmd) {
+            super(gmd, com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge.class);
+            setDefaultPopulator(new Populator() {
+                @Override
+                public void populate() {
+                    populateSucceded();
+                }
+            });
+        }
 
-        ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, ds);
-        config.setScaleMaximum(100d);
-        config.setTheme(ChartTheme.Bright);
-        config.setRadius(80);
-        config.setShowValueLabels(true);
+        @Override
+        public boolean isFullWidth() {
+            return false;
+        }
 
-        SvgRoot svgroot = factory.getSvgRoot();
-        svgroot.add(new Gauge(config));
+        @Override
+        public Widget initContentPanel() {
+            panel = new SimplePanel();
+            DataSource ds = new DataSource();
+            List<Double> values = new ArrayList<Double>(1);
+            values.add(32d);
+            ds.addDataSet(ds.new Metric("Building 1"), values);
+            ds.addSeriesDescription("2008");
 
-        panel.add((Widget) svgroot);
-        panel.setSize("300px", "200px");
-        panel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+            SvgFactory factory = new SvgFactoryForGwt();
+
+            ArcBasedChartConfigurator config = new ArcBasedChartConfigurator(factory, ds);
+            config.setScaleMaximum(100d);
+            config.setTheme(ChartTheme.Bright);
+            config.setRadius(80);
+            config.setShowValueLabels(true);
+
+            SvgRoot svgroot = factory.getSvgRoot();
+            svgroot.add(new Gauge(config));
+
+            panel.add((Widget) svgroot);
+            panel.setSize("300px", "200px");
+            panel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+
+            ScrollPanel scroll = new ScrollPanel(panel);
+            scroll.setWidth("100%");
+
+            return scroll;
+        }
+    }
+
+    public GaugeGadget() {
+        super(com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge.class);
+
     }
 
     @Override
-    public Widget asWidget() {
-        ScrollPanel scroll = new ScrollPanel(panel);
-        scroll.setWidth("100%");
-        return scroll;
+    public List<String> getCategories() {
+        return Arrays.asList(Directory.Categories.Demo.toString(), Directory.Categories.Chart.toString());
     }
 
     @Override
-    public boolean isFullWidth() {
+    public String getDescription() {
+        return i18n.tr("Demo of gauge based gadget.");
+    }
+
+    @Override
+    public boolean isBuildingGadget() {
         return false;
     }
 
     @Override
-    public Widget initContentPanel() {
-        // TODO Auto-generated method stub
-        return null;
+    protected GadgetInstanceBase<com.propertyvista.domain.dashboard.gadgets.type.demo.Gauge> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+        return new GaugeGadgetInstance(gadgetMetadata);
     }
 }

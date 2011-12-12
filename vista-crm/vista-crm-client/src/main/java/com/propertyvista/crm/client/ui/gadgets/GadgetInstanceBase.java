@@ -213,7 +213,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     protected void populate(final Populator populator, boolean showLoadingPanel) {
         if (populator == null) {
             if (!GWT.isProdMode()) {
-                throw new Error("no populator provided (use setPopulator() or execute populateStart() with non null parameter!");
+                throw new Error("no populator provided (use setDefaultPopulator() or execute populateStart() with non null parameter!");
             }
         }
         if (isRunning() & asWidget().isVisible() & asWidget().isAttached() & !isLoading) {
