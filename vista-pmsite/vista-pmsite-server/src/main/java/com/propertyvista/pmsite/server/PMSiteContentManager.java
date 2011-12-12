@@ -34,6 +34,8 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.geo.GeoBox;
+import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -333,10 +335,14 @@ public class PMSiteContentManager implements Serializable {
                 dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
             }
         } else {
-            // TODO vicinity search within the given searchRadius of the centerPoint
+            // Vicinity search within the given searchRadius of the centerPoint
             Integer searchRadiusKm = searchCriteria.distance().getValue();
             GeoPoint centerPoint = searchCriteria.geolocation().getValue();
-            // ... define dbCriteria here ...
+            // Define dbCriteria here, It works perfectly in North America, TODO test other location
+            GeoCircle geoCircle = new GeoCircle(centerPoint, searchRadiusKm);
+            GeoBox geoBox = geoCircle.getMinBox();
+            dbCriteria.add(PropertyCriterion.le(dbCriteria.proto().info().address().location(), geoBox.getNorthEast()));
+            dbCriteria.add(PropertyCriterion.ge(dbCriteria.proto().info().address().location(), geoBox.getSouthWest()));
         }
 
         // create floorplan criteria
