@@ -67,4 +67,15 @@ public class CMoney extends CFocusComponent<Money, NativeMoney> {
             setNativeValue(getValue());
         }
     }
+
+// TODO: not sure where it's better to set default currency: here or in more high level editors...
+//    
+//    @Override
+//    public void populate(Money value) {
+//        if (value != null && value.currency().isEmpty()) {
+//            value.currency().set(EntityFactory.create(Currency.class));
+//            value.currency().name().setValue("CAD");
+//        }
+//        super.populate(value);
+//    }
 }

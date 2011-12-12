@@ -170,9 +170,9 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     @Override
     public void setNativeValue(Money value) {
         clearUI();
-        if (value != null && !value.amount().isNull()) {
+        if (value != null) {
             amount.setText(cComponent.getFormat().format(value));
-            if (currency != null && !value.currency().isNull()) {
+            if (currency != null) {
                 currency.setText(value.currency().getStringView());
             }
         }
