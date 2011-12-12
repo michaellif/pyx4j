@@ -30,7 +30,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
+import com.pyx4j.entity.test.shared.domain.Address;
+import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.geo.GeoBox;
+import com.pyx4j.geo.GeoCircle;
+import com.pyx4j.geo.GeoPoint;
 
 public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
@@ -126,5 +131,48 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             List<Employee> empsRetrived = srv.query(criteria);
             Assert.assertEquals("result set size", 2, empsRetrived.size());
         }
+    }
+
+    public void testSimpleGeoSerch() {
+        City city = EntityFactory.create(City.class);
+        city.name().setValue(uniqueString());
+
+        Address address1 = EntityFactory.create(Address.class);
+        address1.city().set(city);
+        address1.streetName().setValue(uniqueString());
+        address1.location().setValue(new GeoPoint(43.72316, -79.33030));
+        srv.persist(address1);
+
+        Address address2 = EntityFactory.create(Address.class);
+        address2.city().set(city);
+        address2.streetName().setValue(uniqueString());
+        address2.location().setValue(new GeoPoint(43.80269, -79.10929));
+        srv.persist(address2);
+
+        int searchRadiusKm = 10;
+        GeoPoint centerPoint = new GeoPoint(43.65232, -79.38386);
+        GeoCircle geoCircle = new GeoCircle(centerPoint, searchRadiusKm);
+        GeoBox geoBox = geoCircle.getMinBox();
+
+        EntityQueryCriteria<Address> criteria = EntityQueryCriteria.create(Address.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().city().name(), city.name().getValue()));
+        criteria.add(PropertyCriterion.le(criteria.proto().location(), geoBox.getNorthEast()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().location(), geoBox.getSouthWest()));
+
+        List<Address> near = srv.query(criteria);
+        Assert.assertEquals("result set size", 1, near.size());
+
+        //  test with bigger radius
+        searchRadiusKm = 30;
+        geoCircle = new GeoCircle(centerPoint, searchRadiusKm);
+        geoBox = geoCircle.getMinBox();
+
+        criteria.resetCriteria();
+        criteria.add(PropertyCriterion.eq(criteria.proto().city().name(), city.name().getValue()));
+        criteria.add(PropertyCriterion.le(criteria.proto().location(), geoBox.getNorthEast()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().location(), geoBox.getSouthWest()));
+
+        List<Address> far = srv.query(criteria);
+        Assert.assertEquals("result set size", 2, far.size());
     }
 }

@@ -194,24 +194,25 @@ public class QueryBuilder<T extends IEntity> {
             }
         } else {
             Serializable bindValue = propertyCriterion.getValue();
+            String sqlOperator;
             switch (propertyCriterion.getRestriction()) {
             case LESS_THAN:
-                sql.append(" < ? ");
+                sqlOperator = " < ? ";
                 break;
             case LESS_THAN_OR_EQUAL:
-                sql.append(" <= ? ");
+                sqlOperator = " <= ? ";
                 break;
             case GREATER_THAN:
-                sql.append(" > ? ");
+                sqlOperator = " > ? ";
                 break;
             case GREATER_THAN_OR_EQUAL:
-                sql.append(" >= ? ");
+                sqlOperator = " >= ? ";
                 break;
             case EQUAL:
-                sql.append(" = ? ");
+                sqlOperator = " = ? ";
                 break;
             case NOT_EQUAL:
-                sql.append(" != ? ");
+                sqlOperator = " != ? ";
                 break;
             case IN:
                 sql.append(" IN (");
@@ -243,15 +244,16 @@ public class QueryBuilder<T extends IEntity> {
                         bindValue = dialect.likeWildCards() + bindValue.toString() + dialect.likeWildCards();
                     }
                 }
-                sql.append(" LIKE ? ");
+                sqlOperator = " LIKE ? ";
                 break;
             default:
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
             }
 
+            sql.append(sqlOperator);
+
             if (secondPersistenceName != null) {
-                //TODO Use proper restriction
-                sql.append(" AND ").append(secondPersistenceName).append(" = ? ");
+                sql.append(" AND ").append(secondPersistenceName).append(sqlOperator);
                 memeberWithAlias.bindValue = bindValue;
                 bindParams.add(memeberWithAlias);
             } else {
@@ -271,6 +273,11 @@ public class QueryBuilder<T extends IEntity> {
         public MemeberWithAlias(MemberOperationsMeta memberOper, String alias) {
             this.memberOper = memberOper;
             this.alias = alias;
+        }
+
+        @Override
+        public String toString() {
+            return memberOper.toString() + " " + alias + " : " + bindValue;
         }
     }
 

@@ -75,6 +75,22 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.IN, value);
     }
 
+    public static PropertyCriterion gt(IObject<?> member, Serializable value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN, value);
+    }
+
+    public static PropertyCriterion ge(IObject<?> member, Serializable value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN_OR_EQUAL, value);
+    }
+
+    public static PropertyCriterion lt(IObject<?> member, Serializable value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN, value);
+    }
+
+    public static PropertyCriterion le(IObject<?> member, Serializable value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN_OR_EQUAL, value);
+    }
+
     public String getPropertyName() {
         return this.propertyName;
     }
