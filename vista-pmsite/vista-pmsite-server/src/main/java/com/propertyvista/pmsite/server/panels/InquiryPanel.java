@@ -76,8 +76,10 @@ public class InquiryPanel extends Panel {
             public void onSubmit() {
                 // update model
                 Lead lead = model.getObject().getEntityValue();
+                lead.status().setValue(Lead.Status.active);
                 // floorplan
-                Long fpId = ((FormComponent<Long>) get("floorPlanList")).getModelObject();
+                FormComponent<Long> fpList = (FormComponent<Long>) get("floorPlanList");
+                Long fpId = fpList.getModelObject();
                 if (fpId != null) {
                     lead.floorplan().id().setValue(new Key(fpId));
                 }
@@ -102,7 +104,6 @@ public class InquiryPanel extends Panel {
                 true, false));
 
         String label;
-//        label = lead.person().name().firstName().getMeta().getCaption();
         label = i18n.tr("First Name");
         form.add(new Label("firstNameLabel", label));
         form.add(new RequiredTextField<String>("firstName", model.bind(lead.person().name().firstName())).setLabel(new Model<String>(label)));

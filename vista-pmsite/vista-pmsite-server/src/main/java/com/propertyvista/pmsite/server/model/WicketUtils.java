@@ -238,9 +238,9 @@ public class WicketUtils {
         }
 
         @Override
-        public void onBeforeRender() {
+        public void onInitialize() {
             setChoices(new ArrayList<T>(valueMap.keySet()));
-            super.onBeforeRender();
+            super.onInitialize();
         }
     }
 
