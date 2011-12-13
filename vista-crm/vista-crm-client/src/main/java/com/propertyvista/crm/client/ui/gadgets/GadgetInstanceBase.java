@@ -162,14 +162,22 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     public abstract Widget initContentPanel();
 
     protected final Widget initView() {
-        errorPanel = initErrorPanel();
+        if (errorPanel == null) {
+            errorPanel = initErrorPanel();
+        }
         errorPanel.setVisible(false);
-        loadingPanel = initLoadingPanel();
+        if (loadingPanel == null) {
+            loadingPanel = initLoadingPanel();
+        }
         loadingPanel.setVisible(false);
         contentPanel = initContentPanel();
         contentPanel.setVisible(false);
 
-        gadgetPanel = createPanel();
+        if (gadgetPanel == null) {
+            gadgetPanel = createPanel();
+        } else {
+            gadgetPanel.clear();
+        }
         gadgetPanel.add(contentPanel);
         gadgetPanel.add(loadingPanel);
         gadgetPanel.add(errorPanel);
@@ -262,6 +270,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public void start() {
+        initView();
         isRunning = true;
         populate(defaultPopulator, true);
     }

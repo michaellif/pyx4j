@@ -20,6 +20,7 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
@@ -31,8 +32,10 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
@@ -54,9 +57,18 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         private FilterData filterData;
 
+        private FormFlexPanel panel;
+
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
             super(gmd, MockupArrearsState.class, ArrearsStatus.class);
             service = GWT.create(ArrearsReportService.class);
+        }
+
+        @Override
+        protected ArrearsStatus createDefaultSettings(Class<ArrearsStatus> metadataClass) {
+            ArrearsStatus metadata = super.createDefaultSettings(metadataClass);
+            metadata.category().setValue(ArrearsStatus.Category.Total);
+            return metadata;
         }
 
         @Override
@@ -125,13 +137,32 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         @Override
         public Widget initContentPanel() {
-            return initListerWidget();
+            panel = new FormFlexPanel();
+            panel.setH1(0, 0, 1, (getMetadata().category().getValue() != null ? getMetadata().category().getValue() : ArrearsStatus.Category.Total).toString());
+            panel.setWidget(1, 0, initListerWidget());
+            return panel;
         }
 
         @Override
         public void setFiltering(FilterData filterData) {
             this.filterData = filterData;
             populatePage(0);
+        }
+
+        @Override
+        public ISetup getSetup() {
+            return new SetupForm(new CEntityDecoratableEditor<ArrearsStatus>(ArrearsStatus.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel p = new FormFlexPanel();
+                    int row = -1;
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
+                    return p;
+                }
+            });
+
         }
 
         @Override
