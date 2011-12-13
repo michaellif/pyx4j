@@ -32,15 +32,13 @@ public interface TenantFinancialDTO extends IEntity {
     @ToString
     Person person();
 
-    @Caption(name = "Income")
     IList<PersonalIncome> incomes();
 
-    @Caption(name = "Income (Other)")
+    @Caption(name = "Incomes (Other)")
     IList<IIncomeInfo> incomes2();
 
     IList<PersonalAsset> assets();
 
-    @Caption(name = "Guarantor(s)")
     IList<TenantGuarantor> guarantors();
 
     EquifaxApproval equifaxApproval();

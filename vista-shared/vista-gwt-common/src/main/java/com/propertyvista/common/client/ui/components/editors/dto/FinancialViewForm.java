@@ -34,7 +34,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
-import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.TenantFinancialDTO;
 
 public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialDTO> {
@@ -58,8 +58,8 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
 
         int row = -1;
         if (!isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person(), new CEntityLabel<Person>()), 25).build());
-            get(proto().person()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Person")).build());
+            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
 
         main.setH1(++row, 0, 1, proto().incomes().getMeta().getCaption());

@@ -49,7 +49,7 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
-import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
@@ -88,8 +88,8 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person(), new CEntityLabel<Person>()), 25).customLabel(i18n.tr("Name")).build());
-            get(proto().person()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Person")).build());
+            get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate(), new CDateLabel()), 9).build());
