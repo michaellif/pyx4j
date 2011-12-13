@@ -13,13 +13,14 @@
  */
 package com.propertyvista.common.client.ui.components.editors.dto;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -29,12 +30,14 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.TenantFinancialDTO;
 
-public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
+public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialDTO> {
 
     static I18n i18n = I18n.get(FinancialViewForm.class);
 
@@ -54,6 +57,12 @@ public class FinancialViewForm extends CEntityEditor<TenantFinancialDTO> {
         Image info = new Image(VistaImages.INSTANCE.formTooltipHoverInfo().getSafeUri());
 
         int row = -1;
+        if (!isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person(), new CEntityLabel<Person>()), 25).customLabel("").useLabelSemicolon(false)
+                    .build());
+            get(proto().person()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        }
+
         main.setH1(++row, 0, 1, proto().incomes().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());

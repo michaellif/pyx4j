@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui.components.editors.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -47,6 +49,7 @@ import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
@@ -79,11 +82,15 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Contact Details"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
-
+        if (isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().namePrefix()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().middleName()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 20).build());
+        } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person(), new CEntityLabel<Person>()), 25).customLabel(i18n.tr("Name")).build());
+            get(proto().person()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate(), new CDateLabel()), 9).build());
 
