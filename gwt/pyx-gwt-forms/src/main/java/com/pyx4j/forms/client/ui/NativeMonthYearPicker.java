@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.MonthYearPicker;
 
 public class NativeMonthYearPicker extends MonthYearPicker implements INativeFocusComponent<Date> {
@@ -123,6 +124,27 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
 
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
+            yearSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
+            if (cComponent.isValid()) {
+                yearSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (cComponent.isVisited()) {
+                yearSelector.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
+        }
+
+        if (!cComponent.isYearOnly()) {
+            if (event.isEventOfType(PropertyName.repopulated)) {
+                monthSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
+                if (cComponent.isValid()) {
+                    monthSelector.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                } else if (cComponent.isVisited()) {
+                    monthSelector.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                }
+            }
+        }
     }
 
     @Override

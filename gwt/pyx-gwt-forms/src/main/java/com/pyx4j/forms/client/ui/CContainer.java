@@ -129,9 +129,6 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     @Override
     public boolean isValid() {
-        if (!isEditable() || !isEnabled()) {
-            return true;
-        }
         if (getComponents() != null) {
             for (CComponent<?, ?> ccomponent : getComponents()) {
                 if (!ccomponent.isValid()) {
