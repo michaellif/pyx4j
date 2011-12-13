@@ -39,12 +39,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatusDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 
 public class AvailabilityReportServiceImpl implements AvailabilityReportService {
     private static SortingFactory<UnitAvailabilityStatusDTO> SORTING_FACTORY = new SortingFactory<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
@@ -68,7 +68,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             // use descending order of the status date in order to select the most recent statuses first
             // use unit pk sorting in order to make tacking of already added unit statuses
             criteria.setSorts(Arrays.asList(new Sort(criteria.proto().belongsTo().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
-                    .toString(), true)));
+                    .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
             List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
 
             Key pervUnitPK = null;
