@@ -205,8 +205,14 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public void setEnabled(boolean enabled) {
-        defaultAccessAdapter.setEnabled(enabled);
-        applyEnablingRules();
+        if (enabled != isEnabled()) {
+            defaultAccessAdapter.setEnabled(enabled);
+            applyEnablingRules();
+            revalidate();
+            if (!enabled) {
+                setVisited(false);
+            }
+        }
     }
 
     public boolean isVisible() {
@@ -219,8 +225,58 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public void setVisible(boolean visible) {
-        defaultAccessAdapter.setVisible(visible);
-        applyVisibilityRules();
+        if (visible != isVisible()) {
+            defaultAccessAdapter.setVisible(visible);
+            applyVisibilityRules();
+            revalidate();
+            if (!visible) {
+                setVisited(false);
+            }
+        }
+    }
+
+    public boolean isEditable() {
+        for (IAccessAdapter adapter : getAccessAdapters()) {
+            if (!adapter.isEditable(this)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void setEditable(boolean editable) {
+        if (editable != isEditable()) {
+            defaultAccessAdapter.setEditable(editable);
+            applyEditabilityRules();
+            revalidate();
+            if (!editable) {
+                setVisited(false);
+            }
+        }
+    }
+
+    public boolean isMandatory() {
+        if (validators == null) {
+            return false;
+        }
+        for (EditableValueValidator<?> validator : validators) {
+            if (validator instanceof MandatoryValidator) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        if (isMandatory() != mandatory) {
+            addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
+            revalidate();
+        }
+    }
+
+    public boolean isMandatoryConditionMet() {
+        return !(validationFailure instanceof MandatoryValidationFailure);
     }
 
     @Override
@@ -312,6 +368,14 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
+    public void applyEditabilityRules() {
+        boolean editable = isEditable();
+        if (isWidgetCreated() && asWidget().isEditable() != editable) {
+            asWidget().setEditable(editable);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
+        }
+    }
+
     public void applyAccessibilityRules() {
         applyVisibilityRules();
         applyEnablingRules();
@@ -394,46 +458,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
         return EqualsHelper.equals(value1, value2);
-    }
-
-    public boolean isEditable() {
-        for (IAccessAdapter adapter : getAccessAdapters()) {
-            if (!adapter.isEditable(this)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void setEditable(boolean editable) {
-        if (editable != isEditable()) {
-            defaultAccessAdapter.setEditable(editable);
-            applyEditabilityRules();
-        }
-    }
-
-    public boolean isMandatory() {
-        if (validators == null) {
-            return false;
-        }
-        for (EditableValueValidator<?> validator : validators) {
-            if (validator instanceof MandatoryValidator) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setMandatory(boolean mandatory) {
-        if (isMandatory() != mandatory) {
-            addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
-            revalidate();
-        }
-    }
-
-    public boolean isMandatoryConditionMet() {
-        return !(validationFailure instanceof MandatoryValidationFailure);
     }
 
     public String getValidationMessage() {
@@ -519,14 +543,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     protected void setNativeValue(DATA_TYPE value) {
         if (isWidgetCreated()) {
             asWidget().setNativeValue(value);
-        }
-    }
-
-    public void applyEditabilityRules() {
-        boolean editable = isEditable();
-        if (isWidgetCreated() && asWidget().isEditable() != editable) {
-            asWidget().setEditable(editable);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
     }
 

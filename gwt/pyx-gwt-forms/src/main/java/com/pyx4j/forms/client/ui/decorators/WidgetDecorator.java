@@ -136,7 +136,7 @@ public class WidgetDecorator extends FlexTable {
                     setVisible(component.isVisible());
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
                     label.setText(component.getTitle() + ":");
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
                     renderMandatoryStar();
                 }

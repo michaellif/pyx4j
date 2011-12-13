@@ -275,13 +275,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         if (isAttached()) {
             setValue(entity);
         } else {
-            if (entity != null) {
-                this.origEntity = (E) entity.cloneEntity();
-                setValue(entity);
-            } else {
-                this.origEntity = null;
-                setValue(null);
-            }
+            this.origEntity = (E) entity.cloneEntity();
+            setValue(entity);
         }
         super.populate(entity);
     }
