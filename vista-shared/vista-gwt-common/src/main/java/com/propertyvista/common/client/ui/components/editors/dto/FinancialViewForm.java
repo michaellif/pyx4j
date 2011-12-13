@@ -58,8 +58,7 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
 
         int row = -1;
         if (!isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person(), new CEntityLabel<Person>()), 25).customLabel("").useLabelSemicolon(false)
-                    .build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person(), new CEntityLabel<Person>()), 25).build());
             get(proto().person()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
 
