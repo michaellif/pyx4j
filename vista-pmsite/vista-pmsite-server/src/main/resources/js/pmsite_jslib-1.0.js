@@ -158,8 +158,8 @@ function submitGeolocationV2(form) {
 		return;
 	}
 	var address = $('[jsparam=location]', $form).val();
-	if (address.length < 10) {
-		popup_msg('Insufficient input. Please provide more details such as country, city or postal code.');
+	if (address.length < 5) {
+		popup_msg('Insufficient input. Please provide more details such as country, city, postal code.');
 		return false;
 	}
 	var gc = new GClientGeocoder();
@@ -175,7 +175,7 @@ function submitGeolocationV2(form) {
 			retun;
 		}
 		if (result.Placemark.length > 1) {
-			popup_msg('Adress search failed. Please provide more details such as country, city or postal code.');
+			popup_msg('Adress search failed. Please provide more details such as country, city, postal code.');
 			retun;
 		}
 		var coord = result.Placemark[0].Point.coordinates;

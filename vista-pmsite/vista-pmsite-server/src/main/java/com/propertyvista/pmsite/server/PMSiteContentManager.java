@@ -345,10 +345,28 @@ public class PMSiteContentManager implements Serializable {
             dbCriteria.add(PropertyCriterion.ge(dbCriteria.proto().info().address().location(), geoBox.getSouthWest()));
         }
 
-        // create floorplan criteria
+        // 1. filter buildings by amenities (single match gets building in)
+        EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
+        if (searchCriteria.amenities().size() > 0) {
+            amCriteria.add(PropertyCriterion.in(amCriteria.proto().type(), searchCriteria.amenities().toArray((Serializable[]) new BuildingAmenity.Type[0])));
+            // prepare building filter 1
+            final Set<Key> bldFilter1 = new HashSet<Key>();
+            for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
+                bldFilter1.add(am.belongsTo().getPrimaryKey());
+            }
+            // filter buildings with filter 1
+            if (bldFilter1.size() > 0) {
+                dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1.toArray((Serializable[]) new Key[0])));
+            } else {
+                // nothing found, exit now
+                return null;
+            }
+        }
+
+        // 2. filter buildings by floorplans
         EntityQueryCriteria<Floorplan> fpCriteria = EntityQueryCriteria.create(Floorplan.class);
 
-        // 1. filter units
+        // 2.1. filter floorplans by units
         EntityQueryCriteria<AptUnit> auCriteria = EntityQueryCriteria.create(AptUnit.class);
         // price
         Integer minPrice = searchCriteria.minPrice().getValue();
@@ -359,35 +377,19 @@ public class PMSiteContentManager implements Serializable {
         if (maxPrice != null && maxPrice > 0) {
             auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, maxPrice));
         }
-        // prepare new floorplan list 1
+        // prepare new floorplan filter 1
         final Set<Key> fpSet1 = new HashSet<Key>();
         for (AptUnit unit : Persistence.service().query(auCriteria)) {
             fpSet1.add(unit.floorplan().getPrimaryKey());
         }
+        // add floorplan unit criteria
         if (fpSet1.size() > 0) {
             fpCriteria.add(PropertyCriterion.in(fpCriteria.proto().id(), fpSet1.toArray((Serializable[]) new Key[0])));
         } else {
             // nothing found, exit now
             return null;
         }
-
-        // 2. filter amenities (single match gets building in)
-        EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-        if (searchCriteria.amenities().size() > 0) {
-            amCriteria.add(PropertyCriterion.in(amCriteria.proto().type(), searchCriteria.amenities().toArray((Serializable[]) new BuildingAmenity.Type[0])));
-            // prepare new building filter list 1
-            final Set<Key> bldFilter1 = new HashSet<Key>();
-            for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
-                bldFilter1.add(am.belongsTo().getPrimaryKey());
-            }
-            // filter floorplans with amenities
-            if (bldFilter1.size() > 0) {
-                dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1.toArray((Serializable[]) new Key[0])));
-            } else {
-                // nothing found, exit now
-                return null;
-            }
-        }
+        // 2.2 filter floorplans by other search criteria
         // beds
         BedroomChoice minBeds = searchCriteria.minBeds().getValue();
         if (minBeds != null && minBeds != BedroomChoice.Any) {
@@ -406,12 +408,12 @@ public class PMSiteContentManager implements Serializable {
         if (maxBaths != null && maxBaths != BathroomChoice.Any) {
             fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bathrooms(), Restriction.LESS_THAN_OR_EQUAL, minBaths.getBaths()));
         }
-        // prepare building filter list 2
+        // prepare building filter 2
         final Set<Key> bldFilter2 = new HashSet<Key>();
         for (Floorplan fp : Persistence.service().query(fpCriteria)) {
             bldFilter2.add(fp.building().getPrimaryKey());
         }
-        // now filter buildings
+        // filter buildings with filter 2
         if (bldFilter2.size() > 0) {
             dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter2.toArray((Serializable[]) new Key[0])));
         } else {
