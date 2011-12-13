@@ -20,4 +20,8 @@
 	<source path='client' />
     
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.site.client.*" />
+    
+        <!--  disable class names obfuscation -->
+    <set-configuration-property name="CssResource.style" value="stable-notype"/>
+    
 </module>
