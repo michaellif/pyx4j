@@ -55,17 +55,15 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        CLabel lb;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel())).customLabel("").useLabelSemicolon(false).build());
-        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), new CLabel())).customLabel("").useLabelSemicolon(false).build());
+        get(proto().item().type().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 6).customLabel(i18n.tr("Agreed Price")).build());
+        get(proto().agreedPrice()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         CNumberLabel nl;
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().originalPrice(), nl = new CNumberLabel()), 6).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().originalPrice(), nl = new CNumberLabel()), 6).build());
         nl.setNumberFormat(proto().originalPrice().getMeta().getFormat(), proto().originalPrice().getMeta().useMessageFormat());
-
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 6).build());
-        nl.setNumberFormat(proto().agreedPrice().getMeta().getFormat(), proto().agreedPrice().getMeta().useMessageFormat());
-        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -94,7 +92,6 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
         if (!isEditable()) {
             adjustmentPanel.setVisible(!value.adjustments().isEmpty());
-            get(proto().agreedPrice()).setVisible(!value.adjustments().isEmpty());
         }
 
         CEntityEditor editor = null;

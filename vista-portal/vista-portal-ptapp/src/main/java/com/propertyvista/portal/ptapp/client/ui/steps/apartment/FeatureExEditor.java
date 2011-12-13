@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -53,12 +54,12 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
         CLabel lb;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel()), 23).customLabel("").useLabelSemicolon(false)
                 .build());
-        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         CNumberLabel nl;
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice(), nl = new CNumberLabel()), 6).build());
-        nl.setNumberFormat(proto().originalPrice().getMeta().getFormat(), proto().originalPrice().getMeta().useMessageFormat());
-        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        nl.setNumberFormat(proto().agreedPrice().getMeta().getFormat(), proto().agreedPrice().getMeta().useMessageFormat());
+        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -78,9 +79,10 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
         // add extraData editor if necessary:
         switch (value.item().type().type().getValue()) {
         case feature:
+            IEditableComponentFactory factory = (isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory());
             switch (value.item().type().featureType().getValue()) {
             case parking:
-                editor = new VehicleDataEditor(isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory()) {
+                editor = new VehicleDataEditor(factory) {
                     @Override
                     public CComponent<?, ?> create(IObject<?> member) {
                         return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
@@ -92,7 +94,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
                 }
                 break;
             case pet:
-                editor = new PetDataEditor(isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory()) {
+                editor = new PetDataEditor(factory) {
                     @Override
                     public CComponent<?, ?> create(IObject<?> member) {
                         return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
