@@ -64,6 +64,8 @@ public interface AddressStructured extends IEntity {
 
         court,
 
+        circuit,
+
         circle,
 
         crescent,
