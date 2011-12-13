@@ -41,7 +41,6 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -216,18 +215,17 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         } else {
             this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
         }
+        super.setValue(this.editableEntity);
         populateComponents();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected void populateComponents() {
+    private void populateComponents() {
         for (CComponent component : binding.keySet()) {
             Path memberPath = binding.get(component);
             IObject<?> m = editableEntity.getMember(memberPath);
             try {
-                if (component instanceof DelegatingEntityEditableComponent) {
-                    ((DelegatingEntityEditableComponent) component).populateModel(null, m);
-                } else if ((m instanceof IEntity) || (m instanceof ICollection)) {
+                if ((m instanceof IEntity) || (m instanceof ICollection)) {
                     component.populate(m);
                 } else {
                     component.populate(m.getValue());
@@ -238,7 +236,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                 throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
                         + e.getMessage());
             }
-
         }
     }
 
@@ -272,18 +269,26 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @SuppressWarnings("unchecked")
     public void populate(E entity) {
         assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
-        if (isAttached()) {
-            setValue(entity);
-        } else {
+        if (!isAttached()) {
             this.origEntity = (E) entity.cloneEntity();
-            setValue(entity);
         }
+        // Some how nothing works if this removed (because super do not call this class setValue)
+        setValue(entity);
         super.populate(entity);
+    }
+
+    /**
+     * Initialize from with empty Entity
+     */
+    @SuppressWarnings("unchecked")
+    public void populate() {
+        populate((E) EntityFactory.create(proto().getObjectClass()));
     }
 
     //TODO discuss with Vlad how to optimally implement this?
     public void discard() {
         this.origEntity = null;
+        // need this because super do not call this class setValue
         setValue(null);
         super.populate(null);
     }
