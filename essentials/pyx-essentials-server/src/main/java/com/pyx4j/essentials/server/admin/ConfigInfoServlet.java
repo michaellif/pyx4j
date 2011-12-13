@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
@@ -49,7 +50,10 @@ public class ConfigInfoServlet extends HttpServlet {
 
     protected String buildConfigurationText() {
         StringBuilder b = new StringBuilder();
-        b.append("ContextName:").append(LoggerConfig.getContextName()).append("\n");
+        b.append("Application Version   : ").append(ApplicationVersion.getProductVersion()).append("\n");
+        b.append("Application BuildTime : ").append(ApplicationVersion.getProductBuildTime()).append("\n\n");
+
+        b.append("ContextName : ").append(LoggerConfig.getContextName()).append("\n");
 
         ServerSideConfiguration conf = ServerSideConfiguration.instance();
         b.append("ServerSideConfiguration  : ").append(conf.getClass().getName()).append("\n");

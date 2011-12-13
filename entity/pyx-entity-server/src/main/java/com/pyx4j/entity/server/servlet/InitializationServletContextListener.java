@@ -55,7 +55,7 @@ public class InitializationServletContextListener implements ServletContextListe
                     String configContextName = getContextName(servletContext);
                     LoggerConfig.setContextName(configContextName);
                     ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
-                    ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(servletContext, getContextName(servletContext)));
+                    ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(servletContext, configContextName));
 
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
                     log.debug("ServerInfo {}", servletContext.getServerInfo());
