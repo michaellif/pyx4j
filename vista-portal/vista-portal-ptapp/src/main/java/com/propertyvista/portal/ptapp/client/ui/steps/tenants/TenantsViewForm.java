@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,8 +38,12 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
-        main.add(inject(proto().tenants(), new TenantFolder(isEditable())));
+        FormFlexPanel main = new FormFlexPanel();
+
+        int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Tenants & Occupants"));
+        main.setWidget(++row, 0, inject(proto().tenants(), new TenantFolder(isEditable())));
+
         return main;
     }
 
