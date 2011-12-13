@@ -102,7 +102,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         };
         form.initContent();
         form.get(form.proto().captcha()).setVisible(false);
-        form.populate(null);
+        form.discard();
 
         rightColumn.add(form);
     }
