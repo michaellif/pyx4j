@@ -173,22 +173,6 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @Override
-    public boolean isEditable() {
-        for (IAccessAdapter adapter : getAccessAdapters()) {
-            if (!adapter.isEditable(this)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        defaultAccessAdapter.setEditable(editable);
-        applyEditabilityRules();
-    }
-
-    @Override
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         if (getComponents() != null) {

@@ -26,6 +26,8 @@ public interface IFormView<E extends IEntity> extends IView<E> {
 
     void populate(E value);
 
+    void discard();
+
     void setActiveTab(int index);
 
     int getActiveTab();

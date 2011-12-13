@@ -271,6 +271,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @Override
     @SuppressWarnings("unchecked")
     public void populate(E entity) {
+        assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
         if (isAttached()) {
             setValue(entity);
         } else {
@@ -283,6 +284,13 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
             }
         }
         super.populate(entity);
+    }
+
+    //TODO discuss with Vlad how to optimally implement this?
+    public void discard() {
+        this.origEntity = null;
+        setValue(null);
+        super.populate(null);
     }
 
     public boolean isDirty() {

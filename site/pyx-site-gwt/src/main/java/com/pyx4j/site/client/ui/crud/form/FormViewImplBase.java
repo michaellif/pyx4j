@@ -131,6 +131,11 @@ public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel impleme
     }
 
     @Override
+    public void discard() {
+        form.discard();
+    }
+
+    @Override
     public void setActiveTab(int index) {
         if (index >= 0) {
             assert (form != null);
