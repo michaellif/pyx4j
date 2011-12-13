@@ -97,6 +97,7 @@ class LeaseHelper {
         ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
         chargeItem.item().set(serviceItem);
         chargeItem.originalPrice().setValue(serviceItem.price().getValue());
+        chargeItem.agreedPrice().setValue(serviceItem.price().getValue());
         return chargeItem;
     }
 }

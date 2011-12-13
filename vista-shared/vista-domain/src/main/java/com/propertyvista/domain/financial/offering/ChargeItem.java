@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -36,14 +35,12 @@ public interface ChargeItem extends IEntity {
     IPrimitive<Double> originalPrice();
 
     /*
-     * adjusted price: case price + adjustments (type of hole-term only!)
-     * should be recalculated by service when necessary (use @link PriceCalculationHelpers.calculateChargeItemAdjustments(ChargeItem item))!..
+     * agreed price: contractual price value, override the Service Item’s price
      */
-    @Transient
     @ToString(index = 2)
     @Format("#0.00")
     @Caption(name = "Price")
-    IPrimitive<Double> adjustedPrice();
+    IPrimitive<Double> agreedPrice();
 
     @Owned
     IList<ChargeItemAdjustment> adjustments();

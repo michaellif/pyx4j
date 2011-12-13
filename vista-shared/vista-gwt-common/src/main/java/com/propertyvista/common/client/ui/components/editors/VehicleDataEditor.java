@@ -37,9 +37,10 @@ public class VehicleDataEditor extends CEntityDecoratableEditor<Vehicle> {
     }
 
     public VehicleDataEditor(IEditableComponentFactory factory) {
-        super(Vehicle.class);
+        super(Vehicle.class, factory);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();

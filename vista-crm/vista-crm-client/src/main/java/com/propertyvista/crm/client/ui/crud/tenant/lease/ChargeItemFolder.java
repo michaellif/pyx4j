@@ -58,7 +58,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                         ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());
-                        newItem.adjustedPrice().setValue(item.price().getValue());
+                        newItem.agreedPrice().setValue(item.price().getValue());
                         addItem(newItem);
                     }
                     return true;
@@ -70,7 +70,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ChargeItem) {
-            return new ChargeItemEditor(this);
+            return new ChargeItemEditor();
         }
         return super.create(member);
     }

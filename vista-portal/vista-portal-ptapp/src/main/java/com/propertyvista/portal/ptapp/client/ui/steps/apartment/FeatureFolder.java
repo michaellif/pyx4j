@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -36,18 +37,26 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
 
     public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(ChargeItem.class, modifiable);
-        // TODO: remove when folder modifiable state be unlinked from parents editing state! 
+        // TODO: remove when folder modifiable state be unlinked from parents editing state!
         inheritContainerAccessRules(false);
+        setEditable(modifiable);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
     }
 
     @Override
+    protected IFolderDecorator<ChargeItem> createDecorator() {
+        IFolderDecorator<ChargeItem> decor = super.createDecorator();
+        decor.setAddButtonVisible(isModifiable());
+        return decor;
+    }
+
+    @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().item().type(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().adjustedPrice(), "7em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().agreedPrice(), "7em"));
         columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "30em"));
         return columns;
 
@@ -63,7 +72,7 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
                         ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());
-                        newItem.adjustedPrice().setValue(item.price().getValue());
+                        newItem.agreedPrice().setValue(item.price().getValue());
                         addItem(newItem);
                     }
                     return true;
@@ -80,8 +89,8 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
     protected void removeItem(final CEntityFolderItem<ChargeItem> item) {
         if (!item.getValue().adjustments().isEmpty()) {
             MessageDialog.confirm(i18n.tr("Warning!"),
-                    i18n.tr("By removing the selected item you will lose the agreed price adjustment! Are you sure you want to remove it?"), new Command() {
-
+                    i18n.tr("By removing the selected item you will lose the agreed price and adjustment(s)! Are you sure you want to remove it?"),
+                    new Command() {
                         @Override
                         public void execute() {
                             unconditionalRemoveItem(item);

@@ -13,11 +13,15 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
+import java.util.List;
+
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -41,7 +45,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
         super(ChargeItem.class, modifiable);
         // TODO: remove when folder modifiable state be unlinked from parents editing state!
         inheritContainerAccessRules(false);
-        setEditable(apartmentViewForm != null);
+        setEditable(modifiable);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
@@ -74,15 +78,26 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                             ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                             newItem.item().set(item);
                             newItem.originalPrice().setValue(item.price().getValue());
-                            newItem.adjustedPrice().setValue(item.price().getValue());
+                            newItem.agreedPrice().setValue(item.price().getValue());
                             addItem(newItem);
                         }
                         return true;
                     }
                 }.show();
             } else {
-                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more then {0} items here!", maxCount));
+                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more than {0} items here!", maxCount));
             }
         }
+    }
+
+    @Override
+    public void addValidations() {
+        addValueValidator(new EditableValueValidator<List<ChargeItem>>() {
+            @Override
+            public ValidationFailure isValid(CComponent<List<ChargeItem>, ?> component, List<ChargeItem> value) {
+                return (value.size() < maxCount) ? null : new ValidationFailure(i18n.tr("You cannot add more than {0} items here!", maxCount));
+            }
+        });
+        super.addValidations();
     }
 }

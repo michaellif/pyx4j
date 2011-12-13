@@ -72,7 +72,7 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         Lease lease = Persistence.service().retrieve(leaseCriteria);
         if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
-            dto.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().adjustedPrice().getValue());
+            dto.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().agreedPrice().getValue());
         }
     }
 

@@ -177,9 +177,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
-        serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 50).build());
         if (isEditable()) {
-            serviceItemPanel.add(new AnchorButton("Select...", new ClickHandler() {
+            Widget select;
+            serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new ChargeItemEditor()));
+            serviceItemPanel.add(select = new AnchorButton("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
@@ -195,6 +196,9 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     }
                 }
             }));
+            select.getElement().getStyle().setMarginLeft(4, Unit.EM);
+        } else {
+            serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 50).build());
         }
 
         int row = -1;

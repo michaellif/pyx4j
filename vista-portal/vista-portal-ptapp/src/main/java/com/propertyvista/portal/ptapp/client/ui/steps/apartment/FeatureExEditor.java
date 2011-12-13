@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
@@ -50,22 +51,20 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
         int row = -1;
 
         CLabel lb;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel())).customLabel("").useLabelSemicolon(false).build());
-        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel()), 23).customLabel("").useLabelSemicolon(false)
+                .build());
+        lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         CNumberLabel nl;
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().originalPrice(), nl = new CNumberLabel()), 6).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice(), nl = new CNumberLabel()), 6).build());
         nl.setNumberFormat(proto().originalPrice().getMeta().getFormat(), proto().originalPrice().getMeta().useMessageFormat());
-
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6).build());
-        nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat(), proto().adjustedPrice().getMeta().useMessageFormat());
-        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "40%");
-        main.getColumnFormatter().setWidth(1, "60%");
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return main;
     }
@@ -76,31 +75,35 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
         super.populate(value);
 
         CEntityEditor editor = null;
-        switch (value.item().type().featureType().getValue()) {
-        case parking:
-            editor = new VehicleDataEditor(new VistaEditorsComponentFactory()) {
-                @Override
-                public CComponent<?, ?> create(IObject<?> member) {
-                    return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
-                }
-            };
+        // add extraData editor if necessary:
+        switch (value.item().type().type().getValue()) {
+        case feature:
+            switch (value.item().type().featureType().getValue()) {
+            case parking:
+                editor = new VehicleDataEditor(isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory()) {
+                    @Override
+                    public CComponent<?, ?> create(IObject<?> member) {
+                        return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
+                    }
+                };
 
-            if (value.extraData().isNull()) {
-                value.extraData().set(EntityFactory.create(Vehicle.class));
-            }
-            break;
-        case pet:
-            editor = new PetDataEditor(new VistaEditorsComponentFactory()) {
-                @Override
-                public CComponent<?, ?> create(IObject<?> member) {
-                    return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
+                if (value.extraData().isNull()) {
+                    value.extraData().set(EntityFactory.create(Vehicle.class));
                 }
-            };
+                break;
+            case pet:
+                editor = new PetDataEditor(isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory()) {
+                    @Override
+                    public CComponent<?, ?> create(IObject<?> member) {
+                        return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
+                    }
+                };
 
-            if (value.extraData().isNull()) {
-                value.extraData().set(EntityFactory.create(Pet.class));
+                if (value.extraData().isNull()) {
+                    value.extraData().set(EntityFactory.create(Pet.class));
+                }
+                break;
             }
-            break;
         }
 
         if (editor != null) {

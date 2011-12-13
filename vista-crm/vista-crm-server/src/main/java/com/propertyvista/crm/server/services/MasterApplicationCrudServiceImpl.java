@@ -108,7 +108,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         // calculate price adjustments:
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().serviceAgreement().serviceItem());
 
-        dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem().adjustedPrice().getValue());
+        dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem().agreedPrice().getValue());
         dto.parkingPrice().setValue(0.);
         dto.otherPrice().setValue(0.);
         dto.deposit().setValue(0.);
@@ -118,11 +118,11 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             if (item.item().product() instanceof Feature) {
                 switch (((Feature) item.item().product()).type().getValue()) {
                 case parking:
-                    dto.parkingPrice().setValue(dto.parkingPrice().getValue() + item.adjustedPrice().getValue());
+                    dto.parkingPrice().setValue(dto.parkingPrice().getValue() + item.agreedPrice().getValue());
                     break;
 
                 default:
-                    dto.otherPrice().setValue(dto.otherPrice().getValue() + item.adjustedPrice().getValue());
+                    dto.otherPrice().setValue(dto.otherPrice().getValue() + item.agreedPrice().getValue());
                 }
             }
         }

@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -49,11 +46,8 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    private final ChargeItemFolder chargeItemFolder;
-
-    public ChargeItemEditor(ChargeItemFolder chargeItemFolder) {
+    public ChargeItemEditor() {
         super(ChargeItem.class);
-        this.chargeItemFolder = chargeItemFolder;
     }
 
     @Override
@@ -69,8 +63,8 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().originalPrice(), nl = new CNumberLabel()), 6).build());
         nl.setNumberFormat(proto().originalPrice().getMeta().getFormat(), proto().originalPrice().getMeta().useMessageFormat());
 
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().adjustedPrice(), nl = new CNumberLabel()), 6).build());
-        nl.setNumberFormat(proto().adjustedPrice().getMeta().getFormat(), proto().adjustedPrice().getMeta().useMessageFormat());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 6).build());
+        nl.setNumberFormat(proto().agreedPrice().getMeta().getFormat(), proto().agreedPrice().getMeta().useMessageFormat());
         nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         main.setWidget(++row, 0, extraDataPanel);
@@ -95,26 +89,31 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
         if (value.item().type().featureType().getValue() == Feature.Type.utility) {
             // TODO - how to ?
-//                    setRemovable(false);
+//            setRemovable(false);
         }
 
         if (!isEditable()) {
             adjustmentPanel.setVisible(!value.adjustments().isEmpty());
-            get(proto().adjustedPrice()).setVisible(!value.adjustments().isEmpty());
+            get(proto().agreedPrice()).setVisible(!value.adjustments().isEmpty());
         }
 
         CEntityEditor editor = null;
-        switch (value.item().type().featureType().getValue()) {
-        case parking:
-            editor = new VehicleDataEditor();
-            if (value.extraData().isNull()) {
-                value.extraData().set(EntityFactory.create(Vehicle.class));
-            }
-            break;
-        case pet:
-            editor = new PetDataEditor();
-            if (value.extraData().isNull()) {
-                value.extraData().set(EntityFactory.create(Pet.class));
+        // add extraData editor if necessary:
+        switch (value.item().type().type().getValue()) {
+        case feature:
+            switch (value.item().type().featureType().getValue()) {
+            case parking:
+                editor = new VehicleDataEditor();
+                if (value.extraData().isNull()) {
+                    value.extraData().set(EntityFactory.create(Vehicle.class));
+                }
+                break;
+            case pet:
+                editor = new PetDataEditor();
+                if (value.extraData().isNull()) {
+                    value.extraData().set(EntityFactory.create(Pet.class));
+                }
+                break;
             }
             break;
         }
@@ -126,38 +125,10 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         }
     }
 
-    @Override
-    public void addValidations() {
-        super.addValidations();
-        addValueChangeHandler(new ValueChangeHandler<ChargeItem>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<ChargeItem> event) {
-                calculateAdjustments();
-            }
-        });
-    }
-
-    private void calculateAdjustments() {
-        if (chargeItemFolder.parent.isEditable()) {
-            LeaseEditorView.Presenter presenter = (LeaseEditorView.Presenter) ((LeaseEditorView) chargeItemFolder.parent.getParentView()).getPresenter();
-            presenter.calculateChargeItemAdjustments(new AsyncCallback<Double>() {
-                @Override
-                public void onSuccess(Double result) {
-                    get(proto().adjustedPrice()).setValue(result);
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    // TODO Auto-generated method stub
-                }
-            }, getValue());
-        }
-    }
-
     private class ChargeItemAdjustmentFolder extends VistaTableFolder<ChargeItemAdjustment> {
 
         public ChargeItemAdjustmentFolder() {
-            super(ChargeItemAdjustment.class, chargeItemFolder.isEditable());
+            super(ChargeItemAdjustment.class, ChargeItemEditor.this.isEditable());
         }
 
         @Override

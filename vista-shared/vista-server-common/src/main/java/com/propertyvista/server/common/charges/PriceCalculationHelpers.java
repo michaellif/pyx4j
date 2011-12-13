@@ -28,8 +28,6 @@ public class PriceCalculationHelpers {
             }
         }
 
-        // update Value:
-        item.adjustedPrice().setValue(adjustedPrice);
         return adjustedPrice;
     }
 
