@@ -53,7 +53,7 @@ public interface PasswordChangeRequest extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.password)
-    @Caption(name = "Confirm new password")
+    @Caption(name = "Confirm New Password")
     IPrimitive<String> newPasswordConfirm();
 
     /**
