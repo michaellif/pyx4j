@@ -103,7 +103,7 @@ public class Converter {
         // List of Floorplans
         for (Floorplan fp : floorplans) {
             FloorplanPropertyDTO fpto = EntityFactory.create(FloorplanPropertyDTO.class);
-            fpto.name().set(fp.name());
+            fpto.name().set(fp.marketingName());
             fpto.bedrooms().set(fp.bedrooms());
             fpto.bathrooms().set(fp.bathrooms());
             fpto.price().set(CommonsGenerator.createRange(600d, 1600d));

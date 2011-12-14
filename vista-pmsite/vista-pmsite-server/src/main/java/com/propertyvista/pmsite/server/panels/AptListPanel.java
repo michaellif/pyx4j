@@ -101,7 +101,7 @@ public class AptListPanel extends Panel {
                     @Override
                     protected void populateItem(ListItem<Floorplan> item) {
                         Floorplan fp = item.getModelObject();
-                        String name = fp.name().getValue();
+                        String name = fp.marketingName().getValue();
                         if (name == null) {
                             name = fp.bedrooms().getValue() + " " + i18n.tr("Bedroom");
                         }
