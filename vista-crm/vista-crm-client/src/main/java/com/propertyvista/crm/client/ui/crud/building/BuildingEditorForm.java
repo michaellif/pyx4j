@@ -158,16 +158,16 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex()), 15).build());
 
-        //main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().geoLocation()), 28).build());
-        //main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
-
         main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().geoLocation()));
+        if (isEditable()) {
+            main.setWidget(row, 0, inject(proto().geoLocation()));
+        } else {
+            main.setWidget(row, 0, new DecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
+        }
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setH1(row++, 0, 2, proto().amenities().getMeta().getCaption());

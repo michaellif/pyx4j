@@ -42,10 +42,13 @@ public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latitude()), 15).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().latitudeType()), 15).customLabel("Latitude Direction").build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().longitude()), 15).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().longitudeType()), 15).customLabel("Longitude Direction").build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latitude()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().latitudeType()), 6).customLabel("Latitude Direction").build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().longitude()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().longitudeType()), 6).customLabel("Longitude Direction").build());
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
         return main;
     }
 
