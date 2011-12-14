@@ -75,43 +75,45 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
     public void populate(ChargeItem value) {
         super.populate(value);
 
-        CEntityEditor editor = null;
-        // add extraData editor if necessary:
-        switch (value.item().type().type().getValue()) {
-        case feature:
-            IEditableComponentFactory factory = (isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory());
-            switch (value.item().type().featureType().getValue()) {
-            case parking:
-                editor = new VehicleDataEditor(factory) {
-                    @Override
-                    public CComponent<?, ?> create(IObject<?> member) {
-                        return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
-                    }
-                };
+        if (!value.item().isEmpty()) {
+            CEntityEditor editor = null;
+            // add extraData editor if necessary:
+            switch (value.item().type().type().getValue()) {
+            case feature:
+                IEditableComponentFactory factory = (isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory());
+                switch (value.item().type().featureType().getValue()) {
+                case parking:
+                    editor = new VehicleDataEditor(factory) {
+                        @Override
+                        public CComponent<?, ?> create(IObject<?> member) {
+                            return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
+                        }
+                    };
 
-                if (value.extraData().isNull()) {
-                    value.extraData().set(EntityFactory.create(Vehicle.class));
-                }
-                break;
-            case pet:
-                editor = new PetDataEditor(factory) {
-                    @Override
-                    public CComponent<?, ?> create(IObject<?> member) {
-                        return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
+                    if (value.extraData().isNull()) {
+                        value.extraData().set(EntityFactory.create(Vehicle.class));
                     }
-                };
+                    break;
+                case pet:
+                    editor = new PetDataEditor(factory) {
+                        @Override
+                        public CComponent<?, ?> create(IObject<?> member) {
+                            return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
+                        }
+                    };
 
-                if (value.extraData().isNull()) {
-                    value.extraData().set(EntityFactory.create(Pet.class));
+                    if (value.extraData().isNull()) {
+                        value.extraData().set(EntityFactory.create(Pet.class));
+                    }
+                    break;
                 }
-                break;
             }
-        }
 
-        if (editor != null) {
-            this.inject(proto().extraData(), editor);
-            editor.populate(value.extraData().cast());
-            extraDataPanel.setWidget(editor);
+            if (editor != null) {
+                this.inject(proto().extraData(), editor);
+                editor.populate(value.extraData().cast());
+                extraDataPanel.setWidget(editor);
+            }
         }
     }
 }

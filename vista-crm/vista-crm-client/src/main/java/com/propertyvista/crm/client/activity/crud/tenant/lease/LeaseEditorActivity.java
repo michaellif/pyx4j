@@ -214,7 +214,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     private void clearServiceAgreement(LeaseDTO currentValue, boolean all) {
         if (all) {
-            currentValue.serviceAgreement().serviceItem().set(null);
+            currentValue.serviceAgreement().serviceItem().set(EntityFactory.create(ChargeItem.class));
         }
         currentValue.serviceAgreement().featureItems().clear();
         currentValue.serviceAgreement().concessions().clear();
