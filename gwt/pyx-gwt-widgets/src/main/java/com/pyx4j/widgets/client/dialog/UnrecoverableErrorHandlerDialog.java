@@ -116,9 +116,12 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
                 return true;
             }
         };
-        String message = i18n.tr("We Updated Our Application\nIn Order To Continue Using This Application You Need To Refresh The Page"
+        MessageDialog.show(i18n.tr("System Error"), getMessageReloadApplication(), Type.Error, optYesNo);
+    }
+
+    protected String getMessageReloadApplication() {
+        return i18n.tr("We Updated Our Application\nIn Order To Continue Using This Application You Need To Refresh The Page"
                 + "\nDo You Want To Refresh The Page Now?");
-        MessageDialog.show(i18n.tr("System Error"), message, Type.Error, optYesNo);
     }
 
     @Override
