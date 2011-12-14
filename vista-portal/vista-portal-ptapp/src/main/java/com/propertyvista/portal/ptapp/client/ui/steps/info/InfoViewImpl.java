@@ -22,5 +22,4 @@ public class InfoViewImpl extends WizardStepViewImpl<TenantInfoDTO, InfoViewPres
     public InfoViewImpl() {
         super(new InfoViewForm());
     }
-
 }

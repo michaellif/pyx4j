@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.offering;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -23,6 +24,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.company.Employee;
 
 public interface ChargeItemAdjustment extends IEntity {
 
@@ -80,4 +83,7 @@ public interface ChargeItemAdjustment extends IEntity {
     @MemberColumn(name = "concessionValue")
     IPrimitive<Double> value();
 
+    Employee createdBy();
+
+    IPrimitive<LogicalDate> createdWhen();
 }

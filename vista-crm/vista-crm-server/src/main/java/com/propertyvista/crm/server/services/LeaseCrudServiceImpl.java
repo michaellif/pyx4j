@@ -26,14 +26,17 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.ServiceAgreement;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -65,10 +68,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
             // update Tenants double links:
             TenantInLeaseRetriever.UpdateLeaseTenants(dto);
-//            EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
-//            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), in));
-//            dto.tenants().clear();
-//            dto.tenants().addAll(Persistence.service().query(criteria));
 
             // calculate price adjustments:
             PriceCalculationHelpers.calculateChargeItemAdjustments(dto.serviceAgreement().serviceItem());
@@ -93,7 +92,24 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
                 Persistence.service().merge(item.extraData());
             }
         }
+        updateAdjustments(dbo.serviceAgreement());
         Persistence.service().merge(dbo);
+    }
+
+    private void updateAdjustments(ServiceAgreement serviceAgreement) {
+        updateAdjustments(serviceAgreement.serviceItem());
+        for (ChargeItem ci : serviceAgreement.featureItems()) {
+            updateAdjustments(ci);
+        }
+    }
+
+    private void updateAdjustments(ChargeItem chargeItem) {
+        for (ChargeItemAdjustment cia : chargeItem.adjustments()) {
+            if (cia.createdWhen().isNull()) {
+                cia.createdWhen().setValue(new LogicalDate());
+                cia.createdBy().set(CrmAppContext.getCurrentUserEmployee());
+            }
+        }
     }
 
     @Override

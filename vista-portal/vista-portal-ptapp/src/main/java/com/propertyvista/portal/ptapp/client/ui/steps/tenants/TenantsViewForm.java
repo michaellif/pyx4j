@@ -67,7 +67,6 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
                 return (size <= maxTenants) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue()))) ? null
                         : new ValidationFailure(i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants"));
             }
-
         });
     }
 }

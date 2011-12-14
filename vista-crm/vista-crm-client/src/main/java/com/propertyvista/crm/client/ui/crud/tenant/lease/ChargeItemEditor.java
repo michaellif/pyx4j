@@ -23,9 +23,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -120,6 +123,20 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
             editor.populate(value.extraData().cast());
             extraDataPanel.setWidget(editor);
         }
+    }
+
+    @Override
+    public void addValidations() {
+        get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<Double>() {
+            @Override
+            public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
+                Double originalPrice = getValue().originalPrice().getValue();
+                return ((value > originalPrice * 0.5 && originalPrice < value * 1.5) ? null : new ValidationFailure(i18n
+                        .tr("The price should not be differ +-50% of original price")));
+            }
+        });
+
+        super.addValidations();
     }
 
     private class ChargeItemAdjustmentFolder extends VistaTableFolder<ChargeItemAdjustment> {
