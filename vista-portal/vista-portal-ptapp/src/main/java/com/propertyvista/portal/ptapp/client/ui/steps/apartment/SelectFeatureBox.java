@@ -16,119 +16,52 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.common.client.ui.components.SelectDialog;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-abstract class SelectFeatureBox extends OkCancelDialog {
+abstract class SelectFeatureBox extends SelectDialog<ServiceItem> {
 
     private static I18n i18n = I18n.get(OkCancelDialog.class);
 
-    private ListBox list;
-
-    private final Feature.Type type;
-
-    private final ApartmentInfoDTO apartmentInfo;
-
     public SelectFeatureBox(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
-        super(i18n.tr("Select {0}(s)", type));
-        this.type = type;
-        this.apartmentInfo = apartmentInfo;
-        setBody(createBody());
-        setSize("300px", "100px");
+        super(i18n.tr("Select {0}(s)", type), true, getAvailableList(type, apartmentInfo));
     }
 
-    protected Widget createBody() {
-        getOkButton().setEnabled(false);
-
-        if (!getAvailableList().isEmpty()) {
-            list = new ListBox(true);
-            list.addChangeHandler(new ChangeHandler() {
-                @Override
-                public void onChange(ChangeEvent event) {
-                    getOkButton().setEnabled(list.getSelectedIndex() >= 0);
-                }
-            });
-
-//  TODO not sure if we need duplicate item restriction:
-//                List<ServiceItem> alreadySelected = new ArrayList<ServiceItem>();
-//                for (ChargeItem item : getAgreedList()) {
-//                    alreadySelected.add(item.item());
-//                }
-
-            for (ServiceItem item : getAvailableList()) {
-                if (isCompatible(item) /* && !alreadySelected.contains(item) */) {
-                    list.addItem(item.getStringView(), item.id().toString());
-                }
-            }
-
-            if (list.getItemCount() > 0) {
-                list.setVisibleItemCount(8);
-                list.setWidth("100%");
-                return list.asWidget();
-            } else {
-                return new HTML(i18n.tr("All {0}(s) have been selected already!", type));
-            }
-        } else {
-            return new HTML(i18n.tr("There Are No {0}(s) Available", type));
-        }
-    }
-
-    protected List<ServiceItem> getSelectedItems() {
-        List<ServiceItem> selectedItems = new ArrayList<ServiceItem>(4);
-        for (int i = 0; i < list.getItemCount(); ++i) {
-            if (list.isItemSelected(i)) {
-                for (ServiceItem item : getAvailableList()) {
-                    if (list.getValue(i).contentEquals(item.id().toString())) {
-                        selectedItems.add(item);
-                    }
-                }
-            }
-        }
-        return selectedItems;
-    }
-
-    private List<ChargeItem> getAgreedList() {
+    private static List<ServiceItem> getAvailableList(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
+        // TODO in the previous version there was a commented out part of code that restricted addition of already selected items (from apartmentInfo.agreed*())
+        List<ServiceItem> available = null;
         switch (type) {
         case utility:
-            return apartmentInfo.agreedUtilities();
+            available = apartmentInfo.availableUtilities();
+            break;
         case pet:
-            return apartmentInfo.agreedPets();
+            available = apartmentInfo.availablePets();
+            break;
         case parking:
-            return apartmentInfo.agreedParking();
+            available = apartmentInfo.availableParking();
+            break;
         case locker:
-            return apartmentInfo.agreedStorage();
+            available = apartmentInfo.availableStorage();
+            break;
         default:
-            return apartmentInfo.agreedOther();
+            available = apartmentInfo.availableOther();
+            break;
         }
+        List<ServiceItem> result = new ArrayList<ServiceItem>(available.size());
+        for (ServiceItem item : available) {
+            if (isCompatible(item, type)) {
+                result.add(item);
+            }
+        }
+        return result;
     }
 
-    private List<ServiceItem> getAvailableList() {
-        switch (type) {
-        case utility:
-            return apartmentInfo.availableUtilities();
-        case pet:
-            return apartmentInfo.availablePets();
-        case parking:
-            return apartmentInfo.availableParking();
-        case locker:
-            return apartmentInfo.availableStorage();
-        default:
-            return apartmentInfo.availableOther();
-        }
-    }
-
-    private boolean isCompatible(ServiceItem item) {
+    private static boolean isCompatible(ServiceItem item, Feature.Type type) {
 
         if (type.equals(Feature.Type.addOn)) {
             switch (item.type().featureType().getValue()) {
@@ -142,7 +75,6 @@ abstract class SelectFeatureBox extends OkCancelDialog {
                 return true;
             }
         }
-
         return (item.type().featureType().getValue().equals(type));
     }
 }

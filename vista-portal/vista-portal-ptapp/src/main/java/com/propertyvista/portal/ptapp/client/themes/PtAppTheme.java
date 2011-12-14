@@ -67,6 +67,7 @@ public class PtAppTheme extends VistaTheme {
         addTheme(new NewPaymentMethodEditorTheme());
 
         initBodyStyles();
+        initCellListStyle();
 
         initVistaSummaryViewStyles();
         initVistaCaptionViewStyles();

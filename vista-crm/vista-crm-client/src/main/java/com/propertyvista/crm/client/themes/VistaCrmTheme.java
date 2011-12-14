@@ -96,6 +96,7 @@ public class VistaCrmTheme extends VistaTheme {
 
         initGeneralStyles();
         initBodyStyles();
+        initCellListStyle();
 
         intitNavigationStyles();
         intitShortCutStyles();

@@ -563,4 +563,27 @@ public class VistaTheme extends Theme {
 
     }
 
+    protected void initCellListStyle() {
+        // Available Selectors
+        // cellListWidget
+        // cellListEvenItem
+        // cellListOddItem
+        // cellListKeyboardSelectedItem
+        // cellListSelectedItem
+
+        Style style = new Style(".cellListEvenItem");
+        style.addProperty("color", "black");
+        addStyle(style);
+
+        style = new Style(".cellListOddItem");
+        style.addProperty("color", "black");
+        addStyle(style);
+
+        style = new Style(".cellListSelectedItem");
+        style.addProperty("background", "");
+        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 1.0);
+        addStyle(style);
+
+    }
+
 }

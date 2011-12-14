@@ -16,12 +16,6 @@ package com.propertyvista.crm.client.ui.crud.building;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
@@ -31,9 +25,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.SelectDialog;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.dto.BuildingDTO;
 
@@ -68,7 +62,7 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
 
     @Override
     protected void addItem() {
-        new SelectUtilityBox(building) {
+        new SelectDialog<ServiceItemType>(i18n.tr("Select Utilities"), true, getNotSelectedUtilities(building)) {
             @Override
             public boolean onClickOk() {
                 for (ServiceItemType item : getSelectedItems()) {
@@ -77,6 +71,23 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
                 return true;
             }
         }.show();
+    }
+
+    private static List<ServiceItemType> getNotSelectedUtilities(CEntityEditor<BuildingDTO> building) {
+        List<ServiceItemType> alreadySelected = new ArrayList<ServiceItemType>();
+        for (ServiceItemType item : building.getValue().serviceCatalog().includedUtilities()) {
+            alreadySelected.add(item);
+        }
+        for (ServiceItemType item : building.getValue().serviceCatalog().externalUtilities()) {
+            alreadySelected.add(item);
+        }
+        List<ServiceItemType> canBeSelected = new ArrayList<ServiceItemType>();
+        for (ServiceItemType item : building.getValue().availableUtilities()) {
+            if (!alreadySelected.contains(item)) {
+                canBeSelected.add(item);
+            }
+        }
+        return canBeSelected;
     }
 
     @Override
@@ -99,67 +110,5 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
             return super.createCell(column);
         }
 
-    }
-
-    private abstract class SelectUtilityBox extends OkCancelDialog {
-
-        private ListBox list;
-
-        private final CEntityEditor<BuildingDTO> building;
-
-        public SelectUtilityBox(CEntityEditor<BuildingDTO> building) {
-            super(i18n.tr("Select Utilities"));
-            this.building = building;
-            setBody(createBody());
-            setSize("300px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-
-            if (!building.getValue().availableUtilities().isEmpty()) {
-                list = new ListBox(true);
-                list.addChangeHandler(new ChangeHandler() {
-                    @Override
-                    public void onChange(ChangeEvent event) {
-                        getOkButton().setEnabled(list.getSelectedIndex() >= 0);
-                    }
-                });
-
-                List<ServiceItemType> alreadySelected = new ArrayList<ServiceItemType>();
-                for (ServiceItemType item : building.getValue().serviceCatalog().includedUtilities()) {
-                    alreadySelected.add(item);
-                }
-                for (ServiceItemType item : building.getValue().serviceCatalog().externalUtilities()) {
-                    alreadySelected.add(item);
-                }
-
-                for (ServiceItemType item : building.getValue().availableUtilities()) {
-                    if (!alreadySelected.contains(item)) {
-                        list.addItem(item.getStringView());
-                        list.setValue(list.getItemCount() - 1, item.id().toString());
-                    }
-                }
-                list.setVisibleItemCount(8);
-                list.setWidth("100%");
-                return list.asWidget();
-            } else {
-                return new HTML(i18n.tr("There Are No Items Available"));
-            }
-        }
-
-        protected List<ServiceItemType> getSelectedItems() {
-            List<ServiceItemType> selectedItems = new ArrayList<ServiceItemType>(4);
-            for (int i = 0; i < list.getItemCount(); ++i) {
-                if (list.isItemSelected(i)) {
-                    for (ServiceItemType item : building.getValue().availableUtilities()) {
-                        if (list.getValue(i).contentEquals(item.id().toString())) {
-                            selectedItems.add(item);
-                        }
-                    }
-                }
-            }
-            return selectedItems;
-        }
     }
 }

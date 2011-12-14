@@ -13,15 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -29,9 +20,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.SelectDialog;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -69,7 +60,8 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
         if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            new SelectConcessionBox() {
+
+            new SelectDialog<Concession>(i18n.tr("Select Concessions"), true, parent.getValue().selectedConcessions()) {
                 @Override
                 public boolean onClickOk() {
                     for (Concession item : getSelectedItems()) {
@@ -78,61 +70,6 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
                     return true;
                 }
             }.show();
-        }
-    }
-
-    private abstract class SelectConcessionBox extends OkCancelDialog {
-
-        private ListBox list;
-
-        public SelectConcessionBox() {
-            super(i18n.tr("Select Concessions"));
-            setBody(createBody());
-            setSize("300px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-
-            if (!parent.getValue().selectedConcessions().isEmpty()) {
-                list = new ListBox(true);
-                list.addChangeHandler(new ChangeHandler() {
-                    @Override
-                    public void onChange(ChangeEvent event) {
-                        getOkButton().setEnabled(list.getSelectedIndex() >= 0);
-                    }
-                });
-
-                for (Concession item : parent.getValue().selectedConcessions()) {
-                    if (!parent.getValue().serviceAgreement().concessions().contains(item)) {
-                        list.addItem(item.getStringView(), item.id().toString());
-                    }
-                }
-
-                if (list.getItemCount() > 0) {
-                    list.setVisibleItemCount(8);
-                    list.setWidth("100%");
-                    return list.asWidget();
-                } else {
-                    return new HTML(i18n.tr("All Concessions have already been selected!"));
-                }
-            } else {
-                return new HTML(i18n.tr("There Are No Concessions For This Service"));
-            }
-        }
-
-        protected List<Concession> getSelectedItems() {
-            List<Concession> selectedItems = new ArrayList<Concession>(4);
-            for (int i = 0; i < list.getItemCount(); ++i) {
-                if (list.isItemSelected(i)) {
-                    for (Concession item : parent.getValue().selectedConcessions()) {
-                        if (list.getValue(i).contentEquals(item.id().toString())) {
-                            selectedItems.add(item);
-                        }
-                    }
-                }
-            }
-            return selectedItems;
         }
     }
 }

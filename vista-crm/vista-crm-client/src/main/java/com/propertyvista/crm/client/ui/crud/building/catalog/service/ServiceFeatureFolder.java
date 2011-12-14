@@ -13,21 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import java.util.List;
-
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.SelectDialog;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorForm;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -60,7 +54,7 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
 
     @Override
     protected void addItem() {
-        new SelectFeatureBox(featureListerVeiw) {
+        new SelectDialog<Feature>(i18n.tr("Select Features"), true, featureListerVeiw.getLister().getSelectedItems()) {
             @Override
             public boolean onClickOk() {
                 for (Feature item : getSelectedItems()) {
@@ -69,38 +63,5 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
                 return true;
             }
         }.show();
-    }
-
-    private abstract class SelectFeatureBox extends OkCancelDialog {
-
-        private final IListerView<Feature> featureListerVeiw;
-
-        public SelectFeatureBox(IListerView<Feature> featureListerVeiw) {
-            super(i18n.tr("Select Features"));
-            this.featureListerVeiw = featureListerVeiw;
-            featureListerVeiw.getLister().releaseSelection();
-            setBody(createBody());
-            setSize("700px", "200px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-            featureListerVeiw.getLister().addItemSelectionHandler(new ItemSelectionHandler<Feature>() {
-                @Override
-                public void onSelect(Feature selectedItem) {
-                    getOkButton().setEnabled(!featureListerVeiw.getLister().getSelectedItems().isEmpty());
-                }
-            });
-
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(featureListerVeiw.asWidget());
-            vPanel.setWidth("100%");
-            return vPanel;
-        }
-
-        protected List<Feature> getSelectedItems() {
-            List<Feature> selectedFeatures = featureListerVeiw.getLister().getSelectedItems();
-            return selectedFeatures;
-        }
     }
 }

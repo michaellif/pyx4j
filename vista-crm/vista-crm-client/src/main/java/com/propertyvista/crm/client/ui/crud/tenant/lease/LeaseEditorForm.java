@@ -13,27 +13,25 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.components.SelectDialog;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
@@ -186,11 +184,16 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
                         MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Building/Unit First"));
                     } else {
-                        new SelectServiceItemBox() {
+                        new SelectDialog<ServiceItem>(i18n.tr("Service Item Selection"), false, getValue().selectedServiceItems()) {
                             @Override
                             public boolean onClickOk() {
-                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(getSelectedItem());
-                                return true;
+                                List<ServiceItem> selectedItems = getSelectedItems();
+                                if (!selectedItems.isEmpty()) {
+                                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(selectedItems.get(0));
+                                    return true;
+                                } else {
+                                    return false;
+                                }
                             }
                         }.show();
                     }
@@ -214,54 +217,5 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceAgreement().account()), 15).build());
 
         return new CrmScrollPanel(main);
-    }
-
-//
-// Selection Boxes:
-    private abstract class SelectServiceItemBox extends OkCancelDialog {
-
-        private CComboBox<ServiceItem> combo;
-
-        public SelectServiceItemBox() {
-            super(i18n.tr("Service Item Selection"));
-            setBody(createBody());
-            setSize("400px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-
-            if (!getValue().selectedServiceItems().isEmpty()) {
-                getOkButton().setEnabled(true);
-
-                combo = new CComboBox<ServiceItem>() {
-                    @Override
-                    public String getItemName(ServiceItem o) {
-                        if (o == null) {
-                            return super.getItemName(o);
-                        } else {
-                            return o.getStringView();
-                        }
-                    }
-                };
-                combo.setOptions(getValue().selectedServiceItems());
-                combo.setValue(combo.getOptions().get(0));
-                combo.addValueChangeHandler(new ValueChangeHandler<ServiceItem>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<ServiceItem> event) {
-                        getOkButton().setEnabled((event.getValue()) != null);
-                    }
-                });
-
-                return combo.asWidget();
-            } else {
-                return new HTML(i18n.tr("There Are No Service Items"));
-            }
-
-        }
-
-        protected ServiceItem getSelectedItem() {
-            return combo.getValue();
-        }
     }
 }
