@@ -25,7 +25,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ClientSystemInfo implements Serializable {
 
-    private String productVersion;
+    private String buildLabel;
 
     private boolean script;
 
@@ -41,12 +41,12 @@ public class ClientSystemInfo implements Serializable {
 
     }
 
-    public String getProductVersion() {
-        return this.productVersion;
+    public String getBuildLabel() {
+        return this.buildLabel;
     }
 
-    public void setProductVersion(String productVersion) {
-        this.productVersion = productVersion;
+    public void setBuildLabel(String buildLabel) {
+        this.buildLabel = buildLabel;
     }
 
     public boolean isHostedMode() {

@@ -32,7 +32,7 @@ public abstract class ClientApplicationVersion {
         return instance;
     }
 
-    public abstract String productVersion();
+    public abstract String getBuildLabel();
 
-    public abstract Date getProductBuildDate();
+    public abstract Date getBuildDate();
 }

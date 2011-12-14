@@ -131,7 +131,7 @@ public class ClientContext {
         clientSystemInfo.setStartTime(System.currentTimeMillis());
         clientSystemInfo.setUserAgent(BrowserType.getUserAgent());
         clientSystemInfo.setTimeZoneInfo(TimeUtils.getTimeZoneInfo());
-        clientSystemInfo.setProductVersion(ClientApplicationVersion.instance().productVersion());
+        clientSystemInfo.setBuildLabel(ClientApplicationVersion.instance().getBuildLabel());
     }
 
     private ClientContext() {

@@ -5,8 +5,8 @@
 	<inherits name='com.pyx4j.config.ConfigShared'/>
     <source path="client"/>
 	
-    <define-configuration-property name="pyx.compileTimeSystemProperty.productVersion" is-multi-valued="false" />
-    <set-configuration-property name="pyx.compileTimeSystemProperty.productVersion" value="buildLabel" />
+    <define-configuration-property name="pyx.compileTimeSystemProperty.build.label" is-multi-valued="false" />
+    <set-configuration-property name="pyx.compileTimeSystemProperty.build.label" value="buildLabel" />
     
     <define-configuration-property name="pyx.compileTimeSystemProperty.build.time" is-multi-valued="false" />
     <set-configuration-property name="pyx.compileTimeSystemProperty.build.time" value="build.time" />

@@ -47,7 +47,7 @@ public class ClientApplicationVersionGenerator extends Generator {
     /**
      * Configuration properties.
      */
-    public static final String PRODUCT_VERSION = "pyx.compileTimeSystemProperty.productVersion";
+    public static final String BUILD_LABEL = "pyx.compileTimeSystemProperty.build.label";
 
     public static final String BUILD_TIME = "pyx.compileTimeSystemProperty.build.time";
 
@@ -64,7 +64,7 @@ public class ClientApplicationVersionGenerator extends Generator {
             throw new UnableToCompleteException();
         }
 
-        String productVersion = getConfigurationProperty(logger, context, PRODUCT_VERSION);
+        String buildLabel = getConfigurationProperty(logger, context, BUILD_LABEL);
         String buildTime = getConfigurationProperty(logger, context, BUILD_TIME);
         String buildFromat = getConfigurationProperty(logger, context, BUILD_TIME_FORMAT);
 
@@ -81,17 +81,17 @@ public class ClientApplicationVersionGenerator extends Generator {
             SourceWriter writer = factory.createSourceWriter(context, printWriter);
 
             writer.println();
-            writer.println("public final String productVersion() {");
+            writer.println("public final String getBuildLabel() {");
             writer.indent();
             writer.print("return \"");
-            writer.print(productVersion);
+            writer.print(buildLabel);
             writer.println("\";");
             writer.outdent();
             writer.println("}");
             writer.println();
 
             writer.println();
-            writer.println("public final Date getProductBuildDate() {");
+            writer.println("public final Date getBuildDate() {");
             writer.indent();
             writer.print("return new Date(");
             long buildDate = System.currentTimeMillis();

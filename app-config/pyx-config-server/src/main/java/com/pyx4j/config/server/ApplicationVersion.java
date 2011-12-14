@@ -54,7 +54,7 @@ public class ApplicationVersion {
 
     private static String productVersion = null;
 
-    private static String productBuildVersion;
+    private static String buildLabel;
 
     private static Date buildTimestamp;
 
@@ -89,12 +89,12 @@ public class ApplicationVersion {
             }
         }
 
-        productBuildVersion = properties.getProperty(BUILD_NUMBER, "n/a");
-        if (productBuildVersion.startsWith("${") || productBuildVersion.endsWith("-SNAPSHOT")) {
-            productBuildVersion = "n/a";
+        buildLabel = properties.getProperty(BUILD_NUMBER, "n/a");
+        if (buildLabel.startsWith("${") || buildLabel.endsWith("-SNAPSHOT")) {
+            buildLabel = "n/a";
             productVersion = properties.getProperty(POM_VERSION, "n/a");
         } else {
-            productVersion = productBuildVersion;
+            productVersion = buildLabel;
         }
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
@@ -120,12 +120,12 @@ public class ApplicationVersion {
         return productVersion;
     }
 
-    public static String getProductBuildVersion() {
+    public static String getBuildLabel() {
         initVersionInfo();
-        return productBuildVersion;
+        return buildLabel;
     }
 
-    public static String getProductBuildTime() {
+    public static String getBuildTime() {
         initVersionInfo();
         if (buildTimestamp != null) {
             DateFormat df;
@@ -140,7 +140,7 @@ public class ApplicationVersion {
         }
     }
 
-    public static Date getProductBuildDate() {
+    public static Date getBuildDate() {
         initVersionInfo();
         return buildTimestamp;
     }

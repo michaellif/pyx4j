@@ -50,8 +50,8 @@ public class ConfigInfoServlet extends HttpServlet {
 
     protected String buildConfigurationText() {
         StringBuilder b = new StringBuilder();
-        b.append("Application Version   : ").append(ApplicationVersion.getProductVersion()).append("\n");
-        b.append("Application BuildTime : ").append(ApplicationVersion.getProductBuildTime()).append("\n\n");
+        b.append("Application Version   : ").append(ApplicationVersion.getBuildLabel()).append("\n");
+        b.append("Application BuildTime : ").append(ApplicationVersion.getBuildTime()).append("\n\n");
 
         b.append("ContextName : ").append(LoggerConfig.getContextName()).append("\n");
 
