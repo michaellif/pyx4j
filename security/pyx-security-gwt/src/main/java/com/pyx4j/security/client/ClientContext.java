@@ -29,12 +29,17 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.client.ClientApplicationVersion;
+import com.pyx4j.config.shared.ClientSystemInfo;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableBlockingAsyncCallback;
@@ -94,6 +99,8 @@ public class ClientContext {
 
     private static final Map<String, Object> attributes = new HashMap<String, Object>();
 
+    private static ClientSystemInfo clientSystemInfo;
+
     static {
         RPCManager.addSystemNotificationHandler(new SystemNotificationHandler() {
             @Override
@@ -118,6 +125,13 @@ public class ClientContext {
                 }
             }
         });
+
+        clientSystemInfo = new ClientSystemInfo();
+        clientSystemInfo.setScript(GWT.isScript());
+        clientSystemInfo.setStartTime(System.currentTimeMillis());
+        clientSystemInfo.setUserAgent(BrowserType.getUserAgent());
+        clientSystemInfo.setTimeZoneInfo(TimeUtils.getTimeZoneInfo());
+        clientSystemInfo.setProductVersion(ClientApplicationVersion.instance().productVersion());
     }
 
     private ClientContext() {
@@ -128,13 +142,17 @@ public class ClientContext {
         return userVisit;
     }
 
+    public static ClientSystemInfo getClientSystemInfo() {
+        return clientSystemInfo;
+    }
+
     public static int visitHashCode() {
         if (userVisit == null) {
             return -1;
         } else {
             return userVisit.hashCode();
+            //TODO fix this
             /** 0x1F + ClientSecurityController.instance().getAcl().hashCode(); */
-
         }
     }
 

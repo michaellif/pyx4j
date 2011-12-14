@@ -40,13 +40,17 @@ public class ApplicationVersion {
 
     private static final String BUILD_PROPERTIES_FILE = "generated/build.version.properties";
 
-    private static final String POM_VERSION = "project.version";
+    private static final String POM_VERSION = "pom.version";
 
     private static final String BUILD_NUMBER = "build.number";
 
-    private static final String BUILD_TIME = "build.timestamp";
+    private static final String BUILD_TIME = "build.time";
 
-    private static final String BUILD_TIME_FORMAT = "yyyyMMddHHmmss";
+    private static final String BUILD_TIME_FORMAT = "yyyyMMdd HH:mm";
+
+    private static final String BUILD_TIMESTAMP = "build.timestamp";
+
+    private static final String BUILD_TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
 
     private static String productVersion = null;
 
@@ -87,13 +91,18 @@ public class ApplicationVersion {
         if (productVersion.startsWith("${")) {
             productVersion = properties.getProperty(POM_VERSION, "n/a");
         }
-        DateFormat df = new SimpleDateFormat(BUILD_TIME_FORMAT);
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
             if ((bildTimeString == null) || (bildTimeString.startsWith("${"))) {
                 buildTimestamp = null;
             } else {
-                buildTimestamp = df.parse(bildTimeString);
+                buildTimestamp = new SimpleDateFormat(BUILD_TIME_FORMAT).parse(bildTimeString);
+            }
+            if (buildTimestamp == null) {
+                bildTimeString = properties.getProperty(BUILD_TIMESTAMP);
+                if ((bildTimeString != null) && (!bildTimeString.startsWith("${"))) {
+                    buildTimestamp = new SimpleDateFormat(BUILD_TIMESTAMP_FORMAT).parse(bildTimeString);
+                }
             }
         } catch (ParseException e) {
             log.error("build timestamp error", e);

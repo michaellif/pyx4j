@@ -30,7 +30,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ClientSystemInfo;
+import com.pyx4j.config.shared.ClientVersionMismatchError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -48,6 +52,20 @@ import com.pyx4j.server.contexts.Visit;
 public abstract class AuthenticationServiceImpl implements AuthenticationService {
 
     private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+
+    private static I18n i18n = I18n.get(AuthenticationServiceImpl.class);
+
+    protected void assertClientSystemInfo(ClientSystemInfo clientSystemInfo) {
+
+        String serverVersion = ApplicationVersion.getProductVersion();
+        if (clientSystemInfo == null) {
+            throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", "", serverVersion));
+        }
+        if (((clientSystemInfo.isScript()) && (!serverVersion.equals("n/a")) && (!serverVersion.equals(clientSystemInfo.getProductVersion())))) {
+            throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", clientSystemInfo.getProductVersion(),
+                    serverVersion));
+        }
+    }
 
     @Override
     public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback) {
