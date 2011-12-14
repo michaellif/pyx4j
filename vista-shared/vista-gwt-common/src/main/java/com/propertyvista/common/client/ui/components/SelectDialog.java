@@ -96,7 +96,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
     }
 
     public String defineWidth() {
-        return "20em";
+        return "40em";
     }
 
     private Widget initBody(boolean isMultiselectAllowed, List<E> data) {
