@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -51,16 +52,17 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
 
     @Override
     @IgnoreSessionToken
-    public void authenticate(AsyncCallback<AuthenticationResponse> callback, String sessionToken) {
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
         if (!hasRequiredSiteBehavior()) {
             VistaLifecycle.endSession();
         }
-        super.authenticate(callback, sessionToken);
+        super.authenticate(callback, clientSystemInfo, sessionToken);
     }
 
     @Override
     @IgnoreSessionToken
-    public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request) {
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request) {
+        assertClientSystemInfo(clientSystemInfo);
         // Try to begin Session
         String sessionToken = beginSession(request);
         if (!hasRequiredSiteBehavior()) {

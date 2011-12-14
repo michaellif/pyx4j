@@ -70,7 +70,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             }
 
         };
-        ((CrmAuthenticationService) GWT.create(CrmAuthenticationService.class)).authenticate(callback, request);
+        ((CrmAuthenticationService) GWT.create(CrmAuthenticationService.class)).authenticate(callback, ClientContext.getClientSystemInfo(), request);
     }
 
     @Override

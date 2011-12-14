@@ -72,7 +72,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
         };
 
-        ((PortalAuthenticationService) GWT.create(PortalAuthenticationService.class)).authenticate(callback, request);
+        ((PortalAuthenticationService) GWT.create(PortalAuthenticationService.class)).authenticate(callback, ClientContext.getClientSystemInfo(), request);
 
     }
 

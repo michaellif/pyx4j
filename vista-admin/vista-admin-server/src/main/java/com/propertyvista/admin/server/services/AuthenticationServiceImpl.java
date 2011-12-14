@@ -18,6 +18,7 @@ import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.Behavior;
@@ -30,7 +31,9 @@ import com.propertyvista.server.common.security.VistaLifecycle;
 public class AuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
-    public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request) {
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request) {
+        assertClientSystemInfo(clientSystemInfo);
+
         final UserVisit visit = new UserVisit(null, "Admin");
 
         Set<Behavior> behaviors = new HashSet<Behavior>();
