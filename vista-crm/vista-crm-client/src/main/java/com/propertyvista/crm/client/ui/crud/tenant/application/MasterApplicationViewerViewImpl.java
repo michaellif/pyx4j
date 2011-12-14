@@ -13,25 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CTextArea;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.components.SelectDialog;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -43,6 +39,7 @@ import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 
 public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<MasterApplicationDTO> implements MasterApplicationViewerView {
+    private final static I18n i18n = I18n.get(MasterApplicationViewerViewImpl.class);
 
     private final IListerView<ApplicationDTO> applicationLister;
 
@@ -58,13 +55,13 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
 
     private final Button checkAction;
 
-    private static final String APPROVE = i18n.tr("Approve");
+    private static final String APPROVE = I18n.get(MasterApplicationViewerViewImpl.class).tr("Approve");
 
-    private static final String MORE_INFO = i18n.tr("More Info");
+    private static final String MORE_INFO = I18n.get(MasterApplicationViewerViewImpl.class).tr("More Info");
 
-    private static final String DECLINE = i18n.tr("Decline");
+    private static final String DECLINE = I18n.get(MasterApplicationViewerViewImpl.class).tr("Decline");
 
-    private static final String CANCEL = i18n.tr("Cancel");
+    private static final String CANCEL = I18n.get(MasterApplicationViewerViewImpl.class).tr("Cancel");
 
     public MasterApplicationViewerViewImpl() {
         super(CrmSiteMap.Tenants.MasterApplication.class, true);
@@ -134,10 +131,16 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new SelectTenantsBox() {
+                new SelectDialog<TenantInfoDTO>(i18n.tr("Select Tenants To Check"), true, form.getValue().tenantInfo(),
+                        new SelectDialog.Formatter<TenantInfoDTO>() {
+                            @Override
+                            public String format(TenantInfoDTO enntity) {
+                                return enntity.person().name().getStringView();
+                            }
+                        }) {
                     @Override
                     public boolean onClickOk() {
-                        //TODO do something here
+                        // TODO make the credit check happen
                         return true;
                     }
                 }.show();
@@ -173,7 +176,7 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             getOkButton().setEnabled(true);
 
             VerticalPanel content = new VerticalPanel();
-            content.add(new HTML(i18n.tr("Please fill the reason:")));
+            content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
             content.add(reason);
 
             reason.setWidth("100%");
@@ -187,51 +190,6 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
             action.decisionReason().setValue(reason.getValue());
             action.status().setValue(status);
             return action;
-        }
-    }
-
-    private abstract class SelectTenantsBox extends OkCancelDialog {
-
-        private ListBox list;
-
-        public SelectTenantsBox() {
-            super(i18n.tr("Select Tenants To Check"));
-            setBody(createBody());
-            setSize("350px", "100px");
-        }
-
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-
-            list = new ListBox(true);
-            list.addChangeHandler(new ChangeHandler() {
-                @Override
-                public void onChange(ChangeEvent event) {
-                    getOkButton().setEnabled(list.getSelectedIndex() >= 0);
-                }
-            });
-
-            for (TenantInfoDTO item : form.getValue().tenantInfo()) {
-                list.addItem(item.person().name().getStringView(), item.id().toString());
-            }
-
-            list.setVisibleItemCount(5);
-            list.setWidth("100%");
-            return list.asWidget();
-        }
-
-        protected List<TenantInfoDTO> getSelectedItems() {
-            List<TenantInfoDTO> selectedItems = new ArrayList<TenantInfoDTO>(4);
-            for (int i = 0; i < list.getItemCount(); ++i) {
-                if (list.isItemSelected(i)) {
-                    for (TenantInfoDTO item : form.getValue().tenantInfo()) {
-                        if (list.getValue(i).contentEquals(item.id().toString())) {
-                            selectedItems.add(item);
-                        }
-                    }
-                }
-            }
-            return selectedItems;
         }
     }
 }

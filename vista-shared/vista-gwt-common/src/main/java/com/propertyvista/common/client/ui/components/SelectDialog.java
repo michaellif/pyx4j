@@ -46,7 +46,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
 
     private final List<E> data;
 
-    public SelectDialog(String caption, boolean isMultiselectAllowed, List<E> data, Formatter formatter) {
+    public SelectDialog(String caption, boolean isMultiselectAllowed, List<E> data, Formatter<E> formatter) {
         super(caption);
         this.data = data;
         this.selectionModel = isMultiselectAllowed ? new MultiSelectionModel<E>() : new SingleSelectionModel<E>();
@@ -62,7 +62,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
                 }
             }
         });
-        this.formatter = formatter != null ? formatter : new Formatter() {
+        this.formatter = formatter != null ? formatter : new Formatter<E>() {
             @Override
             public String format(E enntity) {
                 return enntity.getStringView();
@@ -183,7 +183,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
         return panel;
     }
 
-    public abstract class Formatter {
-        public abstract String format(E enntity);
+    public static interface Formatter<E> {
+        public String format(E enntity);
     }
 }
