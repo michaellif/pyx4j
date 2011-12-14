@@ -397,7 +397,7 @@ public class PMSiteContentManager implements Serializable {
         }
         BedroomChoice maxBeds = searchCriteria.maxBeds().getValue();
         if (maxBeds != null && maxBeds != BedroomChoice.Any) {
-            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bedrooms(), Restriction.LESS_THAN_OR_EQUAL, minBeds.getBeds()));
+            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bedrooms(), Restriction.LESS_THAN_OR_EQUAL, maxBeds.getBeds()));
         }
         // baths
         BathroomChoice minBaths = searchCriteria.minBaths().getValue();
@@ -406,7 +406,7 @@ public class PMSiteContentManager implements Serializable {
         }
         BathroomChoice maxBaths = searchCriteria.maxBaths().getValue();
         if (maxBaths != null && maxBaths != BathroomChoice.Any) {
-            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bathrooms(), Restriction.LESS_THAN_OR_EQUAL, minBaths.getBaths()));
+            fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bathrooms(), Restriction.LESS_THAN_OR_EQUAL, maxBaths.getBaths()));
         }
         // prepare building filter 2
         final Set<Key> bldFilter2 = new HashSet<Key>();
