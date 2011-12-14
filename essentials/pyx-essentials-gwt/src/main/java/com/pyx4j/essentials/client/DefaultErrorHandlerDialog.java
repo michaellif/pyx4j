@@ -42,6 +42,7 @@ public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
     }
 
     protected DefaultErrorHandlerDialog(boolean includeErrorCodeInUserMessage) {
+        super();
         this.includeErrorCodeInUserMessage = includeErrorCodeInUserMessage;
     }
 

@@ -67,6 +67,10 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     };
 
+    protected UnrecoverableErrorHandlerDialog() {
+        MessageDialog.prefetch();
+    }
+
     /**
      * Session aware applications can override this function.
      * 

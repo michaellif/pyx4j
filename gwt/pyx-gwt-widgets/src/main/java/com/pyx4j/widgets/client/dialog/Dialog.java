@@ -40,6 +40,8 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
@@ -472,6 +474,11 @@ public class Dialog extends DialogPanel {
                 }
             }
         });
+
+        if (options instanceof OpenHandler) {
+            ((OpenHandler) options).onOpen(new OpenEvent(this) {
+            });
+        }
     }
 
     @Override
