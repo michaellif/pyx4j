@@ -115,9 +115,9 @@ public class ClientApplicationVersionGenerator extends Generator {
         return packageName + "." + implName;
     }
 
-    private String getConfigurationProperty(TreeLogger logger, GeneratorContext context, String productVersion) throws UnableToCompleteException {
+    private String getConfigurationProperty(TreeLogger logger, GeneratorContext context, String propertyName) throws UnableToCompleteException {
         try {
-            ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(PRODUCT_VERSION);
+            ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(propertyName);
             String value = prop.getValues().get(0);
             if (CommonsStringUtils.isStringSet(value)) {
                 return System.getProperty(value, "");
@@ -125,7 +125,7 @@ public class ClientApplicationVersionGenerator extends Generator {
                 return "";
             }
         } catch (BadPropertyValueException e) {
-            logger.log(TreeLogger.ERROR, "The configuration property " + PRODUCT_VERSION + " was not defined. Is com.pyx4j.config.Config.gwt.xml inherited?");
+            logger.log(TreeLogger.ERROR, "The configuration property " + propertyName + " was not defined. Is com.pyx4j.config.Config.gwt.xml inherited?");
             throw new UnableToCompleteException();
         }
 
