@@ -17,9 +17,7 @@ import java.util.EnumSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.widgets.client.dialog.OkDialog;
-
+import com.propertyvista.common.client.ui.components.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -32,8 +30,7 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Feature.Type> callback) {
-        new SelectTypeBox() {
-
+        new SelectTypeDialog<Feature.Type>(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.Type.class)) {
             @Override
             public boolean onClickOk() {
                 defaultCaption = getSelectedType().toString();
@@ -41,26 +38,5 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
                 return true;
             }
         }.show();
-    }
-
-    private abstract class SelectTypeBox extends OkDialog {
-
-        private final CComboBox<Feature.Type> types;
-
-        public SelectTypeBox() {
-            super(i18n.tr("Select Feature Type"));
-
-            types = new CComboBox<Feature.Type>(i18n.tr("Types"), true);
-            types.setOptions(EnumSet.allOf(Feature.Type.class));
-            types.setValue(types.getOptions().get(0));
-            types.setWidth("100%");
-
-            setBody(types.asWidget());
-            setSize("250px", "100px");
-        }
-
-        public Feature.Type getSelectedType() {
-            return types.getValue();
-        }
     }
 }

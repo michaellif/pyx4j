@@ -16,14 +16,12 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import java.util.EnumSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.dialog.OkDialog;
 
+import com.propertyvista.common.client.ui.components.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
@@ -77,37 +75,22 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        new SelectTypeBox() {
+        new SelectTypeDialog<Service.Type>(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.Type.class)) {
             @Override
             public boolean onClickOk() {
                 callback.onSuccess(getSelectedType());
                 return true;
             }
+
+            @Override
+            public String defineHeight() {
+                return "100px";
+            };
+
+            @Override
+            public String defineWidth() {
+                return "300px";
+            };
         }.show();
-    }
-
-    private abstract class SelectTypeBox extends OkDialog {
-
-        private final CComboBox<Service.Type> type = new CComboBox<Service.Type>(i18n.tr("Types"), true);
-
-        public SelectTypeBox() {
-            super(i18n.tr("Select Lease Type"));
-
-            type.setOptions(EnumSet.allOf(Service.Type.class));
-            type.setValue(Service.Type.residentialUnit);
-            type.setWidth("100%");
-
-            HorizontalPanel main = new HorizontalPanel();
-            main.add(type);
-            main.setSpacing(4);
-            main.setWidth("100%");
-
-            setBody(main);
-            setSize("300px", "100px");
-        }
-
-        public Service.Type getSelectedType() {
-            return type.getValue();
-        }
     }
 }

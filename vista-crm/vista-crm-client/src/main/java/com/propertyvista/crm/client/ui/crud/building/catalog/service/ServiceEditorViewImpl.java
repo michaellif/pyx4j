@@ -17,11 +17,10 @@ import java.util.EnumSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.dialog.OkDialog;
 
+import com.propertyvista.common.client.ui.components.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -45,7 +44,7 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {
-        new SelectTypeBox() {
+        new SelectTypeDialog<Service.Type>(i18n.tr("Select Service Type"), EnumSet.allOf(Service.Type.class)) {
             @Override
             public boolean onClickOk() {
                 defaultCaption = getSelectedType().toString();
@@ -53,27 +52,6 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
                 return true;
             }
         }.show();
-    }
-
-    private abstract class SelectTypeBox extends OkDialog {
-
-        private final CComboBox<Service.Type> types;
-
-        public SelectTypeBox() {
-            super(i18n.tr("Select Service Type"));
-
-            types = new CComboBox<Service.Type>(i18n.tr("Types"), true);
-            types.setOptions(EnumSet.allOf(Service.Type.class));
-            types.setValue(types.getOptions().get(0));
-            types.setWidth("100%");
-
-            setBody(types.asWidget());
-            setSize("250px", "100px");
-        }
-
-        public Service.Type getSelectedType() {
-            return types.getValue();
-        }
     }
 
     @Override

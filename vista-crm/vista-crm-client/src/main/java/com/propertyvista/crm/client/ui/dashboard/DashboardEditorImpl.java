@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import java.util.EnumSet;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.RadioButton;
 
-import com.pyx4j.widgets.client.dialog.OkDialog;
-
+import com.propertyvista.common.client.ui.components.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -31,7 +30,7 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<DashboardType> callback) {
-        new SelectTypeBox() {
+        new SelectTypeDialog<DashboardType>(i18n.tr("Select Dashboard Type"), EnumSet.of(DashboardType.system, DashboardType.building)) {
             @Override
             public boolean onClickOk() {
                 callback.onSuccess(getSelectedType());
@@ -39,27 +38,5 @@ public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata
             }
         }.show();
 
-    }
-
-    private abstract class SelectTypeBox extends OkDialog {
-
-        private RadioButton system;
-
-        public SelectTypeBox() {
-            super(i18n.tr("Select Dashboard Type"));
-
-            HorizontalPanel main = new HorizontalPanel();
-            main.add(system = new RadioButton(i18n.tr("DashboardType"), DashboardType.system.toString()));
-            main.add(new RadioButton(i18n.tr("DashboardType"), DashboardType.building.toString()));
-            main.setSpacing(8);
-            main.setWidth("100%");
-            system.setValue(true);
-
-            setBody(main);
-        }
-
-        public DashboardType getSelectedType() {
-            return (system.getValue() ? DashboardType.system : DashboardType.building);
-        }
     }
 }

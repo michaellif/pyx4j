@@ -13,18 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
+import java.util.EnumSet;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.RadioButton;
 
-import com.pyx4j.widgets.client.dialog.OkDialog;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> implements TenantEditorView {
+    private static final I18n i18n = I18n.get(TenantEditorViewImpl.class);
 
     public TenantEditorViewImpl() {
         super(CrmSiteMap.Tenants.Tenant.class, new TenantEditorForm());
@@ -32,34 +34,12 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Tenant.Type> callback) {
-        new SelectTypeBox() {
+        new SelectTypeDialog<Tenant.Type>(i18n.tr("Select Tenant Type"), EnumSet.of(Tenant.Type.person, Tenant.Type.company)) {
             @Override
             public boolean onClickOk() {
                 callback.onSuccess(getSelectedType());
                 return true;
             }
         }.show();
-    }
-
-    private abstract class SelectTypeBox extends OkDialog {
-
-        private RadioButton person;
-
-        public SelectTypeBox() {
-            super(i18n.tr("Select Tenant Type"));
-
-            HorizontalPanel main = new HorizontalPanel();
-            main.add(person = new RadioButton(i18n.tr("Type"), Tenant.Type.person.toString()));
-            main.add(new RadioButton(i18n.tr("Type"), Tenant.Type.company.toString()));
-            main.setSpacing(8);
-            main.setWidth("100%");
-            person.setValue(true);
-
-            setBody(main);
-        }
-
-        public Tenant.Type getSelectedType() {
-            return (person.getValue() ? Tenant.Type.person : Tenant.Type.company);
-        }
     }
 }

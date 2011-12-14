@@ -23,9 +23,8 @@ import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.cellview.client.CellList.Style;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -35,9 +34,12 @@ import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
+    private static final I18n i18n = I18n.get(SelectDialog.class);
+
     private final SelectionModel<E> selectionModel;
 
     private final Formatter formatter;
@@ -165,60 +167,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
             }
         };
 
-        CellList<E> cellList = new CellList<E>(cell, new CellList.Resources() {
-            // this is a hack that allows us to define style our own way - (that's how I succeeded to override the selected item style, just writing own style for cellListSelectedItem selector in VistaTheme didn't help) 
-            private final Style my = new CellList.Style() {
-                @Override
-                public boolean ensureInjected() {
-                    return true;
-                }
-
-                @Override
-                public String getText() {
-                    return "";
-                }
-
-                @Override
-                public String getName() {
-                    return "";
-                }
-
-                @Override
-                public String cellListEvenItem() {
-                    return "cellListEvenItem";
-                }
-
-                @Override
-                public String cellListKeyboardSelectedItem() {
-                    return "cellListKeyboardSelectedItem";
-                }
-
-                @Override
-                public String cellListOddItem() {
-                    return "cellListOddItem";
-                }
-
-                @Override
-                public String cellListSelectedItem() {
-                    return "cellListSelectedItem";
-                }
-
-                @Override
-                public String cellListWidget() {
-                    return "cellListWidget";
-                }
-            };
-
-            @Override
-            public ImageResource cellListSelectedBackground() {
-                return null;
-            }
-
-            @Override
-            public Style cellListStyle() {
-                return my;
-            }
-        });
+        CellList<E> cellList = new CellList<E>(cell, new FakeCellListResources());
         cellList.setHeight(defineHeight());
         cellList.setWidth("100%");
         if (isMultiselectAllowed) {
@@ -227,6 +176,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
             cellList.setSelectionModel(selectionModel);
         }
         cellList.setRowData(data);
+        cellList.setEmptyListWidget(new Label(i18n.tr("There are no available items")));
         ScrollPanel panel = new ScrollPanel(cellList);
         panel.getElement().getStyle().setProperty("borderStyle", "inset");
         panel.getElement().getStyle().setProperty("borderWidth", "1px");
