@@ -864,6 +864,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <systemProperties>
+                        <systemProperty>buildLabel</systemProperty>
+                        <systemProperty>timestamp</systemProperty>
+                    </systemProperties>
+                </configuration>
             </plugin>
 
         </plugins>

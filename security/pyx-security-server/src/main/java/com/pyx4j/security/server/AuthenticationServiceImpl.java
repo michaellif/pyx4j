@@ -56,7 +56,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
     private static I18n i18n = I18n.get(AuthenticationServiceImpl.class);
 
     protected void assertClientSystemInfo(ClientSystemInfo clientSystemInfo) {
-        String serverVersion = ApplicationVersion.getProductVersion();
+        String serverVersion = ApplicationVersion.getProductBuildVersion();
         if (clientSystemInfo == null) {
             throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", "", serverVersion));
         }

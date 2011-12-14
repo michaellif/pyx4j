@@ -20,8 +20,10 @@
  */
 package com.pyx4j.config.shared;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
+
 @SuppressWarnings("serial")
-public class ClientVersionMismatchError extends Error {
+public class ClientVersionMismatchError extends RuntimeExceptionSerializable {
 
     public ClientVersionMismatchError() {
     }

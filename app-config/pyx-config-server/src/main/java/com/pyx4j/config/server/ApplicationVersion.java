@@ -54,6 +54,8 @@ public class ApplicationVersion {
 
     private static String productVersion = null;
 
+    private static String productBuildVersion;
+
     private static Date buildTimestamp;
 
     public static void initVersionInfo() {
@@ -87,9 +89,12 @@ public class ApplicationVersion {
             }
         }
 
-        productVersion = properties.getProperty(BUILD_NUMBER, "n/a");
-        if (productVersion.startsWith("${")) {
+        productBuildVersion = properties.getProperty(BUILD_NUMBER, "n/a");
+        if (productBuildVersion.startsWith("${") || productBuildVersion.endsWith("-SNAPSHOT")) {
+            productBuildVersion = "n/a";
             productVersion = properties.getProperty(POM_VERSION, "n/a");
+        } else {
+            productVersion = productBuildVersion;
         }
         try {
             String bildTimeString = properties.getProperty(BUILD_TIME);
@@ -113,6 +118,11 @@ public class ApplicationVersion {
     public static String getProductVersion() {
         initVersionInfo();
         return productVersion;
+    }
+
+    public static String getProductBuildVersion() {
+        initVersionInfo();
+        return productBuildVersion;
     }
 
     public static String getProductBuildTime() {
