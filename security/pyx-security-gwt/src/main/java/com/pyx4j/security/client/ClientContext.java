@@ -413,7 +413,7 @@ public class ClientContext {
                     authenticationToken = HTML5Storage.getLocalStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
                 }
                 log.debug("authenticate {}", authenticationToken);
-                service.authenticate(callback, authenticationToken);
+                service.authenticate(callback, clientSystemInfo, authenticationToken);
             } else {
                 if (executeBackground) {
                     RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);

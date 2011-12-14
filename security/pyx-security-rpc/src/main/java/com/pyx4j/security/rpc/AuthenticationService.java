@@ -22,15 +22,16 @@ package com.pyx4j.security.rpc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.rpc.shared.IService;
 
 public interface AuthenticationService extends IService {
 
     public void getSystemReadOnlyStatus(AsyncCallback<Boolean> callback);
 
-    public void authenticate(AsyncCallback<AuthenticationResponse> callback, String sessionToken);
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken);
 
-    public void authenticate(AsyncCallback<AuthenticationResponse> callback, AuthenticationRequest request);
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request);
 
     public void logout(AsyncCallback<AuthenticationResponse> callback);
 

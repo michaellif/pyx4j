@@ -46,7 +46,7 @@ public class ApplicationVersion {
 
     private static final String BUILD_TIME = "build.time";
 
-    private static final String BUILD_TIME_FORMAT = "yyyyMMdd HH:mm";
+    private static final String BUILD_TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
     private static final String BUILD_TIMESTAMP = "build.timestamp";
 
