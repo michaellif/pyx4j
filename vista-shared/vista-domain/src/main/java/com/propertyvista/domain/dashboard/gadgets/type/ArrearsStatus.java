@@ -15,12 +15,17 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @DiscriminatorValue("ArrearsStatus")
 public interface ArrearsStatus extends ListerGadgetBaseMetadata {
-    // FIXME add translation
-    enum Category {
+    public enum Category {
         Rent, Parking, Other, Total;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
     }
 
     IPrimitive<Category> category();
