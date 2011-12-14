@@ -48,37 +48,7 @@ public interface AddressStructured extends IEntity {
     @I18nComment("Street Type")
     public enum StreetType {
 
-        street,
-
-        avenue,
-
-        alley,
-
-        boulevard,
-
-        road,
-
-        lane,
-
-        line,
-
-        court,
-
-        circuit,
-
-        circle,
-
-        crescent,
-
-        grove,
-
-        way,
-
-        highway,
-
-        drive,
-
-        place,
+        alley, approach, arcade, avenue, boulevard, brow, bypass, causeway, circuit, circle, circus, close, copse, corner, cove, court, crescent, drive, end, esplanande, flat, freeway, frontage, gardens, glade, glen, green, grove, heights, highway, lane, line, link, loop, mall, mews, packet, parade, park, parkway, place, promenade, reserve, ridge, rise, road, row, square, street, strip, tarn, terrace, thoroughfaree, track, trunkway, view, vista, walk, way, walkway, yard,
 
         other;
 
