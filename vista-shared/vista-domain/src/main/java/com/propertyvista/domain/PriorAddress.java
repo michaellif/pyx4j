@@ -65,10 +65,13 @@ public interface PriorAddress extends AddressStructured {
     @Editor(type = EditorType.radiogroup)
     IPrimitive<OwnedRented> rented();
 
+    @NotNull
     IPrimitive<String> propertyCompany();
 
+    @NotNull
     IPrimitive<String> managerName();
 
+    @NotNull
     @EmbeddedEntity
     Phone managerPhone();
 
