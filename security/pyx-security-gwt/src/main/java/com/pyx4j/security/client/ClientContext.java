@@ -397,6 +397,8 @@ public class ClientContext {
 
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
+                    ClientContext.getClientSystemInfo().setServerTimeDelta(System.currentTimeMillis() - result.getServertTime());
+                    log.debug("Client/Server time delta {}", ClientContext.getClientSystemInfo().getServerTimeDelta());
                     ClientContext.authenticated(result);
                     if (onAuthenticationAvailable != null) {
                         onAuthenticationAvailable.onSuccess(isAuthenticated());
