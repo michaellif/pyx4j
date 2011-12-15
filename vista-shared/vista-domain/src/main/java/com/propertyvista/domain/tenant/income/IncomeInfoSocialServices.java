@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("socialServices")
@@ -25,6 +26,7 @@ public interface IncomeInfoSocialServices extends IEmploymentInfo {
 
     @Override
     @Caption(name = "Social Services Agency")
+    @NotNull
     IPrimitive<String> name();
 
     @Override
@@ -33,11 +35,13 @@ public interface IncomeInfoSocialServices extends IEmploymentInfo {
 
     @Override
     @Caption(name = "Social Service Agent or Case Worker")
+    @NotNull
     IPrimitive<String> supervisorName();
 
     @Override
     @Caption(name = "Social Service Agent's or Case Worker's Phone")
     @Editor(type = EditorType.phone)
+    @NotNull
     IPrimitive<String> supervisorPhone();
 
 }

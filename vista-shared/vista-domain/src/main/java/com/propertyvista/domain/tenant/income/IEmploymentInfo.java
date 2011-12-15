@@ -44,10 +44,12 @@ public interface IEmploymentInfo extends IIncomeInfo {
     IPrimitive<Double> employedForYears();
 
     @Caption(name = "Supervisor/Manager Name")
+    @NotNull
     IPrimitive<String> supervisorName();
 
     @Caption(name = "Supervisor/Manager Phone")
     @Editor(type = EditorType.phone)
+    @NotNull
     IPrimitive<String> supervisorPhone();
 
     @Caption(name = "Position")
