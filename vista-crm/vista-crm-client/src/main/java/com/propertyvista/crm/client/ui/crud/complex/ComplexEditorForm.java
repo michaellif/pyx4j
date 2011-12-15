@@ -37,12 +37,6 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
     private static I18n i18n = I18n.get(ComplexEditorForm.class);
 
-    private static final String TAB_CAPTION_DASHBOARD = "Dashboard";
-
-    private static final String TAB_CAPTION_GENERAL = "General";
-
-    private static final String TAB_CAPTION_BUILDINGS = "Buildings";
-
     private final VistaTabLayoutPanel tabPanel;
 
     public ComplexEditorForm() {
@@ -56,9 +50,9 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
     @Override
     public IsWidget createContent() {
-        tabPanel.addDisable(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView(), i18n.tr(TAB_CAPTION_DASHBOARD));
-        tabPanel.add(createGeneralPanel(), i18n.tr(TAB_CAPTION_GENERAL));
-        tabPanel.addDisable(isEditable() ? new HTML() : getParentComplexViewerView().getBuildingListerView(), i18n.tr(TAB_CAPTION_BUILDINGS));
+        tabPanel.addDisable(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView(), i18n.tr("Dashboard"));
+        tabPanel.add(createGeneralPanel(), i18n.tr("General"));
+        tabPanel.addDisable(isEditable() ? new HTML() : getParentComplexViewerView().getBuildingListerView(), i18n.tr("Buildings"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -72,7 +66,14 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
         if (isEditable() && primaryBuildingWidget instanceof CEntityComboBox<?>) {
             CEntityComboBox<Building> primaryBuildingCombo = (CEntityComboBox<Building>) primaryBuildingWidget;
             primaryBuildingCombo.resetCriteria();
-            primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), value));
+            if ((value != null) && (value.getPrimaryKey() != null)) {
+                primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), value));
+                primaryBuildingCombo.setEnabled(true);
+                primaryBuildingCombo.setVisible(true);
+            } else {
+                primaryBuildingCombo.setEnabled(false);
+                primaryBuildingCombo.setVisible(false);
+            }
         }
         super.populate(value);
     }

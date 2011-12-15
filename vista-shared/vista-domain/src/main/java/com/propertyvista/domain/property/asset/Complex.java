@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -28,6 +29,7 @@ public interface Complex extends IEntity {
      */
     @ToString
     @Caption(name = "Legal Name")
+    @NotNull
     IPrimitive<String> name();
 
     IPrimitive<String> website();
