@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
@@ -412,18 +411,16 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
-    protected boolean update(DATA_TYPE value) {
+    protected final void update(DATA_TYPE value) {
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             revalidate();
             ValueChangeEvent.fire(this, value);
-            return true;
         }
-        return false;
     }
 
     public void setValue(DATA_TYPE value, boolean fireEvent) {
-        if (getValue() != value) {
+        if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             setNativeValue(value);
             revalidate();
@@ -445,9 +442,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
      * Call populate on init of component
      */
     public void populate(DATA_TYPE value) {
-
         setValue(value, false);
-
         setVisited(false);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
     }
@@ -457,7 +452,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
-        return EqualsHelper.equals(value1, value2);
+        return value1 == value2;
     }
 
     public String getValidationMessage() {

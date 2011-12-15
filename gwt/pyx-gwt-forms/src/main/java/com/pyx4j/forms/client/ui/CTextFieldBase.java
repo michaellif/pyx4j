@@ -93,11 +93,8 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
     }
 
     @Override
-    protected boolean update(DATA_TYPE value) {
-        boolean res = super.update(value);
-        if (!res) {
-            revalidate(); // let TextBoxParserValidator to work!..
-        }
-        return res;
+    public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
+        //This takes in consideration that 2 values can be null but actual state of component is not empty after failed parsing
+        return value1 != null && value1 == value2;
     }
 }
