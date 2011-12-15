@@ -13,12 +13,14 @@
  */
 package com.propertyvista.common.client.ui.components.c;
 
-import com.pyx4j.forms.client.ui.CFocusComponent;
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 import com.propertyvista.domain.financial.Money;
 
-public class CMoney extends CFocusComponent<Money, NativeMoney> {
+public class CMoney extends CTextFieldBase<Money, NativeMoney> {
 
     private IFormat<Money> format;
 
@@ -36,6 +38,7 @@ public class CMoney extends CFocusComponent<Money, NativeMoney> {
         super(title);
         setShowCurrency(showCurrency);
         setFormat(new MoneyFormatter());
+        addValueValidator(new TextBoxParserValidator<Money>());
     }
 
     public void setShowCurrency(boolean showCurrency) {
@@ -48,14 +51,15 @@ public class CMoney extends CFocusComponent<Money, NativeMoney> {
 
     @Override
     protected NativeMoney createWidget() {
-        NativeMoney w = new NativeMoney(this);
-        return w;
+        return new NativeMoney(this);
     }
 
+    @Override
     public void setFormat(IFormat<Money> format) {
         this.format = format;
     }
 
+    @Override
     public IFormat<Money> getFormat() {
         return format;
     }
@@ -63,9 +67,19 @@ public class CMoney extends CFocusComponent<Money, NativeMoney> {
     @Override
     public void onEditingStop() {
         super.onEditingStop();
-        if (isValid()) {
-            setNativeValue(getValue());
+//        if (isValid()) {
+//            setNativeValue(getValue());
+//        }
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        if (isWidgetCreated()) {
+            if (!CommonsStringUtils.isEmpty(asWidget().getNativeText())) {
+                return false;
+            }
         }
+        return super.isValueEmpty() || getValue().isNull();
     }
 
 // TODO: not sure where it's better to set default currency: here or in more high level editors...

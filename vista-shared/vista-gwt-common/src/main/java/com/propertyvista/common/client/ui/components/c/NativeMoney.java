@@ -18,26 +18,29 @@ import java.text.ParseException;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
-import com.pyx4j.forms.client.ui.INativeFocusComponent;
-import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.forms.client.ui.INativeTextComponent;
+import com.pyx4j.forms.client.ui.NativeTextBox;
 
 import com.propertyvista.domain.financial.Money;
 
-public class NativeMoney extends SimplePanel implements INativeFocusComponent<Money> {
+public class NativeMoney extends SimplePanel implements Focusable, INativeTextComponent<Money> {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Money";
 
@@ -45,7 +48,7 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
         disabled, readOnly, invalid
     }
 
-    private final TextBox amount;
+    private final NativeTextBox<Money> amount;
 
     private final Label currency;
 
@@ -76,7 +79,7 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
         // ----------------------------------------------
 
         HorizontalPanel contentPanel = new HorizontalPanel();
-        contentPanel.add(amount = new TextBox());
+        contentPanel.add(amount = new NativeTextBox<Money>(cComponent));
         amount.setWidth("100%");
         amount.addFocusHandler(groupFocusHandler);
         amount.addBlurHandler(groupBlurHandler);
@@ -115,12 +118,6 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     @Override
     public void setEnabled(boolean enabled) {
         amount.setEnabled(enabled);
-        String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
-        if (enabled) {
-            removeStyleDependentName(dependentSuffix);
-        } else {
-            addStyleDependentName(dependentSuffix);
-        }
     }
 
     @Override
@@ -131,12 +128,6 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     @Override
     public void setEditable(boolean editable) {
         amount.setReadOnly(!editable);
-        String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
-        if (editable) {
-            removeStyleDependentName(dependentSuffix);
-        } else {
-            addStyleDependentName(dependentSuffix);
-        }
     }
 
     @Override
@@ -147,12 +138,12 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
         if (event.isEventOfType(PropertyName.repopulated)) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            amount.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
         } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
             if (cComponent.isValid()) {
-                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                amount.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
             } else if (cComponent.isVisited()) {
-                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                amount.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
             }
         }
     }
@@ -186,13 +177,9 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     }
 
     @Override
-    public Money getNativeValue() {
-        Money value;
-        try {
-            value = cComponent.getFormat().parse(amount.getText());
-        } catch (ParseException e) {
-            value = null;
-        }
+    public Money getNativeValue() throws ParseException {
+        Money value = null;
+        value = amount.getNativeValue();
         if (value != null && currency != null) {
             value.currency().name().setValue(currency.getText());
         }
@@ -203,4 +190,40 @@ public class NativeMoney extends SimplePanel implements INativeFocusComponent<Mo
     protected void onEnsureDebugId(String baseID) {
         amount.ensureDebugId(baseID);
     }
+
+    @Override
+    public void setNativeText(String newValue) {
+        amount.setText(newValue);
+    }
+
+    @Override
+    public String getNativeText() {
+        return amount.getNativeText();
+    }
+
+    @Override
+    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+        return amount.addChangeHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return amount.addKeyDownHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return amount.addKeyUpHandler(handler);
+    }
+
+    @Override
+    public int getTabIndex() {
+        return amount.getTabIndex();
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        amount.setAccessKey(key);
+    }
+
 }
