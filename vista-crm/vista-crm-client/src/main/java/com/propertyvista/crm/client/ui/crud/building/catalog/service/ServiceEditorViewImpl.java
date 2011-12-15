@@ -51,6 +51,16 @@ public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implem
                 callback.onSuccess(getSelectedType());
                 return true;
             }
+
+            @Override
+            public String defineWidth() {
+                return "250px";
+            }
+
+            @Override
+            public String defineHeight() {
+                return "100px";
+            }
         }.show();
     }
 
