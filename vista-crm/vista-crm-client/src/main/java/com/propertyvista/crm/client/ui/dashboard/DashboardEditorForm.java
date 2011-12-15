@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.dashboard;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
@@ -37,6 +38,7 @@ public class DashboardEditorForm extends CrmEntityForm<DashboardMetadata> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isFavorite()), 3).build());
