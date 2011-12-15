@@ -32,6 +32,16 @@ abstract class SelectFeatureBox extends SelectDialog<ServiceItem> {
         super(i18n.tr("Select {0}(s)", type), true, getAvailableList(type, apartmentInfo));
     }
 
+    @Override
+    public String defineWidth() {
+        return "300px";
+    }
+
+    @Override
+    public String defineHeight() {
+        return "100px";
+    }
+
     private static List<ServiceItem> getAvailableList(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
         // TODO in the previous version there was a commented out part of code that restricted addition of already selected items (from apartmentInfo.agreed*())
         List<ServiceItem> available = null;

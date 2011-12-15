@@ -70,6 +70,16 @@ class UtilityFolder extends VistaTableFolder<ServiceItemType> {
                 }
                 return true;
             }
+
+            @Override
+            public String defineWidth() {
+                return "300px";
+            }
+
+            @Override
+            public String defineHeight() {
+                return "100px";
+            }
         }.show();
     }
 

@@ -42,7 +42,7 @@ public abstract class SelectDialog<E extends IEntity> extends OkCancelDialog {
 
     private final SelectionModel<E> selectionModel;
 
-    private final Formatter formatter;
+    private final Formatter<E> formatter;
 
     private final List<E> data;
 

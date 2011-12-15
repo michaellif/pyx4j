@@ -63,6 +63,16 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
                 }
                 return true;
             }
+
+            @Override
+            public String defineWidth() {
+                return "700px";
+            }
+
+            @Override
+            public String defineHeight() {
+                return "200px";
+            }
         }.show();
     }
 }

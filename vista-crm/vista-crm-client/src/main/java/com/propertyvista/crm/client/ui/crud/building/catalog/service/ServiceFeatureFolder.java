@@ -62,6 +62,16 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
                 }
                 return true;
             }
+
+            @Override
+            public String defineWidth() {
+                return "700px";
+            }
+
+            @Override
+            public String defineHeight() {
+                return "200px";
+            }
         }.show();
     }
 }

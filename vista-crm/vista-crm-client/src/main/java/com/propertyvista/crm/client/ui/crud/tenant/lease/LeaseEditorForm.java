@@ -195,6 +195,16 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                                     return false;
                                 }
                             }
+
+                            @Override
+                            public String defineHeight() {
+                                return "100px";
+                            };
+
+                            @Override
+                            public String defineWidth() {
+                                return "400px";
+                            }
                         }.show();
                     }
                 }

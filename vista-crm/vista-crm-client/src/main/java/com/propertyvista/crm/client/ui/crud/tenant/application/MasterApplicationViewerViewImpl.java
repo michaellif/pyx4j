@@ -138,10 +138,21 @@ public class MasterApplicationViewerViewImpl extends CrmViewerViewImplBase<Maste
                                 return enntity.person().name().getStringView();
                             }
                         }) {
+
                     @Override
                     public boolean onClickOk() {
                         // TODO make the credit check happen
                         return true;
+                    }
+
+                    @Override
+                    public String defineWidth() {
+                        return "350px";
+                    }
+
+                    @Override
+                    public String defineHeight() {
+                        return "100px";
                     }
                 }.show();
             }
