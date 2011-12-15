@@ -46,6 +46,8 @@ public class AuthenticationResponse implements Serializable {
 
     private boolean datastoreReadOnly;
 
+    private long servertTime;
+
     public AuthenticationResponse() {
 
     }
@@ -120,6 +122,14 @@ public class AuthenticationResponse implements Serializable {
 
     public void setAclTimeStamp(String aclTimeStamp) {
         this.aclTimeStamp = aclTimeStamp;
+    }
+
+    public long getServertTime() {
+        return this.servertTime;
+    }
+
+    public void setServertTime(long servertTime) {
+        this.servertTime = servertTime;
     }
 
 }

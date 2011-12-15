@@ -112,6 +112,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         if (ServerSideConfiguration.instance().datastoreReadOnly()) {
             ar.setDatastoreReadOnly(true);
         }
+        ar.setServertTime(System.currentTimeMillis());
         return ar;
     }
 

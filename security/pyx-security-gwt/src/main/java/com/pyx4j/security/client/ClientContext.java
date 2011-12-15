@@ -41,10 +41,12 @@ import com.pyx4j.config.client.ClientApplicationVersion;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableBlockingAsyncCallback;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
+import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -424,4 +426,24 @@ public class ClientContext {
         }
     }
 
+    public static void authenticate(AuthenticationService authenticationService, AuthenticationRequest request, final AsyncCallback<Boolean> callback) {
+        service = authenticationService;
+        AsyncCallback<AuthenticationResponse> rpcCallback = new DefaultAsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.getClientSystemInfo().setServerTimeDelta(System.currentTimeMillis() - result.getServertTime());
+                log.debug("Client/Server time delta {}", ClientContext.getClientSystemInfo().getServerTimeDelta());
+                ClientContext.authenticated(result);
+                callback.onSuccess(isAuthenticated());
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+
+        };
+        authenticationService.authenticate(rpcCallback, ClientContext.getClientSystemInfo(), request);
+    }
 }
