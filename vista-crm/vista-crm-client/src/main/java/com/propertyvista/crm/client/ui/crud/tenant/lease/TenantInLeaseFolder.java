@@ -28,6 +28,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,7 +39,6 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -90,16 +90,18 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         new SelectTenantBox(tenantListerView) {
             @Override
             public boolean onClickOk() {
-                TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
+                for (Tenant tenant : getSelectedItem()) {
+                    TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
 
-                newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
-                newTenantInLease.tenant().set(getSelectedItem());
-                if (!isApplicantPresent()) {
-                    newTenantInLease.role().setValue(Role.Applicant);
-                    newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
+                    newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
+                    newTenantInLease.tenant().set(tenant);
+                    if (!isApplicantPresent()) {
+                        newTenantInLease.role().setValue(Role.Applicant);
+                        newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
+                    }
+                    // FIXME here we have to check that this tenant is not already added and is indeed new tenant in lease
+                    addItem(newTenantInLease);
                 }
-
-                addItem(newTenantInLease);
 
                 return true;
             }
@@ -246,8 +248,6 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
         private final IListerView<Tenant> tenantListerView;
 
-        private Tenant selectedTenant;
-
         public SelectTenantBox(IListerView<Tenant> tenantListerView) {
             super(i18n.tr("Select Tenant"));
             this.tenantListerView = tenantListerView;
@@ -257,11 +257,11 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
         protected Widget createBody() {
             getOkButton().setEnabled(false);
-            tenantListerView.getLister().addItemSelectionHandler(new ItemSelectionHandler<Tenant>() {
+            tenantListerView.getLister().getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+
                 @Override
-                public void onSelect(Tenant selectedItem) {
-                    selectedTenant = selectedItem;
-                    getOkButton().setEnabled(true);
+                public void onCheck(boolean isAnyChecked) {
+                    getOkButton().setEnabled(isAnyChecked);
                 }
             });
 
@@ -271,8 +271,8 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             return vPanel;
         }
 
-        protected Tenant getSelectedItem() {
-            return selectedTenant;
+        protected List<Tenant> getSelectedItem() {
+            return tenantListerView.getLister().getCheckedItems();
         }
     }
 }

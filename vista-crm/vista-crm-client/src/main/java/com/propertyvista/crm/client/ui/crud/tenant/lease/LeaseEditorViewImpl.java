@@ -53,6 +53,7 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
         });
         unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
         tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
+        tenantLister.getLister().setHasCheckboxColumn(true);
 
         // set main form here: 
         setForm(new LeaseEditorForm());
