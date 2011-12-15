@@ -43,7 +43,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
     }
 
     public static boolean shouldEnterInformation(TenantInLease tenant) {
-        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
+        //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
         if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
             return true;
         }

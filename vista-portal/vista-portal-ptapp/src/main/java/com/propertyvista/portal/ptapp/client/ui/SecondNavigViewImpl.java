@@ -67,10 +67,9 @@ public class SecondNavigViewImpl extends SimplePanel implements SecondNavigView 
         if (presenter.getWizardStep() != null) {
 
             List<ApplicationWizardSubstep> substeps = presenter.getWizardStep().substeps();
-
-            if (substeps.size() > 1) {
-
+            if (!substeps.isEmpty()) {
                 tabsHolder = new NavigTabList();
+
                 int debugIdItemNo = 0;
                 for (ApplicationWizardSubstep substep : substeps) {
                     tabsHolder.add(new NavigTab(substep, presenter.getWizardStep().placeId().getValue(), debugIdItemNo));
