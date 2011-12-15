@@ -24,7 +24,6 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 
@@ -54,11 +53,10 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     @Override
     public void login(AuthenticationRequest request) {
-        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
+        AsyncCallback<Boolean> callback = new DefaultAsyncCallback<Boolean>() {
 
             @Override
-            public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticated(result);
+            public void onSuccess(Boolean result) {
             }
 
             @Override
@@ -70,7 +68,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             }
 
         };
-        ((CrmAuthenticationService) GWT.create(CrmAuthenticationService.class)).authenticate(callback, ClientContext.getClientSystemInfo(), request);
+        ClientContext.authenticate((CrmAuthenticationService) GWT.create(CrmAuthenticationService.class), request, callback);
     }
 
     @Override
