@@ -84,17 +84,16 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
     @Override
     public void populate(ChargeItem value) {
         super.populate(value);
-
-        if (value.item().type().featureType().getValue() == Feature.Type.utility) {
-            // TODO - how to ?
-//            setRemovable(false);
-        }
-
-        if (!isEditable()) {
-            adjustmentPanel.setVisible(!value.adjustments().isEmpty());
-        }
-
         if (!value.item().isEmpty()) {
+            if (value.item().type().featureType().getValue() == Feature.Type.utility) {
+                // TODO - how to ?
+//                setRemovable(false);
+            }
+
+            if (!isEditable()) {
+                adjustmentPanel.setVisible(!value.adjustments().isEmpty());
+            }
+
             CEntityEditor editor = null;
             // add extraData editor if necessary:
             switch (value.item().type().type().getValue()) {
