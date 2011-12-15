@@ -99,8 +99,16 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                         newTenantInLease.role().setValue(Role.Applicant);
                         newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
                     }
-                    // FIXME here we have to check that this tenant is not already added and is indeed new tenant in lease
-                    addItem(newTenantInLease);
+                    boolean isNewAlreadySelected = false;
+                    for (TenantInLease alreadySelected : getValue()) {
+                        if (alreadySelected.tenant().equals(tenant)) {
+                            isNewAlreadySelected = true;
+                            break;
+                        }
+                    }
+                    if (!isNewAlreadySelected) {
+                        addItem(newTenantInLease);
+                    }
                 }
 
                 return true;
@@ -256,7 +264,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         }
 
         protected Widget createBody() {
-            getOkButton().setEnabled(false);
+            getOkButton().setEnabled(!tenantListerView.getLister().getCheckedItems().isEmpty());
             tenantListerView.getLister().getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
 
                 @Override
