@@ -35,6 +35,9 @@ public class VistaDevSessionServlet extends HttpServlet {
         response.setDateHeader("X-StatusDate", System.currentTimeMillis());
 
         DevSession devSession = DevSession.getSession();
+        if (!devSession.isAlive()) {
+            devSession = DevSession.beginSession();
+        }
         devSession.setAttribute(OpenIdFilter.ACCESS_GRANTED_ATTRIBUTE, Boolean.TRUE);
         devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, "tester-a@" + OpenIdServlet.DOMAIN);
 
