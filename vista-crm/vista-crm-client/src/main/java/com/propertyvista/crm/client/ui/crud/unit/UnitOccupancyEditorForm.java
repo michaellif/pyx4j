@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -22,6 +24,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.Status;
 
 public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
 
@@ -40,13 +43,35 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateFrom()), 8.2).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateTo()), 8.2).build());
-
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarket()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease()), 25).build());
+        get(proto().status()).addValueChangeHandler(new ValueChangeHandler<AptUnitOccupancy.Status>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Status> event) {
+                get(proto().offMarket()).setVisible(Status.offMarket.equals(getValue().status().getValue()));
+                get(proto().lease()).setVisible(Status.leased.equals(getValue().status().getValue()));
+            };
+        });
+
+        get(proto().offMarket()).setVisible(false);
+        get(proto().lease()).setVisible(false);
 
         return new CrmScrollPanel(main);
+    }
+
+    @Override
+    public void populate(final AptUnitOccupancy entity) {
+        if ((entity == null) || entity.isNull()) {
+            get(proto().offMarket()).setVisible(false);
+            get(proto().lease()).setVisible(false);
+        } else {
+            get(proto().offMarket()).setVisible(Status.offMarket.equals(entity.status().getValue()));
+            get(proto().lease()).setVisible(Status.leased.equals(entity.status().getValue()));
+        }
+
+        super.populate(entity);
     }
 }

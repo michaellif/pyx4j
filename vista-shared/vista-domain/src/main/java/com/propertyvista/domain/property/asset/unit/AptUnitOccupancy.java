@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -73,6 +74,7 @@ public interface AptUnitOccupancy extends IEntity {
     @ReadOnly
     AptUnit unit();
 
+    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateFrom();
 
@@ -82,6 +84,7 @@ public interface AptUnitOccupancy extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> dateTo();
 
+    @NotNull
     IPrimitive<Status> status();
 
     IPrimitive<OffMarketType> offMarket();
