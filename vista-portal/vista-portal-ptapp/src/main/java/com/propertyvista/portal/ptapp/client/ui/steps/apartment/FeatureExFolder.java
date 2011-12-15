@@ -75,11 +75,13 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                     @Override
                     public boolean onClickOk() {
                         for (ServiceItem item : getSelectedItems()) {
-                            ChargeItem newItem = EntityFactory.create(ChargeItem.class);
-                            newItem.item().set(item);
-                            newItem.originalPrice().setValue(item.price().getValue());
-                            newItem.agreedPrice().setValue(item.price().getValue());
-                            addItem(newItem);
+                            if (getValue().size() < maxCount) {
+                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                newItem.item().set(item);
+                                newItem.originalPrice().setValue(item.price().getValue());
+                                newItem.agreedPrice().setValue(item.price().getValue());
+                                addItem(newItem);
+                            }
                         }
                         return true;
                     }
