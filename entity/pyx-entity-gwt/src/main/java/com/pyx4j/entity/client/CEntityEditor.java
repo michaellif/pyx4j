@@ -209,21 +209,28 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     @Override
     @SuppressWarnings("unchecked")
-    public void setValue(E entity) {
+    protected void setValue(E entity, boolean fireEvent, boolean populate) {
+        if (populate) {
+            assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
+            if (!isAttached()) {
+                this.origEntity = (E) entity.cloneEntity();
+            }
+        }
         if (entity != null) {
             this.editableEntity = entity;
         } else {
             this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
         }
-        super.setValue(this.editableEntity);
-        populateComponents();
+
+        super.setValue(entity, fireEvent, populate);
+        setComponentsValue(this.editableEntity, fireEvent, populate);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void populateComponents() {
+    private void setComponentsValue(E value, boolean fireEvent, boolean populate) {
         for (CComponent component : getComponents()) {
             Path memberPath = binding.get(component);
-            IObject<?> m = editableEntity.getMember(memberPath);
+            IObject<?> m = value.getMember(memberPath);
             try {
                 if ((m instanceof IEntity) || (m instanceof ICollection)) {
                     component.populate(m);
@@ -252,7 +259,10 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     @Override
     public Collection<? extends CComponent<?, ?>> getComponents() {
-        return binding.keySet();
+        if (binding != null) {
+            return binding.keySet();
+        }
+        return null;
     }
 
     public E getOrigValue() {
@@ -260,18 +270,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
             throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
         }
         return origEntity;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void populate(E entity) {
-        assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
-        if (!isAttached()) {
-            this.origEntity = (E) entity.cloneEntity();
-        }
-        // Some how nothing works if this removed (because super do not call this class setValue)
-        setValue(entity);
-        super.populate(entity);
     }
 
     /**
@@ -285,9 +283,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     //TODO discuss with Vlad how to optimally implement this?
     public void discard() {
         this.origEntity = null;
-        // need this because super do not call this class setValue
-        setValue(null);
-        super.populate(null);
+        setValue(null, false, false);
     }
 
     public boolean isDirty() {

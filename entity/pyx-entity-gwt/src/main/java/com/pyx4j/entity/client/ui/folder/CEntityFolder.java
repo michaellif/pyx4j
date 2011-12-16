@@ -247,18 +247,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void setValue(IList<E> value) {
-        super.setValue(value);
-        populateComponents(value);
+    protected void setValue(IList<E> value, boolean fireEvent, boolean populate) {
+        super.setValue(value, fireEvent, populate);
+        setComponentsValue(value, fireEvent, populate);
     }
 
-    @Override
-    public void populate(IList<E> value) {
-        super.populate(value);
-        populateComponents(value);
-    }
-
-    private void populateComponents(IList<E> value) {
+    private void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
         ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
         for (CEntityFolderItem<E> item : previousList) {

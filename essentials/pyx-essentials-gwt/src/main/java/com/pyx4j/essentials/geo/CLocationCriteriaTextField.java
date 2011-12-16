@@ -54,13 +54,14 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, Nati
     }
 
     @Override
-    public void setValue(GeoCriteria value) {
+    protected void setValue(GeoCriteria value, boolean fireEvent, boolean populate) {
+        //TODO ask VladS - what is that?
         // merge the radius value
         GeoCriteria orig = getValue();
-        if ((orig != null) && (value != null)) {
+        if (!populate && (orig != null) && (value != null)) {
             value.radius().setValue(orig.radius().getValue());
         }
-        super.setValue(value);
+        super.setValue(value, fireEvent, populate);
     }
 
     @Override

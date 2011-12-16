@@ -31,8 +31,8 @@ import com.pyx4j.forms.client.ui.ValidationResults;
 public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContainer<E> {
 
     @Override
-    public void populate(E value) {
-        super.populate(value);
+    protected void setValue(E value, boolean fireEvent, boolean populate) {
+        super.setValue(value, fireEvent, populate);
         setContent(createContent(value));
     }
 

@@ -116,14 +116,13 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
     }
 
     @Override
-    public void populate(List<E> value) {
-        // sort
+    protected void setValue(List<E> value, boolean fireEvent, boolean populate) {
         if (value != null) {
             if (getComparator() != null) {
                 Collections.sort(value, getComparator());
             }
         }
-        super.populate(value);
+        super.setValue(value, fireEvent, populate);
     }
 
     /**
@@ -139,16 +138,6 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
         //            initValue = new FullyEqualArrayList(value);
         //        }
         throw new RuntimeException("TODO!!!!!!!!!!!!!!!");
-    }
-
-    @Override
-    public void setValue(List<E> value) {
-        if (value != null) {
-            if (getComparator() != null) {
-                Collections.sort(value, getComparator());
-            }
-        }
-        super.setValue(value);
     }
 
     @Override

@@ -332,21 +332,13 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     @Override
-    public void setValue(E value) {
+    protected void setValue(E value, boolean fireEvent, boolean populate) {
         if ((value != null) && (value.isNull())) {
             value = null;
         }
-        super.setValue(value);
-    }
+        super.setValue(value, fireEvent, populate);
 
-    @Override
-    public void populate(E value) {
-        if ((value != null) && (value.isNull())) {
-            value = null;
-        }
-        super.populate(value);
-
-        if (optionsFilter != null || (criteria != null && criteria.getFilters() != null && !criteria.getFilters().isEmpty())) {
+        if (populate && optionsFilter != null || (criteria != null && criteria.getFilters() != null && !criteria.getFilters().isEmpty())) {
             // Fire options reload since optionsFilter may depend on other values in the model.
             resetOptions();
             retriveOptions(null);

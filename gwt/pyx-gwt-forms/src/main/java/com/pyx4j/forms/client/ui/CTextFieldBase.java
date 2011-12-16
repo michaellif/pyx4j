@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INativeTextComponent<DATA_TYPE>> extends CTextComponent<DATA_TYPE, WIDGET_TYPE>
         implements IAcceptText {
@@ -50,15 +49,6 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
 
     public IFormat<DATA_TYPE> getFormat() {
         return format;
-    }
-
-    @Override
-    public void setValue(DATA_TYPE value) {
-        if (getValue() == null && value == null) {
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.tooltip);
-        } else {
-            super.setValue(value);
-        }
     }
 
     @Override

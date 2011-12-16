@@ -201,18 +201,12 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 //    }
 
     @Override
-    public void setValue(E value) {
-        super.setValue(value);
-        repopulate(value);
+    public void setValue(E value, boolean fireEvent, boolean populate) {
+        super.setValue(value, fireEvent, populate);
+        setComponentsValue(value, fireEvent, populate);
     }
 
-    @Override
-    public void populate(E value) {
-        super.populate(value);
-        repopulate(value);
-    }
-
-    protected void repopulate(E value) {
+    protected void setComponentsValue(E value, boolean fireEvent, boolean populate) {
         for (IDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {
                 CEntityEditor editor = createItemPrivate(discriminator);

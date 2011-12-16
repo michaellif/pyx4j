@@ -419,7 +419,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
-    public void setValue(DATA_TYPE value, boolean fireEvent) {
+    protected void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             setNativeValue(value);
@@ -428,23 +428,33 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                 ValueChangeEvent.fire(this, value);
             }
         }
+        if (populate) {
+            setVisited(false);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
+            onPopulate();
+        }
     }
 
-    public void setValue(DATA_TYPE value) {
-        setValue(value, true);
+    public final void setValue(DATA_TYPE value, boolean fireEvent) {
+        setValue(value, fireEvent, false);
     }
 
-    public DATA_TYPE getValue() {
-        return value;
+    public final void setValue(DATA_TYPE value) {
+        setValue(value, true, false);
     }
 
     /*
      * Call populate on init of component
      */
-    public void populate(DATA_TYPE value) {
-        setValue(value, false);
-        setVisited(false);
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
+    public final void populate(DATA_TYPE value) {
+        setValue(value, false, true);
+    }
+
+    protected void onPopulate() {
+    }
+
+    public DATA_TYPE getValue() {
+        return value;
     }
 
     public boolean isValueEmpty() {

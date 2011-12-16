@@ -43,13 +43,8 @@ public class CCheckBox extends CFocusComponent<Boolean, NativeCheckBox> {
     }
 
     @Override
-    public void setValue(Boolean value) {
-        super.setValue(value == null ? false : value);
-    }
-
-    @Override
-    public void populate(Boolean value) {
-        super.populate(value == null ? false : value);
+    protected void setValue(Boolean value, boolean fireEvent, boolean populate) {
+        super.setValue(value == null ? false : value, fireEvent, populate);
     }
 
     @Override
