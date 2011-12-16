@@ -54,7 +54,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, Nati
     }
 
     @Override
-    protected void setValue(GeoCriteria value, boolean fireEvent, boolean populate) {
+    public void setValue(GeoCriteria value, boolean fireEvent, boolean populate) {
         //TODO ask VladS - what is that?
         // merge the radius value
         GeoCriteria orig = getValue();

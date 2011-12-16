@@ -419,7 +419,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
-    protected void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
+    public void setValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             setNativeValue(value);
@@ -453,7 +453,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     protected void onPopulate() {
     }
 
-    public DATA_TYPE getValue() {
+    public final DATA_TYPE getValue() {
         return value;
     }
 

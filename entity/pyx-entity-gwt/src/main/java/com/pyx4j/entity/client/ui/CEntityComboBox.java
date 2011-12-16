@@ -332,7 +332,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     @Override
-    protected void setValue(E value, boolean fireEvent, boolean populate) {
+    public void setValue(E value, boolean fireEvent, boolean populate) {
         if ((value != null) && (value.isNull())) {
             value = null;
         }

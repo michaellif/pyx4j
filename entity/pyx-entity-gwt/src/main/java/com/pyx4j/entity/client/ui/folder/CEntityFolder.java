@@ -247,12 +247,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    protected void setValue(IList<E> value, boolean fireEvent, boolean populate) {
+    public void setValue(IList<E> value, boolean fireEvent, boolean populate) {
         super.setValue(value, fireEvent, populate);
-        setComponentsValue(value, fireEvent, populate);
+        setComponentsValue(fireEvent, populate);
     }
 
-    private void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
+    @SuppressWarnings("unchecked")
+    private void setComponentsValue(boolean fireEvent, boolean populate) {
         ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
         for (CEntityFolderItem<E> item : previousList) {
@@ -261,22 +262,26 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         currentRowDebugId = 0;
 
-        for (E entity : value) {
-            CEntityFolderItem<E> item = null;
-            for (CEntityFolderItem<E> itemFromCahe : previousList) {
-                if (itemFromCahe.getValue().equals(entity)) {
-                    previousList.remove(itemFromCahe);
-                    item = itemFromCahe;
-                    break;
+        if (getValue() != null) {
+
+            for (E entity : getValue()) {
+                CEntityFolderItem<E> item = null;
+                for (CEntityFolderItem<E> itemFromCahe : previousList) {
+                    if (itemFromCahe.getValue().equals(entity)) {
+                        previousList.remove(itemFromCahe);
+                        item = itemFromCahe;
+                        break;
+                    }
                 }
+
+                if (item == null) {
+                    item = createItemPrivate();
+                }
+
+                adopt(item);
+                item.populate(entity);
             }
 
-            if (item == null) {
-                item = createItemPrivate();
-            }
-
-            adopt(item);
-            item.populate(entity);
         }
 
         for (CEntityFolderItem<E> item : itemsList) {

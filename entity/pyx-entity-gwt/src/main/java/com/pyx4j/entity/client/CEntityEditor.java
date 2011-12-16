@@ -63,8 +63,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     private final E entityPrototype;
 
-    private E editableEntity;
-
     private E origEntity;
 
     private final HashMap<CComponent<?, ?>, Path> binding;
@@ -78,10 +76,10 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         @Override
         public void onValueChange(ValueChangeEvent event) {
             Path memberPath = binding.get(event.getSource());
-            if ((memberPath != null) && (editableEntity != null)) {
+            if ((memberPath != null) && (getValue() != null)) {
                 Object value = event.getValue();
                 if (value instanceof IEntity) {
-                    ((IEntity) editableEntity.getMember(memberPath)).set(((IEntity) value).cloneEntity());
+                    ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).cloneEntity());
                     log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
                     return;
                 }
@@ -89,14 +87,14 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                 if (value instanceof ICollection) {
                     value = ((ICollection) value).getValue();
                 } else if ((value instanceof Date)) {
-                    Class<?> cls = editableEntity.getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                    Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
                     if (cls.equals(LogicalDate.class)) {
                         value = new LogicalDate((Date) value);
                     } else if (cls.equals(java.sql.Date.class)) {
                         value = new java.sql.Date(((Date) value).getTime());
                     }
                 }
-                editableEntity.setValue(memberPath, value);
+                getValue().setValue(memberPath, value);
                 log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
             }
         }
@@ -209,39 +207,45 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void setValue(E entity, boolean fireEvent, boolean populate) {
+    public void setValue(E entity, boolean fireEvent, boolean populate) {
         if (populate) {
             assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
             if (!isAttached()) {
                 this.origEntity = (E) entity.cloneEntity();
             }
         }
-        if (entity != null) {
-            this.editableEntity = entity;
-        } else {
-            this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
-        }
+        //      this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
 
         super.setValue(entity, fireEvent, populate);
-        setComponentsValue(this.editableEntity, fireEvent, populate);
+        setComponentsValue(fireEvent, populate);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void setComponentsValue(E value, boolean fireEvent, boolean populate) {
-        for (CComponent component : getComponents()) {
-            Path memberPath = binding.get(component);
-            IObject<?> m = value.getMember(memberPath);
-            try {
-                if ((m instanceof IEntity) || (m instanceof ICollection)) {
-                    component.populate(m);
+    private void setComponentsValue(boolean fireEvent, boolean populate) {
+        if (getValue() == null) {
+            for (CComponent component : getComponents()) {
+                if (component instanceof CEntityEditor) {
+                    ((CEntityEditor) component).discard();
                 } else {
-                    component.populate(m.getValue());
+                    component.setValue(null, fireEvent, populate);
                 }
-            } catch (ClassCastException e) {
-                log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
-                log.error("Error", e);
-                throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
-                        + e.getMessage());
+            }
+        } else {
+            for (CComponent component : getComponents()) {
+                Path memberPath = binding.get(component);
+                IObject<?> m = getValue().getMember(memberPath);
+                try {
+                    if ((m instanceof IEntity) || (m instanceof ICollection)) {
+                        component.setValue(m, fireEvent, populate);
+                    } else {
+                        component.setValue(m.getValue(), fireEvent, populate);
+                    }
+                } catch (ClassCastException e) {
+                    log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
+                    log.error("Error", e);
+                    throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
+                            + e.getMessage());
+                }
             }
         }
     }
@@ -250,11 +254,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
             me.getKey().setDebugId(new CompositeDebugId(debugId, me.getValue()));
         }
-    }
-
-    @Override
-    public E getValue() {
-        return editableEntity;
     }
 
     @Override
@@ -280,8 +279,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         populate((E) EntityFactory.create(proto().getObjectClass()));
     }
 
-    //TODO discuss with Vlad how to optimally implement this?
-    public void discard() {
+    public final void discard() {
         this.origEntity = null;
         setValue(null, false, false);
     }
