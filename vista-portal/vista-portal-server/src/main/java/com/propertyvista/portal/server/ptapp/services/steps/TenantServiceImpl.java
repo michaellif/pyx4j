@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services;
+package com.propertyvista.portal.server.ptapp.services.steps;
 
 import java.util.List;
 import java.util.Vector;
@@ -34,10 +34,11 @@ import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
-import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
+import com.propertyvista.portal.server.ptapp.util.ChargesServerCalculation;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -122,7 +123,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
                 ApplicationProgressMgr.invalidateChargesStep(application);
                 secureSave(charges);
 
-                log.info("Charges are re-calculated");
+                log.info("Charges have been re-calculated");
             }
         }
 

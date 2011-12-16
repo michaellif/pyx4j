@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp;
+package com.propertyvista.portal.server.ptapp.util;
 
 import java.util.ArrayList;
 import java.util.List;

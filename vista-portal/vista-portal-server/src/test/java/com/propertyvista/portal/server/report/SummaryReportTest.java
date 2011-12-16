@@ -41,7 +41,7 @@ import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.propertyvista.portal.server.ptapp.services.SummaryServiceImpl;
+import com.propertyvista.portal.server.ptapp.services.steps.SummaryServiceImpl;
 
 public class SummaryReportTest extends ReportsTestBase {
 
