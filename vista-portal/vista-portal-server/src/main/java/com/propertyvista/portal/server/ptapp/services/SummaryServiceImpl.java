@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services.steps;
+package com.propertyvista.portal.server.ptapp.services;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
@@ -45,7 +45,6 @@ import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.report.SummaryReport;
 import com.propertyvista.server.common.util.TenantConverter;

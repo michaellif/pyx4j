@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services.steps;
+package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.Iterator;
 import java.util.List;
