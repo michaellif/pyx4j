@@ -42,11 +42,6 @@ public class CCheckBox extends CFocusComponent<Boolean, NativeCheckBox> {
         return new NativeCheckBox(this);
     }
 
-    @Override
-    public void setValue(Boolean value, boolean fireEvent, boolean populate) {
-        super.setValue(value == null ? false : value, fireEvent, populate);
-    }
-
     public void setAlignmet(Alignment alignment) {
         this.alignment = alignment;
         if (isWidgetCreated()) {
