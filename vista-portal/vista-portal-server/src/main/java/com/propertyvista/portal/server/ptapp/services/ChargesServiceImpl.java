@@ -34,6 +34,7 @@ import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.server.ptapp.ChargesServerCalculation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -48,18 +49,20 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
     }
 
     @Override
-    public void save(AsyncCallback<Charges> callback, Charges charges) {
-        log.info("Saving charges\n{}", VistaDataPrinter.print(charges));
+    public void save(AsyncCallback<Charges> callback, Charges entity) {
+        log.info("Saving charges\n{}", VistaDataPrinter.print(entity));
 
-        saveApplicationEntity(charges);
+        saveApplicationEntity(entity);
 
-        loadTransientData(charges);
+        DigitalSignatureMgr.resetAll();
 
-        callback.onSuccess(charges);
+        // we do not use return value, so return the same as input one:        
+        callback.onSuccess(entity);
+        // but, strictly speaking, this call should look like:        
+//        callback.onSuccess(retrieveData());
     }
 
     public Charges retrieveData() {
-
         Lease lease = PtAppContext.getCurrentUserLease();
         TenantInLeaseRetriever.UpdateLeaseTenants(lease);
         Persistence.service().retrieve(lease.tenants());
@@ -94,13 +97,11 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
                     case pet:
                     case parking:
                     case locker:
-                        charges.monthlyCharges().charges()
-                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
+                        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
                         break;
 
                     default:
-                        charges.oneTimeCharges().charges()
-                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
+                        charges.oneTimeCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
                     }
                 }
             }

@@ -57,13 +57,13 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     @Override
     public void retrieve(AsyncCallback<SummaryDTO> callback, Key tenantId) {
         log.info("Retrieving summary for tenant {}", tenantId);
-        callback.onSuccess(retrieveSummary());
+        callback.onSuccess(retrieveData());
     }
 
     @Override
-    public void save(AsyncCallback<SummaryDTO> callback, SummaryDTO summaryDTO) {
+    public void save(AsyncCallback<SummaryDTO> callback, SummaryDTO entity) {
         Summary summary = EntityFactory.create(Summary.class);
-        summary.setValue(summaryDTO.getValue());
+        summary.setValue(entity.getValue());
 
         for (DigitalSignature sig : summary.application().signatures()) {
             if (!sig.agree().isBooleanTrue() || !DigitalSignatureValidation.isSignatureValid(sig.tenant().tenant(), sig.fullName().getValue())) {
@@ -76,11 +76,13 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         saveApplicationEntity(summary);
 
-        createSummaryDTO(summary);
-        callback.onSuccess(summaryDTO);
+        // we do not use return value, so return the same as input one:        
+        callback.onSuccess(entity);
+        // but, strictly speaking, this call should look like:        
+//        callback.onSuccess(retrieveData());
     }
 
-    public SummaryDTO retrieveSummary() {
+    public SummaryDTO retrieveData() {
         Summary summary = retrieveApplicationEntity(Summary.class);
         if (summary == null) {
             log.info("Creating new Summary for appl {}", PtAppContext.getCurrentUserApplicationPrimaryKey());
@@ -138,7 +140,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none) {
-        SummaryDTO summary = retrieveSummary();
+        SummaryDTO summary = retrieveData();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
             JasperReportProcessor.createReport(SummaryReport.createModel(summary), JasperFileFormat.PDF, bos);

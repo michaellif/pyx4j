@@ -42,6 +42,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.AddressConverter;
 
@@ -60,9 +61,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO entity) {
-
         // update agreed items:
-
         Lease lease = PtAppContext.getCurrentUserLease();
         for (Iterator<ChargeItem> iter = lease.serviceAgreement().featureItems().iterator(); iter.hasNext();) {
             ChargeItem item = iter.next();
@@ -92,10 +91,17 @@ public class ApartmentServiceImpl implements ApartmentService {
             }
         }
 
-// actually, just feature list should be saved:
-//        Persistence.service().merge(lease.serviceAgreement().featureItems());
+        // actually, just feature list should be saved:
+//      Persistence.service().merge(lease.serviceAgreement().featureItems());
+        //but it's not implemented yet - so save all Lease:
         Persistence.service().merge(lease);
+
+        DigitalSignatureMgr.resetAll();
+
+        // we do not use return value, so return the same as input one:        
         callback.onSuccess(entity);
+        // but, strictly speaking, this call should look like:        
+//        callback.onSuccess(retrieveData());
     }
 
     public ApartmentInfoDTO retrieveData() {

@@ -112,7 +112,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         }
 
         DigitalSignatureMgr.update(application, lease.tenants());
-        ApplicationProgressMgr.syncroizeApplicationProgress(tenants.tenants());
+        ApplicationProgressMgr.syncroizeApplicationProgress(application, tenants.tenants());
 
         // we need to load charges and re-calculate them
         log.info("Load charges and re-calculate them");

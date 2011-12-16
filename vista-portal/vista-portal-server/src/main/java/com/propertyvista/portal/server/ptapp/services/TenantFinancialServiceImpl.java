@@ -22,6 +22,7 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
+import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -36,18 +37,23 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     }
 
     @Override
-    public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO dto) {
-        log.debug("Saving tenantFinancial {}", dto);
+    public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO entity) {
+        log.debug("Saving tenantFinancial {}", entity);
 
-        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(dto.getPrimaryKey(), true);
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(dto, tr.tenantScreening);
+        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey(), true);
+        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.tenantScreening);
 
         tr.saveScreening();
 
-        dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
-        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+        entity = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
+        entity.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
 
-        callback.onSuccess(dto);
+        DigitalSignatureMgr.reset(tr.tenantInLease);
+
+        // we do not use return value, so return the same as input one:        
+        callback.onSuccess(entity);
+        // but, strictly speaking, this call should look like:        
+//        callback.onSuccess(retrieveData(tr));
     }
 
     public TenantFinancialDTO retrieveData(TenantInLeaseRetriever tr) {

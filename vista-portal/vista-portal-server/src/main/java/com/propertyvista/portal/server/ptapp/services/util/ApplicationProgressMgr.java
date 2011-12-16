@@ -28,19 +28,9 @@ import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
 
 public class ApplicationProgressMgr extends ApplicationMgr {
-
-    private static ApplicationWizardStep findWizardStep(Application progress, Class<? extends AppPlace> place) {
-        for (ApplicationWizardStep step : progress.steps()) {
-            if (step.placeId().getValue().equals(AppPlaceInfo.getPlaceId(place))) {
-                return step;
-            }
-        }
-        throw new Error("Step '" + place.getName() + "' not found");
-    }
 
     public static boolean shouldEnterInformation(TenantInLease tenant) {
         //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
@@ -53,26 +43,15 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         return (TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18));
     }
 
-    public static void invalidateChargesStep() {
-        Application app = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
-        ApplicationWizardStep chargesStep = findWizardStep(app, PtSiteMap.Charges.class);
-        switch (chargesStep.status().getValue()) {
-        case latest:
-        case complete:
-            chargesStep.status().setValue(ApplicationWizardStep.Status.invalid);
-            Persistence.service().persist(chargesStep);
-        }
-    }
+    public static void syncroizeApplicationProgress(Application application, List<TenantInLeaseDTO> tenants) {
+        ApplicationWizardStep infoStep = findWizardStep(application, PtSiteMap.Info.class);
+        ApplicationWizardStep financialStep = findWizardStep(application, PtSiteMap.Financial.class);
 
-    public static void syncroizeApplicationProgress(List<TenantInLeaseDTO> tenants) {
-        Application app = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
-
-        ApplicationWizardStep infoStep = findWizardStep(app, PtSiteMap.Info.class);
-        ApplicationWizardStep financialStep = findWizardStep(app, PtSiteMap.Financial.class);
-        //Keep original values to be able to merge Steps
+        // keep original values to be able to merge Steps
         ApplicationWizardSubstep[] infoSubSteps = infoStep.substeps().toArray(new ApplicationWizardSubstep[infoStep.substeps().size()]);
         ApplicationWizardSubstep[] financialSubSteps = financialStep.substeps().toArray(new ApplicationWizardSubstep[financialStep.substeps().size()]);
 
+        // process sub-steps:
         infoStep.substeps().clear();
         financialStep.substeps().clear();
         for (TenantInLeaseDTO tenant : tenants) {
@@ -86,11 +65,36 @@ public class ApplicationProgressMgr extends ApplicationMgr {
                 updateParentStepStatus(financialStep, financialSubstep);
             }
         }
+
         updateStepCompletion(infoStep);
         updateStepCompletion(financialStep);
+
         Persistence.service().merge(infoStep);
         Persistence.service().merge(financialStep);
     }
+
+    public static void invalidateChargesStep(Application application) {
+        ApplicationWizardStep chargesStep = findWizardStep(application, PtSiteMap.Charges.class);
+        switch (chargesStep.status().getValue()) {
+        case latest:
+        case complete:
+            chargesStep.status().setValue(ApplicationWizardStep.Status.invalid);
+            Persistence.service().merge(chargesStep);
+        }
+    }
+
+    public static void invalidateSummaryStep(Application application) {
+        ApplicationWizardStep summaryStep = findWizardStep(application, PtSiteMap.Summary.class);
+        switch (summaryStep.status().getValue()) {
+        case latest:
+        case complete:
+            summaryStep.status().setValue(ApplicationWizardStep.Status.invalid);
+            Persistence.service().merge(summaryStep);
+            break;
+        }
+    }
+
+    // internals:
 
     private static void updateParentStepStatus(ApplicationWizardStep step, ApplicationWizardSubstep substep) {
         switch (substep.status().getValue()) {
@@ -153,4 +157,14 @@ public class ApplicationProgressMgr extends ApplicationMgr {
 
         return step;
     }
+
+    private static ApplicationWizardStep findWizardStep(Application application, Class<? extends AppPlace> place) {
+        for (ApplicationWizardStep step : application.steps()) {
+            if (step.placeId().getValue().equals(AppPlaceInfo.getPlaceId(place))) {
+                return step;
+            }
+        }
+        throw new Error("Step '" + place.getName() + "' not found");
+    }
+
 }

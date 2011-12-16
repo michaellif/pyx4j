@@ -22,6 +22,7 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
+import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -36,21 +37,26 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     }
 
     @Override
-    public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO dto) {
-        log.debug("Saving Tenant Info {}", dto);
+    public void save(AsyncCallback<TenantInfoDTO> callback, TenantInfoDTO entity) {
+        log.debug("Saving Tenant Info {}", entity);
 
-        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(dto.getPrimaryKey());
-        new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(dto, tr.tenant);
-        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(dto, tr.tenantScreening);
+        TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey());
+        new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(entity, tr.tenant);
+        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.tenantScreening);
 
         tr.saveTenant();
         tr.saveScreening();
 
-        dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, dto);
-        dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
+        entity = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
+        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, entity);
+        entity.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
 
-        callback.onSuccess(dto);
+        DigitalSignatureMgr.reset(tr.tenantInLease);
+
+        // we do not use return value, so return the same as input one:        
+        callback.onSuccess(entity);
+        // but, strictly speaking, this call should look like:        
+//        callback.onSuccess(retrieveData(tr));
     }
 
     public TenantInfoDTO retrieveData(TenantInLeaseRetriever tr) {
@@ -59,5 +65,4 @@ public class TenantInfoServiceImpl implements TenantInfoService {
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
         return dto;
     }
-
 }

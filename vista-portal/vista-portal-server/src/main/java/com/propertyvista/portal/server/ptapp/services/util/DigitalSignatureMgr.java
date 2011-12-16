@@ -24,9 +24,14 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class DigitalSignatureMgr {
+
+    static public void update() {
+        update(PtAppContext.getCurrentUserApplication());
+    }
 
     static public void update(Application application) {
         Persistence.service().retrieve(application.lease());
@@ -35,17 +40,16 @@ public class DigitalSignatureMgr {
     }
 
     static public void update(Application application, IList<TenantInLease> tenants) {
-
         List<DigitalSignature> existingSignatures = new Vector<DigitalSignature>(application.signatures());
         application.signatures().clear();
 
         // check/create signature for every tenant which needs it: 
-        for (TenantInLease tenantInLease : tenants) {
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
+        for (TenantInLease tenant : tenants) {
+            if (ApplicationProgressMgr.shouldEnterInformation(tenant)) {
                 boolean alreadyPresent = false;
                 for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
                     DigitalSignature sig = it.next();
-                    if (tenantInLease.equals(sig.tenant())) {
+                    if (sig.tenant().equals(tenant)) {
                         alreadyPresent = true;
                         application.signatures().add(sig);
                         it.remove();
@@ -53,19 +57,63 @@ public class DigitalSignatureMgr {
                     }
                 }
                 if (!alreadyPresent) { // create signature if absent: 
-                    DigitalSignature sig = EntityFactory.create(DigitalSignature.class);
-                    sig.tenant().set(tenantInLease);
-                    application.signatures().add(sig);
-                    Persistence.service().persist(sig);
+                    createDigitalSignature(application, tenant);
+                    ApplicationProgressMgr.invalidateSummaryStep(application);
                 }
             }
         }
 
-        Persistence.service().merge(application);
-
-//        // remove orphan ones:
-//        for (DigitalSignature orphan : existingSignatures) {
-//            Persistence.service().delete(orphan);
-//        }
+        Persistence.service().persist(application);
     }
+
+    static public void resetAll() {
+        resetAll(PtAppContext.getCurrentUserApplication());
+    }
+
+    static public void resetAll(Application application) {
+        application.signatures().clear();
+        update(application);
+    }
+
+    static public void reset(TenantInLease tenant) {
+        Application application = PtAppContext.getCurrentUserApplication();
+
+//        DigitalSignature sigToRemove = null;
+//        for (DigitalSignature sig : application.signatures()) {
+//            if (sig.tenant().equals(tenant)) {
+//                sigToRemove = sig;
+//                createDigitalSignature(application, tenant);
+//                break;
+//            }
+//        }
+//
+//        if (sigToRemove != null) {
+//            application.signatures().remove(sigToRemove);
+//        }
+
+        boolean found = false;
+        for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
+            DigitalSignature sig = it.next();
+            if (sig.tenant().equals(tenant)) {
+                it.remove();
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            createDigitalSignature(application, tenant);
+            ApplicationProgressMgr.invalidateSummaryStep(application);
+        }
+
+        Persistence.service().merge(application);
+    }
+
+    static private DigitalSignature createDigitalSignature(Application application, TenantInLease tenant) { // create signature if absent: 
+        DigitalSignature sig = EntityFactory.create(DigitalSignature.class);
+        sig.tenant().set(tenant);
+        application.signatures().add(sig);
+        return sig;
+    }
+
 }
