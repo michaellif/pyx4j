@@ -221,7 +221,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void populateComponents() {
-        for (CComponent component : binding.keySet()) {
+        for (CComponent component : getComponents()) {
             Path memberPath = binding.get(component);
             IObject<?> m = editableEntity.getMember(memberPath);
             try {
@@ -252,9 +252,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     @Override
     public Collection<? extends CComponent<?, ?>> getComponents() {
-        if (binding == null) {
-            return null;
-        }
         return binding.keySet();
     }
 
@@ -281,7 +278,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
      * Initialize from with empty Entity
      */
     @SuppressWarnings("unchecked")
-    public void populate() {
+    public void populateNew() {
         populate((E) EntityFactory.create(proto().getObjectClass()));
     }
 

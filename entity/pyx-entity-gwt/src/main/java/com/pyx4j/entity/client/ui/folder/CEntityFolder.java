@@ -249,16 +249,16 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public void setValue(IList<E> value) {
         super.setValue(value);
-        repopulate(value);
+        populateComponents(value);
     }
 
     @Override
     public void populate(IList<E> value) {
         super.populate(value);
-        repopulate(value);
+        populateComponents(value);
     }
 
-    protected void repopulate(IList<E> value) {
+    private void populateComponents(IList<E> value) {
         ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
         for (CEntityFolderItem<E> item : previousList) {
@@ -318,11 +318,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     public Collection<? extends CComponent<?, ?>> getComponents() {
-        if (itemsList != null) {
-            return itemsList;
-        } else {
-            return null;
-        }
+        return itemsList;
     }
 
     @Override
