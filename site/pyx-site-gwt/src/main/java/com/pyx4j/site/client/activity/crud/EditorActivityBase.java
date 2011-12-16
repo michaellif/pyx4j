@@ -110,8 +110,14 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         view.discard();
         view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
-        containerWidget.setWidget(view);
         populate();
+        containerWidget.setWidget(view);
+    }
+
+    @Override
+    public void onStop() {
+        view.discard();
+        super.onStop();
     }
 
     @Override

@@ -76,8 +76,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        containerWidget.setWidget(view);
         populate();
+        containerWidget.setWidget(view);
     }
 
     @Override

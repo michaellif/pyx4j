@@ -81,8 +81,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
         populate();
+        panel.setWidget(view);
     }
 
     @Override
