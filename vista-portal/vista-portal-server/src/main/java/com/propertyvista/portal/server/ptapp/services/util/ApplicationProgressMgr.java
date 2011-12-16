@@ -15,6 +15,9 @@ package com.propertyvista.portal.server.ptapp.services.util;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,7 +34,14 @@ import com.propertyvista.server.common.ptapp.ApplicationMgr;
 
 public class ApplicationProgressMgr extends ApplicationMgr {
 
+    private final static Logger log = LoggerFactory.getLogger(ApplicationProgressMgr.class);
+
     public static boolean shouldEnterInformation(TenantInLease tenant) {
+        if (tenant.isNull()) {
+            log.info("Received a null tenant when checking for eligibility");
+            return false;
+        }
+
         //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
         if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
             return true;

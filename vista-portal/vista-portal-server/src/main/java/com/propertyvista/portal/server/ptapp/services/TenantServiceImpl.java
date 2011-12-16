@@ -105,8 +105,9 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             currentTenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
-        Persistence.service().persist(lease);
+        Persistence.service().merge(lease);
 
+        // remove deleted tenants:
         for (TenantInLease orphan : existingTenants) {
             Persistence.service().delete(orphan);
         }
@@ -114,13 +115,15 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         DigitalSignatureMgr.update(application, lease.tenants());
         ApplicationProgressMgr.syncroizeApplicationProgress(application, tenants.tenants());
 
-        // we need to load charges and re-calculate them
-        log.info("Load charges and re-calculate them");
+        // re-calculate charges:
         Charges charges = retrieveApplicationEntity(Charges.class);
         if (charges != null) {
-            ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
-            secureSave(charges);
-            log.info("Re-calculated and saved charges");
+            if (ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants())) {
+                ApplicationProgressMgr.invalidateChargesStep(application);
+                secureSave(charges);
+
+                log.info("Charges are re-calculated");
+            }
         }
 
 //        CampaignManager.fireEvent(CampaignTriger.Registration, tenants);

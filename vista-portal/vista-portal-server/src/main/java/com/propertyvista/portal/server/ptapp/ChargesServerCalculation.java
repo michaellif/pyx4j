@@ -37,23 +37,19 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             return false;
         }
 
-        //@see http://propertyvista.jira.com/browse/VISTA-235?focusedCommentId=10332
+        //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
         if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
             return true;
-        } else {
-            return TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18);
         }
+        if (tenant.role().getValue() == TenantInLease.Role.Dependent) {
+            return false;
+        }
+        return TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18);
     }
 
-    public static void updatePaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {
-        //        // find all potential tenants 
-        //        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
-        //        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        //        PotentialTenantList tenantList = Persistence.service().retrieve(criteria);
-        //        log.info("Found {} tenants", tenantList.tenants().size());
-
-        // compare current tenant list with what we have on the form
+    public static boolean updatePaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {
         boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
+
         List<TenantInLease> chargedTenants = new ArrayList<TenantInLease>();
         for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
             TenantInLease tenant = tenantCharge.tenant();
@@ -85,7 +81,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         } else {
             log.info("Tenants are the same as before, no need to reset payment split charges");
         }
+
+        return dirty;
     }
+
+    // internals:
 
     private static boolean areTwoTenantListsTheSame(List<TenantInLease> tenants1, List<TenantInLease> tenants2) {
 
