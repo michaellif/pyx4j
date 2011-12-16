@@ -73,7 +73,7 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
             @Override
             public void onSuccess(AddressStructured result) {
                 final PaymentMethod currentValue = EntityFactory.create(PaymentMethod.class);
-                currentValue.set(view.getValue());
+                currentValue.set(view.getValue().cloneEntity());
                 currentValue.billingAddress().set(result);
                 currentValue.sameAsCurrent().setValue(true);
                 view.populate(currentValue);

@@ -26,6 +26,7 @@ import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -141,7 +142,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
             @Override
             public void onSuccess(AptUnit unit) {
-                LeaseDTO currentValue = view.getValue();
+                LeaseDTO currentValue = view.getValue().cloneEntity();
 
                 currentValue.unit().set(unit);
                 currentValue.selectedBuilding().set(unit.belongsTo());
@@ -161,7 +162,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedService(ServiceItem serviceItem) {
-        LeaseDTO currentValue = view.getValue();
+        LeaseDTO currentValue = view.getValue().cloneEntity();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
 
             // clear current dependable data:
@@ -181,15 +182,10 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void removeTenat(TenantInLease tenant) {
-        ((LeaseCrudService) service).removeTenat(new AsyncCallback<Boolean>() {
+        ((LeaseCrudService) service).removeTenat(new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
             }
         }, tenant.getPrimaryKey());
     }
