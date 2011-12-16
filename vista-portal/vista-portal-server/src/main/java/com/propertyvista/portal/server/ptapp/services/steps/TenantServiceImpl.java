@@ -48,19 +48,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
     @Override
     public void retrieve(AsyncCallback<TenantInApplicationListDTO> callback, Key tenantId) {
-        Lease lease = PtAppContext.getCurrentUserLease();
-        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
-
-        TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
-        for (TenantInLease tenantInLease : lease.tenants()) {
-            Persistence.service().retrieve(tenantInLease);
-            tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
-        }
-
-        //TODO use policy
-        tenants.tenantsMaximum().setValue(6);
-
-        callback.onSuccess(tenants);
+        callback.onSuccess(retrieveData());
     }
 
     @Override
@@ -129,6 +117,25 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
 //        CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
 
+        // we do not use return value, so return the same as input one:        
         callback.onSuccess(currentTenants);
+        // but, strictly speaking, this call should look like:        
+//        callback.onSuccess(retrieveData());
+    }
+
+    public TenantInApplicationListDTO retrieveData() {
+        Lease lease = PtAppContext.getCurrentUserLease();
+        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
+
+        TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
+        for (TenantInLease tenantInLease : lease.tenants()) {
+            Persistence.service().retrieve(tenantInLease);
+            tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+        }
+
+        //TODO use policy
+        tenants.tenantsMaximum().setValue(6);
+
+        return tenants;
     }
 }

@@ -112,15 +112,12 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             ChargesSharedCalculation.calculateCharges(charges);
         }
 
-        loadTransientData(charges);
-
-        return charges;
-    }
-
-    private void loadTransientData(Charges charges) {
+        // load transient data:
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             Persistence.service().retrieve(charge.tenant());
             charge.tenantName().set(charge.tenant().tenant().person().name().detach());
         }
+
+        return charges;
     }
 }
