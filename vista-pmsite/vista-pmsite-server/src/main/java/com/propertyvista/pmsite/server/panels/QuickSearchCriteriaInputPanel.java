@@ -15,6 +15,7 @@ package com.propertyvista.pmsite.server.panels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,7 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         // add Province drop-down
         final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap();
         List<String> provinces = new ArrayList<String>(provCityMap.keySet());
+        Collections.sort(provinces);
         DropDownChoice<String> provChoice = new WicketUtils.DropDownList<String>("province", model.bind(criteria.province()), provinces, false,
                 i18n.tr("Select Province"));
         provChoice.add(AttributeModifier.replace("onChange",
@@ -55,6 +57,7 @@ public class QuickSearchCriteriaInputPanel extends Panel {
         String selProv = model.getObject().getEntityValue().province().getValue();
         if (selProv != null && selProv.length() > 0) {
             cities = provCityMap.get(selProv);
+            Collections.sort(cities);
         } else {
             cities = Arrays.asList("- Select Province -");
         }
@@ -68,7 +71,9 @@ public class QuickSearchCriteriaInputPanel extends Panel {
                 + "var provCity = {};\n";
         for (String _prov : provCityMap.keySet()) {
             String _list = "";
-            for (String _city : provCityMap.get(_prov)) {
+            List<String> _cityList = new ArrayList<String>(provCityMap.get(_prov));
+            Collections.sort(_cityList);
+            for (String _city : _cityList) {
                 _list += ("".equals(_list) ? "" : ",") + "'" + StringEscapeUtils.escapeJavaScript(_city) + "'";
             }
             jsCityList += "provCity['" + StringEscapeUtils.escapeJavaScript(_prov) + "'] = [" + _list + "];\n";
