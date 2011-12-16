@@ -18,7 +18,6 @@ import java.util.List;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -56,11 +55,11 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         financialStep.substeps().clear();
         for (TenantInLeaseDTO tenant : tenants) {
             if (shouldEnterInformation(tenant)) {
-                ApplicationWizardSubstep infoSubstep = merge(tenant, infoSubSteps);
+                ApplicationWizardSubstep infoSubstep = mergeSubStep(tenant, infoSubSteps);
                 infoStep.substeps().add(infoSubstep);
                 updateParentStepStatus(infoStep, infoSubstep);
 
-                ApplicationWizardSubstep financialSubstep = merge(tenant, financialSubSteps);
+                ApplicationWizardSubstep financialSubstep = mergeSubStep(tenant, financialSubSteps);
                 financialStep.substeps().add(financialSubstep);
                 updateParentStepStatus(financialStep, financialSubstep);
             }
@@ -131,31 +130,29 @@ public class ApplicationProgressMgr extends ApplicationMgr {
     }
 
     @SuppressWarnings("unchecked")
-    private static ApplicationWizardSubstep merge(TenantInLeaseDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
+    private static ApplicationWizardSubstep mergeSubStep(TenantInLeaseDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
+        ApplicationWizardSubstep subStep = EntityFactory.create(ApplicationWizardSubstep.class);
+        subStep.placeArgument().setValue(tenant.getPrimaryKey().toString());
+        subStep.name().setValue(tenant.tenant().person().name().getStringView());
+        subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
 
-        ApplicationWizardSubstep step = EntityFactory.create(ApplicationWizardSubstep.class);
-        //TODO serialize key.
-        step.placeArgument().setValue(tenant.getPrimaryKey().toString());
-        step.name().setValue(
-                EntityFromatUtils.nvl_concat(" ", tenant.tenant().person().name().firstName(), tenant.tenant().person().name().middleName(), tenant.tenant()
-                        .person().name().lastName()));
-        step.status().setValue(ApplicationWizardStep.Status.notVisited);
-
-        // find original
+        // try to find original:
         for (ApplicationWizardSubstep origStep : origSubSteps) {
-            if (origStep.placeArgument().getValue().equals(tenant.getPrimaryKey())) {
-                step.id().set(origStep.id());
-                step.status().set(origStep.status());
+            if (origStep.placeArgument().getValue().equals(tenant.getPrimaryKey().toString())) {
+                subStep.id().set(origStep.id());
+                subStep.status().set(origStep.status());
 
                 // see if something changed between tenantNew and tenantOrig
                 if ((tenant.changeStatus().getValue() == TenantInLeaseDTO.ChangeStatus.Updated)
-                        && (step.status().getValue() == ApplicationWizardStep.Status.complete)) {
-                    step.status().setValue(ApplicationWizardStep.Status.invalid);
+                        && (subStep.status().getValue() == ApplicationWizardStep.Status.complete)) {
+                    subStep.status().setValue(ApplicationWizardStep.Status.invalid);
                 }
+
+                break;
             }
         }
 
-        return step;
+        return subStep;
     }
 
     private static ApplicationWizardStep findWizardStep(Application application, Class<? extends AppPlace> place) {
