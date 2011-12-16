@@ -85,9 +85,10 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
         }
 
         @Override
-        public void populate(DigitalSignature entity) {
-            setEditable(!(entity.agree().isBooleanTrue() && DigitalSignatureValidation.isSignatureValid(entity.tenant().tenant(), entity.fullName().getValue())));
-            super.populate(entity);
+        protected void onPopulate() {
+            super.onPopulate();
+            setEditable(!(getValue().agree().isBooleanTrue() && DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), getValue().fullName()
+                    .getValue())));
         }
 
         @Override

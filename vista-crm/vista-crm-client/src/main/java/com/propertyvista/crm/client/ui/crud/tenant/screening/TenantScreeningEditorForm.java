@@ -97,15 +97,15 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     @Override
-    public void populate(TenantScreening value) {
-        super.populate(value);
+    protected void onPopulate() {
+        super.onPopulate();
 
         enablePreviousAddress();
 
-        get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
-        fileUpload.setVisible(isEditable() && value.notCanadianCitizen().isBooleanTrue());
-        if (value != null) {
-            fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
+        get(proto().secureIdentifier()).setEnabled(!getValue().notCanadianCitizen().isBooleanTrue());
+        fileUpload.setVisible(isEditable() && getValue().notCanadianCitizen().isBooleanTrue());
+        if (getValue() != null) {
+            fileUpload.setTenantID(((IEntity) getValue()).getPrimaryKey());
         }
     }
 

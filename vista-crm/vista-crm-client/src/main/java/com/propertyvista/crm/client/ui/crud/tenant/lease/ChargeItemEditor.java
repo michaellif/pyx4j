@@ -82,33 +82,33 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void populate(ChargeItem value) {
-        super.populate(value);
-        if (!value.item().isEmpty()) {
-            if (value.item().type().featureType().getValue() == Feature.Type.utility) {
+    protected void onPopulate() {
+        super.onPopulate();
+        if (!getValue().item().isEmpty()) {
+            if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
                 // TODO - how to ?
 //                setRemovable(false);
             }
 
             if (!isEditable()) {
-                adjustmentPanel.setVisible(!value.adjustments().isEmpty());
+                adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
             }
 
             CEntityEditor editor = null;
             // add extraData editor if necessary:
-            switch (value.item().type().type().getValue()) {
+            switch (getValue().item().type().type().getValue()) {
             case feature:
-                switch (value.item().type().featureType().getValue()) {
+                switch (getValue().item().type().featureType().getValue()) {
                 case parking:
                     editor = new VehicleDataEditor();
-                    if (value.extraData().isNull()) {
-                        value.extraData().set(EntityFactory.create(Vehicle.class));
+                    if (getValue().extraData().isNull()) {
+                        getValue().extraData().set(EntityFactory.create(Vehicle.class));
                     }
                     break;
                 case pet:
                     editor = new PetDataEditor();
-                    if (value.extraData().isNull()) {
-                        value.extraData().set(EntityFactory.create(Pet.class));
+                    if (getValue().extraData().isNull()) {
+                        getValue().extraData().set(EntityFactory.create(Pet.class));
                     }
                     break;
                 }
@@ -117,7 +117,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
             if (editor != null) {
                 this.inject(proto().extraData(), editor);
-                editor.populate(value.extraData().cast());
+                editor.populate(getValue().extraData().cast());
                 extraDataPanel.setWidget(editor);
             }
         }

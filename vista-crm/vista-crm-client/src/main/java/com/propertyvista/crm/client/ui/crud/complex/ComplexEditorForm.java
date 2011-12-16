@@ -61,13 +61,14 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void populate(ComplexDTO value) {
+    protected void onPopulate() {
+        super.onPopulate();
         CComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
         if (isEditable() && primaryBuildingWidget instanceof CEntityComboBox<?>) {
             CEntityComboBox<Building> primaryBuildingCombo = (CEntityComboBox<Building>) primaryBuildingWidget;
             primaryBuildingCombo.resetCriteria();
-            if ((value != null) && (value.getPrimaryKey() != null)) {
-                primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), value));
+            if ((getValue() != null) && (getValue().getPrimaryKey() != null)) {
+                primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), getValue()));
                 primaryBuildingCombo.setEnabled(true);
                 primaryBuildingCombo.setVisible(true);
             } else {
@@ -75,7 +76,6 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
                 primaryBuildingCombo.setVisible(false);
             }
         }
-        super.populate(value);
     }
 
     private Widget createGeneralPanel() {

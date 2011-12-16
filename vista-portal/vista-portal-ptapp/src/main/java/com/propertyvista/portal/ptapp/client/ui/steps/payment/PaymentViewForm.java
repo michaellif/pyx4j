@@ -121,14 +121,14 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
     }
 
     @Override
-    public void populate(PaymentInformation value) {
-        super.populate(value);
+    protected void onPopulate() {
+        super.onPopulate();
 
         // prepare term text:
         String termText = PortalResources.INSTANCE.paymentTermsNotes().getText();
         termText = termText.replace("$[PMC]", PtAppSite.getPmcName());
         termText = termText.replace("$[USER]", ClientContext.getUserVisit().getName());
-        termText = termText.replace("$[AMOUNT]", value.applicationCharges().total().getStringView());
+        termText = termText.replace("$[AMOUNT]", getValue().applicationCharges().total().getStringView());
         termText = termText.replace("$[DATE]", "1st of January");
         termContent.setValue(termText);
     }

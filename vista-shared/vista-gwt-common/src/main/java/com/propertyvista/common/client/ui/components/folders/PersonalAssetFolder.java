@@ -21,14 +21,12 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.domain.financial.Currency;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 
@@ -83,13 +81,5 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
             });
         }
 
-        @Override
-        public void populate(PersonalAsset entity) {
-            if (entity != null && entity.assetValue().currency().isEmpty()) {
-                entity.assetValue().currency().set(EntityFactory.create(Currency.class));
-                entity.assetValue().currency().name().setValue("CAD");
-            }
-            super.populate(entity);
-        }
     }
 }

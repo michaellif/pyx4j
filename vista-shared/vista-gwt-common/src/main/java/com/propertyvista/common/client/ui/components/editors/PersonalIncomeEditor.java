@@ -98,11 +98,11 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
     }
 
     @Override
-    public void populate(PersonalIncome value) {
-        super.populate(value);
-        setVisibility(value.incomeSource().getValue());
-        if (value != null && fileUpload != null) {
-            fileUpload.setTenantID(((IEntity) (value.getParent().getParent())).getPrimaryKey());
+    protected void onPopulate() {
+        super.onPopulate();
+        setVisibility(getValue().incomeSource().getValue());
+        if (fileUpload != null) {
+            fileUpload.setTenantID(((IEntity) (getValue().getParent().getParent())).getPrimaryKey());
         }
     }
 

@@ -135,21 +135,21 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     }
 
     @Override
-    public void populate(SummaryDTO entity) {
-        super.populate(entity);
+    protected void onPopulate() {
+        super.onPopulate();
 
         //hide/show various panels depend on populated data:
-        consessionPanel.setVisible(!entity.selectedUnit().concessions().isEmpty());
-        includedPanel.setVisible(!entity.selectedUnit().includedUtilities().isEmpty());
-        excludedPanel.setVisible(!entity.selectedUnit().externalUtilities().isEmpty());
-        chargedPanel.setVisible(!entity.selectedUnit().agreedUtilities().isEmpty());
+        consessionPanel.setVisible(!getValue().selectedUnit().concessions().isEmpty());
+        includedPanel.setVisible(!getValue().selectedUnit().includedUtilities().isEmpty());
+        excludedPanel.setVisible(!getValue().selectedUnit().externalUtilities().isEmpty());
+        chargedPanel.setVisible(!getValue().selectedUnit().agreedUtilities().isEmpty());
 
-        petsPanel.setVisible(!entity.selectedUnit().agreedPets().isEmpty());
-        parkingPanel.setVisible(!entity.selectedUnit().agreedParking().isEmpty());
-        storagePanel.setVisible(!entity.selectedUnit().agreedStorage().isEmpty());
-        otherPanel.setVisible(!entity.selectedUnit().agreedOther().isEmpty());
-        addonsPanel.setVisible(!entity.selectedUnit().agreedPets().isEmpty() | !entity.selectedUnit().agreedParking().isEmpty()
-                | !entity.selectedUnit().agreedStorage().isEmpty() | !entity.selectedUnit().agreedOther().isEmpty());
+        petsPanel.setVisible(!getValue().selectedUnit().agreedPets().isEmpty());
+        parkingPanel.setVisible(!getValue().selectedUnit().agreedParking().isEmpty());
+        storagePanel.setVisible(!getValue().selectedUnit().agreedStorage().isEmpty());
+        otherPanel.setVisible(!getValue().selectedUnit().agreedOther().isEmpty());
+        addonsPanel.setVisible(!getValue().selectedUnit().agreedPets().isEmpty() | !getValue().selectedUnit().agreedParking().isEmpty()
+                | !getValue().selectedUnit().agreedStorage().isEmpty() | !getValue().selectedUnit().agreedOther().isEmpty());
     }
 
     public class DemoReportButtons extends FlowPanel {

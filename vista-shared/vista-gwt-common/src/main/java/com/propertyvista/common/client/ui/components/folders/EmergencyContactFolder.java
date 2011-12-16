@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.ui.components.folders;
 
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
@@ -56,9 +55,9 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     }
 
     @Override
-    public void populate(IList<EmergencyContact> value) {
-        super.populate(value);
-        if (modifyable && value.isEmpty()) {
+    protected void onPopulate() {
+        super.onPopulate();
+        if (modifyable && getValue().isEmpty()) {
             addItem(); // at least one Emergency Contact should be present!..
         }
     }

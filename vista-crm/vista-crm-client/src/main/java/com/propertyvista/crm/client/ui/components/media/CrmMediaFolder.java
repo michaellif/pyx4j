@@ -154,9 +154,9 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
         }
 
         @Override
-        public void populate(Media value) {
-            super.populate(value);
-            setVisibility(value.type().getValue());
+        protected void onPopulate() {
+            super.onPopulate();
+            setVisibility(getValue().type().getValue());
         }
 
         private void setVisibility(Media.Type type) {

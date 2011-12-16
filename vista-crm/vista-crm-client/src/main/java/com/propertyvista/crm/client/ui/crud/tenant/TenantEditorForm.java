@@ -117,9 +117,9 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
     }
 
     @Override
-    public void populate(TenantDTO value) {
-        super.populate(value);
-        setVisibility(value);
+    protected void onPopulate() {
+        super.onPopulate();
+        setVisibility();
     }
 
     @Override
@@ -135,9 +135,9 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         });
     }
 
-    private void setVisibility(TenantDTO tenant) {
+    private void setVisibility() {
         tabPanel.clear();
-        switch (tenant.type().getValue()) {
+        switch (getValue().type().getValue()) {
         case person:
             tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
             tabPanel.addDisable(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));

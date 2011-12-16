@@ -153,24 +153,24 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     }
 
     @Override
-    public void populate(ApartmentInfoDTO value) {
-        super.populate(value);
+    protected void onPopulate() {
+        super.onPopulate();
 
         // generate welcome message for logged user:
         welcome.setHTML(HtmlUtils.h3(i18n.tr("Welcome") + " " + ClientContext.getUserVisit().getName() + "!<br>" + i18n.tr("Thank you for choosing") + " "
                 + PtAppSite.getPmcName() + " " + i18n.tr("for your future home!")));
 
-        pictureHolder.setWidget(MediaUtils.createPublicMediaImage(value.picture().getPrimaryKey(), ThumbnailSize.large));
+        pictureHolder.setWidget(MediaUtils.createPublicMediaImage(getValue().picture().getPrimaryKey(), ThumbnailSize.large));
 
         //hide/show various panels depend on populated data:
-        consessionPanel.setVisible(!value.concessions().isEmpty());
-        includedPanel.setVisible(!value.includedUtilities().isEmpty());
-        excludedPanel.setVisible(!value.externalUtilities().isEmpty());
-        chargedPanel.setVisible(!value.agreedUtilities().isEmpty());
+        consessionPanel.setVisible(!getValue().concessions().isEmpty());
+        includedPanel.setVisible(!getValue().includedUtilities().isEmpty());
+        excludedPanel.setVisible(!getValue().externalUtilities().isEmpty());
+        chargedPanel.setVisible(!getValue().agreedUtilities().isEmpty());
 
-        petsPanel.setVisible(!value.agreedPets().isEmpty() || !value.availablePets().isEmpty());
-        parkingPanel.setVisible(!value.agreedParking().isEmpty() || !value.availableParking().isEmpty());
-        storagePanel.setVisible(!value.agreedStorage().isEmpty() || !value.availableStorage().isEmpty());
-        otherPanel.setVisible(!value.agreedOther().isEmpty() || !value.availableOther().isEmpty());
+        petsPanel.setVisible(!getValue().agreedPets().isEmpty() || !getValue().availablePets().isEmpty());
+        parkingPanel.setVisible(!getValue().agreedParking().isEmpty() || !getValue().availableParking().isEmpty());
+        storagePanel.setVisible(!getValue().agreedStorage().isEmpty() || !getValue().availableStorage().isEmpty());
+        otherPanel.setVisible(!getValue().agreedOther().isEmpty() || !getValue().availableOther().isEmpty());
     }
 }

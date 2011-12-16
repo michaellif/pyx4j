@@ -63,9 +63,10 @@ public class EquifaxResultEditorForm extends CrmEntityForm<EquifaxResult> {
     }
 
     @Override
-    public void populate(EquifaxResult entity) {
+    protected void onPopulate() {
+        super.onPopulate();
 
-        switch (entity.suggestedDecision().getValue()) {
+        switch (getValue().suggestedDecision().getValue()) {
         case Approve:
             resultHolder.setWidget(new Frame(resultApprovePath));
             break;
@@ -85,6 +86,5 @@ public class EquifaxResultEditorForm extends CrmEntityForm<EquifaxResult> {
         resultHolder.getWidget().setSize("100%", "100%");
         resultHolder.getWidget().getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 
-        super.populate(entity);
     }
 }

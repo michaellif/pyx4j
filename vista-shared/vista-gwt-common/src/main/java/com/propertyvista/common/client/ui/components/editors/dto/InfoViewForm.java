@@ -273,15 +273,15 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
     }
 
     @Override
-    public void populate(TenantInfoDTO value) {
-        super.populate(value);
+    protected void onPopulate() {
+        super.onPopulate();
 
         enablePreviousAddress();
 
-        get(proto().secureIdentifier()).setEnabled(!value.notCanadianCitizen().isBooleanTrue());
-        fileUpload.setVisible(value.notCanadianCitizen().isBooleanTrue());
-        if (value != null) {
-            fileUpload.setTenantID(((IEntity) value).getPrimaryKey());
+        get(proto().secureIdentifier()).setEnabled(!getValue().notCanadianCitizen().isBooleanTrue());
+        fileUpload.setVisible(getValue().notCanadianCitizen().isBooleanTrue());
+        if (getValue() != null) {
+            fileUpload.setTenantID(((IEntity) getValue()).getPrimaryKey());
         }
     }
 }

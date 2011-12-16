@@ -51,7 +51,7 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
-                setVizibility(getValue());
+                setVisibility(getValue());
             }
         });
 
@@ -77,12 +77,12 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
     }
 
     @Override
-    public void populate(PriorAddress value) {
-        super.populate(value);
-        setVizibility(value);
+    protected void onPopulate() {
+        super.onPopulate();
+        setVisibility(getValue());
     }
 
-    private void setVizibility(PriorAddress value) {
+    private void setVisibility(PriorAddress value) {
         boolean rented = OwnedRented.rented.equals(value.rented().getValue());
         get(proto().payment()).setVisible(rented);
         get(proto().propertyCompany()).setVisible(rented);

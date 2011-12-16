@@ -51,12 +51,13 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
     }
 
     @Override
-    public void populate(ServiceItemType value) {
+    protected void onPopulate() {
+        super.onPopulate();
 
         serviceType.setVisible(false);
         featureType.setVisible(false);
 
-        switch (value.type().getValue()) {
+        switch (getValue().type().getValue()) {
         case service:
             serviceType.setVisible(true);
             break;
@@ -66,6 +67,5 @@ public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
             break;
         }
 
-        super.populate(value);
     }
 }

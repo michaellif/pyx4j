@@ -126,9 +126,9 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         }
 
         @Override
-        public void populate(TenantCharge entity) {
-            super.populate(entity);
-            boolean applicant = (entity.tenant().role().getValue() == Role.Applicant);
+        protected void onPopulate() {
+            super.onPopulate();
+            boolean applicant = (getValue().tenant().role().getValue() == Role.Applicant);
             if (applicant) {
                 get(proto().percentage()).setEditable(false);
             }

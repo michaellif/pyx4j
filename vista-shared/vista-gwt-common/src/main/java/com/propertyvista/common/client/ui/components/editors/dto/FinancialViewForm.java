@@ -83,11 +83,6 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
     }
 
     @Override
-    public void populate(TenantFinancialDTO value) {
-        super.populate(value);
-    }
-
-    @Override
     public void addValidations() {
         this.addValueValidator(new EditableValueValidator<TenantFinancialDTO>() {
 

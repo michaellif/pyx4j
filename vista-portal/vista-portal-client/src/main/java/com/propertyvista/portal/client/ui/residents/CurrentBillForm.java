@@ -84,11 +84,6 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
         }
 
         @Override
-        public void populate(LogicalDate value) {
-            super.populate(value);
-        }
-
-        @Override
         public IsWidget createContent(LogicalDate value) {
             if (value != null) {
                 FlowPanel container = new FlowPanel();

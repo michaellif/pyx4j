@@ -100,9 +100,9 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         }
 
         @Override
-        public void populate(PageContent value) {
-            super.populate(value);
-            boolean staticPage = value.descriptor().type().getValue() == PageDescriptor.Type.staticContent;
+        protected void onPopulate() {
+            super.onPopulate();
+            boolean staticPage = getValue().descriptor().type().getValue() == PageDescriptor.Type.staticContent;
             get(proto().content()).setVisible(staticPage);
             get(proto()._caption().secondaryCaption()).setVisible(staticPage);
         }

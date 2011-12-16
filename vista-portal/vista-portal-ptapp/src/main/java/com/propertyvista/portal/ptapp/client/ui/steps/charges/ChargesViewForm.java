@@ -87,9 +87,9 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
     }
 
     @Override
-    public void populate(Charges value) {
-        super.populate(value);
-        splitCharges.setVisible(value.paymentSplitCharges().charges().size() > 1);
+    protected void onPopulate() {
+        super.onPopulate();
+        splitCharges.setVisible(getValue().paymentSplitCharges().charges().size() > 1);
     }
 
     private static Widget createTotal(CEntityEditor<?> form, Money member) {
@@ -134,9 +134,9 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         }
 
         @Override
-        public void populate(ChargeLineList entity) {
-            super.populate(entity);
-            this.asWidget().setVisible(!entity.charges().isEmpty());
+        protected void onPopulate() {
+            super.onPopulate();
+            this.asWidget().setVisible(!getValue().charges().isEmpty());
         }
     }
 }

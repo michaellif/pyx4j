@@ -130,10 +130,10 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
         }
 
         @Override
-        public void populate(TenantInLeaseDTO value) {
-            super.populate(value);
+        protected void onPopulate() {
+            super.onPopulate();
 
-            applicant = (value.role().getValue() == Role.Applicant);
+            applicant = (getValue().role().getValue() == Role.Applicant);
             if (applicant) {
                 relationship.setVisible(false);
                 takeOwnership.setVisible(false);
@@ -149,8 +149,8 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 role.setOptions(roles);
             }
 
-            if (!applicant && !value.tenant().person().birthDate().isNull()) {
-                if (ValidationUtils.isOlderThen18(value.tenant().person().birthDate().getValue())) {
+            if (!applicant && !getValue().tenant().person().birthDate().isNull()) {
+                if (ValidationUtils.isOlderThen18(getValue().tenant().person().birthDate().getValue())) {
                     enableRoleAndOwnership();
                 } else {
                     setMandatoryDependant();

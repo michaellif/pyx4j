@@ -73,9 +73,9 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
     }
 
     @Override
-    public void populate(PaymentMethod value) {
-        super.populate(value);
-        setInstrumentsVisibility(value.type().getValue());
+    protected void onPopulate() {
+        super.onPopulate();
+        setInstrumentsVisibility(getValue().type().getValue());
     }
 
     @Override

@@ -78,16 +78,15 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     @Override
-    public void populate(AptUnitDTO value) {
+    protected void onPopulate() {
+        super.onPopulate();
         CComponent<Floorplan, ?> comp = get(proto().floorplan());
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
             combo.resetCriteria(); // reload options with new criteria...
-            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), value.belongsTo().detach()));
+            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), getValue().belongsTo().detach()));
         }
-
-        super.populate(value);
     }
 
     @Override

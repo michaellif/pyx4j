@@ -63,15 +63,14 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
     }
 
     @Override
-    public void populate(final AptUnitOccupancy entity) {
-        if ((entity == null) || entity.isNull()) {
+    protected void onPopulate() {
+        super.onPopulate();
+        if (getValue().isNull()) {
             get(proto().offMarket()).setVisible(false);
             get(proto().lease()).setVisible(false);
         } else {
-            get(proto().offMarket()).setVisible(Status.offMarket.equals(entity.status().getValue()));
-            get(proto().lease()).setVisible(Status.leased.equals(entity.status().getValue()));
+            get(proto().offMarket()).setVisible(Status.offMarket.equals(getValue().status().getValue()));
+            get(proto().lease()).setVisible(Status.leased.equals(getValue().status().getValue()));
         }
-
-        super.populate(entity);
     }
 }

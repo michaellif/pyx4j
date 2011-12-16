@@ -67,10 +67,4 @@ public class PersonalInfoForm extends CEntityDecoratableEditor<ResidentDTO> impl
 
     }
 
-    @Override
-    public void populate(ResidentDTO personalInfo) {
-        super.populate(personalInfo);
-
-    }
-
 }
