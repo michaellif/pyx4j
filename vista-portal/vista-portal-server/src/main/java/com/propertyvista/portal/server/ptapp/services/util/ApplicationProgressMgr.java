@@ -95,6 +95,35 @@ public class ApplicationProgressMgr extends ApplicationMgr {
 
     // internals:
 
+    private static ApplicationWizardSubstep mergeSubStep(TenantInLeaseDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
+
+        // try to find original:
+        ApplicationWizardSubstep subStep = null;
+        for (ApplicationWizardSubstep origStep : origSubSteps) {
+            if (origStep.placeArgument().getValue().equals(tenant.getPrimaryKey().toString())) {
+                // copy step data if found:
+                subStep = origStep;
+                // invalidate status if there are changes:
+                if ((tenant.changeStatus().getValue() == TenantInLeaseDTO.ChangeStatus.Updated)
+                        && (subStep.status().getValue() == ApplicationWizardStep.Status.complete)) {
+                    subStep.status().setValue(ApplicationWizardStep.Status.invalid);
+                }
+
+                break;
+            }
+        }
+
+        if (subStep == null) {
+            // create an new sub-step:
+            subStep = EntityFactory.create(ApplicationWizardSubstep.class);
+            subStep.placeArgument().setValue(tenant.getPrimaryKey().toString());
+            subStep.name().setValue(tenant.tenant().person().name().getStringView());
+            subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
+        }
+
+        return subStep;
+    }
+
     private static void updateParentStepStatus(ApplicationWizardStep step, ApplicationWizardSubstep substep) {
         switch (substep.status().getValue()) {
         case invalid:
@@ -115,7 +144,6 @@ public class ApplicationProgressMgr extends ApplicationMgr {
             if ((hasInvalid) && (substep.status().getValue() == ApplicationWizardStep.Status.latest)) {
                 substep.status().setValue(ApplicationWizardStep.Status.notVisited);
             }
-
             if (substep.status().getValue() == ApplicationWizardStep.Status.invalid) {
                 hasInvalid = true;
             }
@@ -127,32 +155,6 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         if (!hasNotComplete) {
             step.status().setValue(ApplicationWizardStep.Status.complete);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static ApplicationWizardSubstep mergeSubStep(TenantInLeaseDTO tenant, ApplicationWizardSubstep[] origSubSteps) {
-        ApplicationWizardSubstep subStep = EntityFactory.create(ApplicationWizardSubstep.class);
-        subStep.placeArgument().setValue(tenant.getPrimaryKey().toString());
-        subStep.name().setValue(tenant.tenant().person().name().getStringView());
-        subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
-
-        // try to find original:
-        for (ApplicationWizardSubstep origStep : origSubSteps) {
-            if (origStep.placeArgument().getValue().equals(tenant.getPrimaryKey().toString())) {
-                subStep.id().set(origStep.id());
-                subStep.status().set(origStep.status());
-
-                // see if something changed between tenantNew and tenantOrig
-                if ((tenant.changeStatus().getValue() == TenantInLeaseDTO.ChangeStatus.Updated)
-                        && (subStep.status().getValue() == ApplicationWizardStep.Status.complete)) {
-                    subStep.status().setValue(ApplicationWizardStep.Status.invalid);
-                }
-
-                break;
-            }
-        }
-
-        return subStep;
     }
 
     private static ApplicationWizardStep findWizardStep(Application application, Class<? extends AppPlace> place) {

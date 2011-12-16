@@ -78,25 +78,12 @@ public class DigitalSignatureMgr {
     static public void reset(TenantInLease tenant) {
         Application application = PtAppContext.getCurrentUserApplication();
 
-//        DigitalSignature sigToRemove = null;
-//        for (DigitalSignature sig : application.signatures()) {
-//            if (sig.tenant().equals(tenant)) {
-//                sigToRemove = sig;
-//                createDigitalSignature(application, tenant);
-//                break;
-//            }
-//        }
-//
-//        if (sigToRemove != null) {
-//            application.signatures().remove(sigToRemove);
-//        }
-
         boolean found = false;
         for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
             DigitalSignature sig = it.next();
             if (sig.tenant().equals(tenant)) {
-                it.remove();
                 found = true;
+                it.remove();
                 break;
             }
         }
