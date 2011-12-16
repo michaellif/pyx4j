@@ -76,6 +76,7 @@ import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeEditor
 import com.propertyvista.crm.client.activity.crud.settings.FeatureItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.PageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.PageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.PolicyManagementActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceDictionaryViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewerActivity;
@@ -512,6 +513,8 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new PageViewerActivity(place);
                         break;
                     }
+                } else if (place instanceof CrmSiteMap.Settings.Policy) {
+                    activity = new PolicyManagementActivity(place);
                 } else if (place instanceof CrmSiteMap.Settings.ServiceDictionary) {
                     activity = new ServiceDictionaryViewActivity(place);
                 } else if (place instanceof CrmSiteMap.Settings.ServiceItemType) {
