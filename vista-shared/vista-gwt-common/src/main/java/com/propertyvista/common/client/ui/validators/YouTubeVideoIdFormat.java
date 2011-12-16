@@ -25,6 +25,9 @@ public class YouTubeVideoIdFormat implements IFormat<String> {
     }
 
     static String extract(String value, String prefix) {
+        if (value == null) {
+            return null;
+        }
         int idx = value.indexOf(prefix);
         if (idx >= 0) {
             int start = idx + prefix.length();

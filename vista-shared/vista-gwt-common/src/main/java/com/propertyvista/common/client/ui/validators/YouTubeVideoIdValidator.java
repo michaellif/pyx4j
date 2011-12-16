@@ -24,6 +24,9 @@ public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
 
     @Override
     public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+        if (value == null) {
+            return null;
+        }
         for (String p : new String[] { "watch?v=", "watch#!v=", "/vi/", "/?v=", "/v/" }) {
             String v = YouTubeVideoIdFormat.extract(value, p);
             if (v != null) {
