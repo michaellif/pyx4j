@@ -15,11 +15,15 @@ package com.propertyvista.common.client.ui.components.c;
 
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
@@ -45,6 +49,7 @@ import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
@@ -140,6 +145,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
         instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
+        instrumentsPanel.add(inject(proto().interac(), createInteracInfoEditor()));
 
         container.setWidget(row, 1, paymentType);
 
@@ -181,10 +187,14 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
     }
 
     private void setInstrumentsVisibility(PaymentType value) {
-        boolean card = (value != PaymentType.Echeck);
-        get(proto().echeck()).setVisible(!card);
-        get(proto().creditCard()).setVisible(card);
+        get(proto().echeck()).setVisible(value == PaymentType.Echeck);
+        get(proto().creditCard()).setVisible(isCardPayment(value));
+        get(proto().interac()).setVisible(value == PaymentType.Interac);
         setPaymentTableVisibility(value.ordinal());
+    }
+
+    private boolean isCardPayment(PaymentType value) {
+        return value == PaymentType.MasterCard | value == PaymentType.Visa | value == PaymentType.Discover;
     }
 
     private void setPaymentTableVisibility(int index) {
@@ -210,7 +220,12 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                 checkPanel.add(proto().routingNo(), 85);
                 checkPanel.add(proto().accountNo(), 85);
 
-                panel.add(checkPanel);
+                HorizontalPanel hpanel = new HorizontalPanel();
+                hpanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+                hpanel.add(checkPanel);
+                hpanel.setCellWidth(checkPanel, "400");
+
+                panel.add(hpanel);
 
                 return panel;
             }
@@ -265,6 +280,68 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                 get(proto().number()).addValueValidator(new CreditCardNumberValidator());
             }
         };
+    }
+
+    private CEntityEditor<InteracInfo> createInteracInfoEditor() {
+        return new CEntityEditor<InteracInfo>(InteracInfo.class) {
+            @Override
+            public IsWidget createContent() {
+                FlowPanel panel = new FlowPanel();
+                panel.add(InteracPanelCanada());
+
+                return panel;
+            }
+        };
+
+    }
+
+    private HorizontalPanel InteracPanelCanada() {
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        panel.getElement().getStyle().setProperty("padding", "5px");
+
+        Image image = new Image(VistaImages.INSTANCE.logoBMO().getSafeUri());
+        image.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                interacRedirect();
+            }
+        });
+        panel.add(image);
+        panel.setCellWidth(image, "100");
+        image = new Image(VistaImages.INSTANCE.logoRBC().getSafeUri());
+        image.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                interacRedirect();
+            }
+        });
+        panel.add(image);
+        panel.setCellWidth(image, "100");
+        image = new Image(VistaImages.INSTANCE.logoTD().getSafeUri());
+        image.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                interacRedirect();
+            }
+        });
+        panel.add(image);
+        panel.setCellWidth(image, "100");
+        image = new Image(VistaImages.INSTANCE.logoScotia().getSafeUri());
+        image.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                interacRedirect();
+            }
+        });
+        panel.add(image);
+        panel.setCellWidth(image, "100");
+
+        return panel;
+    }
+
+    private void interacRedirect() { //TODO add a method for creating proper Interac links
+
     }
 
     class CheckPanel extends FlexTable {
