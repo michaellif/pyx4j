@@ -56,6 +56,8 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     private WidgetsImages images;
 
+    private Button addButton;
+
     private Button filterButton;
 
     public DataTablePanel(Class<E> clazz) {
@@ -122,8 +124,12 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setAddActionHandler(ClickHandler addActionHandler) {
         topActionsBar.getToolbar().insertItem(
-                new Button(new Image(EntityFolderImages.INSTANCE.addHover()), i18n.tr("New") + " " + entityPrototype.getEntityMeta().getCaption(),
+                addButton = new Button(new Image(EntityFolderImages.INSTANCE.addHover()), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
                         addActionHandler), 0, false);
+    }
+
+    public Button getAddButton() {
+        return addButton;
     }
 
     public void setFilterActionHandler(ClickHandler filterActionHandler) {
