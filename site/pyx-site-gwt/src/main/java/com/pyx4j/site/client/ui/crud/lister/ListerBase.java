@@ -144,19 +144,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     }
 
-    @SuppressWarnings("unchecked")
-    public void setColumnDescriptors(ColumnDescriptor<?>... columnDescriptors) {
-        dataTablePanel.setColumnDescriptors(Arrays.asList((ColumnDescriptor<E>[]) columnDescriptors));
-    }
-
-    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
-        dataTablePanel.setColumnDescriptors(columnDescriptors);
-    }
-
-    public E proto() {
-        return dataTablePanel.proto();
-    }
-
     public ListerBase(Class<E> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass, boolean openEditor, boolean allowAddNew) {
         this(clazz);
 
@@ -186,6 +173,19 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             }
 
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setColumnDescriptors(ColumnDescriptor<?>... columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(Arrays.asList((ColumnDescriptor<E>[]) columnDescriptors));
+    }
+
+    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(columnDescriptors);
+    }
+
+    public E proto() {
+        return dataTablePanel.proto();
     }
 
     public void showColumnSelector(boolean show) {
