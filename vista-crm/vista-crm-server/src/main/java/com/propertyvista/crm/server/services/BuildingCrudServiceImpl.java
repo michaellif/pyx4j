@@ -104,7 +104,6 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
         }
         // save detached entities:
         Persistence.service().merge(dbo.serviceCatalog());
-        PublicDataUpdater.updateIndexData(dbo);
 
         // Geotagging:
         if (!in.geoLocation().isNull()) {
@@ -125,6 +124,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
 
         boolean isCreate = dbo.id().isNull();
         Persistence.service().merge(dbo);
+        PublicDataUpdater.updateIndexData(dbo);
 
         if (!isCreate) {
             EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);

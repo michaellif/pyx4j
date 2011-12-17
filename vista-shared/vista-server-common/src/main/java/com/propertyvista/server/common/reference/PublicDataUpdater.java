@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 
@@ -30,13 +31,19 @@ public class PublicDataUpdater {
         if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
             return;
         }
+
+        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().info().address().city(), building.info().address().city().getValue()));
+        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().marketing().visibility(), PublicVisibilityType.global));
+        boolean visibleBuildingExists = Persistence.service().exists(buildingCriteria);
+
         EntityQueryCriteria<City> criteriaCity = EntityQueryCriteria.create(City.class);
         criteriaCity.add(PropertyCriterion.eq(criteriaCity.proto().name(), building.info().address().city().getValue()));
         //TODO verify Province
         City city = Persistence.service().retrieve(criteriaCity);
         if (city != null) {
-            if (!city.hasProperties().isBooleanTrue()) {
-                city.hasProperties().setValue(Boolean.TRUE);
+            if (city.hasProperties().isBooleanTrue() != visibleBuildingExists) {
+                city.hasProperties().setValue(visibleBuildingExists);
                 Persistence.service().persist(city);
             }
         } else {
@@ -44,7 +51,7 @@ public class PublicDataUpdater {
             city.name().setValue(building.info().address().city().getValue());
             city.province().set(building.info().address().province());
             city.location().setValue(building.info().address().location().getValue());
-            city.hasProperties().setValue(Boolean.TRUE);
+            city.hasProperties().setValue(visibleBuildingExists);
             Persistence.service().persist(city);
         }
     }
