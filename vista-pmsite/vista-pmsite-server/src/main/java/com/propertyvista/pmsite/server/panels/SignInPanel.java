@@ -34,7 +34,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
@@ -172,7 +172,7 @@ public class SignInPanel extends Panel {
                 } else {
                     // get path relative to context root
                     String toRoot = PMSiteApplication.get().getPathToRoot();
-                    ((WebResponse) getResponse()).sendRedirect(toRoot + targetUrl);
+                    throw new RedirectToUrlException(toRoot + targetUrl);
                 }
             } else {
                 strategy.remove();
