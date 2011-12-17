@@ -1560,6 +1560,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public <T extends IEntity> boolean exists(EntityQueryCriteria<T> criteria) {
+        ICursorIterator<com.pyx4j.commons.Key> it = queryKeys(null, criteria);
+        return it.hasNext();
+    }
+
+    @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         Class<T> entityClass = criteria.getEntityClass();
@@ -1728,4 +1734,5 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public int getDatastoreWriteCallCount() {
         return datastoreCallStats.get().writeCount;
     }
+
 }

@@ -874,9 +874,64 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<Key> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public <T extends IEntity> ICursorIterator<Key> queryKeys(final String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+        final Connection connection = connectionProvider.getConnection(ConnectionTarget.forRead);
+        final TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        if (encodedCursorRefference != null) {
+            log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
+            // TODO
+        }
+        try {
+            final ResultSetIterator<Key> iterable = tm.queryKeysIterable(connection, criteria);
+
+            return new ICursorIterator<Key>() {
+
+                @Override
+                public boolean hasNext() {
+                    return iterable.hasNext();
+                }
+
+                @Override
+                public Key next() {
+                    return iterable.next();
+                }
+
+                @Override
+                public void remove() {
+                    iterable.remove();
+                }
+
+                @Override
+                public String encodedCursorReference() {
+                    // TODO proper encoded cursor reference has to be passed, this is just temporary
+                    return "" + encodedCursorRefference + "a";
+                }
+
+                @Override
+                public void completeRetrieval() {
+                    iterable.close();
+                    SQLUtils.closeQuietly(connection);
+                }
+            };
+
+        } catch (Throwable e) {
+            SQLUtils.closeQuietly(connection);
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            } else {
+                throw new Error(e);
+            }
+        }
+    }
+
+    @Override
+    public <T extends IEntity> boolean exists(EntityQueryCriteria<T> criteria) {
+        ICursorIterator<Key> it = queryKeys(null, criteria);
+        try {
+            return it.hasNext();
+        } finally {
+            it.completeRetrieval();
+        }
     }
 
     @Override

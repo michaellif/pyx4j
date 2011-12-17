@@ -634,6 +634,64 @@ public class TableModel {
         }
     }
 
+    public <T extends IEntity> ResultSetIterator<Key> queryKeysIterable(final Connection connection, EntityQueryCriteria<T> criteria) {
+        String sql = null;
+        QueryBuilder<T> qb = new QueryBuilder<T>(connection, dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            sql = "SELECT m1.id FROM " + qb.getSQL(tableName);
+            int limit = -1;
+            int offset = 0;
+            if (criteria instanceof EntityListCriteria) {
+                EntityListCriteria<T> c = (EntityListCriteria<T>) criteria;
+                if (c.getPageSize() > 0) {
+                    offset = c.getPageSize() * c.getPageNumber();
+                    limit = c.getPageSize() + 1;
+                    sql = dialect.applyLimitCriteria(sql);
+                }
+            }
+            stmt = connection.prepareStatement(sql);
+            if (limit > 0) {
+                stmt.setMaxRows(limit);
+            } else {
+                // zero means there is no limit, Need for pooled connections 
+                stmt.setMaxRows(0);
+            }
+            int parameterIndex = qb.bindParameters(stmt);
+            if (limit > 0) {
+                if (dialect.limitCriteriaIsRelative()) {
+                    stmt.setInt(parameterIndex, limit);
+                } else {
+                    stmt.setInt(parameterIndex, limit + offset);
+                }
+                parameterIndex++;
+                stmt.setInt(parameterIndex, offset);
+            }
+
+            rs = stmt.executeQuery();
+        } catch (SQLException e) {
+            SQLUtils.closeQuietly(stmt);
+            log.error("{} SQL {}", tableName, sql);
+            log.error("{} SQL select error", tableName, e);
+            throw new RuntimeException(e);
+        }
+
+        return new ResultSetIterator<Key>(stmt, rs) {
+
+            @Override
+            protected Key retrieve() {
+                try {
+                    return new Key(rs.getLong("id"));
+                } catch (SQLException e) {
+                    log.error("{} SQL select error", tableName, e);
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+    }
+
     public <T extends IEntity> Object aggregate(Connection connection, EntityQueryCriteria<T> criteria, SQLAggregateFunctions func, String args) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
