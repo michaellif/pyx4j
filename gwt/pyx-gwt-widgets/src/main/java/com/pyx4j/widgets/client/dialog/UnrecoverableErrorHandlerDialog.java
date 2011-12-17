@@ -116,7 +116,7 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
                 return true;
             }
         };
-        MessageDialog.show(i18n.tr("System Error"), getMessageReloadApplication(), Type.Error, optYesNo);
+        MessageDialog.show(i18n.tr("Application Updated"), getMessageReloadApplication(), Type.Confirm, optYesNo);
     }
 
     protected String getMessageReloadApplication() {
