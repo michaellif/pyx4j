@@ -17,15 +17,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
@@ -37,6 +41,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
@@ -65,6 +70,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     private final String[] persistParams = { "gwt.codesvr" };
 
     public static String ParamNameLang = "lang";
+
+    public static String ParamNameTarget = "target";
 
     public static String ParamNameBuilding = "propId";
 
@@ -175,6 +182,12 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         return internalError;
     }
 
+    // get path to context root
+    public String getPathToRoot() {
+        HttpServletRequest req = ((ServletWebRequest) RequestCycle.get().getRequest()).getContainerRequest();
+        return req.getServletPath().replaceAll("/+[^/]*", "../").replaceFirst("../", "");
+    }
+
     @Override
     public IRequestCycleProvider getRequestCycleProvider() {
         return super.getRequestCycleProvider();
@@ -225,6 +238,23 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     }
 
     @Override
+    // super implementation uses HttpServletResponse.encodeURL() to append jsessionid to url
+    // we don't want that as we rely on cookies
+    protected WebResponse newWebResponse(final WebRequest webRequest, final HttpServletResponse httpServletResponse) {
+        return new ServletWebResponse((ServletWebRequest) webRequest, httpServletResponse) {
+            @Override
+            public String encodeURL(CharSequence url) {
+                return url.toString();
+            }
+
+            @Override
+            public String encodeRedirectURL(CharSequence url) {
+                return url.toString();
+            }
+        };
+    }
+
+    @Override
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
         return PMSiteSession.class;
     }
@@ -232,5 +262,13 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {
         return SignInPage.class;
+    }
+
+    // we want to use target url parameter to avoid storing it in session
+    @Override
+    public void restartResponseAtSignInPage() {
+        PageParameters pp = new PageParameters();
+        pp.add(ParamNameTarget, RequestCycle.get().getRequest().getUrl().toString());
+        throw new RestartResponseException(getSignInPageClass(), pp);
     }
 }

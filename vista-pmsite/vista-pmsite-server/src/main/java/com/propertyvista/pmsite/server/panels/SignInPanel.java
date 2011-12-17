@@ -34,11 +34,13 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.http.WebResponse;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 
 public class SignInPanel extends Panel {
@@ -164,8 +166,13 @@ public class SignInPanel extends Panel {
                     strategy.remove();
                 }
 
-                if (!continueToOriginalDestination()) {
+                String targetUrl = getPage().getPageParameters().get(PMSiteApplication.ParamNameTarget).toString();
+                if (targetUrl == null || targetUrl.length() == 0) {
                     setResponsePage(getApplication().getHomePage());
+                } else {
+                    // get path relative to context root
+                    String toRoot = PMSiteApplication.get().getPathToRoot();
+                    ((WebResponse) getResponse()).sendRedirect(toRoot + targetUrl);
                 }
             } else {
                 strategy.remove();

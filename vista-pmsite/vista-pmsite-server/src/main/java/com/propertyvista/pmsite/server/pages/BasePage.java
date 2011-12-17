@@ -92,6 +92,12 @@ public abstract class BasePage extends WebPage {
 
     @Override
     protected void onBeforeRender() {
+        // If page has a form, the FormListener will be called on submit and will
+        // set the page stateless hint to false if page is to be rendered, which
+        // in turn will trigger Session.bind() in Page.onBeforeRender(). So, we
+        // set it back to true here to block session bind()
+        setStatelessHint(true);
+
         super.onBeforeRender();
 
         // add page title if not already done
@@ -114,7 +120,6 @@ public abstract class BasePage extends WebPage {
 
     @Override
     protected void onDetach() {
-        super.onDetach();
         /*
          * When RequestAdapter completes, it will store in session all stateful pages (getStatelessHint()
          * returning false). However, when ListenerInterfaceRequestHandler called, it triggers
@@ -124,6 +129,7 @@ public abstract class BasePage extends WebPage {
          * before checking stateless hint. See RequestAdapter#CommitRequest().
          */
         setStatelessHint(true);
+        super.onDetach();
     }
 
     private void checkIfPageStateless(Page p) {
