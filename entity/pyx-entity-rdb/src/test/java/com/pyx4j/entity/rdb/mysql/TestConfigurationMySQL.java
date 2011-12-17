@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.mysql;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
     @Override
@@ -57,4 +59,12 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
         return true;
     }
 
+    @Override
+    public int unreturnedConnectionTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionTimeout();
+        }
+    }
 }

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.oracle;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
@@ -70,4 +71,12 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         return new NamingConventionOracle(32, shortWords);
     }
 
+    @Override
+    public int unreturnedConnectionTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionTimeout();
+        }
+    }
 }

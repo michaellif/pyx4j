@@ -60,6 +60,8 @@ public class ServerSideConfiguration {
 
     private EnvironmentType environmentType;
 
+    private static Boolean jvmDebugMode;
+
     public static enum EnvironmentType {
         LocalJVM, GAEDevelopment, GAESandbox
     }
@@ -201,6 +203,13 @@ public class ServerSideConfiguration {
         StackTraceElement[] ste = new Throwable().getStackTrace();
         String firstRunnableClass = (ste[ste.length - 1]).getClassName();
         return firstRunnableClass.startsWith("org.eclipse.jdt") || firstRunnableClass.startsWith("org.eclipse.jetty");
+    }
+
+    public static boolean isStartedUnderJvmDebugMode() {
+        if (jvmDebugMode == null) {
+            jvmDebugMode = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("-agentlib:jdwp") > 0;
+        }
+        return jvmDebugMode;
     }
 
     /**

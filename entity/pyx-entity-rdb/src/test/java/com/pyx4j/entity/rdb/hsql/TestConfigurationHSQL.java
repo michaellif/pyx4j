@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.hsql;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationHSQL {
 
     @Override
@@ -45,5 +47,14 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
     @Override
     public boolean isMultitenant() {
         return true;
+    }
+
+    @Override
+    public int unreturnedConnectionTimeout() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return 0;
+        } else {
+            return super.unreturnedConnectionTimeout();
+        }
     }
 }
