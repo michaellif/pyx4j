@@ -18,20 +18,14 @@ import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
 
 public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
-    private static final String LOG_CONFIG = "&logger=com.mysql.jdbc.log.Slf4JLogger";
-
     @Override
     public String dbHost() {
         return "localhost";
     }
 
-    private boolean showSql() {
-        return false;
-    }
-
     @Override
-    public String connectionUrl() {
-        return super.connectionUrl() + "?autoReconnect=true" + LOG_CONFIG + (showSql() ? "&autoGenerateTestcaseScript=true" : "");
+    public boolean showSql() {
+        return false;
     }
 
     @Override
