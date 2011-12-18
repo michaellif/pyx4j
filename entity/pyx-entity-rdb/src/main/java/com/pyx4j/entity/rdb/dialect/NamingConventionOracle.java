@@ -148,7 +148,7 @@ public class NamingConventionOracle implements NamingConvention {
 
     @Override
     public String sqlChildTableName(String javaPersistenceTableName, String javaPersistenceChildTableName) {
-        return sqlTableName(javaPersistenceTableName) + "_" + sqlTableName(javaPersistenceChildTableName);
+        return makeName(sqlTableName(javaPersistenceTableName) + "_" + sqlTableName(javaPersistenceChildTableName));
     }
 
     @Override

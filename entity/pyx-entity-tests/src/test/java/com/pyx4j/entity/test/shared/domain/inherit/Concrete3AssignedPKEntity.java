@@ -25,7 +25,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("C3")
-@Table(prefix = "test", primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED)
+@Table(prefix = "test", name = "Concrete3", primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED)
 public interface Concrete3AssignedPKEntity extends Base1Entity {
 
     IPrimitive<String> nameC3();

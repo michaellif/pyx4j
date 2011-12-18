@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.detached;
 
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -38,8 +39,10 @@ public interface MainHolderEnity extends IEntity {
     IList<MainEnity> ownedEntities();
 
     @Owned
+    @MemberColumn(name = "obr")
     OwnedWithBackReference ownedWithBackReference();
 
     @Owned
+    @MemberColumn(name = "obrl")
     IList<OwnedWithBackReference> ownedWithBackReferenceList();
 }
