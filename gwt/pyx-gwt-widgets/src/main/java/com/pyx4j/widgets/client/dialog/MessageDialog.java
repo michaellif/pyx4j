@@ -14,6 +14,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -23,7 +24,14 @@ public class MessageDialog extends Dialog {
 
     public MessageDialog(String caption, String message, Type type, DialogOptions options) {
         super(caption, options, new MessagePanel(message, type));
-        setPixelSize(500, 200);
+
+        // Try to fit message in text box if message is not very long
+        int lines = CommonsStringUtils.linesCount(message, 60); // 60 char ~ 400px 
+        int height = Math.max(lines * 18, 90); // TODO use font-size instead of 18px
+        if (height > 180) {
+            height = 90;
+        }
+        setPixelSize(500, 110 + height);
     }
 
     public static void error(String title, String text) {

@@ -155,6 +155,26 @@ public class CommonsStringUtils {
         }
     }
 
+    public static int linesCount(String message, int wrapLength) {
+        if (message == null) {
+            return 0;
+        }
+        String[] lines = message.split("\n");
+        int count = lines.length;
+        if (wrapLength > 0) {
+            for (String line : lines) {
+                if (line.length() > wrapLength) {
+                    int over = line.length() % wrapLength;
+                    if (over > 0) {
+                        count++;
+                    }
+                    count += Math.ceil((line.length() - 1 - over) / wrapLength);
+                }
+            }
+        }
+        return count;
+    }
+
     public static String splitTextToLines(String message, String... separators) {
         for (String separator : separators) {
             message = splitTextToLines(message, separator);

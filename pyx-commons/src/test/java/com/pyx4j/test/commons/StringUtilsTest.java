@@ -40,4 +40,14 @@ public class StringUtilsTest extends TestCase {
         assertEquals("1,001", CommonsStringUtils.formatLong(1001));
     }
 
+    public void testLinesCount() {
+        assertEquals(1, CommonsStringUtils.linesCount("a", 3));
+        assertEquals(2, CommonsStringUtils.linesCount("a\nb", 3));
+        assertEquals(3, CommonsStringUtils.linesCount("a\n\nb", 3));
+        assertEquals(2, CommonsStringUtils.linesCount("a\nbcd", 3));
+        assertEquals(3, CommonsStringUtils.linesCount("a\nbcde", 3));
+        assertEquals(3, CommonsStringUtils.linesCount("a\nbcd123", 3));
+        assertEquals(4, CommonsStringUtils.linesCount("a\nbcd1234", 3));
+    }
+
 }
