@@ -60,6 +60,15 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
     }
 
     @Override
+    public boolean showSql() {
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public int unreturnedConnectionTimeout() {
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             return 0;

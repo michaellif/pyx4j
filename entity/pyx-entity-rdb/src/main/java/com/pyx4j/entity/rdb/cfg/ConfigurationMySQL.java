@@ -40,7 +40,19 @@ public abstract class ConfigurationMySQL implements Configuration {
 
     @Override
     public String connectionUrl() {
-        return "jdbc:mysql://" + dbHost() + ":" + dbPort() + "/" + dbName() + (isAutoReconnect() ? "?autoReconnect=true" : "");
+        StringBuilder b = new StringBuilder();
+        b.append("jdbc:mysql://").append(dbHost()).append(":").append(dbPort()).append("/").append(dbName());
+
+        b.append("?logger=com.mysql.jdbc.log.Slf4JLogger");
+
+        if (isAutoReconnect()) {
+            b.append("&autoReconnect=true");
+        }
+
+        if (showSql()) {
+            b.append("&autoGenerateTestcaseScript=true");
+        }
+        return b.toString();
     }
 
     @Override
@@ -49,6 +61,10 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     public boolean isAutoReconnect() {
+        return false;
+    }
+
+    public boolean showSql() {
         return false;
     }
 
