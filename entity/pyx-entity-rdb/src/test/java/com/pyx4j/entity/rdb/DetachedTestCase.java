@@ -27,6 +27,7 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.detached.DetachedEntity;
 import com.pyx4j.entity.test.shared.domain.detached.MainEnity;
 import com.pyx4j.entity.test.shared.domain.detached.MainHolderEnity;
+import com.pyx4j.entity.test.shared.domain.detached.OwnedWithBackReference;
 
 //TODO move to GAE tests as well
 public abstract class DetachedTestCase extends DatastoreTestBase {
@@ -182,7 +183,7 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
     public void testDetachedOwnerMemeber() {
         MainHolderEnity main = EntityFactory.create(MainHolderEnity.class);
         main.name().setValue("m1 " + uniqueString());
-        // TODO fix the first save
+        // TODO fix the first recurcive save
         srv.persist(main);
         main.ownedWithBackReference().name().setValue("c1 " + uniqueString());
 
@@ -191,6 +192,29 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
         MainHolderEnity mainR = srv.retrieve(MainHolderEnity.class, main.getPrimaryKey());
 
         Assert.assertFalse("is detached", mainR.ownedWithBackReference().detachedOwner().isValuesDetached());
+        Assert.assertEquals(main.name().getValue(), mainR.ownedWithBackReference().detachedOwner().name().getValue());
+
+        OwnedWithBackReference ownedDetachedR = srv.retrieve(OwnedWithBackReference.class, mainR.ownedWithBackReference().getPrimaryKey());
+        Assert.assertTrue("is detached", ownedDetachedR.detachedOwner().isValuesDetached());
+
+        // Test data corruption error
+        MainHolderEnity main2 = EntityFactory.create(MainHolderEnity.class);
+        main2.name().setValue("m2 " + uniqueString());
+        srv.persist(main2);
+
+        OwnedWithBackReference ownedDetached = mainR.ownedWithBackReference().detach();
+        ownedDetached.detachedOwner().set(main2);
+        srv.persist(ownedDetached);
+
+        boolean retrived = false;
+        try {
+            srv.retrieve(MainHolderEnity.class, main.getPrimaryKey());
+            retrived = true;
+        } catch (RuntimeException ok) {
+        }
+        if (retrived) {
+            Assert.fail("Back Reference test failed");
+        }
     }
 
 }

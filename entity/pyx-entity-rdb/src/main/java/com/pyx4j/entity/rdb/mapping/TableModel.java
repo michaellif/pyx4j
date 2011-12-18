@@ -400,21 +400,22 @@ public class TableModel {
             Object value = member.getValueAdapter().retrieveValue(rs, member.sqlName());
             if (value != null) {
                 if (member.getMemberMeta().isEntity()) {
+                    IEntity valueEntity = (IEntity) value;
                     IEntity memberValue = (IEntity) member.getMember(entity);
                     if (member.isOwnerColumn()) {
                         // Special handling for recursive retrieve of Owner
-                        if ((entity.getOwner() != null) && member.getMemberMeta().isOwnedRelationships()) {
+                        if ((entity.getOwner() != null) && (entity.getMeta() != null) && entity.getMeta().isOwnedRelationships()) {
                             // verify graph integrity
-                            if (!entity.getOwner().equals(value)) {
-                                throw new RuntimeException("Unexpected owner " + member.getMemberPath() + " '"
-                                        + ((IEntity) value).getDebugExceptionInfoString() + "' != '" + entity.getOwner().getDebugExceptionInfoString()
-                                        + "' in entity '" + entity.getDebugExceptionInfoString() + "'");
+                            if (!entity.getOwner().getPrimaryKey().equals(valueEntity.getPrimaryKey())) {
+                                throw new RuntimeException("Unexpected owner " + member.getMemberPath() + " '" + valueEntity.getDebugExceptionInfoString()
+                                        + "' != '" + entity.getOwner().getDebugExceptionInfoString() + "' in entity '" + entity.getDebugExceptionInfoString()
+                                        + "'");
                             }
                         } else {
-                            memberValue.set((IEntity) value);
+                            memberValue.set(valueEntity);
                         }
                     } else {
-                        memberValue.set((IEntity) value);
+                        memberValue.set(valueEntity);
                     }
                 } else {
                     member.setMemberValue(entity, value);

@@ -24,7 +24,7 @@ import com.pyx4j.entity.rdb.DetachedTestCase;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class DetachedCase extends DetachedTestCase {
+public class DetachedTest extends DetachedTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {

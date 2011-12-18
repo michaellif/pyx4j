@@ -46,12 +46,12 @@ public interface IObject<VALUE_TYPE> {
     public Class<? extends IObject<?>> getObjectClass();
 
     /**
-     * This is IEntity in the Entity Graph that holds the value of this Entity. This is not business parent
+     * This is IEntity in the Entity Graph that holds the value of this Entity. This is not business parent @Owner!
      */
     public IEntity getOwner();
 
     /**
-     * This may be ICollection or IEntity in the Entity Graph. This is not business parent
+     * This may be ICollection or IEntity in the Entity Graph. This is not business parent @Owner!
      */
     public IObject<?> getParent();
 
