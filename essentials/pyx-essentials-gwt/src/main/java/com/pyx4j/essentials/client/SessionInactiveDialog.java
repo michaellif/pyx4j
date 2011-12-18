@@ -69,12 +69,12 @@ public class SessionInactiveDialog implements SessionInactiveHandler {
         String reasonMessage;
 
         if (timeout) {
-            reasonMessage = i18n.tr("Your Session Has Timed Out. Please Sign In To Continue");
+            reasonMessage = i18n.tr("Your Session Has Timed Out.");
         } else {
             reasonMessage = i18n.tr("Your Session Has Been Terminated." + "\nOnly One Application Session Can Be Active At The Same Time");
         }
 
-        reasonMessage += "\n\n" + i18n.tr("Please login again.") + "\n";
+        reasonMessage += "\n\n" + i18n.tr("Please Sign In To Continue.") + "\n";
 
         if (!timeout) {
             reasonMessage += "\n" + i18n.tr("Please Open Another Browser Window If You Want To Keep Multiple Sessions Active");
