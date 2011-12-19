@@ -65,6 +65,8 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows);
 
+    void discard();
+
     List<DataTableFilterData> getFiltering();
 
     void setFiltering(List<DataTableFilterData> filterData);

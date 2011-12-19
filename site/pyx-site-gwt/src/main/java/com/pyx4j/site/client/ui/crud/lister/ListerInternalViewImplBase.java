@@ -128,4 +128,10 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void discard() {
+        getLister().discard();
+    }
+
 }

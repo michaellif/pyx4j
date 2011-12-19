@@ -186,7 +186,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
     }
 
-    public void clearData() {
+    public void discard() {
         if (getDataTableModel() != null) {
             getDataTableModel().clearData();
         }

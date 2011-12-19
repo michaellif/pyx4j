@@ -403,6 +403,11 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     @Override
+    public void discard() {
+        getDataTablePanel().discard();
+    }
+
+    @Override
     public IMemento getMemento() {
         return memento;
     }

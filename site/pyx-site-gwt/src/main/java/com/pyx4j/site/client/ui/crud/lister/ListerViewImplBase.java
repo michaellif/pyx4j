@@ -156,4 +156,9 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     public void onDeleted(Key itemID, boolean isSuccessful) {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void discard() {
+        getLister().discard();
+    }
 }

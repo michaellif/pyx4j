@@ -279,7 +279,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 }
 
                 adopt(item);
-                item.populate(entity);
+                item.setValue(entity, fireEvent, populate);
             }
 
         }

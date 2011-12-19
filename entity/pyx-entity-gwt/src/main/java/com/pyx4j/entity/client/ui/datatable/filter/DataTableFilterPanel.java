@@ -99,13 +99,17 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         btnClose.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                setFilterData(null);
-                DataTableFilterPanel.this.setVisible(false);
+                discard();
                 btnApply.click();
             }
         });
 
         add(addButtonWidget, DockPanel.SOUTH);
+    }
+
+    public void discard() {
+        setFilterData(null);
+        DataTableFilterPanel.this.setVisible(false);
     }
 
     private Widget createAddButton() {
