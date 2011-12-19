@@ -60,6 +60,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     /**
      * @return true is only PrimaryKey and type information is present, other data was not retrieved, TODO getStringView()
+     * 
+     *         TODO fix plural name!
      */
     public boolean isValuesDetached();
 
@@ -140,16 +142,24 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public List<Validator> getValidators(Path memberPath);
 
+    /**
+     * TODO rename to 'duplicate'
+     * 
+     * @return clone of the entity
+     */
     public <T extends IEntity> T cloneEntity();
 
     /**
      * Copy all existing members to new Entity
      * This function is run-time type safe!
+     * 
+     * TODO rename to: copy/convert/mutate/duplicate
      */
     public <T extends IEntity> T clone(Class<T> entityClass);
 
     /**
-     * Detach IEntity from its parent but keep the same shared value object
+     * Detach IEntity from its parent but keep the same shared value object.
+     * TODO rename. Subject related convert to root entity.
      */
     public <T extends IEntity> T detach();
 
