@@ -67,7 +67,15 @@ public class QueryBuilder<T extends IEntity> {
 
     private final String mainTableSqlAlias;
 
-    private final Map<String, String> memberJoinAliases = new HashMap<String, String>();
+    private static class JoinDef {
+
+        String alias;
+
+        String condition;
+
+    }
+
+    private final Map<String, JoinDef> memberJoinAliases = new HashMap<String, JoinDef>();
 
     private final EntityOperationsMeta operationsMeta;
 
@@ -100,7 +108,7 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sortsSql.append(", ");
                 }
-                MemeberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyName());
+                MemeberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyName(), true);
                 if (descr != null) {
                     sortsSql.append(descr.alias).append('.');
                     sortsSql.append(descr.memberOper.sqlName());
@@ -111,6 +119,8 @@ public class QueryBuilder<T extends IEntity> {
                     sortsSql.append(sort.getPropertyName());
                 }
                 sortsSql.append(' ').append(sort.isDescending() ? "DESC" : "ASC");
+                // TODO Make it configurable in API
+                sortsSql.append(dialect.sqlSortNulls(sort.isDescending()));
             }
         }
     }
@@ -148,7 +158,7 @@ public class QueryBuilder<T extends IEntity> {
         if (pkPath.equals(propertyCriterion.getPropertyName()) || IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName())) {
             memberPersistenceName = IEntity.PRIMARY_KEY;
         } else if (!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
-            memeberWithAlias = getMemberOperationsMetaByPath(mainTableSqlAlias, propertyCriterion.getPropertyName());
+            memeberWithAlias = getMemberOperationsMetaByPath(mainTableSqlAlias, propertyCriterion.getPropertyName(), false);
             if (memeberWithAlias == null) {
                 throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
             }
@@ -161,7 +171,7 @@ public class QueryBuilder<T extends IEntity> {
         switch (objectClassType) {
         case EntityList:
         case EntitySet:
-            String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias);
+            String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias, false);
             sql.append(memberJoinAlias).append(".value ");
             break;
         default:
@@ -281,14 +291,14 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    private MemeberWithAlias getMemberOperationsMetaByPath(String mainAlias, String propertyPath) {
+    private MemeberWithAlias getMemberOperationsMetaByPath(String mainAlias, String propertyPath, boolean leftJoin) {
         MemberOperationsMeta memberOper = operationsMeta.getMember(propertyPath);
         if (memberOper != null) {
             return new MemeberWithAlias(memberOper, mainAlias);
         } else {
             memberOper = operationsMeta.getFirstDirectMember(propertyPath);
             if (memberOper != null) {
-                String thisAlias = getJoin(memberOper, mainAlias);
+                String thisAlias = getJoin(memberOper, mainAlias, leftJoin);
 
                 //TODO recursion
                 @SuppressWarnings("unchecked")
@@ -309,27 +319,35 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    private String getJoin(MemberOperationsMeta memberOper, String mainAlias) {
-        String memberJoinAlias = memberJoinAliases.get(memberOper.getMemberPath());
-        if (memberJoinAlias == null) {
-            memberJoinAlias = "j" + String.valueOf(memberJoinAliases.size() + 1);
-            memberJoinAliases.put(memberOper.getMemberPath(), memberJoinAlias);
+    private String getJoin(MemberOperationsMeta memberOper, String mainAlias, boolean leftJoin) {
+        JoinDef memberJoin = memberJoinAliases.get(memberOper.getMemberPath());
+        if (memberJoin == null) {
+            memberJoin = new JoinDef();
+            memberJoin.alias = "j" + String.valueOf(memberJoinAliases.size() + 1);
+            memberJoinAliases.put(memberOper.getMemberPath(), memberJoin);
 
-            if (joinWhereSql.length() > 0) {
-                joinWhereSql.append(" AND ");
-            }
+            StringBuilder condition = new StringBuilder();
 
             if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
-                joinWhereSql.append(mainAlias).append(".").append(memberOper.sqlName());
-                joinWhereSql.append(" = ");
-                joinWhereSql.append(memberJoinAlias).append(".id ");
+                condition.append(mainAlias).append(".").append(memberOper.sqlName());
+                condition.append(" = ");
+                condition.append(memberJoin.alias).append(".id ");
             } else {
                 // Collection
-                joinWhereSql.append(mainAlias).append(".id = ");
-                joinWhereSql.append(memberJoinAlias).append(".owner ");
+                condition.append(mainAlias).append(".id = ");
+                condition.append(memberJoin.alias).append(".owner ");
+            }
+
+            if (leftJoin) {
+                memberJoin.condition = condition.toString();
+            } else {
+                if (joinWhereSql.length() > 0) {
+                    joinWhereSql.append(" AND ");
+                }
+                joinWhereSql.append(condition);
             }
         }
-        return memberJoinAlias;
+        return memberJoin.alias;
     }
 
     private boolean valueIsNull(Object value) {
@@ -351,8 +369,14 @@ public class QueryBuilder<T extends IEntity> {
     private String getJoins(String mainTableSqlName) {
         StringBuilder sqlFrom = new StringBuilder();
         sqlFrom.append(mainTableSqlName).append(' ').append(mainTableSqlAlias);
-        for (Map.Entry<String, String> me : memberJoinAliases.entrySet()) {
-            sqlFrom.append(", ");
+        for (Map.Entry<String, JoinDef> me : memberJoinAliases.entrySet()) {
+            JoinDef memberJoin = me.getValue();
+
+            if (memberJoin.condition != null) {
+                sqlFrom.append(" LEFT JOIN ");
+            } else {
+                sqlFrom.append(", ");
+            }
 
             MemberOperationsMeta memberOper = operationsMeta.getMember(me.getKey());
             if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
@@ -365,7 +389,10 @@ public class QueryBuilder<T extends IEntity> {
 
             sqlFrom.append(" ");
             // AS
-            sqlFrom.append(me.getValue());
+            sqlFrom.append(memberJoin.alias);
+            if (memberJoin.condition != null) {
+                sqlFrom.append(" ON ").append(memberJoin.condition);
+            }
         }
         return sqlFrom.toString();
     }

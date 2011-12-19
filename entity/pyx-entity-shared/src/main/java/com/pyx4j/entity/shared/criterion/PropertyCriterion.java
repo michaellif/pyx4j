@@ -24,7 +24,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @SuppressWarnings("serial")
 public class PropertyCriterion implements Criterion {
@@ -48,7 +50,18 @@ public class PropertyCriterion implements Criterion {
     public PropertyCriterion(String propertyName, Restriction restriction, Serializable value) {
         this.propertyName = propertyName;
         this.restriction = restriction;
-        this.value = value;
+        if (value instanceof IEntity) {
+            //TODO detach/ make identity copy
+            this.value = value;
+        } else {
+            this.value = value;
+        }
+    }
+
+    public PropertyCriterion(String propertyName, Restriction restriction, IPrimitive<?> value) {
+        this.propertyName = propertyName;
+        this.restriction = restriction;
+        this.value = (Serializable) value.getValue();
     }
 
     public PropertyCriterion(IObject<?> member, Restriction restriction, Serializable value) {
@@ -59,6 +72,11 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
     }
 
+    public static PropertyCriterion eq(IObject<?> member, IPrimitive<?> value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
+    }
+
+    @Deprecated
     public static PropertyCriterion eq(String propertyName, Serializable value) {
         return new PropertyCriterion(propertyName, Restriction.EQUAL, value);
     }
@@ -79,7 +97,15 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN, value);
     }
 
+    public static PropertyCriterion gt(IObject<?> member, IPrimitive<?> value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN, value);
+    }
+
     public static PropertyCriterion ge(IObject<?> member, Serializable value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN_OR_EQUAL, value);
+    }
+
+    public static PropertyCriterion ge(IObject<?> member, IPrimitive<?> value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.GREATER_THAN_OR_EQUAL, value);
     }
 
@@ -87,7 +113,15 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN, value);
     }
 
+    public static PropertyCriterion lt(IObject<?> member, IPrimitive<?> value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN, value);
+    }
+
     public static PropertyCriterion le(IObject<?> member, Serializable value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN_OR_EQUAL, value);
+    }
+
+    public static PropertyCriterion le(IObject<?> member, IPrimitive<?> value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN_OR_EQUAL, value);
     }
 

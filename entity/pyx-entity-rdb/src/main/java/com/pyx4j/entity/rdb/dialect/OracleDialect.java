@@ -123,4 +123,13 @@ public class OracleDialect extends Dialect {
     public boolean limitCriteriaIsRelative() {
         return false;
     }
+
+    @Override
+    public String sqlSortNulls(boolean descending) {
+        if (descending) {
+            return " NULLS LAST";
+        } else {
+            return " NULLS FIRST";
+        }
+    }
 }

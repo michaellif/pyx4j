@@ -193,4 +193,8 @@ public abstract class Dialect {
     public boolean limitCriteriaIsRelative() {
         throw new Error("Dialect does not support limit");
     }
+
+    public String sqlSortNulls(boolean descending) {
+        return "";
+    }
 }
