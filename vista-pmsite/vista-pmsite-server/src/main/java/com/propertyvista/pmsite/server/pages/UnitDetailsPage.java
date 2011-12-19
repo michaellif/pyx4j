@@ -34,10 +34,10 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteApplication;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class UnitDetailsPage extends BasePage {
 
@@ -58,17 +58,17 @@ public class UnitDetailsPage extends BasePage {
             redirectOrFail(FindAptPage.class, "Invalid parameter: " + PMSiteApplication.ParamNameFloorplan);
         }
 
-        final Floorplan fp = PMSiteContentManager.getFloorplanDetails(planId);
+        final Floorplan fp = PropertyFinder.getFloorplanDetails(planId);
         if (fp == null) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "Could not get floorplan data");
         }
-        final List<AptUnit> fpUnits = PMSiteContentManager.getFloorplanUnits(fp);
+        final List<AptUnit> fpUnits = PropertyFinder.getFloorplanUnits(fp);
         if (fpUnits == null || fpUnits.size() < 1) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "No units found");
         }
-        final List<FloorplanAmenity> amenities = PMSiteContentManager.getFloorplanAmenities(fp);
+        final List<FloorplanAmenity> amenities = PropertyFinder.getFloorplanAmenities(fp);
 
         // left side
         add(new FloorplanInfoPanel("floorplanInfoPanel", fp));

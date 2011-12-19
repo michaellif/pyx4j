@@ -47,7 +47,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.pmsite.server.PMSiteApplication;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
@@ -55,6 +54,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.DateInput;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadioGroup;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class InquiryPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -131,9 +131,9 @@ public class InquiryPanel extends Panel {
             curFp = fp.id().getValue().asLong();
         }
         SimpleRadioGroup<Long> radioGroup = new SimpleRadioGroup<Long>("floorPlanList", new Model<Long>(curFp));
-        for (Floorplan p : PMSiteContentManager.getBuildingFloorplans(bld).keySet()) {
+        for (Floorplan p : PropertyFinder.getBuildingFloorplans(bld).keySet()) {
             Double minPrice = null;
-            for (AptUnit u : PMSiteContentManager.getBuildingAptUnits(p.building(), p)) {
+            for (AptUnit u : PropertyFinder.getBuildingAptUnits(p.building(), p)) {
                 Double _prc = u.financial()._marketRent().getValue();
                 if (minPrice == null || minPrice > _prc) {
                     minPrice = _prc;

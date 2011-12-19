@@ -41,6 +41,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class AptDetailsPage extends BasePage {
 
@@ -61,17 +62,17 @@ public class AptDetailsPage extends BasePage {
             redirectOrFail(FindAptPage.class, "Invalid parameter: " + PMSiteApplication.ParamNameBuilding);
         }
 
-        final Building propInfo = PMSiteContentManager.getBuildingDetails(propId);
+        final Building propInfo = PropertyFinder.getBuildingDetails(propId);
         if (propInfo == null) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "Could not get building details");
         }
-        final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(propInfo);
+        final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(propInfo);
         if (fpUnits == null || fpUnits.size() < 1) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "No units found");
         }
-        final List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);
+        final List<BuildingAmenity> amenities = PropertyFinder.getBuildingAmenities(propInfo);
 
         // left side - building info
         add(new BuildingInfoPanel("buildingInfoPanel", propInfo));

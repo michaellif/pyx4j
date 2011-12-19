@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
@@ -44,7 +45,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
@@ -53,6 +53,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourc
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class AptListPage extends BasePage {
 
@@ -117,6 +118,7 @@ public class AptListPage extends BasePage {
 
         };
 
+        form.add(new FeedbackPanel("form_messages"));
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
         form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", i18n.tr("Search"))));
 
@@ -142,7 +144,7 @@ public class AptListPage extends BasePage {
             int nextId = (viewMode.ordinal() + 1) % ViewMode.values().length;
             ViewMode nextMode = ViewMode.values()[nextId];
             add(new Label("aptListModeSwitch", nextMode.toString()).add(new AttributeClassModifier(null, "aptListMode_" + nextMode.name())));
-            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria)), viewMode));
+            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PropertyFinder.getPropertyList(criteria)), viewMode));
             String jsAptListModeInfo = "\n" + "var aptListModeInfo = {";
             for (ViewMode mode : ViewMode.values()) {
                 nextId = (mode.ordinal() + 1) % ViewMode.values().length;
@@ -159,7 +161,7 @@ public class AptListPage extends BasePage {
         } else {
             viewMode = ViewMode.list;
             add(new Label("aptListModeSwitch").setVisible(false));
-            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PMSiteContentManager.getPropertyList(criteria)), viewMode));
+            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PropertyFinder.getPropertyList(criteria)), viewMode));
             add(new Label("jsAptListModeInfo").setVisible(false));
         }
         // js method to return aptDetails url

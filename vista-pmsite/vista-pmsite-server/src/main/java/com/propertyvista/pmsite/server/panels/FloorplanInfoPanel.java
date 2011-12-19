@@ -38,6 +38,7 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class FloorplanInfoPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -45,7 +46,7 @@ public class FloorplanInfoPanel extends Panel {
     public FloorplanInfoPanel(String id, Floorplan fp) {
         super(id);
 
-        final List<AptUnit> fpUnits = PMSiteContentManager.getFloorplanUnits(fp);
+        final List<AptUnit> fpUnits = PropertyFinder.getFloorplanUnits(fp);
 
         long mediaId = 0;
         if (fp.media().size() > 0) {
@@ -65,7 +66,7 @@ public class FloorplanInfoPanel extends Panel {
                 item.add(tn.add(AttributeModifier.replace("onClick", "setImgSrc('" + picId + "','" + largeSrc + "')")));
             }
         });
-        Building bld = PMSiteContentManager.getBuildingDetails(fp.building().getPrimaryKey().asLong());
+        Building bld = PropertyFinder.getBuildingDetails(fp.building().getPrimaryKey().asLong());
         AddressStructured addr = bld.info().address();
         String addrFmt = "";
         if (addr != null) {

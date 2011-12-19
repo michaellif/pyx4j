@@ -46,6 +46,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -94,7 +95,7 @@ public class AptListPanel extends Panel {
                 }
                 item.add(new Label("description", desc));
 
-                final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(propInfo);
+                final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(propInfo);
                 item.add(new ListView<Floorplan>("types", new ArrayList<Floorplan>(fpUnits.keySet())) {
                     private static final long serialVersionUID = 1L;
 
@@ -120,7 +121,7 @@ public class AptListPanel extends Panel {
                     }
                 });
 
-                final List<BuildingAmenity> amenities = PMSiteContentManager.getBuildingAmenities(propInfo);
+                final List<BuildingAmenity> amenities = PropertyFinder.getBuildingAmenities(propInfo);
                 item.add(new ListView<BuildingAmenity>("amenities", amenities) {
                     private static final long serialVersionUID = 1L;
 

@@ -26,11 +26,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteApplication;
-import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class InquirySuccessPage extends BasePage {
     private static final long serialVersionUID = 1L;
@@ -56,12 +56,12 @@ public class InquirySuccessPage extends BasePage {
         Building bld = null;
         BookmarkablePageLink<Void> backLink;
         if (planId != null) {
-            fp = PMSiteContentManager.getFloorplanDetails(planId);
+            fp = PropertyFinder.getFloorplanDetails(planId);
             add(new FloorplanInfoPanel("infoPanel", fp));
             backLink = new BookmarkablePageLink<Void>("backLink", UnitDetailsPage.class, params);
             backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + UnitDetailsPage.LocalizedPageTitle));
         } else if (propId != null) {
-            bld = PMSiteContentManager.getBuildingDetails(propId);
+            bld = PropertyFinder.getBuildingDetails(propId);
             add(new BuildingInfoPanel("infoPanel", bld));
             backLink = new BookmarkablePageLink<Void>("backLink", AptDetailsPage.class, params);
             backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + AptDetailsPage.LocalizedPageTitle));

@@ -132,7 +132,7 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         });
 
         // add distance input
-        add(new TextField<Integer>("distance").add(new MinimumValidator<Integer>(1)));
+        add(new TextField<Integer>("distance"));
 
         // add common fields
         // bedrooms

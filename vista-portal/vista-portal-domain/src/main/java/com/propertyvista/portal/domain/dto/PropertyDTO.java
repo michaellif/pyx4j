@@ -56,4 +56,6 @@ public interface PropertyDTO extends IEntity {
     @RpcTransient
     IPrimitive<LogicalDate> availableForRent();
 
+    IPrimitive<Boolean> selected();
+
 }

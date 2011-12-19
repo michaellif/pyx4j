@@ -162,6 +162,13 @@ function submitGeolocationV2(form) {
 		popup_msg('Insufficient input. Please provide more details such as country, city, postal code.');
 		return false;
 	}
+	var $distInp = $('[jsparam=distance]', $form);
+	var distance = parseFloat($distInp.val());
+	if (isNaN(distance)) {
+		popup_msg('Please provide a valid distance (Km).');
+		return false;
+	}
+	$distInp.val(Math.round(distance));
 	var gc = new GClientGeocoder();
 	if (!gc) {
 		console.log('Could not create geocoder');

@@ -39,6 +39,7 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class BuildingInfoPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -69,7 +70,7 @@ public class BuildingInfoPanel extends Panel {
         add(new Label("address", addrFmt));
         // get price range
         Double minPrice = null, maxPrice = null;
-        final Map<Floorplan, List<AptUnit>> fpUnits = PMSiteContentManager.getBuildingFloorplans(bld);
+        final Map<Floorplan, List<AptUnit>> fpUnits = PropertyFinder.getBuildingFloorplans(bld);
         for (Floorplan fp : fpUnits.keySet()) {
             for (AptUnit u : fpUnits.get(fp)) {
                 Double _prc = u.financial()._marketRent().getValue();
