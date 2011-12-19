@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -73,9 +74,9 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     protected Widget initListerWidget() {
         dataTablePanel = new DataTablePanel<E>(entityClass);
         dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
-        dataTablePanel.setFilterActionHandler(new ClickHandler() {
+        dataTablePanel.setFilterApplyCommand(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 populate(false);
             }
         });
@@ -273,7 +274,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     }
 
     protected List<DataTableFilterData> getListerFilterData() {
-        return dataTablePanel.getFilterData();
+        return dataTablePanel.getFilters();
     }
 
     public int getPageSize() {

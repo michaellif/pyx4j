@@ -103,13 +103,13 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public List<DataTableFilterData> getFiltering() {
-        return getLister().getFiltering();
+    public List<DataTableFilterData> getFilters() {
+        return getLister().getFilters();
     }
 
     @Override
-    public void setFiltering(List<DataTableFilterData> filterData) {
-        getLister().setFiltering(filterData);
+    public void setFilters(List<DataTableFilterData> filterData) {
+        getLister().setFilters(filterData);
     }
 
     @Override
