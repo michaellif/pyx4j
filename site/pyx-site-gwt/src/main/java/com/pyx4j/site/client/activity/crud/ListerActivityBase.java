@@ -193,7 +193,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
             currentFilters.addAll(preDefinedFilters);
         }
 
-        List<DataTableFilterData> userDefinedFilters = view.getFiltering();
+        List<DataTableFilterData> userDefinedFilters = view.getFilters();
         if (userDefinedFilters != null) {
             currentFilters.addAll(userDefinedFilters);
         }

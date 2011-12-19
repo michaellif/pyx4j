@@ -27,6 +27,7 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -76,9 +77,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
         dataTablePanel = new DataTablePanel<E>(clazz);
 
-        dataTablePanel.setFilterActionHandler(new ClickHandler() {
+        dataTablePanel.setFilterApplyCommand(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 getPresenter().populate(0);
             }
         });
@@ -267,7 +268,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
         getMemento().clear();
 
         getMemento().putInteger(MementoKeys.page.name(), getLister().getPageNumber());
-        getMemento().putObject(MementoKeys.filterData.name(), getLister().getFiltering());
+        getMemento().putObject(MementoKeys.filterData.name(), getLister().getFilters());
         getMemento().putObject(MementoKeys.sortingData.name(), getLister().getSorting());
     }
 
@@ -284,7 +285,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
-        getLister().setFiltering(filters);
+        getLister().setFilters(filters);
         getLister().setSorting(sorts);
         // should be called last:
         getPresenter().populate(pageNumber);
@@ -292,7 +293,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     public void resetState() {
 
-        getLister().setFiltering(null);
+        getLister().setFilters(null);
         getLister().setSorting(null);
 
         getLister().getDataTablePanel().getDataTable().clearTable();
@@ -364,13 +365,13 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     }
 
     @Override
-    public List<DataTableFilterData> getFiltering() {
-        return dataTablePanel.getFilterData();
+    public List<DataTableFilterData> getFilters() {
+        return dataTablePanel.getFilters();
     }
 
     @Override
-    public void setFiltering(List<DataTableFilterData> filterData) {
-        dataTablePanel.setFilterData(filterData);
+    public void setFilters(List<DataTableFilterData> filters) {
+        dataTablePanel.setFilters(filters);
     }
 
     @Override

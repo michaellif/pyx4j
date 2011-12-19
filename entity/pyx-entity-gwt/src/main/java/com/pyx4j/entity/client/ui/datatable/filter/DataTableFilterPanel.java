@@ -25,6 +25,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -51,6 +52,10 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     private final Button btnApply;
 
     private final Button btnClose;
+
+    private Command filterActionCommand;
+
+    private List<DataTableFilterData> filters;
 
     public DataTableFilterPanel(DataTablePanel<E> dataTablePanel) {
         this.dataTablePanel = dataTablePanel;
@@ -91,6 +96,15 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         btnApply.getElement().getStyle().setMarginLeft(1, Unit.EM);
         btnApply.getElement().getStyle().setMarginBottom(0.3, Unit.EM);
         buttonsPanel.add(btnApply);
+        btnApply.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                filters = grid.getFilters();
+                if (filterActionCommand != null) {
+                    filterActionCommand.execute();
+                }
+            }
+        });
 
         btnClose = new Button(i18n.tr("Close"));
         btnClose.getElement().getStyle().setMarginLeft(1, Unit.EM);
@@ -108,7 +122,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     }
 
     public void discard() {
-        setFilterData(null);
+        setFilters(null);
         DataTableFilterPanel.this.setVisible(false);
     }
 
@@ -136,16 +150,17 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         return panel;
     }
 
-    public void setFilterActionHandler(ClickHandler filterActionHandler) {
-        btnApply.addClickHandler(filterActionHandler);
+    public void setFilterApplyCommand(Command filterActionCommand) {
+        this.filterActionCommand = filterActionCommand;
     }
 
-    public List<DataTableFilterData> getFilterData() {
-        return grid.getFilterData();
+    public List<DataTableFilterData> getFilters() {
+        return filters;
     }
 
-    public void setFilterData(List<DataTableFilterData> filterData) {
-        grid.setFiltersData(filterData);
+    public void setFilters(List<DataTableFilterData> filters) {
+        this.filters = filters;
+        grid.setFilters(filters);
     }
 
     @Override

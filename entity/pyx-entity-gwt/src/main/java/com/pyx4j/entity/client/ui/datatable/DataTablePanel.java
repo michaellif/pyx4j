@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -132,8 +133,8 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         return addButton;
     }
 
-    public void setFilterActionHandler(ClickHandler filterActionHandler) {
-        filterPanel.setFilterActionHandler(filterActionHandler);
+    public void setFilterApplyCommand(Command filterActionCommand) {
+        filterPanel.setFilterApplyCommand(filterActionCommand);
     }
 
     public void setFirstActionHandler(ClickHandler firstActionHandler) {
@@ -190,6 +191,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         if (getDataTableModel() != null) {
             getDataTableModel().clearData();
         }
+        filterPanel.discard();
     }
 
     public int getPageSize() {
@@ -228,12 +230,12 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         return images;
     }
 
-    public List<DataTableFilterData> getFilterData() {
-        return filterPanel.getFilterData();
+    public List<DataTableFilterData> getFilters() {
+        return filterPanel.getFilters();
     }
 
-    public void setFilterData(List<DataTableFilterData> filterData) {
-        filterPanel.setFilterData(filterData);
+    public void setFilters(List<DataTableFilterData> filters) {
+        filterPanel.setFilters(filters);
     }
 
     public void setFilterEnabled(boolean enabled) {

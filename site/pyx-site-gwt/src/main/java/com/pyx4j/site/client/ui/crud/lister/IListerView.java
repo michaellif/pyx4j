@@ -67,9 +67,9 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     void discard();
 
-    List<DataTableFilterData> getFiltering();
+    List<DataTableFilterData> getFilters();
 
-    void setFiltering(List<DataTableFilterData> filterData);
+    void setFilters(List<DataTableFilterData> filterData);
 
     List<Sort> getSorting();
 

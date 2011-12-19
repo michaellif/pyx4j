@@ -61,7 +61,7 @@ public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
     }
 
     @SuppressWarnings("unchecked")
-    public List<DataTableFilterData> getFilterData() {
+    public List<DataTableFilterData> getFilters() {
         ArrayList<DataTableFilterData> filters = new ArrayList<DataTableFilterData>();
 
         for (Widget w : this) {
@@ -73,11 +73,11 @@ public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
         return filters;
     }
 
-    public void setFiltersData(List<DataTableFilterData> filterData) {
+    public void setFilters(List<DataTableFilterData> filters) {
         clear();
-        if (filterData != null) {
+        if (filters != null) {
             DataTableFilterItem<E> filter;
-            for (DataTableFilterData item : filterData) {
+            for (DataTableFilterData item : filters) {
                 addFilter(filter = new DataTableFilterItem<E>(this));
                 filter.setFilterData(item);
             }
