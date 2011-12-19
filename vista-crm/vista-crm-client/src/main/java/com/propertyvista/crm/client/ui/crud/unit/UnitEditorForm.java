@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import java.io.Serializable;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -135,7 +137,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
-            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), null));
+            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), (Serializable) null));
             combo.addValueChangeHandler(new ValueChangeHandler<Floorplan>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Floorplan> event) {

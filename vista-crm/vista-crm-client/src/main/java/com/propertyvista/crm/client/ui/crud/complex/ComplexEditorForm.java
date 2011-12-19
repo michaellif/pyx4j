@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
+import java.io.Serializable;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -92,7 +94,7 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
         if (isEditable() && primaryBuildingWidget instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
             CEntityComboBox<Building> primaryBuildingCombo = (CEntityComboBox<Building>) primaryBuildingWidget;
-            primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), null));
+            primaryBuildingCombo.addCriterion(PropertyCriterion.eq(primaryBuildingCombo.proto().complex(), (Serializable) null));
         }
 
         return new CrmScrollPanel(panel);
