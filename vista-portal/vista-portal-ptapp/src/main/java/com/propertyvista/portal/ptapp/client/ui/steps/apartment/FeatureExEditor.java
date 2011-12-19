@@ -33,6 +33,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.domain.financial.offering.ChargeItem;
+import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 
@@ -77,6 +78,8 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
 
         if (!getValue().item().isEmpty()) {
             CEntityEditor editor = null;
+            ChargeItemExtraData extraData = getValue().extraData();
+
             // add extraData editor if necessary:
             switch (getValue().item().type().type().getValue()) {
             case feature:
@@ -90,8 +93,8 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
                         }
                     };
 
-                    if (getValue().extraData().isNull()) {
-                        getValue().extraData().set(EntityFactory.create(Vehicle.class));
+                    if (extraData.isNull()) {
+                        extraData.set(EntityFactory.create(Vehicle.class));
                     }
                     break;
                 case pet:
@@ -102,16 +105,17 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
                         }
                     };
 
-                    if (getValue().extraData().isNull()) {
-                        getValue().extraData().set(EntityFactory.create(Pet.class));
+                    if (extraData.isNull()) {
+                        extraData.set(EntityFactory.create(Pet.class));
                     }
                     break;
                 }
             }
 
             if (editor != null) {
-                this.inject(proto().extraData(), editor);
-                editor.populate(getValue().extraData().cast());
+                this.adopt(editor);
+//                this.inject(proto().extraData(), editor);
+                editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
             }
         }

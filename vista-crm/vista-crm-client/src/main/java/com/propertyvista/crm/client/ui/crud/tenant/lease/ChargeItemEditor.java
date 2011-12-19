@@ -23,9 +23,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -34,6 +37,7 @@ import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
+import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
@@ -95,20 +99,21 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
             }
 
             CEntityEditor editor = null;
+            ChargeItemExtraData extraData = getValue().extraData();
             // add extraData editor if necessary:
             switch (getValue().item().type().type().getValue()) {
             case feature:
                 switch (getValue().item().type().featureType().getValue()) {
                 case parking:
                     editor = new VehicleDataEditor();
-                    if (getValue().extraData().isNull()) {
-                        getValue().extraData().set(EntityFactory.create(Vehicle.class));
+                    if (extraData.isNull()) {
+                        extraData.set(EntityFactory.create(Vehicle.class));
                     }
                     break;
                 case pet:
                     editor = new PetDataEditor();
-                    if (getValue().extraData().isNull()) {
-                        getValue().extraData().set(EntityFactory.create(Pet.class));
+                    if (extraData.isNull()) {
+                        extraData.set(EntityFactory.create(Pet.class));
                     }
                     break;
                 }
@@ -116,8 +121,9 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
             }
 
             if (editor != null) {
-                this.inject(proto().extraData(), editor);
-                editor.populate(getValue().extraData().cast());
+                this.adopt(editor);
+//                this.inject(proto().extraData(), editor);
+                editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
             }
         }
@@ -125,14 +131,14 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
     @Override
     public void addValidations() {
-//        get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<Double>() {
-//            @Override
-//            public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
-//                Double originalPrice = getValue().originalPrice().getValue();
-//                return ((value > originalPrice * 0.5 && originalPrice < value * 1.5) ? null : new ValidationFailure(i18n
-//                        .tr("The price should not be differ +-50% of original price")));
-//            }
-//        });
+        get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<Double>() {
+            @Override
+            public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
+                Double originalPrice = getValue().originalPrice().getValue();
+                return ((value > originalPrice * 0.5 && originalPrice < value * 1.5) ? null : new ValidationFailure(i18n
+                        .tr("The price should not be differ +-50% of original price")));
+            }
+        });
 
         super.addValidations();
     }
