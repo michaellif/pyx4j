@@ -136,4 +136,9 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     public void restoreState() {
         getLister().restoreState();
     }
+
+    @Override
+    public void discard() {
+        getLister().discard();
+    }
 }
