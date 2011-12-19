@@ -7,18 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 19, 2011
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.policy;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.ISet;
 
-@DiscriminatorValue("PolicyNumberOfIDs")
-@Caption(name = "Number of Identification Documents")
-public interface NumberOfIDs extends Policy {
-    IPrimitive<Integer> numOfIDs();
+@Transient
+public interface EffectivePolicyPresetDTO extends IEntity {
+    ISet<EffectivePolicyDTO> effectivePolicies();
 }

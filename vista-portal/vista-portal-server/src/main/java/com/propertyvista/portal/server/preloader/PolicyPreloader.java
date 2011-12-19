@@ -18,13 +18,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.AllowedIDs;
-import com.propertyvista.domain.policy.IdentificationDocument;
-import com.propertyvista.domain.policy.NumberOfIDs;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyPreset;
-import com.propertyvista.domain.policy.PolicyToNodeMap;
-import com.propertyvista.domain.policy.PolicyToNodeMap.NodeType;
+import com.propertyvista.domain.policy.PolicyPresetAtNode;
+import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
+import com.propertyvista.domain.policy.policies.AllowedIDs;
+import com.propertyvista.domain.policy.policies.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.NumberOfIDs;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private static final I18n i18n = I18n.get(PolicyPreloader.class);
@@ -56,7 +56,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         policyPreset.policies().add(allowedIDs);
         Persistence.service().persist(policyPreset);
 
-        PolicyToNodeMap policyToNodeMap = EntityFactory.create(PolicyToNodeMap.class);
+        PolicyPresetAtNode policyToNodeMap = EntityFactory.create(PolicyPresetAtNode.class);
         policyToNodeMap.policyPreset().set(policyPreset);
         policyToNodeMap.nodeType().setValue(NodeType.organization);
 
@@ -68,7 +68,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PolicyToNodeMap.class, Policy.class, IdentificationDocument.class);
+            return deleteAll(PolicyPresetAtNode.class, Policy.class, IdentificationDocument.class);
         } else {
             return "This is production";
         }

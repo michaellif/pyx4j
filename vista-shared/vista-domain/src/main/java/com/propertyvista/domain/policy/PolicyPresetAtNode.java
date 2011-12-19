@@ -11,17 +11,22 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.policy;
+package com.propertyvista.domain.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.IService;
+public interface PolicyPresetAtNode extends IEntity {
+    public enum NodeType {
+        unit, building, complex, region, country, organization;
+    }
 
-import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
-import com.propertyvista.domain.policy.Policy;
+    IEntity nodeValue();
 
-public interface PolicyManagerService extends IService {
+    IPrimitive<NodeType> nodeType();
 
-    void getEffectiveUnitPolicies(AsyncCallback<EffectivePolicyPresetDTO> callback, Key unitPk, Policy policyProto);
+    @Detached
+    PolicyPreset policyPreset();
+
 }

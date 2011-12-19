@@ -7,21 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 19, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.policy;
+package com.propertyvista.domain.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.IService;
+@Transient
+public interface EffectivePolicyDTO extends IEntity {
+    PolicyPresetAtNode inheritedFrom();
 
-import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
-import com.propertyvista.domain.policy.Policy;
-
-public interface PolicyManagerService extends IService {
-
-    void getEffectiveUnitPolicies(AsyncCallback<EffectivePolicyPresetDTO> callback, Key unitPk, Policy policyProto);
+    Policy policy();
 }

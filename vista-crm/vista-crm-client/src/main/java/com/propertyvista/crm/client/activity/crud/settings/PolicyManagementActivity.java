@@ -17,16 +17,11 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-
-import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementView;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementViewImpl;
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
-import com.propertyvista.domain.policy.AllowedIDs;
-import com.propertyvista.domain.policy.Policy;
 
 public class PolicyManagementActivity extends AbstractActivity implements PolicyManagementView.Presenter {
     protected final PolicyManagementView view;
@@ -57,19 +52,19 @@ public class PolicyManagementActivity extends AbstractActivity implements Policy
 
     @Override
     public void populate() {
-        service.getUnitPolicy(new AsyncCallback<Policy>() {
-
-            @Override
-            public void onSuccess(Policy result) {
-                view.populate(result);
-
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new Error(caught);
-            }
-        }, null, EntityFactory.getEntityPrototype(AllowedIDs.class));
+//        service.getUnitPolicy(new AsyncCallback<Policy>() {
+//
+//            @Override
+//            public void onSuccess(Policy result) {
+//                view.populate(result);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable caught) {
+//                throw new Error(caught);
+//            }
+//        }, null, EntityFactory.getEntityPrototype(AllowedIDs.class));
     }
 
 }

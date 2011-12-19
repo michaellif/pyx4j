@@ -11,12 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("PolicyAllowedIDs")
-public interface AllowedIDs extends Policy {
-    ISet<IdentificationDocument> allowedIDs();
+public interface IdentificationDocument extends IEntity {
+    @NotNull
+    IPrimitive<String> name();
 }

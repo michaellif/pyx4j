@@ -11,20 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.ISet;
 
-public interface PolicyToNodeMap extends IEntity {
-    public enum NodeType {
-        unit, building, complex, region, country, organization;
-    }
+import com.propertyvista.domain.policy.Policy;
 
-    IEntity belongsTo();
-
-    IPrimitive<NodeType> nodeType();
-
-    PolicyPreset policyPreset();
-
+@DiscriminatorValue("PolicyAllowedIDs")
+public interface AllowedIDs extends Policy {
+    ISet<IdentificationDocument> allowedIDs();
 }
