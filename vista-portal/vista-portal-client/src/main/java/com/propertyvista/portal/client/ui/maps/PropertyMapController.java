@@ -24,7 +24,6 @@ import com.google.gwt.user.client.Window;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.geo.GeoPoint;
-import com.pyx4j.geo.GeoUtils;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -59,14 +58,13 @@ public enum PropertyMapController {
         criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, Window.Location.getParameterMap());
 
         if (allProperties == null) {
-            // TODO this call could use search criteria instead of returning all available properties
             PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
                 @Override
                 public void onSuccess(PropertyListDTO properties) {
                     allProperties = properties;
                     obtainGeopoint();
                 }
-            });
+            }, criteria);
         } else {
             obtainGeopoint();
         }
@@ -113,23 +111,8 @@ public enum PropertyMapController {
 
     private PropertyListDTO filterInboundProperties() {
         PropertyListDTO filteredProperties = EntityFactory.create(PropertyListDTO.class);
-        if (SearchType.city.equals(criteria.searchType().getValue())) {
-            for (PropertyDTO property : allProperties.properties()) {
-                System.out.println("++++++++++" + property.address().city());
-                if (!criteria.city().isNull() && !criteria.city().equals(property.address().city())) {
-                    continue;
-                }
-                if (!criteria.province().isNull() && !criteria.province().equals(property.address().province().name())) {
-                    continue;
-                }
-                filteredProperties.properties().add(property);
-            }
-        } else if (SearchType.proximity.equals(criteria.searchType().getValue()) && (proximityCenter != null) && (criteria.distance().getValue() > 0)) {
-            for (PropertyDTO property : allProperties.properties()) {
-                GeoPoint location = property.location().getValue();
-                if (GeoUtils.distance(location, proximityCenter) > criteria.distance().getValue()) {
-                    continue;
-                }
+        for (PropertyDTO property : allProperties.properties()) {
+            if (allProperties.filterIds().contains(property.getPrimaryKey().asLong())) {
                 filteredProperties.properties().add(property);
             }
         }

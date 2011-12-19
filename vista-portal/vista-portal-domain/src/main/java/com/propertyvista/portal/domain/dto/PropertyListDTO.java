@@ -16,10 +16,12 @@ package com.propertyvista.portal.domain.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 @Transient
 public interface PropertyListDTO extends IEntity {
 
     IList<PropertyDTO> properties();
 
+    IPrimitiveSet<Long> filterIds();
 }

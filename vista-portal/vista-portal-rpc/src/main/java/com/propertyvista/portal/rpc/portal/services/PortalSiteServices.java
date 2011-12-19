@@ -18,9 +18,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 
 public interface PortalSiteServices extends IService {
 
     public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback);
+
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria search);
 
 }

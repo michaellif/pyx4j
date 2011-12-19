@@ -42,22 +42,21 @@ public class PortalSiteServicesImpl implements PortalSiteServices {
     }
 
     // get entire property list and set Selected flag for the properties that satisfy given search criteria
+    @Override
     public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria search) {
+        PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         // get entire list
         List<Building> buildings = PropertyFinder.getPropertyList(null);
-        // search by criteria
-        List<Long> selectedIds = new ArrayList<Long>();
-        if (search != null) {
-            for (Building selected : PropertyFinder.getPropertyList(search)) {
-                selectedIds.add(selected.getPrimaryKey().asLong());
-            }
-        }
-        PropertyListDTO ret = EntityFactory.create(PropertyListDTO.class);
         for (Building building : buildings) {
             Map<Floorplan, List<AptUnit>> fpMap = PropertyFinder.getBuildingFloorplans(building);
             PropertyDTO prop = Converter.convert(building, new ArrayList<Floorplan>(fpMap.keySet()));
-            prop.selected().setValue(selectedIds.contains(building.getPrimaryKey().asLong()));
             ret.properties().add(prop);
+        }
+        // search by criteria
+        if (search != null) {
+            for (Building found : PropertyFinder.getPropertyList(search)) {
+                ret.filterIds().add(found.getPrimaryKey().asLong());
+            }
         }
         callback.onSuccess(ret);
     }
