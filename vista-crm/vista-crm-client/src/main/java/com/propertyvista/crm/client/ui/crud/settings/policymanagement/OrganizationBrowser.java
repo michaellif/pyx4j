@@ -29,17 +29,22 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
+import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 
-public class OrganizationBrowser implements IsWidget {
+public abstract class OrganizationBrowser implements IsWidget {
     private static final I18n i18n = I18n.get(OrganizationBrowser.class);
 
     private final CellTree categoriesTree;
@@ -64,7 +69,7 @@ public class OrganizationBrowser implements IsWidget {
         return categoriesTree;
     }
 
-    private static class OrganizationTreeModel implements TreeViewModel {
+    private class OrganizationTreeModel implements TreeViewModel {
         private final OrganizationPolicyBrowserService service = GWT.create(OrganizationPolicyBrowserService.class);
 
         @Override
@@ -150,6 +155,16 @@ public class OrganizationBrowser implements IsWidget {
                     }
                 });
             } else if (value instanceof Building) {
+                final SingleSelectionModel<AptUnit> selectionModel = new SingleSelectionModel<AptUnit>();
+                selectionModel.addSelectionChangeHandler(new Handler() {
+                    @Override
+                    public void onSelectionChange(SelectionChangeEvent event) {
+                        AptUnit unit = selectionModel.getSelectedObject();
+                        if (unit != null) {
+                            onNodeSelected(unit.getPrimaryKey(), NodeType.unit);
+                        }
+                    }
+                });
                 return new DefaultNodeInfo<AptUnit>(new AbstractDataProvider<AptUnit>() {
                     @Override
                     protected void onRangeChanged(final HasData<AptUnit> display) {
@@ -172,7 +187,7 @@ public class OrganizationBrowser implements IsWidget {
                             sb.appendEscaped(value.getStringView());
                         }
                     }
-                });
+                }, selectionModel, null);
             }
             return null;
         }
@@ -183,4 +198,5 @@ public class OrganizationBrowser implements IsWidget {
         }
     }
 
+    public abstract void onNodeSelected(Key nodeKey, NodeType nodeType);
 }

@@ -36,8 +36,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public class PolicyManagerServiceImpl implements PolicyManagerService {
 
     @Override
-    public void getEffectiveUnitPolicies(AsyncCallback<EffectivePolicyPresetDTO> callback, Key unitPk, Policy policyProto) {
-        callback.onSuccess(computeEffectivePolicyPreset(unitPk, NodeType.unit));
+    public void getEffectiveUnitPolicies(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType) {
+        callback.onSuccess(computeEffectivePolicyPreset(pk, nodeType));
     }
 
     private static PolicyPresetAtNode policyPresetAtNode(Key pk, PolicyPresetAtNode.NodeType nodeType) {
@@ -63,37 +63,38 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
         default:
         }
         criteria.add(PropertyCriterion.eq(criteria.proto().nodeType(), nodeType));
-        List<PolicyPresetAtNode> policyToNodeMap = Persistence.service().query(criteria);
-        if (policyToNodeMap.isEmpty()) {
-            // TODO throw exception here;
+        List<PolicyPresetAtNode> policyPresetAtNode = Persistence.service().query(criteria);
+        if (policyPresetAtNode.isEmpty()) {
+            return null;
         }
-        if (policyToNodeMap.size() > 1) {
-            // TODO throw exception here: database is broken
+        if (policyPresetAtNode.size() > 1) {
+            // TODO write other error message
+            throw new Error("Warning!!! database integrity has been compromized, initiating self desctruction procedure");
         }
-        return policyToNodeMap.get(0);
+        return policyPresetAtNode.get(0);
     }
 
     private static EffectivePolicyPresetDTO merge(EffectivePolicyPresetDTO effectivePreset, PolicyPresetAtNode origin) {
         if (effectivePreset == null) {
             effectivePreset = EntityFactory.create(EffectivePolicyPresetDTO.class);
         }
-
-        for (Policy policy : origin.policyPreset().policies()) {
-            boolean alreadyEffective = false;
-            for (EffectivePolicyDTO effectivePolicy : effectivePreset.effectivePolicies()) {
-                if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
-                    alreadyEffective = true;
-                    break;
+        if (origin != null) {
+            for (Policy policy : origin.policyPreset().policies()) {
+                boolean alreadyEffective = false;
+                for (EffectivePolicyDTO effectivePolicy : effectivePreset.effectivePolicies()) {
+                    if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
+                        alreadyEffective = true;
+                        break;
+                    }
+                }
+                if (!alreadyEffective) {
+                    EffectivePolicyDTO effectivePolicy = EntityFactory.create(EffectivePolicyDTO.class);
+                    effectivePolicy.policy().set(policy);
+                    effectivePolicy.inheritedFrom().set(origin);
+                    effectivePreset.effectivePolicies().add(effectivePolicy);
                 }
             }
-            if (!alreadyEffective) {
-                EffectivePolicyDTO effectivePolicy = EntityFactory.create(EffectivePolicyDTO.class);
-                effectivePolicy.policy().set(policy);
-                effectivePolicy.inheritedFrom().set(origin);
-                effectivePreset.effectivePolicies().add(effectivePolicy);
-            }
         }
-
         return effectivePreset;
     }
 
@@ -172,4 +173,5 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
         Building building = Persistence.service().retrieve(Building.class, buildingPk);
         return building.info().address().country().getPrimaryKey();
     }
+
 }

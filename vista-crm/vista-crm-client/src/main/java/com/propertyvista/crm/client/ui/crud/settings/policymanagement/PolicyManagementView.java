@@ -15,14 +15,23 @@ package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.commons.Key;
 
+import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
 import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 
 public interface PolicyManagementView extends IsWidget {
-    interface Presenter extends IViewerView.Presenter {
-
+    interface Presenter {
+        void populateEffectivePolicyPreset(Key pk, NodeType nodeType);
     }
 
     void populate(Policy policy);
+
+    void setPresenter(Presenter presenter);
+
+    Presenter getPresenter();
+
+    void displayEffectivePreset(EffectivePolicyPresetDTO effectivePolicyPreset);
+
 }

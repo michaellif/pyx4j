@@ -17,11 +17,16 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementView;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementViewImpl;
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
+import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
+import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 
 public class PolicyManagementActivity extends AbstractActivity implements PolicyManagementView.Presenter {
     protected final PolicyManagementView view;
@@ -29,42 +34,30 @@ public class PolicyManagementActivity extends AbstractActivity implements Policy
     private final PolicyManagerService service;
 
     public PolicyManagementActivity(Place place) {
-        // TODO make instantiation via factory
-        view = new PolicyManagementViewImpl();
+
         service = GWT.create(PolicyManagerService.class);
+
+        view = new PolicyManagementViewImpl(); // FIXME this one must be instantiated via factory
+        view.setPresenter(this);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        populate();
     }
 
     @Override
-    public void edit() {
+    public void populateEffectivePolicyPreset(Key pk, NodeType nodeType) {
+        service.getEffectiveUnitPolicies(new AsyncCallback<EffectivePolicyPresetDTO>() {
+            @Override
+            public void onSuccess(EffectivePolicyPresetDTO result) {
+                view.displayEffectivePreset(result);
+            }
 
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new Error(caught);
+            }
+        }, pk, nodeType);
     }
-
-    @Override
-    public void cancel() {
-
-    }
-
-    @Override
-    public void populate() {
-//        service.getUnitPolicy(new AsyncCallback<Policy>() {
-//
-//            @Override
-//            public void onSuccess(Policy result) {
-//                view.populate(result);
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable caught) {
-//                throw new Error(caught);
-//            }
-//        }, null, EntityFactory.getEntityPrototype(AllowedIDs.class));
-    }
-
 }
