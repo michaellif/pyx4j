@@ -46,8 +46,21 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
         }
 
         EntityQueryCriteria<PolicyPresetAtNode> criteria = new EntityQueryCriteria<PolicyPresetAtNode>(PolicyPresetAtNode.class);
-        if (!nodeType.equals(NodeType.organization)) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().nodeValue(), pk));
+        switch (nodeType) {
+        case unit:
+            criteria.add(PropertyCriterion.eq(criteria.proto().unit(), pk));
+            break;
+        case building:
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), pk));
+            break;
+        // TODO add region
+        case complex:
+            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), pk));
+            break;
+        case country:
+            criteria.add(PropertyCriterion.eq(criteria.proto().country(), pk));
+            break;
+        default:
         }
         criteria.add(PropertyCriterion.eq(criteria.proto().nodeType(), nodeType));
         List<PolicyPresetAtNode> policyToNodeMap = Persistence.service().query(criteria);

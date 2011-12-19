@@ -18,7 +18,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyPreset;
 import com.propertyvista.domain.policy.PolicyPresetAtNode;
 import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
@@ -31,12 +30,17 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-        PolicyPreset policyPreset = EntityFactory.create(PolicyPreset.class);
-        policyPreset.name().setValue(i18n.tr("Default Global Policy Preset"));
+        PolicyPreset defaultPolicyPreset = EntityFactory.create(PolicyPreset.class);
+        defaultPolicyPreset.name().setValue(i18n.tr("Default Global Policy Preset"));
+        defaultPolicyPreset.description().setValue(i18n.tr("Default Global Policy Preset"));
+
+        // Number of IDs default policy
         NumberOfIDs numOfIDs = EntityFactory.create(NumberOfIDs.class);
         numOfIDs.numOfIDs().setValue(5);
-        policyPreset.policies().add(numOfIDs);
+        Persistence.service().persist(numOfIDs);
+        defaultPolicyPreset.policies().add(numOfIDs);
 
+        // Allowed IDs default policy
         AllowedIDs allowedIDs = EntityFactory.create(AllowedIDs.class);
         IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
         id.name().setValue(i18n.tr("Passport"));
@@ -52,23 +56,26 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         id.name().setValue(i18n.tr("Citizenship Card"));
         Persistence.service().persist(id);
         allowedIDs.allowedIDs().add(id);
+        Persistence.service().persist(allowedIDs);
+        defaultPolicyPreset.policies().add(allowedIDs);
 
-        policyPreset.policies().add(allowedIDs);
-        Persistence.service().persist(policyPreset);
+        Persistence.service().persist(defaultPolicyPreset);
 
-        PolicyPresetAtNode policyToNodeMap = EntityFactory.create(PolicyPresetAtNode.class);
-        policyToNodeMap.policyPreset().set(policyPreset);
-        policyToNodeMap.nodeType().setValue(NodeType.organization);
+        // Assign the default preset to the organization
 
-        Persistence.service().persist(policyToNodeMap);
+        PolicyPresetAtNode policyPresetAtOrganizationNode = EntityFactory.create(PolicyPresetAtNode.class);
+        policyPresetAtOrganizationNode.nodeType().setValue(NodeType.organization);
+        policyPresetAtOrganizationNode.policyPreset().set(defaultPolicyPreset);
 
-        return "created default global policy";
+        Persistence.service().persist(policyPresetAtOrganizationNode);
+
+        return "Created default global policy";
     }
 
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PolicyPresetAtNode.class, Policy.class, IdentificationDocument.class);
+            return deleteAll(PolicyPresetAtNode.class, IdentificationDocument.class);
         } else {
             return "This is production";
         }

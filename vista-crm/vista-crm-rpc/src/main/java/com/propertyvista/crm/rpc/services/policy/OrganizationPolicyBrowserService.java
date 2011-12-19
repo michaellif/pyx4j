@@ -7,41 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 19, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.crm.rpc.services.policy;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 
-public interface PolicyPresetAtNode extends IEntity {
-    public enum NodeType {
-        unit, building, complex, region, country, organization;
-    }
+public interface OrganizationPolicyBrowserService extends IService {
+    void getCountries(AsyncCallback<Vector<Country>> callback);
 
-    @Detached
-    AptUnit unit();
+    void getComplexes(AsyncCallback<Vector<Complex>> callback, Key countryPk);
 
-    @Detached
-    Building building();
+    void getBuildings(AsyncCallback<Vector<Building>> callback, Key complexPk);
 
-    @Detached
-    Complex complex();
-
-    @Detached
-    Country country();
-
-    IPrimitive<NodeType> nodeType();
-
-    @Detached
-    PolicyPreset policyPreset();
-
+    void getUnits(AsyncCallback<Vector<AptUnit>> callback, Key buildingPk);
 }

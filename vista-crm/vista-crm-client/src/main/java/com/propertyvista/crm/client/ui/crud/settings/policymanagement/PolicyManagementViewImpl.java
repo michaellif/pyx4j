@@ -29,6 +29,7 @@ public class PolicyManagementViewImpl implements PolicyManagementView {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel panel = new FormFlexPanel();
+                panel.setWidget(0, 0, new OrganizationBrowser());
                 panel.setSize("100%", "100%");
 
                 //panel.setWidget(0, 0, inject(proto().foo()));
