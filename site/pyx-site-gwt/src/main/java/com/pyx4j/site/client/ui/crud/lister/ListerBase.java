@@ -285,7 +285,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
         }
 
-        getLister().setFilters(filters);
+        if (filters != null && filters.size() > 0) {
+            getLister().setFilters(filters);
+        }
         getLister().setSorting(sorts);
         // should be called last:
         getPresenter().populate(pageNumber);
@@ -293,7 +295,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     public void resetState() {
 
-        getLister().setFilters(null);
+        getLister().resetFilters();
         getLister().setSorting(null);
 
         getLister().getDataTablePanel().getDataTable().clearTable();
@@ -372,6 +374,10 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
     @Override
     public void setFilters(List<DataTableFilterData> filters) {
         dataTablePanel.setFilters(filters);
+    }
+
+    public void resetFilters() {
+        dataTablePanel.resetFilters();
     }
 
     @Override

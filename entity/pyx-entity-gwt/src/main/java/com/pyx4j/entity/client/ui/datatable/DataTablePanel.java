@@ -93,14 +93,9 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         filterButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-
-                if (!filterPanel.isVisible()) {
-                    filterPanel.setVisible(true);
-                }
+                filterPanel.setFilters(null);
             }
         });
-
-        filterPanel.setVisible(false);
 
         setDataTableModel(new DataTableModel<E>(clazz));
     }
@@ -191,7 +186,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         if (getDataTableModel() != null) {
             getDataTableModel().clearData();
         }
-        filterPanel.discard();
+        filterPanel.resetFilters();
     }
 
     public int getPageSize() {
@@ -238,7 +233,11 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         filterPanel.setFilters(filters);
     }
 
-    public void setFilterEnabled(boolean enabled) {
+    public void resetFilters() {
+        filterPanel.resetFilters();
+    }
+
+    public void setFilteringEnabled(boolean enabled) {
         filterButton.setVisible(enabled);
     }
 }

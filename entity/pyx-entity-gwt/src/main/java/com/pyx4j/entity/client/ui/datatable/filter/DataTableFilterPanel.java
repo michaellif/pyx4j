@@ -113,17 +113,12 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         btnClose.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                discard();
+                resetFilters();
                 btnApply.click();
             }
         });
 
         add(addButtonWidget, DockPanel.SOUTH);
-    }
-
-    public void discard() {
-        setFilters(null);
-        DataTableFilterPanel.this.setVisible(false);
     }
 
     private Widget createAddButton() {
@@ -161,15 +156,17 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     public void setFilters(List<DataTableFilterData> filters) {
         this.filters = filters;
         grid.setFilters(filters);
+        setVisible(true);
+        dataTablePanel.getFilterButton().setEnabled(false);
+        if (filters == null || filters.size() == 0) {
+            grid.addFilter(new DataTableFilterItem<E>(grid));
+        }
     }
 
-    @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
-        dataTablePanel.getFilterButton().setEnabled(!visible);
-        if (visible) {
-            grid.addFilter(new DataTableFilterItem<E>(grid));
-
-        }
+    public void resetFilters() {
+        this.filters = null;
+        grid.clear();
+        setVisible(false);
+        dataTablePanel.getFilterButton().setEnabled(true);
     }
 }
