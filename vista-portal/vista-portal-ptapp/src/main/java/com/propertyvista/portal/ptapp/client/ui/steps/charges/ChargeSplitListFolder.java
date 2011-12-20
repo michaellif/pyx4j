@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.financial.Money;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
@@ -78,12 +79,9 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             @Override
             public ValidationFailure isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
                 int totalPrc = 0;
-                boolean first = true;
                 for (TenantCharge charge : value) {
-                    if (first) {
-                        // Ignore first one since it is calculated
-                        first = false;
-                        continue;
+                    if (charge.tenant().role().getValue() == Role.Applicant) {
+                        continue; // Ignore main applicant, since it is read-only!
                     }
                     Integer p = charge.percentage().getValue();
                     if (p != null) {
@@ -92,7 +90,6 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
                 }
                 return totalPrc <= 100 ? null : new ValidationFailure(i18n.tr("Sum Of All Percentages Cannot Exceed 100%"));
             }
-
         });
     }
 
@@ -105,7 +102,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().tenantName()) {
-                return inject(column.getObject(), new CEntityLabel());
+                return inject(column.getObject(), new CEntityLabel<Name>());
             }
             return super.createCell(column);
         }
@@ -130,7 +127,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             super.onPopulate();
             boolean applicant = (getValue().tenant().role().getValue() == Role.Applicant);
             if (applicant) {
-                get(proto().percentage()).setEditable(false);
+                get(proto().percentage()).setEditable(false); // set main applicant percent as read-only
             }
         }
 

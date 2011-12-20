@@ -35,10 +35,10 @@ public class ChargesSharedCalculation {
         return (calculateMonthlyAndProrateCharges(charges) && calculateOneTimeCharges(charges) && calculateApplicationCharges(charges) && calculatePaymentSplitCharges(charges));
     }
 
-    public static void calculatePetCharges(PetChargeRule petChargeRule, Pet pet) {
+    public static boolean calculatePetCharges(PetChargeRule petChargeRule, Pet pet) {
         if ((petChargeRule == null) || petChargeRule.chargeType().isNull()) {
             pet.chargeLine().set(null);
-            return;
+            return true;
         }
 
         switch (petChargeRule.chargeType().getValue()) {
@@ -53,15 +53,13 @@ public class ChargesSharedCalculation {
             break;
         }
         pet.chargeLine().amount().set(DomainUtil.createMoney(petChargeRule.value().getValue()));
-
+        return true;
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean calculateMonthlyAndProrateCharges(Charges charges) {
 
         // take all monthly charges and get their total
-        double monthlyTotal = calculateTotal(charges.monthlyCharges());
-        charges.monthlyCharges().total().set(DomainUtil.createMoney(monthlyTotal));
+        calculateTotal(charges.monthlyCharges());
 
         // take the rentStart date
         if (charges.rentStart().isNull()) {
@@ -73,7 +71,7 @@ public class ChargesSharedCalculation {
             charges.proratedCharges().charges().add(calculateProrateCharge(charges.rentStart().getValue(), charge));
         }
 
-        charges.proratedCharges().total().set(DomainUtil.createMoney(calculateTotal(charges.proratedCharges())));
+        calculateTotal(charges.proratedCharges());
         return true;
     }
 
@@ -119,7 +117,6 @@ public class ChargesSharedCalculation {
      * (rent and upgrades).
      */
     public static boolean calculatePaymentSplitCharges(Charges charges) {
-
         int totalSplitPrc = -1; // sum %, paid by co-applicants
 
         // check % correctness: 
@@ -161,13 +158,12 @@ public class ChargesSharedCalculation {
         return true;
     }
 
-    public static double calculateTotal(ChargeLineList charges) {
+    public static void calculateTotal(ChargeLineList charges) {
         double total = 0d;
         for (Charge charge : charges.charges()) {
             total += charge.amount().amount().getValue();
         }
         charges.total().set(DomainUtil.createMoney(total));
-        return total;
     }
 
     public static void calculateTotal(TenantChargeList charges) {

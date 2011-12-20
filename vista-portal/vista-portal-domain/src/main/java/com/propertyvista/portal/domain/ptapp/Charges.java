@@ -41,16 +41,16 @@ public interface Charges extends IEntity, IBoundToApplication {
     @Owned
     ChargeLineList oneTimeCharges();
 
-    // TODO add Pro-Rated duration,fraction information for calulation to be posible
+    // TODO add Pro-Rated duration,fraction information for calculation to be possible
     @Owned
     ChargeLineList proratedCharges();
 
-    //Calculated. DUMMY data on back-end for now., Also "deposit" may be changed by ChargesSharedCalculation.calculateCharges
+    //Calculated. Also "deposit" may be changed by ChargesSharedCalculation.calculateCharges
     @Owned
     @Caption(name = "Other Charges")
     ChargeLineList applicationCharges();
 
-    //Calculated base on percentage and total monthly payable. ChargesSharedCalculation.calculateCharges
+    //Calculated based on percentage and total monthly payable. ChargesSharedCalculation.calculateCharges
     @Owned
     @Caption(name = "Payment Charges Split")
     TenantChargeList paymentSplitCharges();

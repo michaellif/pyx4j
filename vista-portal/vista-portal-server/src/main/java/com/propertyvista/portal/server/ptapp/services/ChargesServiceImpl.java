@@ -73,10 +73,6 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges = EntityFactory.create(Charges.class);
             charges.application().set(PtAppContext.getCurrentUserApplication());
             ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants());
-
-            // some mockup data:
-            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, 1200.0));
-            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, 24.99));
         }
 
         ChargeItem serviceItem = lease.serviceAgreement().serviceItem();
@@ -86,6 +82,12 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             PriceCalculationHelpers.calculateChargeItemAdjustments(serviceItem);
             charges.monthlyCharges().charges()
                     .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.agreedPrice().getValue()));
+
+            // create/update deposits:
+            charges.applicationCharges().charges().clear();
+            // TODO get deposit value rule (one or two monthly rent(s)) policy !
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem.agreedPrice().getValue()));
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, 24.99)); // get value from policy ! 
 
             // fill agreed items:
             for (ChargeItem item : lease.serviceAgreement().featureItems()) {
