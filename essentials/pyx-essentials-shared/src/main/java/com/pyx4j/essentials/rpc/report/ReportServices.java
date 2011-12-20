@@ -23,6 +23,7 @@ package com.pyx4j.essentials.rpc.report;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+@Deprecated
 public interface ReportServices {
 
     public interface Search extends Service<ReportRequest, String> {

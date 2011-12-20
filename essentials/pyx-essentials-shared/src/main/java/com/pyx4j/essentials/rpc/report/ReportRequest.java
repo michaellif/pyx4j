@@ -22,14 +22,14 @@ package com.pyx4j.essentials.rpc.report;
 
 import java.io.Serializable;
 
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 @SuppressWarnings("serial")
 public class ReportRequest implements Serializable {
 
     private DownloadFormat downloadFormat;
 
-    private EntitySearchCriteria<?> criteria;
+    private EntityQueryCriteria<?> criteria;
 
     private int timezoneOffset;
 
@@ -53,11 +53,11 @@ public class ReportRequest implements Serializable {
         this.downloadFormat = downloadFormat;
     }
 
-    public EntitySearchCriteria<?> getCriteria() {
+    public EntityQueryCriteria<?> getCriteria() {
         return criteria;
     }
 
-    public void setCriteria(EntitySearchCriteria<?> criteria) {
+    public void setCriteria(EntityQueryCriteria<?> criteria) {
         this.criteria = criteria;
     }
 }

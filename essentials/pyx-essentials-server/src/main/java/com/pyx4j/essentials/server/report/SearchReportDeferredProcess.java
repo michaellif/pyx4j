@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.server.search.IndexedEntitySearch;
-import com.pyx4j.entity.server.search.SearchResultIterator;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -72,7 +72,6 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
     public SearchReportDeferredProcess(ReportRequest request) {
         SecurityController.assertPermission(new EntityPermission(request.getCriteria().getEntityClass(), EntityPermission.READ));
         this.request = request;
-        this.request.getCriteria().setPageSize(0);
         this.entityClass = request.getCriteria().getEntityClass();
         this.formater = new ReportTableCSVFormater();
         ((ReportTableCSVFormater) this.formater).setTimezoneOffset(request.getTimezoneOffset());
@@ -98,10 +97,8 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                 if (selectedMemberNames == null) {
                     createHeader();
                 }
-                @SuppressWarnings({ "rawtypes", "unchecked" })
-                IndexedEntitySearch<IEntity> search = new IndexedEntitySearch(request.getCriteria());
-                search.buildQueryCriteria();
-                SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
+                @SuppressWarnings("unchecked")
+                ICursorIterator<IEntity> it = (ICursorIterator<IEntity>) Persistence.service().query(encodedCursorRefference, request.getCriteria());
                 try {
                     int currentFetchCount = 0;
                     while (it.hasNext()) {

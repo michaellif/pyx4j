@@ -27,27 +27,25 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.rpc.report.ReportServices;
+import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
 
 public class ReportDialog extends DeferredProcessDialog {
 
+    private ReportService<?> reportService;
+
     private String downloadUrl;
 
-    public static void start(EntitySearchCriteria<?> criteria) {
-        start(ReportServices.Search.class, criteria);
-    }
-
-    public static void start(Class<? extends ReportServices.Search> reportServiceInterface, EntitySearchCriteria<?> criteria) {
+    public static void start(ReportService<?> reportService, EntityQueryCriteria<?> criteria) {
 
         final ReportDialog rd = new ReportDialog("Report", "Creating report...");
+        rd.reportService = reportService;
         rd.show();
 
         ReportRequest reportRequest = new ReportRequest();
@@ -69,7 +67,7 @@ public class ReportDialog extends DeferredProcessDialog {
 
         };
 
-        RPCManager.execute(reportServiceInterface, reportRequest, callback);
+        reportService.createDownload(callback, reportRequest);
     }
 
     public ReportDialog(String title, String initialMessage) {
@@ -111,7 +109,7 @@ public class ReportDialog extends DeferredProcessDialog {
     @Override
     public boolean onClickClose() {
         if (downloadUrl != null) {
-            RPCManager.execute(ReportServices.CancelDownload.class, downloadUrl, null);
+            reportService.cancelDownload(null, downloadUrl);
         }
         return onClickClose();
     }
