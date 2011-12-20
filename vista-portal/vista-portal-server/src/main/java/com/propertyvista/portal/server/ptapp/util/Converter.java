@@ -51,7 +51,7 @@ public class Converter {
 
         if (!from.media().isEmpty()) {
             for (Media media : from.media()) {
-                if (media.isValuesDetached()) {
+                if (media.isValueDetached()) {
                     Persistence.service().retrieve(media);
                 }
                 if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
@@ -128,7 +128,7 @@ public class Converter {
 
         if (!from.media().isEmpty()) {
             for (Media media : from.media()) {
-                if (media.isValuesDetached()) {
+                if (media.isValueDetached()) {
                     Persistence.service().retrieve(media);
                 }
                 if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {

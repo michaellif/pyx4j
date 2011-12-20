@@ -29,7 +29,7 @@ public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ServiceIt
     protected void enhanceRetrieve(ServiceItem entity, boolean fromList) {
         if (!fromList) {
             // Load detached data:
-            if (entity.element().isValuesDetached()) {
+            if (entity.element().isValueDetached()) {
                 Persistence.service().retrieve(entity.element());
             }
         }
@@ -37,7 +37,7 @@ public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ServiceIt
 
     @Override
     protected void enhanceSave(ServiceItem entity) {
-        if (entity.element().isValuesDetached()) {
+        if (entity.element().isValueDetached()) {
             Persistence.service().merge(entity.element());
         }
     }

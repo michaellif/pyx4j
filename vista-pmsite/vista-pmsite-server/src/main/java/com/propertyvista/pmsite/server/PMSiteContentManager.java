@@ -338,7 +338,7 @@ public class PMSiteContentManager implements Serializable {
 
     public static long getFistVisibleMedia(List<Media> medias) {
         for (Media media : medias) {
-            if (media.isValuesDetached()) {
+            if (media.isValueDetached()) {
                 Persistence.service().retrieve(media);
             }
             if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
@@ -351,7 +351,7 @@ public class PMSiteContentManager implements Serializable {
     public static List<Media> getVisibleMedia(List<Media> medias) {
         List<Media> mediasVisible = new Vector<Media>();
         for (Media media : medias) {
-            if (media.isValuesDetached()) {
+            if (media.isValueDetached()) {
                 Persistence.service().retrieve(media);
             }
             if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
