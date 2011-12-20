@@ -45,7 +45,7 @@ import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
-public class SearchReportDeferredProcess implements IDeferredProcess {
+public class SearchReportDeferredProcess<E extends IEntity> implements IDeferredProcess {
 
     private static final long serialVersionUID = -7944873735643401186L;
 
@@ -98,11 +98,11 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                     createHeader();
                 }
                 @SuppressWarnings("unchecked")
-                ICursorIterator<IEntity> it = (ICursorIterator<IEntity>) Persistence.service().query(encodedCursorRefference, request.getCriteria());
+                ICursorIterator<E> it = (ICursorIterator<E>) Persistence.service().query(encodedCursorRefference, request.getCriteria());
                 try {
                     int currentFetchCount = 0;
                     while (it.hasNext()) {
-                        IEntity ent = it.next();
+                        E ent = it.next();
                         SecurityController.assertPermission(EntityPermission.permissionRead(ent.getValueClass()));
                         reportEntity(ent);
                         fetchCount++;
@@ -141,6 +141,10 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         return true;
     }
 
+    protected String getMemberCaption(String memberName, MemberMeta memberMeta) {
+        return memberMeta.getCaption();
+    }
+
     protected void createHeaderEnds() {
         formater.newRow();
     }
@@ -162,24 +166,24 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
             }
             if (memberMeta.isEntity()) {
                 selectedMemberNames.add(memberName);
-                formater.header(memberMeta.getCaption());
+                formater.header(getMemberCaption(memberName, memberMeta));
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 selectedMemberNames.add(memberName);
-                formater.header(memberMeta.getCaption());
+                formater.header(getMemberCaption(memberName, memberMeta));
             }
         }
         createHeaderEnds();
     }
 
-    protected boolean reportMember(IEntity entity, String memberName, MemberMeta memberMeta) {
+    protected boolean reportMember(E entity, String memberName, MemberMeta memberMeta) {
         return true;
     }
 
-    protected void reportEntityEnds(IEntity entity) {
+    protected void reportEntityEnds(E entity) {
         formater.newRow();
     }
 
-    protected void reportEntity(IEntity entity) {
+    protected void reportEntity(E entity) {
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : selectedMemberNames) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
