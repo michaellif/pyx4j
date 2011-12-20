@@ -172,7 +172,9 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
                     }
                 });
             }
-
+            dataTablePanel.getDataTable().setHasDetailsNavigation(true);
+        } else {
+            dataTablePanel.getDataTable().setHasDetailsNavigation(false);
         }
     }
 
@@ -221,10 +223,6 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
 
     public List<E> getSelectedItems() {
         return dataTablePanel.getDataTable().getSelectedItems();
-    }
-
-    public void setSelectedItem(E item) {
-        // TODO - implementation here...
     }
 
     public void addItemSelectionHandler(ItemSelectionHandler<E> handler) {

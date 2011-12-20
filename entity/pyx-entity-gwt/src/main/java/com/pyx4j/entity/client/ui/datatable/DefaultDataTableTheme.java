@@ -92,6 +92,7 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.nodetails);
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.selected);
