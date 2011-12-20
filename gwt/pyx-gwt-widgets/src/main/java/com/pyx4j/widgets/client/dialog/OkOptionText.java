@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
-public interface OkOptionText extends DialogOptions {
+public interface OkOptionText extends DialogOptions, OkOption {
 
     String optionTextOk();
 

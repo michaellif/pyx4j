@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
-public interface CancelOptionText extends DialogOptions {
+public interface CancelOptionText extends DialogOptions, CancelOption {
 
     String optionTextCancel();
 

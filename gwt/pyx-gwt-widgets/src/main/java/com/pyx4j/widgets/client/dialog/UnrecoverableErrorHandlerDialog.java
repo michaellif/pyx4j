@@ -103,20 +103,20 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     @Override
     protected void showReloadApplication() {
-        final YesNoOption optYesNo = new YesNoOption() {
+        final OkOptionText option = new OkOptionText() {
 
             @Override
-            public boolean onClickYes() {
-                Window.Location.reload();
-                return false;
+            public String optionTextOk() {
+                return i18n.tr("Refresh");
             }
 
             @Override
-            public boolean onClickNo() {
+            public boolean onClickOk() {
+                Window.Location.reload();
                 return true;
             }
         };
-        MessageDialog.show(i18n.tr("Application Updated"), getMessageReloadApplication(), Type.Confirm, optYesNo);
+        MessageDialog.show(i18n.tr("Application Updated"), getMessageReloadApplication(), Type.Confirm, option);
     }
 
     protected String getMessageReloadApplication() {
