@@ -21,7 +21,6 @@
 package com.pyx4j.widgets.client.dialog;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -44,6 +43,8 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.gwt.commons.BrowserType;
 
 public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMoveHandler, MouseUpHandler, MouseDownHandler {
 
@@ -133,7 +134,10 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         contentHolder = new SimplePanel();
         contentHolder.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContentHolder.name());
         container.add(contentHolder, DockPanel.CENTER);
-        container.setCellHeight(contentHolder, "100%");
+
+        if (!BrowserType.isIE8()) {
+            container.setCellHeight(contentHolder, "100%");
+        }
 
         setWidget(container);
 
@@ -179,9 +183,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         // DialogBox content) to keep text from being selected when it
         // is dragged.
         NativeEvent nativeEvent = event.getNativeEvent();
-
-        EventTarget target = nativeEvent.getEventTarget();
-        if (target != null && target.equals(this) && !event.isCanceled() && (event.getTypeInt() == Event.ONMOUSEDOWN)) {
+        if (!event.isCanceled() && ((event.getTypeInt() == Event.ONMOUSEDOWN) || (event.getTypeInt() == Event.ONMOUSEMOVE))) {
             nativeEvent.preventDefault();
         }
         super.onPreviewNativeEvent(event);
@@ -279,8 +281,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         if (dragging) {
             continueDragging(event);
         } else {
-            DragZoneType dragZoneType = getDragZoneType(event);
-            setCursor(dragZoneType);
+            setCursor(getDragZoneType(event));
         }
     }
 
@@ -299,47 +300,55 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
     }
 
     private void setCursor(DragZoneType dragZoneType) {
-        DOM.setStyleAttribute(this.getElement(), "cursor", dragZoneType.getCursor());
+        if (DragZoneType.MOVE.equals(dragZoneType)) {
+            DOM.setStyleAttribute(captionPanel.getElement(), "cursor", dragZoneType.getCursor());
+        } else {
+            DOM.setStyleAttribute(this.getElement(), "cursor", dragZoneType.getCursor());
+        }
     }
 
     private DragZoneType getDragZoneType(MouseEvent<?> mouseEvent) {
-        if (captionPanel.equals(mouseEvent.getSource())) {
+        if (BrowserType.isIE8()) {
+            return DragZoneType.NONE;
+        }
+
+        int eventY = mouseEvent.getY() + getAbsoluteTop();
+        int boxY = this.getAbsoluteTop();
+        int height = this.getOffsetHeight();
+
+        int eventX = mouseEvent.getX() + getAbsoluteLeft();
+        int boxX = this.getAbsoluteLeft();
+        int width = this.getOffsetWidth();
+
+        int y = eventY - boxY;
+        int x = eventX - boxX;
+
+        if ((x > captionPanel.getAbsoluteLeft() - boxX) && (x < captionPanel.getAbsoluteLeft() + captionPanel.getOffsetWidth() - boxX)
+                && (y > captionPanel.getAbsoluteTop() - boxY) && (y < captionPanel.getAbsoluteTop() + captionPanel.getOffsetHeight() - boxY)) {
             return DragZoneType.MOVE;
-        } else {
-            int eventY = mouseEvent.getY() + getAbsoluteTop();
-            int boxY = this.getAbsoluteTop();
-            int height = this.getOffsetHeight();
-
-            int eventX = mouseEvent.getX() + getAbsoluteLeft();
-            int boxX = this.getAbsoluteLeft();
-            int width = this.getOffsetWidth();
-
-            int y = eventY - boxY;
-            int x = eventX - boxX;
-            if (y <= DRAG_ZONE_WIDTH) {
-                if (x <= DRAG_ZONE_WIDTH) {
-                    return DragZoneType.RESIZE_NW;
-                } else if (x >= width - DRAG_ZONE_WIDTH) {
-                    return DragZoneType.RESIZE_NE;
-                } else {
-                    return DragZoneType.RESIZE_N;
-                }
-            } else if (y >= height - DRAG_ZONE_WIDTH) {
-                if (x <= DRAG_ZONE_WIDTH) {
-                    return DragZoneType.RESIZE_SW;
-                } else if (x >= width - DRAG_ZONE_WIDTH) {
-                    return DragZoneType.RESIZE_SE;
-                } else {
-                    return DragZoneType.RESIZE_S;
-                }
+        } else if (y <= DRAG_ZONE_WIDTH) {
+            if (x <= DRAG_ZONE_WIDTH) {
+                return DragZoneType.RESIZE_NW;
+            } else if (x >= width - DRAG_ZONE_WIDTH) {
+                return DragZoneType.RESIZE_NE;
             } else {
-                if (x <= DRAG_ZONE_WIDTH) {
-                    return DragZoneType.RESIZE_W;
-                } else if (x >= width - DRAG_ZONE_WIDTH) {
-                    return DragZoneType.RESIZE_E;
-                } else {
-                    return DragZoneType.NONE;
-                }
+                return DragZoneType.RESIZE_N;
+            }
+        } else if (y >= height - DRAG_ZONE_WIDTH) {
+            if (x <= DRAG_ZONE_WIDTH) {
+                return DragZoneType.RESIZE_SW;
+            } else if (x >= width - DRAG_ZONE_WIDTH) {
+                return DragZoneType.RESIZE_SE;
+            } else {
+                return DragZoneType.RESIZE_S;
+            }
+        } else {
+            if (x <= DRAG_ZONE_WIDTH) {
+                return DragZoneType.RESIZE_W;
+            } else if (x >= width - DRAG_ZONE_WIDTH) {
+                return DragZoneType.RESIZE_E;
+            } else {
+                return DragZoneType.NONE;
             }
         }
 
@@ -351,12 +360,6 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
             setWordWrap(false);
             setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCaption.name());
             setHeight("22px");
-            DOM.setStyleAttribute(this.getElement(), "cursor", "move");
-
-            addDomHandler(DialogPanel.this, MouseMoveEvent.getType());
-            addDomHandler(DialogPanel.this, MouseUpEvent.getType());
-            addDomHandler(DialogPanel.this, MouseDownEvent.getType());
-
         }
 
     }

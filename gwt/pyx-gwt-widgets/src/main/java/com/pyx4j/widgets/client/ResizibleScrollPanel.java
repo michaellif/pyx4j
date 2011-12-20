@@ -48,6 +48,7 @@ public class ResizibleScrollPanel extends SimplePanel implements ProvidesResize,
 
     }
 
+    @Override
     public void onResize() {
         contentPanel.setWidth(getOffsetWidth() + "px");
         contentPanel.setHeight(getOffsetHeight() + "px");

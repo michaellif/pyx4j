@@ -66,6 +66,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
@@ -379,7 +380,7 @@ public class Dialog extends DialogPanel {
 
     static class MessagePanel extends DockPanel implements RequiresResize {
 
-        private final ResizibleScrollPanel scrollPanel;
+        private ResizibleScrollPanel scrollPanel;
 
         MessagePanel(final String message, Type type) {
 
@@ -414,12 +415,6 @@ public class Dialog extends DialogPanel {
             add(image, DockPanel.WEST);
             setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
 
-            scrollPanel = new ResizibleScrollPanel();
-            scrollPanel.setSize("100%", "100%");
-            add(scrollPanel, DockPanel.CENTER);
-            setCellHeight(scrollPanel, "100%");
-            setCellWidth(scrollPanel, "100%");
-
             HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
 
             HorizontalPanel htmlHolder = new HorizontalPanel();
@@ -428,13 +423,26 @@ public class Dialog extends DialogPanel {
             htmlHolder.setCellHorizontalAlignment(htmlMessage, HasHorizontalAlignment.ALIGN_CENTER);
             htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
 
-            scrollPanel.setContentWidget(htmlHolder);
+            if (BrowserType.isIE8()) {
+                add(htmlHolder, DockPanel.CENTER);
+                setCellHeight(htmlHolder, "100%");
+                setCellWidth(htmlHolder, "100%");
+            } else {
+                scrollPanel = new ResizibleScrollPanel();
+                scrollPanel.setSize("100%", "100%");
+                scrollPanel.setContentWidget(htmlHolder);
+                add(scrollPanel, DockPanel.CENTER);
+                setCellHeight(scrollPanel, "100%");
+                setCellWidth(scrollPanel, "100%");
+            }
 
         }
 
         @Override
         public void onResize() {
-            scrollPanel.onResize();
+            if (scrollPanel != null) {
+                scrollPanel.onResize();
+            }
         }
     }
 
