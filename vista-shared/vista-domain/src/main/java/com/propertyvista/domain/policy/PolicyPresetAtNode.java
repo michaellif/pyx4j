@@ -27,6 +27,8 @@ public interface PolicyPresetAtNode extends IEntity {
         unit, building, complex, region, country, organization;
     }
 
+    IPrimitive<NodeType> nodeType();
+
     @Detached
     AptUnit unit();
 
@@ -38,8 +40,6 @@ public interface PolicyPresetAtNode extends IEntity {
 
     @Detached
     Country country();
-
-    IPrimitive<NodeType> nodeType();
 
     @Detached
     PolicyPreset policyPreset();

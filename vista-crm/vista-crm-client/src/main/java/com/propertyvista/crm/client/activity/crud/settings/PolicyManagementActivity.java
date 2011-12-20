@@ -48,7 +48,7 @@ public class PolicyManagementActivity extends AbstractActivity implements Policy
 
     @Override
     public void populateEffectivePolicyPreset(Key pk, NodeType nodeType) {
-        service.getEffectiveUnitPolicies(new AsyncCallback<EffectivePolicyPresetDTO>() {
+        service.getEffectivePolicyPreset(new AsyncCallback<EffectivePolicyPresetDTO>() {
             @Override
             public void onSuccess(EffectivePolicyPresetDTO result) {
                 view.displayEffectivePreset(result);

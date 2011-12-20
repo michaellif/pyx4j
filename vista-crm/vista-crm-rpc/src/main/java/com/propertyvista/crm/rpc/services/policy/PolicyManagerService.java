@@ -23,5 +23,5 @@ import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 
 public interface PolicyManagerService extends IService {
 
-    void getEffectiveUnitPolicies(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType);
+    void getEffectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType);
 }

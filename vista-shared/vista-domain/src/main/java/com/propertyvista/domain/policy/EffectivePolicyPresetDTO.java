@@ -15,9 +15,9 @@ package com.propertyvista.domain.policy;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.IList;
 
 @Transient
 public interface EffectivePolicyPresetDTO extends IEntity {
-    ISet<EffectivePolicyDTO> effectivePolicies();
+    IList<EffectivePolicyDTO> effectivePolicies();
 }

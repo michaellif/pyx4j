@@ -36,7 +36,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public class PolicyManagerServiceImpl implements PolicyManagerService {
 
     @Override
-    public void getEffectiveUnitPolicies(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType) {
+    public void getEffectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType) {
         callback.onSuccess(computeEffectivePolicyPreset(pk, nodeType));
     }
 
@@ -68,18 +68,19 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
             return null;
         }
         if (policyPresetAtNode.size() > 1) {
-            // TODO write other error message
+            // FIXME write other error message
             throw new Error("Warning!!! database integrity has been compromized, initiating self desctruction procedure");
         }
         return policyPresetAtNode.get(0);
     }
 
-    private static EffectivePolicyPresetDTO merge(EffectivePolicyPresetDTO effectivePreset, PolicyPresetAtNode origin) {
+    private static EffectivePolicyPresetDTO merge(EffectivePolicyPresetDTO effectivePreset, PolicyPresetAtNode presetAtNode) {
         if (effectivePreset == null) {
             effectivePreset = EntityFactory.create(EffectivePolicyPresetDTO.class);
         }
-        if (origin != null) {
-            for (Policy policy : origin.policyPreset().policies()) {
+        if (presetAtNode != null) {
+            Persistence.service().retrieve(presetAtNode.policyPreset());
+            for (Policy policy : presetAtNode.policyPreset().policies()) {
                 boolean alreadyEffective = false;
                 for (EffectivePolicyDTO effectivePolicy : effectivePreset.effectivePolicies()) {
                     if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
@@ -90,7 +91,7 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
                 if (!alreadyEffective) {
                     EffectivePolicyDTO effectivePolicy = EntityFactory.create(EffectivePolicyDTO.class);
                     effectivePolicy.policy().set(policy);
-                    effectivePolicy.inheritedFrom().set(origin);
+                    effectivePolicy.inheritedFrom().set(presetAtNode);
                     effectivePreset.effectivePolicies().add(effectivePolicy);
                 }
             }
@@ -136,6 +137,9 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
             effectivePreset = merge(effectivePreset, policyPresetAtNode(pk, NodeType.country));
         case organization:
             effectivePreset = merge(effectivePreset, policyPresetAtNode(pk, NodeType.organization));
+        }
+        for (EffectivePolicyDTO effectivePolicy : effectivePreset.effectivePolicies()) {
+            effectivePolicy.inheritedFrom().policyPreset().detach();
         }
         return effectivePreset;
     }

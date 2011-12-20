@@ -13,52 +13,43 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
-import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 
 public class PolicyManagementViewImpl implements PolicyManagementView {
-    private final CEntityEditor<Policy> form;
+    FormFlexPanel panel;
+
+    PolicyFolder policyFolder;
 
     private Presenter presenter;
 
     public PolicyManagementViewImpl() {
-        form = new CEntityEditor<Policy>(Policy.class) {
+        panel = new FormFlexPanel();
+        panel.setSize("100%", "100%");
+
+        panel.setWidget(0, 0, new OrganizationBrowser() {
             @Override
-            public IsWidget createContent() {
-                FormFlexPanel panel = new FormFlexPanel();
-                panel.setWidget(0, 0, new OrganizationBrowser() {
-
-                    @Override
-                    public void onNodeSelected(Key nodeKey, NodeType nodeType) {
-                        getPresenter().populateEffectivePolicyPreset(nodeKey, nodeType);
-                    }
-                });
-                panel.setSize("100%", "100%");
-
-                //panel.setWidget(0, 0, inject(proto().foo()));
-
-                return panel;
+            public void onNodeSelected(Key nodeKey, NodeType nodeType) {
+                getPresenter().populateEffectivePolicyPreset(nodeKey, nodeType);
             }
-        };
-        form.initContent();
+        });
+        panel.getFlexCellFormatter().setWidth(0, 0, "50%");
+        panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+
+        panel.setWidget(0, 1, (policyFolder = new PolicyFolder()));
+        panel.getFlexCellFormatter().setWidth(0, 1, "50%");
+
     }
 
     @Override
     public Widget asWidget() {
-        return form.asWidget();
-    }
-
-    @Override
-    public void populate(Policy policy) {
-        form.populate(policy);
+        return panel;
     }
 
     @Override
@@ -73,7 +64,6 @@ public class PolicyManagementViewImpl implements PolicyManagementView {
 
     @Override
     public void displayEffectivePreset(EffectivePolicyPresetDTO effectivePolicyPreset) {
-        // TODO WRITE THIS METHOD
-        System.out.println(effectivePolicyPreset.toString());
+        this.policyFolder.populate(effectivePolicyPreset.effectivePolicies());
     }
 }

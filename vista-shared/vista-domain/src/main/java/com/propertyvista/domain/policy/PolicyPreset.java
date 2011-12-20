@@ -14,13 +14,13 @@
 package com.propertyvista.domain.policy;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 public interface PolicyPreset extends IEntity {
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
-    ISet<Policy> policies();
+    IList<Policy> policies();
 }
