@@ -173,7 +173,7 @@ public class XMLEntityWriter {
             // Avoid cyclic references even if not writing id
             return;
         }
-        if (!isEmitId() && entity.isValuesDetached()) {
+        if (!isEmitId() && entity.isValueDetached()) {
             throw new Error("Writing detached entity " + entity.getDebugExceptionInfoString());
         }
         if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {

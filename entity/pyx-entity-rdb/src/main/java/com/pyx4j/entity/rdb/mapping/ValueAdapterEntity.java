@@ -79,7 +79,7 @@ class ValueAdapterEntity implements ValueAdapter {
         } else {
             IEntity entity = EntityFactory.create(entityClass);
             entity.setPrimaryKey(new Key(value));
-            entity.setValuesDetached();
+            entity.setValueDetached();
             return entity;
         }
     }

@@ -51,8 +51,7 @@ public class PropertyCriterion implements Criterion {
         this.propertyName = propertyName;
         this.restriction = restriction;
         if (value instanceof IEntity) {
-            //TODO detach/ make identity copy
-            this.value = value;
+            this.value = ((IEntity) value).createIdentityStub();
         } else {
             this.value = value;
         }

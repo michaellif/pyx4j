@@ -58,7 +58,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         RefferenceEntity entr = srv.retrieve(RefferenceEntity.class, ent.getPrimaryKey());
 
-        Assert.assertFalse("Value retrieved", entr.refference().isValuesDetached());
+        Assert.assertFalse("Value retrieved", entr.refference().isValueDetached());
 
         Assert.assertEquals("Proper instance", Concrete2Entity.class, entr.refference().getInstanceValueClass());
 
@@ -94,7 +94,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Concrete2Entity entr = srv.retrieve(Concrete2Entity.class, ent.getPrimaryKey());
 
         Assert.assertEquals("Proper value", ent.nameC2().getValue(), entr.nameC2().getValue());
-        Assert.assertTrue("Value retrieved", entr.refference().isValuesDetached());
+        Assert.assertTrue("Value retrieved", entr.refference().isValueDetached());
         Assert.assertEquals("Proper instance", Concrete1Entity.class, entr.refference().getInstanceValueClass());
 
         Concrete1Entity ent2r = entr.refference().cast();
@@ -142,7 +142,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("Proper instance", Concrete1Entity.class, ent1r.refference().getInstanceValueClass());
 
         Concrete1Entity ent2r = ent1r.refference().cast();
-        Assert.assertTrue("Value retrived", ent2r.isValuesDetached());
+        Assert.assertTrue("Value retrived", ent2r.isValueDetached());
         Assert.assertEquals("Proper PK value", ent2.getPrimaryKey(), ent2r.getPrimaryKey());
 
         srv.retrieve(ent1r.refference());
@@ -266,7 +266,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("retrieved List size", 2, ent1r1.tasksSorted().size());
         Task task1r1 = ent1r1.tasksSorted().get(0);
         Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r1.getPrimaryKey());
-        Assert.assertFalse("Values retrieved", task1r1.isValuesDetached());
+        Assert.assertFalse("Values retrieved", task1r1.isValueDetached());
 
         String description = "Work " + uniqueString();
         task1r1.description().setValue(description);
@@ -322,7 +322,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         Assert.assertEquals("retrieved List size", 2, ent1r1.tasksSorted().size());
         Task task1r1 = ent1r1.tasksSorted().get(0);
         Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task1r1.getPrimaryKey());
-        Assert.assertFalse("Values retrieved", task1r1.isValuesDetached());
+        Assert.assertFalse("Values retrieved", task1r1.isValueDetached());
 
         String description = "Work " + uniqueString();
         task1r1.description().setValue(description);

@@ -128,7 +128,7 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
             Class<? extends IEntity> entityClass = impClasses.get(discriminatorValue);
             IEntity entityValue = EntityFactory.create(entityClass);
             entityValue.setPrimaryKey(new Key(value));
-            entityValue.setValuesDetached();
+            entityValue.setValueDetached();
             return entityValue;
         }
     }

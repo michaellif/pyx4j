@@ -398,7 +398,7 @@ public class TableModel {
     }
 
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
-        entity.setValuesPopulated();
+        entity.setValuePopulated();
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
             Object value = member.getValueAdapter().retrieveValue(rs, member.sqlName());
             if (value != null) {

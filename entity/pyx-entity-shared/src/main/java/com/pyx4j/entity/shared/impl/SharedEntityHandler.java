@@ -424,7 +424,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     @Override
-    public boolean isValuesDetached() {
+    public boolean isValueDetached() {
         Map<String, Object> thisValue = this.getValue(false);
         if ((thisValue == null) || (thisValue.isEmpty())) {
             return false;
@@ -433,12 +433,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     @Override
-    public void setValuesPopulated() {
+    public void setValuePopulated() {
         ensureValue(false).remove(DETACHED_ATTR);
     }
 
     @Override
-    public void setValuesDetached() {
+    public void setValueDetached() {
         ensureValue(false).put(DETACHED_ATTR, Boolean.TRUE);
     }
 
@@ -678,6 +678,15 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     @SuppressWarnings("unchecked")
+    public <T extends IEntity> T createIdentityStub() {
+        IEntity entity = EntityFactory.create((Class<IEntity>) getObjectClass());
+        entity.setPrimaryKey(this.getPrimaryKey());
+        entity.setValueDetached();
+        return (T) entity;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public <T extends IEntity> T cast() {
         Map<String, Object> entityValue = getValue();
         if ((entityValue == null) || (!entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR))) {
@@ -702,8 +711,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         // Down cast
         if (entity.getEntityMeta().isEntityClassAssignableFrom(this)) {
             entity.setPrimaryKey(this.getPrimaryKey());
-            if (this.isValuesDetached()) {
-                entity.setValuesDetached();
+            if (this.isValueDetached()) {
+                entity.setValueDetached();
             } else {
                 Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
                 for (String memberName : entity.getEntityMeta().getMemberNames()) {
@@ -715,8 +724,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             // Up cast
         } else if (this.getEntityMeta().isEntityClassAssignableFrom(entity)) {
             entity.setPrimaryKey(this.getPrimaryKey());
-            if (this.isValuesDetached()) {
-                entity.setValuesDetached();
+            if (this.isValueDetached()) {
+                entity.setValueDetached();
             } else {
                 Map<Object, Object> processed = new IdentityHashMap<Object, Object>();
                 for (String memberName : this.getEntityMeta().getMemberNames()) {

@@ -60,20 +60,18 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     /**
      * @return true is only PrimaryKey and type information is present, other data was not retrieved, TODO getStringView()
-     * 
-     *         TODO fix plural name!
      */
-    public boolean isValuesDetached();
+    public boolean isValueDetached();
 
     /**
      * Internally used by persistence layer when loading all values for entity
      */
-    public void setValuesPopulated();
+    public void setValuePopulated();
 
     /**
      * Internally used by persistence layer when creating new Entity reference
      */
-    public void setValuesDetached();
+    public void setValueDetached();
 
     public IObject<?> getMember(String memberName);
 
@@ -162,6 +160,12 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
      * TODO rename. Subject related convert to root entity.
      */
     public <T extends IEntity> T detach();
+
+    /**
+     * Create shell entity that has only class information and primary key.
+     * isValueDetached() will return true for such entity.
+     */
+    public <T extends IEntity> T createIdentityStub();
 
     public <T extends IEntity> T cast();
 

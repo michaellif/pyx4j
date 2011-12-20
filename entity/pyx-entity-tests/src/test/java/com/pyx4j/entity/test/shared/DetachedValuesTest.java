@@ -43,7 +43,7 @@ public class DetachedValuesTest extends InitializerTestCase {
     public void testMethodsAccess() {
         final Employee emp = EntityFactory.create(Employee.class);
         emp.department().setPrimaryKey(new Key(1));
-        emp.department().setValuesDetached();
+        emp.department().setValueDetached();
 
         assertFalse("Can access isNull", emp.department().isNull());
         assertTrue("Can access isEmpty and is properly set", emp.department().isEmpty());
@@ -94,21 +94,21 @@ public class DetachedValuesTest extends InitializerTestCase {
     public void testEntityMethods() {
         final Employee emp = EntityFactory.create(Employee.class);
         emp.department().setPrimaryKey(new Key(1));
-        emp.department().setValuesDetached();
+        emp.department().setValueDetached();
 
-        assertTrue("isValuesDetached", emp.department().isValuesDetached());
+        assertTrue("isValuesDetached", emp.department().isValueDetached());
 
         Department dptc = emp.department().cloneEntity();
-        assertTrue("cloneEntity isValuesDetached", dptc.isValuesDetached());
+        assertTrue("cloneEntity isValuesDetached", dptc.isValueDetached());
 
         Employee empc = emp.cloneEntity();
-        assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValuesDetached());
+        assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValueDetached());
 
         dptc = emp.department().clone(Department.class);
-        assertTrue("cloneEntity isValuesDetached", dptc.isValuesDetached());
+        assertTrue("cloneEntity isValuesDetached", dptc.isValueDetached());
 
         empc = emp.clone(Employee.class);
-        assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValuesDetached());
+        assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValueDetached());
 
     }
 }

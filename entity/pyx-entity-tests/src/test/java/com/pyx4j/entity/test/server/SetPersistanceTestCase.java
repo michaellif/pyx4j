@@ -125,7 +125,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr. Set size", 1, emp2.tasks().size());
         Task task2 = emp2.tasks().iterator().next();
         Assert.assertEquals("Owned value Pk", task.getPrimaryKey(), task2.getPrimaryKey());
-        Assert.assertFalse("Values retrived", task2.isValuesDetached());
+        Assert.assertFalse("Values retrived", task2.isValueDetached());
 
         String description = "Work " + uniqueString();
         task2.description().setValue(description);
@@ -166,7 +166,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr. Set size", 1, emp2.tasksSorted().size());
         Task task2 = emp2.tasksSorted().iterator().next();
         Assert.assertEquals("Owned value Pk", task11.getPrimaryKey(), task2.getPrimaryKey());
-        Assert.assertFalse("Values retrived", task2.isValuesDetached());
+        Assert.assertFalse("Values retrived", task2.isValueDetached());
 
         String description = "Work1 " + uniqueString();
         task2.description().setValue(description);

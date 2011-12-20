@@ -189,7 +189,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private void persist(Connection connection, TableModel tm, IEntity entity, Date now) {
-        if (entity.isValuesDetached()) {
+        if (entity.isValueDetached()) {
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
@@ -197,7 +197,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             IEntity childEntity = (IEntity) member.getMember(entity);
             if (!childEntity.isNull()) {
                 if (memberMeta.isOwnedRelationships()) {
-                    if (!childEntity.isValuesDetached()) {
+                    if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
                         persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                     }
@@ -242,7 +242,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
-                            if (!childEntity.isValuesDetached()) {
+                            if (!childEntity.isValueDetached()) {
                                 persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                             }
                         } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
@@ -272,7 +272,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
-                            if (!childEntity.isValuesDetached()) {
+                            if (!childEntity.isValueDetached()) {
                                 if (doMerge) {
                                     merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                                 } else {
@@ -494,7 +494,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 Iterator<IEntity> baseIterator = baseCollectionMember.iterator();
                 for (; iterator.hasNext() && baseIterator.hasNext();) {
                     IEntity childEntity = iterator.next();
-                    if (!childEntity.isValuesDetached()) {
+                    if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
                         TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta(childEntity.getValueClass()));
                         IEntity childBaseEntity = baseIterator.next();
@@ -572,7 +572,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 Iterator<IEntity> iterator = collectionMember.iterator();
                 for (; iterator.hasNext();) {
                     IEntity childEntity = iterator.next();
-                    if (!childEntity.isValuesDetached()) {
+                    if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
                         TableModel childTM = tableModel(connection, EntityFactory.getEntityMeta(childEntity.getValueClass()));
                         fireModificationAdapters(connection, childTM, childEntity);
@@ -583,7 +583,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private void merge(Connection connection, TableModel tm, IEntity entity, Date now) {
-        if (entity.isValuesDetached()) {
+        if (entity.isValueDetached()) {
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
         final IEntity baseEntity = EntityFactory.create(tm.entityMeta().getEntityClass());
@@ -609,7 +609,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         cascadeDelete(connection, baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey(), baseChildEntity);
                     }
                 }
-                if (!childEntity.isValuesDetached() && (!childEntity.isNull())) {
+                if (!childEntity.isValueDetached() && (!childEntity.isNull())) {
                     childEntity = childEntity.cast();
                     merge(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                 }

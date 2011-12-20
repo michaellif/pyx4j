@@ -146,7 +146,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             IObject dboM = dbo.getMember(b.dboMemberPath);
 
             // Assert that all data has been retrieved
-            if ((dboM instanceof IEntity) && ((IEntity) dboM).isValuesDetached() && !dtoM.getMeta().isDetached()) {
+            if ((dboM instanceof IEntity) && ((IEntity) dboM).isValueDetached() && !dtoM.getMeta().isDetached()) {
                 if (!retriveDetachedMember((IEntity) dboM)) {
                     throw new Error("Copying detached entity " + ((IEntity) dboM).getDebugExceptionInfoString());
                 }
@@ -156,7 +156,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                 if (dboM instanceof ICollection) {
                     ((ICollection<IEntity, ?>) dtoM).clear();
                     for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
-                        if (dboMi.isValuesDetached() && !dtoM.getMeta().isDetached()) {
+                        if (dboMi.isValueDetached() && !dtoM.getMeta().isDetached()) {
                             if (!retriveDetachedMember(dboMi)) {
                                 throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
                             }
