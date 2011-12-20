@@ -208,6 +208,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @Override
     @SuppressWarnings("unchecked")
     public void setValue(E entity, boolean fireEvent, boolean populate) {
+        assert entity != null && proto().isAssignableFrom(entity.getInstanceValueClass()) : "Trying to set value of a wrong type";
         if (populate) {
             assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
             if (!isAttached()) {
@@ -235,7 +236,9 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
                 Path memberPath = binding.get(component);
                 IObject<?> m = getValue().getMember(memberPath);
                 try {
-                    if ((m instanceof IEntity) || (m instanceof ICollection)) {
+                    if (m instanceof IEntity) {
+                        component.setValue(((IEntity) m).cast(), fireEvent, populate);
+                    } else if (m instanceof ICollection) {
                         component.setValue(m, fireEvent, populate);
                     } else {
                         component.setValue(m.getValue(), fireEvent, populate);

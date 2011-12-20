@@ -222,12 +222,12 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     public void setValue(E value, boolean fireEvent, boolean populate) {
+        super.setValue(value, fireEvent, populate);
         if (populate) {
             editor.populate(value);
         } else {
             editor.setValue(value);
         }
-        super.setValue(value, fireEvent, populate);
     }
 
     @Override
