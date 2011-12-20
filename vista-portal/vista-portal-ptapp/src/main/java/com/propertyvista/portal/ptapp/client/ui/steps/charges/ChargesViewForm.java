@@ -59,8 +59,9 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
             public void onValueChange(ValueChangeEvent<Charges> event) {
                 revalidate();
                 log.trace("calculateCharges");
-                if (isValid() && ChargesSharedCalculation.calculateCharges(getValue())) {
-                    setValue(getValue());
+                Charges current = getValue();
+                if (isValid() && ChargesSharedCalculation.calculateCharges(current)) {
+                    setValue(current, false, false);
                 }
             }
         });
