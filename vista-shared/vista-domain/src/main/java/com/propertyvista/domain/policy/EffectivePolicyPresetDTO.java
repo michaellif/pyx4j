@@ -19,5 +19,7 @@ import com.pyx4j.entity.shared.IList;
 
 @Transient
 public interface EffectivePolicyPresetDTO extends IEntity {
+    PolicyPresetAtNode assignedPolicyPreset();
+
     IList<EffectivePolicyDTO> effectivePolicies();
 }

@@ -14,11 +14,13 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.policy.Policy;
 
 @DiscriminatorValue("PolicyAllowedIDs")
+@ToStringFormat("Allowed IDs")
 public interface AllowedIDs extends Policy {
     ISet<IdentificationDocument> allowedIDs();
 }

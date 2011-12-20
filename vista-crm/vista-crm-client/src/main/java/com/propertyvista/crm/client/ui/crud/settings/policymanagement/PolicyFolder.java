@@ -20,16 +20,20 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.AllowedIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
 import com.propertyvista.domain.policy.EffectivePolicyDTO;
+import com.propertyvista.domain.policy.PolicyPresetAtNode;
 import com.propertyvista.domain.policy.policies.AllowedIDs;
 import com.propertyvista.domain.policy.policies.NumberOfIDs;
 
 public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
+
+    private static final I18n i18n = I18n.get(PolicyFolder.class);
 
     public PolicyFolder() {
         super(EffectivePolicyDTO.class, false);
@@ -58,7 +62,8 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
 
             policyEditorPanel = new SimplePanel();
             policyEditorPanel.setSize("100%", "100%");
-            content.setWidget(0, 0, new DecoratorBuilder(inject(proto().inheritedFrom().nodeType())).build());
+            content.setWidget(0, 0, new DecoratorBuilder(inject(proto().inheritedFrom().nodeType())).customLabel(i18n.tr("Inherited From")).componentWidth(10)
+                    .labelWidth(10).build());
             content.setWidget(0, 1, policyEditorPanel);
 
             return content;
@@ -82,19 +87,20 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
                 throw new Error("No editor for policy '" + policyClass.getName() + "' was found");
             }
 
-            policyEditor.initContent();
             adopt(policyEditor);
+            policyEditor.initContent();
             policyEditor.populate(getValue().policy().cast());
 
             policyEditorPanel.clear();
             policyEditorPanel.setWidget(policyEditor);
 
+            PolicyPresetAtNode inheritedFrom = getValue().inheritedFrom();
+            if (inheritedFrom.isNull()) {
+                get(proto().inheritedFrom().nodeType()).setVisible(false);
+            } else {
+                get(proto().inheritedFrom().nodeType()).setVisible(true);
+            }
         }
-    }
 
-    @Override
-    public IsWidget createContent() {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

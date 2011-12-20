@@ -31,8 +31,8 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         PolicyPreset defaultPolicyPreset = EntityFactory.create(PolicyPreset.class);
-        defaultPolicyPreset.name().setValue(i18n.tr("Default Global Policy Preset"));
-        defaultPolicyPreset.description().setValue(i18n.tr("Default Global Policy Preset"));
+        defaultPolicyPreset.name().setValue(i18n.tr("Default Global Policy"));
+        defaultPolicyPreset.description().setValue(i18n.tr("Default built-in global policy"));
 
         // Number of IDs default policy
         NumberOfIDs numOfIDs = EntityFactory.create(NumberOfIDs.class);

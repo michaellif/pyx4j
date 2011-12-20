@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
 import com.propertyvista.domain.policy.EffectivePolicyDTO;
 import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
 import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.PolicyPreset;
 import com.propertyvista.domain.policy.PolicyPresetAtNode;
 import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 import com.propertyvista.domain.property.asset.Complex;
@@ -36,8 +37,13 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 public class PolicyManagerServiceImpl implements PolicyManagerService {
 
     @Override
-    public void getEffectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType) {
+    public void effectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType) {
         callback.onSuccess(computeEffectivePolicyPreset(pk, nodeType));
+    }
+
+    @Override
+    public void assignedPolicyPreset(AsyncCallback<PolicyPreset> callback, Key pk, NodeType nodeType) {
+        callback.onSuccess(policyPresetAtNode(pk, nodeType).policyPreset());
     }
 
     private static PolicyPresetAtNode policyPresetAtNode(Key pk, PolicyPresetAtNode.NodeType nodeType) {
@@ -100,14 +106,20 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
     }
 
     private static EffectivePolicyPresetDTO computeEffectivePolicyPreset(Key pk, PolicyPresetAtNode.NodeType nodeType) {
-        assert pk != null;
         assert nodeType != null;
+        assert (pk != null & !nodeType.equals(NodeType.organization)) | nodeType.equals(NodeType.organization);
 
-        EffectivePolicyPresetDTO effectivePreset = null;
+        EffectivePolicyPresetDTO effectivePreset = EntityFactory.create(EffectivePolicyPresetDTO.class);
+
+        // TODO i don't like repeating this search when merging effective policy, but nevertheless it should work, think about it later 
+        effectivePreset.assignedPolicyPreset().set(policyPresetAtNode(pk, nodeType));
+        if (!effectivePreset.assignedPolicyPreset().isNull()) {
+            Persistence.service().retrieve(effectivePreset.assignedPolicyPreset().policyPreset());
+        }
         boolean hasParentComplex = false;
 
         // if a node doesn't have a parent (i.e. unit doesn't have a parent building, we let it use organization policy by default)
-        // but, in case of building we make an exception.
+        // but, in case of building we make an exception        
         switch (nodeType) {
         case unit:
             effectivePreset = merge(effectivePreset, policyPresetAtNode(pk, NodeType.unit));
@@ -139,7 +151,12 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
             effectivePreset = merge(effectivePreset, policyPresetAtNode(pk, NodeType.organization));
         }
         for (EffectivePolicyDTO effectivePolicy : effectivePreset.effectivePolicies()) {
-            effectivePolicy.inheritedFrom().policyPreset().detach();
+            if (nodeType.equals(effectivePolicy.inheritedFrom().nodeType().getValue())) {
+                effectivePolicy.inheritedFrom().set(null);
+            } else {
+                effectivePolicy.inheritedFrom().policyPreset().detach();
+            }
+
         }
         return effectivePreset;
     }

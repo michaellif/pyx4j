@@ -19,9 +19,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
+import com.propertyvista.domain.policy.PolicyPreset;
 import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 
 public interface PolicyManagerService extends IService {
 
-    void getEffectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType);
+    void effectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType);
+
+    void assignedPolicyPreset(AsyncCallback<PolicyPreset> callback, Key pk, NodeType nodeType);
 }
