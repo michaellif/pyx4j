@@ -102,6 +102,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         content.add(postDescription = new Hidden(UploadService.PostUploadDescription));
 
         upload = new FileUpload();
+        upload.getElement().setAttribute("size", "40");
         upload.setName("upload");
 
         HorizontalPanel line = new HorizontalPanel();
