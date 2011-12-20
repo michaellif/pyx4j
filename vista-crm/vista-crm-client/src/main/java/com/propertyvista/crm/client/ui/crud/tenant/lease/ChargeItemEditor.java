@@ -121,8 +121,11 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
             }
 
             if (editor != null) {
-                this.adopt(editor);
+// TODO : logically inject should be called here:                 
 //                this.inject(proto().extraData(), editor);
+// but it doesnt's work now - so just:
+                this.adopt(editor);
+
                 editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
             }
