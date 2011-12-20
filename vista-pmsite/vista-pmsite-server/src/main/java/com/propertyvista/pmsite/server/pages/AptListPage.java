@@ -130,38 +130,46 @@ public class AptListPage extends BasePage {
             return;
         }
         ViewMode viewMode = ViewMode.map;
-        if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
-            // check view mode - Map/List
-            if (PMSiteClientPreferences.getClientPref("aptListMode") == null) {
-                PMSiteClientPreferences.setClientPref("aptListMode", ViewMode.map.name());
-            }
-            try {
-                viewMode = ViewMode.valueOf(PMSiteClientPreferences.getClientPref("aptListMode"));
-            } catch (Exception ignore) {
-                // do nothing
-            }
-            // set switch label
-            int nextId = (viewMode.ordinal() + 1) % ViewMode.values().length;
-            ViewMode nextMode = ViewMode.values()[nextId];
-            add(new Label("aptListModeSwitch", nextMode.toString()).add(new AttributeClassModifier(null, "aptListMode_" + nextMode.name())));
-            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PropertyFinder.getPropertyList(criteria)), viewMode));
-            String jsAptListModeInfo = "\n" + "var aptListModeInfo = {";
-            for (ViewMode mode : ViewMode.values()) {
-                nextId = (mode.ordinal() + 1) % ViewMode.values().length;
-                nextMode = ViewMode.values()[nextId];
-                // switch icon must display the next mode it switches to, but must activate the current mode view
-                jsAptListModeInfo += "\n" + mode.name() + ": {text: '" + nextMode.toString() + "', cls: 'aptListMode_" + nextMode.name()
-                        + "', show: '.listing_" + mode.name() + "view', next: '" + nextMode.name() + "'}";
-                if (nextId > 0) {
-                    jsAptListModeInfo += ",";
+        List<Building> searchResult = PropertyFinder.getPropertyList(criteria);
+        if (searchResult.size() > 0) {
+            if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
+                // check view mode - Map/List
+                if (PMSiteClientPreferences.getClientPref("aptListMode") == null) {
+                    PMSiteClientPreferences.setClientPref("aptListMode", ViewMode.map.name());
                 }
+                try {
+                    viewMode = ViewMode.valueOf(PMSiteClientPreferences.getClientPref("aptListMode"));
+                } catch (Exception ignore) {
+                    // do nothing
+                }
+                // set switch label
+                int nextId = (viewMode.ordinal() + 1) % ViewMode.values().length;
+                ViewMode nextMode = ViewMode.values()[nextId];
+                add(new Label("aptListModeSwitch", nextMode.toString()).add(new AttributeClassModifier(null, "aptListMode_" + nextMode.name())));
+                add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(searchResult), viewMode));
+                String jsAptListModeInfo = "\n" + "var aptListModeInfo = {";
+                for (ViewMode mode : ViewMode.values()) {
+                    nextId = (mode.ordinal() + 1) % ViewMode.values().length;
+                    nextMode = ViewMode.values()[nextId];
+                    // switch icon must display the next mode it switches to, but must activate the current mode view
+                    jsAptListModeInfo += "\n" + mode.name() + ": {text: '" + nextMode.toString() + "', cls: 'aptListMode_" + nextMode.name()
+                            + "', show: '.listing_" + mode.name() + "view', next: '" + nextMode.name() + "'}";
+                    if (nextId > 0) {
+                        jsAptListModeInfo += ",";
+                    }
+                }
+                jsAptListModeInfo += "\n}\n";
+                add(new Label("jsAptListModeInfo", jsAptListModeInfo).setEscapeModelStrings(false));
+            } else {
+                viewMode = ViewMode.list;
+                add(new Label("aptListModeSwitch").setVisible(false));
+                add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PropertyFinder.getPropertyList(criteria)), viewMode));
+                add(new Label("jsAptListModeInfo").setVisible(false));
             }
-            jsAptListModeInfo += "\n}\n";
-            add(new Label("jsAptListModeInfo", jsAptListModeInfo).setEscapeModelStrings(false));
         } else {
-            viewMode = ViewMode.list;
             add(new Label("aptListModeSwitch").setVisible(false));
-            add(new AptListPanel("aptListPanel", new CompoundPropertyModel<List<Building>>(PropertyFinder.getPropertyList(criteria)), viewMode));
+            add(new Label("aptListPanel", i18n.tr("Sorry, no matches found. Please refine your search criteria and try again.")).add(AttributeModifier.replace(
+                    "class", "notFoundNote")));
             add(new Label("jsAptListModeInfo").setVisible(false));
         }
         // js method to return aptDetails url

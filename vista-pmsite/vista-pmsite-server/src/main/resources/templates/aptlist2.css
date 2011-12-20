@@ -275,6 +275,11 @@
 	padding:6px 0;
 	border-bottom: 1px solid ${foreground_20}
 }
+.apartmentListingWrap .notFoundNote {
+	font-size:18px;
+	color:${foreground_50};
+	padding:40px 20px;
+}
 .listingCtlButton {
 	background-image: url("images/template2/aptListIcons.png");
 	background-repeat: no-repeat;

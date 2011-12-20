@@ -273,6 +273,12 @@
 	padding:6px 0;
 	border-bottom: 1px solid #ccc;
 }
+.apartmentListingWrap .notFoundNote {
+	font-size:18px;
+	background:white;
+	color:#777;
+	padding:40px 20px;
+}
 .listingCtlButton {
 	background-image: url("images/template0/aptListIcons.png");
 	background-repeat: no-repeat;
