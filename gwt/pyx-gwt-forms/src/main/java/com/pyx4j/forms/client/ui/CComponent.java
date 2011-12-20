@@ -439,6 +439,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         setValue(value, fireEvent, false);
     }
 
+    /**
+     * Attention! Fires onValueChange event
+     * 
+     * @param value
+     */
     public final void setValue(DATA_TYPE value) {
         setValue(value, true, false);
     }
