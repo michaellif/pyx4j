@@ -113,14 +113,11 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
             }
 
             if (editor != null) {
-// TODO : logically, inject should be called here:                 
-//              this.inject(proto().extraData(), editor);
-//but it doesnt's work now - so just:
-                this.adopt(editor);
-
+                this.inject(proto().extraData(), editor);
                 editor.populate(extraData.cast());
                 extraDataPanel.setWidget(editor);
             }
         }
     }
+
 }
