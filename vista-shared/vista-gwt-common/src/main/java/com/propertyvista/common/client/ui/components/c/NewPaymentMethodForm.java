@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -47,6 +48,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
@@ -304,7 +306,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         image.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                interacRedirect();
+                interacRedirect("BMO");
             }
         });
         panel.add(image);
@@ -313,7 +315,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         image.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                interacRedirect();
+                interacRedirect("RBC");
             }
         });
         panel.add(image);
@@ -322,7 +324,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         image.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                interacRedirect();
+                interacRedirect("TD");
             }
         });
         panel.add(image);
@@ -331,7 +333,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         image.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                interacRedirect();
+                interacRedirect("Scotia");
             }
         });
         panel.add(image);
@@ -340,7 +342,22 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         return panel;
     }
 
-    private void interacRedirect() { //TODO add a method for creating proper Interac links
+    private void interacRedirect(String site) { //TODO add a method for creating proper Interac links
+        String url = null;
+        if (site.equals("BMO")) {
+            url = "https://www12.bmo.com/cgi-bin/netbnx/NBmain?product=1";
+        } else if (site.equals("RBC")) {
+            url = "https://www1.royalbank.com/cgi-bin/rbaccess/rbunxcgi?F6=1&F7=IB&F21=IB&F22=IB&REQUEST=ClientSignin&LANGUAGE=ENGLISH";
+        } else if (site.equals("TD")) {
+            url = "https://easywebcpo.td.com/waw/idp/login.htm?execution=e1s1";
+        } else if (site.equals("Scotia")) {
+            url = "https://www1.scotiaonline.scotiabank.com/online/authentication/authentication.bns";
+        } else {
+            Window.alert("Proper link is not set up yet");
+            url = "www.google.com";
+        }
+
+        Window.open(url, Media.Type.externalUrl.name(), null);
 
     }
 
