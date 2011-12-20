@@ -23,7 +23,7 @@ public class ElevatorLister extends ListerBase<ElevatorDTO> {
 
     public ElevatorLister() {
         super(ElevatorDTO.class, CrmSiteMap.Properties.Elevator.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().type()).build(),
 

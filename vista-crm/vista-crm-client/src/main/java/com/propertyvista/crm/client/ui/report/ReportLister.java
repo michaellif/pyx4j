@@ -34,7 +34,7 @@ public class ReportLister extends ListerBase<DashboardMetadata> {
 
     public ReportLister() {
         super(DashboardMetadata.class, CrmSiteMap.Report.Edit.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {

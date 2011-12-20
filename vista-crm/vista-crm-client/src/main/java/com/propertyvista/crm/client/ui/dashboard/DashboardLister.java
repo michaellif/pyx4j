@@ -34,7 +34,7 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
 
     public DashboardLister() {
         super(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {

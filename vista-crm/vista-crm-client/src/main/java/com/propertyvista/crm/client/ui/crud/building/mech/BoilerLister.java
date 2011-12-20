@@ -27,7 +27,7 @@ public class BoilerLister extends ListerBase<BoilerDTO> {
 
     public BoilerLister() {
         super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilteringEnabled(false);
 
         List<ColumnDescriptor<BoilerDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<BoilerDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));

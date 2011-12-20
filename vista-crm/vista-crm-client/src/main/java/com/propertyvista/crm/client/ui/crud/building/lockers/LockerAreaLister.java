@@ -27,7 +27,7 @@ public class LockerAreaLister extends ListerBase<LockerAreaDTO> {
 
     public LockerAreaLister() {
         super(LockerAreaDTO.class, CrmSiteMap.Properties.LockerArea.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilteringEnabled(false);
 
         List<ColumnDescriptor<LockerAreaDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<LockerAreaDTO>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));

@@ -27,7 +27,7 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
 
     public UnitOccupancyLister() {
         super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilteringEnabled(false);
 
         List<ColumnDescriptor<AptUnitOccupancy>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitOccupancy>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dateFrom(), true));

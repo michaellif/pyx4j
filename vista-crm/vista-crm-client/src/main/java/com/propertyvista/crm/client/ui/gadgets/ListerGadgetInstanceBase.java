@@ -144,7 +144,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         });
 
         dataTablePanel.setSize("100%", "100%");
-        dataTablePanel.setFilterEnabled(isFilterRequired());
+        dataTablePanel.setFilteringEnabled(isFilterRequired());
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);

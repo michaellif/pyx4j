@@ -23,7 +23,7 @@ public class RoofLister extends ListerBase<RoofDTO> {
 
     public RoofLister() {
         super(RoofDTO.class, CrmSiteMap.Properties.Roof.class, false, true);
-        getDataTablePanel().setFilterEnabled(false);
+        getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().type()).build(),
 
