@@ -30,7 +30,7 @@ public class AllowedIDsPolicyEditorForm extends CEntityDecoratableEditor<Allowed
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs())).build());
+        //content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs())).build());
         return content;
     }
 

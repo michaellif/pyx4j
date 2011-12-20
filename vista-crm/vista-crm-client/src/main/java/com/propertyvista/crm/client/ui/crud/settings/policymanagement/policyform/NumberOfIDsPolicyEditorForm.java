@@ -36,4 +36,8 @@ public class NumberOfIDsPolicyEditorForm extends CEntityDecoratableEditor<Number
         return content;
     }
 
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+    }
 }

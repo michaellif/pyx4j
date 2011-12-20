@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
@@ -25,7 +26,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.AllowedIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
 import com.propertyvista.domain.policy.EffectivePolicyDTO;
-import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.policies.AllowedIDs;
 import com.propertyvista.domain.policy.policies.NumberOfIDs;
 
@@ -37,22 +37,8 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof EffectivePolicyDTO) {
-            Class<?> policyClass = ((EffectivePolicyDTO) member).policy().getInstanceValueClass();
-            CEntityEditor<? extends Policy> policyEditor = null;
-
-            //@formatter:off
-            // the most horrible part of this component starts HERE (it's bettter to colse your eyes!)
-            do {
-                if (NumberOfIDs.class.equals(policyClass)) { policyEditor = new NumberOfIDsPolicyEditorForm();  break; }                
-                if (AllowedIDs.class.equals(policyClass)) { policyEditor = new AllowedIDsPolicyEditorForm(); break; }                
-            } while (false);
-            //@formatter:on
-            if (policyEditor == null) {
-                throw new Error("No editor for policy '" + policyClass.getName() + "' was found");
-            }
-
-            return new PolicyEditorFormContainer(policyEditor);
+        if ((member instanceof EffectivePolicyDTO)) {
+            return new PolicyEditorFormContainer();
         }
         return super.create(member);
     }
@@ -60,18 +46,20 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
     @SuppressWarnings("rawtypes")
     private static class PolicyEditorFormContainer extends CEntityDecoratableEditor<EffectivePolicyDTO> {
 
-        private final CEntityEditor policyEditor;
+        private SimplePanel policyEditorPanel;
 
-        public PolicyEditorFormContainer(CEntityEditor policyEditor) {
+        public PolicyEditorFormContainer() {
             super(EffectivePolicyDTO.class);
-            this.policyEditor = policyEditor;
         }
 
         @Override
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
-            int row = -1;
-            content.setWidget(++row, 0, policyEditor);
+
+            policyEditorPanel = new SimplePanel();
+            policyEditorPanel.setSize("100%", "100%");
+            content.setWidget(0, 0, new DecoratorBuilder(inject(proto().inheritedFrom().nodeType())).build());
+            content.setWidget(0, 1, policyEditorPanel);
 
             return content;
         }
@@ -82,8 +70,31 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             // FIXME review this method when polymorphic entities can be somehow 'injected' into form
             super.onPopulate();
 
+            Class<?> policyClass = getValue().policy().getInstanceValueClass();
+            CEntityEditor policyEditor = null;
+            //@formatter:off
+            do {
+                if (NumberOfIDs.class.equals(policyClass)) { policyEditor = new NumberOfIDsPolicyEditorForm();  break; }                
+                if (AllowedIDs.class.equals(policyClass)) { policyEditor = new AllowedIDsPolicyEditorForm(); break; }                
+            } while (false);
+            //@formatter:on
+            if (policyEditor == null) {
+                throw new Error("No editor for policy '" + policyClass.getName() + "' was found");
+            }
+
+            policyEditor.initContent();
+            adopt(policyEditor);
             policyEditor.populate(getValue().policy().cast());
-            this.adopt(policyEditor);
+
+            policyEditorPanel.clear();
+            policyEditorPanel.setWidget(policyEditor);
+
         }
+    }
+
+    @Override
+    public IsWidget createContent() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

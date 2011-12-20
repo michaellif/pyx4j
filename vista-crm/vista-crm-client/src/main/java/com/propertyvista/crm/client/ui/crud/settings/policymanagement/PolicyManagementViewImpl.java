@@ -14,18 +14,21 @@
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
 import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 
 public class PolicyManagementViewImpl implements PolicyManagementView {
     FormFlexPanel panel;
 
-    PolicyFolder policyFolder;
+    CEntityEditor<EffectivePolicyPresetDTO> policiesForm;
 
     private Presenter presenter;
 
@@ -42,9 +45,19 @@ public class PolicyManagementViewImpl implements PolicyManagementView {
         panel.getFlexCellFormatter().setWidth(0, 0, "50%");
         panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
 
-        panel.setWidget(0, 1, (policyFolder = new PolicyFolder()));
+        policiesForm = new CEntityDecoratableEditor<EffectivePolicyPresetDTO>(EffectivePolicyPresetDTO.class) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+                content.setSize("100%", "100%");
+                content.setWidget(0, 0, inject(proto().effectivePolicies(), new PolicyFolder()));
+                return content;
+            }
+        };
+        policiesForm.initContent();
+        panel.setWidget(0, 1, policiesForm);
         panel.getFlexCellFormatter().setWidth(0, 1, "50%");
-
+        panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
     }
 
     @Override
@@ -64,6 +77,6 @@ public class PolicyManagementViewImpl implements PolicyManagementView {
 
     @Override
     public void displayEffectivePreset(EffectivePolicyPresetDTO effectivePolicyPreset) {
-        this.policyFolder.populate(effectivePolicyPreset.effectivePolicies());
+        this.policiesForm.populate(effectivePolicyPreset);
     }
 }
