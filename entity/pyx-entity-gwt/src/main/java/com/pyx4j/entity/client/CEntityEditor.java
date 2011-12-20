@@ -208,7 +208,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @Override
     @SuppressWarnings("unchecked")
     public void setValue(E entity, boolean fireEvent, boolean populate) {
-        assert entity != null && proto().isAssignableFrom(entity.getInstanceValueClass()) : "Trying to set value of a wrong type";
+        assert (entity == null) || proto().isAssignableFrom(entity.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
+                + proto().getValueClass() + ", got " + entity.getInstanceValueClass();
         if (populate) {
             assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
             if (!isAttached()) {
