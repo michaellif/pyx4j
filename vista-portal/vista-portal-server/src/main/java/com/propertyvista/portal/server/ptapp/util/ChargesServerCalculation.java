@@ -44,7 +44,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         if (tenant.role().getValue() == TenantInLease.Role.Dependent) {
             return false;
         }
-        return TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18);
+        return TimeUtils.isOlderThan(tenant.tenant().person().birthDate().getValue(), 18);
     }
 
     public static boolean updatePaymentSplitCharges(Charges charges, List<TenantInLease> tenants) {

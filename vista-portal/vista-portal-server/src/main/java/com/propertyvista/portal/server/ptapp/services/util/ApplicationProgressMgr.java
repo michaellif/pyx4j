@@ -49,7 +49,7 @@ public class ApplicationProgressMgr extends ApplicationMgr {
         if (!tenant.takeOwnership().isBooleanTrue()) {
             return false;
         }
-        return (TimeUtils.isOlderThen(tenant.tenant().person().birthDate().getValue(), 18));
+        return (TimeUtils.isOlderThan(tenant.tenant().person().birthDate().getValue(), 18));
     }
 
     public static void syncroizeApplicationProgress(Application application, List<TenantInLeaseDTO> tenants) {

@@ -34,7 +34,7 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
     }
 
     public static boolean isOlderThen18(final Date bithday) {
-        return TimeUtils.isOlderThen(bithday, 18);
+        return TimeUtils.isOlderThan(bithday, 18);
     }
 
     public static boolean isSinValid(String value) {
