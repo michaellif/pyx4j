@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
@@ -53,6 +54,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
 
     @SuppressWarnings("rawtypes")
     private static class PolicyEditorFormContainer extends CEntityDecoratableEditor<EffectivePolicyDTO> {
+        private FormFlexPanel contentPanel;
 
         private SimplePanel policyEditorPanel;
 
@@ -62,15 +64,21 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
+            contentPanel = new FormFlexPanel();
+            contentPanel.setSize("100%", "100%");
+
+            VerticalPanel controlsPanel = new VerticalPanel();
+            controlsPanel.setSize("15em", "100%");
+            controlsPanel.add(new DecoratorBuilder(inject(proto().inheritedFrom().nodeType())).customLabel(i18n.tr("Inherited From")).componentWidth(5)
+                    .labelWidth(7).build());
+            contentPanel.setWidget(1, 0, controlsPanel);
+            contentPanel.getFlexCellFormatter().setWidth(0, 0, "100");
 
             policyEditorPanel = new SimplePanel();
             policyEditorPanel.setSize("100%", "100%");
-            content.setWidget(0, 0, new DecoratorBuilder(inject(proto().inheritedFrom().nodeType())).customLabel(i18n.tr("Inherited From")).componentWidth(10)
-                    .labelWidth(10).build());
-            content.setWidget(0, 1, policyEditorPanel);
+            contentPanel.setWidget(1, 1, policyEditorPanel);
 
-            return content;
+            return contentPanel;
         }
 
         @SuppressWarnings("unchecked")
@@ -96,7 +104,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             adopt(policyEditor);
             policyEditor.initContent();
             policyEditor.populate(getValue().policy().cast());
-
+            contentPanel.setH1(0, 0, 2, getValue().policy().cast().getEntityMeta().getCaption());
             policyEditorPanel.clear();
             policyEditorPanel.setWidget(policyEditor);
 

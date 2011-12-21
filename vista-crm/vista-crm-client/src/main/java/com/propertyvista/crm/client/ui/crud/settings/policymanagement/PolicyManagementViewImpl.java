@@ -13,14 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -29,8 +29,10 @@ import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
 import com.propertyvista.domain.policy.PolicyPreset;
 import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 
-public class PolicyManagementViewImpl implements PolicyManagementView {
+public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyManagementView {
     private static final I18n i18n = I18n.get(PolicyManagementViewImpl.class);
+
+    private static final double BROWSER_WIDTH = 20.0;
 
     FormFlexPanel panel;
 
@@ -41,67 +43,41 @@ public class PolicyManagementViewImpl implements PolicyManagementView {
     private Presenter presenter;
 
     public PolicyManagementViewImpl() {
-        int row = -1;
+        super(Unit.EM);
 
-        panel = new FormFlexPanel();
-        panel.setSize("100%", "100%");
-
-        panel.setWidget(0, 0, new OrganizationBrowser() {
+        addEast(new OrganizationBrowser() {
             @Override
             public void onNodeSelected(Key nodeKey, NodeType nodeType) {
                 getPresenter().populateEffectivePolicyPreset(nodeKey, nodeType);
             }
-        });
-        panel.getFlexCellFormatter().setWidth(0, 0, "10em");
-        panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+        }, BROWSER_WIDTH);
 
         policiesForm = new CEntityDecoratableEditor<EffectivePolicyPresetDTO>(EffectivePolicyPresetDTO.class) {
-//            private final Label inheritedLabel = new Label(i18n.tr("Inherited policies"));
-
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
                 content.setSize("100%", "100%");
                 int row = -1;
-                content.setWidget(++row, 0, new CButton(i18n.tr("Edit"), new Command() {
-                    @Override
-                    public void execute() {
-                    }
-                }));
-                content.setWidget(++row, 0,
-                        new DecoratorBuilder(inject(proto().assignedPolicyPreset().policyPreset().name())).customLabel(i18n.tr("Assigned Preset")).build());
+//                content.setWidget(++row, 0, new CButton(i18n.tr("Edit"), new Command() {
+//                    @Override
+//                    public void execute() {
+//                    }
+//                }));
+//                content.setWidget(++row, 0,
+//                        new DecoratorBuilder(inject(proto().assignedPolicyPreset().policyPreset().name())).customLabel(i18n.tr("Assigned Preset")).build());
 //                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().assignedPolicyPreset().policyPreset().description(), new CTextArea())).build());
-
                 content.setWidget(++row, 0, inject(proto().effectivePolicies(), new PolicyFolder()));
+                content.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
                 return content;
             }
 
-            @Override
-            protected void onPopulate() {
-                super.onPopulate();
-//                EffectivePolicyPresetDTO value = getValue();
-//                if (value.isNull() || value.assignedPolicyPreset().isNull()) {
-//                    get(proto().assignedPolicyPreset().policyPreset().name()).setVisible(false);
-//                    inheritedLabel.setVisible(true);
-//                    //  get(proto().assignedPolicyPreset().policyPreset().description()).setVisible(false);
-//                } else {
-//                    get(proto().assignedPolicyPreset().policyPreset().name()).setVisible(true);
-//                    inheritedLabel.setVisible(false);
-//                    //  get(proto().assignedPolicyPreset().policyPreset().description()).setVisible(true);
-//                }
-            }
         };
 
         policiesForm.setEditable(false);
         policiesForm.initContent();
-        panel.setWidget(0, 1, policiesForm);
-        panel.getFlexCellFormatter().setWidth(0, 1, "40em");
-        panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-    }
+        add(policiesForm);
 
-    @Override
-    public Widget asWidget() {
-        return panel;
+        setSize("100%", "100%");
     }
 
     @Override
