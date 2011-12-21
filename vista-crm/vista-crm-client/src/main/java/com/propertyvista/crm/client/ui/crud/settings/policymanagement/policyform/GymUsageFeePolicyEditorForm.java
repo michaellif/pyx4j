@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 20, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
@@ -18,12 +18,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.policy.policies.NumberOfIDs;
+import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 
-public class NumberOfIDsPolicyEditorForm extends CEntityDecoratableEditor<NumberOfIDs> {
+public class GymUsageFeePolicyEditorForm extends CEntityDecoratableEditor<GymUsageFeePolicy> {
 
-    public NumberOfIDsPolicyEditorForm() {
-        super(NumberOfIDs.class);
+    public GymUsageFeePolicyEditorForm() {
+        super(GymUsageFeePolicy.class);
     }
 
     @Override
@@ -31,13 +31,9 @@ public class NumberOfIDsPolicyEditorForm extends CEntityDecoratableEditor<Number
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfIDs())).componentWidth(3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyGymFee())).componentWidth(3.0).build());
 
         return content;
     }
 
-    @Override
-    protected void onPopulate() {
-        super.onPopulate();
-    }
 }

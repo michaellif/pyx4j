@@ -25,11 +25,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.AllowedIDsPolicyEditorForm;
+import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.GymUsageFeePolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
+import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.PoolUsageFeePolicyEditorForm;
 import com.propertyvista.domain.policy.EffectivePolicyDTO;
 import com.propertyvista.domain.policy.PolicyPresetAtNode;
 import com.propertyvista.domain.policy.policies.AllowedIDs;
+import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.NumberOfIDs;
+import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
 public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
 
@@ -80,7 +84,9 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             //@formatter:off
             do {
                 if (NumberOfIDs.class.equals(policyClass)) { policyEditor = new NumberOfIDsPolicyEditorForm();  break; }                
-                if (AllowedIDs.class.equals(policyClass)) { policyEditor = new AllowedIDsPolicyEditorForm(); break; }                
+                if (AllowedIDs.class.equals(policyClass)) { policyEditor = new AllowedIDsPolicyEditorForm(); break; }
+                if (GymUsageFeePolicy.class.equals(policyClass)) { policyEditor = new GymUsageFeePolicyEditorForm(); break; }
+                if (PoolUsageFeePolicy.class.equals(policyClass)) { policyEditor = new PoolUsageFeePolicyEditorForm(); break; }
             } while (false);
             //@formatter:on
             if (policyEditor == null) {

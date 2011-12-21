@@ -15,10 +15,15 @@ package com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyfor
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.CEntityListBox;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.policy.policies.AllowedIDs;
+import com.propertyvista.domain.policy.policies.IdentificationDocument;
 
 public class AllowedIDsPolicyEditorForm extends CEntityDecoratableEditor<AllowedIDs> {
 
@@ -30,8 +35,38 @@ public class AllowedIDsPolicyEditorForm extends CEntityDecoratableEditor<Allowed
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        //content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs(), new CEntityListBox<IdentificationDocument>())).build());
         return content;
+    }
+
+    private static class IdEdtiorForm extends CEntityDecoratableEditor<IdentificationDocument> {
+
+        public IdEdtiorForm() {
+            super(IdentificationDocument.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel content = new FormFlexPanel();
+            content.setWidget(0, 0, new DecoratorBuilder(inject(proto().name())).labelWidth(7).componentWidth(10).build());
+
+            return content;
+        }
+    }
+
+    private static class IdFolder extends VistaBoxFolder<IdentificationDocument> {
+
+        public IdFolder() {
+            super(IdentificationDocument.class);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof IdentificationDocument) {
+                return new IdEdtiorForm();
+            }
+            return super.create(member);
+        }
     }
 
 }

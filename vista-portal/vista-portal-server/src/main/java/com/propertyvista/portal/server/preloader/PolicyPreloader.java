@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.Arrays;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -22,8 +24,10 @@ import com.propertyvista.domain.policy.PolicyPreset;
 import com.propertyvista.domain.policy.PolicyPresetAtNode;
 import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
 import com.propertyvista.domain.policy.policies.AllowedIDs;
+import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.NumberOfIDs;
+import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private static final I18n i18n = I18n.get(PolicyPreloader.class);
@@ -34,12 +38,43 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         defaultPolicyPreset.name().setValue(i18n.tr("Default Global Policy"));
         defaultPolicyPreset.description().setValue(i18n.tr("Default built-in global policy"));
 
-        // Number of IDs default policy
+        // Create default policies
+        defaultPolicyPreset.policies().addAll(Arrays.asList(//@formatter:off
+                initNumberOfIdsDefaultPolicy(),
+                initAllowedIdsDefaultPolicy(),
+                initGymUsageFeeDefaultPolicy(),
+                initPoolUsageFeeDefaultPolicy()
+        ));//@formatter:on
+
+        Persistence.service().persist(defaultPolicyPreset);
+
+        // Assign the default preset to the organization
+        PolicyPresetAtNode policyPresetAtOrganizationNode = EntityFactory.create(PolicyPresetAtNode.class);
+        policyPresetAtOrganizationNode.nodeType().setValue(NodeType.organization);
+        policyPresetAtOrganizationNode.policyPreset().set(defaultPolicyPreset);
+
+        Persistence.service().persist(policyPresetAtOrganizationNode);
+
+        return "Created default global policy";
+    }
+
+    @Override
+    public String delete() {
+        if (ApplicationMode.isDevelopment()) {
+            return deleteAll(PolicyPresetAtNode.class, IdentificationDocument.class);
+        } else {
+            return "This is production";
+        }
+    }
+
+    private NumberOfIDs initNumberOfIdsDefaultPolicy() {
         NumberOfIDs numOfIDs = EntityFactory.create(NumberOfIDs.class);
         numOfIDs.numOfIDs().setValue(5);
         Persistence.service().persist(numOfIDs);
-        defaultPolicyPreset.policies().add(numOfIDs);
+        return numOfIDs;
+    }
 
+    private AllowedIDs initAllowedIdsDefaultPolicy() {
         // Allowed IDs default policy
         AllowedIDs allowedIDs = EntityFactory.create(AllowedIDs.class);
         IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
@@ -57,28 +92,21 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         Persistence.service().persist(id);
         allowedIDs.allowedIDs().add(id);
         Persistence.service().persist(allowedIDs);
-        defaultPolicyPreset.policies().add(allowedIDs);
-
-        Persistence.service().persist(defaultPolicyPreset);
-
-        // Assign the default preset to the organization
-
-        PolicyPresetAtNode policyPresetAtOrganizationNode = EntityFactory.create(PolicyPresetAtNode.class);
-        policyPresetAtOrganizationNode.nodeType().setValue(NodeType.organization);
-        policyPresetAtOrganizationNode.policyPreset().set(defaultPolicyPreset);
-
-        Persistence.service().persist(policyPresetAtOrganizationNode);
-
-        return "Created default global policy";
+        return allowedIDs;
     }
 
-    @Override
-    public String delete() {
-        if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PolicyPresetAtNode.class, IdentificationDocument.class);
-        } else {
-            return "This is production";
-        }
+    private GymUsageFeePolicy initGymUsageFeeDefaultPolicy() {
+        GymUsageFeePolicy policy = EntityFactory.create(GymUsageFeePolicy.class);
+        policy.monthlyGymFee().setValue(30.0);
+        Persistence.service().persist(policy);
+        return policy;
+    }
+
+    private PoolUsageFeePolicy initPoolUsageFeeDefaultPolicy() {
+        PoolUsageFeePolicy policy = EntityFactory.create(PoolUsageFeePolicy.class);
+        policy.monthlyPoolFee().setValue(27.99);
+        Persistence.service().persist(policy);
+        return policy;
     }
 
 }

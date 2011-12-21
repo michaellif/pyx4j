@@ -7,21 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{0}")
-public interface IdentificationDocument extends IEntity {
-    @NotNull
-    @ToString(index = 0)
-    IPrimitive<String> name();
+import com.propertyvista.domain.policy.Policy;
+
+@DiscriminatorValue("PolicyGymUsageFee")
+public interface GymUsageFeePolicy extends Policy {
+
+    @Format("#,##")
+    IPrimitive<Double> monthlyGymFee();
 }
