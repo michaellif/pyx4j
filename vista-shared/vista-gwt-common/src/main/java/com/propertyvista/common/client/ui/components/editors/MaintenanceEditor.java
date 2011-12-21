@@ -40,8 +40,8 @@ public class MaintenanceEditor extends CEntityDecoratableEditor<Maintenance> {
 
         main.setH1(++row, 0, 2, i18n.tr("Schedule"));
         ++row;
-        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().lastService()), 8.2).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextService()), 8.2).build());
+        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().lastService()), 9).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextService()), 9).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

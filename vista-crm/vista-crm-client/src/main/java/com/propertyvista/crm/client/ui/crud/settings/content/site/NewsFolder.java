@@ -51,7 +51,7 @@ class NewsFolder extends VistaBoxFolder<News> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().caption()), 20).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content()), 50).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date()), 8.2).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date()), 9).build());
 
             return main;
         }

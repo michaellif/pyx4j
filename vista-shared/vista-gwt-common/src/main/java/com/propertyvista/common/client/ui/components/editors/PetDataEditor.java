@@ -48,7 +48,7 @@ public class PetDataEditor extends CEntityDecoratableEditor<Pet> {
         row = 0; // skip header
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weight()), 4).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weightUnit()), 4).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().birthDate()), 8.2).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         panel.getColumnFormatter().setWidth(0, "50%");
         panel.getColumnFormatter().setWidth(1, "50%");

@@ -39,8 +39,8 @@ public class ContractEditor extends CEntityDecoratableEditor<Contract> {
 //      main.setWidget(++row, 0, decorate(inject(proto.document()), 50);
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().start()), 8.2).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().end()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().start()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().end()), 9).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

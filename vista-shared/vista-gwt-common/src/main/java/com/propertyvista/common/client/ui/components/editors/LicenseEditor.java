@@ -34,8 +34,8 @@ public class LicenseEditor extends CEntityDecoratableEditor<License> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 15).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expiration()), 8.2).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().renewal()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expiration()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().renewal()), 9).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

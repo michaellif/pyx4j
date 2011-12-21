@@ -41,8 +41,8 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateFrom()), 8.2).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateTo()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateFrom()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateTo()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarket()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease()), 25).build());

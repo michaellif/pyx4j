@@ -69,7 +69,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         tabPanel.addDisable(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget()),
                 i18n.tr("Occupancy"));
 
-        tabPanel.add(createFinancialsTab(), i18n.tr("Financial"));
+        tabPanel.addDisable(createFinancialsTab(), i18n.tr("Financial"));
 // TODO Hided till further investigation:
 //        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
         tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
@@ -82,6 +82,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     @Override
     protected void onPopulate() {
         super.onPopulate();
+
+        // restrict floorplan combo here to current building:
         CComponent<Floorplan, ?> comp = get(proto().floorplan());
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")
@@ -110,7 +112,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
         row += 2;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 9).build());
 
         main.setBR(++row, 0, 0);
         CComponent<?, ?> belongs;
@@ -132,7 +134,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
-        // restrict floorplan combo here to current building:
+        // restrict floorplan combo here to any free :
         CComponent<Floorplan, ?> comp = get(proto().floorplan());
         if (isEditable() && comp instanceof CEntityComboBox<?>) {
             @SuppressWarnings("unchecked")

@@ -52,15 +52,15 @@ public class UnitItemEditorForm extends CrmEntityForm<AptUnitItem> {
         int row1 = row0; // from second column from here..
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringType()), 10).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 8.2).build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringValue()), 8.2).build());
+        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
+        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
 
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 8.2).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 8.2).build());
+        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
+        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
         main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 8.2).build());
-        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 8.2).build());
+        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
+        main.setWidget(++row1, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

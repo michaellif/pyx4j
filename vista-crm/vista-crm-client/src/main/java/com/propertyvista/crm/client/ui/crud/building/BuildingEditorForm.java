@@ -222,12 +222,12 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().dateAcquired()), 8.2).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().dateAcquired()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().purchasePrice()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial().marketPrice()), 10).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 8.2).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
 
