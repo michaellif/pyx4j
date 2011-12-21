@@ -75,15 +75,4 @@ public interface FormImages extends ClientBundleWithLookup {
 
     ImageResource mandatory();
 
-    // --- CForm tools
-
-    @Source("arrow_up.png")
-    ImageResource moveUp();
-
-    @Source("arrow_down.png")
-    ImageResource moveDown();
-
-    @Source("cross.png")
-    ImageResource deleteItem();
-
 }

@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageButton;
 
@@ -64,7 +63,7 @@ public class ItemActionsBar extends FlowPanel {
         add(orderActionsPanel);
 
         downCommand = new ImageButton(images.moveDown(), images.moveDownHover(), i18n.tr("Move down"));
-        downCommand.setResource(ImageFactory.getImages().moveDown());
+        downCommand.setResource(images.moveDown());
         downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         downCommand.setStyleName(EntityFolderDownButton.name());
         orderActionsPanel.add(downCommand);

@@ -72,6 +72,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         this.removable = removable;
 
         handlerRegistrations = new ArrayList<HandlerRegistration>();
+
     }
 
     @Override
@@ -183,6 +184,8 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         });
         handlerRegistrations.add(handlerRegistration);
 
+        calculateActionsState();
+
         addItemRemoveClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -206,18 +209,30 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @SuppressWarnings("unchecked")
     protected void calculateActionsState() {
-        CEntityFolder<E> parent = ((CEntityFolder<E>) getParent());
-        int index = parent.getItemIndex(CEntityFolderItem.this);
+        boolean enabled = isEnabled() && isEditable();
+        if (!enabled) {
+            ((IFolderItemDecorator<?>) getDecorator()).setActionsState(false, false, false);
+        } else {
 
-        first = index == 0;
-        last = index == parent.getItemCount() - 1;
+            CEntityFolder<E> parent = ((CEntityFolder<E>) getParent());
+            int index = parent.getItemIndex(CEntityFolderItem.this);
 
-        CEntityFolderItem<?> previousSibling = parent.getItem(index - 1);
-        CEntityFolderItem<?> nextSibling = parent.getItem(index + 1);
+            first = index == 0;
+            last = index == parent.getItemCount() - 1;
 
-        ((IFolderItemDecorator<?>) getDecorator()).setActionsState(removable, movable && !first && previousSibling.isMovable(),
-                movable && !last && nextSibling.isMovable());
+            CEntityFolderItem<?> previousSibling = parent.getItem(index - 1);
+            CEntityFolderItem<?> nextSibling = parent.getItem(index + 1);
 
+            if (getDecorator() != null) {
+                ((IFolderItemDecorator<?>) getDecorator()).setActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last
+                        && nextSibling.isMovable());
+            }
+        }
+
+    }
+
+    protected void disableActions() {
+        ((IFolderItemDecorator<?>) getDecorator()).setActionsState(false, false, false);
     }
 
     @Override

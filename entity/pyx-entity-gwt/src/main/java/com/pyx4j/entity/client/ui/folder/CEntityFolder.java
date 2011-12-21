@@ -42,6 +42,9 @@ import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -76,6 +79,16 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         } else {
             entityPrototype = null;
         }
+
+        addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.enabled || event.getPropertyName() == PropertyName.editable
+                        || event.getPropertyName() == PropertyName.repopulated) {
+                    calculateActionsState();
+                }
+            }
+        });
     }
 
     public boolean isOrderable() {
@@ -96,12 +109,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     public void setModifiable(boolean modifiable) {
         this.modifiable = modifiable;
-        if (getDecorator() != null) {
-            ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
-        }
+        calculateActionsState();
         for (CEntityFolderItem<E> item : itemsList) {
             item.setRemovable(modifiable);
             item.calculateActionsState();
+        }
+    }
+
+    private void calculateActionsState() {
+        boolean enabled = isModifiable() && isEnabled() && isEditable();
+        if (getDecorator() != null) {
+            ((IFolderDecorator) getDecorator()).setAddButtonVisible(enabled);
         }
     }
 
@@ -193,6 +211,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 adopt(item);
                 getValue().add(result);
                 item.populate(result);
+                ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
         });
 
@@ -298,13 +317,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     public void adopt(final CComponent<?, ?> component) {
-        super.adopt(component);
         itemsList.add((CEntityFolderItem<E>) component);
         container.add(component);
 
         IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
         component.setDebugId(rowDebugId);
         currentRowDebugId++;
+
+        super.adopt(component);
 
     }
 
