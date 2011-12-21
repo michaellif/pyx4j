@@ -36,7 +36,7 @@ public class TimeUtils {
     @Deprecated
     public static String[] MONTH_NAMES_SHORT = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
-    public static boolean isOlderThen(final Date bithday, int years) {
+    public static boolean isOlderThan(final Date bithday, int years) {
         if (bithday == null) {
             return false;
         } else {
