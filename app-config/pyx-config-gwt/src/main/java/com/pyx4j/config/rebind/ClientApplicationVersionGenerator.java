@@ -72,7 +72,7 @@ public class ClientApplicationVersionGenerator extends Generator {
         String buildFromat = getConfigurationProperty(logger, context, BUILD_TIME_FORMAT);
 
         boolean forceRPCVersion = false;
-        {
+        if (CommonsStringUtils.isStringSet(buildLabel)) {
             ConfigurationProperty prop;
             try {
                 prop = context.getPropertyOracle().getConfigurationProperty(BUILD_FORCE_RPC_VERSION);
