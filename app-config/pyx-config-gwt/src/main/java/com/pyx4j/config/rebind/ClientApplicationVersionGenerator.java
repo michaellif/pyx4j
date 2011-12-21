@@ -21,6 +21,7 @@
 package com.pyx4j.config.rebind;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
@@ -53,6 +54,8 @@ public class ClientApplicationVersionGenerator extends Generator {
 
     public static final String BUILD_TIME_FORMAT = "pyx.compileTimeSystemProperty.build.timeFormat";
 
+    public static final String BUILD_FORCE_RPC_VERSION = "pyx.build.forceRPCVersion";
+
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
         TypeOracle oracle = context.getTypeOracle();
@@ -68,6 +71,22 @@ public class ClientApplicationVersionGenerator extends Generator {
         String buildTime = getConfigurationProperty(logger, context, BUILD_TIME);
         String buildFromat = getConfigurationProperty(logger, context, BUILD_TIME_FORMAT);
 
+        boolean forceRPCVersion = false;
+        {
+            ConfigurationProperty prop;
+            try {
+                prop = context.getPropertyOracle().getConfigurationProperty(BUILD_FORCE_RPC_VERSION);
+            } catch (BadPropertyValueException e) {
+                logger.log(TreeLogger.ERROR, "The configuration property " + BUILD_FORCE_RPC_VERSION
+                        + " was not defined. Is com.pyx4j.config.Config.gwt.xml inherited?");
+                throw new UnableToCompleteException();
+            }
+            String value = prop.getValues().get(0);
+            if (CommonsStringUtils.isStringSet(value)) {
+                forceRPCVersion = Boolean.valueOf(value);
+            }
+        }
+
         String implName = interfaceType.getName();
         implName = implName.replace('.', '_') + "Impl";
 
@@ -77,6 +96,9 @@ public class ClientApplicationVersionGenerator extends Generator {
         if (printWriter != null) {
             ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, implName);
             factory.setSuperclass(interfaceType.getQualifiedSourceName());
+            if (forceRPCVersion) {
+                factory.addImplementedInterface(Serializable.class.getName());
+            }
             factory.addImport(Date.class.getName());
             SourceWriter writer = factory.createSourceWriter(context, printWriter);
 
@@ -108,6 +130,15 @@ public class ClientApplicationVersionGenerator extends Generator {
             writer.outdent();
             writer.println("}");
             writer.println();
+
+            if (forceRPCVersion) {
+                logger.log(TreeLogger.INFO, "Force new RPC version");
+                writer.println();
+                writer.print("public String buildId");
+                writer.print(buildLabel.replace('-', '_').replace('.', '_').replace(' ', '_').trim());
+                writer.print(";");
+                writer.println();
+            }
 
             writer.commit(logger);
         }

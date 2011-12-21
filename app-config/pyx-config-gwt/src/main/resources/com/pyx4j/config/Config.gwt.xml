@@ -13,6 +13,9 @@
     
     <define-configuration-property name="pyx.compileTimeSystemProperty.build.timeFormat" is-multi-valued="false" />
     <set-configuration-property name="pyx.compileTimeSystemProperty.build.timeFormat" value="yyyyMMdd HH:mm" />
+
+    <define-configuration-property name="pyx.build.forceRPCVersion" is-multi-valued="false" />
+    <set-configuration-property name="pyx.build.forceRPCVersion" value="false" />
     
     <generate-with class="com.pyx4j.config.rebind.ClientApplicationVersionGenerator">
         <when-type-assignable class="com.pyx4j.config.client.ClientApplicationVersion"/>
