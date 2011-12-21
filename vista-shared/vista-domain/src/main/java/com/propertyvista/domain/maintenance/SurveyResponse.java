@@ -13,30 +13,13 @@
  */
 package com.propertyvista.domain.maintenance;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.Tenant;
-
-public interface MaintenanceRequest extends IEntity {
-
-    Tenant tenant();
-
-    //TODO Add 
-    //Building building();
-
-    IssueClassification issueClassification();
-
-    IPrimitive<LogicalDate> submited();
-
-    IPrimitive<MaintenanceRequestStatus> status();
-
-    @Caption(name = "Last Updated")
-    IPrimitive<LogicalDate> updated();
+public interface SurveyResponse extends IEntity {
 
     IPrimitive<String> description();
 
-    SurveyResponse surveyResponse();
+    IPrimitive<Integer> rating();
+
 }

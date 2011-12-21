@@ -57,6 +57,7 @@ import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
+import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestListerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentListerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentViewerActivity;
@@ -114,6 +115,7 @@ import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.LockerArea;
@@ -154,6 +156,9 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
         } else if (entityClass.equals(EquifaxResult.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
+
+        } else if (entityClass.equals(MaintenanceRequest.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.MaintenanceRequest.class);
         }
 
         return null;
@@ -549,6 +554,12 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Properties.MaintenanceRequest) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new MaintenanceRequestListerActivity(place);
+                        break;
+                    }
                 }
 
                 callback.onSuccess(activity);

@@ -140,6 +140,10 @@ public class CrmSiteMap implements SiteMap {
         public static class Concession extends CrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Maintenance Request")
+        @NavigationItem(navigLabel = "Maintenance Requests")
+        public static class MaintenanceRequest extends CrudAppPlace {
+        }
     }
 
     public static class Tenants extends AppPlace {

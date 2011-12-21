@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 26, 2011
- * @author vlads
+ * Created on Dec 20, 2011
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.maintenance;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public interface SurveyResponce {
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
-    IPrimitive<String> description();
-
-    IPrimitive<Integer> rating();
+public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
 }
