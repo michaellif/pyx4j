@@ -124,10 +124,10 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
         @Override
         public void setValue(TenantCharge entity, boolean fireEvent, boolean populate) {
-            // TODO Auto-generated method stub
             super.setValue(entity, fireEvent, populate);
+            // set main applicant percent as read-only (it's always calculated):
             if ((getValue().tenant().role().getValue() == Role.Applicant)) {
-                get(proto().percentage()).setEditable(false); // set main applicant percent as read-only
+                get(proto().percentage()).setEditable(false);
             }
         }
 
