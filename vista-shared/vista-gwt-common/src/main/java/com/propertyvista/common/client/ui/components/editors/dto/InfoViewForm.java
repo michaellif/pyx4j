@@ -227,6 +227,18 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
 
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(currentAddressForm.get(currentAddressForm.proto().moveInDate())));
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(currentAddressForm.get(currentAddressForm.proto().moveInDate())));
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
+
         // ------------------------------------------------------------------------------------------------
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
@@ -246,6 +258,54 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
                 return (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
                         .tr("Move Out Date should be greater than Move In Date"));
+            }
+
+        });
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+
+                IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
+                return (date.isNull() || value.after(date.getValue()) || TimeUtils.isOlderThan(value, 3)) ? null : new ValidationFailure(i18n
+                        .tr("Current Move In date should be greater than Previous Move In date"));
+            }
+
+        });
+
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+
+                IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
+                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
+                        .tr("Current Move In date should be greater than Previous Move In date"));
+            }
+
+        });
+
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+
+                IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
+                return (date.isNull() || !value.before(date.getValue())) ? null : new ValidationFailure(i18n
+                        .tr("Current Move In date should not be greater than Previous Move Out date"));
+            }
+
+        });
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+
+                IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
+                return (date.isNull() || value.equals(date.getValue()) || value.before(date.getValue())) ? null : new ValidationFailure(i18n
+                        .tr("Current Move In date should not be greater than Previous Move Out date"));
             }
 
         });
