@@ -47,14 +47,16 @@ public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
         this.addValueValidator(new EditableValueValidator<IList<PersonalIncome>>() {
             @Override
             public ValidationFailure isValid(CComponent<IList<PersonalIncome>, ?> component, IList<PersonalIncome> value) {
-                if (value.size() == 1) {
+                if (value != null && value.size() == 1) {
                     PersonalIncome income = value.get(0);
-                    switch (income.incomeSource().getValue()) {
-                    case fulltime:
-                    case parttime:
-                        return (income.employer().ends().getValue().getTime() - income.employer().starts().getValue().getTime()) > 365 * 24 * 60 * 60 * 1000l ? null
-                                : new ValidationFailure(i18n.tr("You need to enter previous employment information"));
-                        // valid, if more than 1 year, otherwise - previous employment needed! 
+                    if (!income.employer().isEmpty()) {
+                        switch (income.incomeSource().getValue()) {
+                        case fulltime:
+                        case parttime:
+                            return (income.employer().ends().getValue().getTime() - income.employer().starts().getValue().getTime()) > 365 * 24 * 60 * 60
+                                    * 1000l ? null : new ValidationFailure(i18n.tr("You need to enter previous employment information"));
+                            // valid, if more than 1 year, otherwise - previous employment needed! 
+                        }
                     }
                 }
                 return null;
