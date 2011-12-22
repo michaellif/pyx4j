@@ -48,6 +48,8 @@ public final class VistaDevPreloadConfig implements Serializable {
 
     public int numLeads = 5;
 
+    public int numMntRequests = 5;
+
     public int numFloors = 4;
 
     public int numFloorplans = 5;

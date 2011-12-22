@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -24,4 +26,8 @@ public class MaintenanceCrudServiceImpl extends GenericCrudServiceDtoImpl<Mainte
         super(MaintenanceRequest.class, MaintenanceRequestDTO.class);
     }
 
+    @Override
+    protected void enhanceDTO(MaintenanceRequest in, MaintenanceRequestDTO dto, boolean fromList) {
+        Persistence.service().retrieve(dto.issueClassification());
+    }
 }

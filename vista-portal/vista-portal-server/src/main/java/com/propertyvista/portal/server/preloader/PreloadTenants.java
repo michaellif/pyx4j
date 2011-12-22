@@ -34,11 +34,14 @@ import com.propertyvista.domain.User;
 import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.maintenance.IssueClassification;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -162,6 +165,15 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
                     }
                 }
             }
+        }
+
+        // Maintenance Requests
+        List<TenantInLease> leases = Persistence.service().query(EntityQueryCriteria.create(TenantInLease.class));
+        List<IssueClassification> issues = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
+        for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
+            req.issueClassification().set(RandomUtil.random(issues));
+            req.tenant().set(RandomUtil.random(leases).tenant());
+            Persistence.service().persist(req);
         }
 
         StringBuilder sb = new StringBuilder();

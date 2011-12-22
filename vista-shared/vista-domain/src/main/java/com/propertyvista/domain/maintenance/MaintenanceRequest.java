@@ -15,6 +15,11 @@ package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,11 +27,17 @@ import com.propertyvista.domain.tenant.Tenant;
 
 public interface MaintenanceRequest extends IEntity {
 
+    @Owner
+    @Detached
+    @ReadOnly
+    @Indexed
     Tenant tenant();
 
     //TODO Add 
     //Building building();
 
+    @Detached
+    @ReadOnly
     IssueClassification issueClassification();
 
     IPrimitive<LogicalDate> submited();
@@ -38,5 +49,6 @@ public interface MaintenanceRequest extends IEntity {
 
     IPrimitive<String> description();
 
+    @EmbeddedEntity
     SurveyResponse surveyResponse();
 }

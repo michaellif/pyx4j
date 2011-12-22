@@ -14,6 +14,7 @@
 package com.propertvista.generator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -24,10 +25,14 @@ import com.propertvista.generator.util.CompanyVendor;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.maintenance.IssuePriority;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -181,5 +186,33 @@ public class TenantsGenerator {
         item.reason().setValue(RandomUtil.randomEnum(Showing.Reason.class));
 
         return item;
+    }
+
+    public List<MaintenanceRequest> createMntRequests(int num) {
+        List<MaintenanceRequest> items = new ArrayList<MaintenanceRequest>();
+        for (int i = 0; i < num; ++i) {
+            items.add(createMntRequest());
+        }
+        return items;
+    }
+
+    public MaintenanceRequest createMntRequest() {
+        MaintenanceRequest req = EntityFactory.create(MaintenanceRequest.class);
+        req.issueClassification().issue().setValue(CommonsGenerator.lipsumShort());
+        req.issueClassification().priority().setValue(RandomUtil.randomEnum(IssuePriority.class));
+        req.status().setValue(RandomUtil.randomEnum(MaintenanceRequestStatus.class));
+        req.description().setValue(CommonsGenerator.lipsum());
+        if (RandomUtil.randomInt(5) > 2) {
+            req.surveyResponse().rating().setValue(RandomUtil.randomInt(6));
+            req.surveyResponse().description().setValue(CommonsGenerator.lipsumShort());
+        }
+        // generate dates
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(RandomUtil.randomDate(2011, 2012));
+        req.submited().setValue(new LogicalDate(cal.getTime()));
+        // add 10 min to 10 days
+        cal.setTimeInMillis(cal.getTimeInMillis() + 600000 * (1 + RandomUtil.randomInt(24 * 60)));
+        req.updated().setValue(new LogicalDate(cal.getTime()));
+        return req;
     }
 }
