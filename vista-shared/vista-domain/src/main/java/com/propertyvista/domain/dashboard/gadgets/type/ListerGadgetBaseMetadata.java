@@ -34,4 +34,12 @@ public interface ListerGadgetBaseMetadata extends GadgetMetadata {
 
     @EmbeddedEntity
     ColumnDescriptorEntity primarySortColumn();
+
+    /**
+     * Determine if sorting results should be in descending order (the opposite of default ordering).
+     * 
+     * <code>true</code> means use descending order, <code>null</code> or <code>false</code> means use ascending (the default) order.
+     */
+    IPrimitive<Boolean> sortAscending();
+
 }

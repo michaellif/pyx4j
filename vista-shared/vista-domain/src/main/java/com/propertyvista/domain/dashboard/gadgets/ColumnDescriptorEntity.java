@@ -26,13 +26,6 @@ public interface ColumnDescriptorEntity extends IEntity {
     /** Determines which property of the embodied member to hold. Supposed to be the same thing as <code>ColumnDescriptor.columnName() </code> */
     IPrimitive<String> propertyPath();
 
-    /**
-     * Determine if sorting results should be in descending order (the opposite of default ordering).
-     * 
-     * <code>true</code> means use descending order, <code>null</code> or <code>false</code> means use ascending (the default) order.
-     */
-    IPrimitive<Boolean> sortAscending();
-
     IPrimitive<Boolean> sortable();
 
     /** Sets title to override the default title of the column. <code>null</code> means use the default one */

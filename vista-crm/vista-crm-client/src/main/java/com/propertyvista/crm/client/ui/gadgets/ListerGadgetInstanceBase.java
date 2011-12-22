@@ -109,7 +109,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
             public void onChange(ColumnDescriptor<E> column) {
                 for (ColumnDescriptorEntity entity : getMetadata().columnDescriptors()) {
                     if (entity.propertyPath().getValue().equals(column.getColumnName())) {
-                        entity.sortAscending().setValue(column.isSortAscending());
+                        getMetadata().sortAscending().setValue(dataTablePanel.getDataTableModel().isSortAscending());
                         getMetadata().primarySortColumn().set(entity);
                         break;
                     }
@@ -250,6 +250,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     public void start() {
         getMetadata().pageNumber().setValue(0);
         dataTablePanel.getDataTableModel().setSortColumn(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, getMetadata().primarySortColumn()));
+        dataTablePanel.getDataTableModel().setSortAscending(getMetadata().sortAscending().getValue());
         dataTablePanel.getDataTable().renderTable();
         super.start();
     }

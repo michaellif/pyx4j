@@ -30,9 +30,8 @@ public class ColumnDescriptorConverter {
             IObject<?> member = proto.getMember(new Path(columnDescriptorEntity.propertyPath().getValue()));
 
             ColumnDescriptor<E> columnDescriptor = new MemberColumnDescriptor.Builder(member).title(columnDescriptorEntity.title().getValue())
-                    .ascendingSort(columnDescriptorEntity.sortAscending().getValue()).sortable(columnDescriptorEntity.sortable().getValue())
-                    .width(columnDescriptorEntity.width().getValue()).wordWrap(columnDescriptorEntity.wordWrap().getValue())
-                    .visible(columnDescriptorEntity.visiblily().getValue()).build();
+                    .sortable(columnDescriptorEntity.sortable().getValue()).width(columnDescriptorEntity.width().getValue())
+                    .wordWrap(columnDescriptorEntity.wordWrap().getValue()).visible(columnDescriptorEntity.visiblily().getValue()).build();
 
             return columnDescriptor;
         } else {
@@ -44,7 +43,6 @@ public class ColumnDescriptorConverter {
         assert entity != null;
 
         entity.propertyPath().setValue(columnDescriptor.getColumnName());
-        entity.sortAscending().setValue(columnDescriptor.isSortAscending());
         entity.sortable().setValue(columnDescriptor.isSortable());
         entity.title().setValue(columnDescriptor.getColumnTitle());
         entity.width().setValue(columnDescriptor.getWidth());
