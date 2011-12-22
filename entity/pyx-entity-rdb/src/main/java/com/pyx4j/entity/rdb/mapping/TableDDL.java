@@ -46,6 +46,8 @@ class TableDDL {
 
         String group;
 
+        boolean uniqueConstraint;
+
         Map<String, String> columns = new HashMap<String, String>();
 
     }
@@ -103,38 +105,6 @@ class TableDDL {
         return sqls;
     }
 
-    private static String createIndexSql(Dialect dialect, String tableName, final IndexDef indexDef) {
-        List<String> columnsSorted = new Vector<String>();
-        columnsSorted.addAll(indexDef.columns.keySet());
-        Collections.sort(columnsSorted, new Comparator<String>() {
-
-            @Override
-            public int compare(String o1, String o2) {
-                return indexDef.columns.get(o1).compareTo(indexDef.columns.get(o2));
-            }
-        });
-
-        StringBuilder sql = new StringBuilder();
-        sql.append("CREATE INDEX ");
-        if (CommonsStringUtils.isStringSet(indexDef.name)) {
-            sql.append(indexDef.name);
-        } else {
-            sql.append(dialect.getNamingConvention().sqlTableIndexName(tableName, columnsSorted));
-        }
-        sql.append(" ON ").append(tableName).append(" (");
-        boolean first = true;
-        for (String column : columnsSorted) {
-            if (first) {
-                first = false;
-            } else {
-                sql.append(", ");
-            }
-            sql.append(column);
-        }
-        sql.append(")");
-        return sql.toString();
-    }
-
     private static void addIndexDef(List<IndexDef> indexes, String sqlName, Indexed indexedAnnotation) {
         if ((indexedAnnotation.group() != null) && (indexedAnnotation.group().length > 0)) {
             nextGroup: for (String group : indexedAnnotation.group()) {
@@ -156,6 +126,7 @@ class TableDDL {
                 }
                 IndexDef def = new IndexDef();
                 def.name = indexedAnnotation.name();
+                def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
                 def.group = group;
                 def.columns.put(sqlName, position);
                 indexes.add(def);
@@ -163,10 +134,47 @@ class TableDDL {
         } else {
             IndexDef def = new IndexDef();
             def.name = indexedAnnotation.name();
+            def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
             def.columns.put(sqlName, "");
             indexes.add(def);
         }
 
+    }
+
+    private static String createIndexSql(Dialect dialect, String tableName, final IndexDef indexDef) {
+        List<String> columnsSorted = new Vector<String>();
+        columnsSorted.addAll(indexDef.columns.keySet());
+        Collections.sort(columnsSorted, new Comparator<String>() {
+
+            @Override
+            public int compare(String o1, String o2) {
+                return indexDef.columns.get(o1).compareTo(indexDef.columns.get(o2));
+            }
+        });
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("CREATE ");
+        if (indexDef.uniqueConstraint) {
+            sql.append("UNIQUE ");
+        }
+        sql.append("INDEX ");
+        if (CommonsStringUtils.isStringSet(indexDef.name)) {
+            sql.append(indexDef.name);
+        } else {
+            sql.append(dialect.getNamingConvention().sqlTableIndexName(tableName, columnsSorted));
+        }
+        sql.append(" ON ").append(tableName).append(" (");
+        boolean first = true;
+        for (String column : columnsSorted) {
+            if (first) {
+                first = false;
+            } else {
+                sql.append(", ");
+            }
+            sql.append(column);
+        }
+        sql.append(")");
+        return sql.toString();
     }
 
     static List<String> validateAndAlter(Dialect dialect, TableMetadata tableMetadata, TableModel tableModel) throws SQLException {
