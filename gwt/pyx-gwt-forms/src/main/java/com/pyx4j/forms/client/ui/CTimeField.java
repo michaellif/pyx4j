@@ -26,8 +26,8 @@ import java.text.ParseException;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
-
 
 public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
 
@@ -42,6 +42,7 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
     public CTimeField(String title) {
         super(title);
         setTimeFormat(defaultTimeFormat);
+        addValueValidator(new TextBoxParserValidator<Time>());
     }
 
     @Override

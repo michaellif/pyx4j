@@ -255,31 +255,18 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     }
 
-    // TODO Misha please review this implementation with me!
-    @Deprecated
-    protected boolean __sugestedChangesForIsDirty__() {
-        return false;
-    }
-
     protected void onApplySuccess(E result) {
         view.onApplySuccess();
-        if (__sugestedChangesForIsDirty__()) {
-            // TODO find a better way to clear dirty flag in form
-            view.populate(result);
-        }
         if (isNewEntity()) { // switch new item to regular editing after successful apply!..
-            entityID = result.getPrimaryKey();
-            view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
+            view.discard();
+            goToEditor(result.getPrimaryKey());
+        } else {
             populate();
         }
     }
 
     protected void onSaveSuccess(E result) {
         view.onSaveSuccess();
-        if (__sugestedChangesForIsDirty__()) {
-            // TODO find a better way to clear dirty flag in form
-            view.populate(result);
-        }
         goToViewer(result.getPrimaryKey());
     }
 
@@ -293,18 +280,18 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
     }
 
+    protected void goToEditor(Key entityID) {
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formEditorPlace(entityID, view.getActiveTab()));
+    }
+
     @Override
     public String mayStop() {
-        if (__sugestedChangesForIsDirty__()) {
-            if (view.isDirty()) {
-                String entityName = view.getValue().getStringView();
-                if (CommonsStringUtils.isEmpty(entityName)) {
-                    return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());
-                } else {
-                    return i18n.tr("Changes to {0} ''{1}'' were not saved", view.getValue().getEntityMeta().getCaption(), entityName);
-                }
+        if (view.isDirty()) {
+            String entityName = view.getValue().getStringView();
+            if (CommonsStringUtils.isEmpty(entityName)) {
+                return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());
             } else {
-                return null;
+                return i18n.tr("Changes to {0} ''{1}'' were not saved", view.getValue().getEntityMeta().getCaption(), entityName);
             }
         } else {
             return null;

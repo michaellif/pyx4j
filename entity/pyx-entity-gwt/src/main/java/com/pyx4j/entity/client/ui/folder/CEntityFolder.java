@@ -267,12 +267,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     public void setValue(IList<E> value, boolean fireEvent, boolean populate) {
+        setComponentsValue(value, fireEvent, populate);
         super.setValue(value, fireEvent, populate);
-        setComponentsValue(fireEvent, populate);
     }
 
     @SuppressWarnings("unchecked")
-    private void setComponentsValue(boolean fireEvent, boolean populate) {
+    private void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
         ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
         for (CEntityFolderItem<E> item : previousList) {
@@ -281,9 +281,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         currentRowDebugId = 0;
 
-        if (getValue() != null) {
+        if (value != null) {
 
-            for (E entity : getValue()) {
+            for (E entity : value) {
                 CEntityFolderItem<E> item = null;
                 for (CEntityFolderItem<E> itemFromCahe : previousList) {
                     if (itemFromCahe.getValue().equals(entity)) {

@@ -218,13 +218,13 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         }
         //      this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
 
+        setComponentsValue(entity, fireEvent, populate);
         super.setValue(entity, fireEvent, populate);
-        setComponentsValue(fireEvent, populate);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void setComponentsValue(boolean fireEvent, boolean populate) {
-        if (getValue() == null) {
+    private void setComponentsValue(E entity, boolean fireEvent, boolean populate) {
+        if (entity == null) {
             for (CComponent component : getComponents()) {
                 if (component instanceof CEntityEditor) {
                     ((CEntityEditor) component).discard();
@@ -235,7 +235,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         } else {
             for (CComponent component : getComponents()) {
                 Path memberPath = binding.get(component);
-                IObject<?> m = getValue().getMember(memberPath);
+                IObject<?> m = entity.getMember(memberPath);
                 try {
                     if (m instanceof IEntity) {
                         component.setValue(((IEntity) m).cast(), fireEvent, populate);

@@ -41,8 +41,8 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     }
 
     @Override
-    public void setNativeText(String newValue) {
-        super.setText(newValue);
+    public void setNativeText(String value) {
+        super.setText(value);
     }
 
     @Override
