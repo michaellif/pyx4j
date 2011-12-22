@@ -43,7 +43,11 @@ public class DataTableModel<E extends IEntity> {
 
     private ColumnDescriptor<E> sortColumn;
 
+    private boolean sortAscending = true;
+
     private ColumnDescriptor<E> secondarySortColumn;
+
+    private boolean secondarySortAscending = true;
 
     private int pageNumber = 0;
 
@@ -132,6 +136,14 @@ public class DataTableModel<E extends IEntity> {
         this.sortColumn = sortColumn;
     }
 
+    public boolean isSortAscending() {
+        return sortAscending;
+    }
+
+    public void setSortAscending(boolean ascending) {
+        this.sortAscending = ascending;
+    }
+
     public ColumnDescriptor<E> getSecondarySortColumn() {
         return secondarySortColumn;
     }
@@ -140,15 +152,23 @@ public class DataTableModel<E extends IEntity> {
         this.secondarySortColumn = sortColumn;
     }
 
+    public boolean isSecondarySortAscending() {
+        return secondarySortAscending;
+    }
+
+    public void setSecondarySortAscending(boolean ascending) {
+        this.secondarySortAscending = ascending;
+    }
+
     public List<Sort> getSortCriteria() {
         List<Sort> sorting = new ArrayList<Sort>(2);
         ColumnDescriptor<E> primarySortColumn = getSortColumn();
         if (primarySortColumn != null) {
-            sorting.add(new Sort(primarySortColumn.getColumnName(), !primarySortColumn.isSortAscending()));
+            sorting.add(new Sort(primarySortColumn.getColumnName(), !isSortAscending()));
         }
         ColumnDescriptor<E> secondarySortColumn = getSecondarySortColumn();
         if (secondarySortColumn != null) {
-            sorting.add(new Sort(secondarySortColumn.getColumnName(), !secondarySortColumn.isSortAscending()));
+            sorting.add(new Sort(secondarySortColumn.getColumnName(), !isSecondarySortAscending()));
         }
         return sorting;
     }

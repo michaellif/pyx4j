@@ -26,22 +26,22 @@ public class ColumnDescriptor<E> {
 
     public static final String DEFAULT_WIDTH = "100px";
 
-    private Builder builder;
+    private final Builder builder;
 
     public ColumnDescriptor(String columnName, String columnTitle) {
         this(columnName, columnTitle, DEFAULT_WIDTH);
     }
 
     public ColumnDescriptor(String columnName, String columnTitle, String width) {
-        this(columnName, columnTitle, true, true, width);
+        this(columnName, columnTitle, true, width);
     }
 
-    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, boolean sortAscending) {
-        this(columnName, columnTitle, sortable, sortAscending, DEFAULT_WIDTH);
+    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable) {
+        this(columnName, columnTitle, sortable, DEFAULT_WIDTH);
     }
 
-    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, boolean ascendingSort, String width) {
-        this(new Builder(columnName, columnTitle).sortable(sortable).ascendingSort(ascendingSort).width(width));
+    public ColumnDescriptor(String columnName, String columnTitle, boolean sortable, String width) {
+        this(new Builder(columnName, columnTitle).sortable(sortable).width(width));
     }
 
     protected ColumnDescriptor(Builder builder) {
@@ -50,14 +50,6 @@ public class ColumnDescriptor<E> {
 
     public String getColumnName() {
         return builder.columnName;
-    }
-
-    public boolean isSortAscending() {
-        return builder.ascending;
-    }
-
-    public void setSortAscending(boolean sortAscending) {
-        builder.ascending = sortAscending;
     }
 
     public boolean isSortable() {
@@ -114,6 +106,24 @@ public class ColumnDescriptor<E> {
         return builder.columnName + "[" + builder.columnTitle + "]";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if ((builder.columnName != null) && (obj instanceof ColumnDescriptor)) {
+            return builder.columnName.equals(((ColumnDescriptor<?>) obj).builder.columnName);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        if (builder.columnName != null) {
+            return builder.columnName.hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
+
     public static class Builder {
 
         private String columnName;
@@ -121,8 +131,6 @@ public class ColumnDescriptor<E> {
         private String columnTitle;
 
         private boolean sortable = true;
-
-        private boolean ascending = true;
 
         private String width;
 
@@ -155,11 +163,6 @@ public class ColumnDescriptor<E> {
 
         public Builder sortable(boolean sortable) {
             this.sortable = sortable;
-            return this;
-        }
-
-        public Builder ascendingSort(boolean ascending) {
-            this.ascending = ascending;
             return this;
         }
 

@@ -345,7 +345,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             StringBuffer headerText = new StringBuffer("&nbsp;");
             headerText.append(columnTitle);
             if (columnDescriptor.equals(model.getSortColumn())) {
-                if (columnDescriptor.isSortAscending()) {
+                if (model.isSortAscending()) {
                     headerText.append("&nbsp;&#x2191;");
                 } else {
                     headerText.append("&nbsp;&#x2193;");
@@ -477,12 +477,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             ColumnDescriptor<E> columnDescriptor = model.getVisibleColumnDescriptor(column);
             if (columnDescriptor.isSortable()) {
                 if (columnDescriptor.equals(model.getSortColumn())) {
-                    columnDescriptor.setSortAscending(!columnDescriptor.isSortAscending());
+                    model.setSortAscending(!model.isSortAscending());
                 } else {
                     model.setSortColumn(columnDescriptor);
                 }
-
-                renderHeader();
 
                 // notify listeners:
                 if (sortChangeHandlers != null) {

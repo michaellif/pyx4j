@@ -394,7 +394,7 @@ public abstract class ListerBase<E extends IEntity> extends VerticalPanel implem
             for (Sort sort : sorts) {
                 for (ColumnDescriptor<E> column : getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
                     if (column.getColumnName().compareTo(sort.getPropertyName()) == 0) {
-                        column.setSortAscending(!sort.isDescending());
+                        getDataTablePanel().getDataTableModel().setSortAscending(!sort.isDescending());
                         if (!primarySet) {
                             getDataTablePanel().getDataTableModel().setSortColumn(column);
                             primarySet = true;
