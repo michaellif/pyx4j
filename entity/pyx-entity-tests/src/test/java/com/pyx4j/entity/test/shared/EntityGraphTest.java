@@ -172,7 +172,7 @@ public class EntityGraphTest extends InitializerTestCase {
         ol.setPrimaryKey(new Key(55));
         ol.name().setValue("To be removed");
 
-        final OwnedLeaf olBase = (OwnedLeaf) ol.cloneEntity();
+        final OwnedLeaf olBase = (OwnedLeaf) ol.duplicate();
 
         root.ownedLeaf().set(ol);
         assertTrue(ol.equals(root.ownedLeaf()));
@@ -212,7 +212,7 @@ public class EntityGraphTest extends InitializerTestCase {
         ol.setPrimaryKey(new Key(55));
         ol.name().setValue("To be removed");
 
-        final OwnedLeaf olBase = (OwnedLeaf) ol.cloneEntity();
+        final OwnedLeaf olBase = (OwnedLeaf) ol.duplicate();
 
         // Add to root
         root.ownedLeafs().add(ol);

@@ -98,16 +98,16 @@ public class DetachedValuesTest extends InitializerTestCase {
 
         assertTrue("isValuesDetached", emp.department().isValueDetached());
 
-        Department dptc = emp.department().cloneEntity();
+        Department dptc = emp.department().duplicate();
         assertTrue("cloneEntity isValuesDetached", dptc.isValueDetached());
 
-        Employee empc = emp.cloneEntity();
+        Employee empc = emp.duplicate();
         assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValueDetached());
 
-        dptc = emp.department().clone(Department.class);
+        dptc = emp.department().duplicate(Department.class);
         assertTrue("cloneEntity isValuesDetached", dptc.isValueDetached());
 
-        empc = emp.clone(Employee.class);
+        empc = emp.duplicate(Employee.class);
         assertTrue("parent.cloneEntity isValuesDetached", empc.department().isValueDetached());
 
     }

@@ -657,7 +657,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     @SuppressWarnings("unchecked")
-    public IEntity cloneEntity() {
+    public IEntity duplicate() {
         IEntity entity = EntityFactory.create((Class<IEntity>) getObjectClass());
         Map<String, Object> v = getValue();
         if (v != null) {
@@ -705,7 +705,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     @Override
-    public <T extends IEntity> T clone(Class<T> entityClass) {
+    public <T extends IEntity> T duplicate(Class<T> entityClass) {
         Map<String, Object> entityValue = getValue();
         T entity = EntityFactory.create(entityClass);
         // Down cast

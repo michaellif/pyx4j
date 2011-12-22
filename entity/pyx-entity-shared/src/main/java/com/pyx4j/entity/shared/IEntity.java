@@ -141,19 +141,18 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public List<Validator> getValidators(Path memberPath);
 
     /**
-     * TODO rename to 'duplicate'
+     * Clone the entity to new entity of the same type
      * 
      * @return clone of the entity
      */
-    public <T extends IEntity> T cloneEntity();
+    public <T extends IEntity> T duplicate();
 
     /**
-     * Copy all existing members to new Entity
+     * Copy/clone all existing members to new Entity of specific type that has a common ancestor.
      * This function is run-time type safe!
-     * 
-     * TODO rename to: copy/convert/mutate/duplicate
+     * Should be used for Downcasting and upcasting IEntity.
      */
-    public <T extends IEntity> T clone(Class<T> entityClass);
+    public <T extends IEntity> T duplicate(Class<T> entityClass);
 
     /**
      * Detach IEntity from its parent but keep the same shared value object.
@@ -167,6 +166,11 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
      */
     public <T extends IEntity> T createIdentityStub();
 
+    /**
+     * Cast the entity to actual type if entity is Abstract Entity. Return the same entity if Concrete type is the same as current type.
+     * 
+     * @return Entity that reference the same data as original entity.
+     */
     public <T extends IEntity> T cast();
 
     public boolean isObjectClassSameAsDef();

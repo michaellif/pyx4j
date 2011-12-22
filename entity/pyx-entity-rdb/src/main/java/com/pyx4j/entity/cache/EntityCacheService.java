@@ -58,7 +58,7 @@ public class EntityCacheService implements IEntityCacheService {
         }
         T ent = (T) CacheService.get(meta.getEntityClass().getName() + primaryKey);
         if (ent != null) {
-            return ent.cloneEntity();
+            return ent.duplicate();
         } else {
             return null;
         }
@@ -76,7 +76,7 @@ public class EntityCacheService implements IEntityCacheService {
             for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
                 Object ent = CacheService.get(meta.getEntityClass().getName() + primaryKey);
                 if (ent != null) {
-                    ret.put(primaryKey, (T) ((T) ent).cloneEntity());
+                    ret.put(primaryKey, (T) ((T) ent).duplicate());
                 }
             }
             return ret;
@@ -98,7 +98,7 @@ public class EntityCacheService implements IEntityCacheService {
                 for (com.pyx4j.commons.Key primaryKey : request.getPrimaryKeys()) {
                     Object ent = CacheService.get(meta.getEntityClass().getName() + primaryKey);
                     if (ent != null) {
-                        responce.put(primaryKey, ((IEntity) ent).cloneEntity());
+                        responce.put(primaryKey, ((IEntity) ent).duplicate());
                     }
                 }
                 ret.put(request, responce);
@@ -114,7 +114,7 @@ public class EntityCacheService implements IEntityCacheService {
         if ((cached == null) || (disabled)) {
             return;
         }
-        CacheService.put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity.cloneEntity());
+        CacheService.put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity.duplicate());
     }
 
     @Override
@@ -124,7 +124,7 @@ public class EntityCacheService implements IEntityCacheService {
             if ((cached == null) || (disabled)) {
                 continue;
             }
-            CacheService.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity.cloneEntity());
+            CacheService.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity.duplicate());
         }
     }
 

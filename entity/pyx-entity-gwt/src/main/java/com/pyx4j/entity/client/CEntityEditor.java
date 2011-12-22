@@ -79,7 +79,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
             if ((memberPath != null) && (getValue() != null)) {
                 Object value = event.getValue();
                 if (value instanceof IEntity) {
-                    ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).cloneEntity());
+                    ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).duplicate());
                     log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
                     return;
                 }
@@ -213,7 +213,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         if (populate) {
             assert entity != null : "Entity Editor should not be populated with null. Use discard() instead";
             if (!isAttached()) {
-                this.origEntity = (E) entity.cloneEntity();
+                this.origEntity = (E) entity.duplicate();
             }
         }
         //      this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());

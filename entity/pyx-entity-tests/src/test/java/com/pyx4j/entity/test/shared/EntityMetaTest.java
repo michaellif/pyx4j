@@ -171,14 +171,14 @@ public class EntityMetaTest extends InitializerTestCase {
         ent1.nameC2().setValue("v-name");
         ent1.nameB2().setValue("v-name2");
 
-        Base2Entity ent2 = ent1.clone(Base2Entity.class);
+        Base2Entity ent2 = ent1.duplicate(Base2Entity.class);
         assertFalse("Members not removed", ent2.containsMemberValue(ent1.nameC2().getFieldName()));
 
         assertEquals("value of name2", "v-name2", ent2.nameB2().getValue());
         assertEquals("PK preserved", ent1.getPrimaryKey(), ent2.getPrimaryKey());
 
         try {
-            ent1.clone(Concrete1Entity.class);
+            ent1.duplicate(Concrete1Entity.class);
             fail("Allow invalid cast");
         } catch (ClassCastException ok) {
 
@@ -191,7 +191,7 @@ public class EntityMetaTest extends InitializerTestCase {
         ent1.nameB1().setValue("v-name1");
         ent1.nameB2().setValue("v-name2");
 
-        Concrete2Entity ent2 = ent1.clone(Concrete2Entity.class);
+        Concrete2Entity ent2 = ent1.duplicate(Concrete2Entity.class);
         assertTrue("Members not removed", ent2.containsMemberValue(ent1.nameB2().getFieldName()));
 
         assertEquals("value of name1", "v-name1", ent2.nameB1().getValue());

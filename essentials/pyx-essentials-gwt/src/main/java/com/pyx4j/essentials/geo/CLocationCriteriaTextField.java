@@ -70,7 +70,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, Nati
         if (value == null) {
             value = EntityFactory.create(GeoCriteria.class);
         } else {
-            value = (GeoCriteria) value.cloneEntity();
+            value = (GeoCriteria) value.duplicate();
         }
         value.location().setValue(name);
         setValue(value);
@@ -112,7 +112,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, Nati
 
             @Override
             public void onSuccess(LatLng fromCoordinates) {
-                GeoCriteria value = (GeoCriteria) getValue().cloneEntity();
+                GeoCriteria value = (GeoCriteria) getValue().duplicate();
                 value.geoPoint().setValue(MapUtils.newGeoPointInstance(fromCoordinates));
                 setValue(value);
                 callback.onSuccess(value);

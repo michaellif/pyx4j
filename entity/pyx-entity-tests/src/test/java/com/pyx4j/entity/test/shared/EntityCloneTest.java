@@ -32,7 +32,7 @@ public class EntityCloneTest extends InitializerTestCase {
         Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("First Name");
 
-        Employee employee2 = (Employee) employee.cloneEntity();
+        Employee employee2 = (Employee) employee.duplicate();
 
         assertEquals("Firstname", employee.firstName().getValue(), employee2.firstName().getValue());
 
@@ -51,7 +51,7 @@ public class EntityCloneTest extends InitializerTestCase {
         address.streetName().setValue("Home Street");
         assertEquals("Level 2 value Orig", "Home Street", employee.homeAddress().streetName().getValue());
 
-        Employee employee2 = (Employee) employee.cloneEntity();
+        Employee employee2 = (Employee) employee.duplicate();
         assertEquals("Level 2 value Cloned", "Home Street", employee2.homeAddress().streetName().getValue());
 
         assertEquals("Level 2 value", employee.homeAddress().streetName().getValue(), employee2.homeAddress().streetName().getValue());
@@ -79,7 +79,7 @@ public class EntityCloneTest extends InitializerTestCase {
 
         org.departments().add(department);
 
-        Organization orgClone = org.cloneEntity();
+        Organization orgClone = org.duplicate();
 
         assertEquals("Level 1 name", org.name().getValue(), orgClone.name().getValue());
         assertEquals("Level 2 name", org.departments().iterator().next().name().getValue(), orgClone.departments().iterator().next().name().getValue());

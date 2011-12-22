@@ -76,7 +76,7 @@ public class EntityDtoBinderTest extends InitializerTestCase {
         Assert.assertEquals(1, emp2.tasksSorted().get(0).notes().size());
         Assert.assertEquals("note1", emp2.tasksSorted().get(0).notes().iterator().next());
 
-        emp2 = emp2.cloneEntity();
+        emp2 = emp2.duplicate();
 
         Assert.assertFalse(new SimpleEntityDtoBinder().updateDBO(emp1, emp2));
 
@@ -98,7 +98,7 @@ public class EntityDtoBinderTest extends InitializerTestCase {
         emp1.workAddress().city().name().setValue("city");
 
         Employee emp2 = new SimpleEntityDtoBinder().createDBO(emp1);
-        emp2 = emp2.cloneEntity();
+        emp2 = emp2.duplicate();
 
         Assert.assertFalse(new SimpleEntityDtoBinder().updateDBO(emp1, emp2));
         Assert.assertEquals("address.country Value", emp1.workAddress().country().name().getValue(), emp2.workAddress().country().name().getValue());

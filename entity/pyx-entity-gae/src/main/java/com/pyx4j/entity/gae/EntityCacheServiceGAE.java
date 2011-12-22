@@ -151,7 +151,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
         }
         if ((entity.getParent() != null) || (entity.getOwner() != null)) {
             // Entity delegate its value
-            entity = (T) entity.cloneEntity();
+            entity = (T) entity.duplicate();
         }
         if (cached.expirationSeconds() > 0) {
             getMemcache().put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity, Expiration.byDeltaSeconds(cached.expirationSeconds()));
@@ -176,7 +176,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
             }
             if ((entity.getParent() != null) || (entity.getOwner() != null)) {
                 // Entity delegate its value
-                entity = entity.cloneEntity();
+                entity = entity.duplicate();
             }
             rawMap.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity);
         }

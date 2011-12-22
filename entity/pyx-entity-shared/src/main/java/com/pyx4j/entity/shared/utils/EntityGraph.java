@@ -268,17 +268,6 @@ public class EntityGraph {
         }
     }
 
-    /**
-     * Downcasting IEntity
-     * 
-     * @param src
-     * @param destinationClass
-     * @return new instance of destinationClass Entity
-     */
-    public static <D extends IEntity, S extends D> D clone(S src, Class<D> destinationClass) {
-        return src.clone(destinationClass);
-    }
-
     public static <D extends IEntity, S extends D> boolean update(S src, D dst) {
         return update(src, dst, new HashSet<IEntity>());
     }
