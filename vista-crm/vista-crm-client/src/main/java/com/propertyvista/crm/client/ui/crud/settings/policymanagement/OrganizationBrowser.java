@@ -35,12 +35,10 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
-import com.propertyvista.domain.policy.NodeType;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -90,33 +88,9 @@ public abstract class OrganizationBrowser implements IsWidget {
             selectionModel.addSelectionChangeHandler(new Handler() {
                 @Override
                 public void onSelectionChange(SelectionChangeEvent event) {
-                    NodeType nodeType = null;
                     Object obj = selectionModel.getSelectedObject();
                     if (obj != null) {
-                        if (obj instanceof AptUnit) {
-                            nodeType = NodeType.UNIT;
-                        } else if (obj instanceof Floorplan) {
-                            nodeType = NodeType.FLOORPLAN;
-                        } else if (obj instanceof Building) {
-                            nodeType = NodeType.BUILDING;
-                        } else if (obj instanceof Complex) {
-                            nodeType = NodeType.COMPLEX;
-                        } else if (obj instanceof Province) {
-                            nodeType = NodeType.PROVINCE;
-                        } else if (obj instanceof Country) {
-                            nodeType = NodeType.COUNTRY;
-                        } else if (obj instanceof String) {
-                            nodeType = NodeType.ORGANIZATION;
-                        } else {
-                            throw new Error("Unknown node was selected");
-                        }
-                        if (nodeType != null) {
-                            if (!nodeType.equals(NodeType.ORGANIZATION)) {
-                                onNodeSelected(((IEntity) obj).getPrimaryKey(), nodeType);
-                            } else {
-                                onNodeSelected(null, nodeType);
-                            }
-                        }
+                        onNodeSelected(obj instanceof IEntity ? (IEntity) obj : null);
                     }
                 }
             });
@@ -310,5 +284,5 @@ public abstract class OrganizationBrowser implements IsWidget {
         }
     }
 
-    public abstract void onNodeSelected(Key nodeKey, NodeType nodeType);
+    public abstract void onNodeSelected(IEntity node);
 }

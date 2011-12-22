@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -20,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -61,6 +63,8 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
 
         private SimplePanel policyEditorPanel;
 
+        private CEntityEditor policyEditor;
+
         public PolicyEditorFormContainer() {
             super(EffectivePolicyDTO.class);
         }
@@ -73,6 +77,15 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             VerticalPanel controlsPanel = new VerticalPanel();
             controlsPanel.setSize("15em", "100%");
             controlsPanel.add(inheritedLabel = new Label(i18n.tr("inherited")));
+            controlsPanel.add(new CButton("Override", new Command() {
+
+                @Override
+                public void execute() {
+                    if (policyEditor != null) {
+                        // TODO somehow make the component editable
+                    }
+                }
+            }));
             contentPanel.setWidget(1, 0, controlsPanel);
             contentPanel.getFlexCellFormatter().setWidth(0, 0, "100");
 
@@ -90,7 +103,8 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             super.onPopulate();
 
             Class<?> policyClass = getValue().policy().getInstanceValueClass();
-            CEntityEditor policyEditor = null;
+
+            policyEditor = null;
             //@formatter:off
             do {
                 if (NumberOfIDsPolicy.class.equals(policyClass)) { policyEditor = new NumberOfIDsPolicyEditorForm();  break; }                

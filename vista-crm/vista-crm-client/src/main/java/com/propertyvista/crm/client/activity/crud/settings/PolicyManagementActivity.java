@@ -20,12 +20,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementView;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementViewImpl;
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
-import com.propertyvista.domain.policy.NodeType;
 import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
 
 public class PolicyManagementActivity extends AbstractActivity implements PolicyManagementView.Presenter {
@@ -47,8 +46,8 @@ public class PolicyManagementActivity extends AbstractActivity implements Policy
     }
 
     @Override
-    public void populateEffectivePolicyPreset(Key pk, NodeType nodeType) {
-        service.effectivePolicyPreset(new AsyncCallback<EffectivePolicyPresetDTO>() {
+    public void populateEffectivePolicyPreset(IEntity node) {
+        service.effectivePolicies(new AsyncCallback<EffectivePolicyPresetDTO>() {
             @Override
             public void onSuccess(EffectivePolicyPresetDTO result) {
                 view.displayEffectivePreset(result);
@@ -58,6 +57,6 @@ public class PolicyManagementActivity extends AbstractActivity implements Policy
             public void onFailure(Throwable caught) {
                 throw new Error(caught);
             }
-        }, pk, nodeType);
+        }, node);
     }
 }

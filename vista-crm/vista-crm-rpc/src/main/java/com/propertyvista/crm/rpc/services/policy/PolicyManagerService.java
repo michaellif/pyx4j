@@ -15,13 +15,15 @@ package com.propertyvista.crm.rpc.services.policy;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.policy.NodeType;
+import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
 
 public interface PolicyManagerService extends IService {
 
-    void effectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType);
+    void effectivePolicies(AsyncCallback<EffectivePolicyPresetDTO> callback, IEntity node);
+
+    void effectivePolicy(AsyncCallback<Policy> callback, IEntity node, Policy policyProto);
 }

@@ -21,6 +21,7 @@ import com.propertyvista.domain.policy.Policy;
 
 @Transient
 public interface EffectivePolicyDTO extends IEntity {
+
     PoliciesAtNode inheritedFrom();
 
     Policy policy();

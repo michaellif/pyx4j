@@ -13,26 +13,35 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.policy.NodeType;
+import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
+import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyPreset;
 import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
+import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyManagementView {
     private static final I18n i18n = I18n.get(PolicyManagementViewImpl.class);
 
-    private static final double BROWSER_WIDTH = 20.0;
+    private static final double BROWSER_WIDTH = 25.0;
 
     FormFlexPanel panel;
 
@@ -47,8 +56,8 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
 
         addEast(new OrganizationBrowser() {
             @Override
-            public void onNodeSelected(Key nodeKey, NodeType nodeType) {
-                getPresenter().populateEffectivePolicyPreset(nodeKey, nodeType);
+            public void onNodeSelected(IEntity node) {
+                getPresenter().populateEffectivePolicyPreset(node);
             }
         }, BROWSER_WIDTH);
 
@@ -58,6 +67,24 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
                 FormFlexPanel content = new FormFlexPanel();
                 content.setSize("100%", "100%");
                 int row = -1;
+                content.setWidget(++row, 0, new CButton("Test", new Command() {
+                    @Override
+                    public void execute() {
+                        PolicyManagerService service = GWT.create(PolicyManagerService.class);
+                        service.effectivePolicy(new AsyncCallback<Policy>() {
+                            @Override
+                            public void onSuccess(Policy result) {
+                                Window.alert("success");
+                            }
+
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                Window.alert(caught.getLocalizedMessage());
+                            }
+                        }, EntityFactory.create(AptUnit.class), EntityFactory.create(NumberOfIDsPolicy.class));
+                    }
+                }));
+                content.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
                 content.setWidget(++row, 0, inject(proto().effectivePolicies(), new PolicyFolder()));
                 content.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
                 return content;
