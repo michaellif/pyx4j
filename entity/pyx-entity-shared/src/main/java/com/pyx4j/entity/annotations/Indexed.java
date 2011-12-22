@@ -36,6 +36,8 @@ public @interface Indexed {
 
     String name() default "";
 
+    boolean uniqueConstraint() default false;
+
     boolean indexPrimaryValue() default true;
 
     Class<? extends IndexAdapter<?>>[] adapters() default {};
