@@ -25,8 +25,8 @@ import com.pyx4j.commons.Key;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementView;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementViewImpl;
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
-import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
-import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
+import com.propertyvista.domain.policy.NodeType;
+import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
 
 public class PolicyManagementActivity extends AbstractActivity implements PolicyManagementView.Presenter {
     protected final PolicyManagementView view;

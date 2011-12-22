@@ -7,22 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Dec 16, 2011
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.BuildingPolicy;
 import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.UnitPolicy;
 
-@DiscriminatorValue("PoolUsageFeePolicy")
-public interface PoolUsageFeePolicy extends BuildingPolicy, Policy {
+@DiscriminatorValue("AllowedIDsPolicy")
+public interface AllowedIDsPolicy extends Policy, UnitPolicy {
 
-    @Format("#,##")
-    IPrimitive<Double> monthlyPoolFee();
+    IList<IdentificationDocument> allowedIDs();
+
+    @Deprecated
+    IPrimitive<Integer> x(); // needed just so that the entity could be created in the database with no probelms
 }

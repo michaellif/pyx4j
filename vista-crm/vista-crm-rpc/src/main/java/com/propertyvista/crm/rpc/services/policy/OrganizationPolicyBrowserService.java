@@ -21,16 +21,22 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 
 public interface OrganizationPolicyBrowserService extends IService {
     void getCountries(AsyncCallback<Vector<Country>> callback);
 
-    void getComplexes(AsyncCallback<Vector<Complex>> callback, Key countryPk);
+    void getProvinces(AsyncCallback<Vector<Province>> callback, Key countryPk);
+
+    void getComplexes(AsyncCallback<Vector<Complex>> callback, Key provincePk);
 
     void getBuildings(AsyncCallback<Vector<Building>> callback, Key complexPk);
 
-    void getUnits(AsyncCallback<Vector<AptUnit>> callback, Key buildingPk);
+    void getFloorplans(AsyncCallback<Vector<Floorplan>> callback, Key buildingPk);
+
+    void getUnits(AsyncCallback<Vector<AptUnit>> callback, Key floorplanPk);
 }

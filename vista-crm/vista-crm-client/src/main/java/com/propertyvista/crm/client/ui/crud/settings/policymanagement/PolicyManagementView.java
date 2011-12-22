@@ -17,8 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 
-import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
-import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
+import com.propertyvista.domain.policy.NodeType;
+import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
 
 public interface PolicyManagementView extends IsWidget {
     interface Presenter {

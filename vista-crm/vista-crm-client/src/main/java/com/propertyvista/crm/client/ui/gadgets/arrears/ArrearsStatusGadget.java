@@ -188,24 +188,27 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         private Vector<Criterion> getCustomCriteria() {
             Vector<Criterion> customCriteria = new Vector<Criterion>();
-            for (DataTableFilterData filterData : getListerFilterData()) {
-                if (filterData.isFilterOK()) {
-                    switch (filterData.getOperand()) {
-                    case is:
-                        customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.EQUAL, filterData.getValue()));
-                        break;
-                    case isNot:
-                        customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.NOT_EQUAL, filterData.getValue()));
-                        break;
-                    case like:
-                        customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.RDB_LIKE, filterData.getValue()));
-                        break;
-                    case greaterThan:
-                        customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.GREATER_THAN, filterData.getValue()));
-                        break;
-                    case lessThan:
-                        customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.LESS_THAN, filterData.getValue()));
-                        break;
+            List<DataTableFilterData> filters = getListerFilterData();
+            if (filters != null) {
+                for (DataTableFilterData filterData : filters) {
+                    if (filterData.isFilterOK()) {
+                        switch (filterData.getOperand()) {
+                        case is:
+                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.EQUAL, filterData.getValue()));
+                            break;
+                        case isNot:
+                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.NOT_EQUAL, filterData.getValue()));
+                            break;
+                        case like:
+                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.RDB_LIKE, filterData.getValue()));
+                            break;
+                        case greaterThan:
+                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.GREATER_THAN, filterData.getValue()));
+                            break;
+                        case lessThan:
+                            customCriteria.add(new PropertyCriterion(filterData.getMemberPath(), Restriction.LESS_THAN, filterData.getValue()));
+                            break;
+                        }
                     }
                 }
             }

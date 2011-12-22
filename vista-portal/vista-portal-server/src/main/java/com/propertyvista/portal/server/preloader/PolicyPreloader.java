@@ -21,12 +21,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.PolicyPreset;
-import com.propertyvista.domain.policy.PolicyPresetAtNode;
-import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
-import com.propertyvista.domain.policy.policies.AllowedIDs;
+import com.propertyvista.domain.policy.assignment.DefaultPolicies;
+import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.IdentificationDocument;
-import com.propertyvista.domain.policy.policies.NumberOfIDs;
+import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
@@ -34,49 +33,42 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-        PolicyPreset defaultPolicyPreset = EntityFactory.create(PolicyPreset.class);
-        defaultPolicyPreset.name().setValue(i18n.tr("Default Global Policy"));
-        defaultPolicyPreset.description().setValue(i18n.tr("Default built-in global policy"));
-
         // Create default policies
-        defaultPolicyPreset.policies().addAll(Arrays.asList(//@formatter:off
+        PolicyPreset defaultPreset = EntityFactory.create(PolicyPreset.class);
+        defaultPreset.policies().addAll(Arrays.asList(//@formatter:off
                 initNumberOfIdsDefaultPolicy(),
                 initAllowedIdsDefaultPolicy(),
                 initGymUsageFeeDefaultPolicy(),
                 initPoolUsageFeeDefaultPolicy()
         ));//@formatter:on
+        Persistence.service().persist(defaultPreset);
 
-        Persistence.service().persist(defaultPolicyPreset);
+        DefaultPolicies defaultPolicies = EntityFactory.create(DefaultPolicies.class);
+        defaultPolicies.preset().set(defaultPreset);
+        Persistence.service().persist(defaultPolicies);
 
-        // Assign the default preset to the organization
-        PolicyPresetAtNode policyPresetAtOrganizationNode = EntityFactory.create(PolicyPresetAtNode.class);
-        policyPresetAtOrganizationNode.nodeType().setValue(NodeType.organization);
-        policyPresetAtOrganizationNode.policyPreset().set(defaultPolicyPreset);
-
-        Persistence.service().persist(policyPresetAtOrganizationNode);
-
-        return "Created default global policy";
+        return "Created default global policies";
     }
 
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PolicyPresetAtNode.class, IdentificationDocument.class);
+            return deleteAll(PolicyPreset.class, IdentificationDocument.class);
         } else {
             return "This is production";
         }
     }
 
-    private NumberOfIDs initNumberOfIdsDefaultPolicy() {
-        NumberOfIDs numOfIDs = EntityFactory.create(NumberOfIDs.class);
+    private NumberOfIDsPolicy initNumberOfIdsDefaultPolicy() {
+        NumberOfIDsPolicy numOfIDs = EntityFactory.create(NumberOfIDsPolicy.class);
         numOfIDs.numOfIDs().setValue(5);
         Persistence.service().persist(numOfIDs);
         return numOfIDs;
     }
 
-    private AllowedIDs initAllowedIdsDefaultPolicy() {
+    private AllowedIDsPolicy initAllowedIdsDefaultPolicy() {
         // Allowed IDs default policy
-        AllowedIDs allowedIDs = EntityFactory.create(AllowedIDs.class);
+        AllowedIDsPolicy allowedIDs = EntityFactory.create(AllowedIDsPolicy.class);
         IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
         id.name().setValue(i18n.tr("Passport"));
         Persistence.service().persist(id);
@@ -91,6 +83,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         id.name().setValue(i18n.tr("Citizenship Card"));
         Persistence.service().persist(id);
         allowedIDs.allowedIDs().add(id);
+
         Persistence.service().persist(allowedIDs);
         return allowedIDs;
     }

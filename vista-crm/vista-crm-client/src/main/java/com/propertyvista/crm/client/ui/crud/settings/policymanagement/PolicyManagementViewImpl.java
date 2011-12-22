@@ -25,9 +25,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.policy.EffectivePolicyPresetDTO;
+import com.propertyvista.domain.policy.NodeType;
 import com.propertyvista.domain.policy.PolicyPreset;
-import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
+import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
 
 public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyManagementView {
     private static final I18n i18n = I18n.get(PolicyManagementViewImpl.class);
@@ -58,14 +58,6 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
                 FormFlexPanel content = new FormFlexPanel();
                 content.setSize("100%", "100%");
                 int row = -1;
-//                content.setWidget(++row, 0, new CButton(i18n.tr("Edit"), new Command() {
-//                    @Override
-//                    public void execute() {
-//                    }
-//                }));
-//                content.setWidget(++row, 0,
-//                        new DecoratorBuilder(inject(proto().assignedPolicyPreset().policyPreset().name())).customLabel(i18n.tr("Assigned Preset")).build());
-//                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().assignedPolicyPreset().policyPreset().description(), new CTextArea())).build());
                 content.setWidget(++row, 0, inject(proto().effectivePolicies(), new PolicyFolder()));
                 content.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
                 return content;

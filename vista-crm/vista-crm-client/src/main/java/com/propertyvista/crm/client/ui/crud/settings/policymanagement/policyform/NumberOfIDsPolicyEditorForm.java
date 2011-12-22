@@ -18,12 +18,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.policy.policies.NumberOfIDs;
+import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 
-public class NumberOfIDsPolicyEditorForm extends CEntityDecoratableEditor<NumberOfIDs> {
+public class NumberOfIDsPolicyEditorForm extends CEntityDecoratableEditor<NumberOfIDsPolicy> {
 
     public NumberOfIDsPolicyEditorForm() {
-        super(NumberOfIDs.class);
+        super(NumberOfIDsPolicy.class);
     }
 
     @Override

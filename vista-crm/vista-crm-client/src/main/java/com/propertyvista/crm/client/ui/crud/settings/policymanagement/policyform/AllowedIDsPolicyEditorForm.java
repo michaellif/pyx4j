@@ -22,13 +22,13 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.policy.policies.AllowedIDs;
+import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.IdentificationDocument;
 
-public class AllowedIDsPolicyEditorForm extends CEntityDecoratableEditor<AllowedIDs> {
+public class AllowedIDsPolicyEditorForm extends CEntityDecoratableEditor<AllowedIDsPolicy> {
 
     public AllowedIDsPolicyEditorForm() {
-        super(AllowedIDs.class);
+        super(AllowedIDsPolicy.class);
     }
 
     @Override

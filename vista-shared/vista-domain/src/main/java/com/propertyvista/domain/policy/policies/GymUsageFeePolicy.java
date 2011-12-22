@@ -17,10 +17,11 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.policy.BuildingPolicy;
 import com.propertyvista.domain.policy.Policy;
 
-@DiscriminatorValue("PolicyGymUsageFee")
-public interface GymUsageFeePolicy extends Policy {
+@DiscriminatorValue("GymUsageFeePolicy")
+public interface GymUsageFeePolicy extends BuildingPolicy, Policy {
 
     @Format("#,##")
     IPrimitive<Double> monthlyGymFee();

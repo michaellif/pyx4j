@@ -40,11 +40,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
-import com.propertyvista.domain.policy.PolicyPresetAtNode.NodeType;
+import com.propertyvista.domain.policy.NodeType;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 
 public abstract class OrganizationBrowser implements IsWidget {
     private static final I18n i18n = I18n.get(OrganizationBrowser.class);
@@ -92,20 +94,24 @@ public abstract class OrganizationBrowser implements IsWidget {
                     Object obj = selectionModel.getSelectedObject();
                     if (obj != null) {
                         if (obj instanceof AptUnit) {
-                            nodeType = NodeType.unit;
+                            nodeType = NodeType.UNIT;
+                        } else if (obj instanceof Floorplan) {
+                            nodeType = NodeType.FLOORPLAN;
                         } else if (obj instanceof Building) {
-                            nodeType = NodeType.building;
+                            nodeType = NodeType.BUILDING;
                         } else if (obj instanceof Complex) {
-                            nodeType = NodeType.complex;
+                            nodeType = NodeType.COMPLEX;
+                        } else if (obj instanceof Province) {
+                            nodeType = NodeType.PROVINCE;
                         } else if (obj instanceof Country) {
-                            nodeType = NodeType.country;
+                            nodeType = NodeType.COUNTRY;
                         } else if (obj instanceof String) {
-                            nodeType = NodeType.organization;
+                            nodeType = NodeType.ORGANIZATION;
                         } else {
                             throw new Error("Unknown node was selected");
                         }
                         if (nodeType != null) {
-                            if (!nodeType.equals(NodeType.organization)) {
+                            if (!nodeType.equals(NodeType.ORGANIZATION)) {
                                 onNodeSelected(((IEntity) obj).getPrimaryKey(), nodeType);
                             } else {
                                 onNodeSelected(null, nodeType);
@@ -119,7 +125,6 @@ public abstract class OrganizationBrowser implements IsWidget {
 
         @Override
         public <T> NodeInfo<?> getNodeInfo(final T value) {
-            // TODO add Region
             if (value == null) {
                 // Root Node
                 return new DefaultNodeInfo<String>(new ListDataProvider<String>(Arrays.asList(i18n.tr("Organization"))), new TextCell(), selectionModel, null);
@@ -135,7 +140,11 @@ public abstract class OrganizationBrowser implements IsWidget {
 
                             @Override
                             public void onSuccess(Vector<Country> result) {
-                                updateRowData(display, 0, result);
+                                if (result.isEmpty()) {
+                                    updateRowCount(0, true);
+                                } else {
+                                    updateRowData(display, 0, result);
+                                }
                             }
                         });
                     }
@@ -148,6 +157,38 @@ public abstract class OrganizationBrowser implements IsWidget {
                     };
                 }, selectionModel, null);
             } else if (value instanceof Country) {
+                return new DefaultNodeInfo<Province>(new AbstractDataProvider<Province>() {
+                    @Override
+                    protected void onRangeChanged(final HasData<Province> display) {
+                        service.getProvinces(new AsyncCallback<Vector<Province>>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                throw new Error(caught);
+                            }
+
+                            @Override
+                            public void onSuccess(final Vector<Province> result) {
+                                if (result.isEmpty()) {
+                                    updateRowCount(0, true);
+                                } else {
+                                    updateRowData(display, 0, result);
+                                }
+                            }
+                        }, ((Country) value).getPrimaryKey());
+                    }
+                }, new AbstractCell<Province>() {
+                    @Override
+                    public void render(com.google.gwt.cell.client.Cell.Context context, Province value, SafeHtmlBuilder sb) {
+                        if (value != null) {
+                            if (value.isNull()) {
+                                sb.appendEscaped(i18n.tr("Buildings that do not belong to a Province"));
+                            } else {
+                                sb.appendEscaped(value.name().getValue());
+                            }
+                        }
+                    }
+                }, selectionModel, null);
+            } else if (value instanceof Province) {
                 return new DefaultNodeInfo<Complex>(new AbstractDataProvider<Complex>() {
                     @Override
                     protected void onRangeChanged(final HasData<Complex> display) {
@@ -159,9 +200,13 @@ public abstract class OrganizationBrowser implements IsWidget {
 
                             @Override
                             public void onSuccess(final Vector<Complex> result) {
-                                updateRowData(display, 0, result);
+                                if (result.isEmpty()) {
+                                    updateRowCount(0, true);
+                                } else {
+                                    updateRowData(display, 0, result);
+                                }
                             }
-                        }, ((Country) value).getPrimaryKey());
+                        }, ((Province) value).getPrimaryKey());
                     }
                 }, new AbstractCell<Complex>() {
                     @Override
@@ -187,7 +232,11 @@ public abstract class OrganizationBrowser implements IsWidget {
 
                             @Override
                             public void onSuccess(final Vector<Building> result) {
-                                updateRowData(display, 0, result);
+                                if (result.isEmpty()) {
+                                    updateRowCount(0, true);
+                                } else {
+                                    updateRowData(display, 0, result);
+                                }
                             }
                         }, ((Complex) value).getPrimaryKey());
                     }
@@ -200,6 +249,34 @@ public abstract class OrganizationBrowser implements IsWidget {
                     }
                 }, selectionModel, null);
             } else if (value instanceof Building) {
+                return new DefaultNodeInfo<Floorplan>(new AbstractDataProvider<Floorplan>() {
+                    @Override
+                    protected void onRangeChanged(final HasData<Floorplan> display) {
+                        service.getFloorplans(new AsyncCallback<Vector<Floorplan>>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                throw new Error(caught);
+                            }
+
+                            @Override
+                            public void onSuccess(final Vector<Floorplan> result) {
+                                if (result.isEmpty()) {
+                                    updateRowCount(0, true);
+                                } else {
+                                    updateRowData(display, 0, result);
+                                }
+                            }
+                        }, ((Building) value).getPrimaryKey());
+                    }
+                }, new AbstractCell<Floorplan>() {
+                    @Override
+                    public void render(com.google.gwt.cell.client.Cell.Context context, Floorplan value, SafeHtmlBuilder sb) {
+                        if (value != null) {
+                            sb.appendEscaped(value.getStringView());
+                        }
+                    }
+                }, selectionModel, null);
+            } else if (value instanceof Floorplan) {
                 return new DefaultNodeInfo<AptUnit>(new AbstractDataProvider<AptUnit>() {
                     @Override
                     protected void onRangeChanged(final HasData<AptUnit> display) {
@@ -213,7 +290,7 @@ public abstract class OrganizationBrowser implements IsWidget {
                             public void onSuccess(final Vector<AptUnit> result) {
                                 updateRowData(display, 0, result);
                             }
-                        }, ((Building) value).getPrimaryKey());
+                        }, ((Floorplan) value).getPrimaryKey());
                     }
                 }, new AbstractCell<AptUnit>() {
                     @Override

@@ -7,20 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies;
+package com.propertyvista.domain.policy.assignment;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.PoliciesAtNode;
+import com.propertyvista.domain.ref.Country;
 
-@DiscriminatorValue("PolicyAllowedIDs")
-@ToStringFormat("Allowed IDs")
-public interface AllowedIDs extends Policy {
-    IList<IdentificationDocument> allowedIDs();
+@DiscriminatorValue("PoliciesAtCountry")
+public interface PoliciesAtCountry extends PoliciesAtNode {
+
+    @Detached
+    Country country();
 }

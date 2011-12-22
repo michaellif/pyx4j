@@ -7,18 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 19, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.assignment;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-@Transient
-public interface EffectivePolicyDTO extends IEntity {
-    PolicyPresetAtNode inheritedFrom();
+import com.propertyvista.domain.policy.PoliciesAtNode;
+import com.propertyvista.domain.property.asset.Floorplan;
 
-    Policy policy();
+@DiscriminatorValue("PoliciesAtFloorplan")
+public interface PoliciesAtFloorplan extends PoliciesAtNode {
+
+    @Detached
+    Floorplan floorplan();
 }

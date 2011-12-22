@@ -11,17 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.policy;
+package com.propertyvista.domain.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.IService;
+@Inheritance
+@AbstractEntity
+public interface PoliciesAtNode extends IEntity {
 
-import com.propertyvista.domain.policy.NodeType;
-import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
-
-public interface PolicyManagerService extends IService {
-
-    void effectivePolicyPreset(AsyncCallback<EffectivePolicyPresetDTO> callback, Key pk, NodeType nodeType);
+    @Detached
+    PolicyPreset preset();
 }

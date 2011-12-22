@@ -16,10 +16,9 @@ package com.propertyvista.domain.policy;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
 @Inheritance
 @AbstractEntity
 public interface Policy extends IEntity {
-    IPrimitive<String> policyVersion();
+
 }

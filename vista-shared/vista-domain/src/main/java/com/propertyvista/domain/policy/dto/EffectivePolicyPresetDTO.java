@@ -11,15 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.policy.PoliciesAtNode;
+
 @Transient
 public interface EffectivePolicyPresetDTO extends IEntity {
-    PolicyPresetAtNode assignedPolicyPreset();
+    PoliciesAtNode directlyAssignedFrom();
 
     IList<EffectivePolicyDTO> effectivePolicies();
 }

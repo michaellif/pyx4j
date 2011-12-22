@@ -18,8 +18,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PolicyPreset extends IEntity {
-    IPrimitive<String> name();
-
     IPrimitive<String> description();
 
     IList<Policy> policies();

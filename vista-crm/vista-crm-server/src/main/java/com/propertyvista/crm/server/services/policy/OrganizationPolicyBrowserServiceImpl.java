@@ -25,9 +25,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 
 public class OrganizationPolicyBrowserServiceImpl implements OrganizationPolicyBrowserService {
 
@@ -39,15 +41,23 @@ public class OrganizationPolicyBrowserServiceImpl implements OrganizationPolicyB
     }
 
     @Override
-    public void getComplexes(AsyncCallback<Vector<Complex>> callback, Key countryPk) {
+    public void getProvinces(AsyncCallback<Vector<Province>> callback, Key countryPk) {
+        EntityQueryCriteria<Province> criteria = new EntityQueryCriteria<Province>(Province.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().country(), countryPk));
+        List<Province> provinces = Persistence.service().query(criteria);
+
+        callback.onSuccess(new Vector<Province>(provinces));
+    }
+
+    @Override
+    public void getComplexes(AsyncCallback<Vector<Complex>> callback, Key provincePk) {
         EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().info().address().country(), countryPk));
+        criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), provincePk));
         criteria.add(PropertyCriterion.eq(criteria.proto().complexPrimary(), true));
         List<Building> primaryBuildings = Persistence.service().query(criteria);
 
         Vector<Complex> complexes = new Vector<Complex>(primaryBuildings.size());
         for (Building building : primaryBuildings) {
-            //Persistence.service().retrieve(building.complex());
             complexes.add((Complex) building.complex().cloneEntity());
         }
 
@@ -63,11 +73,19 @@ public class OrganizationPolicyBrowserServiceImpl implements OrganizationPolicyB
     }
 
     @Override
-    public void getUnits(AsyncCallback<Vector<AptUnit>> callback, Key buildingPk) {
+    public void getFloorplans(AsyncCallback<Vector<Floorplan>> callback, Key buildingPk) {
+        EntityQueryCriteria<Floorplan> criteria = new EntityQueryCriteria<Floorplan>(Floorplan.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), buildingPk));
+
+        callback.onSuccess(new Vector<Floorplan>(Persistence.service().query(criteria)));
+    }
+
+    @Override
+    public void getUnits(AsyncCallback<Vector<AptUnit>> callback, Key floorplanPk) {
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
 
         criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), buildingPk));
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplanPk));
 
         callback.onSuccess(new Vector<AptUnit>(Persistence.service().query(criteria)));
     }

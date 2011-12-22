@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -29,11 +30,11 @@ import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.GymUsageFeePolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.PoolUsageFeePolicyEditorForm;
-import com.propertyvista.domain.policy.EffectivePolicyDTO;
-import com.propertyvista.domain.policy.PolicyPresetAtNode;
-import com.propertyvista.domain.policy.policies.AllowedIDs;
+import com.propertyvista.domain.policy.PoliciesAtNode;
+import com.propertyvista.domain.policy.dto.EffectivePolicyDTO;
+import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
-import com.propertyvista.domain.policy.policies.NumberOfIDs;
+import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
 public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
@@ -56,6 +57,8 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
     private static class PolicyEditorFormContainer extends CEntityDecoratableEditor<EffectivePolicyDTO> {
         private FormFlexPanel contentPanel;
 
+        private Label inheritedLabel;
+
         private SimplePanel policyEditorPanel;
 
         public PolicyEditorFormContainer() {
@@ -69,8 +72,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
 
             VerticalPanel controlsPanel = new VerticalPanel();
             controlsPanel.setSize("15em", "100%");
-            controlsPanel.add(new DecoratorBuilder(inject(proto().inheritedFrom().nodeType())).customLabel(i18n.tr("Inherited From")).componentWidth(5)
-                    .labelWidth(7).build());
+            controlsPanel.add(inheritedLabel = new Label(i18n.tr("inherited")));
             contentPanel.setWidget(1, 0, controlsPanel);
             contentPanel.getFlexCellFormatter().setWidth(0, 0, "100");
 
@@ -91,8 +93,8 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             CEntityEditor policyEditor = null;
             //@formatter:off
             do {
-                if (NumberOfIDs.class.equals(policyClass)) { policyEditor = new NumberOfIDsPolicyEditorForm();  break; }                
-                if (AllowedIDs.class.equals(policyClass)) { policyEditor = new AllowedIDsPolicyEditorForm(); break; }
+                if (NumberOfIDsPolicy.class.equals(policyClass)) { policyEditor = new NumberOfIDsPolicyEditorForm();  break; }                
+                if (AllowedIDsPolicy.class.equals(policyClass)) { policyEditor = new AllowedIDsPolicyEditorForm(); break; }
                 if (GymUsageFeePolicy.class.equals(policyClass)) { policyEditor = new GymUsageFeePolicyEditorForm(); break; }
                 if (PoolUsageFeePolicy.class.equals(policyClass)) { policyEditor = new PoolUsageFeePolicyEditorForm(); break; }
             } while (false);
@@ -108,11 +110,11 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             policyEditorPanel.clear();
             policyEditorPanel.setWidget(policyEditor);
 
-            PolicyPresetAtNode inheritedFrom = getValue().inheritedFrom();
+            PoliciesAtNode inheritedFrom = getValue().inheritedFrom();
             if (inheritedFrom.isNull()) {
-                get(proto().inheritedFrom().nodeType()).setVisible(false);
+                inheritedLabel.setVisible(false);
             } else {
-                get(proto().inheritedFrom().nodeType()).setVisible(true);
+                inheritedLabel.setVisible(true);
             }
         }
 

@@ -7,41 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.assignment;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.policy.PoliciesAtNode;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Country;
 
-public interface PolicyPresetAtNode extends IEntity {
-    public enum NodeType {
-        unit, building, complex, region, country, organization;
-    }
-
-    IPrimitive<NodeType> nodeType();
-
-    @Detached
-    AptUnit unit();
+@DiscriminatorValue("PoliciesAtBuilding")
+public interface PoliciesAtBuilding extends PoliciesAtNode {
 
     @Detached
     Building building();
-
-    @Detached
-    Complex complex();
-
-    @Detached
-    Country country();
-
-    @Detached
-    PolicyPreset policyPreset();
-
 }
