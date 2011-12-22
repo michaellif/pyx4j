@@ -168,6 +168,7 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     /**
      * Cast the entity to actual type if entity is Abstract Entity. Return the same entity if Concrete type is the same as current type.
+     * Use case when you need access to Concrete entity metadata(filed names).
      * 
      * @return Entity that reference the same data as original entity.
      */
