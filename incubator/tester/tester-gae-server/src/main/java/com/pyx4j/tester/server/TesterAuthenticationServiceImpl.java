@@ -20,23 +20,22 @@
  */
 package com.pyx4j.tester.server;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
+import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.AuthenticationServices;
-import com.pyx4j.security.server.AuthenticationServicesImpl;
+import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.tester.rpc.TesterAuthenticationService;
 
-public class TesterAuthenticationServicesImpl extends AuthenticationServicesImpl {
+public class TesterAuthenticationServiceImpl extends AuthenticationServiceImpl implements TesterAuthenticationService {
 
-    public static class AuthenticateImpl implements AuthenticationServices.Authenticate, IsIgnoreSessionTokenService {
-
-        @Override
-        public AuthenticationResponse execute(AuthenticationRequest request) {
-            Lifecycle.beginSession(new UserVisit(new Key("t" + System.currentTimeMillis()), null), null);
-            return AuthenticationServicesImpl.createAuthenticationResponse(null);
-        }
+    @Override
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request) {
+        Lifecycle.beginSession(new UserVisit(new Key("t" + System.currentTimeMillis()), null), null);
+        callback.onSuccess(createAuthenticationResponse(null));
     }
 }

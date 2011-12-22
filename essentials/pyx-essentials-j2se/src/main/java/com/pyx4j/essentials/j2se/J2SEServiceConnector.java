@@ -38,7 +38,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.j2se.J2SEService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.AuthenticationServices;
 
 public class J2SEServiceConnector extends J2SEService {
 
@@ -110,19 +109,19 @@ public class J2SEServiceConnector extends J2SEService {
         AuthenticationRequest authenticationRequest = EntityFactory.create(AuthenticationRequest.class);
         authenticationRequest.email().setValue(credentials.email);
         authenticationRequest.password().setValue(credentials.password);
-        auth = super.execute(AuthenticationServices.Authenticate.class, authenticationRequest);
+        //auth = super.execute(AuthenticationServices.Authenticate.class, authenticationRequest);
         sessionToken = auth.getSessionToken();
     }
 
     public void getApplicationSession() {
-        auth = super.execute(AuthenticationServices.GetStatus.class, null);
+        //auth = super.execute(AuthenticationServices.GetStatus.class, null);
         sessionToken = auth.getSessionToken();
         log.debug("got behaviors {}", auth.getBehaviors());
     }
 
     @Override
     public void logout() {
-        super.execute(AuthenticationServices.Logout.class, null);
+        //super.execute(AuthenticationServices.Logout.class, null);
         if (auth != null) {
             super.removeCookie(auth.getSessionCookieName());
             auth = null;

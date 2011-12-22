@@ -31,25 +31,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.apphosting.api.ApiProxy.CapabilityDisabledException;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.examples.domain.User;
 import com.pyx4j.examples.domain.UserCredential;
-import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
-import com.pyx4j.security.server.AuthenticationServicesImpl;
+import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Lifecycle;
 
-public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesImpl {
+public class ExamplesAuthenticationServicesImpl extends AuthenticationServiceImpl {
 
     private final static Logger log = LoggerFactory.getLogger(ExamplesAuthenticationServicesImpl.class);
 
@@ -62,59 +62,56 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
         }
     }
 
-    public static class AuthenticateImpl implements AuthenticationServices.Authenticate, IsIgnoreSessionTokenService {
-
-        @Override
-        public AuthenticationResponse execute(AuthenticationRequest request) {
-            if (CommonsStringUtils.isEmpty(request.email().getValue()) || CommonsStringUtils.isEmpty(request.password().getValue())) {
-                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-            }
-            if (!validEmailAddress(request.email().getValue())) {
-                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-            }
-
-            AbstractAntiBot.assertLogin(request.email().getValue(), request.captcha().getValue());
-
-            EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue()));
-            List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
-            if (users.size() != 1) {
-                if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
-                    throw new ChallengeVerificationRequired("Too many failed log-in attempts");
-                } else {
-                    throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-                }
-            }
-            User user = users.get(0);
-            UserCredential userCredential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
-            if (userCredential == null) {
-                throw new RuntimeException("Invalid user account, contact support");
-            }
-            if (userCredential.enabled().isNull() || (!userCredential.enabled().getValue())) {
-                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-            }
-            if (!request.password().getValue().equals(userCredential.credential().getValue())) {
-                log.info("Invalid password for user {}", request.email().getValue());
-                if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
-                    throw new ChallengeVerificationRequired("Too many failed log-in attempts");
-                } else {
-                    throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-                }
-            }
-            if (!userCredential.accessKey().isNull()) {
-                userCredential.accessKey().setValue(null);
-                try {
-                    PersistenceServicesFactory.getPersistenceService().persist(userCredential);
-                } catch (CapabilityDisabledException e) {
-                    // Datastore is read-only, degrade gracefully
-                }
-            }
-
-            // Begin Session
-            beginSession(user, userCredential);
-
-            return AuthenticationServicesImpl.createAuthenticationResponse(request.logoutApplicationUrl().getValue());
+    @Override
+    public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request) {
+        if (CommonsStringUtils.isEmpty(request.email().getValue()) || CommonsStringUtils.isEmpty(request.password().getValue())) {
+            throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
+        if (!validEmailAddress(request.email().getValue())) {
+            throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+
+        AbstractAntiBot.assertLogin(request.email().getValue(), request.captcha().getValue());
+
+        EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue()));
+        List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        if (users.size() != 1) {
+            if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
+                throw new ChallengeVerificationRequired("Too many failed log-in attempts");
+            } else {
+                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
+        }
+        User user = users.get(0);
+        UserCredential userCredential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+        if (userCredential == null) {
+            throw new RuntimeException("Invalid user account, contact support");
+        }
+        if (userCredential.enabled().isNull() || (!userCredential.enabled().getValue())) {
+            throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+        if (!request.password().getValue().equals(userCredential.credential().getValue())) {
+            log.info("Invalid password for user {}", request.email().getValue());
+            if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
+                throw new ChallengeVerificationRequired("Too many failed log-in attempts");
+            } else {
+                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
+        }
+        if (!userCredential.accessKey().isNull()) {
+            userCredential.accessKey().setValue(null);
+            try {
+                PersistenceServicesFactory.getPersistenceService().persist(userCredential);
+            } catch (CapabilityDisabledException e) {
+                // Datastore is read-only, degrade gracefully
+            }
+        }
+
+        // Begin Session
+        beginSession(user, userCredential);
+
+        callback.onSuccess(createAuthenticationResponse(request.logoutApplicationUrl().getValue()));
     }
 
     static void beginSession(User user, UserCredential userCredential) {

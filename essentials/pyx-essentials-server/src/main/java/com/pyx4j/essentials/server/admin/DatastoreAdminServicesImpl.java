@@ -22,20 +22,12 @@ package com.pyx4j.essentials.server.admin;
 
 import java.util.Vector;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
-import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.server.AuthenticationServicesImpl;
-import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Lifecycle;
 
 public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
 
@@ -47,16 +39,16 @@ public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
         }
     }
 
-    public static class CreateSessionImpl implements DatastoreAdminServices.CreateSession, IsIgnoreSessionTokenService {
-
-        @Override
-        public AuthenticationResponse execute(AuthenticationRequest request) {
-            if (Context.getSession() == null) {
-                Lifecycle.beginSession(new UserVisit(new Key("x" + String.valueOf(System.currentTimeMillis())), null), null);
-            }
-            return AuthenticationServicesImpl.createAuthenticationResponse(null);
-        }
-    }
+//    public static class CreateSessionImpl implements DatastoreAdminServices.CreateSession, IsIgnoreSessionTokenService {
+//
+//        @Override
+//        public AuthenticationResponse execute(AuthenticationRequest request) {
+//            if (Context.getSession() == null) {
+//                Lifecycle.beginSession(new UserVisit(new Key("x" + String.valueOf(System.currentTimeMillis())), null), null);
+//            }
+//            return AuthenticationServicesImpl.createAuthenticationResponse(null);
+//        }
+//    }
 
     public static class RemoveAllDataDeferredImpl implements DatastoreAdminServices.RemoveAllDataDeferred {
 

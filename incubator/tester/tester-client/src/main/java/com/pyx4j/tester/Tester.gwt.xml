@@ -23,6 +23,7 @@
     <inherits name='com.google.gwt.user.Debug'/>
 
 	<source path="client"/>
+    <source path="rpc"/>
 
 	<entry-point class='com.pyx4j.tester.client.TesterClientEntryPoint'/>
 

@@ -49,7 +49,6 @@ import com.pyx4j.rpc.client.SystemNotificationHandler;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
-import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.CoreBehavior;
@@ -113,7 +112,7 @@ public class ClientContext {
                         ClientContext.terminateSession();
                     } else {
                         log.debug("Authorization Changed");
-                        ClientContext.obtainAuthenticationData(null, null, true, false, null);
+                        ClientContext.obtainAuthenticationData(null, null, true, null);
                     }
                 } else if (event.getSystemNotification() instanceof UserVisitChangedSystemNotification) {
                     log.debug("Authorization Changed");
@@ -267,11 +266,11 @@ public class ClientContext {
      * Keep in mind when changing URL just after this call, that some fast bowers like
      * Chrome and Safari would not execute RPC call and session would still be active.
      */
-    public static void logout(final AsyncCallback<AuthenticationResponse> callback) {
-        logout("/", callback);
+    public static void logout(AuthenticationService authenticationService, final AsyncCallback<AuthenticationResponse> callback) {
+        logout(authenticationService, "/", callback);
     }
 
-    public static void logout(String logoutApplicationUrl, final AsyncCallback<AuthenticationResponse> callback) {
+    public static void logout(AuthenticationService authenticationService, String logoutApplicationUrl, final AsyncCallback<AuthenticationResponse> callback) {
         AsyncCallback<AuthenticationResponse> defaultCallback = new AsyncCallback<AuthenticationResponse>() {
 
             @Override
@@ -292,7 +291,7 @@ public class ClientContext {
                 }
             }
         };
-        RPCManager.execute(AuthenticationServices.Logout.class, logoutApplicationUrl, defaultCallback);
+        authenticationService.logout(defaultCallback);
     }
 
     public static String getCurrentURL() {
@@ -307,12 +306,12 @@ public class ClientContext {
         return logoutURL;
     }
 
-    public static void googleAccountsLogin() {
-        googleAccountsLogin(getCurrentURL());
+    public static void googleAccountsLogin(AuthenticationService authenticationService) {
+        googleAccountsLogin(authenticationService, getCurrentURL());
     }
 
-    public static void googleAccountsLogin(final String destinationURLComponent) {
-        logout(new AsyncCallback<AuthenticationResponse>() {
+    public static void googleAccountsLogin(final AuthenticationService authenticationService, final String destinationURLComponent) {
+        logout(authenticationService, new AsyncCallback<AuthenticationResponse>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -325,7 +324,7 @@ public class ClientContext {
             }
 
             private void googleLogin() {
-                RPCManager.execute(AuthenticationServices.GetGoogleAccountsLoginUrl.class, destinationURLComponent, new AsyncCallback<String>() {
+                authenticationService.getLoginUrl(new AsyncCallback<String>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         log.error("Get LoginUrl failure", caught);
@@ -336,11 +335,9 @@ public class ClientContext {
                         log.debug("go {}", result);
                         Window.Location.replace(result);
                     }
-                });
+                }, destinationURLComponent);
             }
-        }
-
-        );
+        });
     }
 
     public static boolean isAuthenticationObtained() {
@@ -352,17 +349,20 @@ public class ClientContext {
     }
 
     public static void obtainAuthenticationData(final AsyncCallback<Boolean> onAuthenticationAvailable) {
-        obtainAuthenticationData(null, onAuthenticationAvailable, false, true, null);
+        obtainAuthenticationData(null, onAuthenticationAvailable, false, null);
     }
 
     public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvailable) {
-        obtainAuthenticationData(authenticationService, onAuthenticationAvailable, false, true, null);
+        obtainAuthenticationData(authenticationService, onAuthenticationAvailable, false, null);
     }
 
     public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvailable,
-            boolean force, boolean executeBackground, String authenticationToken) {
+            boolean force, String authenticationToken) {
         if (authenticationService != null) {
             service = authenticationService;
+        }
+        if (service == null) {
+            throw new Error();
         }
         if (!force && authenticationObtained) {
             if (onAuthenticationAvailable != null) {
@@ -412,19 +412,11 @@ public class ClientContext {
                 }
             };
 
-            if (service != null) {
-                if ((authenticationToken == null) && HTML5Storage.isSupported()) {
-                    authenticationToken = HTML5Storage.getLocalStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
-                }
-                log.debug("authenticate {}", authenticationToken);
-                service.authenticate(callback, clientSystemInfo, authenticationToken);
-            } else {
-                if (executeBackground) {
-                    RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
-                } else {
-                    RPCManager.execute(AuthenticationServices.GetStatus.class, null, callback);
-                }
+            if ((authenticationToken == null) && HTML5Storage.isSupported()) {
+                authenticationToken = HTML5Storage.getLocalStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
             }
+            log.debug("authenticate {}", authenticationToken);
+            service.authenticate(callback, clientSystemInfo, authenticationToken);
         }
     }
 

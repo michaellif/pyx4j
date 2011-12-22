@@ -20,6 +20,7 @@
  */
 package com.pyx4j.tester.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -29,11 +30,11 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.AuthenticationServices;
+import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.tester.rpc.TesterAuthenticationService;
 import com.pyx4j.widgets.client.GroupBoxPanel;
 
 public class SessionControlPanel extends GroupBoxPanel {
@@ -41,6 +42,8 @@ public class SessionControlPanel extends GroupBoxPanel {
     final Button btnSessionStart;
 
     final Button btnSessionEnd;
+
+    private final AuthenticationService srv = GWT.create(TesterAuthenticationService.class);
 
     SessionControlPanel() {
         super(true);
@@ -65,7 +68,7 @@ public class SessionControlPanel extends GroupBoxPanel {
         btnSessionEnd.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ClientContext.logout(new AsyncCallback<AuthenticationResponse>() {
+                ClientContext.logout(srv, new AsyncCallback<AuthenticationResponse>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         Window.alert(caught.getMessage());
@@ -79,7 +82,7 @@ public class SessionControlPanel extends GroupBoxPanel {
             }
         });
 
-        ClientContext.obtainAuthenticationData(new AsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(srv, new AsyncCallback<Boolean>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -112,6 +115,6 @@ public class SessionControlPanel extends GroupBoxPanel {
             }
         };
         AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
-        RPCManager.execute(AuthenticationServices.Authenticate.class, request, callback);
+        srv.authenticate(callback, null, request);
     }
 }

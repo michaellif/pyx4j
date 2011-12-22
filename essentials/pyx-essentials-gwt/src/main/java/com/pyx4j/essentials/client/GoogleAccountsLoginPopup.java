@@ -28,6 +28,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.widgets.client.PopupWindow;
 
 public class GoogleAccountsLoginPopup {
@@ -38,11 +39,15 @@ public class GoogleAccountsLoginPopup {
         registerCallbacks();
     }
 
-    public static void open() {
+    private static AuthenticationService srv;
+
+    public static void open(AuthenticationService authenticationService) {
+        srv = authenticationService;
         PopupWindow.open("/login", "Login", 660, 580);
     }
 
-    public static void logout() {
+    public static void logout(AuthenticationService authenticationService) {
+        srv = authenticationService;
         PopupWindow.open("/logout", "Logout", PopupWindow.windowScreenLeft() + Window.getClientWidth() - 100,
                 PopupWindow.windowScreenTop() + Window.getClientHeight() - 40, 100, 40);
     }
@@ -54,11 +59,11 @@ public class GoogleAccountsLoginPopup {
             public void onSelection(SelectionEvent<String> event) {
                 if ("loginCompleated".equals(event.getSelectedItem())) {
                     log.debug("login completed");
-                    ClientContext.obtainAuthenticationData(null, null, true, false, null);
+                    ClientContext.obtainAuthenticationData(srv, null, true, null);
                 } else if ("logoutCompleated".equals(event.getSelectedItem())) {
                     log.debug("logout completed");
                     ClientContext.terminateSession();
-                    ClientContext.logout(null);
+                    ClientContext.logout(srv, null);
                 }
             }
         });

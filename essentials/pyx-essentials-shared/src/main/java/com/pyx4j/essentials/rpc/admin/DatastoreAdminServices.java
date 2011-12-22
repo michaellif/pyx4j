@@ -26,7 +26,6 @@ import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.AuthenticationServices;
 
 /**
  * This is mainly development time service.
@@ -36,8 +35,8 @@ public interface DatastoreAdminServices {
     public interface RemoveAllData extends Service<VoidSerializable, String> {
     }
 
-    public interface CreateSession extends AuthenticationServices.Authenticate {
-    }
+//    public interface CreateSession extends AuthenticationServices.Authenticate {
+//    }
 
     public interface RemoveAllDataDeferred extends DeferredProcessServices.AbstractStartDeferredProcessService {
     }

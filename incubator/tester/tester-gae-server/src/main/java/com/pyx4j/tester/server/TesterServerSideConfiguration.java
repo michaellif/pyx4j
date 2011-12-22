@@ -22,15 +22,9 @@ package com.pyx4j.tester.server;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.security.server.ThrottleConfig;
 
 public class TesterServerSideConfiguration extends ServerSideConfiguration {
-
-    @Override
-    public IServiceFactory getRPCServiceFactory() {
-        return new TesterRPCServiceFactory();
-    }
 
     @Override
     public ThrottleConfig getThrottleConfig() {

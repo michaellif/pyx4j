@@ -35,4 +35,11 @@ public interface AuthenticationService extends IService {
 
     public void logout(AsyncCallback<AuthenticationResponse> callback);
 
+    /**
+     * Get GoogleAccounts or JSP login page URL
+     */
+    public void getLoginUrl(AsyncCallback<String> callback, final String destinationURLComponent);
+
+    public void getLogoutUrl(AsyncCallback<String> callback, final String destinationURLComponent);
+
 }

@@ -130,4 +130,14 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         callback.onSuccess(createAuthenticationResponse(null));
     }
 
+    @Override
+    public void getLoginUrl(AsyncCallback<String> callback, String destinationURLComponent) {
+        callback.onSuccess(ContainerHelper.getContainerHelper().createLoginURL(destinationURLComponent));
+    }
+
+    @Override
+    public void getLogoutUrl(AsyncCallback<String> callback, String destinationURLComponent) {
+        callback.onSuccess(ContainerHelper.getContainerHelper().createLogoutURL(destinationURLComponent));
+    }
+
 }
