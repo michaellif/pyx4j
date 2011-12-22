@@ -250,7 +250,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     public void start() {
         getMetadata().pageNumber().setValue(0);
         dataTablePanel.getDataTableModel().setSortColumn(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, getMetadata().primarySortColumn()));
-        dataTablePanel.getDataTableModel().setSortAscending(getMetadata().sortAscending().getValue());
+        dataTablePanel.getDataTableModel().setSortAscending(getMetadata().sortAscending().isBooleanTrue());
         dataTablePanel.getDataTable().renderTable();
         super.start();
     }
