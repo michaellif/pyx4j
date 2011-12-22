@@ -58,7 +58,7 @@ public class OrganizationPolicyBrowserServiceImpl implements OrganizationPolicyB
 
         Vector<Complex> complexes = new Vector<Complex>(primaryBuildings.size());
         for (Building building : primaryBuildings) {
-            complexes.add((Complex) building.complex().cloneEntity());
+            complexes.add((Complex) building.complex().duplicate());
         }
 
         callback.onSuccess(complexes);

@@ -106,13 +106,13 @@ public class MediaGenerator {
                     thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().filename().getStringView(), me.getValue(), ImageTarget.Building);
                     resized.put(m.file().filename().getValue(), thumbnailBlob);
                 }
-                thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
+                thumbnailBlob = (ThumbnailBlob) thumbnailBlob.duplicate();
                 thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
                 Persistence.service().persist(thumbnailBlob);
                 newData = true;
             }
             if (blob_mimize_Preload_Data_Size) {
-                m = (Media) m.cloneEntity();
+                m = (Media) m.duplicate();
                 m.setPrimaryKey(null);
             }
             building.media().add(m);
@@ -143,14 +143,14 @@ public class MediaGenerator {
                     thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().filename().getStringView(), me.getValue(), ImageTarget.Floorplan);
                     resized.put(m.file().filename().getValue(), thumbnailBlob);
                 }
-                thumbnailBlob = (ThumbnailBlob) thumbnailBlob.cloneEntity();
+                thumbnailBlob = (ThumbnailBlob) thumbnailBlob.duplicate();
                 thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
                 Persistence.service().persist(thumbnailBlob);
 
                 newData = true;
             }
             if (blob_mimize_Preload_Data_Size) {
-                m = (Media) m.cloneEntity();
+                m = (Media) m.duplicate();
                 m.setPrimaryKey(null);
             }
 

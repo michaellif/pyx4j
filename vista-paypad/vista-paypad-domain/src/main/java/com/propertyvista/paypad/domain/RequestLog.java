@@ -41,5 +41,5 @@ public interface RequestLog extends IEntity {
 
     IPrimitive<String> responseCode();
 
-    IPrimitive<Boolean> duplicate();
+    IPrimitive<Boolean> duplication();
 }

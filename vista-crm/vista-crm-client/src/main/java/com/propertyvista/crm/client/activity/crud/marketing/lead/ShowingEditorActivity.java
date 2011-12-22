@@ -82,7 +82,7 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
 
             @Override
             public void onSuccess(AptUnit result) {
-                Showing current = view.getValue().cloneEntity();
+                Showing current = view.getValue().duplicate();
 
                 current.unit().set(result);
                 current.building().set(result.belongsTo());

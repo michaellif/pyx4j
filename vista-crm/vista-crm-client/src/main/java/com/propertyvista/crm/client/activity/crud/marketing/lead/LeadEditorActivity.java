@@ -73,7 +73,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
 
             @Override
             public void onSuccess(Floorplan item) {
-                Lead currentValue = view.getValue().cloneEntity();
+                Lead currentValue = view.getValue().duplicate();
 
                 currentValue.building().set(item.building());
                 currentValue.floorplan().set(item);

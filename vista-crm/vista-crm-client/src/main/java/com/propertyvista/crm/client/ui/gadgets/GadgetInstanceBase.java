@@ -421,7 +421,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         @Override
         public boolean onStart() {
             suspend();
-            form.populate(getMetadata().clone(metadataClass));
+            form.populate(getMetadata().duplicate(metadataClass));
             return true;
         }
 

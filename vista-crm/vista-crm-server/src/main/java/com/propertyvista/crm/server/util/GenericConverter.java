@@ -35,11 +35,11 @@ public class GenericConverter {
     }
 
     public static <DBO extends IEntity, DTO extends DBO> DBO convertDTO2DBO(DTO src, Class<DBO> dstClass) {
-        return src.clone(dstClass);
+        return src.duplicate(dstClass);
     }
 
     public static <DBO extends IEntity, DTO extends DBO> DTO convertDBO2DTO(DBO src, Class<DTO> dstClass) {
-        return src.clone(dstClass);
+        return src.duplicate(dstClass);
     }
 
     public static <DTO extends IEntity> EntitySearchCriteria<DTO> convertDTO2DBO(EntitySearchCriteria<? extends DTO> src, Class<DTO> dstClass) {

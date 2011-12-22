@@ -259,7 +259,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                     MediaGenerator.attachGeneratedFloorplanMedia(floorplanDTO);
                 }
 
-                Floorplan floorplan = floorplanDTO.clone(Floorplan.class);
+                Floorplan floorplan = floorplanDTO.duplicate(Floorplan.class);
                 Persistence.service().persist(floorplan.counters());
                 Persistence.service().persist(floorplan); // persist real Object here, not DTO!..
                 floorplanDTO.setPrimaryKey(floorplan.getPrimaryKey());

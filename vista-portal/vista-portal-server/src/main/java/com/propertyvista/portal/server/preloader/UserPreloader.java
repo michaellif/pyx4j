@@ -78,7 +78,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         for (int i = 1; i <= config().maxPropertyManagers; i++) {
             String email = DemoData.UserType.PM.getEmail(i);
 
-            Employee emp = CommonsGenerator.createEmployee().clone(Employee.class);
+            Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
             emp.title().setValue("Executive");
             emp.email().address().setValue(email);
 
@@ -92,7 +92,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         for (int i = 1; i <= config().maxPropertyManagementEmployee; i++) {
             String email = DemoData.UserType.EMP.getEmail(i);
 
-            Employee emp = CommonsGenerator.createEmployee().clone(Employee.class);
+            Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
             emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
             emp.email().address().setValue(email);
 

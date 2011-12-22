@@ -114,7 +114,7 @@ public class CommonsGenerator {
         if (names == null) {
             names = EntityCSVReciver.create(Name.class).loadFile(IOUtils.resourceFileName("employee-names.csv", CommonsGenerator.class));
         }
-        return names.get(DataGenerator.nextInt(names.size(), "names", 10)).cloneEntity(); //doesn't check for duplicate names
+        return names.get(DataGenerator.nextInt(names.size(), "names", 10)).duplicate(); //doesn't check for duplicate names
     }
 
     public static Person createEmployee() {
@@ -174,7 +174,7 @@ public class CommonsGenerator {
             if (adresses == null) {
                 adresses = EntityCSVReciver.create(AddressStructured.class).loadFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
             }
-            return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).cloneEntity();
+            return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
         } else {
             return createAddressWrong();
         }

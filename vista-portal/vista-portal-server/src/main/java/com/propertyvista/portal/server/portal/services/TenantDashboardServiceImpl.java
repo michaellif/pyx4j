@@ -49,7 +49,7 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         Persistence.service().retrieve(tenantInLease.lease().unit().belongsTo());
 
         dashboard.general().floorplanName().set(tenantInLease.lease().unit().floorplan().marketingName());
-        AddressStructured address = tenantInLease.lease().unit().belongsTo().info().address().cloneEntity();
+        AddressStructured address = tenantInLease.lease().unit().belongsTo().info().address().duplicate();
         address.suiteNumber().set(tenantInLease.lease().unit().info().number());
         dashboard.general().tenantAddress().setValue(address.getStringView());
 

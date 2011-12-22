@@ -39,7 +39,7 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
         }
         if (descriptor == null) {
             SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-            descriptor = siteDescriptor.cloneEntity();
+            descriptor = siteDescriptor.duplicate();
             CacheService.put(SiteDescriptor.cacheKey, descriptor.getPrimaryKey());
         }
         return descriptor;

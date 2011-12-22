@@ -70,7 +70,7 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
         Persistence.service().retrieve(tenantInLease.lease());
         Persistence.service().retrieve(tenantInLease.lease().unit());
         Persistence.service().retrieve(tenantInLease.lease().unit().belongsTo());
-        AddressStructured address = tenantInLease.lease().unit().belongsTo().info().address().cloneEntity();
+        AddressStructured address = tenantInLease.lease().unit().belongsTo().info().address().duplicate();
         address.suiteNumber().set(tenantInLease.lease().unit().info().number());
         callback.onSuccess(address);
     }

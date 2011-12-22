@@ -360,7 +360,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     private static UnitAvailabilityStatusDTO computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate toDate) {
-        UnitAvailabilityStatusDTO unitDTO = unitStatus.clone(UnitAvailabilityStatusDTO.class);
+        UnitAvailabilityStatusDTO unitDTO = unitStatus.duplicate(UnitAvailabilityStatusDTO.class);
         if (isRevenueLost(unitDTO)) {
             computeDaysVacantAndRevenueLost(unitDTO, toDate.getTime());
         }

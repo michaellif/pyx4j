@@ -94,7 +94,7 @@ public class CompanyVendor {
 
         item.contractID().setValue(RandomUtil.randomLetters(8));
 
-        item.contractor().set(createCompany().clone(Vendor.class));
+        item.contractor().set(createCompany().duplicate(Vendor.class));
         item.contractor().type().setValue(RandomUtil.randomEnum(Vendor.Type.class));
 
         item.cost().setValue(RandomUtil.randomDouble(8000));
@@ -123,7 +123,7 @@ public class CompanyVendor {
 
         contact.description().setValue(RandomUtil.random(PreloadData.CONTACT_ROLES));
 
-        contact.person().set(CommonsGenerator.createEmployee().clone(Employee.class));
+        contact.person().set(CommonsGenerator.createEmployee().duplicate(Employee.class));
         contact.person().title().setValue(RandomUtil.random(PreloadData.CONTACT_ROLES));
         contact.person().description().setValue("Employee description here...");
 

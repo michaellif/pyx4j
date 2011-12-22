@@ -142,7 +142,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
             @Override
             public void onSuccess(AptUnit unit) {
-                LeaseDTO currentValue = view.getValue().cloneEntity();
+                LeaseDTO currentValue = view.getValue().duplicate();
 
                 currentValue.unit().set(unit);
                 currentValue.selectedBuilding().set(unit.belongsTo());
@@ -162,7 +162,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void setSelectedService(ServiceItem serviceItem) {
-        LeaseDTO currentValue = view.getValue().cloneEntity();
+        LeaseDTO currentValue = view.getValue().duplicate();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
 
             // clear current dependable data:

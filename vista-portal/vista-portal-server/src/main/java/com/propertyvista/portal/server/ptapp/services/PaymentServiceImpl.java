@@ -95,7 +95,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         for (TenantInLease tenantInfo : secureQuery(criteria)) {
             if (tenantInfo.role().getValue().equals(TenantInLease.Role.Applicant)) {
                 TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantInfo.getPrimaryKey());
-                callback.onSuccess(r.tenantScreening.currentAddress().clone(AddressStructured.class));
+                callback.onSuccess(r.tenantScreening.currentAddress().duplicate(AddressStructured.class));
                 break;
             }
         }

@@ -138,7 +138,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 // TODO fill common().owner() and commmon().portfolio() 
 
                 while (status.statusDate().getValue().before(end)) {
-                    statuses.add(status.cloneEntity());
+                    statuses.add(status.duplicate());
 
                     if (status.vacancyStatus().isNull()) {
                         notice(status);
@@ -192,25 +192,25 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
             status.belongsTo().set(lastUnit);
             status.statusDate().setValue(new LogicalDate(end.getTime() + MIN_EVENT_DELTA));
             status.vacancyStatus().setValue(null);
-            statuses.add(status.cloneEntity());
+            statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(VacancyStatus.Vacant);
-            statuses.add(status.cloneEntity());
+            statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(null);
-            statuses.add(status.cloneEntity());
+            statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(VacancyStatus.Vacant);
-            statuses.add(status.cloneEntity());
+            statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(null);
-            statuses.add(status.cloneEntity());
+            statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(VacancyStatus.Vacant);
-            statuses.add(status.cloneEntity());
+            statuses.add(status.duplicate());
 
             status.vacancyStatus().setValue(null);
-            statuses.add(status.cloneEntity());
+            statuses.add(status.duplicate());
 
         }
         persistArray(statuses);
