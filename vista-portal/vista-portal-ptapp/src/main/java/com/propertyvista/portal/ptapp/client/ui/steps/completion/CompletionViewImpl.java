@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.completion;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,11 +27,13 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordViewImpl;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap.Apartment;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
@@ -68,7 +71,7 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
         logoutAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ClientContext.logout(null);
+                ClientContext.logout((AuthenticationService) GWT.create(PortalAuthenticationService.class), null);
             }
         });
         actions.add(logoutAction);

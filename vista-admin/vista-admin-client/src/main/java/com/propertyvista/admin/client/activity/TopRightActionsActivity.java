@@ -14,6 +14,7 @@
 package com.propertyvista.admin.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -22,11 +23,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.admin.client.ui.TopRightActionsView;
 import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -71,7 +74,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void logout() {
-        ClientContext.logout(null);
+        ClientContext.logout((AuthenticationService) GWT.create(AdminAuthenticationService.class), null);
     }
 
     @Override

@@ -16,7 +16,7 @@ package com.propertyvista.admin.server.security;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.admin.rpc.services.AuthenticationService;
+import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.VistaAdminService;
@@ -25,7 +25,7 @@ import com.propertyvista.domain.VistaBehavior;
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
     public VistaAdminAccessControlList() {
-        grant(new IServiceExecutePermission(AuthenticationService.class));
+        grant(new IServiceExecutePermission(AdminAuthenticationService.class));
         grant(VistaBehavior.ADMIN, new IServiceExecutePermission(VistaAdminService.class));
         grant(VistaBehavior.ADMIN, new IServiceExecutePermission(PmcCrudService.class));
         grant(VistaBehavior.ADMIN, new IServiceExecutePermission(ImportUploadService.class));

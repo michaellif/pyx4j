@@ -29,7 +29,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.admin.client.ui.AdminPanel;
 import com.propertyvista.admin.rpc.AdminSiteMap;
-import com.propertyvista.admin.rpc.services.AuthenticationService;
+import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.domain.VistaBehavior;
@@ -87,7 +87,7 @@ public class AdminSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(((AuthenticationService) GWT.create(AuthenticationService.class)), new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(((AdminAuthenticationService) GWT.create(AdminAuthenticationService.class)), new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {

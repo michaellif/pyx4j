@@ -13,6 +13,6 @@
  */
 package com.propertyvista.admin.rpc.services;
 
-public interface AuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
+public interface AdminAuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
 
 }

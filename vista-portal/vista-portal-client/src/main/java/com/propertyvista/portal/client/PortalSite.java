@@ -89,7 +89,7 @@ public class PortalSite extends VistaSite {
                         getHistoryHandler().handleCurrentHistory();
                         super.onFailure(caught);
                     }
-                }, true, true, getAuthenticationToken());
+                }, true, getAuthenticationToken());
 
     }
 

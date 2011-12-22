@@ -29,7 +29,7 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
 import com.propertyvista.admin.client.ui.login.LoginView;
 import com.propertyvista.admin.client.viewfactories.LoginVeiwFactory;
-import com.propertyvista.admin.rpc.services.AuthenticationService;
+import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
 
@@ -68,6 +68,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             }
 
         };
-        ((AuthenticationService) GWT.create(AuthenticationService.class)).authenticate(callback, ClientContext.getClientSystemInfo(), request);
+        ((AdminAuthenticationService) GWT.create(AdminAuthenticationService.class)).authenticate(callback, ClientContext.getClientSystemInfo(), request);
     }
 }
