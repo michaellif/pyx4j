@@ -232,10 +232,9 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     @Override
     public TYPE remove(int index) {
         TYPE entity = get(index);
-        Map<String, Object> enitytValue = entity.getValue();
         getValue().remove(index);
         if (getMeta().isOwnedRelationships()) {
-            ((SharedEntityHandler) getOwner()).removeValueFromGraph(enitytValue);
+            ((SharedEntityHandler) getOwner()).removeValueFromGraph(entity);
         }
         return entity;
     }

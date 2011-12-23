@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.shared.impl;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -45,6 +44,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -268,43 +268,54 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
-    void removeValueFromGraph(Map<String, Object> v) {
+    void removeValueFromGraph(IEntity entity) {
         IEntity ent = this;
         while (ent.getOwner() != null) {
             ent = ent.getOwner();
         }
-        Map<String, Object> root = ent.getValue();
-        removeValueFromGraph(root, v, new HashSet<Map<String, Object>>());
+        removeValueFromGraph(ent, entity, new IdentityHashSet<IEntity>());
     }
 
     @SuppressWarnings("unchecked")
-    public static void removeValueFromGraph(Map<String, Object> map, Map<String, Object> v, Set<Map<String, Object>> processed) {
-        if (processed.contains(map)) {
+    public static void removeValueFromGraph(IEntity root, IEntity entity, Set<IEntity> processed) {
+        if (processed.contains(root)) {
             return;
         }
-        processed.add(map);
+        processed.add(root);
+        Map<String, Object> map = root.getValue();
+        if (map == null) {
+            return;
+        }
+        root = root.cast();
         Iterator<Entry<String, Object>> it = map.entrySet().iterator();
         while (it.hasNext()) {
             Entry<String, Object> me = it.next();
-            if (me.getValue() instanceof Map<?, ?>) {
-                if (me.getValue().equals(v)) {
+            String memberName = me.getKey();
+            if (memberName.startsWith(IEntity.ATTR_PREFIX)) {
+                continue;
+            }
+            MemberMeta memberMeta = root.getEntityMeta().getMemberMeta(memberName);
+            switch (memberMeta.getObjectClassType()) {
+            case Entity:
+                IEntity member = (IEntity) root.getMember(memberName);
+                if (member.equals(entity)) {
                     it.remove();
                 } else {
-                    removeValueFromGraph((Map<String, Object>) me.getValue(), v, processed);
+                    removeValueFromGraph(member, entity, processed);
                 }
-            } else if (me.getValue() instanceof Collection<?>) {
-                @SuppressWarnings("rawtypes")
-                Iterator<Object> lit = ((Collection) me.getValue()).iterator();
+                break;
+            case EntityList:
+            case EntitySet:
+                Iterator<IEntity> lit = ((ICollection<IEntity, ?>) root.getMember(memberName)).iterator();
                 while (lit.hasNext()) {
-                    Object listMameber = lit.next();
-                    if (listMameber instanceof Map<?, ?>) {
-                        if (listMameber.equals(v)) {
-                            lit.remove();
-                        } else {
-                            removeValueFromGraph((Map<String, Object>) listMameber, v, processed);
-                        }
+                    IEntity listMember = lit.next();
+                    if (listMember.equals(entity)) {
+                        lit.remove();
+                    } else {
+                        removeValueFromGraph(listMember, entity, processed);
                     }
                 }
+                break;
             }
         }
     }
@@ -315,7 +326,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             if ((getOwner() != null) && getMeta().isOwnedRelationships()) {
                 Map<String, Object> v = getValue();
                 if (v != null) {
-                    removeValueFromGraph(v);
+                    removeValueFromGraph(this.detach());
                 }
             }
             setValue(null);

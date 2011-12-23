@@ -111,7 +111,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
                 Map<String, Object> enitytValue = comparableValue((IEntity) o);
                 boolean rc = collectionValue.remove(enitytValue);
                 if (rc && getMeta().isOwnedRelationships()) {
-                    ((SharedEntityHandler) getOwner()).removeValueFromGraph(enitytValue);
+                    ((SharedEntityHandler) getOwner()).removeValueFromGraph((IEntity) o);
                 }
                 return rc;
             } else {
