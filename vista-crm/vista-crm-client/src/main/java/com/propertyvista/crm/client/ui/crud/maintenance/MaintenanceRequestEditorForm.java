@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -32,6 +33,10 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
     private static final I18n i18n = I18n.get(MaintenanceRequestEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+
+    public MaintenanceRequestEditorForm() {
+        this(new CrmEditorsComponentFactory());
+    }
 
     public MaintenanceRequestEditorForm(Class<MaintenanceRequestDTO> rootClass) {
         super(rootClass);
@@ -66,7 +71,7 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().issue()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().priority()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 20).build());
-        main.setBR(++row, 0, 2);
+        main.setH1(++row, 0, 2, proto().surveyResponse().getMeta().getCaption());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating()), 20).build());
 
         row = -1;

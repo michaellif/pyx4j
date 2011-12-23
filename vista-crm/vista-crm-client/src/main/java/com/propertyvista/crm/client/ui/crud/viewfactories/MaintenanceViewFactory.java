@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
+import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestListerView;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerView;
@@ -29,6 +31,8 @@ public class MaintenanceViewFactory extends ViewFactoryBase {
                 map.put(type, new MaintenanceRequestListerViewImpl());
             } else if (MaintenanceRequestViewerView.class.equals(type)) {
                 map.put(type, new MaintenanceRequestViewerViewImpl());
+            } else if (MaintenanceRequestEditorView.class.equals(type)) {
+                map.put(type, new MaintenanceRequestEditorViewImpl());
             }
         }
         @SuppressWarnings("unchecked")
