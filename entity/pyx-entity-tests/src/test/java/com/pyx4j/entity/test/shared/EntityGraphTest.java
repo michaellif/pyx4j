@@ -171,6 +171,8 @@ public class EntityGraphTest extends InitializerTestCase {
         OwnedLeaf ol = EntityFactory.create(OwnedLeaf.class);
         ol.setPrimaryKey(new Key(55));
         ol.name().setValue("To be removed");
+        
+        root.otherEntity().setPrimaryKey(ol.getPrimaryKey());
 
         final OwnedLeaf olBase = (OwnedLeaf) ol.duplicate();
 
@@ -203,6 +205,8 @@ public class EntityGraphTest extends InitializerTestCase {
                 assertFalse("OwnedLeaf found in Graph" + entity.getPath(), olBase.equals(entity));
             }
         });
+        
+        assertEquals("Other not removed", ol.getPrimaryKey(), root.otherEntity().getPrimaryKey());
     }
 
     public void testRemoveOwnedEntityFromGrapthLists() {
