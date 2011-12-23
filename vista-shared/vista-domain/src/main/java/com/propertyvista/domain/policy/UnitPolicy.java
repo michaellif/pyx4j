@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.policy;
 
+/**
+ * Marker interface for policies that are available at unit/floorplan level.
+ */
 public interface UnitPolicy extends BuildingPolicy {
 
 }

@@ -13,11 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
-import java.util.Arrays;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -29,7 +27,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -39,6 +36,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
+import com.propertyvista.domain.policy.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -90,7 +89,7 @@ public abstract class OrganizationBrowser implements IsWidget {
                 public void onSelectionChange(SelectionChangeEvent event) {
                     Object obj = selectionModel.getSelectedObject();
                     if (obj != null) {
-                        onNodeSelected(obj instanceof IEntity ? (IEntity) obj : null);
+                        onNodeSelected(obj instanceof IEntity ? (PolicyNode) obj : null);
                     }
                 }
             });
@@ -101,8 +100,34 @@ public abstract class OrganizationBrowser implements IsWidget {
         public <T> NodeInfo<?> getNodeInfo(final T value) {
             if (value == null) {
                 // Root Node
-                return new DefaultNodeInfo<String>(new ListDataProvider<String>(Arrays.asList(i18n.tr("Organization"))), new TextCell(), selectionModel, null);
-            } else if (value instanceof String) {
+                return new DefaultNodeInfo<OrganizationPoliciesNode>(new AbstractDataProvider<OrganizationPoliciesNode>() {
+                    @Override
+                    protected void onRangeChanged(final HasData<OrganizationPoliciesNode> display) {
+                        service.getOrganization(new AsyncCallback<Vector<OrganizationPoliciesNode>>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                throw new Error(caught);
+                            }
+
+                            @Override
+                            public void onSuccess(Vector<OrganizationPoliciesNode> result) {
+                                if (result.isEmpty()) {
+                                    updateRowCount(0, true);
+                                } else {
+                                    updateRowData(display, 0, result);
+                                }
+                            }
+                        });
+                    }
+                }, new AbstractCell<OrganizationPoliciesNode>() {
+
+                    @Override
+                    public void render(com.google.gwt.cell.client.Cell.Context context, OrganizationPoliciesNode value, SafeHtmlBuilder sb) {
+                        // TODO change this to PMC name
+                        sb.appendEscaped(i18n.tr("Organization"));
+                    }
+                });
+            } else if (value instanceof OrganizationPoliciesNode) {
                 return new DefaultNodeInfo<Country>(new AbstractDataProvider<Country>() {
                     @Override
                     protected void onRangeChanged(final HasData<Country> display) {
@@ -284,5 +309,5 @@ public abstract class OrganizationBrowser implements IsWidget {
         }
     }
 
-    public abstract void onNodeSelected(IEntity node);
+    public abstract void onNodeSelected(PolicyNode node);
 }

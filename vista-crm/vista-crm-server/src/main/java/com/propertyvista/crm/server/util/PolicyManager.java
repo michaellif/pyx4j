@@ -13,30 +13,22 @@
  */
 package com.propertyvista.crm.server.util;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.policy.BuildingPolicy;
-import com.propertyvista.domain.policy.NodeType;
-import com.propertyvista.domain.policy.PoliciesAtNode;
+import com.propertyvista.domain.policy.DefaultPoliciesNode;
+import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.PolicyAtNode;
+import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.UnitPolicy;
-import com.propertyvista.domain.policy.assignment.DefaultPolicies;
-import com.propertyvista.domain.policy.assignment.PoliciesAtBuilding;
-import com.propertyvista.domain.policy.assignment.PoliciesAtComplex;
-import com.propertyvista.domain.policy.assignment.PoliciesAtCountry;
-import com.propertyvista.domain.policy.assignment.PoliciesAtOrganization;
-import com.propertyvista.domain.policy.assignment.PoliciesAtProvince;
-import com.propertyvista.domain.policy.assignment.PoliciesAtUnit;
-import com.propertyvista.domain.policy.dto.EffectivePolicyDTO;
-import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
+import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -45,311 +37,126 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
 public class PolicyManager {
+    @SuppressWarnings("unchecked")
+    private static final List<Class<? extends PolicyNode>> HIERARCHY = Arrays.asList(AptUnit.class, Floorplan.class, Building.class, Complex.class,
+            Province.class, Country.class, OrganizationPoliciesNode.class, DefaultPoliciesNode.class);
 
-    public static NodeType entityToNodeType(IEntity entity) {
-        if (entity == null) {
-            return NodeType.ORGANIZATION;
-        } else if (entity instanceof AptUnit) {
-            return NodeType.UNIT;
-        } else if (entity instanceof Floorplan) {
-            return NodeType.FLOORPLAN;
-        } else if (entity instanceof Building) {
-            return NodeType.BUILDING;
-        } else if (entity instanceof Complex) {
-            return NodeType.COMPLEX;
-        } else if (entity instanceof Province) {
-            return NodeType.PROVINCE;
-        } else if (entity instanceof Country) {
-            return NodeType.COUNTRY;
-        } else {
-            return null;
-        }
-    }
+    public static EffectivePoliciesDTO computeEffectivePolicyPreset(PolicyNode node) {
 
-    public static EffectivePolicyPresetDTO computeEffectivePolicyPreset(Key pk, NodeType nodeType) {
-        assert nodeType != null : "No node type was provided";
-        assert (pk != null & !nodeType.equals(NodeType.ORGANIZATION)) | nodeType.equals(NodeType.ORGANIZATION) : "No primary key provided";
+        EffectivePoliciesDTO effectivePreset = EntityFactory.create(EffectivePoliciesDTO.class);
+        Class<? extends PolicyNode> requestedNodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
 
-        EffectivePolicyPresetDTO effectivePreset = EntityFactory.create(EffectivePolicyPresetDTO.class);
+        for (Class<? extends PolicyNode> nodeType : HIERARCHY) {
+            if (nodeType.equals(node.getInstanceValueClass())) {
+                effectivePreset = merge(effectivePreset, policiesAtNode(node));
 
-        boolean hasParentComplex = false;
-        PoliciesAtNode policiesAtNode = null;
-        // if a node doesn't have a parent (i.e. unit doesn't have a parent building, we let it use organization policy by default)
-        // but, in case of building we make an exception        
-        switch (nodeType) {
-        case UNIT:
-            policiesAtNode = getPolicyPresetAtUnit(pk);
-            if (nodeType.equals(NodeType.UNIT)) {
-                effectivePreset.directlyAssignedFrom().set(policiesAtNode);
-            }
-            effectivePreset = merge(effectivePreset, policiesAtNode);
-
-            pk = parentFloorplanOf(pk);
-        case FLOORPLAN:
-            policiesAtNode = getPolicyPresetAtFloorPlan(pk);
-            if (nodeType.equals(NodeType.FLOORPLAN)) {
-                effectivePreset.directlyAssignedFrom().set(policiesAtNode);
-            }
-            effectivePreset = merge(effectivePreset, policiesAtNode);
-
-            pk = parentBuildingOf(pk);
-        case BUILDING:
-            // it's not clear whether every building has to belong to a complex, so we just assume it doesn't, and if it doesn't belong to a complex
-            // we use country as it's parent
-            // TODO make it be region when we have regions in the domain.
-            policiesAtNode = getPolicyPresetAtBuilding(pk);
-            if (nodeType.equals(NodeType.BUILDING)) {
-                effectivePreset.directlyAssignedFrom().set(policiesAtNode);
-            }
-            effectivePreset = merge(effectivePreset, policiesAtNode);
-
-            Key complexPk = parentComplexOf(pk);
-            if (complexPk != null) {
-                hasParentComplex = true;
-                pk = complexPk;
-            } else {
-                pk = parentProvinceOfBuilding(pk);
-            }
-        case COMPLEX:
-            if (!NodeType.COMPLEX.equals(nodeType) & !hasParentComplex) {
-                // just skip: the building we've just checked had no complex assigned to it
-            } else {
-                // if we were asked to to bring complex info, or we need to get parent of a building
-                policiesAtNode = getPolicyPresetAtComplex(pk);
-                if (nodeType.equals(NodeType.COMPLEX)) {
-                    effectivePreset.directlyAssignedFrom().set(policiesAtNode);
-                }
-                effectivePreset = merge(effectivePreset, policiesAtNode);
-
-                pk = parentProvinceOfComplex(pk);
-                if (pk == null) {
-                    // TODO maybe return an empty effectivePreset?  
-                    throw new Error("Failed to compute policies on complex with PK(" + pk + "): this complex has no primary building set");
+                PolicyNode parentNode = parentOf(node);
+                if (parentNode == null) {
+                    throw new Error("Failed to find parent node of " + node.toString());
+                } else {
+                    node = parentNode;
                 }
             }
-        case PROVINCE:
-            policiesAtNode = getPolicyPresetAtProvince(pk);
-            if (nodeType.equals(NodeType.COMPLEX)) {
-                effectivePreset.directlyAssignedFrom().set(policiesAtNode);
-            }
-            effectivePreset = merge(effectivePreset, policiesAtNode);
-
-            pk = parentCountryOfProvince(pk);
-        case COUNTRY:
-            policiesAtNode = getPolicyPresetAtCountry(pk);
-            if (nodeType.equals(NodeType.COUNTRY)) {
-                effectivePreset.directlyAssignedFrom().set(policiesAtNode);
-            }
-            effectivePreset = merge(effectivePreset, policiesAtNode);
-
-        case ORGANIZATION:
-            policiesAtNode = getPolicyPresetAtOrganization();
-            if (nodeType.equals(NodeType.ORGANIZATION)) {
-                effectivePreset.directlyAssignedFrom().set(policiesAtNode);
-            }
-            effectivePreset = merge(effectivePreset, policiesAtNode);
         }
-        effectivePreset = merge(effectivePreset, getDefaultPolicies());
 
-        // remove things we don't want to send
-        if (!effectivePreset.directlyAssignedFrom().isNull()) {
-            // no need to send policies that are included in effecive policies list
-            effectivePreset.directlyAssignedFrom().preset().detach();
-        }
-        Iterator<EffectivePolicyDTO> i = effectivePreset.effectivePolicies().iterator();
-
+        // Filter all the unwanted policies
+        Iterator<PolicyAtNode> i = effectivePreset.policies().iterator();
         while (i.hasNext()) {
-            EffectivePolicyDTO policy = i.next();
-            Class<?> policyClass = policy.policy().cast().getInstanceValueClass();
-            if ((nodeType.equals(NodeType.UNIT) | nodeType.equals(NodeType.FLOORPLAN)) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
+            Class<? extends Policy> policyClass = (Class<? extends Policy>) i.next().getInstanceValueClass();
+            if (AptUnit.class.equals(requestedNodeClass) | Floorplan.class.equals(requestedNodeClass) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
                 i.remove();
-                continue;
-            }
-            if (nodeType.equals(NodeType.BUILDING) & !(BuildingPolicy.class.isAssignableFrom(policyClass))) {
+            } else if (Building.class.equals(requestedNodeClass) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
                 i.remove();
-                continue;
-            }
-            if (!policy.inheritedFrom().isNull()) {
-                policy.inheritedFrom().preset().detach();
-            }
-        }
-
-        return effectivePreset;
-    }
-
-    public static PoliciesAtNode getPolicyPresetAtUnit(Key pk) {
-        EntityQueryCriteria<PoliciesAtUnit> criteria = new EntityQueryCriteria<PoliciesAtUnit>(PoliciesAtUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), pk));
-        List<PoliciesAtUnit> policyPresetAtNode = Persistence.service().query(criteria);
-        if (policyPresetAtNode.isEmpty()) {
-            return null;
-        }
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    public static PoliciesAtNode getPolicyPresetAtFloorPlan(Key pk) {
-        EntityQueryCriteria<PoliciesAtBuilding> criteria = new EntityQueryCriteria<PoliciesAtBuilding>(PoliciesAtBuilding.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), pk));
-        List<PoliciesAtBuilding> policyPresetAtNode = Persistence.service().query(criteria);
-        if (policyPresetAtNode.isEmpty()) {
-            return null;
-        }
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    public static PoliciesAtNode getPolicyPresetAtBuilding(Key pk) {
-        EntityQueryCriteria<PoliciesAtBuilding> criteria = new EntityQueryCriteria<PoliciesAtBuilding>(PoliciesAtBuilding.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), pk));
-        List<PoliciesAtBuilding> policyPresetAtNode = Persistence.service().query(criteria);
-        if (policyPresetAtNode.isEmpty()) {
-            return null;
-        }
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    public static PoliciesAtNode getPolicyPresetAtComplex(Key pk) {
-        EntityQueryCriteria<PoliciesAtComplex> criteria = new EntityQueryCriteria<PoliciesAtComplex>(PoliciesAtComplex.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), pk));
-        List<PoliciesAtComplex> policyPresetAtNode = Persistence.service().query(criteria);
-        if (policyPresetAtNode.isEmpty()) {
-            return null;
-        }
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    public static PoliciesAtNode getPolicyPresetAtProvince(Key pk) {
-        EntityQueryCriteria<PoliciesAtProvince> criteria = new EntityQueryCriteria<PoliciesAtProvince>(PoliciesAtProvince.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().province(), pk));
-        List<PoliciesAtProvince> policyPresetAtNode = Persistence.service().query(criteria);
-        if (policyPresetAtNode.isEmpty()) {
-            return null;
-        }
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    public static PoliciesAtNode getPolicyPresetAtCountry(Key pk) {
-        EntityQueryCriteria<PoliciesAtCountry> criteria = new EntityQueryCriteria<PoliciesAtCountry>(PoliciesAtCountry.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().country(), pk));
-        List<PoliciesAtCountry> policyPresetAtNode = Persistence.service().query(criteria);
-        if (policyPresetAtNode.isEmpty()) {
-            return null;
-        }
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    public static PoliciesAtNode getPolicyPresetAtOrganization() {
-        EntityQueryCriteria<PoliciesAtOrganization> criteria = new EntityQueryCriteria<PoliciesAtOrganization>(PoliciesAtOrganization.class);
-        List<PoliciesAtOrganization> policyPresetAtNode = Persistence.service().query(criteria);
-        if (policyPresetAtNode.isEmpty()) {
-            return null;
-        }
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    public static PoliciesAtNode getDefaultPolicies() {
-        EntityQueryCriteria<DefaultPolicies> criteria = new EntityQueryCriteria<DefaultPolicies>(DefaultPolicies.class);
-        List<DefaultPolicies> policyPresetAtNode = Persistence.service().query(criteria);
-        assert !policyPresetAtNode.isEmpty() : "Default policy preset was not found in the database, have you forgot to preload?";
-        assert policyPresetAtNode.size() == 1;
-        return policyPresetAtNode.get(0);
-    }
-
-    private static EffectivePolicyPresetDTO merge(EffectivePolicyPresetDTO effectivePreset, PoliciesAtNode presetAtNode) {
-        if (effectivePreset == null) {
-            effectivePreset = EntityFactory.create(EffectivePolicyPresetDTO.class);
-        }
-        if (presetAtNode != null) {
-            Persistence.service().retrieve(presetAtNode.preset());
-            for (Policy policy : presetAtNode.preset().policies()) {
-                boolean alreadyEffective = false;
-                for (EffectivePolicyDTO effectivePolicy : effectivePreset.effectivePolicies()) {
-                    if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
-                        alreadyEffective = true;
-                        break;
-                    }
-                }
-                if (!alreadyEffective) {
-                    EffectivePolicyDTO effectivePolicy = EntityFactory.create(EffectivePolicyDTO.class);
-                    effectivePolicy.policy().set(policy);
-                    if (!presetAtNode.equals(effectivePreset.directlyAssignedFrom())) {
-                        effectivePolicy.inheritedFrom().set(presetAtNode);
-                    }
-                    effectivePreset.effectivePolicies().add(effectivePolicy);
-                }
             }
         }
         return effectivePreset;
     }
 
-    private static Key parentFloorplanOf(Key unitPk) {
-        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
-        return unit.floorplan().getPrimaryKey();
-    }
+    private static PolicyNode parentOf(PolicyNode node) {
+        if (node.getPrimaryKey() == null) {
+            throw new Error("this node is not persited!!!!");
+        }
+        Class<? extends PolicyNode> nodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
+        if (AptUnit.class.equals(nodeClass)) {
 
-    private static Key parentBuildingOf(Key floorplanPk) {
-        Floorplan floorplan = Persistence.service().retrieve(Floorplan.class, floorplanPk);
-        return floorplan.building().getPrimaryKey();
-    }
+            return Persistence.service().retrieve(Floorplan.class, ((AptUnit) node.cast()).floorplan().getPrimaryKey());
 
-    private static Key parentComplexOf(Key buildingPk) {
-        Building building = Persistence.service().retrieve(Building.class, buildingPk);
-        if (building.complex().isNull()) {
-            return null;
+        } else if (Floorplan.class.equals(nodeClass)) {
+
+            return Persistence.service().retrieve(Building.class, ((Floorplan) node.cast()).building().getPrimaryKey());
+
+        } else if (Building.class.equals(nodeClass)) {
+
+            Complex parentComplex = Persistence.service().retrieve(Complex.class, ((Building) node.cast()).complex().getPrimaryKey());
+            if (parentComplex != null) {
+                return parentComplex;
+            } else {
+                return Persistence.service().retrieve(Province.class, ((Building) node.cast()).info().address().province().getPrimaryKey());
+            }
+        } else if (Complex.class.equals(nodeClass)) {
+            EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), node.getPrimaryKey()));
+
+            List<Building> buildings = Persistence.service().query(criteria);
+            for (Building building : buildings) {
+                if (building.complexPrimary().isBooleanTrue()) {
+                    return building.info().address().province();
+                }
+            }
+            // if we haven't found a parent: return settings at organization (we assume that one node at must be preloaded)
+            return Persistence.service().query(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class)).get(0);
+
+        } else if (Province.class.equals(nodeClass)) {
+
+            return Persistence.service().retrieve(Country.class, ((Province) node.cast()).country().getPrimaryKey());
+
+        } else if (Country.class.equals(nodeClass)) {
+
+            // we assume that one organization policies node is preloaded and present in the system
+            return Persistence.service().query(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class)).get(0);
+
+        } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
+
+            // we assume that one default policies node is preloaded 
+            return Persistence.service().query(new EntityQueryCriteria<DefaultPoliciesNode>(DefaultPoliciesNode.class)).get(0);
+
+        } else if (DefaultPoliciesNode.class.equals(nodeClass)) {
+
+            // the parent of the default is default :)
+            return node;
+
         } else {
-            return building.complex().getPrimaryKey();
+
+            return null;
         }
     }
 
-    private static Key parentProvinceOfBuilding(Key buildingPk) {
-        Building building = Persistence.service().retrieve(Building.class, buildingPk);
-        return building.info().address().province().getPrimaryKey();
-    }
+    public static List<PolicyAtNode> policiesAtNode(PolicyNode node) {
+        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
+        List<PolicyAtNode> policiesAtNode = Persistence.service().query(criteria);
+        return policiesAtNode;
+    };
 
-    private static Key parentCountryOfBuilding(Key buildingPk) {
-        Building building = Persistence.service().retrieve(Building.class, buildingPk);
-        return building.info().address().country().getPrimaryKey();
-    }
+    private static EffectivePoliciesDTO merge(EffectivePoliciesDTO effectivePolicies, List<PolicyAtNode> policies) {
+        if (effectivePolicies == null) {
+            effectivePolicies = EntityFactory.create(EffectivePoliciesDTO.class);
+        }
 
-    private static Key parentCountryOfComplex(Key complexPk) {
-        Complex complex = Persistence.service().retrieve(Complex.class, complexPk);
+        for (PolicyAtNode policy : policies) {
+            boolean alreadyEffective = false;
 
-        EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), complex));
-
-        List<Building> buildings = Persistence.service().query(criteria);
-        for (Building building : buildings) {
-            if (building.complexPrimary().isBooleanTrue()) {
-                return building.info().address().country().getPrimaryKey();
+            for (PolicyAtNode effectivePolicy : effectivePolicies.policies()) {
+                if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
+                    alreadyEffective = true;
+                    break;
+                }
+            }
+            if (!alreadyEffective) {
+                effectivePolicies.policies().add(policy);
             }
         }
-        return null;
+
+        return effectivePolicies;
     }
-
-    private static Key parentProvinceOfComplex(Key complexPk) {
-        Complex complex = Persistence.service().retrieve(Complex.class, complexPk);
-
-        EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), complex));
-
-        List<Building> buildings = Persistence.service().query(criteria);
-        for (Building building : buildings) {
-            if (building.complexPrimary().isBooleanTrue()) {
-                return building.info().address().province().getPrimaryKey();
-            }
-        }
-        return null;
-    }
-
-    private static Key parentCountryOfProvince(Key provincePk) {
-        Province province = Persistence.service().retrieve(Province.class, provincePk);
-        return province.country().getPrimaryKey();
-    }
-
 }

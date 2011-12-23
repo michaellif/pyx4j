@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,4 +40,6 @@ public interface OrganizationPolicyBrowserService extends IService {
     void getFloorplans(AsyncCallback<Vector<Floorplan>> callback, Key buildingPk);
 
     void getUnits(AsyncCallback<Vector<AptUnit>> callback, Key floorplanPk);
+
+    void getOrganization(AsyncCallback<Vector<OrganizationPoliciesNode>> callback);
 }

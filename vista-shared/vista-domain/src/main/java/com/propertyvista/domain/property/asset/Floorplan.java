@@ -15,21 +15,23 @@ package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface Floorplan extends IEntity {
+@DiscriminatorValue("Disc_Floorplan")
+public interface Floorplan extends PolicyNode {
 
     @Owner
     @Detached

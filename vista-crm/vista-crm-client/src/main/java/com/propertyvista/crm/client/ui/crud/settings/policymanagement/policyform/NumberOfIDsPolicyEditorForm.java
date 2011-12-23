@@ -31,7 +31,7 @@ public class NumberOfIDsPolicyEditorForm extends CEntityDecoratableEditor<Number
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfIDs())).componentWidth(3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfIDs())).componentWidth(3).build());
 
         return content;
     }

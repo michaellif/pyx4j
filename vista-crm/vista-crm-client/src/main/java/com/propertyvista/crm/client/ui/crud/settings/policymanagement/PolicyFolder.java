@@ -32,31 +32,31 @@ import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.GymUsageFeePolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.PoolUsageFeePolicyEditorForm;
-import com.propertyvista.domain.policy.PoliciesAtNode;
-import com.propertyvista.domain.policy.dto.EffectivePolicyDTO;
+import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.dto.EffectivePolicyAtNodeDTO;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
-public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
+public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
 
     private static final I18n i18n = I18n.get(PolicyFolder.class);
 
     public PolicyFolder() {
-        super(EffectivePolicyDTO.class, false);
+        super(EffectivePolicyAtNodeDTO.class, false);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if ((member instanceof EffectivePolicyDTO)) {
+        if ((member instanceof EffectivePolicyAtNodeDTO)) {
             return new PolicyEditorFormContainer();
         }
         return super.create(member);
     }
 
     @SuppressWarnings("rawtypes")
-    private static class PolicyEditorFormContainer extends CEntityDecoratableEditor<EffectivePolicyDTO> {
+    private static class PolicyEditorFormContainer extends CEntityDecoratableEditor<EffectivePolicyAtNodeDTO> {
         private FormFlexPanel contentPanel;
 
         private Label inheritedLabel;
@@ -66,7 +66,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
         private CEntityEditor policyEditor;
 
         public PolicyEditorFormContainer() {
-            super(EffectivePolicyDTO.class);
+            super(EffectivePolicyAtNodeDTO.class);
         }
 
         @Override
@@ -124,7 +124,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyDTO> {
             policyEditorPanel.clear();
             policyEditorPanel.setWidget(policyEditor);
 
-            PoliciesAtNode inheritedFrom = getValue().inheritedFrom();
+            PolicyNode inheritedFrom = getValue().inheritedFrom();
             if (inheritedFrom.isNull()) {
                 inheritedLabel.setVisible(false);
             } else {

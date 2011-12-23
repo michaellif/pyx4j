@@ -11,17 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.assignment;
+package com.propertyvista.domain.policy;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.PoliciesAtNode;
-import com.propertyvista.domain.ref.Country;
+/** Container for all policies in the system with default values */
 
-@DiscriminatorValue("PoliciesAtCountry")
-public interface PoliciesAtCountry extends PoliciesAtNode {
+@DiscriminatorValue("DefaultPolicies")
+public interface DefaultPoliciesNode extends PolicyNode {
 
-    @Detached
-    Country country();
+    @Deprecated
+    IPrimitive<String> x();
 }

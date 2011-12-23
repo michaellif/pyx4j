@@ -14,12 +14,15 @@
 package com.propertyvista.domain.ref;
 
 import com.pyx4j.entity.adapters.index.CaseInsensitiveIndexAdapter;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Country extends IEntity {
+import com.propertyvista.domain.policy.PolicyNode;
+
+@DiscriminatorValue("Disc_Country")
+public interface Country extends PolicyNode {
 
     @ToString
     @Indexed(adapters = CaseInsensitiveIndexAdapter.class)

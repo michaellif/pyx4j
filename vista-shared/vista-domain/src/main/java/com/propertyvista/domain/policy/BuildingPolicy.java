@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.policy;
 
+/**
+ * Marker interface for policies that can be assigned only to building.
+ */
 public interface BuildingPolicy {
 
 }

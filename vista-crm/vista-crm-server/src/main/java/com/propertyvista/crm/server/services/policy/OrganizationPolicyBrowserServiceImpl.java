@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
+import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -90,4 +91,9 @@ public class OrganizationPolicyBrowserServiceImpl implements OrganizationPolicyB
         callback.onSuccess(new Vector<AptUnit>(Persistence.service().query(criteria)));
     }
 
+    @Override
+    public void getOrganization(AsyncCallback<Vector<OrganizationPoliciesNode>> callback) {
+        callback.onSuccess(new Vector<OrganizationPoliciesNode>(Persistence.service().query(
+                new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class))));
+    }
 }

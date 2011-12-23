@@ -7,21 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Dec 16, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.assignment;
+package com.propertyvista.domain.policy;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.policy.PoliciesAtNode;
-import com.propertyvista.domain.property.asset.Complex;
+/**
+ * Represents a node in organizational structure that can have a policy.
+ */
+@Inheritance
+@AbstractEntity
+public interface PolicyNode extends IEntity {
 
-@DiscriminatorValue("PoliciesAtComplex")
-public interface PoliciesAtComplex extends PoliciesAtNode {
-
-    @Detached
-    Complex complex();
 }

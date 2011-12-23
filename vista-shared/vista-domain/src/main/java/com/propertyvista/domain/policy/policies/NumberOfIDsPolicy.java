@@ -28,5 +28,5 @@ import com.propertyvista.domain.policy.UnitPolicy;
 public interface NumberOfIDsPolicy extends UnitPolicy, Policy {
 
     @ToString(index = 0)
-    IPrimitive<Integer> numOfIDs();
+    IPrimitive<Integer> numberOfIDs();
 }

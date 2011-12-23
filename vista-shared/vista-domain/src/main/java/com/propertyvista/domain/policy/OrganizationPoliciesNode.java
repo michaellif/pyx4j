@@ -7,21 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Dec 23, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.assignment;
+package com.propertyvista.domain.policy;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.PoliciesAtNode;
-import com.propertyvista.domain.property.asset.Floorplan;
+/**
+ * 
+ * Node in the policies hierarchy that represents the whole organization.
+ * 
+ */
+@DiscriminatorValue("OrganizationPoliciesNode")
+public interface OrganizationPoliciesNode extends PolicyNode {
 
-@DiscriminatorValue("PoliciesAtFloorplan")
-public interface PoliciesAtFloorplan extends PoliciesAtNode {
-
-    @Detached
-    Floorplan floorplan();
+    @Deprecated
+    IPrimitive<String> x();
 }

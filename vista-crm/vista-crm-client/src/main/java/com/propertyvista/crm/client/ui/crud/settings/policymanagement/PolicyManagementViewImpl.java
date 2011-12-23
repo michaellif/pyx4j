@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -33,8 +32,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
 import com.propertyvista.domain.policy.Policy;
-import com.propertyvista.domain.policy.PolicyPreset;
-import com.propertyvista.domain.policy.dto.EffectivePolicyPresetDTO;
+import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -45,9 +44,7 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
 
     FormFlexPanel panel;
 
-    CEntityEditor<EffectivePolicyPresetDTO> policiesForm;
-
-    CEntityEditor<PolicyPreset> presetForm;
+    CEntityEditor<EffectivePoliciesDTO> policiesForm;
 
     private Presenter presenter;
 
@@ -56,12 +53,12 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
 
         addEast(new OrganizationBrowser() {
             @Override
-            public void onNodeSelected(IEntity node) {
+            public void onNodeSelected(PolicyNode node) {
                 getPresenter().populateEffectivePolicyPreset(node);
             }
         }, BROWSER_WIDTH);
 
-        policiesForm = new CEntityDecoratableEditor<EffectivePolicyPresetDTO>(EffectivePolicyPresetDTO.class) {
+        policiesForm = new CEntityDecoratableEditor<EffectivePoliciesDTO>(EffectivePoliciesDTO.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
@@ -85,7 +82,7 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
                     }
                 }));
                 content.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
-                content.setWidget(++row, 0, inject(proto().effectivePolicies(), new PolicyFolder()));
+                content.setWidget(++row, 0, inject(proto().policies(), new PolicyFolder()));
                 content.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
                 return content;
             }
@@ -110,7 +107,7 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
     }
 
     @Override
-    public void displayEffectivePreset(EffectivePolicyPresetDTO effectivePolicyPreset) {
+    public void displayEffectivePreset(EffectivePoliciesDTO effectivePolicyPreset) {
         this.policiesForm.populate(effectivePolicyPreset);
     }
 }

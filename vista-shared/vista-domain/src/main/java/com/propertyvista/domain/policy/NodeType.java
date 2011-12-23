@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy;
 
+@Deprecated
 public enum NodeType {
     UNIT, FLOORPLAN, BUILDING, COMPLEX, PROVINCE, COUNTRY, ORGANIZATION
 }

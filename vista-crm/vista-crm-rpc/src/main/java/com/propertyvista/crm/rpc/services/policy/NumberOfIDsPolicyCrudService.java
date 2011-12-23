@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Dec 23, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.assignment;
+package com.propertyvista.crm.rpc.services.policy;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.policy.PoliciesAtNode;
+import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
 
-
-@DiscriminatorValue("PoliciesAtOrganization")
-public interface PoliciesAtOrganization extends PoliciesAtNode {
+public interface NumberOfIDsPolicyCrudService extends AbstractCrudService<NumberOfIDsPolicyDTO> {
 
 }

@@ -13,12 +13,15 @@
  */
 package com.propertyvista.domain.ref;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Province extends IEntity {
+import com.propertyvista.domain.policy.PolicyNode;
+
+@DiscriminatorValue("Disc_Province")
+public interface Province extends PolicyNode {
 
     @ToString
     @Indexed

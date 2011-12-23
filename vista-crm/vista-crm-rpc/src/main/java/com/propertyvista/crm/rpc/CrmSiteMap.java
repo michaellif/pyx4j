@@ -305,4 +305,14 @@ public class CrmSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "Messages")
     public static class Message extends AppPlace {
     }
+
+    @NavigationItem(navigLabel = "Policies")
+    public static class Policies extends AppPlace {
+
+        @PlaceProperties(caption = "Number of Allowed IDs")
+        @NavigationItem(navigLabel = "Number of Allowed IDs")
+        public static class NumberOfIds extends CrudAppPlace {
+
+        }
+    }
 }

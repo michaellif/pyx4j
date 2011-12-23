@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -29,6 +30,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class NavigSettingsActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
+    private static final I18n i18n = I18n.get(NavigSettingsActivity.class);
 
     private final NavigView view;
 
@@ -67,16 +69,23 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
     public List<NavigFolder> createNavigFolders() {
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
-        NavigFolder folder = new NavigFolder("Settings");
+        NavigFolder folder = new NavigFolder(i18n.tr("Settings"));
         folder.addNavigItem(new CrmSiteMap.Settings.Policy());
         folder.addNavigItem(new CrmSiteMap.Settings.UserRole());
         folder.addNavigItem(new CrmSiteMap.Settings.ServiceDictionary());
         list.add(folder);
 
-        folder = new NavigFolder("Portal");
+        folder = new NavigFolder(i18n.tr("Portal"));
         folder.addNavigItem(new CrmSiteMap.Settings.Content());
         list.add(folder);
 
+        list.add(createPoliciesFolder());
         return list;
+    }
+
+    public NavigFolder createPoliciesFolder() {
+        NavigFolder folder = new NavigFolder(i18n.tr("Policies"));
+        folder.addNavigItem(new CrmSiteMap.Policies.NumberOfIds());
+        return folder;
     }
 }

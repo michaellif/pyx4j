@@ -15,14 +15,16 @@ package com.propertyvista.domain.property.asset;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.policy.PolicyNode;
 
-public interface Complex extends IEntity {
+@DiscriminatorValue("Disc Complex")
+public interface Complex extends PolicyNode {
 
     /**
      * Legal name of the property (max 120 char)

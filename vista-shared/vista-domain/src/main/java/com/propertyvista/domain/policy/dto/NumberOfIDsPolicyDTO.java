@@ -7,22 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 19, 2011
+ * Created on Dec 22, 2011
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.policy.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.policy.PoliciesAtNode;
-import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 
 @Transient
-public interface EffectivePolicyDTO extends IEntity {
+public interface NumberOfIDsPolicyDTO extends PolicyDTOBase, NumberOfIDsPolicy {
 
-    PoliciesAtNode inheritedFrom();
-
-    Policy policy();
 }

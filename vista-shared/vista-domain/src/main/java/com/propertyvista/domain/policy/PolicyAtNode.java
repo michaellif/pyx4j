@@ -11,17 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.assignment;
+package com.propertyvista.domain.policy;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.policy.PoliciesAtNode;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+/** Connects policy with policy node */
+public interface PolicyAtNode extends IEntity {
 
-@DiscriminatorValue("PoliciesAtNode")
-public interface PoliciesAtUnit extends PoliciesAtNode {
+    Policy policy();
 
-    @Detached
-    AptUnit unit();
+    PolicyNode node();
 }

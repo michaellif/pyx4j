@@ -7,21 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 22, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.crm.client.ui.crud.policies.numberofids;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-@Inheritance
-@AbstractEntity
-public interface PoliciesAtNode extends IEntity {
+import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
 
-    @Detached
-    PolicyPreset preset();
+public interface NumberOfIDsPolicyListerView extends IListerView<NumberOfIDsPolicyDTO> {
+
 }

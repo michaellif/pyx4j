@@ -7,21 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Dec 19, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.assignment;
+package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.PoliciesAtNode;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.policy.PolicyAtNode;
 
-@DiscriminatorValue("PoliciesAtBuilding")
-public interface PoliciesAtBuilding extends PoliciesAtNode {
+@Transient
+public interface EffectivePoliciesDTO extends IEntity {
 
-    @Detached
-    Building building();
+    IList<PolicyAtNode> policies();
+
+    @Deprecated
+    IPrimitive<String> x();
 }
