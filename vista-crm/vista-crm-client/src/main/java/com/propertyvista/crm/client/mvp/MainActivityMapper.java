@@ -58,6 +58,7 @@ import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestListerActivity;
+import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestViewerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentListerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.AppointmentViewerActivity;
@@ -556,6 +557,9 @@ public class MainActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof CrmSiteMap.Properties.MaintenanceRequest) {
                     switch (((CrudAppPlace) place).getType()) {
+                    case viewer:
+                        activity = new MaintenanceRequestViewerActivity(place);
+                        break;
                     case lister:
                         activity = new MaintenanceRequestListerActivity(place);
                         break;

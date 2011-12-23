@@ -18,6 +18,8 @@ import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestListerView;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerView;
+import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerViewImpl;
 
 public class MaintenanceViewFactory extends ViewFactoryBase {
 
@@ -25,6 +27,8 @@ public class MaintenanceViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (MaintenanceRequestListerView.class.equals(type)) {
                 map.put(type, new MaintenanceRequestListerViewImpl());
+            } else if (MaintenanceRequestViewerView.class.equals(type)) {
+                map.put(type, new MaintenanceRequestViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

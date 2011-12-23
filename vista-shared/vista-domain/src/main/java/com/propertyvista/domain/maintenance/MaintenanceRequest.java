@@ -17,7 +17,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
@@ -30,7 +29,6 @@ public interface MaintenanceRequest extends IEntity {
     @Owner
     @Detached
     @ReadOnly
-    @Indexed
     Tenant tenant();
 
     //TODO Add 
