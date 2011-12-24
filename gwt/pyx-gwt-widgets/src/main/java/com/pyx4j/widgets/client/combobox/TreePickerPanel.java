@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.combobox;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +30,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -36,7 +39,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.CSSClass;
 
@@ -75,17 +77,8 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         tree.clear();
         for (E option : options) {
             PickerTreeItem treeItem = null;
-            if (multipleSelect) {
-                CheckBox itemWidget = new CheckBox(option.toString());
-                treeItem = new PickerTreeItem(itemWidget);
-                tree.addItem(treeItem);
-            } else {
-                HTML itemWidget = new HTML(option.toString());
-                //itemWidget.getElement().getStyle().setDisplay(Display.INLINE);
-                treeItem = new PickerTreeItem(itemWidget);
-                tree.addItem(treeItem);
-            }
-
+            treeItem = new PickerTreeItem(option);
+            tree.addItem(treeItem);
             if (!plainList) {
                 treeItem.addItem("Loading...");
             }
@@ -116,15 +109,12 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
     }
 
     @Override
-    protected void setSelection(Set<E> items) {
+    protected void setSelection(Collection<E> items) {
         final Iterator<TreeItem> itr = tree.treeItemIterator();
         while (itr.hasNext()) {
-            TreeItem treeItem = itr.next();
+            PickerTreeItem treeItem = (PickerTreeItem) itr.next();
             E item = (E) treeItem.getUserObject();
-            treeItem.setSelected(items.contains(item));
-            if (items.contains(item)) {
-                tree.setSelectedItem(treeItem);
-            }
+            treeItem.setChecked(items.contains(item));
         }
     }
 
@@ -132,9 +122,9 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         Set<E> items = new HashSet<E>();
         final Iterator<TreeItem> itr = tree.treeItemIterator();
         while (itr.hasNext()) {
-            TreeItem treeItem = itr.next();
+            PickerTreeItem treeItem = (PickerTreeItem) itr.next();
             E item = (E) treeItem.getUserObject();
-            if (treeItem.isSelected()) {
+            if (treeItem.isChecked()) {
                 items.add(item);
             }
         }
@@ -156,16 +146,45 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
     class PickerTreeItem extends TreeItem {
 
-        public PickerTreeItem(Widget widget) {
-            super(widget);
+        private final E value;
+
+        private CheckBox checkBox;
+
+        private boolean selected;
+
+        public PickerTreeItem(E value) {
+            super();
+            this.value = value;
+            if (multipleSelect) {
+                checkBox = new CheckBox(value.toString());
+                checkBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+                        selected = event.getValue();
+                    }
+                });
+                setWidget(checkBox);
+            } else {
+                HTML label = new HTML(value.toString());
+                setWidget(label);
+            }
+
         }
 
-        @Override
-        public void setSelected(boolean selected) {
+        public void setChecked(boolean selected) {
             super.setSelected(selected);
+            this.selected = selected;
             if (!multipleSelect) {
                 setStyleName(getElement(), CSSClass.pyx4j_PickerLine_Selected.name(), selected);
+            } else {
+                checkBox.setValue(selected);
             }
+        }
+
+        public boolean isChecked() {
+            System.out.println("++++++++++++++isSelected " + value + " " + selected);
+            return selected;
         }
 
     }
@@ -183,18 +202,21 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         @Override
         public void onBrowserEvent(Event event) {
             super.onBrowserEvent(event);
-            int eventType = DOM.eventGetType(event);
-            switch (eventType) {
-            case Event.ONCLICK:
-                hide();
-                break;
-            case Event.ONKEYPRESS: {
-                if (KeyboardListener.KEY_ENTER == event.getKeyCode()) {
+            if (!multipleSelect) {
+                int eventType = DOM.eventGetType(event);
+                switch (eventType) {
+                case Event.ONCLICK:
                     hide();
+                    break;
+                case Event.ONKEYPRESS: {
+                    if (KeyboardListener.KEY_ENTER == event.getKeyCode()) {
+                        hide();
+                    }
+                }
+                    break;
                 }
             }
-                break;
-            }
         }
+
     }
 }

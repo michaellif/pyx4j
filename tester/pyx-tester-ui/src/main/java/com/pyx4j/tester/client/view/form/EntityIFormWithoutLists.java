@@ -23,9 +23,11 @@ package com.pyx4j.tester.client.view.form;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.CEntityListBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
+import com.pyx4j.tester.client.domain.test.EntityIV;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 
 public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
@@ -87,6 +89,10 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEmail())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEmail())));
+
+        main.setHR(++row, 0, 1);
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entityIVListNotOwned(), new CEntityListBox<EntityIV>())));
 
         return main;
     }

@@ -99,6 +99,8 @@ public interface EntityI extends IEntity {
     @Owned
     IList<EntityIV> entityIVList();
 
+    IList<EntityIV> entityIVListNotOwned();
+
     @Editor(type = EditorType.email)
     IPrimitive<String> optionalEmail();
 

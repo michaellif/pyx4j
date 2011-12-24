@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client.combobox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +30,6 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.TextBoxBase;
 
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -39,13 +39,13 @@ import com.pyx4j.widgets.client.combobox.OptionsGrabber.Response;
 
 public abstract class ComboBox<E> extends HorizontalPanel {
 
-    private final Set<E> selection = new HashSet<E>();
+    private final Collection<E> selection = new HashSet<E>();
 
     private PickerPopup<E> pickerPopup;
 
     private PickerPanel<E> pickerPanel;
 
-    private TextBoxBase textBox;
+    private ViewerPanel<E> viewerPanel;
 
     private OptionsGrabber<E> optionsGrabber;
 
@@ -54,20 +54,20 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
     protected void init() {
 
-        assert textBox != null;
+        assert viewerPanel != null;
         assert pickerPanel != null;
         assert optionsGrabber != null;
 
-        textBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+        viewerPanel.asWidget().getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
 
         pickerPopup = new PickerPopup<E>(this);
 
-        add(textBox);
-        setCellVerticalAlignment(textBox, ALIGN_MIDDLE);
+        add(viewerPanel);
+        setCellVerticalAlignment(viewerPanel, ALIGN_MIDDLE);
 
-        Button picker = new Button("");
+        Button picker = new Button("*");
         picker.addClickHandler(new ClickHandler() {
 
             @Override
@@ -107,20 +107,20 @@ public abstract class ComboBox<E> extends HorizontalPanel {
         this.pickerPopup = pickerPopup;
     }
 
+    protected ViewerPanel<E> getViewerPanel() {
+        return viewerPanel;
+    }
+
+    protected void setViewerPanel(ViewerPanel<E> viewerPanel) {
+        this.viewerPanel = viewerPanel;
+    }
+
     protected PickerPanel<E> getPickerPanel() {
         return pickerPanel;
     }
 
     protected void setPickerPanel(PickerPanel<E> pickerPanel) {
         this.pickerPanel = pickerPanel;
-    }
-
-    protected TextBoxBase getTextBox() {
-        return textBox;
-    }
-
-    protected void setTextBox(TextBoxBase textBox) {
-        this.textBox = textBox;
     }
 
     protected void setOptionsGrabber(OptionsGrabber<E> optionsGrabber) {
@@ -138,21 +138,10 @@ public abstract class ComboBox<E> extends HorizontalPanel {
     public void setSelection(Set<E> items) {
         selection.clear();
         selection.addAll(items);
-        String value = formatSelection(items);
-        textBox.setText(value);
-        textBox.setTitle(value);
+        viewerPanel.setSelection(items);
     }
 
-    protected String formatSelection(Set<E> items) {
-        StringBuilder builder = new StringBuilder();
-        for (E item : items) {
-            builder.append(item).append(", ");
-        }
-        String buffer = builder.toString();
-        return buffer.substring(0, buffer.length() > 1 ? buffer.length() - 2 : 0);
-    }
-
-    public Set<E> getSelection() {
+    public Collection<E> getSelection() {
         return selection;
     }
 

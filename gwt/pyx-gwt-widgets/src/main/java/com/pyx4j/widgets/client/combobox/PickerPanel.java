@@ -20,8 +20,8 @@
  */
 package com.pyx4j.widgets.client.combobox;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -43,7 +43,7 @@ public abstract class PickerPanel<E> {
 
     protected abstract void setOptions(List<E> options, E parent);
 
-    protected abstract void setSelection(Set<E> items);
+    protected abstract void setSelection(Collection<E> items);
 
     protected void setPickerPopup(PickerPopup<E> pickerPopup) {
         this.pickerPopup = pickerPopup;

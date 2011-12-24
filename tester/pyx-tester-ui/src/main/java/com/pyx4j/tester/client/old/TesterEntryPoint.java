@@ -22,7 +22,6 @@ package com.pyx4j.tester.client.old;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,6 @@ import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -58,7 +56,6 @@ import com.pyx4j.tester.client.theme.TesterTheme;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
-import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.Reportboard;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
@@ -156,52 +153,6 @@ public class TesterEntryPoint implements EntryPoint {
             });
             contentPanel.add(datePicker);
             contentPanel.add(textBox);
-
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(false, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-
-            comboBox.setSelection("Item 1");
-
-            comboBox.setOptions(options);
-
-            contentPanel.add(comboBox);
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(false, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 444444444444444444");
-            options.add("Item 5");
-            options.add("Item 6");
-            options.add("Item 7");
-            options.add("Item 8");
-            options.add("Item 9");
-            options.add("Item 10");
-            options.add("Item 11");
-            options.add("Item 12");
-            options.add("Item 131313131313131313131313131313");
-            options.add("Item 14");
-            options.add("Item 15");
-
-            comboBox.setOptions(options);
-
-            comboBox.setSelection("Item 14");
-
-            contentPanel.add(comboBox);
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
 
         }
 
@@ -346,65 +297,6 @@ public class TesterEntryPoint implements EntryPoint {
 
             com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(new Image(Images.INSTANCE.collapse()), "Test");
             contentPanel.add(buttonTest2);
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(false, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item ItemItemItemItemItemItemItemItem 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item ItemItemItemItemItemItemItemItemItemItemItemItem 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-
-            comboBox.setOptions(options);
-
-            contentPanel.add(comboBox);
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
-
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(true, true);
-            List<String> options = new ArrayList<String>();
-
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item ItemItemItemItemItemItemItemItem 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item ItemItemItemItemItemItemItemItemItemItemItemItem 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-
-            comboBox.setOptions(options);
-
-            contentPanel.add(comboBox);
-            contentPanel.setCellHorizontalAlignment(comboBox, HasHorizontalAlignment.ALIGN_RIGHT);
-
-            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
-
         }
 
     }
