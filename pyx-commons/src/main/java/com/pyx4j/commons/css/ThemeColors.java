@@ -20,6 +20,8 @@
  */
 package com.pyx4j.commons.css;
 
+//See http://jqueryui.com/themeroller/ for example of style manager
+
 public enum ThemeColors {
 
     object1("#5B6E90"),
