@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -28,20 +29,21 @@ public interface MaintenanceRequest extends IEntity {
 
     @Owner
     @Detached
-    @ReadOnly
+    @NotNull
     Tenant tenant();
 
     //TODO Add 
     //Building building();
 
     @Detached
-    @ReadOnly
     IssueClassification issueClassification();
 
+    @ReadOnly
     IPrimitive<LogicalDate> submited();
 
     IPrimitive<MaintenanceRequestStatus> status();
 
+    @ReadOnly
     @Caption(name = "Last Updated")
     IPrimitive<LogicalDate> updated();
 

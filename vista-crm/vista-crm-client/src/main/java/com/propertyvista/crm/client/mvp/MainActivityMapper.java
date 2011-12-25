@@ -126,6 +126,7 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.misc.EquifaxResult;
@@ -152,6 +153,8 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Parking.class);
         } else if (entityClass.equals(Roof.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Roof.class);
+        } else if (entityClass.equals(MaintenanceRequest.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.MaintenanceRequest.class);
 
         } else if (entityClass.equals(Lease.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Lease.class);
@@ -159,9 +162,9 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
         } else if (entityClass.equals(EquifaxResult.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
+        } else if (entityClass.equals(Tenant.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Tenant.class);
 
-        } else if (entityClass.equals(MaintenanceRequest.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.MaintenanceRequest.class);
         }
 
         return null;

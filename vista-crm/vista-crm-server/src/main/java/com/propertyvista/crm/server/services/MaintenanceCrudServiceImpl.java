@@ -28,6 +28,10 @@ public class MaintenanceCrudServiceImpl extends GenericCrudServiceDtoImpl<Mainte
 
     @Override
     protected void enhanceDTO(MaintenanceRequest in, MaintenanceRequestDTO dto, boolean fromList) {
+        Persistence.service().retrieve(dto.tenant());
         Persistence.service().retrieve(dto.issueClassification());
+        Persistence.service().retrieve(dto.issueClassification().subjectDetails());
+        Persistence.service().retrieve(dto.issueClassification().subjectDetails().subject());
+        Persistence.service().retrieve(dto.issueClassification().subjectDetails().subject().issueElement());
     }
 }
