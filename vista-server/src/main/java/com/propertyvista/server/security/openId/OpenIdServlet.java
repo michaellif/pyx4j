@@ -48,7 +48,7 @@ public class OpenIdServlet extends HttpServlet {
         if (CommonsStringUtils.isStringSet(configDomain)) {
             return configDomain;
         } else {
-            return "birchwoodsoftwaregroup.com";
+            return "propertyvista.com";
         }
     }
 
