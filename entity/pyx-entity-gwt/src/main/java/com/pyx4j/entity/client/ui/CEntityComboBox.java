@@ -357,7 +357,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         } else if (isUseNamesComparison()) {
             return EqualsHelper.equals(getItemName(value1), getItemName(value2));
         } else {
-            return super.isValuesEquals(value1, value2);
+            return EqualsHelper.equals(value1, value2);
         }
     }
 
