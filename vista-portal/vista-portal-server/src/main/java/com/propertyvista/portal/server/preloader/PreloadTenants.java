@@ -41,7 +41,6 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -103,6 +102,8 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
         AptUnitSource aptUnitSource = new AptUnitSource();
 
+        // retrieve MaintenanceRequest issues
+        List<IssueClassification> issues = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
         for (int i = 1; i <= config().numTenants; i++) {
             String email = DemoData.UserType.TENANT.getEmail(i);
             Tenant tenant = generator.createTenant();
@@ -118,6 +119,13 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
                 Persistence.service().persist(tenantSummary.tenantInLease());
             }
             Persistence.service().persist(generator.createPaymentMethods(tenant));
+
+            // Maintenance Requests
+            for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
+                req.issueClassification().set(RandomUtil.random(issues));
+                req.tenant().set(tenant);
+                Persistence.service().persist(req);
+            }
         }
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
@@ -165,15 +173,6 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
                     }
                 }
             }
-        }
-
-        // Maintenance Requests
-        List<TenantInLease> leases = Persistence.service().query(EntityQueryCriteria.create(TenantInLease.class));
-        List<IssueClassification> issues = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
-        for (MaintenanceRequest req : generator.createMntRequests(config().numMntRequests)) {
-            req.issueClassification().set(RandomUtil.random(issues));
-            req.tenant().set(RandomUtil.random(leases).tenant());
-            Persistence.service().persist(req);
         }
 
         StringBuilder sb = new StringBuilder();

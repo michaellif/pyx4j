@@ -14,6 +14,8 @@
 package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -26,6 +28,7 @@ import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RateIt;
@@ -37,6 +40,7 @@ import com.propertyvista.domain.communication.Message.MessageType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.BillInfoDTO;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
@@ -96,6 +100,13 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
         rightPanel.setWidget(++row, 0, inject(proto().currentBill(), new CurrentBillViewer()));
 
         Anchor newTicket = new Anchor(i18n.tr("New Ticket"));
+        newTicket.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewTicket());
+            }
+        });
+
         rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTANANCE"), newTicket);
         rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
 

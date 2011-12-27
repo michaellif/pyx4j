@@ -51,6 +51,22 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
 
     private Selector<IssueClassification> issueClassificationSelector;
 
+    private static String hdrIssueElement = i18n.tr("Rooms");
+
+    private static String hdrRepairSubject = i18n.tr("Repair Subject");
+
+    private static String hdrSubjectDetails = i18n.tr("Subject Details");
+
+    private static String hdrClassification = i18n.tr("Issue");
+
+    private static String defaultChoice = i18n.tr("Please Select");
+
+    private static String defaultIssueElement = i18n.tr("Select") + " " + hdrIssueElement;
+
+    private static String defaultRepairSubject = i18n.tr("Select") + " " + hdrRepairSubject;
+
+    private static String defaultSubjectDetails = i18n.tr("Select") + " " + hdrSubjectDetails;
+
     public NewMaintenanceRequestViewImpl() {
         super(MaintenanceRequestDTO.class);
         initContent();
@@ -68,12 +84,12 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
         int row = -1;
 
         // Issue Type Selector Header
-        content.setHTML(++row, 0, i18n.tr("Rooms"));
+        content.setHTML(++row, 0, hdrIssueElement);
         content.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
-        content.setHTML(row, 1, i18n.tr("Repair Subject"));
-        content.setHTML(row, 2, i18n.tr("Subject Details"));
-        content.setHTML(row, 3, i18n.tr("Issue"));
+        content.setHTML(row, 1, hdrRepairSubject);
+        content.setHTML(row, 2, hdrSubjectDetails);
+        content.setHTML(row, 3, hdrClassification);
 
         content.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
@@ -136,10 +152,10 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
 
     @Override
     public void updateIssueElementSelector(Vector<IssueElement> IssueElements) {
-        issueElementSelector.clear();
-        issueRepairSubjectSelector.clear();
-        issueSubjectDetailsSelector.clear();
-        issueClassificationSelector.clear();
+        issueElementSelector.clear(defaultChoice);
+        issueRepairSubjectSelector.clear(defaultIssueElement);
+        issueSubjectDetailsSelector.clear(defaultRepairSubject);
+        issueClassificationSelector.clear(defaultSubjectDetails);
         for (IssueElement issueElement : IssueElements) {
             issueElementSelector.addItem(issueElement, issueElement.name().getStringView());
         }
@@ -147,9 +163,9 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
 
     @Override
     public void updateIssueRepairSubjectSelector(IList<IssueRepairSubject> subjects) {
-        issueRepairSubjectSelector.clear();
-        issueSubjectDetailsSelector.clear();
-        issueClassificationSelector.clear();
+        issueRepairSubjectSelector.clear(defaultChoice);
+        issueSubjectDetailsSelector.clear(defaultRepairSubject);
+        issueClassificationSelector.clear(defaultSubjectDetails);
         for (IssueRepairSubject subject : subjects) {
             issueRepairSubjectSelector.addItem(subject, subject.name().getStringView());
         }
@@ -157,8 +173,8 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
 
     @Override
     public void updateIssueSubjectDetailsSelector(IList<IssueSubjectDetails> details) {
-        issueSubjectDetailsSelector.clear();
-        issueClassificationSelector.clear();
+        issueSubjectDetailsSelector.clear(defaultChoice);
+        issueClassificationSelector.clear(defaultSubjectDetails);
         for (IssueSubjectDetails detail : details) {
             issueSubjectDetailsSelector.addItem(detail, detail.name().getStringView());
         }
@@ -166,7 +182,7 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
 
     @Override
     public void updateIssueClassificationSelector(IList<IssueClassification> classifications) {
-        issueClassificationSelector.clear();
+        issueClassificationSelector.clear(defaultChoice);
         for (IssueClassification classification : classifications) {
             issueClassificationSelector.addItem(classification, classification.issue().getStringView());
         }
@@ -190,11 +206,15 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
             values.clear();
         }
 
-        void addItem(E entity, String label) {
-            if (values.size() == 0) {
+        public void clear(String defaultChoice) {
+            clear();
+            if (defaultChoice != null) {
                 values.add(null);
-                super.addItem("=== " + i18n.tr("Select") + " ===");
+                super.addItem(defaultChoice);
             }
+        }
+
+        void addItem(E entity, String label) {
             values.add(entity);
             super.addItem(label);
         }

@@ -46,6 +46,8 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
+    private static final String optionSelect = i18n.tr("Select");
+
     public MaintenanceRequestEditorForm() {
         this(new CrmEditorsComponentFactory());
     }
@@ -95,10 +97,10 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
             final CEntityComboBox<IssueClassification> combo4 = (CEntityComboBox<IssueClassification>) comp4;
 
             // clear values for dependable selectors
-            combo1.setNoSelectionText(i18n.tr("Please Select"));
-            comboClear(combo2, i18n.tr("Select " + combo1.getTitle()));
-            comboClear(combo3, i18n.tr("Select " + combo2.getTitle()));
-            comboClear(combo4, i18n.tr("Select " + combo3.getTitle()));
+            combo1.setNoSelectionText(optionSelect);
+            comboClear(combo2, optionSelect + " " + combo1.getTitle());
+            comboClear(combo3, optionSelect + " " + combo2.getTitle());
+            comboClear(combo4, optionSelect + " " + combo3.getTitle());
 
             // add onChange handlers
             combo1.addValueChangeHandler(new ValueChangeHandler<IssueElement>() {
@@ -106,8 +108,8 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
                 public void onValueChange(ValueChangeEvent<IssueElement> event) {
                     comboReset(combo2, PropertyCriterion.eq(combo2.proto().issueElement(), event.getValue()), i18n.tr("Please Select"));
                     // clear remaining selectors
-                    comboClear(combo3, i18n.tr("Select " + combo2.getTitle()));
-                    comboClear(combo4, i18n.tr("Select " + combo3.getTitle()));
+                    comboClear(combo3, optionSelect + " " + combo2.getTitle());
+                    comboClear(combo4, optionSelect + " " + combo3.getTitle());
                 }
             });
 
@@ -116,7 +118,7 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
                 public void onValueChange(ValueChangeEvent<IssueRepairSubject> event) {
                     comboReset(combo3, PropertyCriterion.eq(combo3.proto().subject(), event.getValue()), i18n.tr("Please Select"));
                     // clear remaining selectors
-                    comboClear(combo4, i18n.tr("Select " + combo3.getTitle()));
+                    comboClear(combo4, optionSelect + " " + combo3.getTitle());
                 }
             });
 
@@ -148,6 +150,10 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         row++;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description()), 10).build());
 
+        if (isEditable()) {
+            get(proto().submited()).setEditable(false);
+            get(proto().updated()).setEditable(false);
+        }
         return new CrmScrollPanel(main);
     }
 

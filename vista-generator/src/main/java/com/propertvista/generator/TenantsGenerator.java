@@ -30,7 +30,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.maintenance.IssuePriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -196,19 +195,26 @@ public class TenantsGenerator {
         return items;
     }
 
+    private static String[] MntReqDescription = {
+
+    "Leaking Kitchen Tap", "Broken Blinds", "Door Lock is Broken", "A/C not working",
+
+    "Door hinges squeaking", "Electric stove out of order", "Balcony door glass cracked" };
+
     public MaintenanceRequest createMntRequest() {
         MaintenanceRequest req = EntityFactory.create(MaintenanceRequest.class);
-        req.issueClassification().issue().setValue(CommonsGenerator.lipsumShort());
-        req.issueClassification().priority().setValue(RandomUtil.randomEnum(IssuePriority.class));
         req.status().setValue(RandomUtil.randomEnum(MaintenanceRequestStatus.class));
-        req.description().setValue(CommonsGenerator.lipsum());
+        req.description().setValue(MntReqDescription[RandomUtil.randomInt(MntReqDescription.length - 1)]);
         if (RandomUtil.randomInt(5) > 2) {
             req.surveyResponse().rating().setValue(RandomUtil.randomInt(6));
             req.surveyResponse().description().setValue(CommonsGenerator.lipsumShort());
         }
         // generate dates
         Calendar cal = Calendar.getInstance();
-        cal.setTime(RandomUtil.randomDate(2011, 2012));
+        // get date within 60 days before and after now
+        int daySpan = 120;
+        int curDay = cal.get(Calendar.DAY_OF_YEAR);
+        cal.set(Calendar.DAY_OF_YEAR, curDay + (RandomUtil.randomInt(daySpan) - daySpan / 2));
         req.submited().setValue(new LogicalDate(cal.getTime()));
         // add 10 min to 10 days
         cal.setTimeInMillis(cal.getTimeInMillis() + 600000 * (1 + RandomUtil.randomInt(24 * 60)));

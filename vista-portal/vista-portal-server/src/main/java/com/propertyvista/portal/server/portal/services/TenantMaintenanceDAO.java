@@ -29,6 +29,7 @@ import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
  * This class makes demo data for now
  * 
  */
+@Deprecated
 public class TenantMaintenanceDAO {
 
     static List<MaintananceDTO> demoIssues(Object[][] maintanances) {

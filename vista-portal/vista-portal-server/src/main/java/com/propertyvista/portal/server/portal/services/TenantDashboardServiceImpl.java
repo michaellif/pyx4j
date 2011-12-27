@@ -23,24 +23,38 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.User;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.ptapp.util.Converter;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantDashboardServiceImpl implements TenantDashboardService {
+    User currentUser = VistaContext.getCurrentUser();
 
     @Override
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {
         TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
 
-        dashboard.general().tenantName().set(VistaContext.getCurrentUser().name());
+        // get tenant
+        EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
+        crit.add(PropertyCriterion.eq(crit.proto().user(), VistaContext.getCurrentUser()));
+        Tenant tenant = Persistence.service().retrieve(crit);
+
+        Persistence.service().retrieve(tenant.user());
+        dashboard.general().tenantName().set(tenant.user().name());
 
         TenantInLease tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.lease());
@@ -106,7 +120,13 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
             }
         }
 
-        dashboard.maintanances().addAll(TenantMaintenanceDAO.getRecentIssues());
+        // add open issues
+        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
+        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submited()))) {
+            dashboard.maintanances().add(Converter.convert(mr));
+        }
 
         callback.onSuccess(dashboard);
     }

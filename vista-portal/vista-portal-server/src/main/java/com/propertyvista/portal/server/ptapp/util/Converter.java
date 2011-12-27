@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -37,6 +38,7 @@ import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
 public class Converter {
 
@@ -155,6 +157,16 @@ public class Converter {
         MediaDTO to = EntityFactory.create(MediaDTO.class);
         to.id().set(from.id());
         to.caption().setValue(from.caption().getValue());
+        return to;
+    }
+
+    public static MaintananceDTO convert(MaintenanceRequest from) {
+        MaintananceDTO to = EntityFactory.create(MaintananceDTO.class);
+        to.id().set(from.id());
+        to.description().set(from.description());
+        to.date().set(from.submited());
+        to.status().set(from.status());
+        to.satisfactionSurvey().set(from.surveyResponse());
         return to;
     }
 }

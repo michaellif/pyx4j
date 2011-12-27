@@ -116,7 +116,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         historyRequestsPanel.setH1(++row, 0, 1, i18n.tr("HISTORY"));
         historyRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        historyRequestsPanel.setHTML(++row, 0, i18n.tr("Open Tickets"));
+        historyRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
         historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
         historyRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
@@ -131,7 +131,10 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                     + "</i>");
 
             RateIt rateIt = new RateIt(5);
-            rateIt.setRating(requests.satisfactionSurvey().rating().getValue());
+            Integer rate = requests.satisfactionSurvey().rating().getValue();
+            if (rate != null) {
+                rateIt.setRating(rate);
+            }
             historyRequestsPanel.setWidget(row, 2, rateIt);
 
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());

@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 
 @Transient
 public interface MaintananceDTO extends IEntity {
@@ -33,5 +34,5 @@ public interface MaintananceDTO extends IEntity {
     IPrimitive<MaintenanceRequestStatus> status();
 
     @EmbeddedEntity
-    SatisfactionSurveyResponceDTO satisfactionSurvey();
+    SurveyResponse satisfactionSurvey();
 }

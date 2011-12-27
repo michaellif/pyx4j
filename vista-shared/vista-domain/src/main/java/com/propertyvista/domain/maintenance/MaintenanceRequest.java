@@ -36,11 +36,13 @@ public interface MaintenanceRequest extends IEntity {
     //Building building();
 
     @Detached
+    @NotNull
     IssueClassification issueClassification();
 
     @ReadOnly
     IPrimitive<LogicalDate> submited();
 
+    @NotNull
     IPrimitive<MaintenanceRequestStatus> status();
 
     @ReadOnly

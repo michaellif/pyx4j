@@ -18,7 +18,9 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -28,28 +30,57 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueElementType;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
+import com.propertyvista.portal.server.ptapp.util.Converter;
+import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
+
+    private Tenant getOwner() {
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), VistaContext.getCurrentUser()));
+        return Persistence.service().retrieve(criteria);
+    }
 
     @Override
     public void listOpenIssues(AsyncCallback<Vector<MaintananceDTO>> callback) {
         Vector<MaintananceDTO> dto = new Vector<MaintananceDTO>();
-        dto.addAll(TenantMaintenanceDAO.getOpenIssues());
+        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getOwner()));
+        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submited()))) {
+            dto.add(Converter.convert(mr));
+        }
         callback.onSuccess(dto);
     }
 
     @Override
     public void listHistoryIssues(AsyncCallback<Vector<MaintananceDTO>> callback) {
         Vector<MaintananceDTO> dto = new Vector<MaintananceDTO>();
-        dto.addAll(TenantMaintenanceDAO.getHistoryIssues());
+        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Completed));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getOwner()));
+        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submited()))) {
+            dto.add(Converter.convert(mr));
+        }
         callback.onSuccess(dto);
     }
 
     @Override
-    public void createNewTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request) {
+    public void createNewTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
+        MaintenanceRequest req = EntityFactory.create(MaintenanceRequest.class);
+        req.tenant().set(getOwner());
+        req.issueClassification().set(dto.issueClassification());
+        req.description().set(dto.description());
+        req.status().setValue(MaintenanceRequestStatus.Submitted);
+        req.submited().setValue(new LogicalDate());
+        Persistence.service().persist(req);
+
         callback.onSuccess(null);
     }
 
