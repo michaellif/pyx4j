@@ -134,6 +134,9 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (value == null || getValue() == null) {
+                    return null;
+                }
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
                 return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n.tr("Move In Date must be less then Move Out Date"));
             }
@@ -148,9 +151,11 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveOutDate()));
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
-
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (value == null || getValue() == null) {
+                    return null;
+                }
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
                 return (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
                         .tr("Move Out Date must be greater then Move In Date"));
