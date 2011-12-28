@@ -184,11 +184,13 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         comp.get(comp.proto().starts()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (value == null || comp.getValue() == null) {
+                    return null;
+                }
                 IPrimitive<LogicalDate> date = comp.getValue().ends();
-                return (value != null) && (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
+                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
                         .tr("The Start Date Cannot Be Equal To The End Date Or After It"));
             }
-
         });
 
         comp.get(comp.proto().starts()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().ends())));
@@ -196,11 +198,13 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         comp.get(comp.proto().ends()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (value == null || comp.getValue() == null) {
+                    return null;
+                }
                 IPrimitive<LogicalDate> date = comp.getValue().starts();
-                return (value != null) && (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
+                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
                         .tr("The End Date Chosen Cannot Be The Same As The Start Date Or Before It"));
             }
-
         });
 
         comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().starts())));
