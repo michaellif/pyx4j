@@ -20,23 +20,15 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.property.asset.BuildingElement;
-import com.propertyvista.domain.property.asset.LockerArea;
-import com.propertyvista.domain.property.asset.Parking;
-import com.propertyvista.domain.property.asset.Roof;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
 
@@ -74,35 +66,39 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            Class<? extends IEntity> buildingElementClass = null;
-            switch (parent.getValue().type().getValue()) {
-            case residentialUnit:
-            case residentialShortTermUnit:
-            case commercialUnit:
-                buildingElementClass = AptUnit.class;
-                break;
-            case garage:
-                buildingElementClass = Parking.class;
-                break;
-            case storage:
-                buildingElementClass = LockerArea.class;
-                break;
-            case roof:
-                buildingElementClass = Roof.class;
-                break;
-            }
+
+            // TODO: this method was called during/after population, so the parent's value was set already. 
+            // Now it's not true - we need to re-think custom component creation depending on the parent's type technique...                  
+//            Class<? extends IEntity> buildingElementClass = null;
+//            switch (parent.getValue().type().getValue()) {
+//            case residentialUnit:
+//            case residentialShortTermUnit:
+//            case commercialUnit:
+//                buildingElementClass = AptUnit.class;
+//                break;
+//            case garage:
+//                buildingElementClass = Parking.class;
+//                break;
+//            case storage:
+//                buildingElementClass = LockerArea.class;
+//                break;
+//            case roof:
+//                buildingElementClass = Roof.class;
+//                break;
+//            }
 
             CComponent<?, ?> comp;
             if (column.getObject() == proto().element()) {
-                if (buildingElementClass != null) {
-                    if (parent.isEditable()) {
-                        comp = inject(column.getObject(), new CEntityComboBox(buildingElementClass));
-                        CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
-                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
-                    } else {
-                        comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
-                    }
-                } else {
+//                if (buildingElementClass != null) {
+//                    if (parent.isEditable()) {
+//                        comp = inject(column.getObject(), new CEntityComboBox(buildingElementClass));
+//                        CEntityComboBox<BuildingElement> combo = (CEntityComboBox) comp;
+//                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo(), parent.getValue().catalog().belongsTo().detach()));
+//                    } else {
+//                        comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(MainActivityMapper.getCrudAppPlace(buildingElementClass)));
+//                    }
+//                } else 
+                {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
             } else {
