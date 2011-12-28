@@ -17,29 +17,24 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
-import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.policy.PolicyNode;
 
 public interface OrganizationPolicyBrowserService extends IService {
-    void getCountries(AsyncCallback<Vector<Country>> callback);
 
-    void getProvinces(AsyncCallback<Vector<Province>> callback, Key countryPk);
-
-    void getComplexes(AsyncCallback<Vector<Complex>> callback, Key provincePk);
-
-    void getBuildings(AsyncCallback<Vector<Building>> callback, Key complexPk);
-
-    void getFloorplans(AsyncCallback<Vector<Floorplan>> callback, Key buildingPk);
-
-    void getUnits(AsyncCallback<Vector<AptUnit>> callback, Key floorplanPk);
-
-    void getOrganization(AsyncCallback<Vector<OrganizationPoliciesNode>> callback);
+    /**
+     * Retrieve child nodes of a {@link PolicyNode}.
+     * 
+     * @param callback
+     *            the return value.
+     * @param policyNode
+     *            can be <code>null</code> if someone wants to get the organization node (or it can be instance of {@link DefaultPoliciesNode} with no PK). To
+     *            get children organization node use instance of {@link OrganizationPoliciesNode} (can be with no PK). the rest of child nodes must be queried
+     *            using a policyNode with associated PK.
+     * @return see <code>callback</code> parameter.
+     */
+    void getChildNodes(AsyncCallback<Vector<PolicyNode>> callback, PolicyNode policyNode);
 }

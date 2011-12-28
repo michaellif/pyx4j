@@ -32,6 +32,7 @@ import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.GymUsageFeePolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.PoolUsageFeePolicyEditorForm;
+import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.EffectivePolicyAtNodeDTO;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
@@ -56,7 +57,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
     }
 
     @SuppressWarnings("rawtypes")
-    private static class PolicyEditorFormContainer extends CEntityDecoratableEditor<EffectivePolicyAtNodeDTO> {
+    private static class PolicyEditorFormContainer extends CEntityDecoratableEditor<PolicyAtNode> {
         private FormFlexPanel contentPanel;
 
         private Label inheritedLabel;
@@ -66,7 +67,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
         private CEntityEditor policyEditor;
 
         public PolicyEditorFormContainer() {
-            super(EffectivePolicyAtNodeDTO.class);
+            super(PolicyAtNode.class);
         }
 
         @Override
@@ -124,7 +125,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
             policyEditorPanel.clear();
             policyEditorPanel.setWidget(policyEditor);
 
-            PolicyNode inheritedFrom = getValue().inheritedFrom();
+            PolicyNode inheritedFrom = getValue().node();
             if (inheritedFrom.isNull()) {
                 inheritedLabel.setVisible(false);
             } else {

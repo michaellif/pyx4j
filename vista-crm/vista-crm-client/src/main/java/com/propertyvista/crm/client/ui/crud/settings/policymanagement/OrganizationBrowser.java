@@ -32,18 +32,12 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.view.client.TreeViewModel;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 
 public abstract class OrganizationBrowser implements IsWidget {
     private static final I18n i18n = I18n.get(OrganizationBrowser.class);
@@ -63,7 +57,9 @@ public abstract class OrganizationBrowser implements IsWidget {
 
         categoriesTree = new CellTree(new OrganizationTreeModel(), null, resources);
         categoriesTree.setAnimationEnabled(true);
-        categoriesTree.getRootTreeNode().setChildOpen(0, true);
+        if (categoriesTree.getRootTreeNode().getChildCount() > 1) {
+            categoriesTree.getRootTreeNode().setChildOpen(0, true);
+        }
 
         panel = new ScrollPanel(categoriesTree);
         panel.setSize("100%", "100%");
@@ -80,227 +76,55 @@ public abstract class OrganizationBrowser implements IsWidget {
     private class OrganizationTreeModel implements TreeViewModel {
         private final OrganizationPolicyBrowserService service = GWT.create(OrganizationPolicyBrowserService.class);
 
-        private final SingleSelectionModel<Object> selectionModel;
+        private final SingleSelectionModel<PolicyNode> selectionModel;
 
         public OrganizationTreeModel() {
-            selectionModel = new SingleSelectionModel<Object>();
+            selectionModel = new SingleSelectionModel<PolicyNode>();
             selectionModel.addSelectionChangeHandler(new Handler() {
                 @Override
                 public void onSelectionChange(SelectionChangeEvent event) {
-                    Object obj = selectionModel.getSelectedObject();
+                    PolicyNode obj = selectionModel.getSelectedObject();
                     if (obj != null) {
-                        onNodeSelected(obj instanceof IEntity ? (PolicyNode) obj : null);
+                        onNodeSelected(obj);
                     }
                 }
             });
-
         }
 
         @Override
         public <T> NodeInfo<?> getNodeInfo(final T value) {
-            if (value == null) {
-                // Root Node
-                return new DefaultNodeInfo<OrganizationPoliciesNode>(new AbstractDataProvider<OrganizationPoliciesNode>() {
-                    @Override
-                    protected void onRangeChanged(final HasData<OrganizationPoliciesNode> display) {
-                        service.getOrganization(new AsyncCallback<Vector<OrganizationPoliciesNode>>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new Error(caught);
-                            }
-
-                            @Override
-                            public void onSuccess(Vector<OrganizationPoliciesNode> result) {
-                                if (result.isEmpty()) {
-                                    updateRowCount(0, true);
-                                } else {
-                                    updateRowData(display, 0, result);
-                                }
-                            }
-                        });
-                    }
-                }, new AbstractCell<OrganizationPoliciesNode>() {
-
-                    @Override
-                    public void render(com.google.gwt.cell.client.Cell.Context context, OrganizationPoliciesNode value, SafeHtmlBuilder sb) {
-                        // TODO change this to PMC name
-                        sb.appendEscaped(i18n.tr("Organization"));
-                    }
-                });
-            } else if (value instanceof OrganizationPoliciesNode) {
-                return new DefaultNodeInfo<Country>(new AbstractDataProvider<Country>() {
-                    @Override
-                    protected void onRangeChanged(final HasData<Country> display) {
-                        service.getCountries(new AsyncCallback<Vector<Country>>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new Error(caught);
-                            }
-
-                            @Override
-                            public void onSuccess(Vector<Country> result) {
-                                if (result.isEmpty()) {
-                                    updateRowCount(0, true);
-                                } else {
-                                    updateRowData(display, 0, result);
-                                }
-                            }
-                        });
-                    }
-                }, new AbstractCell<Country>() {
-                    @Override
-                    public void render(com.google.gwt.cell.client.Cell.Context context, Country value, SafeHtmlBuilder sb) {
-                        if (value != null) {
-                            sb.appendEscaped(value.getStringView());
+            return new DefaultNodeInfo<PolicyNode>(new AbstractDataProvider<PolicyNode>() {
+                @Override
+                protected void onRangeChanged(final HasData<PolicyNode> display) {
+                    service.getChildNodes(new AsyncCallback<Vector<PolicyNode>>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            throw new Error(caught);
                         }
-                    };
-                }, selectionModel, null);
-            } else if (value instanceof Country) {
-                return new DefaultNodeInfo<Province>(new AbstractDataProvider<Province>() {
-                    @Override
-                    protected void onRangeChanged(final HasData<Province> display) {
-                        service.getProvinces(new AsyncCallback<Vector<Province>>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new Error(caught);
-                            }
 
-                            @Override
-                            public void onSuccess(final Vector<Province> result) {
-                                if (result.isEmpty()) {
-                                    updateRowCount(0, true);
-                                } else {
-                                    updateRowData(display, 0, result);
-                                }
-                            }
-                        }, ((Country) value).getPrimaryKey());
-                    }
-                }, new AbstractCell<Province>() {
-                    @Override
-                    public void render(com.google.gwt.cell.client.Cell.Context context, Province value, SafeHtmlBuilder sb) {
-                        if (value != null) {
-                            if (value.isNull()) {
-                                sb.appendEscaped(i18n.tr("Buildings that do not belong to a Province"));
+                        @Override
+                        public void onSuccess(Vector<PolicyNode> result) {
+                            if (result.isEmpty()) {
+                                updateRowCount(0, true);
                             } else {
-                                sb.appendEscaped(value.name().getValue());
-                            }
-                        }
-                    }
-                }, selectionModel, null);
-            } else if (value instanceof Province) {
-                return new DefaultNodeInfo<Complex>(new AbstractDataProvider<Complex>() {
-                    @Override
-                    protected void onRangeChanged(final HasData<Complex> display) {
-                        service.getComplexes(new AsyncCallback<Vector<Complex>>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new Error(caught);
-                            }
-
-                            @Override
-                            public void onSuccess(final Vector<Complex> result) {
-                                if (result.isEmpty()) {
-                                    updateRowCount(0, true);
-                                } else {
-                                    updateRowData(display, 0, result);
-                                }
-                            }
-                        }, ((Province) value).getPrimaryKey());
-                    }
-                }, new AbstractCell<Complex>() {
-                    @Override
-                    public void render(com.google.gwt.cell.client.Cell.Context context, Complex value, SafeHtmlBuilder sb) {
-                        if (value != null) {
-                            if (value.isNull()) {
-                                sb.appendEscaped(i18n.tr("Buildings that do not belong to a complex"));
-                            } else {
-                                sb.appendEscaped(value.name().getValue());
-                            }
-                        }
-                    }
-                }, selectionModel, null);
-            } else if (value instanceof Complex) {
-                return new DefaultNodeInfo<Building>(new AbstractDataProvider<Building>() {
-                    @Override
-                    protected void onRangeChanged(final HasData<Building> display) {
-                        service.getBuildings(new AsyncCallback<Vector<Building>>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new Error(caught);
-                            }
-
-                            @Override
-                            public void onSuccess(final Vector<Building> result) {
-                                if (result.isEmpty()) {
-                                    updateRowCount(0, true);
-                                } else {
-                                    updateRowData(display, 0, result);
-                                }
-                            }
-                        }, ((Complex) value).getPrimaryKey());
-                    }
-                }, new AbstractCell<Building>() {
-                    @Override
-                    public void render(com.google.gwt.cell.client.Cell.Context context, Building value, SafeHtmlBuilder sb) {
-                        if (value != null) {
-                            sb.appendEscaped(value.getStringView());
-                        }
-                    }
-                }, selectionModel, null);
-            } else if (value instanceof Building) {
-                return new DefaultNodeInfo<Floorplan>(new AbstractDataProvider<Floorplan>() {
-                    @Override
-                    protected void onRangeChanged(final HasData<Floorplan> display) {
-                        service.getFloorplans(new AsyncCallback<Vector<Floorplan>>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new Error(caught);
-                            }
-
-                            @Override
-                            public void onSuccess(final Vector<Floorplan> result) {
-                                if (result.isEmpty()) {
-                                    updateRowCount(0, true);
-                                } else {
-                                    updateRowData(display, 0, result);
-                                }
-                            }
-                        }, ((Building) value).getPrimaryKey());
-                    }
-                }, new AbstractCell<Floorplan>() {
-                    @Override
-                    public void render(com.google.gwt.cell.client.Cell.Context context, Floorplan value, SafeHtmlBuilder sb) {
-                        if (value != null) {
-                            sb.appendEscaped(value.getStringView());
-                        }
-                    }
-                }, selectionModel, null);
-            } else if (value instanceof Floorplan) {
-                return new DefaultNodeInfo<AptUnit>(new AbstractDataProvider<AptUnit>() {
-                    @Override
-                    protected void onRangeChanged(final HasData<AptUnit> display) {
-                        service.getUnits(new AsyncCallback<Vector<AptUnit>>() {
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new Error(caught);
-                            }
-
-                            @Override
-                            public void onSuccess(final Vector<AptUnit> result) {
                                 updateRowData(display, 0, result);
                             }
-                        }, ((Floorplan) value).getPrimaryKey());
-                    }
-                }, new AbstractCell<AptUnit>() {
-                    @Override
-                    public void render(com.google.gwt.cell.client.Cell.Context context, AptUnit value, SafeHtmlBuilder sb) {
-                        if (value != null) {
+                        }
+                    }, value == null ? null : (PolicyNode) value);
+                }
+            }, new AbstractCell<PolicyNode>() {
+                @Override
+                public void render(com.google.gwt.cell.client.Cell.Context context, PolicyNode value, SafeHtmlBuilder sb) {
+                    // TODO change this to PMC name
+                    if (value != null) {
+                        if (value instanceof OrganizationPoliciesNode) {
+                            sb.appendEscaped(i18n.tr("Organization"));
+                        } else {
                             sb.appendEscaped(value.getStringView());
                         }
                     }
-                }, selectionModel, null);
-            }
-            return null;
+                }
+            }, selectionModel, null);
         }
 
         @Override

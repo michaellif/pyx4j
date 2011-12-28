@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.server.util;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -22,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.policy.BuildingPolicy;
 import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
@@ -62,17 +66,17 @@ public class PolicyManager {
         // Filter all the unwanted policies
         Iterator<PolicyAtNode> i = effectivePreset.policies().iterator();
         while (i.hasNext()) {
-            Class<? extends Policy> policyClass = (Class<? extends Policy>) i.next().getInstanceValueClass();
-            if (AptUnit.class.equals(requestedNodeClass) | Floorplan.class.equals(requestedNodeClass) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
+            Class<? extends Policy> policyClass = (Class<? extends Policy>) i.next().policy().getInstanceValueClass();
+            if ((AptUnit.class.equals(requestedNodeClass) | Floorplan.class.equals(requestedNodeClass)) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
                 i.remove();
-            } else if (Building.class.equals(requestedNodeClass) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
+            } else if (Building.class.equals(requestedNodeClass) & !BuildingPolicy.class.isAssignableFrom(policyClass)) {
                 i.remove();
             }
         }
         return effectivePreset;
     }
 
-    private static PolicyNode parentOf(PolicyNode node) {
+    public static PolicyNode parentOf(PolicyNode node) {
         if (node.getPrimaryKey() == null) {
             throw new Error("this node is not persited!!!!");
         }
@@ -158,5 +162,62 @@ public class PolicyManager {
         }
 
         return effectivePolicies;
+    }
+
+    public static List<? extends PolicyNode> childrenOf(PolicyNode node) {
+        Class<? extends PolicyNode> nodeClass = node != null ? (Class<? extends PolicyNode>) node.getInstanceValueClass() : DefaultPoliciesNode.class;
+
+        if (AptUnit.class.equals(nodeClass)) {
+            return new LinkedList<PolicyNode>();
+
+        } else if (Floorplan.class.equals(nodeClass)) {
+            EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), node));
+            return Persistence.service().query(criteria);
+
+        } else if (Building.class.equals(nodeClass)) {
+            EntityQueryCriteria<Floorplan> criteria = new EntityQueryCriteria<Floorplan>(Floorplan.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), node));
+            return Persistence.service().query(criteria);
+
+        } else if (Complex.class.equals(nodeClass)) {
+            EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), node));
+            return Persistence.service().query(criteria);
+
+        } else if (Province.class.equals(nodeClass)) {
+            EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), node));
+            criteria.add(PropertyCriterion.eq(criteria.proto().complexPrimary(), true));
+
+            List<Building> primaryBuildings = Persistence.service().query(criteria);
+
+            List<PolicyNode> children = new ArrayList<PolicyNode>(primaryBuildings.size());
+
+            for (Building building : primaryBuildings) {
+                children.add(building.complex());
+            }
+
+            // now add 'orphan' buidlings that have no parent complex
+
+            criteria = new EntityQueryCriteria<Building>(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), node));
+            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), (Serializable) null)); // the casting here is only to choose the overloaded method
+
+            children.addAll(Persistence.service().query(criteria));
+
+            return children;
+
+        } else if (Country.class.equals(nodeClass)) {
+            EntityQueryCriteria<Province> criteria = new EntityQueryCriteria<Province>(Province.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().country(), node));
+            return Persistence.service().query(criteria);
+        } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
+            return Persistence.service().query(new EntityQueryCriteria<Country>(Country.class));
+        } else if (DefaultPoliciesNode.class.equals(nodeClass)) {
+            return Persistence.service().query(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
+        } else {
+            throw new Error("Got unknown type of " + PolicyNode.class.getName() + ": '" + nodeClass.getName() + "'");
+        }
     }
 }

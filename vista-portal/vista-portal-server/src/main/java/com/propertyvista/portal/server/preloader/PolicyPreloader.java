@@ -39,10 +39,10 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         // create a node for organzation scope policies
         Persistence.service().persist(EntityFactory.create(OrganizationPoliciesNode.class));
 
+        // Create the node for default policies and default policies
         DefaultPoliciesNode defaultPoliciesNode = EntityFactory.create(DefaultPoliciesNode.class);
         Persistence.service().persist(defaultPoliciesNode);
 
-        // Create default policies
         List<? extends Policy> defaults = Arrays.asList(//@formatter:off
                 createNumberOfIdsDefaultPolicy(),
                 createAllowedIdsDefaultPolicy(),
@@ -63,7 +63,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PolicyAtNode.class, IdentificationDocument.class);
+            return deleteAll(PolicyAtNode.class, IdentificationDocument.class, DefaultPoliciesNode.class, OrganizationPoliciesNode.class);
         } else {
             return "This is production";
         }
