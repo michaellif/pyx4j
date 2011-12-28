@@ -39,8 +39,6 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
 
     private LocalServiceTestHelper helper;
 
-    private static int uniqueCount = 0;
-
     protected String storageFileName() {
         return null;
     }
@@ -75,10 +73,6 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
         }
         helper.tearDown();
         ApiProxy.setEnvironmentForCurrentThread(null);
-    }
-
-    protected synchronized String uniqueString() {
-        return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis());
     }
 
     @Override

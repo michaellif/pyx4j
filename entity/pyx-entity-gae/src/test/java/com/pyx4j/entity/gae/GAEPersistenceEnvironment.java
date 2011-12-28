@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,24 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 23, 2010
+ * Created on Dec 28, 2011
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.gae;
 
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
+import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class GAEPersistenceEnvironmentFactory {
+public class GAEPersistenceEnvironment extends PersistenceEnvironment {
 
-    public static PersistenceEnvironment getPersistenceEnvironment() {
-        switch (PersistenceEnvironment.getEnvironmentType()) {
-        case LocalJVM:
-            return new LocalDatastorePersistenceEnvironment();
-        case GAEDevelopment:
-        case GAESandbox:
-        default:
-            return new GAEPersistenceEnvironment();
-        }
+    @Override
+    public ApplicationBackendType getBackendType() {
+        return ApplicationBackendType.GAE;
     }
+
+    @Override
+    public IEntityPersistenceService setupDatastore() {
+        return null;
+    }
+
+    @Override
+    public void teardownDatastore(IEntityPersistenceService srv) {
+    }
+
 }
