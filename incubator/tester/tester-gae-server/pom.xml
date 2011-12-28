@@ -106,7 +106,7 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>tester-client</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <!--scope>provided</scope-->
         </dependency>
 
         <dependency>
