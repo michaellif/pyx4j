@@ -37,6 +37,9 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     }
 
     private String countryName() {
+        if (editor.getValue() == null) {
+            return null;
+        }
         Country country = (Country) editor.getValue().getMember(countryPath);
         return country.name().getValue();
     }
