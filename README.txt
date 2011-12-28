@@ -14,15 +14,15 @@
 
 4. Install Eclipse Plugins.
     - Subclipse     (latest)               (From Eclipse Marketplace)
-    - Google plugins for Eclipse v2.2.1    (From Eclipse Marketplace)
-    - Google Web Toolkin SDK v2.2.0        (From Eclipse Marketplace)
+    - Google plugins for Eclipse v2.5.0    (From Eclipse Marketplace)
+    - Google Web Toolkin SDK v2.4.0        (From Eclipse Marketplace)
     - Google App Engine SDK                (From Eclipse Marketplace)
     - M2-Eclipse ** (latest)
 
 ========= Install Subclipse =========
 
-     Subclipse for SVN 1.6  From Eclipse Marketplace
-     Official Update Site:  http://subclipse.tigris.org/update_1.6.x
+     Subclipse for SVN 1.7  From Eclipse Marketplace
+     Official Update Site:  http://subclipse.tigris.org/update_1.8.x
 
 ========= Install M2-Eclipse =========
 
@@ -65,9 +65,9 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
     Star this bugs: http://code.google.com/p/googleappengine/issues/detail?id=3401
                     http://code.google.com/p/googleappengine/issues/detail?id=2282
 
-2. Download and unzip appengine-java-sdk-1.5.4.zip
+2. Download and unzip appengine-java-sdk-1.6.1.zip
 		from http://code.google.com/appengine/downloads.html
-3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.5.4  (or make NTFS link)
+3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.6.1  (or make NTFS link)
 4. Configure Eclipse -> Preferences -> Google -> App Engine to use SDK above!
 
 4. For heavy server side development use jrebel
