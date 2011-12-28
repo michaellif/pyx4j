@@ -97,6 +97,9 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
         addValueValidator(new EditableValueValidator<List<ChargeItem>>() {
             @Override
             public ValidationFailure isValid(CComponent<List<ChargeItem>, ?> component, List<ChargeItem> value) {
+                if (value == null) {
+                    return null;
+                }
                 return (value.size() < maxCount) ? null : new ValidationFailure(i18n.tr("You cannot add more than {0} items here!", maxCount));
             }
         });

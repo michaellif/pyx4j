@@ -128,6 +128,9 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
             @Override
             public ValidationFailure isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+                if (value == null || getValue() == null) {
+                    return null;
+                }
                 return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationFailure(i18n
                         .tr("Duplicate contacts specified"));
             }
