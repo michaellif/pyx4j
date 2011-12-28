@@ -61,7 +61,13 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
     private ApplicationDocumentsFolderUploader fileUpload;
 
-    private CEntityEditor<PriorAddress> previousAddress;
+    private final FormFlexPanel previousAddress = new FormFlexPanel() {
+        @Override
+        public void setVisible(boolean visible) {
+            get(proto().previousAddress()).setVisible(visible);
+            super.setVisible(visible);
+        }
+    };
 
     public TenantScreeningEditorForm() {
         super(TenantScreening.class, new CrmEditorsComponentFactory());
@@ -210,8 +216,9 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentAddress(), new PriorAddressEditor()));
 
-        main.setH1(++row, 0, 1, proto().previousAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().previousAddress(), previousAddress = new PriorAddressEditor()));
+        previousAddress.setH1(0, 0, 1, proto().previousAddress().getMeta().getCaption());
+        previousAddress.setWidget(1, 0, inject(proto().previousAddress(), new PriorAddressEditor()));
+        main.setWidget(++row, 0, previousAddress);
 
         return new CrmScrollPanel(main);
     }
@@ -245,9 +252,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     }
 
     private void enablePreviousAddress() {
-        boolean enabled = BusinessRules.infoPageNeedPreviousAddress(getValue().currentAddress().moveInDate().getValue());
-        get(proto().previousAddress()).setVisible(enabled);
-        previousAddress.setVisible(enabled);
+        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().currentAddress().moveInDate().getValue()));
     }
 
 // Financial: ------------------------------------------------------------------------------------------------
