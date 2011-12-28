@@ -221,7 +221,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
                 FormFlexPanel main = new FormFlexPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().employedForYears()), 4).build());
 
                 row = -1;
@@ -258,7 +258,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
                 FormFlexPanel main = new FormFlexPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
 
                 row = -1;
                 main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
@@ -291,14 +291,14 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
                 FormFlexPanel main = new FormFlexPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
 
                 main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor()));
 
                 main.setH3(++row, 0, 1, i18n.tr("Program Info"));
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().program()), 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fieldOfStudy()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fieldOfStudy()), 25).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundingChoices()), 10).build());
 
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
@@ -324,7 +324,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
                 FormFlexPanel main = new FormFlexPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
 
                 row = -1;
                 main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
@@ -361,7 +361,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
                 FormFlexPanel main = new FormFlexPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
 
                 row = -1;
                 main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
@@ -394,8 +394,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
                 FormFlexPanel main = new FormFlexPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().monthlyAmount()), 9).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
