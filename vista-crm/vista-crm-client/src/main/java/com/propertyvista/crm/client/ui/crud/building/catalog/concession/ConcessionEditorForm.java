@@ -50,7 +50,7 @@ public class ConcessionEditorForm extends CrmEntityForm<Concession> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 51).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");
