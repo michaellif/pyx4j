@@ -13,6 +13,7 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -28,5 +29,6 @@ public interface BuildingDTO extends Building {
 
     IList<ServiceItemType> availableUtilities();
 
+    @EmbeddedEntity
     GeoLocation geoLocation();
 }

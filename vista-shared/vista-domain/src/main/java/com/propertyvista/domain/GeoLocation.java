@@ -16,13 +16,16 @@ package com.propertyvista.domain;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+//TODO VladL move this class to DTO
 @ToStringFormat("{0} {1} & {2} {3}")
+@Transient
 public interface GeoLocation extends IEntity {
 
     @I18n
