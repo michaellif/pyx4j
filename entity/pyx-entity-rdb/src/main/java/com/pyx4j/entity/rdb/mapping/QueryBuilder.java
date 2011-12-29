@@ -109,15 +109,11 @@ public class QueryBuilder<T extends IEntity> {
                     sortsSql.append(", ");
                 }
                 MemeberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyName(), true);
-                if (descr != null) {
-                    sortsSql.append(descr.alias).append('.');
-                    sortsSql.append(descr.memberOper.sqlName());
-                } else {
-                    // Assume proper SQL string supplied ???
-                    //TODO verify sql INJECTION
-                    sortsSql.append(alias).append('.');
-                    sortsSql.append(sort.getPropertyName());
+                if (descr == null) {
+                    throw new RuntimeException("Unknown member " + sort.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
                 }
+                sortsSql.append(descr.alias).append('.');
+                sortsSql.append(descr.memberOper.sqlName());
                 sortsSql.append(' ').append(sort.isDescending() ? "DESC" : "ASC");
                 // TODO Make it configurable in API
                 sortsSql.append(dialect.sqlSortNulls(sort.isDescending()));
