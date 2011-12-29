@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -57,8 +57,6 @@ public class QueryBuilder<T extends IEntity> {
 
     private final StringBuilder sql = new StringBuilder();
 
-    private final StringBuilder joinWhereSql = new StringBuilder();
-
     private final StringBuilder sortsSql = new StringBuilder();
 
     private final boolean multitenant;
@@ -71,11 +69,16 @@ public class QueryBuilder<T extends IEntity> {
 
         String alias;
 
+        boolean leftJoin;
+
         String condition;
+
+        MemberOperationsMeta memberOper;
 
     }
 
-    private final Map<String, JoinDef> memberJoinAliases = new HashMap<String, JoinDef>();
+    //keep the keys in the order they were inserted.
+    private final Map<String, JoinDef> memberJoinAliases = new LinkedHashMap<String, JoinDef>();
 
     private final EntityOperationsMeta operationsMeta;
 
@@ -288,60 +291,50 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     private MemeberWithAlias getMemberOperationsMetaByPath(String mainAlias, String propertyPath, boolean leftJoin) {
-        MemberOperationsMeta memberOper = operationsMeta.getMember(propertyPath);
+        return getMemberOperationsMetaByPath(operationsMeta, mainAlias, propertyPath, leftJoin);
+    }
+
+    private MemeberWithAlias getMemberOperationsMetaByPath(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin) {
+        MemberOperationsMeta memberOper = fromEntityOperMeta.getMember(propertyPath);
         if (memberOper != null) {
-            return new MemeberWithAlias(memberOper, mainAlias);
+            return new MemeberWithAlias(memberOper, fromAlias);
         } else {
-            memberOper = operationsMeta.getFirstDirectMember(propertyPath);
-            if (memberOper != null) {
-                String thisAlias = getJoin(memberOper, mainAlias, leftJoin);
-
-                //TODO recursion
-                @SuppressWarnings("unchecked")
-                EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta(connection, (Class<? extends IEntity>) memberOper
-                        .getMemberMeta().getObjectClass());
-
-                String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
-                String memberName = GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getObjectClass()) + Path.PATH_SEPARATOR + pathFragmet;
-                MemberOperationsMeta memberOper2 = otherEntityOperMeta.getMember(memberName);
-                if (memberOper2 == null) {
-                    throw new RuntimeException("Member " + memberName + " not found in " + otherEntityOperMeta.entityMeta().getEntityClass());
-                }
-
-                return new MemeberWithAlias(memberOper2, thisAlias);
-            } else {
+            memberOper = fromEntityOperMeta.getFirstDirectMember(propertyPath);
+            if (memberOper == null) {
                 return null;
             }
+            String thisAlias = getJoin(memberOper, fromAlias, leftJoin);
+            @SuppressWarnings("unchecked")
+            EntityOperationsMeta otherEntityOperMeta = operationsMeta.getMappedOperationsMeta(connection, (Class<? extends IEntity>) memberOper.getMemberMeta()
+                    .getObjectClass());
+            String pathFragmet = propertyPath.substring(memberOper.getMemberPath().length());
+            String shorterPath = GWTJava5Helper.getSimpleName(memberOper.getMemberMeta().getObjectClass()) + Path.PATH_SEPARATOR + pathFragmet;
+            return getMemberOperationsMetaByPath(otherEntityOperMeta, thisAlias, shorterPath, leftJoin);
         }
     }
 
-    private String getJoin(MemberOperationsMeta memberOper, String mainAlias, boolean leftJoin) {
+    private String getJoin(MemberOperationsMeta memberOper, String fromAlias, boolean leftJoin) {
         JoinDef memberJoin = memberJoinAliases.get(memberOper.getMemberPath());
         if (memberJoin == null) {
             memberJoin = new JoinDef();
             memberJoin.alias = "j" + String.valueOf(memberJoinAliases.size() + 1);
+            memberJoin.leftJoin = leftJoin;
+            memberJoin.memberOper = memberOper;
             memberJoinAliases.put(memberOper.getMemberPath(), memberJoin);
 
             StringBuilder condition = new StringBuilder();
 
             if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
-                condition.append(mainAlias).append(".").append(memberOper.sqlName());
+                condition.append(fromAlias).append(".").append(memberOper.sqlName());
                 condition.append(" = ");
                 condition.append(memberJoin.alias).append(".id ");
             } else {
                 // Collection
-                condition.append(mainAlias).append(".id = ");
+                condition.append(fromAlias).append(".id = ");
                 condition.append(memberJoin.alias).append(".owner ");
             }
 
-            if (leftJoin) {
-                memberJoin.condition = condition.toString();
-            } else {
-                if (joinWhereSql.length() > 0) {
-                    joinWhereSql.append(" AND ");
-                }
-                joinWhereSql.append(condition);
-            }
+            memberJoin.condition = condition.toString();
         }
         return memberJoin.alias;
     }
@@ -368,13 +361,13 @@ public class QueryBuilder<T extends IEntity> {
         for (Map.Entry<String, JoinDef> me : memberJoinAliases.entrySet()) {
             JoinDef memberJoin = me.getValue();
 
-            if (memberJoin.condition != null) {
+            if (memberJoin.leftJoin) {
                 sqlFrom.append(" LEFT JOIN ");
             } else {
-                sqlFrom.append(", ");
+                sqlFrom.append(" INNER JOIN ");
             }
 
-            MemberOperationsMeta memberOper = operationsMeta.getMember(me.getKey());
+            MemberOperationsMeta memberOper = memberJoin.memberOper;
             if (memberOper.getMemberMeta().getObjectClassType() == ObjectClassType.Entity) {
                 sqlFrom.append(TableModel.getTableName(dialect,
                         EntityFactory.getEntityMeta((Class<? extends IEntity>) memberOper.getMemberMeta().getObjectClass())));
@@ -386,9 +379,7 @@ public class QueryBuilder<T extends IEntity> {
             sqlFrom.append(" ");
             // AS
             sqlFrom.append(memberJoin.alias);
-            if (memberJoin.condition != null) {
-                sqlFrom.append(" ON ").append(memberJoin.condition);
-            }
+            sqlFrom.append(" ON ").append(memberJoin.condition);
         }
         return sqlFrom.toString();
     }
@@ -398,14 +389,10 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     private String getWhere() {
-        if ((sql.length() == 0) && (joinWhereSql.length() == 0)) {
+        if (sql.length() == 0) {
             return "";
         } else {
             StringBuilder sqlWhere = new StringBuilder(" WHERE ");
-            sqlWhere.append(joinWhereSql);
-            if ((sql.length() != 0) && (joinWhereSql.length() != 0)) {
-                sqlWhere.append(" AND ");
-            }
             sqlWhere.append(sql);
             return sqlWhere.toString();
         }

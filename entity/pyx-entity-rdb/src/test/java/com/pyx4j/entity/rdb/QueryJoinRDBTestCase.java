@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Organization;
 
 public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
 
@@ -112,6 +113,65 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
             criteria.asc(criteria.proto().department().name());
             criteria.asc(criteria.proto().homeAddress().streetName());
+
+            List<Employee> empsSortedAsc = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, empsSortedAsc.size());
+            Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp1.getPrimaryKey());
+        }
+    }
+
+    public void testRecurciveQueryCriteria() {
+        String setId = uniqueString();
+        String searchBy = uniqueString();
+
+        Organization org1 = EntityFactory.create(Organization.class);
+        org1.name().setValue("A" + uniqueString());
+        srv.persist(org1);
+
+        Department department1 = EntityFactory.create(Department.class);
+        department1.name().setValue("A" + uniqueString());
+        department1.organization().set(org1);
+        srv.persist(department1);
+
+        Employee emp1 = EntityFactory.create(Employee.class);
+        String emp1Name = "Bob " + uniqueString();
+        emp1.firstName().setValue(emp1Name);
+        emp1.homeAddress().streetName().setValue(searchBy);
+        emp1.workAddress().streetName().setValue(setId);
+        emp1.department().set(department1);
+        srv.persist(emp1);
+
+        Organization org2 = EntityFactory.create(Organization.class);
+        org2.name().setValue("B" + uniqueString());
+        srv.persist(org2);
+
+        Department department2 = EntityFactory.create(Department.class);
+        department2.name().setValue("B" + uniqueString());
+        department2.organization().set(org2);
+        srv.persist(department2);
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        String emp2Name = "Anna " + uniqueString();
+        emp2.firstName().setValue(emp2Name);
+        emp2.workAddress().streetName().setValue(setId);
+        emp2.department().set(department2);
+        srv.persist(emp2);
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
+            criteria.desc(criteria.proto().department().organization().name());
+
+            List<Employee> empsSortedAsc = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, empsSortedAsc.size());
+            Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp2.getPrimaryKey());
+        }
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().workAddress().streetName(), setId));
+            criteria.asc(criteria.proto().department().name());
+            criteria.desc(criteria.proto().department().organization().name());
 
             List<Employee> empsSortedAsc = srv.query(criteria);
             Assert.assertEquals("result set size", 2, empsSortedAsc.size());
