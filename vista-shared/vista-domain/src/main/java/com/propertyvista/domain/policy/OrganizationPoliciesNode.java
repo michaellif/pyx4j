@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
  * 
  */
 @DiscriminatorValue("OrganizationPoliciesNode")
+@Caption(name = "Organization")
 public interface OrganizationPoliciesNode extends PolicyNode {
 
     @Deprecated

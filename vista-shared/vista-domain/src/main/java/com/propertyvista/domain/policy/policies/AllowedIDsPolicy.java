@@ -17,11 +17,10 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.UnitPolicy;
 
 @DiscriminatorValue("AllowedIDsPolicy")
-public interface AllowedIDsPolicy extends Policy, UnitPolicy {
+public interface AllowedIDsPolicy extends UnitPolicy {
 
     IList<IdentificationDocument> allowedIDs();
 

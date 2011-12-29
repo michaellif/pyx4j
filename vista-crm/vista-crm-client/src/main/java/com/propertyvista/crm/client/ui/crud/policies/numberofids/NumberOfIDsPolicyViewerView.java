@@ -7,21 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Dec 29, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies;
+package com.propertyvista.crm.client.ui.crud.policies.numberofids;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.policy.BuildingPolicy;
+import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
 
-@DiscriminatorValue("PoolUsageFeePolicy")
-public interface PoolUsageFeePolicy extends BuildingPolicy {
+public interface NumberOfIDsPolicyViewerView extends IViewerView<NumberOfIDsPolicyDTO> {
 
-    @Format("#,##")
-    IPrimitive<Double> monthlyPoolFee();
 }

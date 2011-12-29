@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.server.common.policy;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -13,9 +13,14 @@
  */
 package com.propertyvista.domain.policy;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+
 /**
  * Marker interface for policies that are available at unit/floorplan level.
  */
+@AbstractEntity
+@Inheritance
 public interface UnitPolicy extends BuildingPolicy {
 
 }

@@ -16,27 +16,13 @@ package com.propertyvista.domain.policy.dto;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.NodeType;
-import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.policy.PolicyNode;
 
-public interface PolicyDTOBase extends IEntity {
+public abstract interface PolicyDTOBase extends IEntity {
 
-    IPrimitive<NodeType> nodeType();
+    PolicyNode node();
 
-    AptUnit unit();
+    IPrimitive<String> nodeType();
 
-    Floorplan floorplan();
-
-    Building building();
-
-    Complex complex();
-
-    Province province();
-
-    Country country();
+    IPrimitive<String> nodeRepresentation();
 }

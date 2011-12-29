@@ -13,12 +13,16 @@
  */
 package com.propertyvista.domain.policy;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
 /** Container for all policies in the system with default values */
 
 @DiscriminatorValue("DefaultPolicies")
+@Caption(name = "Default")
+@ToStringFormat("Default")
 public interface DefaultPoliciesNode extends PolicyNode {
 
     @Deprecated

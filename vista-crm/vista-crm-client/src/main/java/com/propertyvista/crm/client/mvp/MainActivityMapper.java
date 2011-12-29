@@ -112,7 +112,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
+import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsEditorActivity;
 import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsListerActivicty;
+import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsViewerActivity;
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
@@ -580,8 +582,10 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new NumberOfIDsListerActivicty(place);
                         break;
                     case editor:
+                        activity = new NumberOfIDsEditorActivity(place);
                         break;
                     case viewer:
+                        activity = new NumberOfIDsViewerActivity(place);
                         break;
                     }
                 }

@@ -16,11 +16,11 @@ package com.propertyvista.crm.server.services.policy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
-import com.propertyvista.crm.server.util.PolicyManager;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
+import com.propertyvista.server.common.policy.PolicyManager;
 
 public class PolicyManagerServiceImpl implements PolicyManagerService {
 

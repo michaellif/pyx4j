@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyListerViewImpl;
 
@@ -24,7 +26,10 @@ public class PolicyViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (NumberOfIDsPolicyListerView.class.equals(type)) {
                 map.put(NumberOfIDsPolicyListerView.class, new NumberOfIDsPolicyListerViewImpl());
+            } else if (NumberOfIDsPolicyEdtiorView.class.equals(type)) {
+                map.put(NumberOfIDsPolicyEdtiorView.class, new NumberOfIDsPolicyEditorViewImpl());
             }
+
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

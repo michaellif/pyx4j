@@ -13,8 +13,14 @@
  */
 package com.propertyvista.crm.server.services.policy;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
 import com.propertyvista.crm.rpc.services.policy.NumberOfIDsPolicyCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.policy.PolicyAtNode;
+import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 
@@ -29,7 +35,16 @@ public class NumberOfIDsPolicyCrudServiceImpl extends GenericCrudServiceDtoImpl<
     protected void enhanceDTO(NumberOfIDsPolicy in, NumberOfIDsPolicyDTO dto, boolean fromList) {
         super.enhanceDTO(in, dto, fromList);
 
-//        EntityQueryCriteria<PoliciesAtNode> criteria = new EntityQueryCriteria<PoliciesAtNode>(PoliciesAtNode.class);
-//        criteria.add(PropertyCriterion.eq(cr
+        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), in));
+        PolicyAtNode policyAtNode = Persistence.service().retrieve(criteria);
+        assert policyAtNode != null : "Each policy instance has to have one and only one associated node";
+        dto.node().set(policyAtNode.node());
+
+        if (fromList) {
+            PolicyNode castedNode = dto.node().cast();
+            dto.nodeType().setValue(castedNode.getEntityMeta().getCaption());
+            dto.nodeRepresentation().setValue(castedNode.getStringView());
+        }
     }
 }

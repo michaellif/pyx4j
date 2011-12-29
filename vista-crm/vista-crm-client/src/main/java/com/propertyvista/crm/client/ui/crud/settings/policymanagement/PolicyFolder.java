@@ -28,17 +28,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.AllowedIDsPolicyEditorForm;
-import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.GymUsageFeePolicyEditorForm;
-import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
-import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.PoolUsageFeePolicyEditorForm;
+import com.propertyvista.crm.client.ui.policy.PolicyFormFactory;
+import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.EffectivePolicyAtNodeDTO;
-import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
-import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
-import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
-import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
 public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
 
@@ -103,21 +97,9 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
             // FIXME review this method when polymorphic entities can be somehow 'injected' into form
             super.onPopulate();
 
-            Class<?> policyClass = getValue().policy().getInstanceValueClass();
+            Class<? extends Policy> policyClass = (Class<? extends Policy>) getValue().policy().getInstanceValueClass();
 
-            policyEditor = null;
-            //@formatter:off
-            do {
-                if (NumberOfIDsPolicy.class.equals(policyClass)) { policyEditor = new NumberOfIDsPolicyEditorForm();  break; }                
-                if (AllowedIDsPolicy.class.equals(policyClass)) { policyEditor = new AllowedIDsPolicyEditorForm(); break; }
-                if (GymUsageFeePolicy.class.equals(policyClass)) { policyEditor = new GymUsageFeePolicyEditorForm(); break; }
-                if (PoolUsageFeePolicy.class.equals(policyClass)) { policyEditor = new PoolUsageFeePolicyEditorForm(); break; }
-            } while (false);
-            //@formatter:on
-            if (policyEditor == null) {
-                throw new Error("No editor for policy '" + policyClass.getName() + "' was found");
-            }
-
+            policyEditor = PolicyFormFactory.createPolicyEditorForm(policyClass, isEditable());
             adopt(policyEditor);
             policyEditor.initContent();
             policyEditor.populate(getValue().policy().cast());

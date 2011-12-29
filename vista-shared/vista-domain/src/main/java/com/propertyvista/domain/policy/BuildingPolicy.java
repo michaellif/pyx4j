@@ -13,9 +13,14 @@
  */
 package com.propertyvista.domain.policy;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+
 /**
  * Marker interface for policies that can be assigned only to building.
  */
-public interface BuildingPolicy {
+@Inheritance
+@AbstractEntity
+public interface BuildingPolicy extends Policy {
 
 }

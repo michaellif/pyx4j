@@ -19,13 +19,12 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.UnitPolicy;
 
 @DiscriminatorValue("NumberOfIDsPolicy")
 @Caption(name = "Number of Identification Documents")
 @ToStringFormat("Number of Identification Documents: {0}")
-public interface NumberOfIDsPolicy extends UnitPolicy, Policy {
+public interface NumberOfIDsPolicy extends UnitPolicy {
 
     @ToString(index = 0)
     IPrimitive<Integer> numberOfIDs();
