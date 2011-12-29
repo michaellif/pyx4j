@@ -150,7 +150,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(2, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new CrmScrollPanel(main);
     }
