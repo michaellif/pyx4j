@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 public class NumberOfIDsPolicyViewerViewImpl extends CrmViewerViewImplBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyViewerView {
 
     public NumberOfIDsPolicyViewerViewImpl() {
-        super(CrmSiteMap.Policies.NumberOfIds.class);
+        super(CrmSiteMap.Settings.Policies.NumberOfIds.class);
 
         setForm(new PolicyDTOEditorForm<NumberOfIDsPolicy, NumberOfIDsPolicyDTO>(NumberOfIDsPolicy.class, NumberOfIDsPolicyDTO.class,
                 new CrmViewersComponentFactory()));

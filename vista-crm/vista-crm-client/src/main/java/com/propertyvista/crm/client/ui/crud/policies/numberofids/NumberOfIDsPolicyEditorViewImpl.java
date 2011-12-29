@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 public class NumberOfIDsPolicyEditorViewImpl extends CrmEditorViewImplBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyEdtiorView {
 
     public NumberOfIDsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Policies.NumberOfIds.class, new PolicyDTOEditorForm<NumberOfIDsPolicy, NumberOfIDsPolicyDTO>(NumberOfIDsPolicy.class,
+        super(CrmSiteMap.Settings.Policies.NumberOfIds.class, new PolicyDTOEditorForm<NumberOfIDsPolicy, NumberOfIDsPolicyDTO>(NumberOfIDsPolicy.class,
                 NumberOfIDsPolicyDTO.class, new CrmEditorsComponentFactory()));
     }
 }

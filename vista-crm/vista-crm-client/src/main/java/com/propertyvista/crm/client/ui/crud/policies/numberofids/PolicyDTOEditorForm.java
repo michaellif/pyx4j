@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CButton;
@@ -33,6 +34,8 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.policy.PolicyFormFactory;
@@ -199,6 +202,23 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
         protected void onPopulate() {
             super.onPopulate();
         }
+    }
+
+    private class ListerBasedSelectDialog<E extends IEntity> extends OkCancelDialog {
+        ListerBase<E> lister;
+
+        public ListerBasedSelectDialog(String caption, Class<E> clazz) {
+            super(caption);
+            lister = new ListerBase<E>(clazz) {
+            };
+        }
+
+        @Override
+        public boolean onClickOk() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
     }
 
 }

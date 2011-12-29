@@ -23,14 +23,14 @@ import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
 public class NumberOfIDsPolicyListerViewImpl extends CrmListerViewImplBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyListerView {
 
     public NumberOfIDsPolicyListerViewImpl() {
-        super(CrmSiteMap.Policies.NumberOfIds.class);
+        super(CrmSiteMap.Settings.Policies.NumberOfIds.class);
         setLister(new NumberOfIdsLister());
     }
 
     private static class NumberOfIdsLister extends ListerBase<NumberOfIDsPolicyDTO> {
 
         public NumberOfIdsLister() {
-            super(NumberOfIDsPolicyDTO.class, CrmSiteMap.Policies.NumberOfIds.class, false, true);
+            super(NumberOfIDsPolicyDTO.class, CrmSiteMap.Settings.Policies.NumberOfIds.class, false, true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),

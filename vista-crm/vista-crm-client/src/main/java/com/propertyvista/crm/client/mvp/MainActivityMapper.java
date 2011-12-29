@@ -576,7 +576,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
 // - Policies:
-                } else if (place instanceof CrmSiteMap.Policies.NumberOfIds) {
+                } else if (place instanceof CrmSiteMap.Settings.Policies.NumberOfIds) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:
                         activity = new NumberOfIDsListerActivicty(place);

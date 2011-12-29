@@ -260,6 +260,16 @@ public class CrmSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "Administration")
     public static class Settings extends AppPlace {
 
+        @NavigationItem(navigLabel = "Policies")
+        public static class Policies extends AppPlace {
+
+            @PlaceProperties(caption = "Number of Allowed IDs")
+            @NavigationItem(navigLabel = "Number of Allowed IDs")
+            public static class NumberOfIds extends CrudAppPlace {
+
+            }
+        }
+
         @PlaceProperties(caption = "Policy Management")
         @NavigationItem(navigLabel = "Policy Management")
         public static class Policy extends AppPlace {
@@ -306,13 +316,4 @@ public class CrmSiteMap implements SiteMap {
     public static class Message extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Policies")
-    public static class Policies extends AppPlace {
-
-        @PlaceProperties(caption = "Number of Allowed IDs")
-        @NavigationItem(navigLabel = "Number of Allowed IDs")
-        public static class NumberOfIds extends CrudAppPlace {
-
-        }
-    }
 }
