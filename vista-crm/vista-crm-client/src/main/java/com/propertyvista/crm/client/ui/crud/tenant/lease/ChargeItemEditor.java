@@ -133,7 +133,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         get(proto().agreedPrice()).addValueValidator(new EditableValueValidator<Double>() {
             @Override
             public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
-                if (getValue() != null && !getValue().isEmpty()) {
+                if (value != null && getValue() != null && !getValue().isEmpty()) {
                     Double originalPrice = getValue().originalPrice().getValue();
                     return ((value > originalPrice * 0.5 && originalPrice < value * 1.5) ? null : new ValidationFailure(i18n
                             .tr("The price should not be differ +-50% of original price")));
