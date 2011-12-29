@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -27,7 +28,9 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -81,7 +84,7 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType<?>>() {
             @Override
             public void onValueChange(ValueChangeEvent<NodeType<?>> event) {
-                Window.alert(event.getValue() == null ? "null" : event.getValue().toString());
+                get(proto().node()).populate(event.getValue() != null ? EntityFactory.create(event.getValue().getType()) : null);
             }
         });
 
@@ -96,11 +99,14 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
             }
         });
 
-        content.setWidget(++row, 0, new DecoratorBuilder(selectPolicyScopeBox).customLabel(i18n.tr("Scope")).labelWidth(5).componentWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(selectPolicyScopeBox).customLabel(i18n.tr("Scope")).labelWidth(8).componentWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
+                .componentWidth(15).build());
 
         policyEditorFormPanel = new SimplePanel();
         policyEditorFormPanel.setSize("100%", "100%");
         content.setWidget(++row, 0, policyEditorFormPanel);
+
         return content;
     }
 
@@ -152,4 +158,47 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
             return nodeType;
         }
     }
+
+    /**
+     * This component just shows the string view of a node and in edit mode allows to choose the node.
+     * 
+     * @author ArtyomB
+     */
+    private class PolicyNodeEditor extends CEntityEditor<PolicyNode> {
+
+        public PolicyNodeEditor() {
+            super(PolicyNode.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel content = new FormFlexPanel();
+
+            final CLabel label = new CLabel();
+            content.setWidget(0, 1, label);
+            content.setWidget(0, 0, new CButton(i18n.tr("Select"), new Command() {
+                @Override
+                public void execute() {
+                    // TODO
+                    Window.alert("Here be node selection dialog for node type: " + (getValue().getInstanceValueClass().getName()));
+                }
+            }));
+
+            addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
+                        label.setValue(!getValue().isEmpty() ? getValue().cast().getStringView() : i18n.tr("Nothing selected"));
+                    }
+                }
+            });
+            return content;
+        }
+
+        @Override
+        protected void onPopulate() {
+            super.onPopulate();
+        }
+    }
+
 }

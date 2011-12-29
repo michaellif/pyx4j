@@ -32,8 +32,8 @@ public class NumberOfIDsPolicyListerViewImpl extends CrmListerViewImplBase<Numbe
         public NumberOfIdsLister() {
             super(NumberOfIDsPolicyDTO.class, CrmSiteMap.Policies.NumberOfIds.class, false, true);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().numberOfIDs()).build()
             );//@formatter:on
         }

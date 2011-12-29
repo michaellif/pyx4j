@@ -17,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
 import com.propertyvista.domain.policy.Policy;
-import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
 import com.propertyvista.server.common.policy.PolicyManager;
@@ -26,20 +25,18 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
 
     @Override
     public void effectivePolicies(AsyncCallback<EffectivePoliciesDTO> callback, PolicyNode node) {
-        callback.onSuccess(PolicyManager.computeEffectivePolicyPreset(node));
+        callback.onSuccess(PolicyManager.effectivePolicies(node));
     }
 
     @Override
     public void effectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyProto) {
         assert policyProto != null : "A policyProto must be provided";
-
-        EffectivePoliciesDTO effectivePolicies = PolicyManager.computeEffectivePolicyPreset(node);
-        for (PolicyAtNode policyAtNode : effectivePolicies.policies()) {
-            policyAtNode.policy().getInstanceValueClass().equals(policyProto.getInstanceValueClass());
-            callback.onSuccess(policyAtNode.policy());
+        Policy policy = PolicyManager.effectivePolicy(node, (Class<? extends Policy>) policyProto.getInstanceValueClass());
+        if (policy != null) {
+            callback.onSuccess(policy);
+        } else {
+            callback.onFailure(new Error("Unfortunately the requested policy (" + policyProto.getInstanceValueClass().getClass().getName()
+                    + ") was not found in the Default Policy Preset"));
         }
-
-        callback.onFailure(new Error("Unfortunately the requested policy (" + policyProto.getInstanceValueClass().getClass().getName()
-                + ") was not found in the Default Policy Preset"));
     }
 }

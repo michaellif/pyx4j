@@ -41,12 +41,18 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
 public class PolicyManager {
+
+    // TODO keep this in some kind of "PoliciesHeriarchy" class
     @SuppressWarnings("unchecked")
     private static final List<Class<? extends PolicyNode>> HIERARCHY = Arrays.asList(AptUnit.class, Floorplan.class, Building.class, Complex.class,
             Province.class, Country.class, OrganizationPoliciesNode.class, DefaultPoliciesNode.class);
 
-    public static EffectivePoliciesDTO computeEffectivePolicyPreset(PolicyNode node) {
-
+    // TODO refactor this method -> change DTO to just list use DTO only in service
+    /**
+     * @param node
+     * @return PoliciesDTO that contains list of effective policies
+     */
+    public static EffectivePoliciesDTO effectivePolicies(PolicyNode node) {
         EffectivePoliciesDTO effectivePreset = EntityFactory.create(EffectivePoliciesDTO.class);
         Class<? extends PolicyNode> requestedNodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
 
@@ -76,6 +82,56 @@ public class PolicyManager {
         return effectivePreset;
     }
 
+    /**
+     * 
+     * @param node
+     *            not <code>null</code>.
+     * @param policyClass
+     *            not <code>null</code>.
+     * @return policy at the requested organization policies hierarchy node or <code>null</code> if that policy has no default instance attached to
+     *         {@link DefaultPoliciesNode}.
+     */
+    // TODO refactor this, no realy has to use effectivePolicies(); 
+    public static Policy effectivePolicy(PolicyNode node, Class<? extends Policy> policyClass) {
+        EffectivePoliciesDTO effectivePolicies = effectivePolicies(node);
+        for (PolicyAtNode policyAtNode : effectivePolicies.policies()) {
+            if (policyAtNode.policy().getInstanceValueClass().equals(policyClass)) {
+                return policyAtNode.policy();
+            }
+        }
+        return null;
+    }
+
+    private static EffectivePoliciesDTO merge(EffectivePoliciesDTO effectivePolicies, List<PolicyAtNode> policies) {
+        if (effectivePolicies == null) {
+            effectivePolicies = EntityFactory.create(EffectivePoliciesDTO.class);
+        }
+
+        for (PolicyAtNode policy : policies) {
+            boolean alreadyEffective = false;
+
+            for (PolicyAtNode effectivePolicy : effectivePolicies.policies()) {
+                if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
+                    alreadyEffective = true;
+                    break;
+                }
+            }
+            if (!alreadyEffective) {
+                effectivePolicies.policies().add(policy);
+            }
+        }
+
+        return effectivePolicies;
+    }
+
+    private static List<PolicyAtNode> policiesAtNode(PolicyNode node) {
+        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
+        List<PolicyAtNode> policiesAtNode = Persistence.service().query(criteria);
+        return policiesAtNode;
+    };
+
+    // TODO move this method to another class (i.e. something that manages/defines heirarchy)
     public static PolicyNode parentOf(PolicyNode node) {
         if (node.getPrimaryKey() == null) {
             throw new Error("this node is not persited!!!!");
@@ -135,35 +191,7 @@ public class PolicyManager {
         }
     }
 
-    public static List<PolicyAtNode> policiesAtNode(PolicyNode node) {
-        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
-        List<PolicyAtNode> policiesAtNode = Persistence.service().query(criteria);
-        return policiesAtNode;
-    };
-
-    private static EffectivePoliciesDTO merge(EffectivePoliciesDTO effectivePolicies, List<PolicyAtNode> policies) {
-        if (effectivePolicies == null) {
-            effectivePolicies = EntityFactory.create(EffectivePoliciesDTO.class);
-        }
-
-        for (PolicyAtNode policy : policies) {
-            boolean alreadyEffective = false;
-
-            for (PolicyAtNode effectivePolicy : effectivePolicies.policies()) {
-                if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
-                    alreadyEffective = true;
-                    break;
-                }
-            }
-            if (!alreadyEffective) {
-                effectivePolicies.policies().add(policy);
-            }
-        }
-
-        return effectivePolicies;
-    }
-
+    // TODO move this method to another class (i.e. something that manages/defines heirarchy)
     public static List<? extends PolicyNode> childrenOf(PolicyNode node) {
         Class<? extends PolicyNode> nodeClass = node != null ? (Class<? extends PolicyNode>) node.getInstanceValueClass() : DefaultPoliciesNode.class;
 

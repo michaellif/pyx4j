@@ -29,6 +29,7 @@ import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
+import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
@@ -44,10 +45,11 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         Persistence.service().persist(defaultPoliciesNode);
 
         List<? extends Policy> defaults = Arrays.asList(//@formatter:off
-                createNumberOfIdsDefaultPolicy(),
-                createAllowedIdsDefaultPolicy(),
-                createGymUsageFeeDefaultPolicy(),
-                createPoolUsageFeeDefaultPolicy()
+                createDefaultNumberOfIdsPolicy(),
+                createDefaultPetPolicy(),
+                createDefaultAllowedIdsPolicy(),
+                createDefaultGymUsageFeePolicy(),
+                createDefaultPoolUsageFeePolicy()
         );//@formatter:on
 
         for (Policy policy : defaults) {
@@ -69,14 +71,23 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         }
     }
 
-    private NumberOfIDsPolicy createNumberOfIdsDefaultPolicy() {
+    private NumberOfIDsPolicy createDefaultNumberOfIdsPolicy() {
         NumberOfIDsPolicy numOfIDs = EntityFactory.create(NumberOfIDsPolicy.class);
         numOfIDs.numberOfIDs().setValue(5);
         Persistence.service().persist(numOfIDs);
         return numOfIDs;
     }
 
-    private AllowedIDsPolicy createAllowedIdsDefaultPolicy() {
+    private PetPolicy createDefaultPetPolicy() {
+        PetPolicy petPolicy = EntityFactory.create(PetPolicy.class);
+        petPolicy.maxPetWeight().setValue(50d);
+        petPolicy.maxNumberOfPets().setValue(10);
+        petPolicy.petChargeEquation().setValue("E = mc^2");
+        Persistence.service().persist(petPolicy);
+        return petPolicy;
+    }
+
+    private AllowedIDsPolicy createDefaultAllowedIdsPolicy() {
         // Allowed IDs default policy
         AllowedIDsPolicy allowedIDs = EntityFactory.create(AllowedIDsPolicy.class);
         IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
@@ -98,14 +109,14 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         return allowedIDs;
     }
 
-    private GymUsageFeePolicy createGymUsageFeeDefaultPolicy() {
+    private GymUsageFeePolicy createDefaultGymUsageFeePolicy() {
         GymUsageFeePolicy policy = EntityFactory.create(GymUsageFeePolicy.class);
         policy.monthlyGymFee().setValue(30.0);
         Persistence.service().persist(policy);
         return policy;
     }
 
-    private PoolUsageFeePolicy createPoolUsageFeeDefaultPolicy() {
+    private PoolUsageFeePolicy createDefaultPoolUsageFeePolicy() {
         PoolUsageFeePolicy policy = EntityFactory.create(PoolUsageFeePolicy.class);
         policy.monthlyPoolFee().setValue(27.99);
         Persistence.service().persist(policy);
