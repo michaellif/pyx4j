@@ -97,6 +97,9 @@ public interface Lease extends IEntity {
     IPrimitive<LogicalDate> leaseTo();
 
     @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> actualLeaseTo();
+
+    @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> expectedMoveIn();
 
     @Format("MM/dd/yyyy")

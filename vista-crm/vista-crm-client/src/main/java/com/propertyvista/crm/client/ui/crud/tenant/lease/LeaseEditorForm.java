@@ -98,10 +98,14 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         main.setBR(++row, 0, 1);
-        HorizontalPanel leaseDatePanel = new HorizontalPanel();
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().leaseTo()), 9).labelWidth(10).build());
-        main.setWidget(++row, 0, leaseDatePanel);
+        FormFlexPanel leaseDates = new FormFlexPanel();
+        leaseDates.setWidget(0, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
+        leaseDates.setWidget(0, 1, new DecoratorBuilder(inject(proto().leaseTo()), 9).labelWidth(10).build());
+        leaseDates.setWidget(1, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).labelWidth(10).build());
+
+        leaseDates.getColumnFormatter().setWidth(0, "35%");
+        leaseDates.getColumnFormatter().setWidth(1, "65%");
+        main.setWidget(++row, 0, leaseDates);
 
         main.setBR(++row, 0, 1);
         if (isEditable()) {
@@ -133,15 +137,21 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         }
 
         main.setBR(++row, 0, 1);
-        leaseDatePanel = new HorizontalPanel();
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).labelWidth(10).build());
-        main.setWidget(++row, 0, leaseDatePanel);
+        leaseDates = new FormFlexPanel();
+        leaseDates.setWidget(0, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
+        leaseDates.setWidget(0, 1, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).labelWidth(10).build());
 
-        leaseDatePanel = new HorizontalPanel();
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
-        leaseDatePanel.add(new DecoratorBuilder(inject(proto().actualMoveOut()), 9).labelWidth(10).build());
-        main.setWidget(++row, 0, leaseDatePanel);
+        leaseDates.getColumnFormatter().setWidth(0, "35%");
+        leaseDates.getColumnFormatter().setWidth(1, "65%");
+        main.setWidget(++row, 0, leaseDates);
+
+        leaseDates = new FormFlexPanel();
+        leaseDates.setWidget(0, 0, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
+        leaseDates.setWidget(0, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).labelWidth(10).build());
+
+        leaseDates.getColumnFormatter().setWidth(0, "35%");
+        leaseDates.getColumnFormatter().setWidth(1, "65%");
+        main.setWidget(++row, 0, leaseDates);
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().signDate()), 9).build());
