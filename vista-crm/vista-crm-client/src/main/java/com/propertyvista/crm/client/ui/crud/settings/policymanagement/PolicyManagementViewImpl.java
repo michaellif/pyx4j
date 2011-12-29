@@ -31,11 +31,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
+import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyManagementView {
     private static final I18n i18n = I18n.get(PolicyManagementViewImpl.class);
@@ -71,14 +71,14 @@ public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyM
                         service.effectivePolicy(new AsyncCallback<Policy>() {
                             @Override
                             public void onSuccess(Policy result) {
-                                Window.alert("success");
+                                Window.alert("success: number of ids is " + ((NumberOfIDsPolicy) result.cast()).numberOfIDs().getValue());
                             }
 
                             @Override
                             public void onFailure(Throwable caught) {
                                 Window.alert(caught.getLocalizedMessage());
                             }
-                        }, EntityFactory.create(AptUnit.class), EntityFactory.create(NumberOfIDsPolicy.class));
+                        }, EntityFactory.create(OrganizationPoliciesNode.class), EntityFactory.create(NumberOfIDsPolicy.class));
                     }
                 }));
                 content.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);

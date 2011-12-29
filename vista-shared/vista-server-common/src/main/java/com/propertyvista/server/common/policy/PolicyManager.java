@@ -96,7 +96,7 @@ public class PolicyManager {
         EffectivePoliciesDTO effectivePolicies = effectivePolicies(node);
         for (PolicyAtNode policyAtNode : effectivePolicies.policies()) {
             if (policyAtNode.policy().getInstanceValueClass().equals(policyClass)) {
-                return policyAtNode.policy();
+                return policyAtNode.policy().duplicate();
             }
         }
         return null;
@@ -133,9 +133,6 @@ public class PolicyManager {
 
     // TODO move this method to another class (i.e. something that manages/defines heirarchy)
     public static PolicyNode parentOf(PolicyNode node) {
-        if (node.getPrimaryKey() == null) {
-            throw new Error("this node is not persited!!!!");
-        }
         Class<? extends PolicyNode> nodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
         if (AptUnit.class.equals(nodeClass)) {
 
@@ -173,12 +170,12 @@ public class PolicyManager {
         } else if (Country.class.equals(nodeClass)) {
 
             // we assume that one organization policies node is preloaded and present in the system
-            return Persistence.service().query(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class)).get(0);
+            return Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
 
         } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
 
             // we assume that one default policies node is preloaded 
-            return Persistence.service().query(new EntityQueryCriteria<DefaultPoliciesNode>(DefaultPoliciesNode.class)).get(0);
+            return Persistence.service().retrieve(new EntityQueryCriteria<DefaultPoliciesNode>(DefaultPoliciesNode.class));
 
         } else if (DefaultPoliciesNode.class.equals(nodeClass)) {
 
