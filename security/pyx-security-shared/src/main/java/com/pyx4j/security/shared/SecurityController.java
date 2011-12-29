@@ -101,4 +101,8 @@ public abstract class SecurityController {
             }
         }
     }
+
+    public static <T extends AccessRule> T getAccessRule(Class<T> accessRuleClass, Object subject) {
+        return null;
+    }
 }

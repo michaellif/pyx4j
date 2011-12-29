@@ -34,6 +34,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
@@ -213,6 +214,13 @@ public class EntityServicesImpl {
 
     public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+
+        @SuppressWarnings("unchecked")
+        DatasetAccessRule<T> rule = SecurityController.getAccessRule(DatasetAccessRule.class, criteria.getEntityClass());
+        if (rule != null) {
+            rule.applyRule(criteria);
+        }
+
         List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
         Vector<T> v = new Vector<T>();
         for (T ent : rc) {

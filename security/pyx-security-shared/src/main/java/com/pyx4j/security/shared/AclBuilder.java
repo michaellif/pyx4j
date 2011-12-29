@@ -106,6 +106,10 @@ public class AclBuilder implements AclCreator {
         global.permissions.add(permission);
     }
 
+    protected void grant(AccessRule accessRule, Object subject) {
+        //TODO
+    }
+
     protected void revoke(Permission restriction) {
         revoke(new PermissionAntipode(restriction));
     }
@@ -125,6 +129,10 @@ public class AclBuilder implements AclCreator {
 
     protected void grant(Behavior behavior, Permission permission) {
         getGroup(behavior).permissions.add(permission);
+    }
+
+    protected void grant(Behavior behavior, AccessRule accessRule, Object subject) {
+        //TODO
     }
 
     protected void grant(Behavior behaviorDest, Behavior behaviorGranted) {
