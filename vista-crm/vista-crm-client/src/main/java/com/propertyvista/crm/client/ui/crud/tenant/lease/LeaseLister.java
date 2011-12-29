@@ -26,32 +26,31 @@ public class LeaseLister extends ListerBase<LeaseDTO> {
 
         setColumnDescriptors(
 
-        //TODO Fix make sortable
-                new Builder(proto().unit().belongsTo().propertyCode()).sortable(false).build(),
+        new Builder(proto().unit().belongsTo().propertyCode()).build(),
 
-                new Builder(proto().unit()).build(),
+        new Builder(proto().unit()).build(),
 
-                new Builder(proto().leaseID()).build(),
+        new Builder(proto().leaseID()).build(),
 
-                new Builder(proto().type()).build(),
+        new Builder(proto().type()).build(),
 
-                new Builder(proto().leaseFrom()).build(),
+        new Builder(proto().leaseFrom()).build(),
 
-                new Builder(proto().leaseTo()).build(),
+        new Builder(proto().leaseTo()).build(),
 
-                new Builder(proto().expectedMoveIn()).build(),
+        new Builder(proto().expectedMoveIn()).build(),
 
-                new Builder(proto().expectedMoveOut()).build(),
+        new Builder(proto().expectedMoveOut()).build(),
 
-                new Builder(proto().actualMoveIn()).build(),
+        new Builder(proto().actualMoveIn()).build(),
 
-                new Builder(proto().actualMoveOut()).build(),
+        new Builder(proto().actualMoveOut()).build(),
 
-                new Builder(proto().moveOutNotice()).build(),
+        new Builder(proto().moveOutNotice()).build(),
 
-                new Builder(proto().status()).build(),
+        new Builder(proto().status()).build(),
 
-                new Builder(proto().signDate()).build());
+        new Builder(proto().signDate()).build());
 
     }
 

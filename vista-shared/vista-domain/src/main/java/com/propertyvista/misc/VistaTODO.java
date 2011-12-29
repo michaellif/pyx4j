@@ -15,10 +15,6 @@ package com.propertyvista.misc;
 
 public interface VistaTODO {
 
-    public final boolean leftJoinQuerySort = true;
-
-    public final boolean recurciveQueryCriteria = true;
-
     // e.g. person().name()
     public final boolean entityAsStringQueryCriteria = true;
 
