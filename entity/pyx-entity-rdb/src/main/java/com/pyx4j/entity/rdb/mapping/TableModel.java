@@ -454,7 +454,7 @@ public class TableModel {
                     throw new RuntimeException();
                 }
                 if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
-                    throw new RuntimeException("namespace acess error");
+                    throw new RuntimeException("namespace access error");
                 }
                 entity.setPrimaryKey(key);
                 retrieveValues(rs, entity);
@@ -523,7 +523,7 @@ public class TableModel {
                 T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
                 entity.setPrimaryKey(new Key(rs.getLong("id")));
                 if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
-                    throw new RuntimeException("namespace acess error");
+                    throw new RuntimeException("namespace access error");
                 }
                 retrieveValues(rs, entity);
 

@@ -33,6 +33,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.rdb.dialect.Dialect;
@@ -139,6 +140,12 @@ public class EntityOperationsMeta {
                     memberAccess = new EntityMemberEmbeddedAccess(accessPath, memberName);
                 }
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
+                    if (joinTable != null) {
+                        //TODO ignore joins for now
+                        continue;
+                    }
+
                     String sqlName;
                     if (namesPath != null) {
                         sqlName = namingConvention.sqlEmbededTableName(rootEntityMeta.getPersistenceName(), namesPath, memberPersistenceName);

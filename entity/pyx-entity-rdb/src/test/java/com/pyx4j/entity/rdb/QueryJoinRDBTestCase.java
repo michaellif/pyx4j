@@ -35,6 +35,9 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
+import com.pyx4j.entity.test.shared.domain.join.AccPrincipal;
+import com.pyx4j.entity.test.shared.domain.join.AccSubject;
+import com.pyx4j.entity.test.shared.domain.join.AccSubjectPrincipal;
 
 public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
 
@@ -177,5 +180,49 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("result set size", 2, empsSortedAsc.size());
             Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp1.getPrimaryKey());
         }
+    }
+
+    public void TODO_testJoinTable() {
+        String testId = uniqueString();
+
+        AccPrincipal principal1 = EntityFactory.create(AccPrincipal.class);
+        principal1.name().setValue(uniqueString());
+        principal1.testId().setValue(testId);
+        srv.persist(principal1);
+
+        AccPrincipal principal2 = EntityFactory.create(AccPrincipal.class);
+        principal2.name().setValue(uniqueString());
+        principal2.testId().setValue(testId);
+        srv.persist(principal2);
+
+        AccSubject subject1 = EntityFactory.create(AccSubject.class);
+        subject1.name().setValue(uniqueString());
+        subject1.testId().setValue(testId);
+        srv.persist(subject1);
+
+        AccSubject subject2 = EntityFactory.create(AccSubject.class);
+        subject2.name().setValue(uniqueString());
+        subject2.testId().setValue(testId);
+        srv.persist(subject2);
+
+        AccSubjectPrincipal join11 = EntityFactory.create(AccSubjectPrincipal.class);
+        join11.principal().set(principal1);
+        join11.subject().set(subject1);
+        srv.persist(join11);
+
+        AccSubjectPrincipal join22 = EntityFactory.create(AccSubjectPrincipal.class);
+        join22.principal().set(principal2);
+        join22.subject().set(subject2);
+        srv.persist(join22);
+
+        {
+            EntityQueryCriteria<AccSubject> criteria = EntityQueryCriteria.create(AccSubject.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().access(), principal1));
+
+            List<AccSubject> data = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, data.size());
+        }
+
     }
 }

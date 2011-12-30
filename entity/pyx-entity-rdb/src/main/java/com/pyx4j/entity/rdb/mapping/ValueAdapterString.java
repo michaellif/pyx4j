@@ -58,7 +58,7 @@ class ValueAdapterString extends ValueAdapterPrimitive {
             }
             int size = str.length();
             if (size > maxLength) {
-                throw new RuntimeException("Member size vialoation member '" + memberMeta.getFieldName() + "' size " + size + " is greater than max allowed "
+                throw new RuntimeException("Member size violation member '" + memberMeta.getFieldName() + "' size " + size + " is greater than max allowed "
                         + maxLength);
             }
             if (size == 0) {

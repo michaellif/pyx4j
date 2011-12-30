@@ -31,6 +31,7 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Transient;
 
@@ -40,6 +41,11 @@ public class ReservedWords {
 
     public static boolean validate(TreeLogger logger, JClassType interfaceType, JMethod memberMethod) throws UnableToCompleteException {
         if (interfaceType.getAnnotation(Transient.class) != null) {
+            return true;
+        }
+        // Ignore members that are managed as additional tables
+        JoinTable managedColumn = memberMethod.getAnnotation(JoinTable.class);
+        if (managedColumn != null) {
             return true;
         }
         String name = memberMethod.getName();
