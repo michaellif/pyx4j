@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.widgets.client.ListBox;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -136,6 +137,10 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
 
             @Override
             public void onClick(ClickEvent event) {
+                MaintenanceRequestDTO req = NewMaintenanceRequestViewImpl.this.getValue();
+                if (req.issueClassification().isEmpty()) {
+                    throw new UserRuntimeException("Please select 'Issue Classification'");
+                }
                 presenter.submit();
             }
         });

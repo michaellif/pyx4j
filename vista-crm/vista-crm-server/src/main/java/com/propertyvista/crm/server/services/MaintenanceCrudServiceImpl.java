@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
@@ -34,4 +37,11 @@ public class MaintenanceCrudServiceImpl extends GenericCrudServiceDtoImpl<Mainte
         Persistence.service().retrieve(dto.issueClassification().subjectDetails().subject());
         Persistence.service().retrieve(dto.issueClassification().subjectDetails().subject().issueElement());
     }
+
+    @Override
+    public void save(AsyncCallback<MaintenanceRequestDTO> callback, MaintenanceRequestDTO dto) {
+        dto.updated().setValue(new LogicalDate());
+        super.save(callback, dto);
+    }
+
 }

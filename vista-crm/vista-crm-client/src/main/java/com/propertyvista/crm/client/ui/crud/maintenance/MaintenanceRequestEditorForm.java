@@ -26,6 +26,8 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -138,22 +140,20 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.setWidget(++row, 0, new DecoratorBuilder(comp3, 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(comp4, 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 20).build());
+
         main.setH1(++row, 0, 2, proto().surveyResponse().getMeta().getCaption());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submited()), 10).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submited(), new CDateLabel()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
         row++;
-        row++;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description()), 10).build());
 
-        if (isEditable()) {
-            get(proto().submited()).setEditable(false);
-            get(proto().updated()).setEditable(false);
-        }
+        row++;
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel()), 10).build());
+
         return new CrmScrollPanel(main);
     }
 
