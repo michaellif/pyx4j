@@ -16,17 +16,24 @@ package com.propertyvista.crm.client.ui.crud.policies.numberofids;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CButton;
@@ -34,11 +41,22 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
+import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
 import com.propertyvista.crm.client.ui.policy.PolicyFormFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
+import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -87,7 +105,11 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType<?>>() {
             @Override
             public void onValueChange(ValueChangeEvent<NodeType<?>> event) {
-                get(proto().node()).populate(event.getValue() != null ? EntityFactory.create(event.getValue().getType()) : null);
+            	if (event.getValue() != null) {
+            		get(proto().node()).populate(EntityFactory.create(event.getValue().getType()));
+            	} else {
+            		discard();
+            	}
             }
         });
 
@@ -121,8 +143,7 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
         final CEntityEditor<P> policyEditorForm = (CEntityEditor<P>) PolicyFormFactory.createPolicyEditorForm(policyClass, isEditable());
 
         adopt(policyEditorForm); // TODO review this: i'm not sure what it does, something with validation
-        policyEditorForm.initContent();
-        policyEditorForm.populate(getValue().duplicate(policyClass));
+        policyEditorForm.initContent();        
         policyEditorForm.addValueChangeHandler(new ValueChangeHandler<P>() {
             @Override
             public void onValueChange(ValueChangeEvent<P> event) {
@@ -133,7 +154,11 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
                 setValue(getValue(), true); // just to fire the event;
             }
         });
-
+        if (getValue() != null && !getValue().isNull()) {
+        	policyEditorForm.populate(getValue().duplicate(policyClass));
+        } else {
+        	policyEditorForm.discard();
+        }
         policyEditorFormPanel.clear();
         policyEditorFormPanel.setWidget(policyEditorForm);
     }
@@ -163,7 +188,7 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
     }
 
     /**
-     * This component just shows the string view of a node and in edit mode allows to choose the node.
+     * This component just shows the string view of a node and in edit mode allows to choose the node via dialog that shows a list of nodes.
      * 
      * @author ArtyomB
      */
@@ -178,14 +203,21 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
             FormFlexPanel content = new FormFlexPanel();
 
             final CLabel label = new CLabel();
-            content.setWidget(0, 1, label);
-            content.setWidget(0, 0, new CButton(i18n.tr("Select"), new Command() {
-                @Override
-                public void execute() {
-                    // TODO
-                    Window.alert("Here be node selection dialog for node type: " + (getValue().getInstanceValueClass().getName()));
-                }
-            }));
+            int col = -1;
+            if (isEditable()) {
+	            content.setWidget(0, ++col, new CButton(i18n.tr("Select"), new Command() {
+	                @Override
+	                public void execute() {
+	                    OkCancelDialog selectDialog = selectDialogOf(getValue().getInstanceValueClass());
+	                    if (selectDialog != null) {
+	                    	selectDialog.show();
+	                    } else {
+	                    	Window.alert("NOT IMPLEMENTED YET: here be node selection dialog for node type: " + (getValue().getInstanceValueClass().getName()));
+	                    }
+	                }
+	            }));
+            }
+            content.setWidget(0, ++col, label);
 
             addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
@@ -195,6 +227,13 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
                     }
                 }
             });
+            
+            addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
+				@Override
+				public void onValueChange(ValueChangeEvent<PolicyNode> event) {					
+					label.setValue(!event.getValue().isEmpty() ? event.getValue().cast().getStringView() : i18n.tr("Nothing selected"));
+				}
+			});
             return content;
         }
 
@@ -202,23 +241,75 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
         protected void onPopulate() {
             super.onPopulate();
         }
+        
+        private <E extends IEntity> OkCancelDialog selectDialogOf(Class<E> policyNodeClass) {
+
+        	if (AptUnit.class.equals(policyNodeClass)) {
+//        		IListerView<Building> buildingListerView = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
+//        		(new ListerActivityBase<Building>(new CrmSiteMap.Settings.Policies(), buildingListerView,
+//                        (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class)).populate();
+//
+//        		IListerView<AptUnit> unitListerView = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister());
+//        		new ListerActivityBase<AptUnit>(new CrmSiteMap.Settings.Policies(), unitListerView,
+//                        (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
+//
+//        		return new SelectUnitBox(buildingListerView, unitListerView) {
+//        			@Override
+//					public boolean onClickOk() {
+//						setValue(getSelectedItem());
+//						return true;
+//					}        			
+//        		};
+        		return new ListerBasedSelectDialog<AptUnit>(AptUnit.class) {
+					@Override
+					public boolean onClickOk() {
+						setValue(getSelectedItem());
+						return true;
+					}
+				};
+        	} else if (Building.class.equals(policyNodeClass)) {
+        		
+        		return new ListerBasedSelectDialog<Building>(Building.class) {
+					@Override
+					public boolean onClickOk() {
+						setValue(getSelectedItem());
+						return true;
+					}
+				};
+        	}
+        	
+        	return null;
+        }
     }
 
-    private class ListerBasedSelectDialog<E extends IEntity> extends OkCancelDialog {
-        ListerBase<E> lister;
+    private abstract static class ListerBasedSelectDialog<E extends PolicyNode> extends OkCancelDialog {
+    	
+        private final IListerView<E> listerView;
 
-        public ListerBasedSelectDialog(String caption, Class<E> clazz) {
-            super(caption);
-            lister = new ListerBase<E>(clazz) {
-            };
+        public ListerBasedSelectDialog(Class<E> clazz) {
+            super(i18n.tr("Select {0}...", EntityFactory.getEntityMeta(clazz).getCaption()));
+            if (clazz.equals(AptUnit.class)) {
+        		IListerView<AptUnit> unitListerView = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister());
+        		new ListerActivityBase<AptUnit>(new CrmSiteMap.Settings.Policies(), unitListerView,
+                        (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
+        		this.listerView = (IListerView<E>) unitListerView;
+            } else if (clazz.equals(Building.class)) {
+	    		IListerView<Building> buildingListerView = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
+	    		(new ListerActivityBase<Building>(new CrmSiteMap.Settings.Policies(), buildingListerView,
+	                    (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class)).populate();
+	    		this.listerView = (IListerView<E>) buildingListerView;
+	    		
+            } else {
+            	this.listerView = null;
+            }
+            if (this.listerView != null) {
+            	setBody(this.listerView.asWidget());
+            }
         }
-
-        @Override
-        public boolean onClickOk() {
-            // TODO Auto-generated method stub
-            return false;
+        
+        public E getSelectedItem() {
+        	return listerView.getLister().getSelectedItem();
         }
-
     }
 
 }
