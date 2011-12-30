@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 abstract class ValueAdapterPrimitive implements ValueAdapter {
 
@@ -50,4 +51,8 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
         sql.append(dialect.getSqlType(member.getMemberMeta().getValueClass(), member.getMemberMeta().getLength()));
     }
 
+    @Override
+    public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
+        return this;
+    }
 }

@@ -20,23 +20,19 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-interface ValueAdapter {
-
-    List<String> getColumnNames(String memberSqlName);
-
-    boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName);
+interface ValueAdapter extends ValueBindAdapter {
 
     void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName);
 
-    int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException;
+    boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName);
 
     Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
 
+    ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value);
 }

@@ -30,6 +30,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 class ValueAdapterEntity implements ValueAdapter {
 
@@ -82,5 +83,10 @@ class ValueAdapterEntity implements ValueAdapter {
             entity.setValueDetached();
             return entity;
         }
+    }
+
+    @Override
+    public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
+        return this;
     }
 }

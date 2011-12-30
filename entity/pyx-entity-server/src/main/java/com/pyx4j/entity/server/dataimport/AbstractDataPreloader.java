@@ -129,7 +129,7 @@ public abstract class AbstractDataPreloader implements DataPreloader {
             return (T) namesCache.get(key);
         }
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
-        criteria.add(PropertyCriterion.eq("name", name));
+        criteria.add(PropertyCriterion.eq(criteria.proto().getMember("name"), name));
         T ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         namesCache.put(key, ent);
         return ent;

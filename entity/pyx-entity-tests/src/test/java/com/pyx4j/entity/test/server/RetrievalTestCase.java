@@ -30,7 +30,6 @@ import junit.framework.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -54,7 +53,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         srv.persist(emp);
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
-        criteria1.add(PropertyCriterion.eq(IEntity.PRIMARY_KEY, emp.getPrimaryKey()));
+        criteria1.add(PropertyCriterion.eq(criteria1.proto().id(), emp.getPrimaryKey()));
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("retrieve", emp1);
         Assert.assertEquals("Value", empName, emp1.firstName().getValue());

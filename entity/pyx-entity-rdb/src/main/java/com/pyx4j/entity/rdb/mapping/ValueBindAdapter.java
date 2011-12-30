@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,28 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-01-04
+ * Created on Dec 30, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.inherit;
+package com.pyx4j.entity.rdb.mapping;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
 
-@Table(prefix = "test")
-public interface RefferenceEntity extends IEntity {
+public interface ValueBindAdapter {
 
-    IPrimitive<String> testId();
+    List<String> getColumnNames(String memberSqlName);
 
-    IPrimitive<String> name();
-
-    @Owned
-    Base1Entity refference();
-
-    @Owned
-    IList<Base1Entity> refferences();
+    int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException;
 }

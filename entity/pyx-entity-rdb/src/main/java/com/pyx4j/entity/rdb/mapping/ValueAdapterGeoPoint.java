@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.geo.GeoPoint;
 
 class ValueAdapterGeoPoint implements ValueAdapter {
@@ -76,6 +77,11 @@ class ValueAdapterGeoPoint implements ValueAdapter {
         } else {
             return new GeoPoint(lat, rs.getDouble(memberSqlName + "_lng"));
         }
+    }
+
+    @Override
+    public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
+        return this;
     }
 
 }

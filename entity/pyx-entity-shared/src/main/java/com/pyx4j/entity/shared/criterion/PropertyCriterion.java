@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -63,15 +64,25 @@ public class PropertyCriterion implements Criterion {
         this.value = (Serializable) value.getValue();
     }
 
+    public PropertyCriterion(String propertyName, Restriction restriction, Class<? extends IEntity> value) {
+        this.propertyName = propertyName;
+        this.restriction = restriction;
+        this.value = EntityFactory.create(value);
+    }
+
     public PropertyCriterion(IObject<?> member, Restriction restriction, Serializable value) {
         this(member.getPath().toString(), restriction, value);
     }
 
-    public static PropertyCriterion eq(IObject<?> member, Serializable value) {
+    public static PropertyCriterion eq(IObject<?> member, Class<? extends IEntity> value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
     }
 
     public static PropertyCriterion eq(IObject<?> member, IPrimitive<?> value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
+    }
+
+    public static PropertyCriterion eq(IObject<?> member, Serializable value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
     }
 

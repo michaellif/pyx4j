@@ -64,12 +64,12 @@ public class DOEqualsTest extends TestCase {
             assertTrue("DO are the same", d1.equals(d2));
             assertEquals("DO are the same", d1.hashCode(), d2.hashCode());
 
-            d1.add(PropertyCriterion.eq("name", "1"));
-            d2.add(PropertyCriterion.eq("name", "1"));
+            d1.add(PropertyCriterion.eq(d1.proto().name(), "1"));
+            d2.add(PropertyCriterion.eq(d2.proto().name(), "1"));
             assertTrue("DO are the same", d1.equals(d2));
             assertEquals("DO are the same", d1.hashCode(), d2.hashCode());
 
-            d2.add(PropertyCriterion.eq("bob", "2"));
+            d2.add(PropertyCriterion.eq(d2.proto().name(), "2"));
             assertFalse("DO are different", d1.equals(d2));
             assertTrue("DO are different", d1.hashCode() != d2.hashCode());
         }

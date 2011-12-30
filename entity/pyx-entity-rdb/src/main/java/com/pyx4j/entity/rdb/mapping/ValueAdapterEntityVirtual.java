@@ -37,6 +37,7 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class ValueAdapterEntityVirtual implements ValueAdapter {
 
@@ -77,8 +78,8 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
     @Override
     public List<String> getColumnNames(String memberSqlName) {
         List<String> columnNames = new Vector<String>();
-        columnNames.add(memberSqlName);
         columnNames.add(memberSqlName + DISCRIMINATOR_COLUNM_NAME_SUFIX);
+        columnNames.add(memberSqlName);
         return columnNames;
     }
 
@@ -106,14 +107,14 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
         IEntity childEntity = (IEntity) value;
         Key primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
-            stmt.setNull(parameterIndex, sqlTypeKey);
-            stmt.setNull(parameterIndex + 1, sqlTypeDiscriminator);
+            stmt.setNull(parameterIndex, sqlTypeDiscriminator);
+            stmt.setNull(parameterIndex + 1, sqlTypeKey);
         } else {
             assert impClasses.containsValue(childEntity.getInstanceValueClass()) : "Unexpected class " + childEntity.getInstanceValueClass() + "\n"
                     + impClasses.values() + "\n" + value;
-            stmt.setLong(parameterIndex, primaryKey.asLong());
             DiscriminatorValue discriminator = childEntity.getInstanceValueClass().getAnnotation(DiscriminatorValue.class);
-            stmt.setString(parameterIndex + 1, discriminator.value());
+            stmt.setString(parameterIndex, discriminator.value());
+            stmt.setLong(parameterIndex + 1, primaryKey.asLong());
         }
         return 2;
     }
@@ -133,4 +134,30 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
         }
     }
 
+    @Override
+    public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
+        if ((value != null) && (((IEntity) value).getPrimaryKey() == null)) {
+            return new ValueBindAdapter() {
+
+                @Override
+                public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+                    IEntity childEntity = (IEntity) value;
+                    assert impClasses.containsValue(childEntity.getInstanceValueClass()) : "Unexpected class " + childEntity.getInstanceValueClass() + "\n"
+                            + impClasses.values() + "\n" + value;
+                    DiscriminatorValue discriminator = childEntity.getInstanceValueClass().getAnnotation(DiscriminatorValue.class);
+                    stmt.setString(parameterIndex, discriminator.value());
+                    return 1;
+                }
+
+                @Override
+                public List<String> getColumnNames(String memberSqlName) {
+                    List<String> columnNames = new Vector<String>();
+                    columnNames.add(memberSqlName + DISCRIMINATOR_COLUNM_NAME_SUFIX);
+                    return columnNames;
+                }
+            };
+        } else {
+            return this;
+        }
+    }
 }
