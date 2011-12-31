@@ -1291,6 +1291,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             // TODO Query by embeded properies
             propertyName = mm.getFieldName();
             value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
+            if (propertyName.equals(IEntity.PRIMARY_KEY)) {
+                propertyName = Entity.KEY_RESERVED_PROPERTY;
+            }
             if (!mm.isIndexed()) {
                 throw new Error("Query by Unindexed property " + propertyName + " of " + entityMeta.getCaption());
             }
