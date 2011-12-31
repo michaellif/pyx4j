@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -68,6 +69,20 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
     public void openRequest(MaintananceDTO requests) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void cancelRequest(MaintananceDTO request) {
+        if (!Window.confirm("You are about to cancel ticket '" + request.description().getStringView() + "'")) {
+            return;
+        }
+
+        srv.cancelTicket(new DefaultAsyncCallback<Vector<MaintananceDTO>>() {
+            @Override
+            public void onSuccess(Vector<MaintananceDTO> result) {
+                view.populateOpenRequests(result);
+            }
+        }, request);
     }
 
     @Override

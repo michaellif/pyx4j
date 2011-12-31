@@ -35,6 +35,8 @@ public interface TenantMaintenanceService extends IService {
 
     public void createNewTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request);
 
+    public void cancelTicket(AsyncCallback<Vector<MaintananceDTO>> callback, MaintananceDTO request);
+
     // -- Data for New Tickets creation / Classification
     public void listIssueElements(AsyncCallback<Vector<IssueElement>> callback);
 

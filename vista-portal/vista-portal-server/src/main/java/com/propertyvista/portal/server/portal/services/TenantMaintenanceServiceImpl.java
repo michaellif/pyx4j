@@ -84,6 +84,23 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         callback.onSuccess(null);
     }
 
+    @Override
+    public void cancelTicket(AsyncCallback<Vector<MaintananceDTO>> callback, MaintananceDTO dto) {
+        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), dto.id()));
+        List<MaintenanceRequest> rs = Persistence.service().query(criteria);
+        if (rs.size() > 0) {
+            MaintenanceRequest req = rs.get(0);
+            req.status().setValue(MaintenanceRequestStatus.Cancelled);
+            req.updated().setValue(new LogicalDate());
+            Persistence.service().merge(req);
+            listOpenIssues(callback);
+        } else {
+            callback.onFailure(new Throwable("Ticket not found."));
+        }
+
+    }
+
     // -------------
 
     @Override

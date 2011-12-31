@@ -59,7 +59,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
     @Override
     public void populateOpenRequests(Vector<MaintananceDTO> openRequests) {
-        openRequestsPanel.clear();
+        openRequestsPanel.removeAllRows();
 
         openRequestsPanel.setWidth("100%");
         openRequestsPanel.getColumnFormatter().setWidth(0, "250px");
@@ -88,23 +88,29 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
         openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-        for (MaintananceDTO requests : openRequests) {
-            openRequestsPanel.setHTML(++row, 0, requests.description().getStringView());
+        for (final MaintananceDTO request : openRequests) {
+            openRequestsPanel.setHTML(++row, 0, request.description().getStringView());
             openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
-            openRequestsPanel.setHTML(row, 1, requests.status().getStringView() + "<p><i style='font-size:0.8em'>" + requests.date().getStringView() + "</i>");
+            openRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView() + "</i>");
 
             Anchor cancelTicket = new Anchor(i18n.tr("Cancel"));
+            cancelTicket.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.cancelRequest(request);
+                }
+            });
+
             openRequestsPanel.setWidget(row, 2, cancelTicket);
 
             openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
         }
-
     }
 
     @Override
     public void populateHistoryRequests(Vector<MaintananceDTO> historyRequests) {
-        historyRequestsPanel.clear();
+        historyRequestsPanel.removeAllRows();
 
         int row = -1;
 
@@ -123,15 +129,15 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         historyRequestsPanel.setHTML(row, 2, i18n.tr("Rate Service"));
         historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-        for (MaintananceDTO requests : historyRequests) {
-            historyRequestsPanel.setHTML(++row, 0, requests.description().getStringView());
+        for (MaintananceDTO request : historyRequests) {
+            historyRequestsPanel.setHTML(++row, 0, request.description().getStringView());
             historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
-            historyRequestsPanel.setHTML(row, 1, requests.status().getStringView() + "<p><i style='font-size:0.8em'>" + requests.date().getStringView()
+            historyRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView()
                     + "</i>");
 
             RateIt rateIt = new RateIt(5);
-            Integer rate = requests.satisfactionSurvey().rating().getValue();
+            Integer rate = request.satisfactionSurvey().rating().getValue();
             if (rate != null) {
                 rateIt.setRating(rate);
             }

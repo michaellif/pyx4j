@@ -31,6 +31,8 @@ public interface MaintenanceView extends IsWidget {
 
         public void openRequest(MaintananceDTO requests);
 
+        public void cancelRequest(MaintananceDTO request);
+
         public void createNewRequest();
 
     }
