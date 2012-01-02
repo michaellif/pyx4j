@@ -87,6 +87,35 @@ class ValueAdapterEntity implements ValueAdapter {
 
     @Override
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
-        return this;
+        if (value instanceof IEntity) {
+            return this;
+        } else {
+            return new ValueBindAdapter() {
+
+                @Override
+                public List<String> getColumnNames(String memberSqlName) {
+                    List<String> columnNames = new Vector<String>();
+                    columnNames.add(memberSqlName);
+                    return columnNames;
+                }
+
+                @Override
+                public int bindValue(PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+                    if (value == null) {
+                        stmt.setNull(parameterIndex, sqlTypeKey);
+                    } else {
+                        long key;
+                        if (value instanceof Key) {
+                            key = ((Key) value).asLong();
+                        } else {
+                            key = (Long) value;
+                        }
+                        stmt.setLong(parameterIndex, key);
+                    }
+                    return 1;
+                }
+
+            };
+        }
     }
 }
