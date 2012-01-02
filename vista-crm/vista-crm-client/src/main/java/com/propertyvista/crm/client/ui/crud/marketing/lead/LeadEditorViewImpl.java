@@ -38,7 +38,7 @@ public class LeadEditorViewImpl extends CrmEditorViewImplBase<Lead> implements L
         buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
             @Override
             public void onSelect(Building selectedItem) {
-                ((LeadEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
+                ((LeadEditorView.Presenter) getPresenter()).setSelectedBuilding(selectedItem);
             }
         });
         floorplanLister = new ListerInternalViewImplBase<Floorplan>(new SelectedFloorplanLister(/* readOnly */));

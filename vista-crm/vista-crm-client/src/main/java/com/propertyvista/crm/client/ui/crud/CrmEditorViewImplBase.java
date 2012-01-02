@@ -56,7 +56,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
-                presenter.apply();
+                getPresenter().apply();
             }
         });
         footer.addItem(btnApply);
@@ -68,7 +68,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
-                presenter.save();
+                getPresenter().save();
             }
         });
         footer.addItem(btnSave);
@@ -76,7 +76,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.cancel();
+                getPresenter().cancel();
             }
         });
         footer.addItem(btnCancel);

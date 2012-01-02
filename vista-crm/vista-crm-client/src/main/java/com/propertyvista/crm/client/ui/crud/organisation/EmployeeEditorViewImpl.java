@@ -39,7 +39,7 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
                 new NewPasswordBox(form.getValue().user().equals(ClientContext.getUserVisit())) {
                     @Override
                     public boolean onClickOk() {
-                        ((EmployeeEditorView.Presenter) presenter).changePassword(getOldPassword(), getNewPassword1());
+                        ((EmployeeEditorView.Presenter) getPresenter()).changePassword(getOldPassword(), getNewPassword1());
                         return true;
                     }
                 }.show();

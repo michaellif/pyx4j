@@ -38,7 +38,7 @@ public class ShowingEditorViewImpl extends CrmEditorViewImplBase<Showing> implem
         buildingLister.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
             @Override
             public void onSelect(Building selectedItem) {
-                ((ShowingEditorView.Presenter) presenter).setSelectedBuilding(selectedItem);
+                ((ShowingEditorView.Presenter) getPresenter()).setSelectedBuilding(selectedItem);
             }
         });
         unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
