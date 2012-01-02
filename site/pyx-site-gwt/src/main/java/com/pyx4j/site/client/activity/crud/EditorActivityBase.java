@@ -256,7 +256,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void onApplySuccess(E result) {
-        view.onApplySuccess();
         if (isNewEntity()) { // switch new item to regular editing after successful apply!..
             view.discard();
             goToEditor(result.getPrimaryKey());
@@ -266,7 +265,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void onSaveSuccess(E result) {
-        view.onSaveSuccess();
+        view.discard();
         goToViewer(result.getPrimaryKey());
     }
 

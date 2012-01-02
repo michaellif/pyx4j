@@ -407,4 +407,9 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "; dirty=" + isDirty();
+    }
 }

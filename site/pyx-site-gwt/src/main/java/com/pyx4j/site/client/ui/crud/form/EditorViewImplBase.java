@@ -52,14 +52,6 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     }
 
     @Override
-    public void onApplySuccess() {
-    }
-
-    @Override
-    public void onSaveSuccess() {
-    }
-
-    @Override
     public boolean onSaveFail(Throwable caught) {
         return false;
     }

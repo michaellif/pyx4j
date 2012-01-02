@@ -51,10 +51,6 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     public boolean isDirty();
 
-    void onApplySuccess();
-
-    void onSaveSuccess();
-
     // may return TRUE in case of processed event and no need to re-throw the exception further.
     // FALSE - re-throws the exception (new UnrecoverableClientError(caught)).
     boolean onSaveFail(Throwable caught);
