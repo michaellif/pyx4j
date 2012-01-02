@@ -261,7 +261,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
             view.discard();
             goToEditor(result.getPrimaryKey());
         } else {
-            populate();
+            onPopulateSuccess(result);
         }
     }
 

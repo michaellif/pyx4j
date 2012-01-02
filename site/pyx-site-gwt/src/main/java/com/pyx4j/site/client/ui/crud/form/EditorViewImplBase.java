@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IEditorView<E> {
 
-    protected IEditorView.Presenter presenter;
+    private IEditorView.Presenter presenter;
 
     public EditorViewImplBase(Widget header, Widget footer, double size) {
         super(header, footer, size);
