@@ -120,16 +120,6 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         this.mode = mode;
     }
 
-    @Override
-    public void onSaveSuccess() {
-        enableButtons(false);
-    }
-
-    @Override
-    public void onApplySuccess() {
-        enableButtons(false);
-    }
-
     protected void enableButtons(boolean enable) {
 //        
 // TODO Currently buttons are enabled always - more precise form dirty-state mechanics should be implemented!..

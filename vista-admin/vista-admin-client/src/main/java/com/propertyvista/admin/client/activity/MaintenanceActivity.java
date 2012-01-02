@@ -92,11 +92,7 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
         service.setSystemMaintenanceState(new AsyncCallback<SystemMaintenanceState>() {
             @Override
             public void onSuccess(SystemMaintenanceState result) {
-                if (apply) {
-                    view.onApplySuccess();
-                } else {
-                    view.onSaveSuccess();
-                }
+
             }
 
             @Override
