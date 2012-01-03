@@ -217,6 +217,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (getValue() == null || getValue().isEmpty()) {
+                    return null;
+                }
+
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
                 return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
                         .tr("Move Out Date should be greater than Move In Date"));
@@ -255,6 +259,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (getValue() == null || getValue().isEmpty()) {
+                    return null;
+                }
+
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
                 return (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
                         .tr("Move Out Date should be greater than Move In Date"));
@@ -266,6 +274,9 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (getValue() == null || getValue().isEmpty()) {
+                    return null;
+                }
 
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
                 return (date.isNull() || value.after(date.getValue()) || TimeUtils.isOlderThan(value, 3)) ? null : new ValidationFailure(i18n
@@ -278,6 +289,9 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (getValue() == null || getValue().isEmpty()) {
+                    return null;
+                }
 
                 IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
                 return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n
@@ -290,6 +304,9 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (getValue() == null || getValue().isEmpty()) {
+                    return null;
+                }
 
                 IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
                 return (date.isNull() || !value.before(date.getValue())) ? null : new ValidationFailure(i18n
@@ -302,6 +319,9 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                if (getValue() == null || getValue().isEmpty()) {
+                    return null;
+                }
 
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
                 return (date.isNull() || value.equals(date.getValue()) || value.before(date.getValue())) ? null : new ValidationFailure(i18n
@@ -324,6 +344,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 if (value == null || getValue() == null) {
                     return null;
                 }
+
                 return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationFailure(i18n
                         .tr("Duplicate contacts specified"));
             }

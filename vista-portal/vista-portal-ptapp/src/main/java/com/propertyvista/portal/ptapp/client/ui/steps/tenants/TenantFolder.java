@@ -166,6 +166,10 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
             get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
                 @Override
                 public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                    if (getValue() == null || getValue().isEmpty()) {
+                        return null;
+                    }
+
                     TenantInLease.Role status = getValue().role().getValue();
                     if ((status == TenantInLease.Role.Applicant) || (status == TenantInLease.Role.CoApplicant)) {
                         // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
@@ -182,6 +186,10 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                        if (getValue() == null || getValue().isEmpty()) {
+                            return;
+                        }
+
                         TenantInLease.Role role = getValue().role().getValue();
                         if ((role == null) || (role == TenantInLease.Role.Dependent)) {
                             if (ValidationUtils.isOlderThen18(event.getValue())) {
@@ -201,6 +209,10 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 get(proto().role()).addValueChangeHandler(new ValueChangeHandler<TenantInLease.Role>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Role> event) {
+                        if (getValue() == null || getValue().isEmpty()) {
+                            return;
+                        }
+
                         if (Role.Dependent == event.getValue() && !ValidationUtils.isOlderThen18(get(proto().tenant().person().birthDate()).getValue())) {
                             setMandatoryDependant();
                         }
