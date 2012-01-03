@@ -17,10 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
 
-public class LeaseTermsEditorForm extends CEntityDecoratableEditor<LeaseTermsInstance> {
+public class LeaseTermsEditorForm extends CrmEntityForm<LeaseTermsInstance> {
     public LeaseTermsEditorForm() {
         super(LeaseTermsInstance.class);
     }
