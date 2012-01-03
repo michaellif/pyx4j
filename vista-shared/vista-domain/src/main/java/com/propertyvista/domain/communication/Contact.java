@@ -16,7 +16,7 @@ package com.propertyvista.domain.communication;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.communication.Media.MediaType;
+import com.propertyvista.domain.communication.CommunicationMedia.MediaType;
 
 public interface Contact extends IEntity {
 

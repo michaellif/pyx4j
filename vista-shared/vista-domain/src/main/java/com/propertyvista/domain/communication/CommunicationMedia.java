@@ -16,7 +16,7 @@ package com.propertyvista.domain.communication;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Media extends IEntity {
+public interface CommunicationMedia extends IEntity {
     public enum MediaType {
         internal, email, phone, sms, postal
     }

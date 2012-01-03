@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 public interface Campaign extends IEntity {
     Message message();
 
-    IList<Media> media();
+    IList<CommunicationMedia> media();
 
     IList<Recipient> audience();
 
