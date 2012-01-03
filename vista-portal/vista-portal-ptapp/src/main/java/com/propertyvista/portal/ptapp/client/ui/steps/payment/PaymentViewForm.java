@@ -68,6 +68,8 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         this.view = view;
     }
 
+    private static boolean isRecurring = false;
+
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
@@ -99,23 +101,25 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
             }
         }));
 
-        main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
+        if (isRecurring) {
+            main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
 
-        termContent.setAllowHtml(true);
-        termContent.setWordWrap(true);
-        ScrollPanel terms = new ScrollPanel(termContent.asWidget());
-        terms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        terms.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        terms.getElement().getStyle().setBorderColor("#bbb");
+            termContent.setAllowHtml(true);
+            termContent.setWordWrap(true);
+            ScrollPanel terms = new ScrollPanel(termContent.asWidget());
+            terms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            terms.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            terms.getElement().getStyle().setBorderColor("#bbb");
 
-        terms.getElement().getStyle().setBackgroundColor("white");
-        terms.getElement().getStyle().setColor("black");
+            terms.getElement().getStyle().setBackgroundColor("white");
+            terms.getElement().getStyle().setColor("black");
 
-        terms.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
-        terms.setHeight("20em");
+            terms.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
+            terms.setHeight("20em");
 
-        main.setWidget(++row, 0, terms);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().preauthoriseAgree()), 5).build());
+            main.setWidget(++row, 0, terms);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().preauthoriseAgree()), 5).build());
+        }
 
         return main;
     }
@@ -124,13 +128,15 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
     protected void onPopulate() {
         super.onPopulate();
 
-        // prepare term text:
-        String termText = PortalResources.INSTANCE.paymentTermsNotes().getText();
-        termText = termText.replace("$[PMC]", PtAppSite.getPmcName());
-        termText = termText.replace("$[USER]", ClientContext.getUserVisit().getName());
-        termText = termText.replace("$[AMOUNT]", getValue().applicationCharges().total().getStringView());
-        termText = termText.replace("$[DATE]", "1st of January");
-        termContent.setValue(termText);
+        if (isRecurring) {
+            // prepare term text:
+            String termText = PortalResources.INSTANCE.paymentTermsNotes().getText();
+            termText = termText.replace("$[PMC]", PtAppSite.getPmcName());
+            termText = termText.replace("$[USER]", ClientContext.getUserVisit().getName());
+            termText = termText.replace("$[AMOUNT]", getValue().applicationCharges().total().getStringView());
+            termText = termText.replace("$[DATE]", "1st of January");
+            termContent.setValue(termText);
+        }
     }
 
     private Widget createTotal(Money member) {
