@@ -276,6 +276,12 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(caption = "Lease Terms")
+        @NavigationItem(navigLabel = "Lease Terms")
+        public static class LeaseTerms extends CrudAppPlace {
+
+        }
+
         @PlaceProperties(caption = "Policy Management")
         @NavigationItem(navigLabel = "Policy Management")
         public static class Policy extends AppPlace {

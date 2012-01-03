@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 22, 2011
+ * Created on Jan 3, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -18,23 +18,23 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
+import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
 
-public class LeaseTermsPolicyListerViewImpl extends CrmListerViewImplBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyListerView {
+public class LeaseTermsListerViewImpl extends CrmListerViewImplBase<LeaseTermsInstance> implements LeaseTermsListerView {
 
-    public LeaseTermsPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.NumberOfIds.class);
-        setLister(new LeaseTermsPolicyLister());
+    public LeaseTermsListerViewImpl() {
+        super(CrmSiteMap.Settings.LeaseTerms.class);
+        setLister(new LeaseTermsLister());
     }
 
-    private static class LeaseTermsPolicyLister extends ListerBase<LeaseTermsPolicyDTO> {
+    public static class LeaseTermsLister extends ListerBase<LeaseTermsInstance> {
 
-        public LeaseTermsPolicyLister() {
-            super(LeaseTermsPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseTerms.class, false, true);
+        public LeaseTermsLister() {
+            super(LeaseTermsInstance.class, CrmSiteMap.Settings.LeaseTerms.class, true, true);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            );//@formatter:on
+                    new MemberColumnDescriptor.Builder(proto().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().description()).build());  //@formatter:on
         }
+
     }
 }

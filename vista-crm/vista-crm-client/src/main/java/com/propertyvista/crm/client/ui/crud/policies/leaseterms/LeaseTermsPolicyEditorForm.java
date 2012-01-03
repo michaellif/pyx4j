@@ -13,19 +13,31 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsCrudService;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
 
 public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTermsPolicy> {
+
+    private static final I18n i18n = I18n.get(LeaseTermsPolicyEditorForm.class);
 
     public LeaseTermsPolicyEditorForm() {
         super(LeaseTermsPolicy.class);
@@ -62,14 +74,37 @@ public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTe
 
         @Override
         protected void addItem() {
-            new OkCancelDialog("Ladies and Gentelmen, behold: Available Lease Terms!!!") {
-
+            new SelectLeaseTermsDialog() {
                 @Override
                 public boolean onClickOk() {
-
-                    return false;
+                    addItem(getSelectedItem());
+                    return true;
                 }
             }.show();
+        }
+    }
+
+    private abstract static class SelectLeaseTermsDialog extends OkCancelDialog {
+
+        private final IListerView<LeaseTermsInstance> leaseTermsListerView;
+
+        public SelectLeaseTermsDialog() {
+            super(i18n.tr("Choose lease terms"));
+
+            leaseTermsListerView = new ListerInternalViewImplBase<LeaseTermsInstance>(new LeaseTermsListerViewImpl.LeaseTermsLister());
+
+            ListerActivityBase<LeaseTermsInstance> activity = new ListerActivityBase<LeaseTermsInstance>(new CrmSiteMap.Settings.LeaseTerms(),
+                    leaseTermsListerView, (AbstractCrudService<LeaseTermsInstance>) GWT.create(LeaseTermsCrudService.class), LeaseTermsInstance.class);
+            SimplePanel p = new SimplePanel();
+
+            p.setSize("100%", "100%");
+            activity.start(p, new SimpleEventBus());
+            setBody(p);
+            setSize("800px", "600px");
+        }
+
+        public LeaseTermsInstance getSelectedItem() {
+            return leaseTermsListerView.getLister().getSelectedItem();
         }
     }
 }
