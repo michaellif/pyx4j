@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.crm.client.ui.policy.PolicyFormFactory;
+import com.propertyvista.crm.client.ui.policy.PolicyEditorFormFactory;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -99,7 +99,7 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
 
             Class<? extends Policy> policyClass = (Class<? extends Policy>) getValue().policy().getInstanceValueClass();
 
-            policyEditor = PolicyFormFactory.createPolicyEditorForm(policyClass, isEditable());
+            policyEditor = PolicyEditorFormFactory.createPolicyEditorForm(policyClass, isEditable());
             adopt(policyEditor);
             policyEditor.initContent();
             policyEditor.populate(getValue().policy().cast());

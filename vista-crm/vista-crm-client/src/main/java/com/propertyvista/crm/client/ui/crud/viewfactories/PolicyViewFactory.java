@@ -16,6 +16,10 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEdtiorView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyListerView;
@@ -28,6 +32,12 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(NumberOfIDsPolicyListerView.class, new NumberOfIDsPolicyListerViewImpl());
             } else if (NumberOfIDsPolicyEdtiorView.class.equals(type)) {
                 map.put(NumberOfIDsPolicyEdtiorView.class, new NumberOfIDsPolicyEditorViewImpl());
+
+            } else if (LeaseTermsPolicyListerView.class.equals(type)) {
+                map.put(LeaseTermsPolicyListerView.class, new LeaseTermsPolicyListerViewImpl());
+
+            } else if (LeaseTermsPolicyEdtiorView.class.equals(type)) {
+                map.put(LeaseTermsPolicyEdtiorView.class, new LeaseTermsPolicyEditorViewImpl());
             }
 
         }

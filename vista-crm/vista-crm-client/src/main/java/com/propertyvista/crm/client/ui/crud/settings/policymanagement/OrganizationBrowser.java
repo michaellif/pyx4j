@@ -34,7 +34,7 @@ import com.google.gwt.view.client.TreeViewModel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.policy.OrganizationPolicyBrowserService;
+import com.propertyvista.crm.rpc.services.policies.OrganizationPolicyBrowserService;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

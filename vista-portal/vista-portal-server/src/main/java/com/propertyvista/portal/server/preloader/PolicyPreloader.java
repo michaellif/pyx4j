@@ -27,10 +27,11 @@ import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
-import com.propertyvista.domain.policy.policies.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private static final I18n i18n = I18n.get(PolicyPreloader.class);
@@ -46,6 +47,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
         List<? extends Policy> defaults = Arrays.asList(//@formatter:off
                 createDefaultNumberOfIdsPolicy(),
+                createDefaultLeaseTermsPolicy(),
                 createDefaultPetPolicy(),
                 createDefaultAllowedIdsPolicy(),
                 createDefaultGymUsageFeePolicy(),
@@ -119,6 +121,12 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private PoolUsageFeePolicy createDefaultPoolUsageFeePolicy() {
         PoolUsageFeePolicy policy = EntityFactory.create(PoolUsageFeePolicy.class);
         policy.monthlyPoolFee().setValue(27.99);
+        Persistence.service().persist(policy);
+        return policy;
+    }
+
+    private LeaseTermsPolicy createDefaultLeaseTermsPolicy() {
+        LeaseTermsPolicy policy = EntityFactory.create(LeaseTermsPolicy.class);
         Persistence.service().persist(policy);
         return policy;
     }

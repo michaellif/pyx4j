@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.policy;
+package com.propertyvista.crm.rpc.services.policies.policy;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 

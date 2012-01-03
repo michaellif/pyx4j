@@ -86,6 +86,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
     public NavigFolder createPoliciesFolder() {
         NavigFolder folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.NumberOfIds());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
         return folder;
     }
 }

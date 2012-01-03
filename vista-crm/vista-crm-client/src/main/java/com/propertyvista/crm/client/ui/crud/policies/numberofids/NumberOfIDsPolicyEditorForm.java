@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform;
+package com.propertyvista.crm.client.ui.crud.policies.numberofids;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.policy;
+package com.propertyvista.crm.rpc.services.policies;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

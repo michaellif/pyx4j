@@ -15,26 +15,29 @@ package com.propertyvista.crm.client.ui.policy;
 
 import com.pyx4j.entity.client.CEntityEditor;
 
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorForm;
+import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.AllowedIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.GymUsageFeePolicyEditorForm;
-import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.NumberOfIDsPolicyEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.policyform.PoolUsageFeePolicyEditorForm;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 
-public class PolicyFormFactory {
+public class PolicyEditorFormFactory {
 
     public static <P extends Policy> CEntityEditor<?> createPolicyEditorForm(Class<P> policy, boolean isEditable) {
         CEntityEditor<?> policyEditorForm = null;
         //@formatter:off
         do {
-            if (NumberOfIDsPolicy.class.equals(policy)) { policyEditorForm = new NumberOfIDsPolicyEditorForm();  break; }                
+            if (NumberOfIDsPolicy.class.equals(policy)) { policyEditorForm = new NumberOfIDsPolicyEditorForm();  break; }
+            if (LeaseTermsPolicy.class.equals(policy)) { policyEditorForm = new LeaseTermsPolicyEditorForm(); break; }
             if (AllowedIDsPolicy.class.equals(policy)) { policyEditorForm = new AllowedIDsPolicyEditorForm(); break; }
             if (GymUsageFeePolicy.class.equals(policy)) { policyEditorForm = new GymUsageFeePolicyEditorForm(); break; }
-            if (PoolUsageFeePolicy.class.equals(policy)) { policyEditorForm = new PoolUsageFeePolicyEditorForm(); break; }
+            if (PoolUsageFeePolicy.class.equals(policy)) { policyEditorForm = new PoolUsageFeePolicyEditorForm(); break; }            
         } while (false);
         //@formatter:on
         if (policyEditorForm == null) {

@@ -268,6 +268,12 @@ public class CrmSiteMap implements SiteMap {
             public static class NumberOfIds extends CrudAppPlace {
 
             }
+
+            @PlaceProperties(caption = "Lease Terms")
+            @NavigationItem(navigLabel = "Lease Terms")
+            public static class LeaseTerms extends CrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(caption = "Policy Management")

@@ -11,19 +11,19 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.numberofids;
+package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
-import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
+import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 
-public class NumberOfIDsPolicyEditorViewImpl extends CrmEditorViewImplBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyEdtiorView {
+public class LeaseTermsPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEdtiorView {
 
-    public NumberOfIDsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.NumberOfIds.class, new PolicyDTOEditorForm<NumberOfIDsPolicy, NumberOfIDsPolicyDTO>(NumberOfIDsPolicy.class,
-                NumberOfIDsPolicyDTO.class, new CrmEditorsComponentFactory()));
+    public LeaseTermsPolicyEditorViewImpl() {
+        super(CrmSiteMap.Settings.Policies.LeaseTerms.class, new PolicyDTOEditorForm<LeaseTermsPolicy, LeaseTermsPolicyDTO>(LeaseTermsPolicy.class,
+                LeaseTermsPolicyDTO.class, new CrmEditorsComponentFactory()));
     }
 }

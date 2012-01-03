@@ -112,9 +112,12 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
-import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsEditorActivity;
-import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsListerActivicty;
-import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
+import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyListerActivicty;
+import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
@@ -579,13 +582,25 @@ public class MainActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.Settings.Policies.NumberOfIds) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:
-                        activity = new NumberOfIDsListerActivicty(place);
+                        activity = new NumberOfIDsPolicyListerActivicty(place);
                         break;
                     case editor:
-                        activity = new NumberOfIDsEditorActivity(place);
+                        activity = new NumberOfIDsPolicyEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new NumberOfIDsViewerActivity(place);
+                        activity = new NumberOfIDsPolicyViewerActivity(place);
+                        break;
+                    }
+                } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseTerms) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new LeaseTermsPolicyListerActivicty(place);
+                        break;
+                    case editor:
+                        activity = new LeaseTermsPolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new LeaseTermsPolicyViewerActivity(place);
                         break;
                     }
                 }

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementView;
 import com.propertyvista.crm.client.ui.crud.settings.policymanagement.PolicyManagementViewImpl;
-import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
+import com.propertyvista.crm.rpc.services.policies.PolicyManagerService;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
 

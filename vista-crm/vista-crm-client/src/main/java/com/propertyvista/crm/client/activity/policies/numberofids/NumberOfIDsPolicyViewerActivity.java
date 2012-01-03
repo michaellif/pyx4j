@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 28, 2011
+ * Created on Dec 29, 2011
  * @author ArtyomB
  * @version $Id$
  */
@@ -17,18 +17,18 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEdtiorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
-import com.propertyvista.crm.rpc.services.policy.NumberOfIDsPolicyCrudService;
+import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyViewerViewImpl;
+import com.propertyvista.crm.rpc.services.policies.policy.NumberOfIDsPolicyCrudService;
 import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
 
-public class NumberOfIDsEditorActivity extends EditorActivityBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyEdtiorView.Presenter {
+public class NumberOfIDsPolicyViewerActivity extends ViewerActivityBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyViewerView.Presenter {
 
-    public NumberOfIDsEditorActivity(Place place) {
-        super(place, PolicyViewFactory.instance(NumberOfIDsPolicyEdtiorView.class), (AbstractCrudService<NumberOfIDsPolicyDTO>) GWT
-                .create(NumberOfIDsPolicyCrudService.class), NumberOfIDsPolicyDTO.class);
+    public NumberOfIDsPolicyViewerActivity(Place place) {
+        // TODO take the view from pool
+        super(place, new NumberOfIDsPolicyViewerViewImpl(), (AbstractCrudService<NumberOfIDsPolicyDTO>) GWT.create(NumberOfIDsPolicyCrudService.class));
     }
 
 }

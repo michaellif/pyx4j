@@ -11,30 +11,32 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.policy;
+package com.propertyvista.crm.server.services.policies;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.crm.rpc.services.policy.NumberOfIDsPolicyCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.policy.DefaultPoliciesNode;
+import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
+import com.propertyvista.domain.policy.dto.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 
-public class NumberOfIDsPolicyCrudServiceImpl extends GenericCrudServiceDtoImpl<NumberOfIDsPolicy, NumberOfIDsPolicyDTO> implements
-        NumberOfIDsPolicyCrudService {
+public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends POLICY> extends GenericCrudServiceDtoImpl<POLICY, POLICY_DTO> {
 
-    public NumberOfIDsPolicyCrudServiceImpl() {
-        super(NumberOfIDsPolicy.class, NumberOfIDsPolicyDTO.class);
+    public GenericPolicyCrudService(Class<POLICY> dboClass, Class<POLICY_DTO> dtoClass) {
+        super(dboClass, dtoClass);
+        if (!PolicyDTOBase.class.isAssignableFrom(dtoClass)) {
+            throw new Error("POLICY_DTO must extends PolicyDTOBase");
+        }
     }
 
     @Override
-    protected void enhanceDTO(NumberOfIDsPolicy in, NumberOfIDsPolicyDTO dto, boolean fromList) {
+    protected void enhanceDTO(POLICY in, POLICY_DTO dto, boolean fromList) {
         super.enhanceDTO(in, dto, fromList);
 
         EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
@@ -45,30 +47,31 @@ public class NumberOfIDsPolicyCrudServiceImpl extends GenericCrudServiceDtoImpl<
             throw new Error("DB integrity error: policy instance doesn't have associated node");
         }
 
-        dto.node().set(policyAtNode.node().cast());
+        ((PolicyDTOBase) dto).node().set(policyAtNode.node().cast());
 
         if (fromList) {
-            PolicyNode castedNode = dto.node();
-            dto.nodeType().setValue(castedNode.getEntityMeta().getCaption());
-            dto.nodeRepresentation().setValue(castedNode.getStringView());
+            PolicyNode castedNode = ((PolicyDTOBase) dto).node();
+            ((PolicyDTOBase) dto).nodeType().setValue(castedNode.getEntityMeta().getCaption());
+            ((PolicyDTOBase) dto).nodeRepresentation().setValue(castedNode.getStringView());
         }
     }
 
     @Override
-    protected void persistDBO(NumberOfIDsPolicy dbo, NumberOfIDsPolicyDTO in) {
-        if (in.node().isNull() | in.node().getPrimaryKey() == null) {
+    protected void persistDBO(POLICY dbo, POLICY_DTO in) {
+
+        if (((PolicyDTOBase) in).node().isNull() | ((PolicyDTOBase) in).node().getPrimaryKey() == null) {
             throw new Error("failed to persist policy! policy scope (a node in organizaton structure) was not set");
         }
-        if (in.node().getInstanceValueClass().equals(DefaultPoliciesNode.class)) {
+        if (((PolicyDTOBase) in).node().getInstanceValueClass().equals(DefaultPoliciesNode.class)) {
             throw new Error("overriding default policies is strictly forbidden");
         }
 
         EntityQueryCriteria<PolicyAtNode> policyAtNodeCriteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-        policyAtNodeCriteria.add(PropertyCriterion.eq(policyAtNodeCriteria.proto().node(), in.node().cast()));
+        policyAtNodeCriteria.add(PropertyCriterion.eq(policyAtNodeCriteria.proto().node(), ((PolicyDTOBase) in).node().cast()));
         PolicyAtNode policyAtNode = Persistence.service().retrieve(policyAtNodeCriteria);
         if (policyAtNode == null) {
             policyAtNode = EntityFactory.create(PolicyAtNode.class);
-            policyAtNode.node().set(in.node());
+            policyAtNode.node().set(((PolicyDTOBase) in).node());
 
             // if someone has reassigned an existing policy to another node,
             // we have to remove the old policyAtNode record unless it's a default policy

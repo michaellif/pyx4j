@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Jan 3, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -18,12 +18,12 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.UnitPolicy;
-import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
 
-@DiscriminatorValue("AllowedIDsPolicy")
-public interface AllowedIDsPolicy extends UnitPolicy {
+@DiscriminatorValue("AgreementPolicy")
+public interface LeaseTermsPolicy extends UnitPolicy {
 
-    IList<IdentificationDocument> allowedIDs();
+    IList<LeaseTermsInstance> termsList();
 
     @Deprecated
     IPrimitive<Integer> x(); // needed just so that the entity could be created in the database with no probelms

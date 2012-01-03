@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.numberofids;
+package com.propertyvista.crm.client.activity.policies.leaseterms;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyViewerViewImpl;
-import com.propertyvista.crm.rpc.services.policy.NumberOfIDsPolicyCrudService;
-import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyViewerViewImpl;
+import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsPolicyCrudService;
+import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 
-public class NumberOfIDsViewerActivity extends ViewerActivityBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyViewerView.Presenter {
+public class LeaseTermsPolicyViewerActivity extends ViewerActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyViewerView.Presenter {
 
-    public NumberOfIDsViewerActivity(Place place) {
+    public LeaseTermsPolicyViewerActivity(Place place) {
         // TODO take the view from pool
-        super(place, new NumberOfIDsPolicyViewerViewImpl(), (AbstractCrudService<NumberOfIDsPolicyDTO>) GWT.create(NumberOfIDsPolicyCrudService.class));
+        super(place, new LeaseTermsPolicyViewerViewImpl(), (AbstractCrudService<LeaseTermsPolicyDTO>) GWT.create(LeaseTermsPolicyCrudService.class));
     }
 
 }

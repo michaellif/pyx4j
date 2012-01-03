@@ -11,11 +11,11 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.policy;
+package com.propertyvista.crm.server.services.policies;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.crm.rpc.services.policy.PolicyManagerService;
+import com.propertyvista.crm.rpc.services.policies.PolicyManagerService;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;

@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
-import com.propertyvista.domain.policy.policies.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 
 public class AllowedIDsPolicyEditorForm extends CEntityDecoratableEditor<AllowedIDsPolicy> {
 

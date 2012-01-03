@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.numberofids;
+package com.propertyvista.crm.client.ui.crud.policies.common;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +44,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
-import com.propertyvista.crm.client.ui.policy.PolicyFormFactory;
+import com.propertyvista.crm.client.ui.policy.PolicyEditorFormFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
@@ -142,7 +142,7 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
         super.onPopulate();
 
         // create an editor for the specific policy class and propagate the value        
-        final CEntityEditor<P> policyEditorForm = (CEntityEditor<P>) PolicyFormFactory.createPolicyEditorForm(policyClass, isEditable());
+        final CEntityEditor<P> policyEditorForm = (CEntityEditor<P>) PolicyEditorFormFactory.createPolicyEditorForm(policyClass, isEditable());
 
         //adopt(policyEditorForm); // TODO review this: i'm not sure what it does, something with validation        
         policyEditorForm.initContent();
