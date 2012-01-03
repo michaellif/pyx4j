@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 
 public class PetDataEditor extends CEntityDecoratableEditor<Pet> {
@@ -54,5 +55,12 @@ public class PetDataEditor extends CEntityDecoratableEditor<Pet> {
         panel.getColumnFormatter().setWidth(1, "50%");
 
         return panel;
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
     }
 }
