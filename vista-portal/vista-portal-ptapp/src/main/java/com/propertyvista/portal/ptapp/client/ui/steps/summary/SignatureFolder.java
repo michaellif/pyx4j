@@ -106,6 +106,10 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
             get(proto().fullName()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
                 public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+                    if (getValue() == null || getValue().isEmpty()) {
+                        return null;
+                    }
+
                     return DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), value) ? null : new ValidationFailure(i18n
                             .tr("Digital Signature Must Match Your Name On File"));
                 }
