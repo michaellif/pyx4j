@@ -117,7 +117,7 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
                 if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
                     NodeType<?> selectedPolicyScope = getValue() == null || getValue().node().isNull() ? null : NodeType
                             .wrap((Class<? extends PolicyNode>) getValue().node().getInstanceValueClass());
-                    if (selectedPolicyScope.getType().equals(DefaultPoliciesNode.class)) {
+                    if (selectedPolicyScope == null || selectedPolicyScope.getType().equals(DefaultPoliciesNode.class)) {
                         selectPolicyScopeBox.setValue(null, true);
                     } else {
                         selectPolicyScopeBox.setValue(selectedPolicyScope, true);
