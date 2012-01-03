@@ -21,5 +21,5 @@ public interface Media extends IEntity {
         internal, email, phone, sms, postal
     }
 
-    IPrimitive<MediaType> type();
+    IPrimitive<MediaType> mediaType();
 }

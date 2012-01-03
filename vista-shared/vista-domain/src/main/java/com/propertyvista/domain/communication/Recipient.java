@@ -23,7 +23,7 @@ public interface Recipient extends IEntity {
         person, business
     }
 
-    IPrimitive<RecipientType> type();
+    IPrimitive<RecipientType> recipientType();
 
     IList<Contact> contactList();
 }
