@@ -45,6 +45,5 @@ public interface ChargeItem extends IEntity {
     @Owned
     IList<ChargeItemAdjustment> adjustments();
 
-//    @Detached
     ChargeItemExtraData extraData();
 }

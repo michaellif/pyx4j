@@ -18,17 +18,14 @@ import java.util.List;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
 
@@ -109,12 +106,12 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
                 }
             }
 
-            if (column.getObject() == proto().type()) {
-                if (comp instanceof CEntityComboBox<?>) {
-                    CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().type().getValue()));
-                }
-            }
+//            if (column.getObject() == proto().type()) {
+//                if (comp instanceof CEntityComboBox<?>) {
+//                    CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
+//                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().type().getValue()));
+//                }
+//            }
 
             return comp;
 
