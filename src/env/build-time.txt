@@ -15,7 +15,7 @@ Custom i7-2600K 4.4 GHz  - 2.1K$@Oct2011  (VladL)
   SDD Vertex 3 120G
 
 Custom i7-3930K 4.4 GHz  - 2.2K$@Dec2011   (Anya/Misha)
-  DDR3-1866 (PC3-14900) (DDR3 933 MHz, FSB:DRAM 1:14  CAS 9,10,9) 
+  DDR3-1866 (PC3-14900) (DDR3 933 MHz, FSB:DRAM 1:14  CAS 9,10,9)
   SDD Crucial m4 128GB
 
 Custom i7-3930K ~~5 GHz  - 4K$@Dec2011   (VladS)
@@ -42,12 +42,12 @@ pyx4j again    (mvn install)
 
 vista          (mvn install -P pyx,gwtc,draft)  bg.cmg
 -----------------------------------------------------------------------------------------------------------------------------------
- 3:57    |  5:47       |  3:07              |                      |  2:18             |  2:51   (3:02)       |
+ 3:57    |  5:47       |  3:07              |  2:30                |  2:18             |  2:51   (3:02)       |
 
 vista          (mvn install -P full,pyx,gwtc -P !draft -P !developer-env)  bg-prod.cmd
                 mvn install -P full,pyx,gwtc -P \!draft -P \!developer-env
 -----------------------------------------------------------------------------------------------------------------------------------
- 16:57   |             |  9:12              |  ??? 4:24  ???       |  6:41             |  7:57                |
+ 16:57   |             |  9:12              |  12:06               |  6:41             |  7:57                |
 
 
 vista          (mvn clean install)
