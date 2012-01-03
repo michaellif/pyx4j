@@ -71,9 +71,12 @@ public class EntityArgsConverter {
                 } else if (ObjectClassType.PrimitiveSet.equals(memberMeta.getObjectClassType())) {
                     map.put(memberName, new ArrayList<String>());
                     for (Object elem : ((IPrimitiveSet<?>) entity.getMember(memberName))) {
-                        map.get(memberName).add(elem.toString());
+                        if (elem instanceof Enum) {
+                            map.get(memberName).add(((Enum<?>) elem).name());
+                        } else {
+                            map.get(memberName).add(elem.toString());
+                        }
                     }
-
                 }
             }
         }
