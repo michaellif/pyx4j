@@ -19,7 +19,6 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -73,7 +72,6 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
             int row = -1;
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant().tenant().person().name(), new CEntityLabel<Name>()), 25).build());
             main.setBR(++row, 0, 2);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agree(), new CCheckBox()), 5).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName(), new CTextField()), 25).build());
 
             row = 1;
@@ -87,21 +85,12 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
         @Override
         protected void onPopulate() {
             super.onPopulate();
-            setEditable(!(getValue().agree().isBooleanTrue() && DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), getValue().fullName()
-                    .getValue())));
+            setEditable(!DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), getValue().fullName().getValue()));
         }
 
         @Override
         public void addValidations() {
             super.addValidations();
-
-            get(proto().agree()).addValueValidator(new EditableValueValidator<Boolean>() {
-                @Override
-                public ValidationFailure isValid(CComponent<Boolean, ?> component, Boolean value) {
-                    return value == Boolean.TRUE ? null : new ValidationFailure(i18n.tr("You Must Agree To The Terms And Conditions To Continue"));
-                }
-
-            });
 
             get(proto().fullName()).addValueValidator(new EditableValueValidator<String>() {
                 @Override

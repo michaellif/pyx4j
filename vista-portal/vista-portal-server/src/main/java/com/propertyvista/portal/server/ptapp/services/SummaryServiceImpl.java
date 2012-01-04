@@ -14,7 +14,9 @@
 package com.propertyvista.portal.server.ptapp.services;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,20 +35,25 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.misc.ServletMapping;
+import com.propertyvista.portal.domain.ptapp.IAgree;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.report.SummaryReport;
+import com.propertyvista.server.common.policy.PolicyManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -66,9 +73,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.setValue(entity.getValue());
 
         for (DigitalSignature sig : summary.application().signatures()) {
-            if (!sig.agree().isBooleanTrue() || !DigitalSignatureValidation.isSignatureValid(sig.tenant().tenant(), sig.fullName().getValue())) {
+            if (!DigitalSignatureValidation.isSignatureValid(sig.tenant().tenant(), sig.fullName().getValue())) {
                 // reset all if mismatch:
-                sig.agree().setValue(false);
                 sig.fullName().setValue(null);
             }
             Persistence.service().merge(sig);
@@ -101,13 +107,34 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         summary.setValue(dbo.getValue());
 
         boolean allSigned = true;
+        List<IAgree> agrees = new ArrayList<IAgree>();
         for (DigitalSignature sig : summary.application().signatures()) {
-            allSigned = (allSigned && sig.agree().isBooleanTrue());
+            allSigned = (allSigned && !sig.fullName().isNull());
 
-            if (!sig.agree().isBooleanTrue()) { // update timestamp and IP for non-signed signatures:
+            // add I Agree option:
+            IAgree agree = EntityFactory.create(IAgree.class);
+            agree.person().set(sig.tenant().tenant().person());
+            agree.agree().setValue(Boolean.TRUE);
+            agrees.add(agree);
+
+            if (sig.fullName().isNull()) { // update time stamp and IP for non-signed signatures:
                 sig.timestamp().setValue(new Date());
                 sig.ipAddress().setValue(Context.getRequestRemoteAddr());
+
+                agree.agree().setValue(Boolean.FALSE);
             }
+        }
+
+        // fill Lease Terms:
+        LegalTermsPolicy termsPolicy = (LegalTermsPolicy) PolicyManager.effectivePolicy(PtAppContext.getCurrentUserLease().unit(), LegalTermsPolicy.class);
+        for (LegalTermsDescriptor terms : termsPolicy.summaryTerms()) {
+            LegalTermsDescriptorDTO desc = EntityFactory.create(LegalTermsDescriptorDTO.class);
+            desc.name().set(terms.name());
+            desc.description().set(terms.description());
+            if (!terms.content().isEmpty()) {
+                desc.content().set(terms.content().get(0));
+            }
+            desc.agrees().addAll(agrees);
         }
 
         summary.signed().setValue(allSigned);

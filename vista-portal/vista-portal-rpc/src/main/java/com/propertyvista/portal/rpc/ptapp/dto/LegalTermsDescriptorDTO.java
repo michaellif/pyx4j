@@ -7,37 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-21
- * @author jim
+ * Created on Jan 4, 2012
+ * @author vladlouk
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.dto.TenantFinancialDTO;
-import com.propertyvista.dto.TenantInfoDTO;
-import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
+import com.propertyvista.portal.domain.ptapp.IAgree;
 
 @Transient
-public interface SummaryDTO extends Summary {
+public interface LegalTermsDescriptorDTO extends IEntity {
 
-    IPrimitive<Boolean> signed();
+    @ToString(index = 0)
+    IPrimitive<String> name();
 
-    IList<ApartmentInfoSummaryDTO> apartmentSummary();
+    IPrimitive<String> description();
 
-    ApartmentInfoDTO selectedUnit();
+    LegalTermsContent content();
 
-    TenantInApplicationListDTO tenantList();
-
-    IList<TenantInfoDTO> tenantsWithInfo();
-
-    IList<TenantFinancialDTO> tenantFinancials();
-
-    Charges charges();
-
-    IList<LegalTermsDescriptorDTO> summaryTerms();
+    IList<IAgree> agrees();
 }

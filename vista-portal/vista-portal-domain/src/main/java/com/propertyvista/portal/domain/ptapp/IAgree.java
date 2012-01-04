@@ -7,37 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 19, 2011
- * @author vlads
+ * Created on Jan 4, 2012
+ * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.domain.tenant.ptapp;
-
-import java.util.Date;
+package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.person.Person;
 
-public interface DigitalSignature extends IEntity {
-
-    @ToString
-    TenantInLease tenant();
-
-    @Format("MM/dd/yyyy hh:mm a")
-    @MemberColumn(name = "signDate")
-    IPrimitive<Date> timestamp();
-
-    @Caption(name = "IP Address")
-    IPrimitive<String> ipAddress();
+public interface IAgree extends IEntity {
 
     @NotNull
-    @Caption(name = "Type Your Full Name")
-    IPrimitive<String> fullName();
+    @ReadOnly
+    Person person();
+
+    @NotNull
+    @Caption(name = "I Agree with Terms")
+    IPrimitive<Boolean> agree();
 }

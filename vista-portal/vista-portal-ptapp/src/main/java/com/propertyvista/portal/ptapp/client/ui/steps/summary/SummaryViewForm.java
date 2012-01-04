@@ -125,7 +125,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setBR(++row, 0, 1);
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
-        main.setWidget(++row, 0, new LeaseTermsCheck());
+        main.setWidget(++row, 0, inject(proto().leaseTerms(), new LeaseTemsFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("Digital Signature(s)"));
         main.setWidget(++row, 0, inject(proto().application().signatures(), new SignatureFolder()));
@@ -322,9 +322,9 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     /*
      * Lease Terms view implementation
      */
-    private class LeaseTermsCheck extends FlowPanel {
+    private class LeaseTermsToAgree extends FlowPanel {
 
-        public LeaseTermsCheck() {
+        public LeaseTermsToAgree() {
             CLabel leaseTermContent = new CLabel();
             leaseTermContent.setAllowHtml(true);
             leaseTermContent.setWordWrap(true);
