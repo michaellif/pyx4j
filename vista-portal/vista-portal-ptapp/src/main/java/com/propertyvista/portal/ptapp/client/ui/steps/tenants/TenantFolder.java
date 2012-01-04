@@ -59,14 +59,6 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
     }
 
     @Override
-    protected CEntityFolderItem<TenantInLeaseDTO> createItem(boolean first) {
-        CEntityFolderItem<TenantInLeaseDTO> item = super.createItem(first);
-        item.setRemovable(!first);
-        item.setMovable(!first);
-        return item;
-    }
-
-    @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().tenant().person().name().firstName(), "10em"));
@@ -143,6 +135,15 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                 if (role != null) {
                     role.setEditable(false);
                 }
+
+                // correct folder item:
+                if (getParent() instanceof CEntityFolderItem) {
+                    @SuppressWarnings("unchecked")
+                    CEntityFolderItem<TenantInLeaseDTO> item = (CEntityFolderItem<TenantInLeaseDTO>) getParent();
+                    item.setRemovable(false);
+                    item.setMovable(false);
+                }
+
             } else if (role != null) {
                 Collection<TenantInLease.Role> roles = EnumSet.allOf(TenantInLease.Role.class);
                 roles.remove(TenantInLease.Role.Applicant);
