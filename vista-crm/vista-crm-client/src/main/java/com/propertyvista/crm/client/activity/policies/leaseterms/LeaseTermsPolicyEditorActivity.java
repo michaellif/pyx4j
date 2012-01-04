@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEdtiorView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 
-public class LeaseTermsPolicyEditorActivity extends EditorActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEdtiorView.Presenter {
+public class LeaseTermsPolicyEditorActivity extends EditorActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public LeaseTermsPolicyEditorActivity(Place place) {
-        super(place, PolicyViewFactory.instance(LeaseTermsPolicyEdtiorView.class), (AbstractCrudService<LeaseTermsPolicyDTO>) GWT
+        super(place, PolicyViewFactory.instance(LeaseTermsPolicyEditorView.class), (AbstractCrudService<LeaseTermsPolicyDTO>) GWT
                 .create(LeaseTermsPolicyCrudService.class), LeaseTermsPolicyDTO.class);
     }
 

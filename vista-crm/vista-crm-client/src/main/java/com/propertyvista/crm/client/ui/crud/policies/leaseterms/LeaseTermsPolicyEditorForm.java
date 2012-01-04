@@ -13,66 +13,39 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.IsWidget;
+import java.util.Arrays;
+import java.util.List;
 
+import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
+import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsPolicyEditorForm extends CrmEntityForm<LegalTermsPolicy> {
+public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<LeaseTermsPolicyDTO> {
 
     private static final I18n i18n = I18n.get(LeaseTermsPolicyEditorForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
-
-    public LeaseTermsPolicyEditorForm() {
-        super(LegalTermsPolicy.class);
+    public LeaseTermsPolicyEditorForm(IEditableComponentFactory factory) {
+        super(LeaseTermsPolicyDTO.class, factory);
     }
 
     @Override
-    public IsWidget createContent() {
-//        FormFlexPanel content = new FormFlexPanel();
+    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
+        return Arrays.asList(
 
-//        int row = -1;
-//        content.setH1(++row, 0, 1, proto().summaryTerms().getMeta().getCaption());
-//        content.setWidget(++row, 0, inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
-//
-//        content.setH1(++row, 0, 1, proto().oneTimePaymentTerms().getMeta().getCaption());
-//        content.setWidget(++row, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())));
-//
-//        content.setH1(++row, 0, 1, proto().recurrentPaymentTerms().getMeta().getCaption());
-//        content.setWidget(++row, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())));
-//
-//        return content;
+        new TabDescriptor(inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())).asWidget(), proto().summaryTerms().getMeta()
+                .getCaption()),
 
-        // TODO for some reason the tab panel doesn't show the content
+        new TabDescriptor(inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())).asWidget(), proto().oneTimePaymentTerms().getMeta()
+                .getCaption()),
 
-        tabPanel.add(inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())), proto().summaryTerms().getMeta().getCaption());
-        tabPanel.add(inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())), proto().oneTimePaymentTerms().getMeta().getCaption());
-        tabPanel.add(inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())), proto().recurrentPaymentTerms().getMeta().getCaption());
-
-        tabPanel.setSize("100%", "100%");
-        tabPanel.setDisableMode(isEditable());
-        return tabPanel;
-
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
+        new TabDescriptor(inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())).asWidget(), proto().recurrentPaymentTerms().getMeta()
+                .getCaption()));
     }
 
     private static class LegalTermsDescriptorFolder extends VistaBoxFolder<LegalTermsDescriptor> {
@@ -89,4 +62,5 @@ public class LeaseTermsPolicyEditorForm extends CrmEntityForm<LegalTermsPolicy> 
             return super.create(member);
         }
     }
+
 }

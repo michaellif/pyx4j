@@ -27,11 +27,13 @@ import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private static final I18n i18n = I18n.get(PolicyPreloader.class);
@@ -127,7 +129,44 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     private LegalTermsPolicy createDefaultLeaseTermsPolicy() {
         LegalTermsPolicy policy = EntityFactory.create(LegalTermsPolicy.class);
-        Persistence.service().persist(policy);
+
+        LegalTermsDescriptor summaryTermDescriptor = EntityFactory.create(LegalTermsDescriptor.class);
+        summaryTermDescriptor.name().setValue(i18n.tr("Basic DEMO Terms"));
+        policy.summaryTerms().add(summaryTermDescriptor);
+
+        LegalTermsDescriptor descriptor = EntityFactory.create(LegalTermsDescriptor.class);
+        descriptor.name().setValue(i18n.tr("Basic DEMO One Time Payment Terms"));
+        policy.oneTimePaymentTerms().set(descriptor);
+
+        descriptor = EntityFactory.create(LegalTermsDescriptor.class);
+        descriptor.name().setValue(i18n.tr("Basic DEMO Recurring Payment Terms"));
+        policy.oneTimePaymentTerms().set(descriptor);
+
+        LegalTermsContent summaryTermContent = EntityFactory.create(LegalTermsContent.class);
+//            summaryTermContent.locale().set(locale);
+        summaryTermContent.localizedCaption().setValue(i18n.tr("Basic DEMO Terms in "));
+        summaryTermContent.content().setValue("This is a demo agreement text");
+        summaryTermContent.descriptor().set(policy.summaryTerms().get(0));
+        policy.summaryTerms().get(0).content().add(summaryTermContent);
+
+        LegalTermsContent content = EntityFactory.create(LegalTermsContent.class);
+//            content.locale().set(locale);
+        content.localizedCaption().setValue(i18n.tr("Basic DEMO One Time Payment Terms in "));
+        content.content().setValue("This is a demo one time payment terms text");
+
+        content.descriptor().set(policy.oneTimePaymentTerms());
+        policy.oneTimePaymentTerms().content().add(content);
+
+        content = EntityFactory.create(LegalTermsContent.class);
+//            content.locale().set(locale);
+        content.localizedCaption().setValue(i18n.tr("Basic DEMO Recurring Payment Terms in "));
+        content.content().setValue("This is a demo Recurring payment terms text");
+
+        content.descriptor().set(policy.recurrentPaymentTerms());
+        policy.recurrentPaymentTerms().content().add(content);
+
+        Persistence.service().merge(policy);
+
         return policy;
     }
 

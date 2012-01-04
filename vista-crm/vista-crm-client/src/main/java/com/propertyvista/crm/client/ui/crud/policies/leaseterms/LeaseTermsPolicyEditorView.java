@@ -13,18 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 
-public class LeaseTermsPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEditorView {
+public interface LeaseTermsPolicyEditorView extends IEditorView<LeaseTermsPolicyDTO> {
 
-    private static final I18n i18n = I18n.get(LeaseTermsPolicyEditorViewImpl.class);
-
-    public LeaseTermsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseTerms.class, new LeaseTermsPolicyEditorForm(new CrmEditorsComponentFactory()));
-    }
 }

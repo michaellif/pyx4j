@@ -36,7 +36,7 @@ public class LegalTermsEditorForm extends CEntityDecoratableEditor<LegalTermsDes
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).labelWidth(10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description(), new CTextArea()), 60).labelWidth(10).build());
-        content.setH2(++row, 0, 1, proto().content().getMeta().getCaption());
+        content.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), new LegalTermsContentFolder(this)), 60).labelWidth(10).build());
 
         return content;

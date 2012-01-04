@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 28, 2011
+ * Created on Jan 4, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -17,12 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -41,16 +42,16 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
-import com.propertyvista.crm.client.ui.policy.PolicyEditorFormFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.PolicyDTOBase;
 import com.propertyvista.domain.property.asset.Complex;
@@ -60,44 +61,59 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOBase> extends CrmEntityForm<POLICY_DTO> {
+public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends PolicyDTOBase> extends CrmEntityForm<POLICY_DTO> {
 
     private static final I18n i18n = I18n.get(PolicyDTOEditorForm.class);
 
-    private SimplePanel policyEditorFormPanel;
-
-    private final Class<P> policyClass;
-
-    private final Class<POLICY_DTO> policyDTOClass;
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     @SuppressWarnings("unchecked")
-    public static final List<NodeType<?>> NODE_TYPE_OPTIONS = Arrays.asList(//@formatter:off
-                NodeType.wrap(AptUnit.class),
-                NodeType.wrap(Floorplan.class),
-                NodeType.wrap(Building.class),
-                NodeType.wrap(Complex.class),
-                NodeType.wrap(Province.class),
-                NodeType.wrap(Country.class),
-                NodeType.wrap(OrganizationPoliciesNode.class));//@formatter:on
+    public static final List<NodeTypeWrapper<?>> NODE_TYPE_OPTIONS = Arrays.asList(//@formatter:off
+                NodeTypeWrapper.wrap(AptUnit.class),
+                NodeTypeWrapper.wrap(Floorplan.class),
+                NodeTypeWrapper.wrap(Building.class),
+                NodeTypeWrapper.wrap(Complex.class),
+                NodeTypeWrapper.wrap(Province.class),
+                NodeTypeWrapper.wrap(Country.class),
+                NodeTypeWrapper.wrap(OrganizationPoliciesNode.class));//@formatter:on
 
-    public PolicyDTOEditorForm(Class<P> policyClass, Class<POLICY_DTO> policyDTOClass, final IEditableComponentFactory factory) {
+    public PolicyDTOTabPanelBasedEditorForm(Class<POLICY_DTO> policyDTOClass, final IEditableComponentFactory factory) {
         super(policyDTOClass, factory);
-        this.policyClass = policyClass;
-        this.policyDTOClass = policyDTOClass;
     }
 
     @Override
     public IsWidget createContent() {
+        tabPanel.add(createScopeTab(), i18n.tr("Scope"));
+        for (TabDescriptor d : createCustomTabPanels()) {
+            tabPanel.add(d.widget, d.caption);
+        }
+        tabPanel.setSize("100%", "100%");
+        return tabPanel;
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
+    }
+
+    protected abstract List<TabDescriptor> createCustomTabPanels();
+
+    private Widget createScopeTab() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        final CComboBox<NodeType<?>> selectPolicyScopeBox = new CComboBox<PolicyDTOEditorForm.NodeType<?>>();
+        final CComboBox<NodeTypeWrapper<?>> selectPolicyScopeBox = new CComboBox<NodeTypeWrapper<?>>();
         selectPolicyScopeBox.setEditable(isEditable());
         selectPolicyScopeBox.setOptions(NODE_TYPE_OPTIONS);
         selectPolicyScopeBox.setMandatory(true);
-        selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType<?>>() {
+        selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeTypeWrapper<?>>() {
             @Override
-            public void onValueChange(ValueChangeEvent<NodeType<?>> event) {
+            public void onValueChange(ValueChangeEvent<NodeTypeWrapper<?>> event) {
                 if (event.getValue() != null) {
                     get(proto().node()).setVisible(true);
 
@@ -114,7 +130,7 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
-                    NodeType<?> selectedPolicyScope = getValue() == null || getValue().node().isNull() ? null : NodeType
+                    NodeTypeWrapper<?> selectedPolicyScope = getValue() == null || getValue().node().isNull() ? null : NodeTypeWrapper
                             .wrap((Class<? extends PolicyNode>) getValue().node().getInstanceValueClass());
                     if (selectedPolicyScope == null || selectedPolicyScope.getType().equals(DefaultPoliciesNode.class)) {
                         selectPolicyScopeBox.setValue(null, true);
@@ -129,55 +145,30 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
                 .componentWidth(15).build());
 
-        policyEditorFormPanel = new SimplePanel();
-        policyEditorFormPanel.setSize("100%", "100%");
-        content.setWidget(++row, 0, policyEditorFormPanel);
-
         return content;
     }
 
-    @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    public static class TabDescriptor {
+        public final Widget widget;
 
-        // create an editor for the specific policy class and propagate the value        
-        final CEntityEditor<P> policyEditorForm = (CEntityEditor<P>) PolicyEditorFormFactory.createPolicyEditorForm(policyClass, isEditable());
+        public final String caption;
 
-        //adopt(policyEditorForm); // TODO review this: i'm not sure what it does, something with validation        
-        policyEditorForm.initContent();
-
-        // use value change handler in order to propagate the value of the polymorphic editor to the parent form
-        policyEditorForm.addValueChangeHandler(new ValueChangeHandler<P>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<P> event) {
-
-                if (event.getValue() != null) {
-                    // that's really cruel but I don't see another way to do it                
-                    for (String memberName : policyEditorForm.getValue().getEntityMeta().getMemberNames()) {
-                        getValue().setMemberValue(memberName, event.getValue().getMemberValue(memberName));
-                    }
-                    setValue(getValue(), true); // just to fire the event;
-                }
-            }
-        });
-
-        P policyEdtiorValue = ((getValue() != null & !getValue().isNull()) ? getValue().duplicate(policyClass) : EntityFactory.create(policyClass));
-        policyEditorForm.populate(policyEdtiorValue);
-
-        policyEditorFormPanel.clear();
-        policyEditorFormPanel.setWidget(policyEditorForm);
+        public TabDescriptor(Widget widget, String caption) {
+            this.widget = widget;
+            this.caption = caption;
+        }
     }
 
-    public static class NodeType<T extends PolicyNode> {
+    public static class NodeTypeWrapper<T extends PolicyNode> {
         private final String toString;
 
         private final Class<T> nodeType;
 
-        public static <TYPE extends PolicyNode> NodeType<TYPE> wrap(Class<TYPE> nodeType) {
-            return new NodeType<TYPE>(nodeType);
+        public static <TYPE extends PolicyNode> NodeTypeWrapper<TYPE> wrap(Class<TYPE> nodeType) {
+            return new NodeTypeWrapper<TYPE>(nodeType);
         }
 
-        private NodeType(Class<T> nodeType) {
+        private NodeTypeWrapper(Class<T> nodeType) {
             this.nodeType = nodeType;
             this.toString = EntityFactory.getEntityMeta(nodeType).getCaption();
         }
@@ -295,5 +286,4 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
             return listerView.getLister().getSelectedItem();
         }
     }
-
 }

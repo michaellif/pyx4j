@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEdtiorView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEditorViewImpl;
@@ -36,8 +36,8 @@ public class PolicyViewFactory extends ViewFactoryBase {
             } else if (LeaseTermsPolicyListerView.class.equals(type)) {
                 map.put(LeaseTermsPolicyListerView.class, new LeaseTermsPolicyListerViewImpl());
 
-            } else if (LeaseTermsPolicyEdtiorView.class.equals(type)) {
-                map.put(LeaseTermsPolicyEdtiorView.class, new LeaseTermsPolicyEditorViewImpl());
+            } else if (LeaseTermsPolicyEditorView.class.equals(type)) {
+                map.put(LeaseTermsPolicyEditorView.class, new LeaseTermsPolicyEditorViewImpl());
             }
 
         }

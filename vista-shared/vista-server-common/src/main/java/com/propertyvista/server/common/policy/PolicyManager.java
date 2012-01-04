@@ -55,7 +55,9 @@ public class PolicyManager {
     public static EffectivePoliciesDTO effectivePolicies(PolicyNode node) {
         EffectivePoliciesDTO effectivePreset = EntityFactory.create(EffectivePoliciesDTO.class);
         Class<? extends PolicyNode> requestedNodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
-
+        if (node.isEmpty()) {
+            Persistence.service().retrieve(node);
+        }
         for (Class<? extends PolicyNode> nodeType : HIERARCHY) {
             if (nodeType.equals(node.getInstanceValueClass())) {
                 effectivePreset = merge(effectivePreset, policiesAtNode(node));
@@ -96,7 +98,7 @@ public class PolicyManager {
         EffectivePoliciesDTO effectivePolicies = effectivePolicies(node);
         for (PolicyAtNode policyAtNode : effectivePolicies.policies()) {
             if (policyAtNode.policy().getInstanceValueClass().equals(policyClass)) {
-                return policyAtNode.policy().duplicate();
+                return policyAtNode.policy().duplicate(policyClass);
             }
         }
         return null;
