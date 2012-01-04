@@ -13,14 +13,38 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseTermsPolicy, LeaseTermsPolicyDTO> {
+public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalTermsPolicy, LeaseTermsPolicyDTO> {
 
     public LeaseTermsPolicyCrudServiceImpl() {
-        super(LeaseTermsPolicy.class, LeaseTermsPolicyDTO.class);
+        super(LegalTermsPolicy.class, LeaseTermsPolicyDTO.class);
+    }
+
+    @Override
+    protected void persistDBO(LegalTermsPolicy dbo, LeaseTermsPolicyDTO in) {
+//        for (LegalTermsDescriptor descriptor : dbo.summaryTerms()) {
+//            persistDescriptor(descriptor);
+//        }
+//        persistDescriptor(dbo.paymentTerms1());
+//        persistDescriptor(dbo.paymentTerms2());
+
+        super.persistDBO(dbo, in);
+    }
+
+    private void persistDescriptor(LegalTermsDescriptor descriptor) {
+        if (!descriptor.isNull()) {
+            for (LegalTermsContent content : descriptor.content()) {
+                Persistence.service().persist(content);
+            }
+            Persistence.service().persist(descriptor);
+        }
     }
 
 }

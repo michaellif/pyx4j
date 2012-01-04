@@ -15,23 +15,30 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LegalTermsEditorForm extends CrmEntityForm<LegalTermsDescriptor> {
-    public LegalTermsEditorForm() {
+public class LegalTermsEditorForm extends CEntityDecoratableEditor<LegalTermsDescriptor> {
+
+    public LegalTermsEditorForm(boolean isEditable) {
         super(LegalTermsDescriptor.class);
+        setEditable(isEditable);
     }
 
     @Override
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
+
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content())).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).labelWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description(), new CTextArea()), 60).labelWidth(10).build());
+        content.setH2(++row, 0, 1, proto().content().getMeta().getCaption());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), new LegalTermsContentFolder(this)), 60).labelWidth(10).build());
+
         return content;
     }
 }

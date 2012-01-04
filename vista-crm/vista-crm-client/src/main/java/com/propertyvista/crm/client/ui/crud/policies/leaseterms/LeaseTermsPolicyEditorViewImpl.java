@@ -18,12 +18,12 @@ import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 
 public class LeaseTermsPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEdtiorView {
 
     public LeaseTermsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseTerms.class, new PolicyDTOEditorForm<LeaseTermsPolicy, LeaseTermsPolicyDTO>(LeaseTermsPolicy.class,
+        super(CrmSiteMap.Settings.Policies.LeaseTerms.class, new PolicyDTOEditorForm<LegalTermsPolicy, LeaseTermsPolicyDTO>(LegalTermsPolicy.class,
                 LeaseTermsPolicyDTO.class, new CrmEditorsComponentFactory()));
     }
 }

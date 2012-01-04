@@ -14,16 +14,24 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.UnitPolicy;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-@DiscriminatorValue("AgreementPolicy")
-public interface LeaseTermsPolicy extends UnitPolicy {
+@DiscriminatorValue("LegalTermsPolicy")
+public interface LegalTermsPolicy extends UnitPolicy {
 
-    IList<LegalTermsDescriptor> termsList();
+    @Owned
+    IList<LegalTermsDescriptor> summaryTerms();
+
+    @Owned
+    LegalTermsDescriptor oneTimePaymentTerms();
+
+    @Owned
+    LegalTermsDescriptor recurrentPaymentTerms();
 
     @Deprecated
     IPrimitive<Integer> x(); // needed just so that the entity could be created in the database with no probelms

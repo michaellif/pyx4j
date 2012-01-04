@@ -30,7 +30,7 @@ import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
@@ -125,8 +125,8 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         return policy;
     }
 
-    private LeaseTermsPolicy createDefaultLeaseTermsPolicy() {
-        LeaseTermsPolicy policy = EntityFactory.create(LeaseTermsPolicy.class);
+    private LegalTermsPolicy createDefaultLeaseTermsPolicy() {
+        LegalTermsPolicy policy = EntityFactory.create(LegalTermsPolicy.class);
         Persistence.service().persist(policy);
         return policy;
     }

@@ -50,7 +50,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         ((PolicyDTOBase) dto).node().set(policyAtNode.node().cast());
 
         if (fromList) {
-            PolicyNode castedNode = ((PolicyDTOBase) dto).node();
+            PolicyNode castedNode = ((PolicyDTOBase) dto).node().cast();
             ((PolicyDTOBase) dto).nodeType().setValue(castedNode.getEntityMeta().getCaption());
             ((PolicyDTOBase) dto).nodeRepresentation().setValue(castedNode.getStringView());
         }

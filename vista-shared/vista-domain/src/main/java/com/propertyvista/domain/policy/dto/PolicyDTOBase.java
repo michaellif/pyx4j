@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,7 +23,9 @@ public abstract interface PolicyDTOBase extends IEntity {
 
     PolicyNode node();
 
+    @Caption(name = "Scope")
     IPrimitive<String> nodeType();
 
+    @Caption(name = "Applied To")
     IPrimitive<String> nodeRepresentation();
 }

@@ -13,34 +13,24 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsCrudService;
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTermsPolicy> {
+public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LegalTermsPolicy> {
 
     private static final I18n i18n = I18n.get(LeaseTermsPolicyEditorForm.class);
 
     public LeaseTermsPolicyEditorForm() {
-        super(LeaseTermsPolicy.class);
+        super(LegalTermsPolicy.class);
     }
 
     @Override
@@ -48,63 +38,42 @@ public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTe
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().termsList(), new LeaseTermsFolder()));
+        content.setH1(++row, 0, 1, proto().summaryTerms().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
+
+        content.setH1(++row, 0, 1, proto().oneTimePaymentTerms().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())));
+
+        content.setH1(++row, 0, 1, proto().recurrentPaymentTerms().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())));
 
         return content;
+
+        // TODO for some reason the tab panel doesn't show the content
+//        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+//
+//        tabPanel.add(inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())), proto().summaryTerms().getMeta().getCaption());
+//        tabPanel.add(inject(proto().paymentTerms1(), new LegalTermsEditorForm(isEditable())), proto().paymentTerms1().getMeta().getCaption());
+//        tabPanel.add(inject(proto().paymentTerms2(), new LegalTermsEditorForm(isEditable())), proto().paymentTerms2().getMeta().getCaption());
+//        tabPanel.setSize("100%", "100%");
+//        tabPanel.setDisableMode(isEditable());
+//        tabPanel.selectTab(0);
+//        return tabPanel;
+
     }
 
-    @Override
-    protected void onPopulate() {
-        super.onPopulate();
-    }
+    private static class LegalTermsDescriptorFolder extends VistaBoxFolder<LegalTermsDescriptor> {
 
-    private static class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptor> {
-
-        public LeaseTermsFolder() {
-            super(LegalTermsDescriptor.class, true);
+        public LegalTermsDescriptorFolder(boolean isEditable) {
+            super(LegalTermsDescriptor.class, isEditable);
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             if ((member instanceof LegalTermsDescriptor)) {
-                return new LegalTermsEditorForm();
+                return new LegalTermsEditorForm(isEditable());
             }
             return super.create(member);
-        }
-
-        @Override
-        protected void addItem() {
-            new SelectLeaseTermsDialog() {
-                @Override
-                public boolean onClickOk() {
-                    addItem(getSelectedItem());
-                    return true;
-                }
-            }.show();
-        }
-    }
-
-    private abstract static class SelectLeaseTermsDialog extends OkCancelDialog {
-
-        private final IListerView<LegalTermsDescriptor> leaseTermsListerView;
-
-        public SelectLeaseTermsDialog() {
-            super(i18n.tr("Choose lease terms"));
-
-            leaseTermsListerView = new ListerInternalViewImplBase<LegalTermsDescriptor>(new LeaseTermsListerViewImpl.LeaseTermsLister());
-
-            ListerActivityBase<LegalTermsDescriptor> activity = new ListerActivityBase<LegalTermsDescriptor>(new CrmSiteMap.Settings.LeaseTerms(),
-                    leaseTermsListerView, (AbstractCrudService<LegalTermsDescriptor>) GWT.create(LeaseTermsCrudService.class), LegalTermsDescriptor.class);
-            SimplePanel p = new SimplePanel();
-
-            p.setSize("100%", "100%");
-            activity.start(p, new SimpleEventBus());
-            setBody(p);
-            setSize("800px", "600px");
-        }
-
-        public LegalTermsDescriptor getSelectedItem() {
-            return leaseTermsListerView.getLister().getSelectedItem();
         }
     }
 }
