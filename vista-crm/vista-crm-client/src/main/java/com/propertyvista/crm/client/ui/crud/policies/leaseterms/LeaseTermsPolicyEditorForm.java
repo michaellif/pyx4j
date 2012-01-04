@@ -13,21 +13,25 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LegalTermsPolicy> {
+public class LeaseTermsPolicyEditorForm extends CrmEntityForm<LegalTermsPolicy> {
 
     private static final I18n i18n = I18n.get(LeaseTermsPolicyEditorForm.class);
+
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
 
     public LeaseTermsPolicyEditorForm() {
         super(LegalTermsPolicy.class);
@@ -35,31 +39,40 @@ public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LegalTe
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+//        FormFlexPanel content = new FormFlexPanel();
 
-        int row = -1;
-        content.setH1(++row, 0, 1, proto().summaryTerms().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
-
-        content.setH1(++row, 0, 1, proto().oneTimePaymentTerms().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())));
-
-        content.setH1(++row, 0, 1, proto().recurrentPaymentTerms().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())));
-
-        return content;
+//        int row = -1;
+//        content.setH1(++row, 0, 1, proto().summaryTerms().getMeta().getCaption());
+//        content.setWidget(++row, 0, inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
+//
+//        content.setH1(++row, 0, 1, proto().oneTimePaymentTerms().getMeta().getCaption());
+//        content.setWidget(++row, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())));
+//
+//        content.setH1(++row, 0, 1, proto().recurrentPaymentTerms().getMeta().getCaption());
+//        content.setWidget(++row, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())));
+//
+//        return content;
 
         // TODO for some reason the tab panel doesn't show the content
-//        VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
-//
-//        tabPanel.add(inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())), proto().summaryTerms().getMeta().getCaption());
-//        tabPanel.add(inject(proto().paymentTerms1(), new LegalTermsEditorForm(isEditable())), proto().paymentTerms1().getMeta().getCaption());
-//        tabPanel.add(inject(proto().paymentTerms2(), new LegalTermsEditorForm(isEditable())), proto().paymentTerms2().getMeta().getCaption());
-//        tabPanel.setSize("100%", "100%");
-//        tabPanel.setDisableMode(isEditable());
-//        tabPanel.selectTab(0);
-//        return tabPanel;
 
+        tabPanel.add(inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())), proto().summaryTerms().getMeta().getCaption());
+        tabPanel.add(inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())), proto().oneTimePaymentTerms().getMeta().getCaption());
+        tabPanel.add(inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())), proto().recurrentPaymentTerms().getMeta().getCaption());
+
+        tabPanel.setSize("100%", "100%");
+        tabPanel.setDisableMode(isEditable());
+        return tabPanel;
+
+    }
+
+    @Override
+    public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
+    }
+
+    @Override
+    public int getActiveTab() {
+        return tabPanel.getSelectedIndex();
     }
 
     private static class LegalTermsDescriptorFolder extends VistaBoxFolder<LegalTermsDescriptor> {
