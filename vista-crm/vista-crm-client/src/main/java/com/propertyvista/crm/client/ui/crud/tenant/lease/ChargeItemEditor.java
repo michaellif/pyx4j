@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -90,8 +91,11 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         super.onPopulate();
         if (!getValue().item().isEmpty()) {
             if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
-                // TODO - how to ?
-//                setRemovable(false);
+                // correct folder item:
+                if (getParent() instanceof CEntityFolderItem) {
+                    CEntityFolderItem<ChargeItem> item = (CEntityFolderItem<ChargeItem>) getParent();
+                    item.setRemovable(false);
+                }
             }
 
             if (!isEditable()) {
