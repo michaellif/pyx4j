@@ -57,7 +57,6 @@ import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ConcessionsFolde
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureExFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
-import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantFolder;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
@@ -113,7 +112,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setWidget(++row, 0, new LeaseTermView());
 
         main.setH1(++row, 0, 1, i18n.tr("Tenants"), createEditLink(new PtSiteMap.Tenants()));
-        main.setWidget(++row, 0, inject(proto().tenantList().tenants(), new TenantFolder(false)));
+        main.setWidget(++row, 0, inject(proto().tenantList().tenants(), new TenantViewFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("Information"), createEditLink(new PtSiteMap.Info()));
         main.setWidget(++row, 0, inject(proto().tenantsWithInfo(), createTenantView()));

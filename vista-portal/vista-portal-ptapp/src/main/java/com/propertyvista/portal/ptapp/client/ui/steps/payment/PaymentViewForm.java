@@ -106,6 +106,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
             termContent.setAllowHtml(true);
             termContent.setWordWrap(true);
+
             ScrollPanel terms = new ScrollPanel(termContent.asWidget());
             terms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
             terms.getElement().getStyle().setBorderWidth(1, Unit.PX);

@@ -33,7 +33,7 @@ public class ConcessionsFolder extends VistaTableFolder<Concession> {
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().value(), "7em"));
         columns.add(new EntityFolderColumnDescriptor(proto().term(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().description(), "40em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().description(), "43em"));
         return columns;
     }
 }

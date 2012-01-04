@@ -57,7 +57,7 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().item().type(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().agreedPrice(), "7em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "30em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "50em"));
         return columns;
 
     }
