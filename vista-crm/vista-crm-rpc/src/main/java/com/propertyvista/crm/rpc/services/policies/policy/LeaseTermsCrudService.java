@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services.policies.policy;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public interface LeaseTermsCrudService extends AbstractCrudService<LeaseTermsInstance> {
+public interface LeaseTermsCrudService extends AbstractCrudService<LegalTermsDescriptor> {
 
 }

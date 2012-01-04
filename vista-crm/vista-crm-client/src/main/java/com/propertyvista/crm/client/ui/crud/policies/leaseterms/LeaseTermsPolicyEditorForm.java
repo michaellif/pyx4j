@@ -33,7 +33,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsCrudService;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
 public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTermsPolicy> {
 
@@ -58,16 +58,16 @@ public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTe
         super.onPopulate();
     }
 
-    private static class LeaseTermsFolder extends VistaBoxFolder<LeaseTermsInstance> {
+    private static class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptor> {
 
         public LeaseTermsFolder() {
-            super(LeaseTermsInstance.class, true);
+            super(LegalTermsDescriptor.class, true);
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if ((member instanceof LeaseTermsInstance)) {
-                return new LeaseTermsEditorForm();
+            if ((member instanceof LegalTermsDescriptor)) {
+                return new LegalTermsEditorForm();
             }
             return super.create(member);
         }
@@ -86,15 +86,15 @@ public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTe
 
     private abstract static class SelectLeaseTermsDialog extends OkCancelDialog {
 
-        private final IListerView<LeaseTermsInstance> leaseTermsListerView;
+        private final IListerView<LegalTermsDescriptor> leaseTermsListerView;
 
         public SelectLeaseTermsDialog() {
             super(i18n.tr("Choose lease terms"));
 
-            leaseTermsListerView = new ListerInternalViewImplBase<LeaseTermsInstance>(new LeaseTermsListerViewImpl.LeaseTermsLister());
+            leaseTermsListerView = new ListerInternalViewImplBase<LegalTermsDescriptor>(new LeaseTermsListerViewImpl.LeaseTermsLister());
 
-            ListerActivityBase<LeaseTermsInstance> activity = new ListerActivityBase<LeaseTermsInstance>(new CrmSiteMap.Settings.LeaseTerms(),
-                    leaseTermsListerView, (AbstractCrudService<LeaseTermsInstance>) GWT.create(LeaseTermsCrudService.class), LeaseTermsInstance.class);
+            ListerActivityBase<LegalTermsDescriptor> activity = new ListerActivityBase<LegalTermsDescriptor>(new CrmSiteMap.Settings.LeaseTerms(),
+                    leaseTermsListerView, (AbstractCrudService<LegalTermsDescriptor>) GWT.create(LeaseTermsCrudService.class), LegalTermsDescriptor.class);
             SimplePanel p = new SimplePanel();
 
             p.setSize("100%", "100%");
@@ -103,7 +103,7 @@ public class LeaseTermsPolicyEditorForm extends CEntityDecoratableEditor<LeaseTe
             setSize("800px", "600px");
         }
 
-        public LeaseTermsInstance getSelectedItem() {
+        public LegalTermsDescriptor getSelectedItem() {
             return leaseTermsListerView.getLister().getSelectedItem();
         }
     }

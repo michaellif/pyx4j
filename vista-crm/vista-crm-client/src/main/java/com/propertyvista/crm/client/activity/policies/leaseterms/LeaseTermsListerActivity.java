@@ -21,15 +21,15 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsListerViewImpl;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsCrudService;
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsListerActivity extends ListerActivityBase<LeaseTermsInstance> {
+public class LeaseTermsListerActivity extends ListerActivityBase<LegalTermsDescriptor> {
 
     @SuppressWarnings("unchecked")
     public LeaseTermsListerActivity(Place place) {
         // TODO pool for the view
-        super(place, new LeaseTermsListerViewImpl(), (AbstractCrudService<LeaseTermsInstance>) GWT.create(LeaseTermsCrudService.class),
-                LeaseTermsInstance.class);
+        super(place, new LeaseTermsListerViewImpl(), (AbstractCrudService<LegalTermsDescriptor>) GWT.create(LeaseTermsCrudService.class),
+                LegalTermsDescriptor.class);
     }
 
 }

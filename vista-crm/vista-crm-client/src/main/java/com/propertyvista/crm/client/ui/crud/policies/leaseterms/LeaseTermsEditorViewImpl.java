@@ -15,11 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsEditorViewImpl extends CrmEditorViewImplBase<LeaseTermsInstance> implements LeaseTermsEditorView {
+public class LeaseTermsEditorViewImpl extends CrmEditorViewImplBase<LegalTermsDescriptor> implements LeaseTermsEditorView {
 
     public LeaseTermsEditorViewImpl() {
-        super(CrmSiteMap.Settings.LeaseTerms.class, new LeaseTermsEditorForm());
+        super(CrmSiteMap.Settings.LeaseTerms.class, new LegalTermsEditorForm());
     }
 }

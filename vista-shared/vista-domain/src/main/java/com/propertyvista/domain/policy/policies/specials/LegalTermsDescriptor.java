@@ -16,16 +16,16 @@ package com.propertyvista.domain.policy.policies.specials;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @ToStringFormat("{0}")
-public interface LeaseTermsInstance extends IEntity {
+public interface LegalTermsDescriptor extends IEntity {
 
     @ToString(index = 0)
     IPrimitive<String> name();
 
     IPrimitive<String> description();
 
-    IPrimitive<String> terms();
-
+    IList<LegalTermsContent> content();
 }

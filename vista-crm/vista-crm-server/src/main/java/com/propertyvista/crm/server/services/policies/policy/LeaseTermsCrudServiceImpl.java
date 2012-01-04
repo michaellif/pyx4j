@@ -15,12 +15,12 @@ package com.propertyvista.crm.server.services.policies.policy;
 
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsCrudServiceImpl extends GenericCrudServiceImpl<LeaseTermsInstance> implements LeaseTermsCrudService {
+public class LeaseTermsCrudServiceImpl extends GenericCrudServiceImpl<LegalTermsDescriptor> implements LeaseTermsCrudService {
 
     public LeaseTermsCrudServiceImpl() {
-        super(LeaseTermsInstance.class);
+        super(LegalTermsDescriptor.class);
     }
 
 }

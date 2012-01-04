@@ -18,19 +18,19 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsListerViewImpl extends CrmListerViewImplBase<LeaseTermsInstance> implements LeaseTermsListerView {
+public class LeaseTermsListerViewImpl extends CrmListerViewImplBase<LegalTermsDescriptor> implements LeaseTermsListerView {
 
     public LeaseTermsListerViewImpl() {
         super(CrmSiteMap.Settings.LeaseTerms.class);
         setLister(new LeaseTermsLister());
     }
 
-    public static class LeaseTermsLister extends ListerBase<LeaseTermsInstance> {
+    public static class LeaseTermsLister extends ListerBase<LegalTermsDescriptor> {
 
         public LeaseTermsLister() {
-            super(LeaseTermsInstance.class, CrmSiteMap.Settings.LeaseTerms.class, true, true);
+            super(LegalTermsDescriptor.class, CrmSiteMap.Settings.LeaseTerms.class, true, true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().description()).build());  //@formatter:on

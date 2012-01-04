@@ -13,6 +13,20 @@
  */
 package com.propertyvista.crm.client.activity.policies.leaseterms;
 
-public class LeaseTermsEditorActivity {
+import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
+
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+
+public class LeaseTermsEditorActivity extends EditorActivityBase<LegalTermsDescriptor> {
+
+    public LeaseTermsEditorActivity(Place place, IEditorView<LegalTermsDescriptor> view, AbstractCrudService<LegalTermsDescriptor> service,
+            Class<LegalTermsDescriptor> entityClass) {
+        super(place, view, service, entityClass);
+        // TODO Auto-generated constructor stub
+    }
 
 }

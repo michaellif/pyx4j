@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public interface LeaseTermsEditorView extends IEditorView<LeaseTermsInstance> {
+public interface LeaseTermsEditorView extends IEditorView<LegalTermsDescriptor> {
 
 }

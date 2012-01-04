@@ -18,11 +18,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.policy.policies.specials.LeaseTermsInstance;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
-public class LeaseTermsEditorForm extends CrmEntityForm<LeaseTermsInstance> {
-    public LeaseTermsEditorForm() {
-        super(LeaseTermsInstance.class);
+public class LegalTermsEditorForm extends CrmEntityForm<LegalTermsDescriptor> {
+    public LegalTermsEditorForm() {
+        super(LegalTermsDescriptor.class);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class LeaseTermsEditorForm extends CrmEntityForm<LeaseTermsInstance> {
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().terms())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content())).build());
         return content;
     }
 }
