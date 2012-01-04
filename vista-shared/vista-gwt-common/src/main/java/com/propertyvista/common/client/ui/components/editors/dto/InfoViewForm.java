@@ -309,8 +309,8 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 }
 
                 IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
-                return (date.isNull() || !value.before(date.getValue())) ? null : new ValidationFailure(i18n
-                        .tr("Current Move In date should not be greater than Previous Move Out date"));
+                return (date.isNull() || value.getTime() == date.getValue().getTime() - 86400000) ? null : new ValidationFailure(i18n
+                        .tr("Current Move In date should be a day after previous Move Out date"));
             }
 
         });
@@ -324,14 +324,16 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 }
 
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                return (date.isNull() || value.equals(date.getValue()) || value.before(date.getValue())) ? null : new ValidationFailure(i18n
-                        .tr("Current Move In date should not be greater than Previous Move Out date"));
+                return (date.isNull() || value.getTime() == date.getValue().getTime() + 86400000) ? null : new ValidationFailure(i18n
+                        .tr("Current Move In date should be a day after previous Move Out date"));
             }
 
         });
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+
+        //TODO notify landlord if the previous move in date is still too close to current. Possibly should be dealt with on a case by case basis
 
         // ------------------------------------------------------------------------------------------------
 

@@ -108,12 +108,12 @@ public class PTGenerator {
 //        summary.lease().type().setValue(RandomUtil.randomEnum(Service.Type.class));
         summary.lease().status().setValue(Lease.Status.Draft);
         summary.lease().unit().set(selectedUnit);
-        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2011, 2011));
-        summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-        summary.lease().expectedMoveIn().setValue(RandomUtil.randomLogicalDate(2011, 2011));
-        summary.lease().actualMoveIn().setValue(RandomUtil.randomLogicalDate(2011, 2011));
-        summary.lease().expectedMoveOut().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-        summary.lease().signDate().setValue(RandomUtil.randomLogicalDate(2012, 2012));
+        summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2012, 2012));
+        summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2013, 2013));
+        summary.lease().expectedMoveIn().setValue(RandomUtil.randomLogicalDate(2012, 2012));
+        summary.lease().actualMoveIn().setValue(RandomUtil.randomLogicalDate(2012, 2012));
+        summary.lease().expectedMoveOut().setValue(RandomUtil.randomLogicalDate(2013, 2013));
+        summary.lease().signDate().setValue(RandomUtil.randomLogicalDate(2013, 2013));
 
         summary.lease().createDate().setValue(new LogicalDate());
 
@@ -253,7 +253,7 @@ public class PTGenerator {
                 pet.weight().setValue(10 + RandomUtil.randomInt(30));
             }
 
-            pet.birthDate().setValue(RandomUtil.randomLogicalDate(1985, 2010));
+            pet.birthDate().setValue(RandomUtil.randomLogicalDate(1985, 2011));
 
             // charge line
             pet.chargeLine().set(DomainUtil.createChargeLine(ChargeType.petCharge, 20d + RandomUtil.randomInt(100)));
@@ -336,8 +336,8 @@ public class PTGenerator {
 
         populateAddress(address);
 
-        address.moveInDate().setValue(RandomUtil.randomLogicalDate(2008, 2010));
-        address.moveOutDate().setValue(RandomUtil.randomLogicalDate(2010, 2012));
+        address.moveInDate().setValue(RandomUtil.randomLogicalDate(2009, 2011));
+        address.moveOutDate().setValue(RandomUtil.randomLogicalDate(2011, 2013));
 
         address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
@@ -416,7 +416,7 @@ public class PTGenerator {
         tenantSummary.tenant().emergencyContacts().add(ec2);
 
         // Screening
-        tenantSummary.tenantScreening().screeningDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+        tenantSummary.tenantScreening().screeningDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
 
@@ -434,12 +434,13 @@ public class PTGenerator {
         }
 
         PriorAddress currentAddress = createAddress();
-        currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2012, 2013)); // this has to be in the future
+        currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2013, 2014)); // this has to be in the future
         tenantSummary.tenantScreening().currentAddress().set(currentAddress);
 
         PriorAddress previousAddress = createAddress();
-        // moveOut date for previous address is the same as the moveIn date for current address
-        Date moveOut = currentAddress.moveInDate().getValue();
+        // moveOut date for previous address is 1 day before the moveIn date for current address
+        Date moveOut = new Date();
+        moveOut.setTime(currentAddress.moveInDate().getValue().getTime() - 86400000);
         // moveIn date for previous address is a few days/years back
         int years = RandomUtil.randomInt(10) + 1;
         years *= -1;
