@@ -14,16 +14,12 @@
 package com.propertyvista.domain.policy.policies.specials;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.site.AvailableLocale;
 
@@ -36,12 +32,6 @@ public interface LegalTermsContent extends IEntity {
     @NotNull
     @Caption(name = "Caption")
     IPrimitive<String> localizedCaption();
-
-    @Owner
-    @Detached
-    @ReadOnly
-    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    LegalTermsDescriptor descriptor();
 
     @Owned
     @Length(20845)

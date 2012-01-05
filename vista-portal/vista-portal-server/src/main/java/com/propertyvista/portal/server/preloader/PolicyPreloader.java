@@ -146,7 +146,6 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         LegalTermsContent content = EntityFactory.create(LegalTermsContent.class);
         content.localizedCaption().setValue(i18n.tr("Basic DEMO Terms"));
         content.content().setValue(leaseTerms);
-        content.descriptor().set(descriptor);
         descriptor.content().add(content);
         policy.summaryTerms().add(descriptor);
 
@@ -155,7 +154,6 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         content = EntityFactory.create(LegalTermsContent.class);
         content.localizedCaption().setValue(i18n.tr("Basic DEMO One Time Payment Terms"));
         content.content().setValue(leaseTerms);
-        content.descriptor().set(descriptor);
         descriptor.content().add(content);
         policy.oneTimePaymentTerms().set(descriptor);
 
@@ -164,7 +162,6 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         content = EntityFactory.create(LegalTermsContent.class);
         content.localizedCaption().setValue(i18n.tr("Basic DEMO Recurring Payment Terms"));
         content.content().setValue(leaseTerms);
-        content.descriptor().set(descriptor);
         descriptor.content().add(content);
         policy.recurrentPaymentTerms().set(descriptor);
 

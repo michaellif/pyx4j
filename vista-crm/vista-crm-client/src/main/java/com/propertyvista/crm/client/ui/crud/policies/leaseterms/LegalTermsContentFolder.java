@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
@@ -49,12 +48,6 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
         } else {
             return super.create(member);
         }
-    }
-
-    @Override
-    protected void createNewEntity(LegalTermsContent newEntity, AsyncCallback<LegalTermsContent> callback) {
-        newEntity.descriptor().set(parentForm.getValue());
-        super.createNewEntity(newEntity, callback);
     }
 
     @Override

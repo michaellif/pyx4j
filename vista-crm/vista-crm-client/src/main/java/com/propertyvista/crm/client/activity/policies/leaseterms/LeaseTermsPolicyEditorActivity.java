@@ -54,7 +54,6 @@ public class LeaseTermsPolicyEditorActivity extends EditorActivityBase<LeaseTerm
         LegalTermsDescriptor termsDescriptor = EntityFactory.create(LegalTermsDescriptor.class);
 
         termsDescriptor.content().add(EntityFactory.create(LegalTermsContent.class));
-        termsDescriptor.content().get(0).descriptor().set(termsDescriptor);
 
         return termsDescriptor;
     }
