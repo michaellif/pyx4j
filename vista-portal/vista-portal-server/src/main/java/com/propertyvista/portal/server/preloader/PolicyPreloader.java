@@ -13,12 +13,16 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import com.propertvista.generator.BuildingsGenerator;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.DefaultPoliciesNode;
@@ -130,40 +134,39 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private LegalTermsPolicy createDefaultLeaseTermsPolicy() {
         LegalTermsPolicy policy = EntityFactory.create(LegalTermsPolicy.class);
 
-        LegalTermsDescriptor summaryTermDescriptor = EntityFactory.create(LegalTermsDescriptor.class);
-        summaryTermDescriptor.name().setValue(i18n.tr("Basic DEMO Terms"));
-        policy.summaryTerms().add(summaryTermDescriptor);
+        String leaseTerms = "failed to get lease termd during the preload phase";
+        try {
+            leaseTerms = IOUtils.getTextResource("leaseTerms.html", BuildingsGenerator.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         LegalTermsDescriptor descriptor = EntityFactory.create(LegalTermsDescriptor.class);
+        descriptor.name().setValue(i18n.tr("Basic DEMO Terms"));
+        LegalTermsContent content = EntityFactory.create(LegalTermsContent.class);
+        content.localizedCaption().setValue(i18n.tr("Basic DEMO Terms"));
+        content.content().setValue(leaseTerms);
+        content.descriptor().set(descriptor);
+        descriptor.content().add(content);
+        policy.summaryTerms().add(descriptor);
+
+        descriptor = EntityFactory.create(LegalTermsDescriptor.class);
         descriptor.name().setValue(i18n.tr("Basic DEMO One Time Payment Terms"));
+        content = EntityFactory.create(LegalTermsContent.class);
+        content.localizedCaption().setValue(i18n.tr("Basic DEMO One Time Payment Terms"));
+        content.content().setValue(leaseTerms);
+        content.descriptor().set(descriptor);
+        descriptor.content().add(content);
         policy.oneTimePaymentTerms().set(descriptor);
 
         descriptor = EntityFactory.create(LegalTermsDescriptor.class);
         descriptor.name().setValue(i18n.tr("Basic DEMO Recurring Payment Terms"));
-        policy.oneTimePaymentTerms().set(descriptor);
-
-        LegalTermsContent summaryTermContent = EntityFactory.create(LegalTermsContent.class);
-//            summaryTermContent.locale().set(locale);
-        summaryTermContent.localizedCaption().setValue(i18n.tr("Basic DEMO Terms in "));
-        summaryTermContent.content().setValue("This is a demo agreement text");
-        summaryTermContent.descriptor().set(policy.summaryTerms().get(0));
-        policy.summaryTerms().get(0).content().add(summaryTermContent);
-
-        LegalTermsContent content = EntityFactory.create(LegalTermsContent.class);
-//            content.locale().set(locale);
-        content.localizedCaption().setValue(i18n.tr("Basic DEMO One Time Payment Terms in "));
-        content.content().setValue("This is a demo one time payment terms text");
-
-        content.descriptor().set(policy.oneTimePaymentTerms());
-        policy.oneTimePaymentTerms().content().add(content);
-
         content = EntityFactory.create(LegalTermsContent.class);
-//            content.locale().set(locale);
-        content.localizedCaption().setValue(i18n.tr("Basic DEMO Recurring Payment Terms in "));
-        content.content().setValue("This is a demo Recurring payment terms text");
-
-        content.descriptor().set(policy.recurrentPaymentTerms());
-        policy.recurrentPaymentTerms().content().add(content);
+        content.localizedCaption().setValue(i18n.tr("Basic DEMO Recurring Payment Terms"));
+        content.content().setValue(leaseTerms);
+        content.descriptor().set(descriptor);
+        descriptor.content().add(content);
+        policy.recurrentPaymentTerms().set(descriptor);
 
         Persistence.service().merge(policy);
 

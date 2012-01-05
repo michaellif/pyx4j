@@ -13,13 +13,9 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.pyx4j.entity.server.Persistence;
-
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
 public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalTermsPolicy, LeaseTermsPolicyDTO> {
 
@@ -29,22 +25,11 @@ public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<Le
 
     @Override
     protected void persistDBO(LegalTermsPolicy dbo, LeaseTermsPolicyDTO in) {
-//        for (LegalTermsDescriptor descriptor : dbo.summaryTerms()) {
-//            persistDescriptor(descriptor);
-//        }
-//        persistDescriptor(dbo.paymentTerms1());
-//        persistDescriptor(dbo.paymentTerms2());
-
+        // FIXME remove these printlns after its clear what's wrong
+        System.out.println(dbo.summaryTerms().get(0).content().get(0));
+        System.out.println(dbo.oneTimePaymentTerms().content().get(0));
+        System.out.println(dbo.recurrentPaymentTerms().content().get(0));
         super.persistDBO(dbo, in);
-    }
-
-    private void persistDescriptor(LegalTermsDescriptor descriptor) {
-        if (!descriptor.isNull()) {
-            for (LegalTermsContent content : descriptor.content()) {
-                Persistence.service().persist(content);
-            }
-            Persistence.service().persist(descriptor);
-        }
     }
 
 }

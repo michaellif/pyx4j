@@ -29,6 +29,8 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
     public GenericPolicyCrudService(Class<POLICY> dboClass, Class<POLICY_DTO> dtoClass) {
         super(dboClass, dtoClass);
+
+        // TODO check how multiple parametrized inheritance may be acheived (i need "POLICY_DTO extends POLICY & PolicyDTOBase (maybe PolicyDTOBase should extend Policy") 
         if (!PolicyDTOBase.class.isAssignableFrom(dtoClass)) {
             throw new Error("POLICY_DTO must extends PolicyDTOBase");
         }
@@ -83,7 +85,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
                     // TODO maybe better to send a WARNING message to a log???
                     throw new Error("Old policy to node binding was not found");
                 } else if (oldPolicyAtNode.node().getInstanceValueClass().equals(DefaultPoliciesNode.class)) {
-                    dbo.setPrimaryKey(null); // make a copy
+                    dbo.id().set(null); // make a copy
                 } else {
                     Persistence.service().delete(oldPolicyAtNode);
                 }
@@ -92,7 +94,12 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             // if we got here it means that this node already had a policy,
             // hence the natural/intuitive thing to do seems to be to override the old policy, i.e. remove it
             // (so that we don't end up with keeping an orphan policy in the DB)
-            Persistence.service().delete(dbo.getInstanceValueClass(), policyAtNode.policy().getPrimaryKey());
+            try {
+                Persistence.service().delete(dbo.getInstanceValueClass(), policyAtNode.policy().getPrimaryKey());
+            } catch (Throwable error) {
+                // TODO log warning that it can't be deleted
+            }
+            dbo.id().set(null);
         }
 
         policyAtNode.policy().set(dbo);

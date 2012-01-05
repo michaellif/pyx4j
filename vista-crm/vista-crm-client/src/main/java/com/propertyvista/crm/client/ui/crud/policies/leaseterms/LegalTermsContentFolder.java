@@ -84,7 +84,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
 
             int row = -1;
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).labelWidth(10).build());
-            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().localizedCaption()), 10).labelWidth(10).build());
+            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().localizedCaption()), 20).labelWidth(10).build());
 
             CComponent<?, ?> termsContentComp = null;
             if (isEditable()) {

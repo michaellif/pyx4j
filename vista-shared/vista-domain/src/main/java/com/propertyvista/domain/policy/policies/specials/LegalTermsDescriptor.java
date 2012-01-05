@@ -16,6 +16,7 @@ package com.propertyvista.domain.policy.policies.specials;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface LegalTermsDescriptor extends IEntity {
 
     @ToString(index = 0)
+    @NotNull
     IPrimitive<String> name();
 
     IPrimitive<String> description();

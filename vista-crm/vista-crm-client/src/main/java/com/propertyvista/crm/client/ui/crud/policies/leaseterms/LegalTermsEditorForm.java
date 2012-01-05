@@ -34,10 +34,10 @@ public class LegalTermsEditorForm extends CEntityDecoratableEditor<LegalTermsDes
 
         int row = -1;
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).labelWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).labelWidth(10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description(), new CTextArea()), 60).labelWidth(10).build());
         content.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), new LegalTermsContentFolder(this)), 60).labelWidth(10).build());
+        content.setWidget(++row, 0, inject(proto().content(), new LegalTermsContentFolder(this)));
 
         return content;
     }

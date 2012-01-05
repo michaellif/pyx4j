@@ -27,6 +27,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.site.AvailableLocale;
 
+@Caption(name = "Localized Content")
 public interface LegalTermsContent extends IEntity {
 
     @NotNull
