@@ -23,7 +23,7 @@ import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 public class LeaseTermsPolicyListerViewImpl extends CrmListerViewImplBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyListerView {
 
     public LeaseTermsPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.NumberOfIds.class);
+        super(CrmSiteMap.Settings.Policies.LeaseTerms.class);
         setLister(new LeaseTermsPolicyLister());
     }
 

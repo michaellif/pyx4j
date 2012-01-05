@@ -24,7 +24,6 @@ import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 
 public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends POLICY> extends GenericCrudServiceDtoImpl<POLICY, POLICY_DTO> {
 
@@ -93,7 +92,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             // if we got here it means that this node already had a policy,
             // hence the natural/intuitive thing to do seems to be to override the old policy, i.e. remove it
             // (so that we don't end up with keeping an orphan policy in the DB)
-            Persistence.service().delete(NumberOfIDsPolicy.class, policyAtNode.policy().getPrimaryKey());
+            Persistence.service().delete(dbo.getInstanceValueClass(), policyAtNode.policy().getPrimaryKey());
         }
 
         policyAtNode.policy().set(dbo);

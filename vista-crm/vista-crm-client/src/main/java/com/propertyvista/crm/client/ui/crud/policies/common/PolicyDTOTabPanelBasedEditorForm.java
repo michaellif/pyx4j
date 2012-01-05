@@ -20,8 +20,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -47,6 +49,7 @@ import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
@@ -65,10 +68,10 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
     private static final I18n i18n = I18n.get(PolicyDTOEditorForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+    private VistaTabLayoutPanel tabPanel;
 
     @SuppressWarnings("unchecked")
-    public static final List<NodeTypeWrapper<?>> NODE_TYPE_OPTIONS = Arrays.asList(//@formatter:off
+    private static final List<NodeTypeWrapper<?>> NODE_TYPE_OPTIONS = Arrays.asList(//@formatter:off
                 NodeTypeWrapper.wrap(AptUnit.class),
                 NodeTypeWrapper.wrap(Floorplan.class),
                 NodeTypeWrapper.wrap(Building.class),
@@ -83,11 +86,15 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
     @Override
     public IsWidget createContent() {
-        tabPanel.add(createScopeTab(), i18n.tr("Scope"));
-        for (TabDescriptor d : createCustomTabPanels()) {
-            tabPanel.add(d.widget, d.caption);
-        }
+        tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
         tabPanel.setSize("100%", "100%");
+
+        tabPanel.add(new CrmScrollPanel(createScopeTab()), i18n.tr("Scope"));
+
+        for (TabDescriptor d : createCustomTabPanels()) {
+            tabPanel.add(new CrmScrollPanel(d.widget), d.caption);
+        }
+
         return tabPanel;
     }
 
@@ -105,6 +112,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
     private Widget createScopeTab() {
         FormFlexPanel content = new FormFlexPanel();
+        content.setHeight("3em");
         int row = -1;
 
         final CComboBox<NodeTypeWrapper<?>> selectPolicyScopeBox = new CComboBox<NodeTypeWrapper<?>>();
@@ -126,29 +134,107 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             }
         });
 
+        content.setWidget(++row, 0, new DecoratorBuilder(selectPolicyScopeBox).customLabel(i18n.tr("Scope")).labelWidth(8).componentWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
+                .componentWidth(15).build());
+
+        // register handler that propagates scope/node type to the scope box on form population
         addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
-                    NodeTypeWrapper<?> selectedPolicyScope = getValue() == null || getValue().node().isNull() ? null : NodeTypeWrapper
+                    @SuppressWarnings("unchecked")
+                    NodeTypeWrapper<?> policyScope = getValue() == null || getValue().node().isNull() ? null : NodeTypeWrapper
                             .wrap((Class<? extends PolicyNode>) getValue().node().getInstanceValueClass());
-                    if (selectedPolicyScope == null || selectedPolicyScope.getType().equals(DefaultPoliciesNode.class)) {
+
+                    if (policyScope == null || policyScope.getType().equals(DefaultPoliciesNode.class)) {
                         selectPolicyScopeBox.setValue(null, true);
                     } else {
-                        selectPolicyScopeBox.setValue(selectedPolicyScope, true);
+                        selectPolicyScopeBox.setValue(policyScope, true);
                     }
                 }
             }
         });
 
-        content.setWidget(++row, 0, new DecoratorBuilder(selectPolicyScopeBox).customLabel(i18n.tr("Scope")).labelWidth(8).componentWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
-                .componentWidth(15).build());
-
         return content;
     }
 
+    /**
+     * A component that just shows the string view of a node and in edit mode and allows to choose the node via dialog that shows a list of nodes.
+     * 
+     * @author ArtyomB
+     */
+    private class PolicyNodeEditor extends CEntityEditor<PolicyNode> {
+
+        public PolicyNodeEditor() {
+            super(PolicyNode.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel content = new FormFlexPanel();
+
+            int col = -1;
+            if (isEditable()) {
+                content.setWidget(0, ++col, new CButton(i18n.tr("Select") + "...", new Command() {
+                    @Override
+                    public void execute() {
+                        OkCancelDialog selectScopeDialog = selectScopeDialogOf(getValue().getInstanceValueClass());
+                        if (selectScopeDialog != null) {
+                            selectScopeDialog.show();
+                        } else {
+                            Window.alert("NOT IMPLEMENTED YET: here be node selection dialog for node type: " + (getValue().getInstanceValueClass().getName()));
+                        }
+                    }
+                }));
+
+                content.getFlexCellFormatter().getElement(0, col).getStyle().setPaddingRight(2d, Unit.EM);
+            }
+
+            final CLabel scopeRepresentation = new CLabel();
+            scopeRepresentation.setWidth("20em");
+            content.setWidget(0, ++col, scopeRepresentation);
+
+            // TODO not sure why I use both property change handler and value change handler, value change supposed to be enough            
+            addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
+                        scopeRepresentation.setValue(!getValue().isEmpty() ? getValue().cast().getStringView() : i18n.tr("Nothing selected"));
+                    }
+                }
+            });
+
+            addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<PolicyNode> event) {
+                    scopeRepresentation.setValue(!event.getValue().isEmpty() ? event.getValue().cast().getStringView() : i18n.tr("Nothing selected"));
+                }
+            });
+
+            return content;
+        }
+
+        private <E extends IEntity> OkCancelDialog selectScopeDialogOf(Class<E> policyNodeClass) {
+            String caption = i18n.tr("Select {0}", EntityFactory.getEntityMeta(policyNodeClass).getCaption());
+            PolicyNodeSetter policyNodeSetter = new PolicyNodeSetter() {
+                @Override
+                public void setPolicyNode(PolicyNode policyNode) {
+                    PolicyNodeEditor.this.setValue(policyNode);
+                }
+            };
+
+            if (AptUnit.class.equals(policyNodeClass)) {
+                return new AptUnitSelectDialog(policyNodeSetter);
+            } else if (Building.class.equals(policyNodeClass)) {
+                return new BuildingSelectDialog(policyNodeSetter);
+            }
+            return null;
+        }
+    }
+
     public static class TabDescriptor {
+
         public final Widget widget;
 
         public final String caption;
@@ -159,7 +245,8 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         }
     }
 
-    public static class NodeTypeWrapper<T extends PolicyNode> {
+    private static class NodeTypeWrapper<T extends PolicyNode> {
+
         private final String toString;
 
         private final Class<T> nodeType;
@@ -183,107 +270,81 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         }
     }
 
-    /**
-     * This component just shows the string view of a node and in edit mode allows to choose the node via dialog that shows a list of nodes.
-     * 
-     * @author ArtyomB
-     */
-    private class PolicyNodeEditor extends CEntityEditor<PolicyNode> {
-
-        public PolicyNodeEditor() {
-            super(PolicyNode.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
-
-            final CLabel label = new CLabel();
-            int col = -1;
-
-            content.setWidget(0, ++col, label);
-            if (isEditable()) {
-                content.setWidget(0, ++col, new CButton(i18n.tr("Select"), new Command() {
-                    @Override
-                    public void execute() {
-                        OkCancelDialog selectDialog = selectDialogOf(getValue().getInstanceValueClass());
-                        if (selectDialog != null) {
-                            selectDialog.show();
-                        } else {
-                            Window.alert("NOT IMPLEMENTED YET: here be node selection dialog for node type: " + (getValue().getInstanceValueClass().getName()));
-                        }
-                    }
-                }));
-            }
-
-            addPropertyChangeHandler(new PropertyChangeHandler() {
-                @Override
-                public void onPropertyChange(PropertyChangeEvent event) {
-                    if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
-                        label.setValue(!getValue().isEmpty() ? getValue().cast().getStringView() : i18n.tr("Nothing selected"));
-                    }
-                }
-            });
-
-            addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<PolicyNode> event) {
-                    label.setValue(!event.getValue().isEmpty() ? event.getValue().cast().getStringView() : i18n.tr("Nothing selected"));
-                }
-            });
-            return content;
-        }
-
-        private <E extends IEntity> OkCancelDialog selectDialogOf(Class<E> policyNodeClass) {
-            if (AptUnit.class.equals(policyNodeClass)) {
-                return new ListerBasedSelectDialog<AptUnit>(AptUnit.class) {
-                    @Override
-                    public boolean onClickOk() {
-                        PolicyNodeEditor.this.setValue((AptUnit) getSelectedItem().duplicate());
-                        return true;
-                    }
-                };
-            } else if (Building.class.equals(policyNodeClass)) {
-
-                return new ListerBasedSelectDialog<Building>(Building.class) {
-                    @Override
-                    public boolean onClickOk() {
-                        PolicyNodeEditor.this.setValue((Building) getSelectedItem().duplicate());
-                        return true;
-                    }
-                };
-            }
-            return null;
-        }
+    private interface PolicyNodeSetter {
+        void setPolicyNode(PolicyNode policyNode);
     }
 
     private abstract static class ListerBasedSelectDialog<E extends PolicyNode> extends OkCancelDialog {
 
-        private final IListerView<E> listerView;
+        private final PolicyNodeSetter policyNodeSetter;
 
-        public ListerBasedSelectDialog(Class<E> clazz) {
+        private final DeckLayoutPanel containerPanel;
+
+        public ListerBasedSelectDialog(Class<E> clazz, PolicyNodeSetter policyNodeSetter) {
             super(i18n.tr("Select {0}...", EntityFactory.getEntityMeta(clazz).getCaption()));
-            if (clazz.equals(AptUnit.class)) {
-                IListerView<AptUnit> unitListerView = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister());
-                new ListerActivityBase<AptUnit>(new CrmSiteMap.Settings.Policies(), unitListerView,
-                        (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
-                this.listerView = (IListerView<E>) unitListerView;
-            } else if (clazz.equals(Building.class)) {
-                IListerView<Building> buildingListerView = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
-                (new ListerActivityBase<Building>(new CrmSiteMap.Settings.Policies(), buildingListerView,
-                        (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class)).populate();
-                this.listerView = (IListerView<E>) buildingListerView;
+            this.policyNodeSetter = policyNodeSetter;
+            this.containerPanel = new DeckLayoutPanel();
+            this.containerPanel.setSize("800px", "600px");
+            setBody(containerPanel);
+        }
 
+        @Override
+        public boolean onClickOk() {
+            PolicyNode policyNode = getSelectedItem();
+            if (policyNode != null) {
+                policyNodeSetter.setPolicyNode(getSelectedItem());
+                return true;
             } else {
-                this.listerView = null;
-            }
-            if (this.listerView != null) {
-                setBody(this.listerView.asWidget());
+                return false;
             }
         }
 
-        public E getSelectedItem() {
-            return listerView.getLister().getSelectedItem();
+        protected DeckLayoutPanel getContainerPanel() {
+            return containerPanel;
+        }
+
+        protected abstract E getSelectedItem();
+    }
+
+    private static class AptUnitSelectDialog extends ListerBasedSelectDialog<AptUnit> {
+
+        private final IListerView<AptUnit> unitListerView;
+
+        public AptUnitSelectDialog(PolicyNodeSetter policyNodeSetter) {
+            super(AptUnit.class, policyNodeSetter);
+
+            unitListerView = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister());
+            @SuppressWarnings("unchecked")
+            final ListerActivityBase<AptUnit> unitListerActivity = new ListerActivityBase<AptUnit>(new CrmSiteMap.Settings.Policies(), unitListerView,
+                    (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
+            // TODO not sure if need to use that event bus thing, maybe just pass NULL
+            unitListerActivity.start(getContainerPanel(), new SimpleEventBus());
+            getContainerPanel().setSize("800px", "300px");
+        }
+
+        @Override
+        protected AptUnit getSelectedItem() {
+            return unitListerView.getLister().getSelectedItem();
+        }
+    }
+
+    private static class BuildingSelectDialog extends ListerBasedSelectDialog<Building> {
+
+        private final IListerView<Building> buildingListerView;
+
+        public BuildingSelectDialog(PolicyNodeSetter policyNodeSetter) {
+            super(Building.class, policyNodeSetter);
+
+            buildingListerView = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
+            @SuppressWarnings("unchecked")
+            final ListerActivityBase<Building> buildingListerActivity = new ListerActivityBase<Building>(new CrmSiteMap.Settings.Policies(),
+                    buildingListerView, (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
+            buildingListerActivity.start(getContainerPanel(), new SimpleEventBus());
+        }
+
+        @Override
+        protected Building getSelectedItem() {
+            return buildingListerView.getLister().getSelectedItem();
         }
     }
 }

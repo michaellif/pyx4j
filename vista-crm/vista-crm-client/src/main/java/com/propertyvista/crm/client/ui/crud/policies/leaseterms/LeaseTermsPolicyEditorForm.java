@@ -45,7 +45,9 @@ public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
                 .getCaption()),
 
         new TabDescriptor(inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())).asWidget(), proto().recurrentPaymentTerms().getMeta()
-                .getCaption()));
+                .getCaption())
+
+        );
     }
 
     private static class LegalTermsDescriptorFolder extends VistaBoxFolder<LegalTermsDescriptor> {

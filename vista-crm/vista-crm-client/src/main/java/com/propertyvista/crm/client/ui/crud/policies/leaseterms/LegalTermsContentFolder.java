@@ -63,7 +63,11 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
         this.addValueValidator(new EditableValueValidator<IList<LegalTermsContent>>() {
             @Override
             public ValidationFailure isValid(CComponent<IList<LegalTermsContent>, ?> component, IList<LegalTermsContent> value) {
-                return !value.isEmpty() ? null : new ValidationFailure(i18n.tr("At least one content item is necessary"));
+                if (value == null || value.isEmpty()) {
+                    return new ValidationFailure(i18n.tr("At least one content item is necessary"));
+                } else {
+                    return null;
+                }
             }
         });
     }
