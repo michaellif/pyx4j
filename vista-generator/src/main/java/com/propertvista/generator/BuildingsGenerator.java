@@ -15,9 +15,6 @@ package com.propertvista.generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +27,6 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
-import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -510,22 +506,15 @@ public class BuildingsGenerator {
             detail.belongsTo().set(unit);
         }
 
-        Calendar available = new GregorianCalendar();
-        // TODO Dima, We need to Use fixed date for values used in tests, and
-        // current time for Ctrl+Q user :)
-        available.setTime(new Date());
-        available.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
-        DateUtils.dayStart(available);
-
         // TODO populate currentOccupancies and then set avalableForRent using
         // some ServerSideDomainUtils
-        unit.availableForRent().setValue(new LogicalDate(available.getTime().getTime()));
+        unit.availableForRent().setValue(RandomUtil.randomLogicalDate(2012, 2012));
 
         AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
         occupancy.unit().set(unit);
         occupancy.status().setValue(AptUnitOccupancy.Status.available);
-        occupancy.dateFrom().setValue(new LogicalDate(available.getTime().getTime()));
-        occupancy.dateTo().setValue(new LogicalDate(available.getTime().getTime() + RandomUtil.randomInt()));
+        occupancy.dateFrom().setValue(unit.availableForRent().getValue());
+        occupancy.dateTo().setValue(new LogicalDate(occupancy.dateFrom().getValue().getTime() + RandomUtil.randomInt()));
         occupancy.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
         data.occupancies().add(occupancy);
 

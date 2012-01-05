@@ -194,8 +194,10 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     public void populateUnitLister(Building selected) {
-        if (selected != null && !selected.isEmpty()) {
+        if (selected != null) {
             unitsLister.setParentFiltering(selected.getPrimaryKey());
+        } else {
+            unitsLister.setParentFiltering(null);
         }
         if (leaseFrom != null && leaseTo != null) {
             List<DataTableFilterData> filters = new ArrayList<DataTableFilterData>(2);

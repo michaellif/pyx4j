@@ -109,11 +109,11 @@ public class PTGenerator {
         summary.lease().status().setValue(Lease.Status.Draft);
         summary.lease().unit().set(selectedUnit);
         summary.lease().leaseFrom().setValue(RandomUtil.randomLogicalDate(2012, 2012));
-        summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2013, 2013));
+        summary.lease().leaseTo().setValue(RandomUtil.randomLogicalDate(2013, 2015));
         summary.lease().expectedMoveIn().setValue(RandomUtil.randomLogicalDate(2012, 2012));
         summary.lease().actualMoveIn().setValue(RandomUtil.randomLogicalDate(2012, 2012));
         summary.lease().expectedMoveOut().setValue(RandomUtil.randomLogicalDate(2013, 2013));
-        summary.lease().signDate().setValue(RandomUtil.randomLogicalDate(2013, 2013));
+        summary.lease().signDate().setValue(RandomUtil.randomLogicalDate(2012, 2012));
 
         summary.lease().createDate().setValue(new LogicalDate());
 
