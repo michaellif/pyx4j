@@ -18,6 +18,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -43,6 +45,13 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
     public LeaseTemsFolder() {
         super(LegalTermsDescriptorDTO.class, false);
+    }
+
+    @Override
+    public IFolderItemDecorator<LegalTermsDescriptorDTO> createItemDecorator() {
+        BoxFolderItemDecorator<LegalTermsDescriptorDTO> decor = (BoxFolderItemDecorator<LegalTermsDescriptorDTO>) super.createItemDecorator();
+        decor.setCollapsible(false);
+        return decor;
     }
 
     @Override
