@@ -69,11 +69,12 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
             int row = -1;
             main.setWidget(++row, 0, inject(proto().content().content()));
-            main.setBR(++row, 0, 2);
+            main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder()));
 
             main.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LegalTermsDescriptor.name());
-            return main;
+            main.setWidth("100%");
+            return new ScrollPanel(main);
         }
     }
 

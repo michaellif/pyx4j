@@ -71,10 +71,9 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
             int row = -1;
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant().tenant().person().name(), new CEntityLabel<Name>()), 25).build());
-            main.setBR(++row, 0, 2);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName(), new CTextField()), 25).build());
 
-            row = 1;
+            row = -1;
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().ipAddress()), 20).build());
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().timestamp()), 20).build());
 
