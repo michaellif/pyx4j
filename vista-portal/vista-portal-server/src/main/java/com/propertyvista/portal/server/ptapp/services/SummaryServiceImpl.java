@@ -133,16 +133,18 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         for (LegalTermsDescriptor terms : termsPolicy.summaryTerms()) {
-            LegalTermsDescriptorDTO desc = EntityFactory.create(LegalTermsDescriptorDTO.class);
-            desc.name().set(terms.name());
-            desc.description().set(terms.description());
+            LegalTermsDescriptorDTO ltd = EntityFactory.create(LegalTermsDescriptorDTO.class);
+            ltd.name().set(terms.name());
+            ltd.description().set(terms.description());
             if (!terms.content().isEmpty()) {
-                desc.content().set(terms.content().get(0));
+                ltd.content().set(terms.content().get(0));
             }
 
             for (IAgree agree : agrees) {
-                desc.agrees().add((IAgree) agree.duplicate());
+                ltd.agrees().add((IAgree) agree.duplicate());
             }
+
+            summary.summaryTerms().add(ltd);
         }
 
         summary.signed().setValue(allSigned);

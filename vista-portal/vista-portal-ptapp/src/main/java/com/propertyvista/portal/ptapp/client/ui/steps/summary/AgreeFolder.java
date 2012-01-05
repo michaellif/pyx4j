@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,6 +30,7 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.domain.ptapp.IAgree;
 
 public class AgreeFolder extends VistaTableFolder<IAgree> {
@@ -78,6 +80,14 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
             IsWidget c = super.createContent();
             c.asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.IAgree.name());
             return c;
+        }
+
+        @Override
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            if (proto().person().name() == column.getObject()) {
+                return inject(proto().person().name(), new CEntityLabel<Name>());
+            }
+            return super.createCell(column);
         }
 
         @Override
