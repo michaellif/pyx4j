@@ -22,6 +22,7 @@ import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -73,7 +74,9 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, inject(proto().content().content()));
+            CLabel content = new CLabel();
+            content.setAllowHtml(true);
+            main.setWidget(++row, 0, inject(proto().content().content(), content));
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder()));
 

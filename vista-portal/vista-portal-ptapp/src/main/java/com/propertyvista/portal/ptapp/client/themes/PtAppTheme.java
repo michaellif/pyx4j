@@ -129,8 +129,11 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-color", "#bbb");
 
+        style.addProperty("font-weight", "normal");
+
         style.addProperty("background-color", "white");
         style.addProperty("color", "black");
+
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Agrees));
