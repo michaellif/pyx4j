@@ -47,14 +47,14 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LegalTermsDescriptorDTO) {
-            return new DigitalSignatureEditor();
+            return new LeaseTermsEditor();
         }
         return super.create(member);
     }
 
-    private class DigitalSignatureEditor extends CEntityDecoratableEditor<LegalTermsDescriptorDTO> {
+    private class LeaseTermsEditor extends CEntityDecoratableEditor<LegalTermsDescriptorDTO> {
 
-        public DigitalSignatureEditor() {
+        public LeaseTermsEditor() {
             super(LegalTermsDescriptorDTO.class);
         }
 

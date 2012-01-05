@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
@@ -127,6 +128,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
         // fill Lease Terms:
         LegalTermsPolicy termsPolicy = (LegalTermsPolicy) PolicyManager.effectivePolicy(PtAppContext.getCurrentUserLease().unit(), LegalTermsPolicy.class);
+        if (termsPolicy == null) {
+            throw new UserRuntimeException("There is no lease policy for the unit!?.");
+        }
+
         for (LegalTermsDescriptor terms : termsPolicy.summaryTerms()) {
             LegalTermsDescriptorDTO desc = EntityFactory.create(LegalTermsDescriptorDTO.class);
             desc.name().set(terms.name());
@@ -134,7 +139,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             if (!terms.content().isEmpty()) {
                 desc.content().set(terms.content().get(0));
             }
-            desc.agrees().addAll(agrees);
+
+            for (IAgree agree : agrees) {
+                desc.agrees().add((IAgree) agree.duplicate());
+            }
         }
 
         summary.signed().setValue(allSigned);
