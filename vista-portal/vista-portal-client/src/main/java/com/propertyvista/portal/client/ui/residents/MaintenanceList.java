@@ -32,6 +32,8 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
     private static I18n i18n = I18n.get(MaintenanceList.class);
 
+    public static final String NoRecordsFound = i18n.tr("No Records Found");
+
     private MaintenanceView.Presenter presenter;
 
     private final FormFlexPanel openRequestsPanel;
@@ -62,9 +64,6 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         openRequestsPanel.removeAllRows();
 
         openRequestsPanel.setWidth("100%");
-        openRequestsPanel.getColumnFormatter().setWidth(0, "250px");
-        openRequestsPanel.getColumnFormatter().setWidth(1, "75px");
-        openRequestsPanel.getColumnFormatter().setWidth(2, "75px");
 
         int row = -1;
 
@@ -78,32 +77,46 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         });
 
         openRequestsPanel.setH1(++row, 0, 1, i18n.tr("OPEN TICKETS"), newTicket);
-        openRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        openRequestsPanel.setHTML(++row, 0, i18n.tr("Open Tickets"));
-        openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+        if (openRequests.size() > 0) {
+            openRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        openRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
-        openRequestsPanel.setHTML(row, 2, "");
+            openRequestsPanel.getColumnFormatter().setWidth(0, "250px");
+            openRequestsPanel.getColumnFormatter().setWidth(1, "75px");
+            openRequestsPanel.getColumnFormatter().setWidth(2, "75px");
 
-        openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
-
-        for (final MaintananceDTO request : openRequests) {
-            openRequestsPanel.setHTML(++row, 0, request.description().getStringView());
+            openRequestsPanel.setHTML(++row, 0, i18n.tr("Open Tickets"));
             openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
-            openRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView() + "</i>");
+            openRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
+            openRequestsPanel.setHTML(row, 2, "");
 
-            Anchor cancelTicket = new Anchor(i18n.tr("Cancel"));
-            cancelTicket.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    presenter.cancelRequest(request);
-                }
-            });
+            openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            openRequestsPanel.setWidget(row, 2, cancelTicket);
+            for (final MaintananceDTO request : openRequests) {
+                openRequestsPanel.setHTML(++row, 0, request.description().getStringView());
+                openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
+                openRequestsPanel
+                        .setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView() + "</i>");
+
+                Anchor cancelTicket = new Anchor(i18n.tr("Cancel"));
+                cancelTicket.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        presenter.cancelRequest(request);
+                    }
+                });
+
+                openRequestsPanel.setWidget(row, 2, cancelTicket);
+
+                openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+            }
+        } else {
+            openRequestsPanel.setHTML(++row, 0, NoRecordsFound);
+            openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+            openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+            openRequestsPanel.setHTML(++row, 0, "");
             openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
         }
     }
@@ -115,37 +128,46 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         int row = -1;
 
         historyRequestsPanel.setWidth("100%");
-        historyRequestsPanel.getColumnFormatter().setWidth(0, "250px");
-        historyRequestsPanel.getColumnFormatter().setWidth(1, "75px");
-        historyRequestsPanel.getColumnFormatter().setWidth(2, "75px");
 
         historyRequestsPanel.setH1(++row, 0, 1, i18n.tr("HISTORY"));
-        historyRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        historyRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
-        historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+        if (historyRequests.size() > 0) {
+            historyRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        historyRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
-        historyRequestsPanel.setHTML(row, 2, i18n.tr("Rate Service"));
-        historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+            historyRequestsPanel.getColumnFormatter().setWidth(0, "250px");
+            historyRequestsPanel.getColumnFormatter().setWidth(1, "75px");
+            historyRequestsPanel.getColumnFormatter().setWidth(2, "75px");
 
-        for (MaintananceDTO request : historyRequests) {
-            historyRequestsPanel.setHTML(++row, 0, request.description().getStringView());
+            historyRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
             historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
-            historyRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView()
-                    + "</i>");
+            historyRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
+            historyRequestsPanel.setHTML(row, 2, i18n.tr("Rate Service"));
+            historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            RateIt rateIt = new RateIt(5);
-            Integer rate = request.satisfactionSurvey().rating().getValue();
-            if (rate != null) {
-                rateIt.setRating(rate);
+            for (MaintananceDTO request : historyRequests) {
+                historyRequestsPanel.setHTML(++row, 0, request.description().getStringView());
+                historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+
+                historyRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView()
+                        + "</i>");
+
+                RateIt rateIt = new RateIt(5);
+                Integer rate = request.satisfactionSurvey().rating().getValue();
+                if (rate != null) {
+                    rateIt.setRating(rate);
+                }
+                historyRequestsPanel.setWidget(row, 2, rateIt);
+
+                historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
-            historyRequestsPanel.setWidget(row, 2, rateIt);
-
+        } else {
+            historyRequestsPanel.setHTML(++row, 0, NoRecordsFound);
+            historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+            historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+            historyRequestsPanel.setHTML(++row, 0, "");
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
         }
-
     }
 
 }

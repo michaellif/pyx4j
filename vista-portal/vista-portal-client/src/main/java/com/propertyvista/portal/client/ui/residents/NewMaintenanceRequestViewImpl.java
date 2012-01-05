@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -27,15 +28,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.ListBox;
 
+import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
+import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
 public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<MaintenanceRequestDTO> implements NewMaintenanceRequestView {
@@ -83,6 +86,9 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
         content.getColumnFormatter().setWidth(3, "75px");
 
         int row = -1;
+
+        content.setWidget(++row, 0, new UserMessagePanel());
+        content.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
         // Issue Type Selector Header
         content.setHTML(++row, 0, hdrIssueElement);
@@ -137,11 +143,15 @@ public class NewMaintenanceRequestViewImpl extends CEntityDecoratableEditor<Main
 
             @Override
             public void onClick(ClickEvent event) {
-                MaintenanceRequestDTO req = NewMaintenanceRequestViewImpl.this.getValue();
-                if (req.issueClassification().isEmpty()) {
-                    throw new UserRuntimeException("Please select 'Issue Classification'");
+                if (!NewMaintenanceRequestViewImpl.this.isValid()) {
+                    NewMaintenanceRequestViewImpl.this.setVisited(true);
+                    Window.scrollTo(0, 0);
+                    AppSite.getEventBus().fireEvent(
+                            new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
+                                    UserMessageEvent.UserMessageType.ERROR));
+                } else {
+                    presenter.submit();
                 }
-                presenter.submit();
             }
         });
         content.setWidget(++row, 0, submitButton);

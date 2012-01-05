@@ -20,9 +20,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
 public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView {
@@ -34,6 +36,8 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
     private static I18n i18n = I18n.get(PersonalInfoViewImpl.class);
 
     public PersonalInfoViewImpl() {
+        add(new UserMessagePanel());
+
         form = new PersonalInfoForm();
         form.initContent();
         add(form);
@@ -47,10 +51,12 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
             @Override
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
+                    form.setVisited(true);
                     Window.scrollTo(0, 0);
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                    AppSite.getEventBus().fireEvent(
+                            new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
+                                    UserMessageEvent.UserMessageType.ERROR));
                 }
-                Window.scrollTo(0, 0);
             }
         });
 

@@ -51,6 +51,8 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
 
     private static I18n i18n = I18n.get(DashboardForm.class);
 
+    public static final String NoRecordsFound = i18n.tr("No Records Found");
+
     private Presenter presenter;
 
     public DashboardForm() {
@@ -131,22 +133,31 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             FlexTable container = new FlexTable();
 
             container.setWidth("100%");
-            container.getColumnFormatter().setWidth(0, "35px");
-            container.getColumnFormatter().setWidth(1, "250px");
-            container.getColumnFormatter().setWidth(2, "75px");
 
-            container.setHTML(0, 1, i18n.tr("Subject"));
-            container.setHTML(0, 2, i18n.tr("Date"));
-            container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+            if (value.size() > 0) {
+                container.getColumnFormatter().setWidth(0, "35px");
+                container.getColumnFormatter().setWidth(1, "250px");
+                container.getColumnFormatter().setWidth(2, "75px");
 
-            int row = 0;
+                container.setHTML(0, 1, i18n.tr("Subject"));
+                container.setHTML(0, 2, i18n.tr("Date"));
+                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            for (Message message : value) {
-                container.setWidget(++row, 0, getIcon(message.type().getValue()));
-                container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-                container.setHTML(row, 1, message.subject().getValue());
-                container.setHTML(row, 2, message.date().getStringView());
-                container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+                int row = 0;
+
+                for (Message message : value) {
+                    container.setWidget(++row, 0, getIcon(message.type().getValue()));
+                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                    container.setHTML(row, 1, message.subject().getValue());
+                    container.setHTML(row, 2, message.date().getStringView());
+                    container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+                }
+            } else {
+                container.setHTML(0, 0, NoRecordsFound);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+                container.setHTML(1, 0, "");
+                container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
             return container;
         }
@@ -242,28 +253,37 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             FlexTable container = new FlexTable();
 
             container.setWidth("100%");
-            container.getColumnFormatter().setWidth(0, "250px");
-            container.getColumnFormatter().setWidth(1, "75px");
 
-            container.setHTML(0, 0, i18n.tr("Ticket"));
-            container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            container.setHTML(0, 1, i18n.tr("Status"));
-            container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+            if (value.size() > 0) {
+                container.getColumnFormatter().setWidth(0, "250px");
+                container.getColumnFormatter().setWidth(1, "75px");
 
-            int row = 0;
+                container.setHTML(0, 0, i18n.tr("Ticket"));
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.setHTML(0, 1, i18n.tr("Status"));
+                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            for (MaintananceDTO maintanance : value) {
-                container.setHTML(++row, 0, maintanance.description().getValue());
-                container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-                if (MaintenanceRequestStatus.Completed.equals(maintanance.status().getValue())) {
-                    RateIt rateIt = new RateIt(5);
-                    rateIt.setRating(4);
-                    container.setWidget(row, 1, rateIt);
-                } else {
-                    container.setHTML(row, 1, maintanance.status().getStringView() + "<p><i style='font-size:0.8em'>" + maintanance.date().getStringView()
-                            + "</i>");
+                int row = 0;
+
+                for (MaintananceDTO maintanance : value) {
+                    container.setHTML(++row, 0, maintanance.description().getValue());
+                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                    if (MaintenanceRequestStatus.Completed.equals(maintanance.status().getValue())) {
+                        RateIt rateIt = new RateIt(5);
+                        rateIt.setRating(4);
+                        container.setWidget(row, 1, rateIt);
+                    } else {
+                        container.setHTML(row, 1, maintanance.status().getStringView() + "<p><i style='font-size:0.8em'>" + maintanance.date().getStringView()
+                                + "</i>");
+                    }
+                    container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
                 }
-                container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+            } else {
+                container.setHTML(0, 0, NoRecordsFound);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+                container.setHTML(1, 0, "");
+                container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
             return container;
 
@@ -278,22 +298,31 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             FlexTable container = new FlexTable();
 
             container.setWidth("100%");
-            container.getColumnFormatter().setWidth(0, "250px");
-            container.getColumnFormatter().setWidth(1, "75px");
 
-            container.setHTML(0, 0, i18n.tr("Service"));
-            container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            container.setHTML(0, 1, i18n.tr("Status"));
-            container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+            if (value.size() > 0) {
+                container.getColumnFormatter().setWidth(0, "250px");
+                container.getColumnFormatter().setWidth(1, "75px");
 
-            int row = 0;
+                container.setHTML(0, 0, i18n.tr("Service"));
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.setHTML(0, 1, i18n.tr("Status"));
+                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            for (ReservationDTO reservation : value) {
-                container.setHTML(++row, 0, reservation.description().getValue());
-                container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-                container
-                        .setHTML(row, 1, reservation.status().getStringView() + "<p><i style='font-size:0.8em'>" + reservation.date().getStringView() + "</i>");
-                container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+                int row = 0;
+
+                for (ReservationDTO reservation : value) {
+                    container.setHTML(++row, 0, reservation.description().getValue());
+                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                    container.setHTML(row, 1, reservation.status().getStringView() + "<p><i style='font-size:0.8em'>" + reservation.date().getStringView()
+                            + "</i>");
+                    container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+                }
+            } else {
+                container.setHTML(0, 0, NoRecordsFound);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
+                container.setHTML(1, 0, "");
+                container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
             return container;
         }

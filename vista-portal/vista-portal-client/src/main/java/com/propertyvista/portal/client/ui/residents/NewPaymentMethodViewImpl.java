@@ -21,10 +21,12 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
 public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMethodView {
 
@@ -35,6 +37,8 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
     private static I18n i18n = I18n.get(NewPaymentMethodViewImpl.class);
 
     public NewPaymentMethodViewImpl() {
+        add(new UserMessagePanel());
+
         form = new NewPaymentMethodForm() {
             @Override
             public void onBillingAddressSameAsCurrentOne(boolean set) {
@@ -55,8 +59,11 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
             @Override
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
+                    form.setVisited(true);
                     Window.scrollTo(0, 0);
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                    AppSite.getEventBus().fireEvent(
+                            new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
+                                    UserMessageEvent.UserMessageType.ERROR));
                 } else {
                     presenter.save(form.getValue());
                 }
