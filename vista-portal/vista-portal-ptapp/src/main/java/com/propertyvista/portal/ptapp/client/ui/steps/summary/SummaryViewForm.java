@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -26,7 +25,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
@@ -36,7 +34,6 @@ import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -125,7 +122,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setBR(++row, 0, 1);
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
-        main.setWidget(++row, 0, inject(proto().summaryTerms(), new LeaseTemsFolder()));
+        main.setWidget(++row, 0, inject(proto().leaseTerms(), new LeaseTemsFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("Digital Signature(s)"));
         main.setWidget(++row, 0, inject(proto().application().signatures(), new SignatureFolder()));
@@ -319,38 +316,11 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         };
     }
 
-    /*
-     * Lease Terms view implementation
-     */
-    private class LeaseTermsToAgree extends FlowPanel {
-
-        public LeaseTermsToAgree() {
-            CLabel leaseTermContent = new CLabel();
-            leaseTermContent.setAllowHtml(true);
-            leaseTermContent.setWordWrap(true);
-            bind(leaseTermContent, proto().leaseTerms().text());
-
-            ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent.asWidget());
-            leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            leaseTerms.getElement().getStyle().setBorderColor("#bbb");
-
-            leaseTerms.getElement().getStyle().setBackgroundColor("white");
-            leaseTerms.getElement().getStyle().setColor("black");
-
-            leaseTerms.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
-            leaseTerms.setHeight("20em");
-            add(leaseTerms);
-
-            setWidth("100%");
-        }
-    }
-
     //TODO this function is a temporary Hack to make it Work. Remove!
     @Override
     public boolean isValid() {
         if ((getValue() != null) && !getValue().signed().isBooleanTrue()) {
-            return get(proto().application().signatures()).isValid();
+            return (get(proto().application().signatures()).isValid() && get(proto().leaseTerms()).isValid());
         } else {
             return true;
         }

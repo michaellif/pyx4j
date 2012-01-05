@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -86,6 +87,8 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().person().name() == column.getObject()) {
                 return inject(proto().person().name(), new CEntityLabel<Name>());
+            } else if (proto().agree() == column.getObject()) {
+                return inject(proto().agree(), new CCheckBox());
             }
             return super.createCell(column);
         }

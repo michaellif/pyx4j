@@ -19,6 +19,4 @@ import com.propertyvista.domain.IBoundToApplication;
 
 public interface Summary extends IEntity, IBoundToApplication {
 
-    LeaseTerms leaseTerms();
-
 }

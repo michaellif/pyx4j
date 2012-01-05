@@ -28,7 +28,6 @@ import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
@@ -43,7 +42,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.IAgree;
-import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
@@ -107,6 +105,28 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
         summary.setValue(dbo.getValue());
 
+        summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
+        summary.apartmentSummary().add(createApartmentSummary(summary.selectedUnit()));
+        summary.charges().set(new ChargesServiceImpl().retrieveData());
+
+        TenantInfoServiceImpl tis = new TenantInfoServiceImpl();
+        TenantFinancialServiceImpl tfs = new TenantFinancialServiceImpl();
+
+        Lease lease = PtAppContext.getCurrentUserLease();
+        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
+        for (TenantInLease tenantInLease : lease.tenants()) {
+            Persistence.service().retrieve(tenantInLease);
+            TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
+
+            summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+            if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
+                summary.tenantsWithInfo().add(tis.retrieveData(tr));
+                summary.tenantFinancials().add(tfs.retrieveData(tr));
+            }
+        }
+
+        // Legal stuff:
+
         boolean allSigned = true;
         List<IAgree> agrees = new ArrayList<IAgree>();
         for (DigitalSignature sig : summary.application().signatures()) {
@@ -137,6 +157,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             ltd.name().set(terms.name());
             ltd.description().set(terms.description());
             if (!terms.content().isEmpty()) {
+                // TODO get content according current locale here: 
                 ltd.content().set(terms.content().get(0));
             }
 
@@ -144,33 +165,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
                 ltd.agrees().add((IAgree) agree.duplicate());
             }
 
-            summary.summaryTerms().add(ltd);
+            summary.leaseTerms().add(ltd);
         }
 
         summary.signed().setValue(allSigned);
-
-        summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
-        summary.apartmentSummary().add(createApartmentSummary(summary.selectedUnit()));
-        summary.charges().set(new ChargesServiceImpl().retrieveData());
-
-        TenantInfoServiceImpl tis = new TenantInfoServiceImpl();
-        TenantFinancialServiceImpl tfs = new TenantFinancialServiceImpl();
-
-        Lease lease = PtAppContext.getCurrentUserLease();
-        TenantInLeaseRetriever.UpdateLeaseTenants(lease);
-        for (TenantInLease tenantInLease : lease.tenants()) {
-            Persistence.service().retrieve(tenantInLease);
-            TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
-
-            summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
-            if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
-                summary.tenantsWithInfo().add(tis.retrieveData(tr));
-                summary.tenantFinancials().add(tfs.retrieveData(tr));
-            }
-        }
-
-        // TODO This should be taken from building policy
-        summary.leaseTerms().set(Persistence.service().retrieve(EntityQueryCriteria.create(LeaseTerms.class)));
 
         return summary;
     }

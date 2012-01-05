@@ -39,5 +39,5 @@ public interface SummaryDTO extends Summary {
 
     Charges charges();
 
-    IList<LegalTermsDescriptorDTO> summaryTerms();
+    IList<LegalTermsDescriptorDTO> leaseTerms();
 }

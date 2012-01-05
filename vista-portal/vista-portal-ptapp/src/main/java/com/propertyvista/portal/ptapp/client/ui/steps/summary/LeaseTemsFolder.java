@@ -13,12 +13,17 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -69,6 +74,33 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
             main.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LegalTermsDescriptor.name());
             return main;
+        }
+    }
+
+    /*
+     * Lease Terms view implementation
+     */
+    private class LeaseTermsToAgree extends FlowPanel {
+
+        public LeaseTermsToAgree() {
+            CLabel leaseTermContent = new CLabel();
+            leaseTermContent.setAllowHtml(true);
+            leaseTermContent.setWordWrap(true);
+//            bind(leaseTermContent, proto().leaseTerms().text());
+
+            ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent.asWidget());
+            leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            leaseTerms.getElement().getStyle().setBorderColor("#bbb");
+
+            leaseTerms.getElement().getStyle().setBackgroundColor("white");
+            leaseTerms.getElement().getStyle().setColor("black");
+
+            leaseTerms.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
+            leaseTerms.setHeight("20em");
+            add(leaseTerms);
+
+            setWidth("100%");
         }
     }
 }

@@ -28,6 +28,6 @@ public interface IAgree extends IEntity {
     Person person();
 
     @NotNull
-    @Caption(name = "I Agree with Terms")
+    @Caption(name = "I Agree")
     IPrimitive<Boolean> agree();
 }
