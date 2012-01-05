@@ -117,10 +117,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    LeaseDTO value = getValue();
-                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedDates(value.leaseFrom().getValue(), value
-                            .leaseTo().getValue());
-
+                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).initUnitSelection();
                     new SelectUnitBox(((LeaseEditorView) getParentView()).getBuildingListerView(), ((LeaseEditorView) getParentView()).getUnitListerView()) {
                         @Override
                         public boolean onClickOk() {

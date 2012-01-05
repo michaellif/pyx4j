@@ -93,11 +93,10 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
-        buildingsLister.populate(0);
         tenantsLister.populate(0);
 
-        setSelectedDates(result.leaseFrom().getValue(), result.leaseTo().getValue());
-        populateUnitLister(result.selectedBuilding());
+        leaseFrom = result.leaseFrom().getValue();
+        leaseTo = result.leaseTo().getValue();
 
         fillserviceItems(result);
         fillServiceEligibilityData(result, result.serviceAgreement().serviceItem().item());
@@ -126,13 +125,17 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void setSelectedDates(LogicalDate from, LogicalDate to) {
-        leaseFrom = from;
-        leaseTo = to;
+    public void initUnitSelection() {
+        leaseFrom = view.getValue().leaseFrom().getValue();
+        leaseTo = view.getValue().leaseTo().getValue();
+        setSelectedBuilding(null);
     }
 
     @Override
     public void setSelectedBuilding(Building selected) {
+        if (selected == null) {
+            buildingsLister.populate(0);
+        }
         populateUnitLister(selected);
     }
 
@@ -191,7 +194,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     public void populateUnitLister(Building selected) {
-        if (!selected.isEmpty()) {
+        if (selected != null && !selected.isEmpty()) {
             unitsLister.setParentFiltering(selected.getPrimaryKey());
         }
         if (leaseFrom != null && leaseTo != null) {
