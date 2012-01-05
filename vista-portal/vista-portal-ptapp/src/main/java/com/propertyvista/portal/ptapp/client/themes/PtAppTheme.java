@@ -34,6 +34,8 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.AgreeFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.LeaseTemsFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
 
 public class PtAppTheme extends VistaTheme {
@@ -116,13 +118,47 @@ public class PtAppTheme extends VistaTheme {
     }
 
     protected void initVistaSummaryViewStyles() {
-        String prefix = SignatureFolder.DEFAULT_STYLE_PREFIX;
+        // Lease Terms:
+        String prefix = LeaseTemsFolder.DEFAULT_STYLE_PREFIX;
 
-        Style style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.DigitalSignature));
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Content));
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-color", "#bbb");
+
+        style.addProperty("background-color", "white");
+        style.addProperty("color", "black");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Agrees));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Scroll));
+        style.addProperty("height", "20em");
+        addStyle(style);
+
+        prefix = AgreeFolder.DEFAULT_STYLE_PREFIX;
+
+        style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, AgreeFolder.StyleSuffix.Person));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, AgreeFolder.StyleSuffix.Agree));
+        addStyle(style);
+
+        // Signatures:
+        prefix = SignatureFolder.DEFAULT_STYLE_PREFIX;
+
+        style = new Style(Selector.valueOf(prefix));
         style.addProperty("color", ThemeColors.foreground);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.DigitalSignatureLabel));
+        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.Label));
         style.addProperty("color", "#fff");
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
@@ -130,7 +166,7 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("text-shadow", "0 -1px 0 #333333");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.DigitalSignatureEdit));
+        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.Edit));
         addStyle(style);
     }
 

@@ -39,7 +39,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
     public final static String DEFAULT_STYLE_PREFIX = "SignatureFolder";
 
     public static enum StyleSuffix implements IStyleName {
-        DigitalSignature, DigitalSignatureLabel, DigitalSignatureEdit
+        Label, Edit
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -77,7 +77,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().ipAddress()), 20).build());
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().timestamp()), 20).build());
 
-            main.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.DigitalSignature.name());
+            main.setStyleName(DEFAULT_STYLE_PREFIX);
             return main;
         }
 

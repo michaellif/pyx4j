@@ -41,7 +41,7 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
     public final static String DEFAULT_STYLE_PREFIX = "AgreeFolder";
 
     public static enum StyleSuffix implements IStyleName {
-        IAgree, Person, Agree
+        Person, Agree
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -79,7 +79,9 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
         @Override
         public IsWidget createContent() {
             IsWidget c = super.createContent();
-            c.asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.IAgree.name());
+            c.asWidget().setStyleName(DEFAULT_STYLE_PREFIX);
+            get(proto().person().name()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Person.name());
+            get(proto().agree()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Agree.name());
             return c;
         }
 

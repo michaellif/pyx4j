@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.summary;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -36,7 +34,7 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
     public final static String DEFAULT_STYLE_PREFIX = "LeaseTemsFolder";
 
     public static enum StyleSuffix implements IStyleName {
-        LegalTermsDescriptor
+        Scroll, Content, Agrees
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -70,20 +68,16 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder()));
 
-            main.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LegalTermsDescriptor.name());
+            // styling:
+            get(proto().content().content()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content.name());
+            get(proto().agrees()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Agrees.name());
+
+            main.setStyleName(DEFAULT_STYLE_PREFIX);
             main.setWidth("100%");
 
-            ScrollPanel mainScroll = new ScrollPanel(main.asWidget());
-            mainScroll.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            mainScroll.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            mainScroll.getElement().getStyle().setBorderColor("#bbb");
-
-            mainScroll.getElement().getStyle().setBackgroundColor("white");
-            mainScroll.getElement().getStyle().setColor("black");
-
-            mainScroll.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
-            mainScroll.setHeight("20em");
-            return mainScroll;
+            ScrollPanel scroll = new ScrollPanel(main.asWidget());
+            scroll.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Scroll.name());
+            return scroll;
         }
     }
 }
