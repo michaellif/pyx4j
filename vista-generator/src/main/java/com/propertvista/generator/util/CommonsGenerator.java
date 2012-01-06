@@ -146,10 +146,11 @@ public class CommonsGenerator {
     }
 
     public static String createPhone(String number, Integer ext) {
-        String phone = new String();
+        String phone = new String(number);
 
-        phone += number;
-        phone += " ext. " + ext;
+        if (ext != null) {
+            phone += " ext. " + ext;
+        }
 
         return phone;
     }
