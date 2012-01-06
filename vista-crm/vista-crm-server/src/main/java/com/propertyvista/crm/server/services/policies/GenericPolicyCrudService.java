@@ -17,7 +17,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.policy.Policy;
@@ -68,7 +67,8 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
         POLICY policy = null;
         if (!isNewPolicy(dbo)) {
-            policy = EntityGraph.businessDuplicate(dbo);
+            //policy = EntityGraph.businessDuplicate(dbo);
+            policy = dbo;
         } else {
             policy = dbo;
         }
