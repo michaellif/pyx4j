@@ -137,7 +137,7 @@ public class MemberMetaImpl implements MemberMeta {
         } else if ((lengthAnnotation != null) && (PrimitiveHandler.BYTE_ARRAY_CLASS.equals(valueClass))) {
             length = lengthAnnotation.value();
         } else if (lengthAnnotation != null) {
-            throw new RuntimeException("Unexpected @Length annotation in member " + fieldName + " of " + method.getDeclaringClass().getSimpleName());
+            throw new RuntimeException("Unexpected @Length annotation in member '" + fieldName + "' of " + method.getDeclaringClass().getSimpleName());
         } else {
             length = 0;
         }
@@ -162,7 +162,7 @@ public class MemberMetaImpl implements MemberMeta {
         Owned aOwned = method.getAnnotation(Owned.class);
         boolean hasEmbedded = (method.getAnnotation(EmbeddedEntity.class) != null);
         if (hasEmbedded && ((objectClassType == ObjectClassType.Primitive) || (objectClassType == ObjectClassType.PrimitiveSet))) {
-            throw new RuntimeException("Unexpected @EmbeddedEntity annotation in member " + fieldName + " of " + method.getDeclaringClass().getSimpleName());
+            throw new RuntimeException("Unexpected @EmbeddedEntity annotation in member '" + fieldName + "' of " + method.getDeclaringClass().getSimpleName());
         }
         if ((!hasEmbedded) && (objectClassType != ObjectClassType.Primitive) && (objectClassType != ObjectClassType.PrimitiveSet)) {
             hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null);
@@ -180,7 +180,7 @@ public class MemberMetaImpl implements MemberMeta {
 
         detached = (method.getAnnotation(Detached.class) != null);
         if ((aOwned != null) && detached) {
-            //throw new RuntimeException("Unexpected @Detached annotation in member " + fieldName + " of " + method.getDeclaringClass().getSimpleName());
+            //throw new RuntimeException("Unexpected @Detached annotation in member '" + fieldName + "' of " + method.getDeclaringClass().getSimpleName());
         }
 
         Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
