@@ -40,7 +40,6 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.VistaCrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.PolicyDTOBase;
@@ -134,7 +133,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                     NodeTypeWrapper<?> policyScope = getValue() == null || getValue().node().isNull() ? null : NodeTypeWrapper
                             .wrap((Class<? extends PolicyNode>) getValue().node().getInstanceValueClass());
 
-                    if (policyScope == null || policyScope.getType().equals(DefaultPoliciesNode.class)) {
+                    if (policyScope == null) {
                         selectPolicyScopeBox.setValue(null, true);
                     } else {
                         selectPolicyScopeBox.setValue(policyScope, true);

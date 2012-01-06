@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
@@ -46,12 +45,9 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
-        // create a node for organzation scope policies
-        Persistence.service().persist(EntityFactory.create(OrganizationPoliciesNode.class));
-
         // Create the node for default policies and default policies
-        DefaultPoliciesNode defaultPoliciesNode = EntityFactory.create(DefaultPoliciesNode.class);
-        Persistence.service().persist(defaultPoliciesNode);
+        OrganizationPoliciesNode organizationalPoliciesNode = EntityFactory.create(OrganizationPoliciesNode.class);
+        Persistence.service().persist(organizationalPoliciesNode);
 
         List<? extends Policy> defaults = Arrays.asList(//@formatter:off
                 createDefaultNumberOfIdsPolicy(),
@@ -64,7 +60,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
         for (Policy policy : defaults) {
             PolicyAtNode policyAtNode = EntityFactory.create(PolicyAtNode.class);
-            policyAtNode.node().set(defaultPoliciesNode);
+            policyAtNode.node().set(organizationalPoliciesNode);
             policyAtNode.policy().set(policy);
             Persistence.service().persist(policyAtNode);
         }
@@ -75,7 +71,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PolicyAtNode.class, IdentificationDocument.class, DefaultPoliciesNode.class, OrganizationPoliciesNode.class);
+            return deleteAll(PolicyAtNode.class, IdentificationDocument.class, OrganizationPoliciesNode.class);
         } else {
             return "This is production";
         }

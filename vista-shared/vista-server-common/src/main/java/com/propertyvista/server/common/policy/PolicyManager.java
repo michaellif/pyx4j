@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.policy.BuildingPolicy;
-import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
@@ -45,7 +44,7 @@ public class PolicyManager {
     // TODO keep this in some kind of "PoliciesHeriarchy" class
     @SuppressWarnings("unchecked")
     private static final List<Class<? extends PolicyNode>> HIERARCHY = Arrays.asList(AptUnit.class, Floorplan.class, Building.class, Complex.class,
-            Province.class, Country.class, OrganizationPoliciesNode.class, DefaultPoliciesNode.class);
+            Province.class, Country.class, OrganizationPoliciesNode.class);
 
     // TODO refactor this method -> change DTO to just list use DTO only in service
     /**
@@ -175,13 +174,7 @@ public class PolicyManager {
             return Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
 
         } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
-
-            // we assume that one default policies node is preloaded 
-            return Persistence.service().retrieve(new EntityQueryCriteria<DefaultPoliciesNode>(DefaultPoliciesNode.class));
-
-        } else if (DefaultPoliciesNode.class.equals(nodeClass)) {
-
-            // the parent of the default is default :)
+            // the parent of the organization is organization :)        
             return node;
 
         } else {
@@ -192,7 +185,7 @@ public class PolicyManager {
 
     // TODO move this method to another class (i.e. something that manages/defines heirarchy)
     public static List<? extends PolicyNode> childrenOf(PolicyNode node) {
-        Class<? extends PolicyNode> nodeClass = node != null ? (Class<? extends PolicyNode>) node.getInstanceValueClass() : DefaultPoliciesNode.class;
+        Class<? extends PolicyNode> nodeClass = node != null ? (Class<? extends PolicyNode>) node.getInstanceValueClass() : OrganizationPoliciesNode.class;
 
         if (AptUnit.class.equals(nodeClass)) {
             return new LinkedList<PolicyNode>();
@@ -241,8 +234,6 @@ public class PolicyManager {
             return Persistence.service().query(criteria);
         } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
             return Persistence.service().query(new EntityQueryCriteria<Country>(Country.class));
-        } else if (DefaultPoliciesNode.class.equals(nodeClass)) {
-            return Persistence.service().query(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
         } else {
             throw new Error("Got unknown type of " + PolicyNode.class.getName() + ": '" + nodeClass.getName() + "'");
         }

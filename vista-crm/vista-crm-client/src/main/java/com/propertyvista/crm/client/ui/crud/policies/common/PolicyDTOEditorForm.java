@@ -48,7 +48,6 @@ import com.propertyvista.crm.client.ui.policy.PolicyEditorFormFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
-import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -116,7 +115,7 @@ public class PolicyDTOEditorForm<P extends Policy, POLICY_DTO extends PolicyDTOB
                 if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
                     NodeType<?> selectedPolicyScope = getValue() == null || getValue().node().isNull() ? null : NodeType
                             .wrap((Class<? extends PolicyNode>) getValue().node().getInstanceValueClass());
-                    if (selectedPolicyScope == null || selectedPolicyScope.getType().equals(DefaultPoliciesNode.class)) {
+                    if (selectedPolicyScope == null) {
                         selectPolicyScopeBox.setValue(null, true);
                     } else {
                         selectPolicyScopeBox.setValue(selectedPolicyScope, true);

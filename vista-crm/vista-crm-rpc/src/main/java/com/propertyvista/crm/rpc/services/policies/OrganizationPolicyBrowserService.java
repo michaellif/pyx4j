@@ -19,7 +19,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.PolicyNode;
 
@@ -31,7 +30,8 @@ public interface OrganizationPolicyBrowserService extends IService {
      * @param callback
      *            the return value.
      * @param policyNode
-     *            can be <code>null</code> if someone wants to get the organization node (or it can be instance of {@link DefaultPoliciesNode} with no PK). To
+     *            can be <code>null</code> if someone wants to get the organization node (or it can be instance of {@link OrganizationPoliciesNode} with no PK).
+     *            To
      *            get children organization node use instance of {@link OrganizationPoliciesNode} (can be with no PK). the rest of child nodes must be queried
      *            using a policyNode with associated PK.
      * @return see <code>callback</code> parameter.

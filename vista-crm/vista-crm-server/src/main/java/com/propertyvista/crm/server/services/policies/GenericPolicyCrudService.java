@@ -17,9 +17,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.policy.DefaultPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -57,53 +57,49 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void persistDBO(POLICY dbo, POLICY_DTO in) {
+        PolicyNode node = ((PolicyDTOBase) in).node().cast();
 
-        if (((PolicyDTOBase) in).node().isNull() | ((PolicyDTOBase) in).node().getPrimaryKey() == null) {
+        if (node.isNull() || node.id().isNull()) {
             throw new Error("failed to persist policy! policy scope (a node in organizaton structure) was not set");
         }
-        if (((PolicyDTOBase) in).node().getInstanceValueClass().equals(DefaultPoliciesNode.class)) {
-            throw new Error("overriding default policies is strictly forbidden");
-        }
 
-        EntityQueryCriteria<PolicyAtNode> policyAtNodeCriteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-        policyAtNodeCriteria.add(PropertyCriterion.eq(policyAtNodeCriteria.proto().node(), ((PolicyDTOBase) in).node().cast()));
-        PolicyAtNode policyAtNode = Persistence.service().retrieve(policyAtNodeCriteria);
-        if (policyAtNode == null) {
-            policyAtNode = EntityFactory.create(PolicyAtNode.class);
-            policyAtNode.node().set(((PolicyDTOBase) in).node());
-
-            // if someone has reassigned an existing policy to another node,
-            // we have to remove the old policyAtNode record unless it's a default policy
-            // if it is a default policy we just make a copy of that policy.
-            if (dbo.getPrimaryKey() != null) {
-                EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().policy(), dbo));
-                PolicyAtNode oldPolicyAtNode = Persistence.service().retrieve(criteria);
-                if (oldPolicyAtNode == null) {
-                    // TODO maybe better to send a WARNING message to a log???
-                    throw new Error("Old policy to node binding was not found");
-                } else if (oldPolicyAtNode.node().getInstanceValueClass().equals(DefaultPoliciesNode.class)) {
-                    dbo.id().set(null); // make a copy
-                } else {
-                    Persistence.service().delete(oldPolicyAtNode);
-                }
-            }
+        POLICY policy = null;
+        if (!isNewPolicy(dbo)) {
+            policy = EntityGraph.businessDuplicate(dbo);
         } else {
-            // if we got here it means that this node already had a policy,
-            // hence the natural/intuitive thing to do seems to be to override the old policy, i.e. remove it
-            // (so that we don't end up with keeping an orphan policy in the DB)
-            try {
-                Persistence.service().delete(dbo.getInstanceValueClass(), policyAtNode.policy().getPrimaryKey());
-            } catch (Throwable error) {
-                // TODO log warning that it can't be deleted
-            }
-            dbo.id().set(null);
+            policy = dbo;
         }
 
-        policyAtNode.policy().set(dbo);
-        super.persistDBO(dbo, in);
+        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
+        PolicyAtNode policyAtNode = Persistence.service().retrieve(criteria);
+
+        if (policyAtNode != null) {
+            // override, i.e. delete the old policy that was at that node
+            // TODO review this: maybe it's better to forbid such an action on server and populate the form with the existing policy when the user selects a scope with a policy that actually exists            
+            Persistence.service().delete(policyAtNode.policy().cast());
+        } else {
+            policyAtNode = EntityFactory.create(PolicyAtNode.class);
+            policyAtNode.node().set(node);
+        }
+        policyAtNode.policy().set(policy);
+
+        super.persistDBO(policy, in);
         Persistence.service().merge(policyAtNode);
+
+        // A hack to return the correct result back to the client (because java has no C++ references)
+        if (policy != dbo) {
+            dbo.id().set(policy.id());
+            for (String member : policy.getEntityMeta().getMemberNames()) {
+                dbo.set(dbo.getMember(member), policy.getMember(member));
+            }
+        }
+    }
+
+    private boolean isNewPolicy(POLICY policy) {
+        return policy.id().isNull();
     }
 }
