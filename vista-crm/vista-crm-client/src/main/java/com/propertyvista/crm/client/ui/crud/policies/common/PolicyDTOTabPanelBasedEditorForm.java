@@ -189,7 +189,6 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                 content.setWidget(++row, 0, nodeComponent);
             }
 
-            // TODO not sure why I use both property change handler and value change handler, value change supposed to be enough            
             addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override
                 public void onPropertyChange(PropertyChangeEvent event) {
@@ -206,12 +205,6 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                             comp.setValue((PolicyNode) getValue().cast());
                         }
                     }
-                }
-            });
-
-            addValueChangeHandler(new ValueChangeHandler<PolicyNode>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<PolicyNode> event) {
                 }
             });
 
