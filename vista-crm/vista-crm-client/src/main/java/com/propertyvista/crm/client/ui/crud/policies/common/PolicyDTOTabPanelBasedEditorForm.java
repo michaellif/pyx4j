@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
@@ -71,7 +71,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
     @Override
     public IsWidget createContent() {
-        tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+        tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
         tabPanel.setSize("100%", "100%");
 
         tabPanel.add(new CrmScrollPanel(createScopeTab()), i18n.tr("Scope"));

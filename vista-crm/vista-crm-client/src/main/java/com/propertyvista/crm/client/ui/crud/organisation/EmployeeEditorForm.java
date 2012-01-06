@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -43,7 +43,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeEditorForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public EmployeeEditorForm() {
         super(EmployeeDTO.class, new CrmEditorsComponentFactory());

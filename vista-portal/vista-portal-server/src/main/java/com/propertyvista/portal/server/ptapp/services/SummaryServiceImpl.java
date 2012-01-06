@@ -31,7 +31,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
@@ -51,8 +50,8 @@ import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
+import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
 import com.propertyvista.portal.server.report.SummaryReport;
-import com.propertyvista.server.common.policy.PolicyManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -147,20 +146,10 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         // fill Lease Terms:
-        LegalTermsPolicy termsPolicy = (LegalTermsPolicy) PolicyManager.effectivePolicy(PtAppContext.getCurrentUserLease().unit(), LegalTermsPolicy.class);
-        if (termsPolicy == null) {
-            throw new UserRuntimeException("There is no lease policy for the unit!?.");
-        }
+        LegalTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
 
         for (LegalTermsDescriptor terms : termsPolicy.summaryTerms()) {
-            LegalTermsDescriptorDTO ltd = EntityFactory.create(LegalTermsDescriptorDTO.class);
-            ltd.name().set(terms.name());
-            ltd.description().set(terms.description());
-            if (!terms.content().isEmpty()) {
-                // TODO get content according current locale here: 
-                ltd.content().set(terms.content().get(0));
-            }
-
+            LegalTermsDescriptorDTO ltd = LegalStuffUtils.formLegalTerms(terms);
             for (IAgree agree : agrees) {
                 ltd.agrees().add((IAgree) agree.duplicate());
             }

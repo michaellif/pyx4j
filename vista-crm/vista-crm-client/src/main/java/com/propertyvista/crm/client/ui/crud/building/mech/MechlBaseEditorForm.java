@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MaintenanceEditor;
 import com.propertyvista.common.client.ui.components.editors.WarrantyEditor;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -34,7 +34,7 @@ public abstract class MechlBaseEditorForm<E extends LicensedWarrantedMaintained>
 
     private static final I18n i18n = I18n.get(MechlBaseEditorForm.class);
 
-    protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+    protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     protected MechlBaseEditorForm(Class<E> entityClass) {
         super(entityClass, new CrmEditorsComponentFactory());

@@ -37,7 +37,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -49,7 +49,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
     private static final I18n i18n = I18n.get(UnitEditorForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public UnitEditorForm() {
         this(new CrmEditorsComponentFactory());

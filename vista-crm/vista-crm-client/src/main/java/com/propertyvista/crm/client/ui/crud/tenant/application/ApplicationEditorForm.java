@@ -19,14 +19,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ApplicationDTO;
 
 public class ApplicationEditorForm extends CrmEntityForm<ApplicationDTO> {
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public ApplicationEditorForm() {
         this(new CrmEditorsComponentFactory());

@@ -16,9 +16,9 @@ package com.propertyvista.portal.rpc.ptapp.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.portal.domain.ptapp.PaymentInformation;
+import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
-public interface PaymentService extends AbstractWizardService<PaymentInformation> {
+public interface PaymentService extends AbstractWizardService<PaymentInformationDTO> {
 
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 }

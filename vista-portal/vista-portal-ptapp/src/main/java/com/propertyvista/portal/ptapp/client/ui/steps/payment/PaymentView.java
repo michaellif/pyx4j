@@ -13,14 +13,14 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
-import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
+import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
-public interface PaymentView extends WizardStepView<PaymentInformation, PaymentPresenter> {
+public interface PaymentView extends WizardStepView<PaymentInformationDTO, PaymentPresenter> {
 
-    public interface PaymentPresenter extends WizardStepPresenter<PaymentInformation> {
+    public interface PaymentPresenter extends WizardStepPresenter<PaymentInformationDTO> {
 
         public void onBillingAddressSameAsCurrentOne(boolean set);
     }

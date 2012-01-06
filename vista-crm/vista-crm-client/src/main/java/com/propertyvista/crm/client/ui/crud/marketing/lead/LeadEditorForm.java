@@ -32,7 +32,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -45,7 +45,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
 
     private static final I18n i18n = I18n.get(LeadEditorForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public LeadEditorForm() {
         this(new CrmEditorsComponentFactory());

@@ -39,12 +39,11 @@ import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.financial.Money;
-import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
-import com.propertyvista.portal.ptapp.client.resources.PortalResources;
+import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
-public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation> {
+public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformationDTO> {
 
     private static I18n i18n = I18n.get(PaymentViewForm.class);
 
@@ -61,14 +60,14 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
     private final CLabel termContent = new CLabel();
 
     public PaymentViewForm() {
-        super(PaymentInformation.class, new VistaEditorsComponentFactory());
+        super(PaymentInformationDTO.class, new VistaEditorsComponentFactory());
     }
 
     public void setView(PaymentViewImpl view) {
         this.view = view;
     }
 
-    private static boolean isRecurring = false;
+    private static boolean isRecurring = true;
 
     @Override
     public IsWidget createContent() {
@@ -81,18 +80,19 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         main.setWidget(++row, 0, createTotal(proto().applicationCharges().total()));
 
         main.setBR(++row, 0, 1);
-        HTML notes;
         HorizontalPanel info = new HorizontalPanel();
         info.getElement().getStyle().setMarginTop(1, Unit.EM);
         info.add(new Image(PortalImages.INSTANCE.userMessageInfo()));
-        info.add(notes = new HTML(PortalResources.INSTANCE.paymentApprovalNotes().getText()));
-        notes.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        notes.getElement().getStyle().setMarginLeft(2, Unit.EM);
-        notes.getElement().getStyle().setMarginRight(2, Unit.EM);
+
+        CLabel notes;
+        inject(proto().oneTimePaymentTerms().content().content(), notes = new CLabel());
+        notes.setAllowHtml(true);
+        notes.asWidget().getElement().getStyle().setMarginLeft(1.5, Unit.EM);
+        notes.asWidget().setWidth("auto");
+        info.add(notes.asWidget());
+
         main.setWidget(++row, 0, info);
-
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAgree()), 5).build());
-
         main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm(true) {
             @Override
             public void onBillingAddressSameAsCurrentOne(boolean set) {
@@ -104,6 +104,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         if (isRecurring) {
             main.setH1(++row, 0, 1, i18n.tr("Pre-Authorized Payment"));
 
+            inject(proto().recurrentPaymentTerms().content().content(), termContent);
             termContent.setAllowHtml(true);
             termContent.setWordWrap(true);
 
@@ -131,7 +132,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
         if (isRecurring) {
             // prepare term text:
-            String termText = PortalResources.INSTANCE.paymentTermsNotes().getText();
+            String termText = termContent.getValue();
             termText = termText.replace("$[PMC]", PtAppSite.getPmcName());
             termText = termText.replace("$[USER]", ClientContext.getUserVisit().getName());
             termText = termText.replace("$[AMOUNT]", getValue().applicationCharges().total().getStringView());

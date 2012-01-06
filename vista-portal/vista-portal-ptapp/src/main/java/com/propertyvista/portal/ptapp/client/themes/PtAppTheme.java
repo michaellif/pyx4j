@@ -45,31 +45,26 @@ public class PtAppTheme extends VistaTheme {
     }
 
     protected void initStyles() {
-
         addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new DefaultWidgetsTheme());
-
         addTheme(new DefaultWidgetDecoratorTheme());
-
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
             protected ThemeColors getBackgroundColor() {
                 return ThemeColors.object1;
             }
         });
-
-        initEntityFolderStyles();
-
         addTheme(new DefaultDatePickerTheme());
-        addTheme(new PtAppSitePanelTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new DefaultCCOmponentsTheme());
 
+        addTheme(new PtAppSitePanelTheme());
         addTheme(new NewPaymentMethodEditorTheme());
 
         initBodyStyles();
         initCellListStyle();
+        initEntityFolderStyles();
 
         initVistaSummaryViewStyles();
         initVistaCaptionViewStyles();

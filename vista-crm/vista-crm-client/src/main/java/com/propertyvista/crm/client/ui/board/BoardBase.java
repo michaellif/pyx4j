@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.IGadgetInstanceBase;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -91,7 +91,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         if (showSaveButton) {
             addAction(btnSave);
             btnSave.setEnabled(false);
-            btnSave.addStyleName(btnSave.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.SaveButton);
+            btnSave.addStyleName(btnSave.getStylePrimaryName() + CrmTheme.StyleSuffixEx.SaveButton);
             btnSave.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

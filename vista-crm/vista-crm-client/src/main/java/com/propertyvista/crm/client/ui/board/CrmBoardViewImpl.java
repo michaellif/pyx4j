@@ -57,7 +57,7 @@ import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
@@ -83,7 +83,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
     public CrmBoardViewImpl(BoardBase board) {
         this();
 
-        addNorth(header, VistaCrmTheme.defaultHeaderHeight);
+        addNorth(header, CrmTheme.defaultHeaderHeight);
         header.setHeight("100%"); // fill all that defaultHeaderHeight!..
 
         addNorth(filtersPanel, 0);
@@ -106,7 +106,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
                 filters = new BuildingFilters();
                 filtersPanel.setWidget(filters.getCompactVeiw());
-                setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
+                setWidgetSize(filtersPanel, CrmTheme.defaultActionBarHeight);
                 // set filtering (default at this point) to gadgets:
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
@@ -329,7 +329,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             Button apply = new Button(i18n.tr("Apply"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
+                    setWidgetSize(filtersPanel, CrmTheme.defaultActionBarHeight);
                     filtersPanel.setWidget(filters.getCompactVeiw());
 
                     applyFiltering();
@@ -340,7 +340,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             AnchorButton cancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    setWidgetSize(filtersPanel, VistaCrmTheme.defaultActionBarHeight);
+                    setWidgetSize(filtersPanel, CrmTheme.defaultActionBarHeight);
                     filtersPanel.setWidget(filters.getCompactVeiw());
                 }
             });

@@ -27,7 +27,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
@@ -42,7 +42,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     protected EditMode mode;
 
     public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass) {
-        super(new CrmTitleBar(), new Toolbar(), VistaCrmTheme.defaultHeaderHeight);
+        super(new CrmTitleBar(), new Toolbar(), CrmTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         ((CrmTitleBar) getHeader()).setCaption(defaultCaption);

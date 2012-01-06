@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.CrmPanel;
 import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -95,7 +95,7 @@ public class CrmSite extends VistaSite {
                 hideLoadingIndicator();
                 LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
                 Window.setTitle(i18n.tr("Vista CRM") + " - " + descriptor.siteTitles().crmHeader().getStringView());
-                StyleManger.installTheme(new VistaCrmTheme(), new VistaPalette(descriptor.palette()));
+                StyleManger.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
                 obtainAuthenticationData();
             }
         }, ClentNavigUtils.getCurrentLocale());

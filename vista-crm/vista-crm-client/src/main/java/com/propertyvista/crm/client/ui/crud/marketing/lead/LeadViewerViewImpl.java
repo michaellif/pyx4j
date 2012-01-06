@@ -21,7 +21,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -44,7 +44,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                 ((LeadViewerView.Presenter) presenter).convertToLease();
             }
         });
-        btnconvert.addStyleName(btnconvert.getStylePrimaryName() + VistaCrmTheme.StyleSuffixEx.ActionButton);
+        btnconvert.addStyleName(btnconvert.getStylePrimaryName() + CrmTheme.StyleSuffixEx.ActionButton);
         addToolbarItem(btnconvert);
 
         appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());

@@ -47,7 +47,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
 
-public class VistaCrmTheme extends VistaTheme {
+public class CrmTheme extends VistaTheme {
 
     public static double defaultHeaderHeight = 3;
 
@@ -61,7 +61,7 @@ public class VistaCrmTheme extends VistaTheme {
         SaveButton, CancelButton, EditButton, ActionButton;
     }
 
-    public VistaCrmTheme() {
+    public CrmTheme() {
         initStyles();
     }
 
@@ -69,30 +69,27 @@ public class VistaCrmTheme extends VistaTheme {
         addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new DefaultWidgetsTheme());
-
         addTheme(new DefaultWidgetDecoratorTheme());
-
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
             protected ThemeColors getBackgroundColor() {
                 return ThemeColors.foreground;
             }
         });
-
         addTheme(new DefaultEntityFolderTheme() {
             @Override
             protected ThemeColors getBackgroundColor() {
                 return ThemeColors.foreground;
             }
         });
-
-        addTheme(new DraggerMixin());
-        addTheme(new CrmSitePanelTheme());
         addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultSiteCrudPanelsTheme());
         addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new DefaultCCOmponentsTheme());
+
+        addTheme(new CrmSitePanelTheme());
+        addTheme(new DraggerMixin());
 
         initGeneralStyles();
         initBodyStyles();

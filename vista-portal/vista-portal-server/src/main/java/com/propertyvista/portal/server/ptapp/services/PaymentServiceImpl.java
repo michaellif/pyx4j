@@ -28,14 +28,16 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
-import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
+import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 import com.propertyvista.server.domain.CampaignTrigger;
 
@@ -44,13 +46,13 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     private final static Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Override
-    public void retrieve(AsyncCallback<PaymentInformation> callback, Key tenantId) {
+    public void retrieve(AsyncCallback<PaymentInformationDTO> callback, Key tenantId) {
         log.info("Retrieving PaymentInfo for tenant {}", tenantId);
 
-        PaymentInformation payment = retrieveApplicationEntity(PaymentInformation.class);
+        PaymentInformationDTO payment = retrieveApplicationEntity(PaymentInformationDTO.class);
         if (payment == null) {
             log.debug("Creating new payment");
-            payment = EntityFactory.create(PaymentInformation.class);
+            payment = EntityFactory.create(PaymentInformationDTO.class);
             payment.paymentMethod().type().setValue(PaymentType.Echeck);
             payment.preauthoriseAgree().setValue(Boolean.TRUE);
         }
@@ -60,12 +62,17 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         payment.applicationCharges().charges().addAll(charges.applicationCharges().charges());
         ChargesSharedCalculation.calculateTotal(payment.applicationCharges());
 
+        // Legal stuff:
+        LegalTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
+        payment.oneTimePaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.oneTimePaymentTerms()));
+        payment.recurrentPaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.recurrentPaymentTerms()));
+
         callback.onSuccess(payment);
     }
 
     @Override
-    public void save(AsyncCallback<PaymentInformation> callback, PaymentInformation payment) {
-//        log.info("Saving PaymentInformation\n", VistaDataPrinter.print(payment));
+    public void save(AsyncCallback<PaymentInformationDTO> callback, PaymentInformationDTO payment) {
+//        log.info("Saving PaymentInformationDTO\n", VistaDataPrinter.print(payment));
 
         saveApplicationEntity(payment);
 

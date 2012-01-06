@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
-import com.propertyvista.crm.client.themes.VistaCrmTheme;
+import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -49,7 +49,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
 
     private static final I18n i18n = I18n.get(MasterApplicationEditorForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(VistaCrmTheme.defaultTabHeight, Unit.EM);
+    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public MasterApplicationEditorForm() {
         this(new CrmEditorsComponentFactory());
