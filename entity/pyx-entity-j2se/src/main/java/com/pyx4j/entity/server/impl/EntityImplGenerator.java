@@ -363,7 +363,7 @@ public class EntityImplGenerator {
             for (CtMethod method : allMethodsSortedByDeclaration) {
                 CtClass type = method.getReturnType();
                 if (type == CtClass.voidType) {
-                    throw new Error("Can't create void member " + method.getName() + " for class " + name);
+                    throw new Error("Can't create void member '" + method.getName() + "' for class " + name);
                 }
                 // Do not redeclare PK
                 if (method.getName().equals(IEntity.PRIMARY_KEY)) {
