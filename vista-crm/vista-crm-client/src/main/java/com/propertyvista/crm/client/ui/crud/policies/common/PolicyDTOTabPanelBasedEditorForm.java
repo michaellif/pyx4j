@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -58,7 +59,6 @@ import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.dto.PolicyDTOBase;
 import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
@@ -72,8 +72,9 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
     @SuppressWarnings("unchecked")
     private static final List<NodeTypeWrapper<?>> NODE_TYPE_OPTIONS = Arrays.asList(//@formatter:off
-                NodeTypeWrapper.wrap(AptUnit.class),
-                NodeTypeWrapper.wrap(Floorplan.class),
+// reserved for future:            
+//                NodeTypeWrapper.wrap(AptUnit.class),
+//                NodeTypeWrapper.wrap(Floorplan.class),
                 NodeTypeWrapper.wrap(Building.class),
                 NodeTypeWrapper.wrap(Complex.class),
                 NodeTypeWrapper.wrap(Province.class),
@@ -216,7 +217,6 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         }
 
         private <E extends IEntity> OkCancelDialog selectScopeDialogOf(Class<E> policyNodeClass) {
-            String caption = i18n.tr("Select {0}", EntityFactory.getEntityMeta(policyNodeClass).getCaption());
             PolicyNodeSetter policyNodeSetter = new PolicyNodeSetter() {
                 @Override
                 public void setPolicyNode(PolicyNode policyNode) {
@@ -310,6 +310,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
         private final IListerView<AptUnit> unitListerView;
 
+        // FIXME this class is not finished yet!
         public AptUnitSelectDialog(PolicyNodeSetter policyNodeSetter) {
             super(AptUnit.class, policyNodeSetter);
 
@@ -317,8 +318,21 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             @SuppressWarnings("unchecked")
             final ListerActivityBase<AptUnit> unitListerActivity = new ListerActivityBase<AptUnit>(new CrmSiteMap.Settings.Policies(), unitListerView,
                     (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
-            // TODO not sure if need to use that event bus thing, maybe just pass NULL
             unitListerActivity.start(getContainerPanel(), new SimpleEventBus());
+
+            final IListerView<Building> buildingListerView = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
+            @SuppressWarnings("unchecked")
+            final ListerActivityBase<Building> buildingListerActivity = new ListerActivityBase<Building>(new CrmSiteMap.Settings.Policies(),
+                    buildingListerView, (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
+            buildingListerActivity.start(getContainerPanel(), new SimpleEventBus());
+
+            buildingListerView.getLister().addItemSelectionHandler(new ItemSelectionHandler<Building>() {
+
+                @Override
+                public void onSelect(Building selectedItem) {
+                    //                     
+                }
+            });
             getContainerPanel().setSize("800px", "300px");
         }
 
