@@ -161,6 +161,9 @@ public class MemberMetaImpl implements MemberMeta {
         rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
         Owned aOwned = method.getAnnotation(Owned.class);
         boolean hasEmbedded = (method.getAnnotation(EmbeddedEntity.class) != null);
+        if (hasEmbedded && ((objectClassType == ObjectClassType.Primitive) || (objectClassType != ObjectClassType.PrimitiveSet))) {
+            throw new RuntimeException("Unexpected @EmbeddedEntity annotation in member " + fieldName + " of " + method.getDeclaringClass().getSimpleName());
+        }
         if ((!hasEmbedded) && (objectClassType != ObjectClassType.Primitive) && (objectClassType != ObjectClassType.PrimitiveSet)) {
             hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null);
         }
