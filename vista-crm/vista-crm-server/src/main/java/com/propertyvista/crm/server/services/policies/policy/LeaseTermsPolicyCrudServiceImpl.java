@@ -26,9 +26,9 @@ public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<Le
     @Override
     protected void persistDBO(LegalTermsPolicy dbo, LeaseTermsPolicyDTO in) {
         // FIXME remove these printlns after its clear what's wrong
-        System.out.println(dbo.summaryTerms().get(0).content().get(0));
-        System.out.println(dbo.oneTimePaymentTerms().content().get(0));
-        System.out.println(dbo.recurrentPaymentTerms().content().get(0));
+        System.out.println(dbo.summaryTerms().get(0).content());
+        System.out.println(dbo.oneTimePaymentTerms().content());
+        System.out.println(dbo.recurrentPaymentTerms().content());
         super.persistDBO(dbo, in);
     }
 

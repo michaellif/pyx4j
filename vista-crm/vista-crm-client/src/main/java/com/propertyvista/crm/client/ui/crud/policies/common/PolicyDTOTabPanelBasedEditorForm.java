@@ -110,9 +110,11 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             public void onValueChange(ValueChangeEvent<NodeTypeWrapper<?>> event) {
                 if (event.getValue() != null) {
                     // disable node selector if it's a root node (Organization/PMC)
-                    get(proto().node()).setVisible(!event.getValue().getType().equals(OrganizationPoliciesNode.class));
-                    if (!event.getValue().getType().equals(getValue().node().getInstanceValueClass())) {
-                        get(proto().node()).populate(EntityFactory.create(event.getValue().getType()));
+                    Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
+                    boolean isOrganizationPoliciesNodeSelected = selectedNodeType.equals(OrganizationPoliciesNode.class);
+                    get(proto().node()).setVisible(!isOrganizationPoliciesNodeSelected);
+                    if (isOrganizationPoliciesNodeSelected | !selectedNodeType.equals(getValue().node().getInstanceValueClass())) {
+                        get(proto().node()).populate(EntityFactory.create(selectedNodeType));
                     }
                 } else {
                     get(proto().node()).setVisible(false);
@@ -157,6 +159,12 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
         public PolicyNodeEditor() {
             super(PolicyNode.class);
+        }
+
+        @Override
+        protected void onPopulate() {
+            super.onPopulate();
+            Class<?> c = getValue().getInstanceValueClass();
         }
 
         @SuppressWarnings("unchecked")
@@ -209,6 +217,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
             return content;
         }
+
     }
 
     public static class TabDescriptor {

@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services.policies;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -20,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
+import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -62,8 +66,16 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     protected void persistDBO(POLICY dbo, POLICY_DTO in) {
         PolicyNode node = ((PolicyDTOBase) in).node().cast();
 
+        if (node.getInstanceValueClass().equals(OrganizationPoliciesNode.class)) {
+            // since there should be only one organizational policy node, we don't expect from the client to give us a persisted entity with a PK
+            // and do it ourselves
+            node = Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
+            if (node == null) {
+                throw new Error("failed to retrieve instance of " + OrganizationPoliciesNode.class.getSimpleName() + " from the DB");
+            }
+        }
         if (node.isNull() || node.id().isNull()) {
-            throw new Error("failed to persist policy! policy scope (a node in organizaton structure) was not set");
+            throw new Error("unable to persist policy, the scope (a node in organizatonal hierarchy) was not set");
         }
 
         POLICY policy = null;
@@ -97,6 +109,19 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
                 dbo.set(dbo.getMember(member), policy.getMember(member));
             }
         }
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), dboClass));
+
+        Policy deletedNodeGhost = EntityFactory.create(dboClass);
+        deletedNodeGhost.id().setValue(entityId);
+        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), deletedNodeGhost));
+        Persistence.service().delete(criteria);
+
+        super.delete(callback, entityId);
     }
 
     private boolean isNewPolicy(POLICY policy) {
