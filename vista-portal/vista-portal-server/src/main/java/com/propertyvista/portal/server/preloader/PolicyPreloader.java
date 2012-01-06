@@ -38,6 +38,8 @@ import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.shared.CompiledLocale;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private static final I18n i18n = I18n.get(PolicyPreloader.class);
@@ -134,40 +136,47 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private LegalTermsPolicy createDefaultLeaseTermsPolicy() {
         LegalTermsPolicy policy = EntityFactory.create(LegalTermsPolicy.class);
 
-        String leaseTerms = "failed to get lease termd during the preload phase";
+        String termsContentText = "failed to get lease terms during the preload phase";
         try {
-            leaseTerms = IOUtils.getTextResource("leaseTerms.html", BuildingsGenerator.class);
+            termsContentText = IOUtils.getTextResource("leaseTerms.html", BuildingsGenerator.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        AvailableLocale en = EntityFactory.create(AvailableLocale.class);
+        en.displayOrder().setValue(10);
+        en.lang().setValue(CompiledLocale.en);
+        Persistence.service().merge(en);
 
-        LegalTermsDescriptor descriptor = EntityFactory.create(LegalTermsDescriptor.class);
-        descriptor.name().setValue(i18n.tr("Basic DEMO Terms"));
-        LegalTermsContent content = EntityFactory.create(LegalTermsContent.class);
-        content.localizedCaption().setValue(i18n.tr("Basic DEMO Terms"));
-        content.content().setValue(leaseTerms);
-        descriptor.content().add(content);
-        policy.summaryTerms().add(descriptor);
+        String caption = i18n.tr("Mockup Summary Terms");
+        policy.summaryTerms().add(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
 
-        descriptor = EntityFactory.create(LegalTermsDescriptor.class);
-        descriptor.name().setValue(i18n.tr("Basic DEMO One Time Payment Terms"));
-        content = EntityFactory.create(LegalTermsContent.class);
-        content.localizedCaption().setValue(i18n.tr("Basic DEMO One Time Payment Terms"));
-        content.content().setValue(leaseTerms);
-        descriptor.content().add(content);
-        policy.oneTimePaymentTerms().set(descriptor);
+        caption = i18n.tr("Mockup One Time Payment Terms");
+        policy.oneTimePaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
 
-        descriptor = EntityFactory.create(LegalTermsDescriptor.class);
-        descriptor.name().setValue(i18n.tr("Basic DEMO Recurring Payment Terms"));
-        content = EntityFactory.create(LegalTermsContent.class);
-        content.localizedCaption().setValue(i18n.tr("Basic DEMO Recurring Payment Terms"));
-        content.content().setValue(leaseTerms);
-        descriptor.content().add(content);
-        policy.recurrentPaymentTerms().set(descriptor);
+        caption = i18n.tr("Mockup Recurrent Time Payment Terms");
+        policy.recurrentPaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
 
         Persistence.service().merge(policy);
 
         return policy;
+    }
+
+    private LegalTermsDescriptor createLegalTermsDescriptor(String name, String description, LegalTermsContent... content) {
+        LegalTermsDescriptor descriptor = EntityFactory.create(LegalTermsDescriptor.class);
+        descriptor.name().setValue(name);
+        descriptor.description().setValue(description);
+        for (LegalTermsContent c : content) {
+            descriptor.content().add(c);
+        }
+        return descriptor;
+    }
+
+    private LegalTermsContent createLegalTermsContent(String caption, AvailableLocale locale, String contentText) {
+        LegalTermsContent content = EntityFactory.create(LegalTermsContent.class);
+        content.locale().set(locale);
+        content.localizedCaption().setValue(caption);
+        content.content().setValue(contentText);
+        return content;
     }
 
 }
