@@ -28,7 +28,8 @@ import java.lang.annotation.Target;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
- * Define the join table between entities for many to many relationship
+ * Define the join table between entities for many(one) to many(one) relationship.
+ * N.B. implemented only for query.
  */
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

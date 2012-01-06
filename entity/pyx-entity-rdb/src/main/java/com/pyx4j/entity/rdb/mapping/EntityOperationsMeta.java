@@ -69,6 +69,8 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> collectionMembers = new Vector<MemberOperationsMeta>();
 
+    private final List<MemberOperationsMeta> joinCollectionMembers = new Vector<MemberOperationsMeta>();
+
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
     private final Mappings mappings;
@@ -97,6 +99,15 @@ public class EntityOperationsMeta {
         return mappings.getTableModel(connection, entityClass).operationsMeta();
     }
 
+    private String memberPersistenceName(MemberMeta memberMeta) {
+        MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+        if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
+            return memberColumn.name();
+        } else {
+            return memberMeta.getFieldName();
+        }
+    }
+
     private void build(Dialect dialect, NamingConvention namingConvention, EntityMeta rootEntityMeta, String path, List<String> accessPath,
             List<String> namesPath, EntityMeta entityMeta) {
         String ownerMemberName = entityMeta.getOwnerMemberName();
@@ -105,11 +116,7 @@ public class EntityOperationsMeta {
             if (memberMeta.isTransient()) {
                 continue;
             }
-            String memberPersistenceName = memberName;
-            MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
-            if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
-                memberPersistenceName = memberColumn.name();
-            }
+            String memberPersistenceName = memberPersistenceName(memberMeta);
 
             if (memberMeta.isEmbedded()) {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
@@ -140,18 +147,7 @@ public class EntityOperationsMeta {
                     memberAccess = new EntityMemberEmbeddedAccess(accessPath, memberName);
                 }
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
-                    if (joinTable != null) {
-                        //TODO ignore joins for now
-                        continue;
-                    }
 
-                    String sqlName;
-                    if (namesPath != null) {
-                        sqlName = namingConvention.sqlEmbededTableName(rootEntityMeta.getPersistenceName(), namesPath, memberPersistenceName);
-                    } else {
-                        sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
-                    }
                     @SuppressWarnings("unchecked")
                     Class<? extends IEntity> entityClass = (Class<IEntity>) memberMeta.getValueClass();
                     ValueAdapter valueAdapter;
@@ -160,14 +156,52 @@ public class EntityOperationsMeta {
                     } else {
                         valueAdapter = new ValueAdapterEntity(dialect, entityClass);
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
-                            + memberName + Path.PATH_SEPARATOR);
-                    collectionMembers.add(member);
+
+                    JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
+                    MemberOperationsMeta member;
+                    if (joinTable != null) {
+                        Class<? extends IEntity> joinEntity = joinTable.value();
+                        EntityMeta joinEntityMeta = EntityFactory.getEntityMeta(joinEntity);
+                        String sqlName = TableModel.getTableName(dialect, joinEntityMeta);
+
+                        String sqlValueName = null;
+                        String sqlOwnerName = null;
+                        for (String jmemberName : joinEntityMeta.getMemberNames()) {
+                            MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
+                            if (!jmemberMeta.isTransient()) {
+                                if (jmemberMeta.getObjectClass().equals(entityClass)) {
+                                    sqlValueName = namingConvention.sqlFieldName(memberPersistenceName(jmemberMeta));
+                                } else if (jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass())) {
+                                    sqlOwnerName = namingConvention.sqlFieldName(memberPersistenceName(jmemberMeta));
+                                }
+                            }
+                        }
+                        if (sqlValueName == null) {
+                            throw new Error("Unmapped value member '" + entityClass + "' in table '" + joinEntityMeta.getCaption() + "'");
+                        }
+                        if (sqlOwnerName == null) {
+                            throw new Error("Unmapped owner member '" + entityClass + "' in table '" + joinEntityMeta.getCaption() + "'");
+                        }
+
+                        member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
+                                + Path.PATH_SEPARATOR, sqlOwnerName, sqlValueName);
+                        joinCollectionMembers.add(member);
+                    } else {
+                        String sqlName;
+                        if (namesPath != null) {
+                            sqlName = namingConvention.sqlEmbededTableName(rootEntityMeta.getPersistenceName(), namesPath, memberPersistenceName);
+                        } else {
+                            sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
+                        }
+                        member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
+                                + Path.PATH_SEPARATOR, "owner", "value");
+                        collectionMembers.add(member);
+                        if (!memberMeta.isDetached()) {
+                            cascadeRetrieveMembers.add(member);
+                        }
+                    }
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
-                    if (!memberMeta.isDetached()) {
-                        cascadeRetrieveMembers.add(member);
-                    }
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     String sqlName;
                     if (namesPath != null) {

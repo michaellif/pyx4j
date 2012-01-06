@@ -182,7 +182,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
         }
     }
 
-    public void TODO_testJoinTable() {
+    public void testJoinTable() {
         String testId = uniqueString();
 
         AccPrincipal principal1 = EntityFactory.create(AccPrincipal.class);

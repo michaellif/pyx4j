@@ -36,5 +36,17 @@ import java.lang.annotation.Target;
 public @interface Detached {
 
     //TODO implement this
-    boolean retrieveToStringMembers() default false;
+    public enum DetachedLevel {
+
+        Detached,
+
+        IdOnly,
+
+        ToStringMembers,
+
+    }
+
+    //N.B.  For now IdOnly  is implemented!
+    DetachedLevel level() default DetachedLevel.ToStringMembers;
+
 }

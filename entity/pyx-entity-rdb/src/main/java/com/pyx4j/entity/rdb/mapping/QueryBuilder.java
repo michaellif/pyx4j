@@ -198,7 +198,7 @@ public class QueryBuilder<T extends IEntity> {
             case EntityList:
             case EntitySet:
                 String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias, false);
-                memberSqlNameBase = memberJoinAlias + ".value";
+                memberSqlNameBase = memberJoinAlias + "." + ((MemberCollectionOperationsMeta) (memeberWithAlias.memberOper)).sqlValueName();
                 break;
             default:
                 memberSqlNameBase = memeberWithAlias.alias + "." + memeberWithAlias.memberOper.sqlName();
@@ -336,7 +336,7 @@ public class QueryBuilder<T extends IEntity> {
             } else {
                 // Collection
                 condition.append(fromAlias).append(".id = ");
-                condition.append(memberJoin.alias).append(".owner ");
+                condition.append(memberJoin.alias).append(".").append(((MemberCollectionOperationsMeta) (memberOper)).sqlOwnerName()).append(' ');
             }
 
             memberJoin.condition = condition.toString();
