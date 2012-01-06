@@ -23,6 +23,7 @@ package com.pyx4j.entity.test.shared;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Counter;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -171,7 +172,7 @@ public class EntityGraphTest extends InitializerTestCase {
         OwnedLeaf ol = EntityFactory.create(OwnedLeaf.class);
         ol.setPrimaryKey(new Key(55));
         ol.name().setValue("To be removed");
-        
+
         root.otherEntity().setPrimaryKey(ol.getPrimaryKey());
 
         final OwnedLeaf olBase = (OwnedLeaf) ol.duplicate();
@@ -205,7 +206,7 @@ public class EntityGraphTest extends InitializerTestCase {
                 assertFalse("OwnedLeaf found in Graph" + entity.getPath(), olBase.equals(entity));
             }
         });
-        
+
         assertEquals("Other not removed", ol.getPrimaryKey(), root.otherEntity().getPrimaryKey());
     }
 
@@ -249,6 +250,37 @@ public class EntityGraphTest extends InitializerTestCase {
                 assertFalse("OwnedLeaf found in Graph" + entity.getPath(), olBase.equals(entity));
             }
         });
+
+    }
+
+    public void testBuisnessDuplicate() {
+        Employee original = EntityFactory.create(Employee.class);
+        original.id().setValue(new Key(9000l));
+        original.firstName().setValue("George");
+        original.salary().setValue(1000.0);
+        {
+            Task task = EntityFactory.create(Task.class);
+            task.id().setValue(new Key(1l));
+            task.finished().setValue(false);
+            task.description().setValue("Drink a cup of coffee");
+            original.tasks().add(task);
+        }
+
+        Employee duplicate = EntityGraph.businessDuplicate(original);
+
+        Path changedPath = EntityGraph.getChangedDataPath(duplicate, original);
+//        assertNull("the duplicate and original are not equal, first change is at: " + (changedPath == null ? "" : changedPath.toString()) + "\noriginal:\n"
+//                + original + "\nduplicate:\n" + duplicate, changedPath);
+        assertNotNull(original.id().getValue());
+        assertNull(duplicate.id().getValue());
+        assertEquals(duplicate.tasks().size(), original.tasks().size());
+
+        for (Task task : original.tasks()) {
+            assertNotNull(task.id().getValue());
+        }
+        for (Task task : duplicate.tasks()) {
+            assertNull(task.id().getValue());
+        }
 
     }
 }
