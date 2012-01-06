@@ -16,6 +16,8 @@ package com.propertyvista.domain.person;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
@@ -26,7 +28,6 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 
 public interface Person extends IEntity {
 
@@ -50,13 +51,16 @@ public interface Person extends IEntity {
     IPrimitive<Sex> sex();
 
     @EmbeddedEntity
-    Phone homePhone();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> homePhone();
 
     @EmbeddedEntity
-    Phone mobilePhone();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> mobilePhone();
 
     @EmbeddedEntity
-    Phone workPhone();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> workPhone();
 
     @Caption(name = "Email Address")
     @EmbeddedEntity

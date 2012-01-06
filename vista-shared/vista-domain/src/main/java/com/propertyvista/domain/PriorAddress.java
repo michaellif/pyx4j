@@ -27,7 +27,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 
 @EmbeddedEntity
 @Table(name = "pt_address")
@@ -58,7 +57,8 @@ public interface PriorAddress extends AddressStructured {
     IPrimitive<Double> payment();
 
     @EmbeddedEntity
-    Phone phone();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> phone();
 
     @NotNull
     @Caption(name = "Owned/Rented")
@@ -73,7 +73,8 @@ public interface PriorAddress extends AddressStructured {
 
     @NotNull
     @EmbeddedEntity
-    Phone managerPhone();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> managerPhone();
 
     @EmbeddedEntity
     Email managerEmail();

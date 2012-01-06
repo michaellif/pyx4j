@@ -78,7 +78,7 @@ public class CampaignManager {
     private static void execute(PhoneCallCampaign phoneCallCampaign, TenantInLease tenant) {
         List<String> numbers = new ArrayList<String>();
         String name = tenant.tenant().person().name().firstName().getValue() + " " + tenant.tenant().person().name().lastName().getValue();
-        String number = tenant.tenant().person().homePhone().number().getValue();
+        String number = tenant.tenant().person().homePhone().getValue();
         if (ApplicationMode.isDevelopment()) {
             String allowedNumber = DevelopmentSecurity.callNumberFilter(number);
             log.info("We will call {} instead of {}", allowedNumber, number);

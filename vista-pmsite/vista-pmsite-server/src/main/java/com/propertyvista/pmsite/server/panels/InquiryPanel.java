@@ -113,12 +113,11 @@ public class InquiryPanel extends Panel {
         // phone
         label = i18n.tr("Work Phone");
         form.add(new Label("workPhoneLabel", label));
-        TextField<String> workPhone = new TextField<String>("workPhone", model.bind(lead.person().workPhone().number()));
+        TextField<String> workPhone = new TextField<String>("workPhone", model.bind(lead.person().workPhone()));
         form.add(workPhone.setLabel(new Model<String>(label)));
-        form.add(new TextField<Integer>("workPhoneExt", model.bind(lead.person().workPhone().extension())));
         label = i18n.tr("Cell Phone");
         form.add(new Label("cellPhoneLabel", label));
-        TextField<String> cellPhone = new TextField<String>("cellPhone", model.bind(lead.person().mobilePhone().number()));
+        TextField<String> cellPhone = new TextField<String>("cellPhone", model.bind(lead.person().mobilePhone()));
         form.add(cellPhone.setLabel(new Model<String>(lead.person().mobilePhone().getMeta().getCaption())));
         // email
         label = i18n.tr("Email Address");

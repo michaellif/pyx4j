@@ -162,7 +162,7 @@ public class TenantsGenerator {
         item.date().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.time().setValue(RandomUtil.randomTime());
         item.address().setValue("Appointment address here...");
-        item.phone().set(CommonsGenerator.createPhone());
+        item.phone().setValue(CommonsGenerator.createPhone());
         item.email().setValue(RandomUtil.randomLetters(5).toLowerCase() + "@sympatico.ca");
         item.status().setValue(RandomUtil.randomEnum(Appointment.Status.class));
 

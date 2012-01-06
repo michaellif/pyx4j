@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.tenant.Tenant;
 
 public interface PaymentMethod extends IEntity {
@@ -59,5 +58,6 @@ public interface PaymentMethod extends IEntity {
     AddressStructured billingAddress();
 
     @EmbeddedEntity
-    Phone phone();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> phone();
 }

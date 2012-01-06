@@ -29,7 +29,6 @@ import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Email.Type;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
@@ -101,9 +100,9 @@ public class CommonsGenerator {
         person.birthDate().setValue(RandomUtil.randomLogicalDate(1930, 1980));
         person.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
 
-        person.homePhone().set(createPhone());
-        person.mobilePhone().set(createPhone());
-        person.workPhone().set(createPhone(DataGenerator.randomPhone("905"), Phone.Type.work, 123));
+        person.homePhone().setValue(createPhone());
+        person.mobilePhone().setValue(createPhone());
+        person.workPhone().setValue(createPhone(DataGenerator.randomPhone("905"), 123));
 
         person.email().set(createEmail(name));
 
@@ -138,20 +137,19 @@ public class CommonsGenerator {
         return email;
     }
 
-    public static Phone createPhone() {
+    public static String createPhone() {
         return createPhone(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "905"));
     }
 
-    public static Phone createPhone(String number) {
-        return createPhone(number, null, null);
+    public static String createPhone(String number) {
+        return createPhone(number, null);
     }
 
-    public static Phone createPhone(String number, Phone.Type type, Integer ext) {
-        Phone phone = EntityFactory.create(Phone.class);
+    public static String createPhone(String number, Integer ext) {
+        String phone = new String();
 
-        phone.type().setValue(type);
-        phone.number().setValue(number);
-        phone.extension().setValue(ext);
+        phone += number;
+        phone += " ext. " + ext;
 
         return phone;
     }

@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.media.Media;
 
 public interface Company extends IEntity {
@@ -33,7 +32,7 @@ public interface Company extends IEntity {
 
     IList<AddressStructured> addresses();
 
-    IList<Phone> phones();
+    IList<CompanyPhone> phones();
 
     IPrimitive<String> website();
 

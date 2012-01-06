@@ -13,13 +13,14 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.person.Name;
 
 @Transient
@@ -32,7 +33,8 @@ public interface ContactIO extends IEntity {
 
     IPrimitive<String> description();
 
-    Phone workPhone();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> workPhone();
 
     Email email();
 

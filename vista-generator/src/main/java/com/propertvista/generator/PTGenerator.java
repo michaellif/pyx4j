@@ -127,8 +127,8 @@ public class PTGenerator {
 
         contact.name().set(CommonsGenerator.createName());
 
-        contact.homePhone().set(CommonsGenerator.createPhone());
-        contact.mobilePhone().set(CommonsGenerator.createPhone());
+        contact.homePhone().setValue(CommonsGenerator.createPhone());
+        contact.mobilePhone().setValue(CommonsGenerator.createPhone());
 
         contact.email().set(CommonsGenerator.createEmail(contact.name()));
 
@@ -341,10 +341,10 @@ public class PTGenerator {
 
         address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
-        address.phone().set(CommonsGenerator.createPhone());
+        address.phone().setValue(CommonsGenerator.createPhone());
         address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
         address.managerName().setValue("Mr. " + DataGenerator.randomLastName());
-        address.managerPhone().set(CommonsGenerator.createPhone());
+        address.managerPhone().setValue(CommonsGenerator.createPhone());
         address.managerEmail().set(
                 CommonsGenerator.createEmail(DataGenerator.randomFirstName().toLowerCase() + "@" + DataGenerator.random(PreloadData.EMAIL_DOMAINS),
                         Email.Type.work));

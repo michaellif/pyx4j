@@ -7,18 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 2, 2012
- * @author stanp
+ * Created on Jan 5, 2012
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.communication;
+package com.propertyvista.domain.company;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ContactPhone extends Contact {
+public interface CompanyPhone extends IEntity {
 
+    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 }

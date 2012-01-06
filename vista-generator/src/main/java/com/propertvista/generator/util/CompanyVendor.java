@@ -18,6 +18,7 @@ import com.propertvista.generator.PreloadData;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.company.CompanyPhone;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.company.OrganizationContacts;
@@ -41,7 +42,9 @@ public class CompanyVendor {
         }
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            company.phones().add(CommonsGenerator.createPhone());
+            CompanyPhone phone = EntityFactory.create(CompanyPhone.class);
+            phone.phone().setValue(CommonsGenerator.createPhone());
+            company.phones().add(phone);
         }
 
         String domain = company.name().getStringView().toLowerCase() + ".com";
