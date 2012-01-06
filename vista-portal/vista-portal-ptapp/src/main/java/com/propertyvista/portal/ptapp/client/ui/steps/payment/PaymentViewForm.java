@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -47,11 +46,13 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
 
     private static I18n i18n = I18n.get(PaymentViewForm.class);
 
-    private PaymentViewImpl view;
+    public static String DEFAULT_STYLE_PREFIX = "PaymentViewForm";
 
     public static enum StyleSuffix implements IStyleName {
-        PaymentImages, PaymentFee, PaymentForm
+        oneTimePaymentTerms, recurrentPaymentTerms
     }
+
+    private PaymentViewImpl view;
 
     public static enum StyleDependent implements IStyleDependent {
         item, selected
@@ -87,6 +88,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         CLabel notes;
         inject(proto().oneTimePaymentTerms().content().content(), notes = new CLabel());
         notes.setAllowHtml(true);
+        notes.asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.oneTimePaymentTerms);
         notes.asWidget().getElement().getStyle().setMarginLeft(1.5, Unit.EM);
         notes.asWidget().setWidth("auto");
         info.add(notes.asWidget());
@@ -108,18 +110,10 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
             termContent.setAllowHtml(true);
             termContent.setWordWrap(true);
 
-            ScrollPanel terms = new ScrollPanel(termContent.asWidget());
-            terms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            terms.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            terms.getElement().getStyle().setBorderColor("#bbb");
+            ScrollPanel termsScroll = new ScrollPanel(termContent.asWidget());
+            termsScroll.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.recurrentPaymentTerms);
 
-            terms.getElement().getStyle().setBackgroundColor("white");
-            terms.getElement().getStyle().setColor("black");
-
-            terms.getElement().getStyle().setPaddingLeft(0.5, Unit.EM);
-            terms.setHeight("20em");
-
-            main.setWidget(++row, 0, terms);
+            main.setWidget(++row, 0, termsScroll);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().preauthoriseAgree()), 5).build());
         }
 

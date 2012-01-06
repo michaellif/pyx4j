@@ -34,6 +34,7 @@ import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentViewForm;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.AgreeFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.LeaseTemsFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
@@ -66,12 +67,12 @@ public class PtAppTheme extends VistaTheme {
         initCellListStyle();
         initEntityFolderStyles();
 
-        initVistaSummaryViewStyles();
         initVistaCaptionViewStyles();
         initVistaMainNavigViewStyles();
         initVistaSecondNavigViewStyles();
-        initPaymentRadioButtonGroupStyles();
 
+        initSummaryStepViewStyles();
+        initPaymentStepViewStyles();
     }
 
     protected void initEntityFolderStyles() {
@@ -109,62 +110,6 @@ public class PtAppTheme extends VistaTheme {
         style.addProperty("border-top-color", ThemeColors.object1, 0.4);
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
-        addStyle(style);
-    }
-
-    protected void initVistaSummaryViewStyles() {
-        // Lease Terms:
-        String prefix = LeaseTemsFolder.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Content));
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-color", "#bbb");
-
-        style.addProperty("font-weight", "normal");
-
-        style.addProperty("background-color", "white");
-        style.addProperty("color", "black");
-
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Agrees));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Scroll));
-        style.addProperty("height", "20em");
-        addStyle(style);
-
-        prefix = AgreeFolder.DEFAULT_STYLE_PREFIX;
-
-        style = new Style(Selector.valueOf(prefix));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, AgreeFolder.StyleSuffix.Person));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, AgreeFolder.StyleSuffix.Agree));
-        addStyle(style);
-
-        // Signatures:
-        prefix = SignatureFolder.DEFAULT_STYLE_PREFIX;
-
-        style = new Style(Selector.valueOf(prefix));
-        style.addProperty("color", ThemeColors.foreground);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.Label));
-        style.addProperty("color", "#fff");
-        style.addProperty("font-size", "1.2em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("text-align", "left");
-        style.addProperty("text-shadow", "0 -1px 0 #333333");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.Edit));
         addStyle(style);
     }
 
@@ -341,7 +286,90 @@ public class PtAppTheme extends VistaTheme {
         addStyle(style);
     }
 
-    private void initPaymentRadioButtonGroupStyles() {
+    protected void initSummaryStepViewStyles() {
+        // Lease Terms:
+        String prefix = LeaseTemsFolder.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Content));
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-color", "#bbb");
+
+        style.addProperty("font-weight", "normal");
+
+        style.addProperty("background-color", "white");
+        style.addProperty("color", "black");
+
+        style.addProperty("padding-left", "0.5em");
+        style.addProperty("padding-right", "0.5em");
+
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Agrees));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Scroll));
+        style.addProperty("height", "20em");
+        addStyle(style);
+
+        prefix = AgreeFolder.DEFAULT_STYLE_PREFIX;
+
+        style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, AgreeFolder.StyleSuffix.Person));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, AgreeFolder.StyleSuffix.Agree));
+        addStyle(style);
+
+        // Signatures:
+        prefix = SignatureFolder.DEFAULT_STYLE_PREFIX;
+
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("color", ThemeColors.foreground);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.Label));
+        style.addProperty("color", "#fff");
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "left");
+        style.addProperty("text-shadow", "0 -1px 0 #333333");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.Edit));
+        addStyle(style);
     }
 
+    private void initPaymentStepViewStyles() {
+        // Lease Terms:
+        String prefix = PaymentViewForm.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.oneTimePaymentTerms));
+        style.addProperty("color", "black");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, PaymentViewForm.StyleSuffix.recurrentPaymentTerms));
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-color", "#bbb");
+
+        style.addProperty("font-weight", "normal");
+
+        style.addProperty("background-color", "white");
+        style.addProperty("color", "black");
+
+        style.addProperty("padding-left", "0.5em");
+        style.addProperty("padding-right", "0.5em");
+
+        style.addProperty("height", "20em");
+        addStyle(style);
+    }
 }

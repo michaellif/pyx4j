@@ -81,6 +81,7 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder()));
 
             // styling:
+            get(proto().content().content()).asWidget().setWidth("auto");
             get(proto().content().content()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content.name());
             get(proto().agrees()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Agrees.name());
 
