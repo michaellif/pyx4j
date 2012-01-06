@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.propertvista.generator.PreloadData;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
@@ -102,7 +103,7 @@ public class CommonsGenerator {
 
         person.homePhone().setValue(createPhone());
         person.mobilePhone().setValue(createPhone());
-        person.workPhone().setValue(createPhone(DataGenerator.randomPhone("905"), 123));
+        person.workPhone().setValue(createPhone(DataGenerator.randomPhone("905"), "123"));
 
         person.email().set(createEmail(name));
 
@@ -145,11 +146,11 @@ public class CommonsGenerator {
         return createPhone(number, null);
     }
 
-    public static String createPhone(String number, Integer ext) {
+    public static String createPhone(String number, String ext) {
         String phone = new String(number);
 
-        if (ext != null) {
-            phone += " ext. " + ext;
+        if (!CommonsStringUtils.isEmpty(ext)) {
+            phone += " ex. " + ext;
         }
 
         return phone;
