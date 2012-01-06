@@ -41,8 +41,6 @@ public abstract class PickerPanel<E> {
 
     protected abstract void setOptions(List<E> options);
 
-    protected abstract void setOptions(List<E> options, E parent);
-
     protected abstract void setSelection(Collection<E> items);
 
     protected void setPickerPopup(PickerPopup<E> pickerPopup) {
@@ -53,7 +51,7 @@ public abstract class PickerPanel<E> {
         pickerPopup.hide();
     }
 
-    public abstract boolean requiresOptionsRefresh();
+    public abstract boolean isRequiredOptionsRefresh();
 
     public abstract void setFocus(boolean focus);
 

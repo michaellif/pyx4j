@@ -74,7 +74,7 @@ public abstract class ComboBox<E> extends HorizontalPanel {
             public void onClick(ClickEvent event) {
 
                 if (!pickerPopup.isShowing()) {
-                    if (pickerPanel.requiresOptionsRefresh()) {
+                    if (pickerPanel.isRequiredOptionsRefresh()) {
                         optionsGrabber.obtainOptions(new Request(), new Callback<E>() {
                             @Override
                             public void onOptionsReady(Request request, Response<E> response) {

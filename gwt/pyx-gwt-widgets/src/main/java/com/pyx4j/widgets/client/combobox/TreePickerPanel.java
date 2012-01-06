@@ -28,8 +28,6 @@ import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
@@ -44,6 +42,8 @@ import com.pyx4j.commons.css.CSSClass;
 
 public class TreePickerPanel<E> extends PickerPanel<E> {
 
+    private static TreeImages images = GWT.create(TreeImages.class);
+
     private final ListBox<E> listBox;
 
     private final PickerTree tree;
@@ -52,9 +52,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
     private final boolean plainList;
 
-    private static TreeImages images = GWT.create(TreeImages.class);
-
-    private boolean requiresOptionsRefresh = true;
+    private boolean requiredOptionsRefresh = true;
 
     private final PickerScrollPanel scroll;
 
@@ -73,7 +71,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
     @Override
     protected void setOptions(List<E> options) {
-        requiresOptionsRefresh = (options == null);
+        requiredOptionsRefresh = (options == null);
         tree.clear();
         for (E option : options) {
             PickerTreeItem treeItem = null;
@@ -88,24 +86,11 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
             treeItem.getElement().getStyle().setPadding(1, Unit.PX);
             treeItem.setStyleName(CSSClass.pyx4j_PickerLine.name());
         }
-        tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
-            @Override
-            public void onSelection(SelectionEvent<TreeItem> event) {
-                listBox.setSelection(getSelection());
-            }
-        });
-
     }
 
     @Override
-    public boolean requiresOptionsRefresh() {
-        return requiresOptionsRefresh;
-    }
-
-    @Override
-    protected void setOptions(List<E> options, E parent) {
-        // TODO Auto-generated method stub
-
+    public boolean isRequiredOptionsRefresh() {
+        return requiredOptionsRefresh;
     }
 
     @Override
@@ -150,7 +135,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
         private CheckBox checkBox;
 
-        private boolean selected;
+        private boolean checked;
 
         public PickerTreeItem(E value) {
             super();
@@ -161,7 +146,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
-                        selected = event.getValue();
+                        checked = event.getValue();
                     }
                 });
                 setWidget(checkBox);
@@ -172,19 +157,18 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
         }
 
-        public void setChecked(boolean selected) {
-            super.setSelected(selected);
-            this.selected = selected;
+        public void setChecked(boolean checked) {
+            this.checked = checked;
             if (!multipleSelect) {
-                setStyleName(getElement(), CSSClass.pyx4j_PickerLine_Selected.name(), selected);
+                setStyleName(getElement(), CSSClass.pyx4j_PickerLine_Selected.name(), checked);
             } else {
-                checkBox.setValue(selected);
+                checkBox.setValue(checked);
             }
         }
 
         public boolean isChecked() {
-            System.out.println("++++++++++++++isSelected " + value + " " + selected);
-            return selected;
+            System.out.println("++++++++++++++isSelected " + value + " " + checked);
+            return checked;
         }
 
     }
