@@ -50,15 +50,12 @@ public interface Person extends IEntity {
     @NotNull
     IPrimitive<Sex> sex();
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> homePhone();
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> mobilePhone();
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> workPhone();
 

@@ -19,7 +19,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -70,7 +69,6 @@ public interface Appointment extends IEntity {
 
     Employee agent();
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 

@@ -56,7 +56,6 @@ public interface PriorAddress extends AddressStructured {
     @Format("#0.00")
     IPrimitive<Double> payment();
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
@@ -72,7 +71,6 @@ public interface PriorAddress extends AddressStructured {
     IPrimitive<String> managerName();
 
     @NotNull
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> managerPhone();
 

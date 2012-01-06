@@ -15,13 +15,11 @@ package com.propertyvista.domain.company;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface CompanyPhone extends IEntity {
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 }
