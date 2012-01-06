@@ -57,7 +57,6 @@ public interface PaymentMethod extends IEntity {
     @EmbeddedEntity
     AddressStructured billingAddress();
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 }
