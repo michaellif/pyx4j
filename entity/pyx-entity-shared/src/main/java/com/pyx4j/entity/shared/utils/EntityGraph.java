@@ -344,4 +344,22 @@ public class EntityGraph {
         }
         return updated;
     }
+
+    /**
+     * @param entity
+     * @return an copy of the provided entity with <code>id</code>s
+     */
+    public static <E extends IEntity> E businessDuplicate(E entity) {
+        final E copy = entity.duplicate();
+        applyRecursively(copy, new ApplyMethod() {
+            @Override
+            public void apply(IEntity entity) {
+                if (entity == copy || entity.getMeta().isOwnedRelationships()) {
+                    entity.id().set(null);
+                }
+            }
+        });
+
+        return copy;
+    }
 }
