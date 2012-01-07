@@ -21,6 +21,8 @@
 package com.pyx4j.security.shared;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class AclSerializable implements Acl, Serializable {
@@ -33,15 +35,19 @@ public class AclSerializable implements Acl, Serializable {
 
     private Set<Restriction> restrictions;
 
+    private Map<Object, Map<Class<? extends AccessRule>, List<AccessRule>>> accessRules;
+
     AclSerializable() {
 
     }
 
-    AclSerializable(Set<Behavior> behaviors, Set<Permission> permissions, Set<Restriction> restrictions) {
+    AclSerializable(Set<Behavior> behaviors, Set<Permission> permissions, Set<Restriction> restrictions,
+            Map<Object, Map<Class<? extends AccessRule>, List<AccessRule>>> accessRules) {
         super();
         this.behaviors = behaviors;
         this.permissions = permissions;
         this.restrictions = restrictions;
+        this.accessRules = accessRules;
     }
 
     @Override
@@ -68,6 +74,17 @@ public class AclSerializable implements Acl, Serializable {
     @Override
     public Set<Behavior> getBehaviours() {
         return behaviors;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleInterfaceClass, Object subject) {
+        assert accessRuleInterfaceClass.isInterface();
+        Map<Class<? extends AccessRule>, List<AccessRule>> rulesBySubject = accessRules.get(subject);
+        if (rulesBySubject != null) {
+            return (List<T>) rulesBySubject.get(accessRuleInterfaceClass);
+        }
+        return null;
     }
 
 }

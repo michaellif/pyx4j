@@ -23,8 +23,10 @@ package com.pyx4j.security.shared;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 public class AclBuilder implements AclCreator {
 
@@ -36,16 +38,52 @@ public class AclBuilder implements AclCreator {
 
         private Set<Restriction> restrictions = new HashSet<Restriction>();
 
+        private Map<Object, Map<Class<? extends AccessRule>, List<AccessRule>>> accessRules = new HashMap<Object, Map<Class<? extends AccessRule>, List<AccessRule>>>();
+
         protected void add(PermissionsGroup pg) {
             behaviors.addAll(pg.behaviors);
             permissions.addAll(pg.permissions);
             restrictions.addAll(pg.restrictions);
+
+            for (Map.Entry<Object, Map<Class<? extends AccessRule>, List<AccessRule>>> meBySubject : pg.accessRules.entrySet()) {
+                Map<Class<? extends AccessRule>, List<AccessRule>> rulesBySubject = meBySubject.getValue();
+                for (Map.Entry<Class<? extends AccessRule>, List<AccessRule>> meByClass : rulesBySubject.entrySet()) {
+                    for (AccessRule accessRule : meByClass.getValue()) {
+                        grant(meByClass.getKey(), accessRule, meBySubject.getKey());
+                    }
+                }
+            }
         }
 
         protected void freeze() {
             behaviors = Collections.unmodifiableSet(behaviors);
             permissions = Collections.unmodifiableSet(permissions);
             restrictions = Collections.unmodifiableSet(restrictions);
+
+            //Make internals structure unmodifiable
+            for (Map.Entry<Object, Map<Class<? extends AccessRule>, List<AccessRule>>> meBySubject : accessRules.entrySet()) {
+                Map<Class<? extends AccessRule>, List<AccessRule>> rulesBySubject = meBySubject.getValue();
+                for (Map.Entry<Class<? extends AccessRule>, List<AccessRule>> meByClass : rulesBySubject.entrySet()) {
+                    rulesBySubject.put(meByClass.getKey(), Collections.unmodifiableList(meByClass.getValue()));
+                }
+                accessRules.put(meBySubject.getKey(), Collections.unmodifiableMap(rulesBySubject));
+            }
+            accessRules = Collections.unmodifiableMap(accessRules);
+        }
+
+        private void grant(Class<? extends AccessRule> accessRuleInterfaceClass, AccessRule accessRule, Object subject) {
+            assert accessRuleInterfaceClass.isInterface();
+            Map<Class<? extends AccessRule>, List<AccessRule>> rulesBySubject = accessRules.get(subject);
+            if (rulesBySubject == null) {
+                rulesBySubject = new HashMap<Class<? extends AccessRule>, List<AccessRule>>();
+                accessRules.put(subject, rulesBySubject);
+            }
+            List<AccessRule> rulesByClass = rulesBySubject.get(accessRuleInterfaceClass);
+            if (rulesByClass == null) {
+                rulesByClass = new Vector<AccessRule>();
+                rulesBySubject.put(accessRuleInterfaceClass, rulesByClass);
+            }
+            rulesByClass.add(accessRule);
         }
     }
 
@@ -71,16 +109,16 @@ public class AclBuilder implements AclCreator {
     @Override
     public Acl createAcl(Set<Behavior> behaviors) {
         if (!frozen) {
-            throw new RuntimeException("ACL has not been frosen");
+            throw new RuntimeException("ACL has not been frozen");
         }
         if ((behaviors == null) || (behaviors.size() == 0)) {
-            return new AclSerializable(Collections.unmodifiableSet(new HashSet<Behavior>()), global.permissions, global.restrictions);
+            return new AclSerializable(Collections.unmodifiableSet(new HashSet<Behavior>()), global.permissions, global.restrictions, global.accessRules);
         }
         PermissionsGroup g = new PermissionsGroup();
         g.add(global);
         addRecurcive(g, behaviors);
         g.freeze();
-        return new AclSerializable(g.behaviors, g.permissions, g.restrictions);
+        return new AclSerializable(g.behaviors, g.permissions, g.restrictions, g.accessRules);
     }
 
     @Override
@@ -106,8 +144,8 @@ public class AclBuilder implements AclCreator {
         global.permissions.add(permission);
     }
 
-    protected void grant(AccessRule accessRule, Object subject) {
-        //TODO
+    protected void grant(Class<? extends AccessRule> accessRuleInterfaceClass, AccessRule accessRule, Object subject) {
+        global.grant(accessRuleInterfaceClass, accessRule, subject);
     }
 
     protected void revoke(Permission restriction) {
@@ -131,8 +169,8 @@ public class AclBuilder implements AclCreator {
         getGroup(behavior).permissions.add(permission);
     }
 
-    protected void grant(Behavior behavior, AccessRule accessRule, Object subject) {
-        //TODO
+    protected void grant(Behavior behavior, Class<? extends AccessRule> accessRuleInterfaceClass, AccessRule accessRule, Object subject) {
+        getGroup(behavior).grant(accessRuleInterfaceClass, accessRule, subject);
     }
 
     protected void grant(Behavior behaviorDest, Behavior behaviorGranted) {

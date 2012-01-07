@@ -20,7 +20,10 @@
  */
 package com.pyx4j.entity.server.lister;
 
+import java.util.List;
+
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -32,6 +35,13 @@ public class EntityLister {
 
     public static <T extends IEntity> EntitySearchResult<T> secureQuery(EntityListCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+        @SuppressWarnings({ "rawtypes" })
+        List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
+        if (rules != null) {
+            for (DatasetAccessRule<T> rule : rules) {
+                rule.applyRule(criteria);
+            }
+        }
         EntitySearchResult<T> r = new EntitySearchResult<T>();
         final ICursorIterator<T> unfiltered = Persistence.service().query(null, criteria);
         try {

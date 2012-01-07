@@ -27,11 +27,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import com.pyx4j.security.shared.Acl;
-import com.pyx4j.security.shared.AclBuilder;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.CoreBehavior;
 
-public class AppengineAclBuilder extends AclBuilder {
+public class AppengineAclBuilder extends ReflectionEnabledAclBuilder {
 
     @Override
     public Acl createAcl(Set<Behavior> behaviors) {

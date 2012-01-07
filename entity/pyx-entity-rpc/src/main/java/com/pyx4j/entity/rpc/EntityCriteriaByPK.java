@@ -24,6 +24,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 /**
  * Special case criteria for EntityServices.RetrieveByPK service.
@@ -73,6 +74,7 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
 
     public void setPrimaryKey(Key primaryKey) {
         this.primaryKey = primaryKey;
+        super.add(PropertyCriterion.eq(proto().id(), primaryKey));
     }
 
     @Override

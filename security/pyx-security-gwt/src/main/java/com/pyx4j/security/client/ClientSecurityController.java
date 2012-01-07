@@ -21,6 +21,7 @@
 package com.pyx4j.security.client;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.gwt.commons.ClientEventBus;
+import com.pyx4j.security.shared.AccessRule;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.Permission;
@@ -66,6 +68,11 @@ public class ClientSecurityController extends SecurityController {
         @Override
         public int hashCode() {
             return behaviours.hashCode();
+        }
+
+        @Override
+        public <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleInterfaceClass, Object subject) {
+            return null;
         }
 
     }

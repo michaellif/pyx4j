@@ -21,6 +21,7 @@
 package com.pyx4j.security.shared;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
@@ -102,7 +103,7 @@ public abstract class SecurityController {
         }
     }
 
-    public static <T extends AccessRule> T getAccessRule(Class<T> accessRuleClass, Object subject) {
-        return null;
+    public static <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleClass, Object subject) {
+        return controller.getAcl().getAccessRules(accessRuleClass, subject);
     }
 }

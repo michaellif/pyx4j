@@ -20,6 +20,7 @@
  */
 package com.pyx4j.security.shared;
 
+import java.util.List;
 import java.util.Set;
 
 public interface Acl {
@@ -30,6 +31,6 @@ public interface Acl {
 
     public boolean checkPermission(Permission permission);
 
-    //public <T extends AccessRule> T getAccessRule(Class<T> accessRuleClass, Object subject);
+    public <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleInterfaceClass, Object subject);
 
 }

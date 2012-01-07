@@ -24,11 +24,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.security.shared.Acl;
-import com.pyx4j.security.shared.AclBuilder;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.server.contexts.Context;
 
-public class ServletContainerAclBuilder extends AclBuilder {
+public class ServletContainerAclBuilder extends ReflectionEnabledAclBuilder {
 
     @Override
     public Acl createAcl(Set<Behavior> behaviors) {

@@ -86,6 +86,16 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         this.entityPrototype = EntityFactory.getEntityPrototype(entityClass);
     }
 
+    public EntityQueryCriteria(EntityQueryCriteria<E> criteria) {
+        this.entityPrototype = criteria.entityPrototype;
+        if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
+            for (Criterion criterion : criteria.getFilters()) {
+                this.add(criterion);
+            }
+        }
+        this.setSorts(criteria.getSorts());
+    }
+
     public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass) {
         return new EntityQueryCriteria<T>(entityClass);
     }

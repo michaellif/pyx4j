@@ -89,6 +89,8 @@ public class EntityServicesImpl {
         } else {
             SecurityController.assertPermission(EntityPermission.permissionUpdate(entity));
         }
+        //TODO we should apply DatasetAccessRule
+
         PersistenceServicesFactory.getPersistenceService().merge(entity);
     }
 
@@ -195,7 +197,7 @@ public class EntityServicesImpl {
                     } else if ((value instanceof String)) {
                         c.add(new PropertyCriterion(path.getPathString(), Restriction.RDB_LIKE, value));
                     } else {
-                        log.warn("Unsupport SearchCriteria filter");
+                        log.warn("Unsupported SearchCriteria filter");
                     }
                 }
             }
@@ -215,10 +217,12 @@ public class EntityServicesImpl {
     public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
 
-        @SuppressWarnings("unchecked")
-        DatasetAccessRule<T> rule = SecurityController.getAccessRule(DatasetAccessRule.class, criteria.getEntityClass());
-        if (rule != null) {
-            rule.applyRule(criteria);
+        @SuppressWarnings({ "rawtypes" })
+        List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
+        if (rules != null) {
+            for (DatasetAccessRule<T> rule : rules) {
+                rule.applyRule(criteria);
+            }
         }
 
         List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
@@ -236,6 +240,15 @@ public class EntityServicesImpl {
 
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+        @SuppressWarnings({ "rawtypes" })
+        List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
+        if (rules != null) {
+            criteria = new EntityQueryCriteria<T>(criteria);
+            for (DatasetAccessRule<T> rule : rules) {
+                rule.applyRule(criteria);
+            }
+        }
+
         T ent;
         if (criteria instanceof EntityCriteriaByPK) {
             ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria.getEntityClass(), ((EntityCriteriaByPK<?>) criteria).getPrimaryKey());
