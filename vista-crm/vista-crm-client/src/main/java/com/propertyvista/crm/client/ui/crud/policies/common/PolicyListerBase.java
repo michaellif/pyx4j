@@ -13,16 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.common;
 
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -36,7 +32,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
 
     private static final I18n i18n = I18n.get(PolicyListerBase.class);
 
-    private final List<ColumnDescriptor<P>> defaultColumns;
+//    protected List<ColumnDescriptor<P>> defaultColumns;
 
     public PolicyListerBase(Class<P> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
         super(clazz, itemOpenPlaceClass, false, true);
@@ -51,19 +47,20 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
             }
         }));
 
-        defaultColumns = Arrays.asList(//@formatter:off
-                 (ColumnDescriptor<P>)new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                 (ColumnDescriptor<P>)new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-        );//@formatter:on
-        setColumnDescriptors(new LinkedList<ColumnDescriptor<P>>());
+        // TODO : just compilation fix!!!
+//        defaultColumns = Arrays.asList(//@formatter:off
+//                 (ColumnDescriptor<P>)new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+//                 (ColumnDescriptor<P>)new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+//        );//@formatter:on
+//        setColumnDescriptors(new LinkedList<ColumnDescriptor<P>>());
     }
 
-    @Override
-    public void setColumnDescriptors(List<ColumnDescriptor<P>> columnDescriptors) {
-        List<ColumnDescriptor<P>> columns = new LinkedList<ColumnDescriptor<P>>(defaultColumns);
-        columns.addAll(columnDescriptors);
-        super.setColumnDescriptors(columns);
-    }
+//    @Override
+//    public void setColumnDescriptors(List<ColumnDescriptor<P>> columnDescriptors) {
+//        List<ColumnDescriptor<P>> columns = new LinkedList<ColumnDescriptor<P>>(defaultColumns);
+//        columns.addAll(columnDescriptors);
+//        super.setColumnDescriptors(columns);
+//    }
 
     public void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {
         if (!itemsToRemove.isEmpty()) {
