@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -31,13 +29,6 @@ public class LeaseTermsPolicyListerViewImpl extends CrmListerViewImplBase<LeaseT
 
         public LeaseTermsPolicyLister() {
             super(LeaseTermsPolicyDTO.class, CrmSiteMap.Settings.Policies.LeaseTerms.class);
-
-            // TODO : just compilation fix!!!
-            setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-            );//@formatter:on
-
         }
     }
 }
