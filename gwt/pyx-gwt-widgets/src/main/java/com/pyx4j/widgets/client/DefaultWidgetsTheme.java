@@ -81,8 +81,8 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("padding", "0px");
         addStyle(style);
 
-        style = new Style(".", StyleDependent.watermark);
-        style.addProperty("color", ThemeColors.foreground, 0.4);
+        style = new Style(".", StyleName.TextBox, "-", StyleDependent.watermark);
+        style.addProperty("color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
     }

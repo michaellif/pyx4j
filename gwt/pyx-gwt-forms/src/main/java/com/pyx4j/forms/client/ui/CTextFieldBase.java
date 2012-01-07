@@ -87,4 +87,5 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         //This takes in consideration that 2 values can be null but actual state of component is not empty after failed parsing
         return value1 != null && value1 == value2;
     }
+
 }

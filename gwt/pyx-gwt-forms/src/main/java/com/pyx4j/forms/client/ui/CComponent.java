@@ -421,6 +421,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             revalidate();
+            if (isValid()) {
+                setNativeValue(value);
+            }
             ValueChangeEvent.fire(this, value);
         }
     }

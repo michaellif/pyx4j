@@ -35,6 +35,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
         super(title);
         setFormat(new PhoneFormat());
         addValueValidator(new TextBoxParserValidator<String>());
+        setWatermark("(___) ___-____ x___");
     }
 
     @Override
@@ -44,7 +45,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     public static class PhoneFormat implements IFormat<String> {
 
-        private final static String regex = "^\\s*(\\+?1\\s?)?(\\(?\\d{3}\\)?\\s?[\\s-]?){1,2}(\\d{4})$";
+        private final static String regex = "^[\\s\\d\\(\\)-]+x\\d{1,4}$";
 
         public PhoneFormat() {
 
@@ -54,7 +55,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
             if (value == null) {
                 return null;
             } else {
-                return value.replaceAll("[\\+\\s\\(\\)-]+", "");
+                return value.replaceAll("[\\s\\(\\)-]+", "");
             }
         }
 
@@ -64,16 +65,15 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
                 return null;
             }
             String unformatedPhone = normalize(value);
-            if (unformatedPhone.length() == 11) {
-                return "+" + unformatedPhone.subSequence(0, 1) + " " + unformatedPhone.subSequence(1, 4) + "-" + unformatedPhone.subSequence(4, 7) + "-"
-                        + unformatedPhone.subSequence(7, 11);
-            } else if (unformatedPhone.length() == 10) {
-                return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
-            } else if (unformatedPhone.length() == 7) {
-                return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 7);
+            if (unformatedPhone.length() == 10) {
+                return "(" + unformatedPhone.subSequence(0, 3) + ") " + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
+            } else if (unformatedPhone.length() > 10) {
+                return "(" + unformatedPhone.subSequence(0, 3) + ") " + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10) + " "
+                        + unformatedPhone.subSequence(10, unformatedPhone.length());
             } else {
                 return unformatedPhone;
             }
+
         }
 
         @Override
@@ -81,9 +81,23 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             }
+            String errorMessage = "Not a valid phone number. Must be in the format (123) 456-7890 x1234";
             if (!string.matches(regex)) {
-                throw new ParseException("Not a valid phone number. Must be in the format 123-4567 or 123-456-7890 (dashes optional)", 0);
+                throw new ParseException(errorMessage, 0);
             }
+            String unformatedPhone = normalize(string);
+            if (!unformatedPhone.contains("x")) {
+                if (unformatedPhone.length() != 10) {
+                    throw new ParseException(errorMessage, 0);
+                }
+            } else if (unformatedPhone.indexOf("x") == 10) {
+                if (unformatedPhone.length() < 12) {
+                    throw new ParseException(errorMessage, 0);
+                }
+            } else {
+                throw new ParseException(errorMessage, 0);
+            }
+
             return format(string);
         }
     }
@@ -111,8 +125,6 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
             } else if (string.length() != unformatedPhone.length()) {
                 // Contains some user formating.
                 return string;
-            } else if (unformatedPhone.length() == 7) {
-                return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 7);
             } else {
                 return string;
             }
