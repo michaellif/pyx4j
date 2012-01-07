@@ -36,6 +36,7 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.server.AdapterFactory;
@@ -166,12 +167,19 @@ public class EntityOperationsMeta {
 
                         String sqlValueName = null;
                         String sqlOwnerName = null;
+                        Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
+                        Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
+                        if ((tableAnnotation != null) && (tableAnnotation.expands() != null)) {
+                            rootEntityClass = tableAnnotation.expands();
+                        }
+
                         for (String jmemberName : joinEntityMeta.getMemberNames()) {
                             MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
                             if (!jmemberMeta.isTransient()) {
                                 if (jmemberMeta.getObjectClass().equals(entityClass)) {
                                     sqlValueName = namingConvention.sqlFieldName(memberPersistenceName(jmemberMeta));
-                                } else if (jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass())) {
+                                } else if ((jmemberMeta.getObjectClass().equals(rootEntityMeta.getEntityClass()))
+                                        || (jmemberMeta.getObjectClass().equals(rootEntityClass))) {
                                     sqlOwnerName = namingConvention.sqlFieldName(memberPersistenceName(jmemberMeta));
                                 }
                             }
