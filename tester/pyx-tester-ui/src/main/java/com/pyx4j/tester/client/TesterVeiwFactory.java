@@ -30,6 +30,8 @@ import com.pyx4j.tester.client.view.NavigView;
 import com.pyx4j.tester.client.view.NavigViewImpl;
 import com.pyx4j.tester.client.view.form.FormBasicView;
 import com.pyx4j.tester.client.view.form.FormBasicViewImpl;
+import com.pyx4j.tester.client.view.form.FormTesterView;
+import com.pyx4j.tester.client.view.form.FormTesterViewImpl;
 import com.pyx4j.tester.client.view.form.FormVisibilityView;
 import com.pyx4j.tester.client.view.form.FormVisibilityViewImpl;
 import com.pyx4j.tester.client.view.form.folder.FolderLayoutView;
@@ -59,6 +61,8 @@ public class TesterVeiwFactory {
                 map.put(type, new CComponentViewImpl());
             } else if (NativeWidgetBasicView.class.equals(type)) {
                 map.put(type, new NativeWidgetBasicViewImpl());
+            } else if (FormTesterView.class.equals(type)) {
+                map.put(type, new FormTesterViewImpl());
             }
         }
         return map.get(type);

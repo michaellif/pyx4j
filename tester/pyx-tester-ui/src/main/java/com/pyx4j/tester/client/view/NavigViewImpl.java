@@ -31,6 +31,8 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.TesterSiteMap;
+import com.pyx4j.tester.client.activity.FormTesterActivity;
+import com.pyx4j.tester.client.view.form.FormTesterView;
 
 public class NavigViewImpl extends SimplePanel implements NavigView {
 
@@ -41,17 +43,24 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
         Tree tree = new Tree();
 
         TreeItem formRoot = new TreeItem("Form");
-        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormBasic())));
-        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormVisibility())));
+        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormBasic(), "A")));
+        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormVisibility(), "B")));
+        AppPlace place = new TesterSiteMap.FormTester();
+        place.arg(FormTesterActivity.FORM_TYPE, FormTesterView.TestFormType.FormBasic.name());
+        formRoot.addItem(new TreeItem(new NavigItemAnchor(place, FormTesterView.TestFormType.FormBasic.name())));
         tree.addItem(formRoot);
 
         TreeItem folderRoot = new TreeItem("Folders");
-        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderLayout())));
-        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderValidation())));
+        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderLayout(), "D")));
+        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderValidation(), "E")));
+        place = new TesterSiteMap.FormTester();
+        place.arg(FormTesterActivity.FORM_TYPE, FormTesterView.TestFormType.FolderLayout.name());
+        folderRoot.addItem(new TreeItem(new NavigItemAnchor(place, FormTesterView.TestFormType.FolderLayout.name())));
+
         tree.addItem(folderRoot);
 
         TreeItem nativeWidgetRoot = new TreeItem("Native Widgets");
-        nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.NativeWidgetBasic())));
+        nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.NativeWidgetBasic(), "G")));
         tree.addItem(nativeWidgetRoot);
 
         setWidget(tree);
@@ -66,9 +75,10 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
         private final AppPlace place;
 
-        public NavigItemAnchor(final AppPlace place) {
+        public NavigItemAnchor(final AppPlace place, String title) {
             this.place = place;
-            Anchor anchor = new Anchor(place.getPlaceId());
+            //Anchor anchor = new Anchor(place.getPlaceId());
+            Anchor anchor = new Anchor(title);
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
