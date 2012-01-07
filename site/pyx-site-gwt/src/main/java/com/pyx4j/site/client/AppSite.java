@@ -40,6 +40,7 @@ import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -115,6 +116,9 @@ public abstract class AppSite implements EntryPoint {
             ClientLogger.setDebugOn(true);
             if (Window.Location.getParameter("trace") != null) {
                 ClientLogger.setTraceOn(true);
+            }
+            if (Window.Location.getParameter("usec") != null) {
+                ClientSecurityController.setUnsecure();
             }
         }
         log.debug("{}", BrowserType.getCompiledType());

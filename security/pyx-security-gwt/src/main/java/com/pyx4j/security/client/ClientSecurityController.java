@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.security.shared.AccessRule;
 import com.pyx4j.security.shared.Acl;
@@ -41,7 +42,7 @@ public class ClientSecurityController extends SecurityController {
 
     private static Logger log = LoggerFactory.getLogger(ClientSecurityController.class);
 
-    private final AclImpl acl = new AclImpl();
+    private AclImpl acl = new AclImpl();
 
     private boolean initialized;
 
@@ -75,6 +76,24 @@ public class ClientSecurityController extends SecurityController {
             return null;
         }
 
+        boolean isUnsecure() {
+            return false;
+        }
+
+    }
+
+    private static class UnsecureAclImpl extends AclImpl {
+
+        @Override
+        public boolean checkBehavior(Behavior behavior) {
+            return true;
+        }
+
+        @Override
+        boolean isUnsecure() {
+            return true;
+        }
+
     }
 
     public ClientSecurityController() {
@@ -83,6 +102,20 @@ public class ClientSecurityController extends SecurityController {
 
     public static ClientSecurityController instance() {
         return (ClientSecurityController) SecurityController.instance();
+    }
+
+    public static void setUnsecure() {
+        if (ApplicationMode.isDevelopment()) {
+            instance().acl = new UnsecureAclImpl();
+        }
+    }
+
+    public static boolean isUnsecure() {
+        if (ApplicationMode.isDevelopment()) {
+            return instance().acl.isUnsecure();
+        } else {
+            return false;
+        }
     }
 
     @Override
