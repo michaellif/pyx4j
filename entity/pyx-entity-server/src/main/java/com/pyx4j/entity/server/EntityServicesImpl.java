@@ -21,7 +21,6 @@
 package com.pyx4j.entity.server;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -29,14 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
 import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.IEntity;
@@ -50,6 +46,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 
+@Deprecated
 public class EntityServicesImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EntityServicesImpl.class);
@@ -75,23 +72,9 @@ public class EntityServicesImpl {
 
         @Override
         public IEntity execute(IEntity request) {
-            secureSave(request);
+            Persistence.secureSave(request);
             return request;
         }
-    }
-
-    public static <T extends IEntity> void secureSave(T entity) {
-        if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-            throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
-        }
-        if (entity.getPrimaryKey() == null) {
-            SecurityController.assertPermission(EntityPermission.permissionCreate(entity));
-        } else {
-            SecurityController.assertPermission(EntityPermission.permissionUpdate(entity));
-        }
-        //TODO we should apply DatasetAccessRule
-
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
     }
 
     public static class SaveListImpl implements EntityServices.SaveList {
@@ -120,7 +103,7 @@ public class EntityServicesImpl {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         public Vector execute(EntityQueryCriteria request) {
-            return secureQuery(request);
+            return Persistence.secureQuery(request);
         }
     }
 
@@ -201,7 +184,7 @@ public class EntityServicesImpl {
                     }
                 }
             }
-            return EntityLister.secureQuery(c);
+            return Persistence.secureQuery(c);
         }
     }
 
@@ -209,56 +192,9 @@ public class EntityServicesImpl {
 
         @Override
         public IEntity execute(EntityQueryCriteria<?> request) {
-            return secureRetrieve(request);
+            return Persistence.secureRetrieve(request);
         }
 
-    }
-
-    public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria) {
-        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
-
-        @SuppressWarnings({ "rawtypes" })
-        List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
-        if (rules != null) {
-            for (DatasetAccessRule<T> rule : rules) {
-                rule.applyRule(criteria);
-            }
-        }
-
-        List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
-        Vector<T> v = new Vector<T>();
-        for (T ent : rc) {
-            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
-            v.add(ent);
-        }
-        return v;
-    }
-
-    public static <T extends IEntity> T secureRetrieve(Class<T> entityClass, Key primaryKey) {
-        return EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(entityClass, primaryKey));
-    }
-
-    public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
-        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
-        @SuppressWarnings({ "rawtypes" })
-        List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
-        if (rules != null) {
-            criteria = new EntityQueryCriteria<T>(criteria);
-            for (DatasetAccessRule<T> rule : rules) {
-                rule.applyRule(criteria);
-            }
-        }
-
-        T ent;
-        if (criteria instanceof EntityCriteriaByPK) {
-            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria.getEntityClass(), ((EntityCriteriaByPK<?>) criteria).getPrimaryKey());
-        } else {
-            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        }
-        if (ent != null) {
-            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
-        }
-        return ent;
     }
 
     public static class RetrieveByPKImpl implements EntityServices.RetrieveByPK {

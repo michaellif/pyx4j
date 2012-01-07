@@ -28,7 +28,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -103,7 +102,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         criteria.setPageNumber(dtoCriteria.getPageNumber());
         criteria.setPageSize(dtoCriteria.getPageSize());
         enhanceListCriteria(criteria, dtoCriteria);
-        EntitySearchResult<E> dbResults = EntityLister.secureQuery(criteria);
+        EntitySearchResult<E> dbResults = Persistence.secureQuery(criteria);
 
         EntitySearchResult<DTO> result = new EntitySearchResult<DTO>();
         result.setEncodedCursorReference(dbResults.getEncodedCursorReference());

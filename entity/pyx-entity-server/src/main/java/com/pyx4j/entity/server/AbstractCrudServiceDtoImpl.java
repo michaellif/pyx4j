@@ -37,12 +37,12 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     protected void persist(E entity, DTO dto) {
-        EntityServicesImpl.secureSave(entity);
+        Persistence.secureSave(entity);
     }
 
     @Override
     public void retrieve(AsyncCallback<DTO> callback, Key entityId) {
-        E entity = EntityServicesImpl.secureRetrieve(entityClass, entityId);
+        E entity = Persistence.secureRetrieve(entityClass, entityId);
         DTO dto = createDTO(entity);
         enhanceRetrieved(entity, dto);
         callback.onSuccess(dto);

@@ -26,7 +26,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.security.shared.SecurityController;
@@ -63,7 +62,7 @@ public abstract class AbstractListServiceImpl<E extends IEntity> implements Abst
         if (!criteria.getEntityClass().equals(entityClass)) {
             throw new Error("Service " + this.getClass().getName() + " declaration error. " + entityClass + "!=" + criteria.getEntityClass());
         }
-        EntitySearchResult<E> result = EntityLister.secureQuery(criteria);
+        EntitySearchResult<E> result = Persistence.secureQuery(criteria);
         for (E entity : result.getData()) {
             enhanceListRetrieved(entity);
         }
