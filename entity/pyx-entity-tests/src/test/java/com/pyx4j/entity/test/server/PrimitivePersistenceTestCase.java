@@ -37,7 +37,7 @@ import com.pyx4j.entity.test.shared.domain.temporal.Schedule;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.DateUtils;
 
-public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
+public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
 
     public void testString() {
         Employee emp = EntityFactory.create(Employee.class);

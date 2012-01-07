@@ -14,20 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 6, 2010
+ * Created on Dec 31, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.gae;
+package com.pyx4j.entity.rdb.oracle;
 
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.SetPersistanceTestCase;
+import com.pyx4j.entity.test.server.SetPersistenceTestCase;
 
-public class SetPersistanceTest extends SetPersistanceTestCase {
+public class SetPersistenceTest extends SetPersistenceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
     }
 
 }

@@ -14,21 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 31, 2010
+ * Created on 2010-12-30
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.mysql;
+package com.pyx4j.entity.rdb.oracle;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.SetPersistanceTestCase;
+import com.pyx4j.entity.test.server.PrimitivePersistenceTestCase;
 
-public class SetPersistanceTest extends SetPersistanceTestCase {
+public class PrimitivePersistenceTest extends PrimitivePersistenceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
     }
 
 }

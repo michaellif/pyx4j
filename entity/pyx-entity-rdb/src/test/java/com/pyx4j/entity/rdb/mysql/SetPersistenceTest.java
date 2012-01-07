@@ -18,17 +18,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.hsql;
+package com.pyx4j.entity.rdb.mysql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.SetPersistanceTestCase;
+import com.pyx4j.entity.test.server.SetPersistenceTestCase;
 
-public class SetPersistanceTest extends SetPersistanceTestCase {
+public class SetPersistenceTest extends SetPersistenceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
     }
 
 }

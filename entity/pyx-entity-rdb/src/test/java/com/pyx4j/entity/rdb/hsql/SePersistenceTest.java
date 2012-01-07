@@ -14,27 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 20, 2010
+ * Created on Dec 31, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.gae;
+package com.pyx4j.entity.rdb.hsql;
 
-import org.junit.Ignore;
-
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.PrimitivePersistanceTestCase;
+import com.pyx4j.entity.test.server.SetPersistenceTestCase;
 
-public class PrimitivePersistanceTest extends PrimitivePersistanceTestCase {
+public class SePersistenceTest extends SetPersistenceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
-    @Override
-    @Ignore
-    public void testSqlTime() {
-        //TODO do our own conversion in engine
-    }
 }

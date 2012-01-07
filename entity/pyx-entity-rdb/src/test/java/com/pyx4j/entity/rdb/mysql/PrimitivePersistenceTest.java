@@ -22,9 +22,9 @@ package com.pyx4j.entity.rdb.mysql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.PrimitivePersistanceTestCase;
+import com.pyx4j.entity.test.server.PrimitivePersistenceTestCase;
 
-public class PrimitivePersistanceTest extends PrimitivePersistanceTestCase {
+public class PrimitivePersistenceTest extends PrimitivePersistenceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {

@@ -29,7 +29,7 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
 import com.pyx4j.entity.test.shared.domain.Task;
 
-public abstract class SetPersistanceTestCase extends DatastoreTestBase {
+public abstract class SetPersistenceTestCase extends DatastoreTestBase {
 
     public void testUnownedSetMemebrIsNotSaved() {
         Department department = EntityFactory.create(Department.class);

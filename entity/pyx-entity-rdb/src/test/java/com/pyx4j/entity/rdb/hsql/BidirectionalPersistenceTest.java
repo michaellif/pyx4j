@@ -18,17 +18,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.oracle;
+package com.pyx4j.entity.rdb.hsql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.BidirectionalPersistenceTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class BidirectionalPersistanceTest extends BidirectionalPersistenceTestCase {
+public class BidirectionalPersistenceTest extends BidirectionalPersistenceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
 }

@@ -177,10 +177,12 @@ public class EntityOperationsMeta {
                             }
                         }
                         if (sqlValueName == null) {
-                            throw new Error("Unmapped value member '" + entityClass + "' in table '" + joinEntityMeta.getCaption() + "'");
+                            throw new Error("Unmapped value member '" + entityClass.getName() + "' in join table '" + joinEntityMeta.getCaption() + "' for "
+                                    + memberName + " in " + entityMeta.getEntityClass().getName());
                         }
                         if (sqlOwnerName == null) {
-                            throw new Error("Unmapped owner member '" + entityClass + "' in table '" + joinEntityMeta.getCaption() + "'");
+                            throw new Error("Unmapped owner member in join table '" + joinEntityMeta.getCaption() + "' for " + memberName + " in "
+                                    + entityMeta.getEntityClass().getName());
                         }
 
                         member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
