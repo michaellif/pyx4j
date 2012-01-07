@@ -45,6 +45,9 @@ import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
 public class PropertyFinder {
 
     public static boolean isPropertyVisible(Building bld) {
+        if (bld.isValueDetached()) {
+            Persistence.service().retrieve(bld);
+        }
         return PublicVisibilityType.global.equals(bld.marketing().visibility().getValue());
     }
 
@@ -238,7 +241,7 @@ public class PropertyFinder {
 
     public static Floorplan getFloorplanDetails(long planId) {
         EntityQueryCriteria<Floorplan> dbCriteria = EntityQueryCriteria.create(Floorplan.class);
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), planId));
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), new Key(planId)));
         List<Floorplan> plans = Persistence.service().query(dbCriteria);
         if (plans.size() != 1) {
             return null;
@@ -260,7 +263,7 @@ public class PropertyFinder {
         }
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building()));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
         return Persistence.service().query(criteria);
     }
