@@ -26,7 +26,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -133,7 +132,7 @@ public class PmcCrudServiceImpl implements PmcCrudService {
             c.setPageSize(criteria.getPageSize());
             // TODO enhanceSearchCriteria
 
-            EntitySearchResult<Pmc> data = EntityLister.secureQuery(c);
+            EntitySearchResult<Pmc> data = Persistence.secureQuery(c);
 
             result = new EntitySearchResult<PmcDTO>();
             result.setEncodedCursorReference(data.getEncodedCursorReference());

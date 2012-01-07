@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
@@ -45,7 +44,7 @@ public abstract class GenericListServiceImpl<DBO extends IEntity> implements Abs
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<DBO>> callback, EntityListCriteria<DBO> criteria) {
-        EntitySearchResult<DBO> result = EntityLister.secureQuery(criteria);
+        EntitySearchResult<DBO> result = Persistence.secureQuery(criteria);
         for (DBO entity : result.getData()) {
             enhanceRetrieve(entity, true);
         }

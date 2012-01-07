@@ -108,7 +108,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         if (charges != null) {
             if (ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.tenants())) {
                 ApplicationProgressMgr.invalidateChargesStep(application);
-                secureSave(charges);
+                Persistence.secureSave(charges);
 
                 log.info("Charges have been re-calculated");
             }

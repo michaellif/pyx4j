@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.lister.EntityLister;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -109,7 +108,7 @@ public abstract class GenericListServiceDtoImpl<DBO extends IEntity, DTO extends
         c.setPageNumber(criteria.getPageNumber());
         c.setPageSize(criteria.getPageSize());
         enhanceListCriteria(c, criteria);
-        EntitySearchResult<DTO> r = GenericConverter.convertDBO2DTO(EntityLister.secureQuery(c), dtoClass, new GenericConverter.EnhanceDTO<DBO, DTO>() {
+        EntitySearchResult<DTO> r = GenericConverter.convertDBO2DTO(Persistence.secureQuery(c), dtoClass, new GenericConverter.EnhanceDTO<DBO, DTO>() {
             @Override
             public void enhanceDTO(DBO in, DTO dto) {
                 GenericListServiceDtoImpl.this.enhanceDTO(in, dto, true);

@@ -24,7 +24,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -265,7 +264,7 @@ public class PMSiteContentManager implements Serializable {
         ArrayList<City> cityList = new ArrayList<City>();
         EntityQueryCriteria<City> criteria = EntityQueryCriteria.create(City.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
-        for (City city : EntityServicesImpl.secureQuery(criteria.asc(criteria.proto().name()))) {
+        for (City city : Persistence.secureQuery(criteria.asc(criteria.proto().name()))) {
             // sanity check
             if (city.name().isNull() || city.province().name().isNull() || city.province().code().isNull()) {
                 continue;

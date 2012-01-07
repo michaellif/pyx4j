@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -80,7 +81,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         if (callFireDemo) {
             EntityQueryCriteria<TenantInLeaseListDTO> criteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-            CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, secureRetrieve(criteria));
+            CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, Persistence.secureRetrieve(criteria));
         }
 
         if ((EnumSet.of(PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.paymentMethod().type().getValue()))
@@ -99,7 +100,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), PtAppContext.getCurrentUserLease()));
-        for (TenantInLease tenantInfo : secureQuery(criteria)) {
+        for (TenantInLease tenantInfo : Persistence.secureQuery(criteria)) {
             if (tenantInfo.role().getValue().equals(TenantInLease.Role.Applicant)) {
                 TenantInLeaseRetriever r = new TenantInLeaseRetriever(tenantInfo.getPrimaryKey());
                 callback.onSuccess(r.tenantScreening.currentAddress().duplicate(AddressStructured.class));

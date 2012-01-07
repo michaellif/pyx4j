@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
@@ -30,7 +30,7 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends Generi
     }
 
     protected void persistDBO(DBO dbo) {
-        EntityServicesImpl.secureSave(dbo);
+        Persistence.secureSave(dbo);
     }
 
     @Override
@@ -41,7 +41,7 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends Generi
 
     @Override
     public void retrieve(AsyncCallback<DBO> callback, Key entityId) {
-        DBO entity = EntityServicesImpl.secureRetrieve(dboClass, entityId);
+        DBO entity = Persistence.secureRetrieve(dboClass, entityId);
         enhanceRetrieve(entity, false);
         callback.onSuccess(entity);
     }

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
-import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -44,7 +44,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
         addTypeCriteria(criteria);
-        Vector<DashboardMetadata> vdm = EntityServicesImpl.secureQuery(criteria);
+        Vector<DashboardMetadata> vdm = Persistence.secureQuery(criteria);
 
         // Load current user's dashboards:
         User user = EntityFactory.create(User.class);
@@ -52,7 +52,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
         addTypeCriteria(criteria);
-        vdm.addAll(EntityServicesImpl.secureQuery(criteria));
+        vdm.addAll(Persistence.secureQuery(criteria));
 
         callback.onSuccess(vdm);
     }
@@ -63,9 +63,9 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         if (entityId.asLong() == -1) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.system));
-            dm = EntityServicesImpl.secureRetrieve(criteria);
+            dm = Persistence.secureRetrieve(criteria);
         } else {
-            dm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
+            dm = Persistence.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
         }
         callback.onSuccess(dm);
     }
@@ -74,7 +74,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     public void saveMetadata(AsyncCallback<DashboardMetadata> callback, DashboardMetadata dm) {
         if (!dm.id().isNull()) {
             //Assert Permission
-            EntityServicesImpl.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
+            Persistence.secureRetrieve(DashboardMetadata.class, dm.getPrimaryKey());
         }
 
         if (!Key.DORMANT_KEY.equals(dm.user().getPrimaryKey())) {
@@ -85,13 +85,13 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
             persistGadgetMetadata(gm);
         }
 
-        EntityServicesImpl.secureSave(dm);
+        Persistence.secureSave(dm);
         callback.onSuccess(dm);
     }
 
     @Override
     public void retrieveSettings(AsyncCallback<GadgetMetadata> callback, Key gadgetMetadataId) {
-        GadgetMetadata gm = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(GadgetMetadata.class, gadgetMetadataId));
+        GadgetMetadata gm = Persistence.secureRetrieve(EntityCriteriaByPK.create(GadgetMetadata.class, gadgetMetadataId));
         if (!gm.isNull()) {
             callback.onSuccess(gm);
         } else {
@@ -113,6 +113,6 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         if (!Key.DORMANT_KEY.equals(gadgetMetadata.user().getPrimaryKey())) {
             gadgetMetadata.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
         }
-        EntityServicesImpl.secureSave(gadgetMetadata);
+        Persistence.secureSave(gadgetMetadata);
     }
 }

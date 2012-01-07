@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataCrudService;
@@ -59,7 +59,7 @@ abstract class AbstractCrudServiceImpl extends GenericCrudServiceImpl<DashboardM
     @Override
     public void save(AsyncCallback<DashboardMetadata> callback, DashboardMetadata entity) {
         //Assert Permission
-        EntityServicesImpl.secureRetrieve(DashboardMetadata.class, entity.getPrimaryKey());
+        Persistence.secureRetrieve(DashboardMetadata.class, entity.getPrimaryKey());
 
         // TODO  add proper management of secure adapters
 

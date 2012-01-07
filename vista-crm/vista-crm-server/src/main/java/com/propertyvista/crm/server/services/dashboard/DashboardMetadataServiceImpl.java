@@ -21,7 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperFileFormat;
 import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
-import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -48,7 +48,7 @@ public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl im
 
     @Override
     public void downloadBoard(final AsyncCallback<String> callback, VoidSerializable none, Key entityId) {
-        DashboardMetadata result = EntityServicesImpl.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
+        DashboardMetadata result = Persistence.secureRetrieve(EntityCriteriaByPK.create(DashboardMetadata.class, entityId));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
             JasperReportProcessor.createReport(DashboardReport.createModel(result), JasperFileFormat.PDF, bos);

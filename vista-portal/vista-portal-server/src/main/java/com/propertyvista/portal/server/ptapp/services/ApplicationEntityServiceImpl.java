@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.ptapp.services;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -43,13 +44,13 @@ public class ApplicationEntityServiceImpl extends EntityServicesImpl {
                 }
             }
         });
-        secureSave(entity);
+        Persistence.secureSave(entity);
     }
 
     protected <T extends IBoundToApplication> T retrieveApplicationEntity(Class<T> clazz) {
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.getCurrentUserApplication()));
-        return secureRetrieve(criteria);
+        return Persistence.secureRetrieve(criteria);
     }
 
     protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity) {
@@ -60,6 +61,6 @@ public class ApplicationEntityServiceImpl extends EntityServicesImpl {
         @SuppressWarnings("unchecked")
         EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
-        entity.set(secureRetrieve(criteria));
+        entity.set(Persistence.secureRetrieve(criteria));
     }
 }
