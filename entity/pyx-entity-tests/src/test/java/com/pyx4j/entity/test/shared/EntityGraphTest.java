@@ -23,7 +23,6 @@ package com.pyx4j.entity.test.shared;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Counter;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -268,9 +267,8 @@ public class EntityGraphTest extends InitializerTestCase {
 
         Employee duplicate = EntityGraph.businessDuplicate(original);
 
-        Path changedPath = EntityGraph.getChangedDataPath(duplicate, original);
-//        assertNull("the duplicate and original are not equal, first change is at: " + (changedPath == null ? "" : changedPath.toString()) + "\noriginal:\n"
-//                + original + "\nduplicate:\n" + duplicate, changedPath);
+        assertNull(EntityGraph.getChangedDataPath(original, duplicate));
+
         assertNotNull(original.id().getValue());
         assertNull(duplicate.id().getValue());
         assertEquals(duplicate.tasks().size(), original.tasks().size());

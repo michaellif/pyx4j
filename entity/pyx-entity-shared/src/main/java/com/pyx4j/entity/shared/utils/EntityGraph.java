@@ -22,8 +22,10 @@ package com.pyx4j.entity.shared.utils;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -204,17 +206,24 @@ public class EntityGraph {
         return null;
     }
 
-    //TODO, this is not proper implementation in regards to ID
     private static Path getChangedDataPath(ISet<IEntity> set1, ISet<IEntity> set2, Set<IEntity> processed) {
         if (set1.size() != set2.size()) {
             return set1.getPath();
         }
         Iterator<IEntity> iter1 = set1.iterator();
-        while (iter1.hasNext()) {
+        List<IEntity> set2copy = new Vector<IEntity>(set2);
+        set1Loop: while (iter1.hasNext()) {
             IEntity ent1 = iter1.next();
-            if (!set2.contains(ent1)) {
-                return ent1.getPath();
+            // Find first entity with the same data
+            Iterator<IEntity> iter2 = set2copy.iterator();
+            while (iter2.hasNext()) {
+                if (getChangedDataPath(ent1, iter2.next()) == null) {
+                    // Do not compare the same objects twice
+                    iter2.remove();
+                    continue set1Loop;
+                }
             }
+            return ent1.getPath();
         }
         return null;
     }
@@ -223,11 +232,11 @@ public class EntityGraph {
         if (value1.size() != value2.size()) {
             return value1.getPath();
         }
-        Iterator<?> iter1 = value1.iterator();
-        Iterator<?> iter2 = value2.iterator();
+        Iterator<IEntity> iter1 = value1.iterator();
+        Iterator<IEntity> iter2 = value2.iterator();
         for (; iter1.hasNext() && iter2.hasNext();) {
             Path p;
-            if ((p = getChangedDataPath((IEntity) iter1.next(), (IEntity) iter2.next(), processed)) != null) {
+            if ((p = getChangedDataPath(iter1.next(), iter2.next(), processed)) != null) {
                 return p;
             }
         }
@@ -347,7 +356,8 @@ public class EntityGraph {
 
     /**
      * @param entity
-     * @return an copy of the provided entity with <code>id</code>s
+     *            to be duplicated
+     * @return a copy of the provided entity without <code>id</code>s
      */
     public static <E extends IEntity> E businessDuplicate(E entity) {
         final E copy = entity.duplicate();
