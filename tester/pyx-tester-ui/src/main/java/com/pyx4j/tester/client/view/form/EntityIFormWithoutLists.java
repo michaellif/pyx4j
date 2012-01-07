@@ -92,6 +92,11 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setHR(++row, 0, 1);
 
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalMoney())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryMoney())));
+
+        main.setHR(++row, 0, 1);
+
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entityIVListNotOwned(), new CEntityListBox<EntityIV>())));
 
         return main;

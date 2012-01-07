@@ -93,6 +93,13 @@ public interface EntityI extends IEntity {
     @NotNull
     IPrimitive<String> mandatoryPhone();
 
+    @Editor(type = EditorType.money)
+    IPrimitive<String> optionalMoney();
+
+    @Editor(type = EditorType.money)
+    @NotNull
+    IPrimitive<String> mandatoryMoney();
+
     @Owned
     IList<EntityII> entityIIList();
 
