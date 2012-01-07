@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.mutable.MutableInt;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -75,14 +77,28 @@ public class PropertyFinder {
             }
         }
 
-        // 1. filter buildings by amenities (single match gets building in)
+        // 1. filter buildings by amenities (must match all items in the set)
         EntityQueryCriteria<BuildingAmenity> amCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-        if (searchCriteria.amenities().size() > 0) {
+        int amSize = searchCriteria.amenities().size();
+        if (amSize > 0) {
             amCriteria.add(PropertyCriterion.in(amCriteria.proto().type(), searchCriteria.amenities().toArray((Serializable[]) new BuildingAmenity.Type[0])));
+            // count matched buildings
+            Map<Key, MutableInt> amCounter = new HashMap<Key, MutableInt>();
+            for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
+                Key key = am.belongsTo().getPrimaryKey();
+                MutableInt count = amCounter.get(key);
+                if (count == null) {
+                    amCounter.put(key, new MutableInt(1));
+                } else {
+                    count.increment();
+                }
+            }
             // prepare building filter 1
             final Set<Key> bldFilter1 = new HashSet<Key>();
-            for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
-                bldFilter1.add(am.belongsTo().getPrimaryKey());
+            for (Key key : amCounter.keySet()) {
+                if (amCounter.get(key).intValue() == amSize) {
+                    bldFilter1.add(key);
+                }
             }
             // filter buildings with filter 1
             if (bldFilter1.size() == 0) {
