@@ -163,12 +163,13 @@ function submitGeolocationV2(form) {
 		return false;
 	}
 	var $distInp = $('[jsparam=distance]', $form);
-	var distance = parseFloat($distInp.val());
+	var distance = Math.round(parseFloat($distInp.val()));
 	if (isNaN(distance)) {
 		popup_msg('Please provide a valid distance (Km).');
 		return false;
 	}
-	$distInp.val(Math.round(distance));
+	var MAX_DIST = 1000;
+	$distInp.val(distance > MAX_DIST ? MAX_DIST : distance);
 	var gc = new GClientGeocoder();
 	if (!gc) {
 		console.log('Could not create geocoder');
