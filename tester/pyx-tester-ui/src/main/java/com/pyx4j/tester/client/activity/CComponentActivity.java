@@ -84,4 +84,10 @@ public class CComponentActivity extends AbstractActivity implements ConsolePrese
         return this;
     }
 
+    @Override
+    public void onClickEnable() {
+        // TODO Auto-generated method stub
+
+    }
+
 }
