@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.validator.MinimumValidator;
 
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
@@ -146,8 +145,8 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new WicketUtils.DropDownList<PropertySearchCriteria.BathroomChoice>("maxBaths", model.bind(criteria.maxBaths()),
                 Arrays.asList(PropertySearchCriteria.BathroomChoice.values()), true, false));
         // price
-        add(new TextField<Integer>("minPrice", model.bind(criteria.minPrice())).add(new MinimumValidator<Integer>(100)));
-        add(new TextField<Integer>("maxPrice", model.bind(criteria.maxPrice())).add(new MinimumValidator<Integer>(100)));
+        add(new TextField<Integer>("minPrice", model.bind(criteria.minPrice())));
+        add(new TextField<Integer>("maxPrice", model.bind(criteria.maxPrice())));
 
         // amenities
         CheckBoxMultipleChoice<BuildingAmenity.Type> checkBoxMultipleChoice = new CheckBoxMultipleChoice<BuildingAmenity.Type>("amenities", model.bind(criteria
