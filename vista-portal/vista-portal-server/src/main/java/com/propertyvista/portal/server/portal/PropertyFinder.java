@@ -112,13 +112,13 @@ public class PropertyFinder {
         // 2.1. filter floorplans by units
         EntityQueryCriteria<AptUnit> auCriteria = EntityQueryCriteria.create(AptUnit.class);
         // price
-        Double minPrice = searchCriteria.minPrice().getValue().doubleValue();
+        Integer minPrice = searchCriteria.minPrice().getValue();
         if (minPrice != null) {
-            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.GREATER_THAN_OR_EQUAL, minPrice));
+            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.GREATER_THAN_OR_EQUAL, minPrice.doubleValue()));
         }
-        Double maxPrice = searchCriteria.maxPrice().getValue().doubleValue();
+        Integer maxPrice = searchCriteria.maxPrice().getValue();
         if (maxPrice != null && maxPrice > 0) {
-            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, maxPrice));
+            auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, maxPrice.doubleValue()));
         }
         // prepare new floorplan filter 1
         final HashSet<Key> fpSet1 = new HashSet<Key>();
