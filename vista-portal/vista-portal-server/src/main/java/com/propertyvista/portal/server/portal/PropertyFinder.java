@@ -112,11 +112,11 @@ public class PropertyFinder {
         // 2.1. filter floorplans by units
         EntityQueryCriteria<AptUnit> auCriteria = EntityQueryCriteria.create(AptUnit.class);
         // price
-        Integer minPrice = searchCriteria.minPrice().getValue();
+        Double minPrice = searchCriteria.minPrice().getValue().doubleValue();
         if (minPrice != null) {
             auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.GREATER_THAN_OR_EQUAL, minPrice));
         }
-        Integer maxPrice = searchCriteria.maxPrice().getValue();
+        Double maxPrice = searchCriteria.maxPrice().getValue().doubleValue();
         if (maxPrice != null && maxPrice > 0) {
             auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, maxPrice));
         }
