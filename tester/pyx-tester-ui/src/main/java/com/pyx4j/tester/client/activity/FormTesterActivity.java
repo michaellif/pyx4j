@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.view.form.FormTesterView;
 import com.pyx4j.tester.client.view.form.FormTesterView.TestFormType;
 
@@ -51,6 +52,8 @@ public class FormTesterActivity extends AbstractActivity implements FormTesterVi
     @Override
     public void onClickPopulate() {
         System.out.println("++++++ onClickPopulate");
+
+        view.populate(DomainFactory.createEntityI());
 
     }
 

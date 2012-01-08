@@ -27,9 +27,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.view.form.folder.EntityIForm;
 import com.pyx4j.widgets.client.Button;
@@ -44,9 +44,13 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
     private final Button cleanButton;
 
+    private final Button repopulateButton;
+
     private final ScrollPanel formPanel;
 
-    private final HashMap<TestFormType, IsWidget> map = new HashMap<TestFormType, IsWidget>();
+    private final HashMap<TestFormType, CEntityEditor<EntityI>> map = new HashMap<TestFormType, CEntityEditor<EntityI>>();
+
+    private CEntityEditor<EntityI> currentForm;
 
     public FormTesterViewImpl() {
         setSize("100%", "100%");
@@ -83,6 +87,17 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
             }
         });
         buttonPanel.add(cleanButton);
+
+        repopulateButton = new Button("Repopulate");
+        repopulateButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.onClickRepopulate();
+            }
+        });
+        buttonPanel.add(repopulateButton);
+
         container.add(buttonPanel, DockPanel.NORTH);
 
         formPanel = new ScrollPanel();
@@ -108,11 +123,12 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
             if (TestFormType.FormBasic == formType) {
                 EntityIFormWithoutLists form = new EntityIFormWithoutLists();
                 form.initContent();
+                currentForm = form;
                 map.put(formType, form);
             } else if (TestFormType.FormVisibility == formType) {
                 EntityIIFormWithVisibilityChange form = new EntityIIFormWithVisibilityChange();
                 form.initContent();
-                map.put(formType, form);
+                //map.put(formType, form);
             } else if (TestFormType.FolderLayout == formType) {
                 EntityIForm form = new EntityIForm();
                 form.initContent();
@@ -126,8 +142,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
     @Override
     public void populate(EntityI entity) {
-        // TODO Auto-generated method stub
-
+        currentForm.populate(entity);
     }
 
     @Override
