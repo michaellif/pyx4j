@@ -45,7 +45,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     public static class PhoneFormat implements IFormat<String> {
 
-        private final static String regex = "^[\\s\\d\\(\\)-]+x\\d{1,4}$";
+        private final static String regex = "^[\\s\\d\\(\\)-]+(x\\d{1,4})*$";
 
         public PhoneFormat() {
 
