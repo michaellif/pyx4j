@@ -13,16 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IList;
-
-import com.propertyvista.domain.maintenance.IssueClassification;
-import com.propertyvista.domain.maintenance.IssueElement;
-import com.propertyvista.domain.maintenance.IssueRepairSubject;
-import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
 public interface NewMaintenanceRequestView extends IsWidget {
@@ -31,23 +23,9 @@ public interface NewMaintenanceRequestView extends IsWidget {
 
     void populate(MaintenanceRequestDTO requests);
 
-    void updateIssueElementSelector(Vector<IssueElement> rooms);
-
-    void updateIssueRepairSubjectSelector(IList<IssueRepairSubject> subjects);
-
-    void updateIssueSubjectDetailsSelector(IList<IssueSubjectDetails> details);
-
-    void updateIssueClassificationSelector(IList<IssueClassification> classifications);
-
     interface Presenter {
 
         public void submit();
-
-        public void onIssueElementSelection(IssueElement selectedItem);
-
-        public void onIssueRepairSubjectSelection(IssueRepairSubject selectedItem);
-
-        public void onSubjectDetailsSelection(IssueSubjectDetails selectedItem);
 
     }
 

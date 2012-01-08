@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.mutable.MutableInt;
 
@@ -94,7 +93,7 @@ public class PropertyFinder {
                 }
             }
             // prepare building filter 1
-            final Set<Key> bldFilter1 = new HashSet<Key>();
+            final HashSet<Key> bldFilter1 = new HashSet<Key>();
             for (Key key : amCounter.keySet()) {
                 if (amCounter.get(key).intValue() == amSize) {
                     bldFilter1.add(key);
@@ -104,7 +103,7 @@ public class PropertyFinder {
             if (bldFilter1.size() == 0) {
                 bldFilter1.add(Key.DORMANT_KEY);
             }
-            dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1.toArray((Serializable[]) new Key[0])));
+            dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter1));
         }
 
         // 2. filter buildings by floorplans
@@ -122,7 +121,7 @@ public class PropertyFinder {
             auCriteria.add(new PropertyCriterion(auCriteria.proto().financial()._marketRent(), Restriction.LESS_THAN_OR_EQUAL, maxPrice));
         }
         // prepare new floorplan filter 1
-        final Set<Key> fpSet1 = new HashSet<Key>();
+        final HashSet<Key> fpSet1 = new HashSet<Key>();
         for (AptUnit unit : Persistence.service().query(auCriteria)) {
             fpSet1.add(unit.floorplan().getPrimaryKey());
         }
@@ -130,7 +129,7 @@ public class PropertyFinder {
         if (fpSet1.size() == 0) {
             fpSet1.add(Key.DORMANT_KEY);
         }
-        fpCriteria.add(PropertyCriterion.in(fpCriteria.proto().id(), fpSet1.toArray((Serializable[]) new Key[0])));
+        fpCriteria.add(PropertyCriterion.in(fpCriteria.proto().id(), fpSet1));
         // 2.2 filter floorplans by other search criteria
         // beds
         BedroomChoice minBeds = searchCriteria.minBeds().getValue();
@@ -151,7 +150,7 @@ public class PropertyFinder {
             fpCriteria.add(new PropertyCriterion(fpCriteria.proto().bathrooms(), Restriction.LESS_THAN_OR_EQUAL, maxBaths.getBaths()));
         }
         // prepare building filter 2
-        final Set<Key> bldFilter2 = new HashSet<Key>();
+        final HashSet<Key> bldFilter2 = new HashSet<Key>();
         for (Floorplan fp : Persistence.service().query(fpCriteria)) {
             bldFilter2.add(fp.building().getPrimaryKey());
         }
@@ -159,7 +158,7 @@ public class PropertyFinder {
         if (bldFilter2.size() == 0) {
             bldFilter2.add(Key.DORMANT_KEY);
         }
-        dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter2.toArray((Serializable[]) new Key[0])));
+        dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().id(), bldFilter2));
 
     }
 

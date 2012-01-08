@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.activity;
 
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -25,9 +23,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.maintenance.IssueElement;
-import com.propertyvista.domain.maintenance.IssueRepairSubject;
-import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.portal.client.ui.residents.NewMaintenanceRequestView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -55,13 +50,6 @@ public class NewMaintenanceRequestActivity extends SecurityAwareActivity impleme
         request = EntityFactory.create(MaintenanceRequestDTO.class);
         view.populate(request);
 
-        srv.listIssueElements(new DefaultAsyncCallback<Vector<IssueElement>>() {
-
-            @Override
-            public void onSuccess(Vector<IssueElement> result) {
-                view.updateIssueElementSelector(result);
-            }
-        });
     }
 
     @Override
@@ -76,36 +64,4 @@ public class NewMaintenanceRequestActivity extends SecurityAwareActivity impleme
         }, request);
     }
 
-    @Override
-    public void onIssueElementSelection(IssueElement selectedItem) {
-        srv.getIssueRepairSubject(new DefaultAsyncCallback<IssueElement>() {
-
-            @Override
-            public void onSuccess(IssueElement result) {
-                view.updateIssueRepairSubjectSelector(result.subjects());
-            }
-        }, selectedItem);
-    }
-
-    @Override
-    public void onIssueRepairSubjectSelection(IssueRepairSubject selectedItem) {
-        srv.getIssueSubjectDetails(new DefaultAsyncCallback<IssueRepairSubject>() {
-
-            @Override
-            public void onSuccess(IssueRepairSubject result) {
-                view.updateIssueSubjectDetailsSelector(result.details());
-            }
-        }, selectedItem);
-    }
-
-    @Override
-    public void onSubjectDetailsSelection(IssueSubjectDetails selectedItem) {
-        srv.getIssueClassification(new DefaultAsyncCallback<IssueSubjectDetails>() {
-
-            @Override
-            public void onSuccess(IssueSubjectDetails result) {
-                view.updateIssueClassificationSelector(result.classifications());
-            }
-        }, selectedItem);
-    }
 }

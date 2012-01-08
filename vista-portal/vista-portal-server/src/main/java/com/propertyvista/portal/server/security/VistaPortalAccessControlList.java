@@ -23,6 +23,10 @@ import com.pyx4j.security.shared.AllPermissions;
 import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.maintenance.IssueClassification;
+import com.propertyvista.domain.maintenance.IssueElement;
+import com.propertyvista.domain.maintenance.IssueRepairSubject;
+import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
@@ -115,6 +119,11 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBehavior.TENANT, new IServiceExecutePermission(PersonalInfoCrudService.class));
         grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantPaymentMethodCrudService.class));
         grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantMaintenanceService.class));
+
+        grant(VistaBehavior.TENANT, new EntityPermission(IssueElement.class, EntityPermission.READ));
+        grant(VistaBehavior.TENANT, new EntityPermission(IssueRepairSubject.class, EntityPermission.READ));
+        grant(VistaBehavior.TENANT, new EntityPermission(IssueSubjectDetails.class, EntityPermission.READ));
+        grant(VistaBehavior.TENANT, new EntityPermission(IssueClassification.class, EntityPermission.READ));
 
         grant(CoreBehavior.DEVELOPER, new AllPermissions());
 
