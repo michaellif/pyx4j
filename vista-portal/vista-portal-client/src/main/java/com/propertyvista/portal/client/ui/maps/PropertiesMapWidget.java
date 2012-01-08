@@ -146,7 +146,7 @@ public class PropertiesMapWidget extends AbstractMapWidget {
                 getMap().addOverlay(distanceOverlay);
             }
             if (latLng != null) {
-                getMap().setCenter(latLng, 14 - (int) Math.ceil(Math.log(distance) / Math.log(2)));
+                getMap().setCenter(latLng, 15 - (int) Math.ceil(Math.log(distance) / Math.log(2)));
             } else {
                 LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
                 getMap().setCenter(pos, 10);
