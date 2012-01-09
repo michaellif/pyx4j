@@ -23,7 +23,9 @@ public interface MiscPolicy extends UnitPolicy {
     @Caption(description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant//Co-Applicant and cannot be Dependent")
     IPrimitive<Boolean> occupantsOver18areApplicants();
 
+    @Caption(description = "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = OccupantsPerUnit")
+    IPrimitive<Double> occupantsPerBedRoom();
+
     @Caption(description = "Initial payment includes one or two-month deposit")
     IPrimitive<Boolean> oneMonthDeposit();
-
 }
