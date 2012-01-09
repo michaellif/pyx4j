@@ -39,7 +39,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
     protected List<ColumnDescriptor<P>> defaultColumns;
 
     @SuppressWarnings("unchecked")
-	public PolicyListerBase(Class<P> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
+    public PolicyListerBase(Class<P> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
         super(clazz, itemOpenPlaceClass, false, true);
         getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
@@ -52,7 +52,6 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
             }
         }));
 
-
         defaultColumns = Arrays.asList(//@formatter:off
                  new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).<P>build(),
                  new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).<P>build()
@@ -60,6 +59,10 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         setColumnDescriptors(new LinkedList<ColumnDescriptor<P>>());
     }
 
+    /**
+     * Set column descriptors for the {@link PolicyListerBase}, the columns for {@link PolicyDTOBase#nodeType()} and {@link PolicyDTOBase#nodeRepresentation()}
+     * are added implicitly, so there's no need to `set' them.
+     */
     @Override
     public void setColumnDescriptors(List<ColumnDescriptor<P>> columnDescriptors) {
         List<ColumnDescriptor<P>> columns = new LinkedList<ColumnDescriptor<P>>(defaultColumns);
