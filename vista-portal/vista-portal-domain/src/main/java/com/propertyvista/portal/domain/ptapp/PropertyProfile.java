@@ -14,7 +14,6 @@
 package com.propertyvista.portal.domain.ptapp;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 
@@ -39,7 +38,4 @@ public interface PropertyProfile extends IEntity {
      */
 
     PetChargeRule petCharge();
-
-    IPrimitive<Integer> petsMaximum();
-
 }

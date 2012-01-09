@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,6 +25,9 @@ import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 public interface AllowedIDsPolicy extends UnitPolicy {
 
     IList<IdentificationDocument> allowedIDs();
+
+    @Caption(name = "Number of Identification Documents required")
+    IPrimitive<Integer> numberOfIDs();
 
     @Deprecated
     IPrimitive<Integer> x(); // needed just so that the entity could be created in the database with no probelms
