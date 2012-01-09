@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset.unit;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -161,6 +162,7 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> flooringInstallDate();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> flooringValue();
 
     IPrimitive<CounterTopType> counterTopType();
@@ -169,6 +171,7 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> counterTopInstallDate();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> counterTopValue();
 
     IPrimitive<CabinetsType> cabinetsType();
@@ -177,5 +180,6 @@ public interface AptUnitItem extends IEntity {
     IPrimitive<LogicalDate> cabinetsInstallDate();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> cabinetsValue();
 }

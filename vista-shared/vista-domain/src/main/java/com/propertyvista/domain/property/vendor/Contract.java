@@ -15,6 +15,8 @@ package com.propertyvista.domain.property.vendor;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -34,6 +36,7 @@ public interface Contract extends IEntity {
 
     @MemberColumn(name = "vendorCost")
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> cost();
 
     @Caption(name = "Start Date")

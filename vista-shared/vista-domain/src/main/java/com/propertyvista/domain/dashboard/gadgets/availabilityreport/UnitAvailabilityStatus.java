@@ -16,6 +16,8 @@ package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owner;
@@ -116,15 +118,18 @@ public interface UnitAvailabilityStatus extends IEntity {
     IPrimitive<RentReadinessStatus> rentReadinessStatus();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> unitRent();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> marketRent();
 
     /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
     @Caption(name = "Delta, in $")
     @Format("#0.00")
     @CustomComparator(clazz = ComparableComparator.class)
+    @Editor(type = EditorType.money)
     IPrimitive<Double> rentDeltaAbsolute();
 
     /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */

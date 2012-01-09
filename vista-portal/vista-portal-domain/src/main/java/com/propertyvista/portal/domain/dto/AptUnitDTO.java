@@ -17,6 +17,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
@@ -62,9 +64,12 @@ public interface AptUnitDTO extends IEntity {
 
     @Owned
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> unitRent();
 
     @Caption(name = "Deposit")
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> requiredDeposit();
 
     @Format("MM/dd/yyyy")

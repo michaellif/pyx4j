@@ -14,6 +14,8 @@
 package com.propertyvista.domain.property.asset.building;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,15 +28,18 @@ public interface BuildingFinancial extends IEntity {
     IPrimitive<LogicalDate> dateAcquired();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> purchasePrice();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> marketPrice();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> lastAppraisalDate();
 
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<Double> lastAppraisalValue();
 
     /*

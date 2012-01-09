@@ -333,7 +333,8 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
 
-        //TODO notify landlord if the previous move in date is still too close to current. Possibly should be dealt with on a case by case basis
+        //TODO notify landlord if the previous move in date is still too close to current (person changes addresses too often).
+        //Possibly should be dealt with on a case by case basis
 
         // ------------------------------------------------------------------------------------------------
 
