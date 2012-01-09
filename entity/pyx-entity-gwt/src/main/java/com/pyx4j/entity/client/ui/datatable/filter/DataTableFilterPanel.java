@@ -156,7 +156,6 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     }
 
     public void setFilters(List<DataTableFilterData> filters) {
-        System.out.println("++++++++++++++" + filters);
         this.filters = filters;
         grid.setFilters(filters);
         setVisible(true);

@@ -54,16 +54,12 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
     private final List<Image> mandatoryImages = new ArrayList<Image>();
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
-        this(columns, EntityFolderImages.INSTANCE, null, false);
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images) {
+        this(columns, images, null, true);
     }
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title) {
         this(columns, images, title, true);
-    }
-
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images) {
-        this(columns, images, null, true);
     }
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title, boolean addable) {
@@ -123,6 +119,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         if (isAddable()) {
             add(getActionsPanel());
         }
+
     }
 
     @Override
@@ -138,6 +135,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         });
 
         applyFolderProperties();
+
     }
 
     private void applyFolderProperties() {

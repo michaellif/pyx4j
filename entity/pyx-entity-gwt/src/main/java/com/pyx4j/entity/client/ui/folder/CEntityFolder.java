@@ -117,9 +117,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     private void calculateActionsState() {
-        boolean enabled = isModifiable() && isEnabled() && isEditable();
+        boolean modifiable = isModifiable();
         if (getDecorator() != null) {
-            ((IFolderDecorator) getDecorator()).setAddButtonVisible(enabled);
+            ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
         }
     }
 
