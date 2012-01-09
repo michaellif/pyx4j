@@ -38,6 +38,16 @@
 	background-color:white;
 }
 
+.advancedSearchWideWrap .errorPanel {
+	padding:2px;
+	padding-left:15px;
+	margin:0;
+	margin-top:10px;
+	color:red;
+	background:white;
+	display:inline-block;
+}
+
 .advancedSearchWideWrap input[type=submit] {
     background: url("images/template0/btn.png") no-repeat;
     border: none;

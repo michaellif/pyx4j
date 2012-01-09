@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
@@ -118,7 +117,6 @@ public class AptListPage extends BasePage {
 
         };
 
-        form.add(new FeedbackPanel("form_messages"));
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
         form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", i18n.tr("Search"))));
 

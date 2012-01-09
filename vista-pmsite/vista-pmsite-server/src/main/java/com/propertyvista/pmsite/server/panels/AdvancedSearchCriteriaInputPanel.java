@@ -147,6 +147,8 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         // price
         add(new TextField<Integer>("minPrice", model.bind(criteria.minPrice())));
         add(new TextField<Integer>("maxPrice", model.bind(criteria.maxPrice())));
+        // error panel
+        add(new FormErrorPanel("inputErrors", "minPrice", "maxPrice"));
 
         // amenities
         CheckBoxMultipleChoice<BuildingAmenity.Type> checkBoxMultipleChoice = new CheckBoxMultipleChoice<BuildingAmenity.Type>("amenities", model.bind(criteria

@@ -16,7 +16,6 @@ package com.propertyvista.pmsite.server.panels;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -66,8 +65,6 @@ public class AdvancedSearchCriteriaPanel extends Panel {
 
         };
 
-        // add Error Message panel
-        form.add(new FeedbackPanel("form_messages"));
         form.add(new AdvancedSearchCriteriaInputPanel("searchCriteriaInput", model));
         form.add(new Button("searchSubmit").add(AttributeModifier.replace("value", i18n.tr("Search"))));
 
