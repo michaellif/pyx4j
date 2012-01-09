@@ -50,6 +50,7 @@ import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
 import com.pyx4j.entity.rdb.mapping.Mappings;
+import com.pyx4j.entity.rdb.mapping.MemberCollectionOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.ResultSetIterator;
 import com.pyx4j.entity.rdb.mapping.TableModel;
@@ -234,7 +235,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         try {
             tm.insert(connection, entity);
-            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+            for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 CollectionsTableModel.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                     MemberMeta memberMeta = member.getMemberMeta();
@@ -264,7 +265,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             log.info(Trace.enter() + "update {} id={}", tm.getTableName(), entity.getPrimaryKey());
         }
         try {
-            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+            for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 CollectionsTableModel.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                     MemberMeta memberMeta = member.getMemberMeta();
@@ -993,7 +994,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
 
-            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+            for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if ((cascadedeleteDataEntity != null) && member.getMemberMeta().isOwnedRelationships()
                         && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
                     for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity)) {
@@ -1040,7 +1041,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
                 try {
                     // remove data from join tables first, No cascade delete
-                    for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                    for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                         //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
                         if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
                             if (trace) {
@@ -1079,7 +1080,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(connection, entityMeta);
-            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+            for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
             }
             tm.delete(connection, primaryKeys);

@@ -221,8 +221,31 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             criteria.add(PropertyCriterion.eq(criteria.proto().access(), principal1));
 
             List<AccSubject> data = srv.query(criteria);
+            // Test join
             Assert.assertEquals("result set size", 1, data.size());
+            // Test data retrieval with JoinTable
+            Assert.assertEquals("Data retrieved using JoinTable", 1, data.get(0).access().size());
+            Assert.assertEquals("Data retrieved using JoinTable", principal1, data.get(0).access().iterator().next());
         }
 
+        // Test update with JoinTable
+        AccSubject subject1r2 = srv.retrieve(AccSubject.class, subject1.getPrimaryKey());
+        subject1r2.access().add(principal2);
+        srv.persist(subject1r2);
+
+        // Verify data updated
+        {
+            AccSubject subject1r3 = srv.retrieve(AccSubject.class, subject1.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", 2, subject1r3.access().size());
+            Assert.assertTrue("Inserted value present", subject1r3.access().contains(principal2));
+            Assert.assertTrue("Original value present", subject1r3.access().contains(principal1));
+
+            // Verify join table itself update
+            EntityQueryCriteria<AccSubjectPrincipal> criteria = EntityQueryCriteria.create(AccSubjectPrincipal.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().subject(), subject1r3));
+
+            List<AccSubjectPrincipal> data = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, data.size());
+        }
     }
 }

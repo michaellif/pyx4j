@@ -369,7 +369,7 @@ public class TableModel {
             }
             boolean updated = (stmt.executeUpdate() == 1);
             if (updated) {
-                for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                     CollectionsTableModel.update(connection, dialect, entity, member, cascadeRemove);
                 }
             }
@@ -459,7 +459,7 @@ public class TableModel {
                 entity.setPrimaryKey(key);
                 retrieveValues(rs, entity);
 
-                for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                     CollectionsTableModel.retrieve(connection, dialect, entity, member);
                 }
                 return true;
@@ -527,7 +527,7 @@ public class TableModel {
                 }
                 retrieveValues(rs, entity);
 
-                for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                     CollectionsTableModel.retrieve(connection, dialect, entity, member);
                 }
 
@@ -600,7 +600,7 @@ public class TableModel {
                     log.error("{} SQL select error", tableName, e);
                     throw new RuntimeException(e);
                 }
-                for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                     CollectionsTableModel.retrieve(connection, dialect, entity, member);
                 }
                 return entity;

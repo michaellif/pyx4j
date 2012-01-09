@@ -59,7 +59,7 @@ public class CollectionsTableModel {
     }
 
     @SuppressWarnings("unchecked")
-    public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
+    public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
         Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);
         if ((dataSet == null) || dataSet.isEmpty()) {
             return;
@@ -68,7 +68,7 @@ public class CollectionsTableModel {
         }
     }
 
-    private static void insert(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member, Collection<Object> dataSet,
+    private static void insert(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member, Collection<Object> dataSet,
             List<Object> dataPositions) {
         PreparedStatement stmt = null;
 
@@ -79,10 +79,10 @@ public class CollectionsTableModel {
         try {
             int numberOfParams = 0;
             sql.append("INSERT INTO ").append(member.sqlName()).append(" ( ");
-            sql.append("owner");
+            sql.append(member.sqlOwnerName());
             numberOfParams++;
 
-            for (String name : member.getValueAdapter().getColumnNames("value")) {
+            for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
                 sql.append(", ");
                 sql.append(name);
                 numberOfParams++;
@@ -158,7 +158,7 @@ public class CollectionsTableModel {
     }
 
     @SuppressWarnings("unchecked")
-    public static void update(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member, List<IEntity> cascadeRemove) {
+    public static void update(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member, List<IEntity> cascadeRemove) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
 
@@ -181,7 +181,7 @@ public class CollectionsTableModel {
         StringBuilder sql = new StringBuilder();
         try {
             sql.append("SELECT id");
-            for (String name : member.getValueAdapter().getColumnNames("value")) {
+            for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
                 sql.append(", ");
                 sql.append(name);
             }
@@ -191,7 +191,7 @@ public class CollectionsTableModel {
             if (dialect.isMultitenant()) {
                 sql.append(", ns");
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
@@ -206,7 +206,7 @@ public class CollectionsTableModel {
                 if ((dialect.isMultitenant()) && !rs.getString("ns").equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace access error");
                 }
-                Object value = member.getValueAdapter().retrieveValue(rs, "value");
+                Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
                 int valueIdx = allData.indexOf(value);
                 if (valueIdx != -1) {
                     insertData.remove(value);
@@ -241,7 +241,7 @@ public class CollectionsTableModel {
         }
     }
 
-    static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
+    static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
@@ -250,7 +250,7 @@ public class CollectionsTableModel {
         try {
             sql.append("SELECT ");
             boolean firstColumn = true;
-            for (String name : member.getValueAdapter().getColumnNames("value")) {
+            for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
                 if (firstColumn) {
                     firstColumn = false;
                 } else {
@@ -258,7 +258,7 @@ public class CollectionsTableModel {
                 }
                 sql.append(name);
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
@@ -280,7 +280,7 @@ public class CollectionsTableModel {
                 log.warn("retrieving to not empty collection {}", member.getMemberPath());
             }
             while (rs.next()) {
-                Object value = member.getValueAdapter().retrieveValue(rs, "value");
+                Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
                 collectionMember.add(value);
             }
 
@@ -294,7 +294,7 @@ public class CollectionsTableModel {
         }
     }
 
-    static <T extends IEntity> void retrieve(Connection connection, Dialect dialect, Map<Long, T> entities, MemberOperationsMeta member) {
+    static <T extends IEntity> void retrieve(Connection connection, Dialect dialect, Map<Long, T> entities, MemberCollectionOperationsMeta member) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
@@ -302,7 +302,7 @@ public class CollectionsTableModel {
         StringBuilder sql = new StringBuilder();
         try {
             sql.append("SELECT owner");
-            for (String name : member.getValueAdapter().getColumnNames("value")) {
+            for (String name : member.getValueAdapter().getColumnNames(member.sqlValueName())) {
                 sql.append(", ");
                 sql.append(name);
             }
@@ -310,7 +310,7 @@ public class CollectionsTableModel {
             if (dialect.isMultitenant()) {
                 sql.append(" ns = ? AND ");
             }
-            sql.append(" owner = IN (");
+            sql.append(' ').append(member.sqlOwnerName()).append(" = IN (");
             for (int i = 0; i < entities.keySet().size(); i++) {
                 if (i != 0) {
                     sql.append(',');
@@ -318,7 +318,7 @@ public class CollectionsTableModel {
                 sql.append(" ? ");
             }
             sql.append(')');
-            sql.append(" ORDER BY owner");
+            sql.append(" ORDER BY ").append(member.sqlOwnerName());
             if (isList) {
                 sql.append(", seq");
             }
@@ -340,7 +340,7 @@ public class CollectionsTableModel {
                 T entity = entities.get(currKey);
                 @SuppressWarnings("unchecked")
                 Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
-                Object value = member.getValueAdapter().retrieveValue(rs, "value");
+                Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
                 collectionMember.add(value);
             }
 
@@ -354,11 +354,11 @@ public class CollectionsTableModel {
         }
     }
 
-    public static void delete(Connection connection, Dialect dialect, Key primaryKey, MemberOperationsMeta member) {
+    public static void delete(Connection connection, Dialect dialect, Key primaryKey, MemberCollectionOperationsMeta member) {
         PreparedStatement stmt = null;
         StringBuilder sql = new StringBuilder();
         try {
-            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
@@ -377,11 +377,11 @@ public class CollectionsTableModel {
         }
     }
 
-    public static void delete(Connection connection, Dialect dialect, Iterable<Key> primaryKeys, MemberOperationsMeta member) {
+    public static void delete(Connection connection, Dialect dialect, Iterable<Key> primaryKeys, MemberCollectionOperationsMeta member) {
         PreparedStatement stmt = null;
         StringBuilder sql = new StringBuilder();
         try {
-            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE owner = ?");
+            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }

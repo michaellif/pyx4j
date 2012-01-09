@@ -68,9 +68,7 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
 
-    private final List<MemberOperationsMeta> collectionMembers = new Vector<MemberOperationsMeta>();
-
-    private final List<MemberOperationsMeta> joinCollectionMembers = new Vector<MemberOperationsMeta>();
+    private final List<MemberCollectionOperationsMeta> collectionMembers = new Vector<MemberCollectionOperationsMeta>();
 
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
@@ -159,7 +157,7 @@ public class EntityOperationsMeta {
                     }
 
                     JoinTable joinTable = memberMeta.getAnnotation(JoinTable.class);
-                    MemberOperationsMeta member;
+                    MemberCollectionOperationsMeta member;
                     if (joinTable != null) {
                         Class<? extends IEntity> joinEntity = joinTable.value();
                         EntityMeta joinEntityMeta = EntityFactory.getEntityMeta(joinEntity);
@@ -173,6 +171,7 @@ public class EntityOperationsMeta {
                             rootEntityClass = tableAnnotation.expands();
                         }
 
+                        //TODO use @JoinColumn
                         for (String jmemberName : joinEntityMeta.getMemberNames()) {
                             MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
                             if (!jmemberMeta.isTransient()) {
@@ -195,7 +194,6 @@ public class EntityOperationsMeta {
 
                         member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
                                 + Path.PATH_SEPARATOR, sqlOwnerName, sqlValueName);
-                        joinCollectionMembers.add(member);
                     } else {
                         String sqlName;
                         if (namesPath != null) {
@@ -205,10 +203,10 @@ public class EntityOperationsMeta {
                         }
                         member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR + memberName
                                 + Path.PATH_SEPARATOR, "owner", "value");
-                        collectionMembers.add(member);
-                        if (!memberMeta.isDetached()) {
-                            cascadeRetrieveMembers.add(member);
-                        }
+                    }
+                    collectionMembers.add(member);
+                    if (!memberMeta.isDetached()) {
+                        cascadeRetrieveMembers.add(member);
                     }
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
@@ -254,8 +252,8 @@ public class EntityOperationsMeta {
                         throw new Error("Unsupported IPrimitive<" + memberMeta.getValueClass().getName() + "> " + memberName + " in "
                                 + entityMeta.getEntityClass().getName());
                     }
-                    MemberOperationsMeta member = new MemberOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path + Path.PATH_SEPARATOR
-                            + memberName + Path.PATH_SEPARATOR);
+                    MemberCollectionOperationsMeta member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, path
+                            + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, "owner", "value");
                     collectionMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
                 } else {
@@ -368,7 +366,7 @@ public class EntityOperationsMeta {
         return cascadeRetrieveMembers;
     }
 
-    public List<MemberOperationsMeta> getCollectionMembers() {
+    public List<MemberCollectionOperationsMeta> getCollectionMembers() {
         return collectionMembers;
     }
 

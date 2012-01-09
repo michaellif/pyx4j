@@ -20,8 +20,11 @@
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
 public interface AccPrincipal extends IEntity {
 
@@ -29,4 +32,7 @@ public interface AccPrincipal extends IEntity {
 
     IPrimitive<String> name();
 
+    @JoinTable(value = AccSubjectPrincipal.class, cascade = false)
+    @Detached
+    ISet<AccSubject> subjects();
 }

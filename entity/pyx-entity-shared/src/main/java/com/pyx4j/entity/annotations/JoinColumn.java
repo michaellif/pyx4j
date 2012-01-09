@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.annotations;
 
+/**
+ * Optional marker for join columns in JoinTable, By default Entity class match is used.
+ */
 public @interface JoinColumn {
 
     /**
