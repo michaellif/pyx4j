@@ -59,11 +59,14 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public boolean isEmpty();
 
     /**
+     * TODO return AttachLevel
+     * 
      * @return true is only PrimaryKey and type information is present, other data was not retrieved, TODO getStringView()
      */
     public boolean isValueDetached();
 
     /**
+     * TODO set AttachLevel
      * Internally used by persistence layer when loading all values for entity
      */
     public void setValuePopulated();

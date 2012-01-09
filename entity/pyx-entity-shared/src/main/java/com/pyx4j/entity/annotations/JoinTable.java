@@ -25,6 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.pyx4j.entity.annotations.JoinColumn.ColumnId;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
@@ -36,4 +37,9 @@ import com.pyx4j.entity.shared.IEntity;
 public @interface JoinTable {
 
     Class<? extends IEntity> value();
+
+    boolean cascade() default true;
+
+    // Not implemented for now.
+    Class<? extends JoinColumn.ColumnId> mappedby() default ColumnId.class;
 }

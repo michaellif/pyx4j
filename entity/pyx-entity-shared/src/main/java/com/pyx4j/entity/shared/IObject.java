@@ -33,6 +33,19 @@ public interface IObject<VALUE_TYPE> {
 
     public VALUE_TYPE getValue();
 
+    /**
+     * TODO return AttachLevel
+     * 
+     * @return true is only PrimaryKey and type information is present, other data was not retrieved, TODO getStringView()
+     */
+    //public AttachLevel getAttachLevel();
+
+    /**
+     * TODO set AttachLevel
+     * Internally used by persistence layer when loading all values for entity
+     */
+    //public void setAttachLevel(AttachLevel level);
+
     public Path getPath();
 
     /**

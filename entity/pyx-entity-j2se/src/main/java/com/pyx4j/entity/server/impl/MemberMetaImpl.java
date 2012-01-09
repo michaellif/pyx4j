@@ -167,13 +167,7 @@ public class MemberMetaImpl implements MemberMeta {
         if ((!hasEmbedded) && (objectClassType != ObjectClassType.Primitive) && (objectClassType != ObjectClassType.PrimitiveSet)) {
             hasEmbedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null);
         }
-        if (hasEmbedded) {
-            embedded = true;
-        } else if (aOwned != null) {
-            embedded = aOwned.embedded();
-        } else {
-            embedded = false;
-        }
+        embedded = hasEmbedded;
         ownedRelationships = embedded || (aOwned != null);
         owner = (method.getAnnotation(Owner.class) != null);
         assert (!(owner == true && ownedRelationships == true));

@@ -36,17 +36,7 @@ import java.lang.annotation.Target;
 public @interface Detached {
 
     //TODO implement this
-    public enum DetachedLevel {
-
-        Detached,
-
-        IdOnly,
-
-        ToStringMembers,
-
-    }
-
     //N.B.  For now IdOnly  is implemented!
-    DetachedLevel level() default DetachedLevel.ToStringMembers;
+    AttachLevel level() default AttachLevel.IdOnly;
 
 }
