@@ -67,9 +67,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void save(AsyncCallback<SummaryDTO> callback, SummaryDTO entity) {
-        Summary summary = EntityFactory.create(Summary.class);
-        summary.setValue(entity.getValue());
-
+        Summary summary = entity.duplicate(Summary.class);
         for (DigitalSignature sig : summary.application().signatures()) {
             if (!DigitalSignatureValidation.isSignatureValid(sig.tenant().tenant(), sig.fullName().getValue())) {
                 // reset all if mismatch:
@@ -100,10 +98,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     }
 
     public SummaryDTO createSummaryDTO(Summary dbo) {
-
-        SummaryDTO summary = EntityFactory.create(SummaryDTO.class);
-        summary.setValue(dbo.getValue());
-
+        SummaryDTO summary = dbo.duplicate(SummaryDTO.class);
         summary.selectedUnit().set(new ApartmentServiceImpl().retrieveData());
         summary.apartmentSummary().add(createApartmentSummary(summary.selectedUnit()));
         summary.charges().set(new ChargesServiceImpl().retrieveData());
