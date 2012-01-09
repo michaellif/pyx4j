@@ -68,7 +68,7 @@ public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements Bi
 
             @Override
             protected IFolderDecorator<BillDTO> createDecorator() {
-                return new VistaTableFolderDecorator<BillDTO>(this);
+                return new VistaTableFolderDecorator<BillDTO>(this, this.isEditable());
             }
         };
     }

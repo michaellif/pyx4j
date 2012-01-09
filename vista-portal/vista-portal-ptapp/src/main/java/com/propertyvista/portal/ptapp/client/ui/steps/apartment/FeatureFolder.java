@@ -37,9 +37,8 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
 
     public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(ChargeItem.class, modifiable);
-        // TODO: remove when folder modifiable state be unlinked from parents editing state!
         inheritContainerAccessRules(false);
-        setEditable(modifiable);
+        setEditable(false);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;

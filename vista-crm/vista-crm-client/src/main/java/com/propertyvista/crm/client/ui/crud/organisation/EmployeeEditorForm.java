@@ -138,7 +138,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
             @Override
             protected IFolderDecorator<AssignedPortfolio> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedPortfolio>(this) {
+                return new VistaTableFolderDecorator<AssignedPortfolio>(this, this.isEditable()) {
                     {
                         setShowHeader(false);
                     }
@@ -160,7 +160,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
             @Override
             protected IFolderDecorator<ManagedEmployee> createDecorator() {
-                return new VistaTableFolderDecorator<ManagedEmployee>(this) {
+                return new VistaTableFolderDecorator<ManagedEmployee>(this, this.isEditable()) {
                     {
                         setShowHeader(false);
                     }

@@ -72,7 +72,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
             @Override
             protected IFolderDecorator<AssignedBuilding> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedBuilding>(parent) {
+                return new VistaTableFolderDecorator<AssignedBuilding>(parent, parent.isEditable()) {
                     {
                         setShowHeader(false);
                     }

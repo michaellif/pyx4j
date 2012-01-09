@@ -33,6 +33,8 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
 
     private final String itemName;
 
+    private boolean modifyable;
+
     private Class<E> clazz;
 
     public VistaTableFolder(Class<E> clazz) {
@@ -51,6 +53,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         super(clazz);
         this.clazz = clazz;
         this.itemName = itemName;
+        this.modifyable = modifyable;
         setModifiable(modifyable);
         setOrderable(modifyable);
     }
@@ -59,7 +62,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
 
     @Override
     protected IFolderDecorator<E> createDecorator() {
-        return new VistaTableFolderDecorator<E>(this);
+        return new VistaTableFolderDecorator<E>(this, modifyable);
     }
 
     @Override
