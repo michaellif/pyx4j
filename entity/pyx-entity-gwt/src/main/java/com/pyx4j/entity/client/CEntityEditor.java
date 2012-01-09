@@ -70,36 +70,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valuePropagation;
 
-    @SuppressWarnings("rawtypes")
-    private class ValuePropagation implements ValueChangeHandler {
-
-        @Override
-        public void onValueChange(ValueChangeEvent event) {
-            Path memberPath = binding.get(event.getSource());
-            if ((memberPath != null) && (getValue() != null)) {
-                Object value = event.getValue();
-                if (value instanceof IEntity) {
-                    ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).duplicate());
-                    log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
-                    return;
-                }
-
-                if (value instanceof ICollection) {
-                    value = ((ICollection) value).getValue();
-                } else if ((value instanceof Date)) {
-                    Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
-                    if (cls.equals(LogicalDate.class)) {
-                        value = new LogicalDate((Date) value);
-                    } else if (cls.equals(java.sql.Date.class)) {
-                        value = new java.sql.Date(((Date) value).getTime());
-                    }
-                }
-                getValue().setValue(memberPath, value);
-                log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
-            }
-        }
-    }
-
     public CEntityEditor(Class<E> clazz) {
         this(clazz, new EntityFormComponentFactory());
     }
@@ -411,5 +381,35 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     @Override
     public String toString() {
         return super.toString() + "; dirty=" + isDirty();
+    }
+
+    @SuppressWarnings("rawtypes")
+    private class ValuePropagation implements ValueChangeHandler {
+
+        @Override
+        public void onValueChange(ValueChangeEvent event) {
+            Path memberPath = binding.get(event.getSource());
+            if ((memberPath != null) && (getValue() != null)) {
+                Object value = event.getValue();
+                if (value instanceof IEntity) {
+                    ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).duplicate());
+                    log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
+                    return;
+                }
+
+                if (value instanceof ICollection) {
+                    value = ((ICollection) value).getValue();
+                } else if ((value instanceof Date)) {
+                    Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                    if (cls.equals(LogicalDate.class)) {
+                        value = new LogicalDate((Date) value);
+                    } else if (cls.equals(java.sql.Date.class)) {
+                        value = new java.sql.Date(((Date) value).getTime());
+                    }
+                }
+                getValue().setValue(memberPath, value);
+                log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
+            }
+        }
     }
 }

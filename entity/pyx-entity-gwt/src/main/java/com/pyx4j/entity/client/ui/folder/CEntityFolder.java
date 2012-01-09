@@ -57,11 +57,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private final FlowPanel container;
 
-    public boolean orderable = true;
+    private boolean orderable = true;
 
-    public boolean modifiable = true;
+    private boolean modifiable = true;
 
-    protected int currentRowDebugId = 0;
+    private boolean itemContentEditable = true;
+
+    private int currentRowDebugId = 0;
 
     private final List<CEntityFolderItem<E>> itemsList;
 
@@ -91,6 +93,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         });
     }
 
+    public void setItemContentEditable(boolean editable) {
+        itemContentEditable = editable;
+    }
+
+    public boolean isItemContentEditable() {
+        return itemContentEditable;
+    }
+
     public boolean isOrderable() {
         return orderable;
     }
@@ -117,7 +127,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     private void calculateActionsState() {
-        boolean modifiable = isModifiable();
+        boolean modifiable = isModifiable() && isEnabled() && isEditable();
         if (getDecorator() != null) {
             ((IFolderDecorator) getDecorator()).setAddButtonVisible(modifiable);
         }

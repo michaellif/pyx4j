@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends CComponent<DATA_TYPE, WIDGET_TYPE> {
+public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CContainer.class);
 

@@ -53,7 +53,7 @@ import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> implements HasHandlers,
+public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeComponent<DATA_TYPE>> implements HasHandlers,
         HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CComponent.class);

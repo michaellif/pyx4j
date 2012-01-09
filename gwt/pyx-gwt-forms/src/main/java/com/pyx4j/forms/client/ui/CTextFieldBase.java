@@ -64,7 +64,7 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                INativeEditableComponent<DATA_TYPE> impl = asWidget();
+                INativeComponent<DATA_TYPE> impl = asWidget();
                 if (impl instanceof FocusWidget) {
                     ((FocusWidget) impl).setFocus(true);
                 }

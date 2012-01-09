@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
-public interface INativeEditableComponent<E> extends IsWidget, PropertyChangeHandler {
+public interface INativeComponent<E> extends IsWidget, PropertyChangeHandler {
 
     public void setEnabled(boolean enabled);
 

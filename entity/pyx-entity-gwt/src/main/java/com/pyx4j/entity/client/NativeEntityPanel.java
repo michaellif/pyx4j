@@ -26,9 +26,9 @@ import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeComponent;
 
-public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeEditableComponent<E> {
+public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeComponent<E> {
 
     public NativeEntityPanel() {
     }

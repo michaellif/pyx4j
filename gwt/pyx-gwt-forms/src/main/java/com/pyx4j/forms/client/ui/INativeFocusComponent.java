@@ -24,7 +24,7 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public interface INativeFocusComponent<E> extends INativeEditableComponent<E> {
+public interface INativeFocusComponent<E> extends INativeComponent<E> {
 
     public void setTabIndex(int tabIndex);
 

@@ -44,7 +44,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageButton;
 
@@ -147,7 +147,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
             path = fieldsList.getValue().getPath();
         }
         Operators operand = operandsList.getValue();
-        Serializable value = (Serializable) ((CComponent) ((INativeEditableComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
+        Serializable value = (Serializable) ((CComponent) ((INativeComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
 
         return new DataTableFilterData(path, operand, value);
     }
