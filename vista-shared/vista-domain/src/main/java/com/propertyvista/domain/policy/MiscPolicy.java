@@ -14,8 +14,10 @@
 package com.propertyvista.domain.policy;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@DiscriminatorValue("MiscPolicy")
 public interface MiscPolicy extends UnitPolicy {
 
     @Caption(description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant//Co-Applicant and cannot be Dependent")
