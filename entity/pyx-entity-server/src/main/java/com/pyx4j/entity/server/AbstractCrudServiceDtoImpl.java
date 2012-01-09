@@ -24,10 +24,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends IEntity> extends AbstractListServiceDtoImpl<E, DTO> implements
         AbstractCrudService<DTO> {
+
+    private static I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
 
     protected AbstractCrudServiceDtoImpl(Class<E> entityClass, Class<DTO> dtoClass) {
         super(entityClass, dtoClass);
@@ -43,6 +48,9 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     @Override
     public void retrieve(AsyncCallback<DTO> callback, Key entityId) {
         E entity = Persistence.secureRetrieve(entityClass, entityId);
+        if (entity == null) {
+            throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(entityClass).getCaption()));
+        }
         DTO dto = createDTO(entity);
         enhanceRetrieved(entity, dto);
         callback.onSuccess(dto);
