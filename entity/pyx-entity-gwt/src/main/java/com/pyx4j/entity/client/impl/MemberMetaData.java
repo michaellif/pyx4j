@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.impl;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 
@@ -30,7 +31,7 @@ public class MemberMetaData {
 
     public boolean rpcTransient;
 
-    public boolean detached;
+    public AttachLevel attachLevel;
 
     public boolean ownedRelationships;
 
@@ -70,9 +71,10 @@ public class MemberMetaData {
         this.objectClass = (Class<? extends IObject<?>>) ((Class<?>) com.pyx4j.entity.shared.IPrimitive.class);
         this.nullString = "";
         this.valueClassIsNumber = isNumber;
+        this.attachLevel = AttachLevel.Attached;
     }
 
-    // Most commonly used definitions are shared here for code size and memory optimisation.
+    // Most commonly used definitions are shared here for code size and memory optimization.
 
     public static final MemberMetaData defaultStringMember = new MemberMetaData(java.lang.String.class, false);
 

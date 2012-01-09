@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
@@ -56,7 +57,9 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
         if (data == null) {
             return null;
         } else {
-            return (List<Map<String, Object>>) data.get(getFieldName());
+            Object value = data.get(getFieldName());
+            assert (value != AttachLevel.Detached) : "Access to detached IList " + exceptionInfo();
+            return (List<Map<String, Object>>) value;
         }
     }
 
@@ -261,7 +264,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     public int size() {
         List<?> value = getValue();
         if (value != null) {
-            assert (value != this) : this.getFieldName() + " IList structure error";
+            assert (value != this) : "IList structure error in " + exceptionInfo();
             return value.size();
         } else {
             return 0;

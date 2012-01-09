@@ -37,7 +37,9 @@ import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -60,8 +62,15 @@ public class CollectionsTableModel {
 
     @SuppressWarnings("unchecked")
     public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
-        Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);
-        if ((dataSet == null) || dataSet.isEmpty()) {
+        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+            // Never update
+            return;
+        }
+        Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
+        if (((IObject<?>) collectionMember).getAttachLevel() == AttachLevel.Detached) {
+            return;
+        }
+        if ((collectionMember == null) || collectionMember.isEmpty()) {
             return;
         } else {
             insert(connection, dialect, entity, member, (Collection<Object>) member.getMember(entity), null);
@@ -159,10 +168,16 @@ public class CollectionsTableModel {
 
     @SuppressWarnings("unchecked")
     public static void update(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member, List<IEntity> cascadeRemove) {
+        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+            // Never update
+            return;
+        }
+        Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
+        if (((IObject<?>) collectionMember).getAttachLevel() == AttachLevel.Detached) {
+            return;
+        }
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
-
-        Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
 
         List<Object> allData = new Vector<Object>();
         if (type == ObjectClassType.PrimitiveSet) {
@@ -242,6 +257,9 @@ public class CollectionsTableModel {
     }
 
     static void retrieve(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
+        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+            return;
+        }
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ObjectClassType type = member.getMemberMeta().getObjectClassType();

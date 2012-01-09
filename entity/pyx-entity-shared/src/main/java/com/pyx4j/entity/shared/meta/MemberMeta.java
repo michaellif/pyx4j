@@ -24,6 +24,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.validator.Validator;
@@ -71,8 +72,11 @@ public interface MemberMeta {
 
     /**
      * @see com.pyx4j.entity.annotations.Detached
+     * @return true if @Detached present and level != Attached
      */
     public boolean isDetached();
+
+    public AttachLevel getAttachLevel();
 
     /**
      * @see com.pyx4j.entity.annotations.Owned

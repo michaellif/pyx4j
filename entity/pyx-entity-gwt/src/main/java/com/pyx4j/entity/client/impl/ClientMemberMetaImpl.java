@@ -27,6 +27,7 @@ import java.util.Set;
 
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -61,8 +62,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
      */
     public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
             @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
-            boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed,
-            int stringLength, String format, boolean useMessageFormat, String nullString) {
+            boolean persistenceTransient, boolean rpcTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean owner, boolean embedded,
+            boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -70,7 +71,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.fieldName = fieldName;
         this.data.persistenceTransient = persistenceTransient;
         this.data.rpcTransient = rpcTransient;
-        this.data.detached = detached;
+        this.data.attachLevel = attachLevel;
         this.data.ownedRelationships = ownedRelationships;
         this.data.owner = owner;
         this.data.embedded = embedded;
@@ -133,7 +134,12 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     @Override
     public boolean isDetached() {
-        return data.detached;
+        return data.attachLevel != AttachLevel.Attached;
+    }
+
+    @Override
+    public AttachLevel getAttachLevel() {
+        return data.attachLevel;
     }
 
     @Override

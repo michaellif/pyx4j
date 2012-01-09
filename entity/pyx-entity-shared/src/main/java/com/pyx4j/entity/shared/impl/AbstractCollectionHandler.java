@@ -27,7 +27,9 @@ import java.util.Set;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IdentityHashSet;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -53,6 +55,32 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     @Override
     public TYPE $() {
         return EntityFactory.create(getValueClass(), this, getFieldName());
+    }
+
+    @Override
+    public AttachLevel getAttachLevel() {
+        Map<String, Object> data = getOwner().getValue();
+        if ((data != null) && (data.get(getFieldName()) == AttachLevel.Detached)) {
+            return AttachLevel.Detached;
+        } else {
+            return AttachLevel.Attached;
+        }
+    }
+
+    @Override
+    public void setAttachLevel(AttachLevel level) {
+        switch (level) {
+        case Attached:
+            Map<String, Object> data = getOwner().getValue();
+            if ((data != null) && (data.get(getFieldName()) == AttachLevel.Detached)) {
+                data.put(getFieldName(), null);
+            }
+        case Detached:
+            getOwner().setMemberValue(getFieldName(), AttachLevel.Detached);
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -120,6 +148,10 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         } else {
             throw new ClassCastException("Collection member type expected " + getValueClass());
         }
+    }
+
+    protected String exceptionInfo() {
+        return getValueClass() + " '" + this.getFieldName() + "' of " + GWTJava5Helper.getSimpleName(getOwner().getObjectClass());
     }
 
     @Override

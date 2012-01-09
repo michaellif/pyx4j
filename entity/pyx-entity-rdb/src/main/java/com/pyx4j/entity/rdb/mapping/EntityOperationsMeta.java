@@ -68,6 +68,8 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
 
+    private final List<MemberOperationsMeta> detachedMembers = new Vector<MemberOperationsMeta>();
+
     private final List<MemberCollectionOperationsMeta> collectionMembers = new Vector<MemberCollectionOperationsMeta>();
 
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
@@ -205,8 +207,13 @@ public class EntityOperationsMeta {
                                 + Path.PATH_SEPARATOR, "owner", "value");
                     }
                     collectionMembers.add(member);
-                    if (!memberMeta.isDetached()) {
+                    switch (memberMeta.getAttachLevel()) {
+                    case Attached:
                         cascadeRetrieveMembers.add(member);
+                        break;
+                    case Detached:
+                        detachedMembers.add(member);
+                        break;
                     }
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
@@ -364,6 +371,10 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getCascadeRetrieveMembers() {
         return cascadeRetrieveMembers;
+    }
+
+    public List<MemberOperationsMeta> getDetachedMembers() {
+        return detachedMembers;
     }
 
     public List<MemberCollectionOperationsMeta> getCollectionMembers() {

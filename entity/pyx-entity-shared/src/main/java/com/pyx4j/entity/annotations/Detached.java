@@ -25,6 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.pyx4j.entity.shared.AttachLevel;
+
 /**
  * This annotation specifies that the Member is not retrieved and serialized together with
  * Owner Entity.
@@ -37,6 +39,9 @@ public @interface Detached {
 
     //TODO implement this
     //N.B.  For now IdOnly  is implemented!
+    /**
+     * See default value by member class type AttachLevel.getDefault();
+     */
     AttachLevel level() default AttachLevel.IdOnly;
 
 }

@@ -33,6 +33,7 @@ import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -72,6 +73,16 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     @Override
     public void setValue(Set<TYPE> value) {
         getOwner().setMemberValue(getFieldName(), value);
+    }
+
+    @Override
+    public AttachLevel getAttachLevel() {
+        return AttachLevel.Attached;
+    }
+
+    @Override
+    public void setAttachLevel(AttachLevel level) {
+        throw new IllegalArgumentException("Not implemented");
     }
 
     /**

@@ -58,6 +58,7 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -236,11 +237,19 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             tm.insert(connection, entity);
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                    // Never update
+                    continue;
+                }
                 CollectionsTableModel.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                     MemberMeta memberMeta = member.getMemberMeta();
                     @SuppressWarnings("unchecked")
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                    if (iCollectionMember.getAttachLevel() == AttachLevel.Detached) {
+                        // Do not update Detached collections.
+                        continue;
+                    }
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
                             if (!childEntity.isValueDetached()) {
@@ -266,11 +275,19 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         try {
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                    // Never update
+                    continue;
+                }
                 CollectionsTableModel.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                     MemberMeta memberMeta = member.getMemberMeta();
                     @SuppressWarnings("unchecked")
                     ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                    if (iCollectionMember.getAttachLevel() == AttachLevel.Detached) {
+                        // Do not update Detached collections.
+                        continue;
+                    }
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
                             if (!childEntity.isValueDetached()) {
@@ -707,6 +724,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
         }
+        for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
+            member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+        }
         return entity;
     }
 
@@ -995,6 +1015,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                    continue;
+                }
                 if ((cascadedeleteDataEntity != null) && member.getMemberMeta().isOwnedRelationships()
                         && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
                     for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity)) {
@@ -1042,6 +1065,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 try {
                     // remove data from join tables first, No cascade delete
                     for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                            continue;
+                        }
                         //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
                         if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
                             if (trace) {
@@ -1081,7 +1107,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
+                if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
+                    CollectionsTableModel.delete(connection, connectionProvider.getDialect(), primaryKeys, member);
+                }
             }
             tm.delete(connection, primaryKeys);
         } finally {
@@ -1097,7 +1125,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(connection, entityMeta);
             for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                CollectionsTableModel.truncate(connection, member);
+                if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
+                    CollectionsTableModel.truncate(connection, member);
+                }
             }
             tm.truncate(connection);
         } finally {

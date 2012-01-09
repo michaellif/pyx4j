@@ -34,7 +34,7 @@ public class MemberMetaDataGeneration extends MemberMetaData {
 
         && (rpcTransient == other.rpcTransient)
 
-        && (detached == other.detached)
+        && (attachLevel == other.attachLevel)
 
         && (ownedRelationships == other.ownedRelationships)
 

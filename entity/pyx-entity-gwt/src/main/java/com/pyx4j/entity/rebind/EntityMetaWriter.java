@@ -60,6 +60,7 @@ import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
 import com.pyx4j.entity.client.impl.MemberMetaData;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
@@ -80,6 +81,7 @@ public class EntityMetaWriter {
         composer.addImport(IEntity.class.getName());
         composer.addImport(MemberMeta.class.getName());
         composer.addImport(ObjectClassType.class.getName());
+        composer.addImport(AttachLevel.class.getName());
         composer.addImport(ClientMemberMetaImpl.class.getName());
         composer.setSuperclass(ClientEntityMetaImpl.class.getName());
 
@@ -367,13 +369,16 @@ public class EntityMetaWriter {
                 }
             }
             data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
-            data.detached = (method.getAnnotation(Detached.class) != null);
+            Detached detachedAnnotation = method.getAnnotation(Detached.class);
+            if (detachedAnnotation == null) {
+                data.attachLevel = AttachLevel.Attached;
+            } else if (detachedAnnotation.level() == null) {
+                data.attachLevel = AttachLevel.getDefault(data.objectClassType);
+            } else {
+                data.attachLevel = detachedAnnotation.level();
+            }
 
             Owned aOwned = method.getAnnotation(Owned.class);
-
-            if ((aOwned != null) && data.detached) {
-                //  throw new RuntimeException("Unexpected @Detached annotation in member " + method.getName() + " of " + interfaceType.getQualifiedSourceName());
-            }
 
             data.embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
             data.ownedRelationships = (aOwned != null) || (data.embedded);
@@ -488,7 +493,7 @@ public class EntityMetaWriter {
         writer.print(Boolean.valueOf(data.valueClassIsNumber).toString() + ", ");
         writer.print(Boolean.valueOf(data.persistenceTransient).toString() + ", ");
         writer.print(Boolean.valueOf(data.rpcTransient).toString() + ", ");
-        writer.print(Boolean.valueOf(data.detached).toString() + ", ");
+        writer.print(AttachLevel.class.getSimpleName() + "." + data.attachLevel.name() + ", ");
         writer.print(Boolean.valueOf(data.ownedRelationships).toString() + ", ");
         writer.print(Boolean.valueOf(data.owner).toString() + ", ");
         writer.print(Boolean.valueOf(data.embedded).toString() + ", ");

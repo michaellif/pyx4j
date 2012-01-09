@@ -40,6 +40,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -62,7 +63,7 @@ public class MemberMetaImpl implements MemberMeta {
 
     private final boolean rpcTransient;
 
-    private final boolean detached;
+    private final AttachLevel attachLevel;
 
     private final boolean ownedRelationships;
 
@@ -172,10 +173,18 @@ public class MemberMetaImpl implements MemberMeta {
         owner = (method.getAnnotation(Owner.class) != null);
         assert (!(owner == true && ownedRelationships == true));
 
-        detached = (method.getAnnotation(Detached.class) != null);
-        if ((aOwned != null) && detached) {
-            //throw new RuntimeException("Unexpected @Detached annotation in member '" + fieldName + "' of " + method.getDeclaringClass().getSimpleName());
+        Detached detachedAnnotation = method.getAnnotation(Detached.class);
+        if (detachedAnnotation == null) {
+            attachLevel = AttachLevel.Attached;
+        } else if (detachedAnnotation.level() == null) {
+            attachLevel = AttachLevel.getDefault(objectClassType);
+        } else {
+            attachLevel = detachedAnnotation.level();
         }
+
+        //if ((aOwned != null) && attachLevel != AttachLevel.Attached) {
+        //throw new RuntimeException("Unexpected @Detached annotation in member '" + fieldName + "' of " + method.getDeclaringClass().getSimpleName());
+        //}
 
         Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
         indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());
@@ -213,7 +222,12 @@ public class MemberMetaImpl implements MemberMeta {
 
     @Override
     public boolean isDetached() {
-        return detached;
+        return attachLevel != AttachLevel.Attached;
+    }
+
+    @Override
+    public AttachLevel getAttachLevel() {
+        return attachLevel;
     }
 
     @Override

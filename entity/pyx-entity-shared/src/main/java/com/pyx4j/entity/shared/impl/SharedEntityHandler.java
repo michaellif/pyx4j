@@ -43,6 +43,7 @@ import com.pyx4j.commons.IdentityHashSet;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -436,21 +437,40 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public boolean isValueDetached() {
-        Map<String, Object> thisValue = this.getValue(false);
-        if ((thisValue == null) || (thisValue.isEmpty())) {
-            return false;
-        }
-        return thisValue.containsKey(DETACHED_ATTR);
+        return getAttachLevel() != AttachLevel.Attached;
     }
 
     @Override
     public void setValuePopulated() {
-        ensureValue(false).remove(DETACHED_ATTR);
+        setAttachLevel(AttachLevel.Attached);
     }
 
     @Override
     public void setValueDetached() {
-        ensureValue(false).put(DETACHED_ATTR, Boolean.TRUE);
+        setAttachLevel(AttachLevel.IdOnly);
+    }
+
+    @Override
+    public AttachLevel getAttachLevel() {
+        Map<String, Object> thisValue = this.getValue(false);
+        if ((thisValue == null) || (thisValue.isEmpty())) {
+            return AttachLevel.Attached;
+        }
+        AttachLevel level = (AttachLevel) thisValue.get(DETACHED_ATTR);
+        if (level == null) {
+            return AttachLevel.Attached;
+        } else {
+            return level;
+        }
+    }
+
+    @Override
+    public void setAttachLevel(AttachLevel level) {
+        if (level == AttachLevel.Attached) {
+            ensureValue(false).remove(DETACHED_ATTR);
+        } else {
+            ensureValue(false).put(DETACHED_ATTR, level);
+        }
     }
 
     @Override
