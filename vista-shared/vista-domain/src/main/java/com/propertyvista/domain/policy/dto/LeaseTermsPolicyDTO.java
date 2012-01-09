@@ -15,9 +15,9 @@ package com.propertyvista.domain.policy.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 
 @Transient
-public interface LeaseTermsPolicyDTO extends PolicyDTOBase, LegalTermsPolicy {
+public interface LeaseTermsPolicyDTO extends PolicyDTOBase, LeaseTermsPolicy {
 
 }

@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.policies.numberofids;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
 
@@ -24,16 +24,14 @@ public class NumberOfIDsPolicyListerViewImpl extends CrmListerViewImplBase<Numbe
 
     public NumberOfIDsPolicyListerViewImpl() {
         super(CrmSiteMap.Settings.Policies.NumberOfIds.class);
-        setLister(new NumberOfIdsLister());
+        setLister(new NumberOfIdsPolicyLister());
     }
 
-    private static class NumberOfIdsLister extends ListerBase<NumberOfIDsPolicyDTO> {
+    private static class NumberOfIdsPolicyLister extends PolicyListerBase<NumberOfIDsPolicyDTO> {
 
-        public NumberOfIdsLister() {
-            super(NumberOfIDsPolicyDTO.class, CrmSiteMap.Settings.Policies.NumberOfIds.class, false, true);
+        public NumberOfIdsPolicyLister() {
+            super(NumberOfIDsPolicyDTO.class, CrmSiteMap.Settings.Policies.NumberOfIds.class);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().numberOfIDs()).build()
             );//@formatter:on
         }

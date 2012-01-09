@@ -30,7 +30,7 @@ import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
 import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
@@ -129,8 +129,8 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         return policy;
     }
 
-    private LegalTermsPolicy createDefaultLeaseTermsPolicy() {
-        LegalTermsPolicy policy = EntityFactory.create(LegalTermsPolicy.class);
+    private LeaseTermsPolicy createDefaultLeaseTermsPolicy() {
+        LeaseTermsPolicy policy = EntityFactory.create(LeaseTermsPolicy.class);
 
         String termsContentText = "failed to get lease terms during the preload phase";
         try {

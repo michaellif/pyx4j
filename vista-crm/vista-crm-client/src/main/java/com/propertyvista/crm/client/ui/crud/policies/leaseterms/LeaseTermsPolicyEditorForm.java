@@ -19,7 +19,6 @@ import java.util.List;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
@@ -27,8 +26,6 @@ import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
 public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<LeaseTermsPolicyDTO> {
-
-    private static final I18n i18n = I18n.get(LeaseTermsPolicyEditorForm.class);
 
     public LeaseTermsPolicyEditorForm(IEditableComponentFactory factory) {
         super(LeaseTermsPolicyDTO.class, factory);

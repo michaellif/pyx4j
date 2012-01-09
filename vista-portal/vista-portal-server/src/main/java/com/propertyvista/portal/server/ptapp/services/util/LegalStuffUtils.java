@@ -18,7 +18,7 @@ import java.util.Locale;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.server.I18nManager;
 
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
@@ -27,8 +27,8 @@ import com.propertyvista.server.common.policy.PolicyManager;
 
 public class LegalStuffUtils {
 
-    public static LegalTermsPolicy retrieveLegalTermsPolicy() {
-        LegalTermsPolicy termsPolicy = (LegalTermsPolicy) PolicyManager.effectivePolicy(PtAppContext.getCurrentUserLease().unit(), LegalTermsPolicy.class);
+    public static LeaseTermsPolicy retrieveLegalTermsPolicy() {
+        LeaseTermsPolicy termsPolicy = (LeaseTermsPolicy) PolicyManager.effectivePolicy(PtAppContext.getCurrentUserLease().unit(), LeaseTermsPolicy.class);
         if (termsPolicy == null) {
             throw new Error("There is no Legal Policy!?.");
         }

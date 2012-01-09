@@ -70,7 +70,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
         NavigFolder folder = new NavigFolder(i18n.tr("Settings"));
-        folder.addNavigItem(new CrmSiteMap.Settings.Policy());
         folder.addNavigItem(new CrmSiteMap.Settings.UserRole());
         folder.addNavigItem(new CrmSiteMap.Settings.ServiceDictionary());
         list.add(folder);
@@ -85,8 +84,8 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
     public NavigFolder createPoliciesFolder() {
         NavigFolder folder = new NavigFolder(i18n.tr("Policies"));
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.NumberOfIds());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.NumberOfIds());
         return folder;
     }
 }

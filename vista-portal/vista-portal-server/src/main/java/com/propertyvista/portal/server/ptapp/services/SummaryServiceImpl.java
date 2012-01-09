@@ -34,7 +34,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -146,7 +146,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         // fill Lease Terms:
-        LegalTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
+        LeaseTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
 
         for (LegalTermsDescriptor terms : termsPolicy.summaryTerms()) {
             LegalTermsDescriptorDTO ltd = LegalStuffUtils.formLegalTerms(terms);

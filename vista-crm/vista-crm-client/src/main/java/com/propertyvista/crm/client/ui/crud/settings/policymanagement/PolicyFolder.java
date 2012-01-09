@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.crm.client.ui.policy.PolicyEditorFormFactory;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;

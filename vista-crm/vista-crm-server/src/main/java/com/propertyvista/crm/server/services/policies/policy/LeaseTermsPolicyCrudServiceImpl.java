@@ -15,16 +15,16 @@ package com.propertyvista.crm.server.services.policies.policy;
 
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 
-public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalTermsPolicy, LeaseTermsPolicyDTO> {
+public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseTermsPolicy, LeaseTermsPolicyDTO> {
 
     public LeaseTermsPolicyCrudServiceImpl() {
-        super(LegalTermsPolicy.class, LeaseTermsPolicyDTO.class);
+        super(LeaseTermsPolicy.class, LeaseTermsPolicyDTO.class);
     }
 
     @Override
-    protected void persistDBO(LegalTermsPolicy dbo, LeaseTermsPolicyDTO in) {
+    protected void persistDBO(LeaseTermsPolicy dbo, LeaseTermsPolicyDTO in) {
         // FIXME remove these printlns after its clear what's wrong
         System.out.println(dbo.summaryTerms().get(0).content());
         System.out.println(dbo.oneTimePaymentTerms().content());

@@ -15,18 +15,15 @@ package com.propertyvista.crm.client.ui.crud.policies.numberofids;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOEditorForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
-import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 
 public class NumberOfIDsPolicyViewerViewImpl extends CrmViewerViewImplBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyViewerView {
 
     public NumberOfIDsPolicyViewerViewImpl() {
         super(CrmSiteMap.Settings.Policies.NumberOfIds.class);
 
-        setForm(new PolicyDTOEditorForm<NumberOfIDsPolicy, NumberOfIDsPolicyDTO>(NumberOfIDsPolicy.class, NumberOfIDsPolicyDTO.class,
-                new CrmViewersComponentFactory()));
+        setForm(new NumberOfIDsPolicyEditorForm(new CrmViewersComponentFactory()));
     }
 
 }

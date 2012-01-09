@@ -70,6 +70,17 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         super.setColumnDescriptors(columns);
     }
 
+    /**
+     * Set column descriptors for the {@link PolicyListerBase}, the columns for {@link PolicyDTOBase#nodeType()} and {@link PolicyDTOBase#nodeRepresentation()}
+     * are added implicitly, so there's no need to `set' them.
+     */
+    @Override
+    public void setColumnDescriptors(ColumnDescriptor<?>... columnDescriptors) {
+        List<ColumnDescriptor<?>> columns = new LinkedList<ColumnDescriptor<?>>(defaultColumns);
+        columns.addAll(Arrays.asList(columnDescriptors));
+        super.setColumnDescriptors(columns.toArray(new ColumnDescriptor<?>[columns.size()]));
+    };
+
     public void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {
         if (!itemsToRemove.isEmpty()) {
             final P item = itemsToRemove.poll();

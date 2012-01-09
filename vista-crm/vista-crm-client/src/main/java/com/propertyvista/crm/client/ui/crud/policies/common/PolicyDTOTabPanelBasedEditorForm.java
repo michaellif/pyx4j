@@ -39,6 +39,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.NodeType.NodeTypeBuilder;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -50,20 +51,29 @@ import com.propertyvista.domain.ref.Province;
 
 public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends PolicyDTOBase> extends CrmEntityForm<POLICY_DTO> {
 
-    private static final I18n i18n = I18n.get(PolicyDTOEditorForm.class);
+    private static final I18n i18n = I18n.get(PolicyDTOTabPanelBasedEditorForm.class);
 
     private VistaTabLayoutPanel tabPanel;
 
-    @SuppressWarnings("unchecked")
-    private static final List<NodeTypeWrapper<?>> NODE_TYPE_OPTIONS = Arrays.asList(//@formatter:off
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList(//@formatter:off
 // reserved for future:            
-//                NodeTypeWrapper.wrap(AptUnit.class),
-//                NodeTypeWrapper.wrap(Floorplan.class),
-                NodeTypeWrapper.wrap(Building.class),
-                NodeTypeWrapper.wrap(Complex.class),
-                NodeTypeWrapper.wrap(Province.class),
-                NodeTypeWrapper.wrap(Country.class),
-                NodeTypeWrapper.wrap(OrganizationPoliciesNode.class));//@formatter:on
+//                AptUnit.class,
+//                Floorplan.class,
+                new NodeTypeBuilder(Building.class).build(),
+                new NodeTypeBuilder(Complex.class).build(),
+                new NodeTypeBuilder(Province.class).build(),
+                new NodeTypeBuilder(Country.class).build(),
+                new NodeTypeBuilder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build()
+    );//@formatter:on
+
+    @SuppressWarnings("unchecked")
+    private static final List<Class<? extends PolicyNode>> ASSIGNABLE_NODE_TYPES = Arrays.asList(//@formatter:off
+                Building.class,
+                Complex.class,
+                Province.class,
+                Country.class
+    );//@formatter:on
 
     public PolicyDTOTabPanelBasedEditorForm(Class<POLICY_DTO> policyDTOClass, final IEditableComponentFactory factory) {
         super(policyDTOClass, factory);
@@ -100,14 +110,15 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         content.setHeight("3em");
         int row = -1;
 
-        final CComboBox<NodeTypeWrapper<?>> selectPolicyScopeBox = new CComboBox<NodeTypeWrapper<?>>();
+        final CComboBox<NodeType> selectPolicyScopeBox = new CComboBox<NodeType>();
         selectPolicyScopeBox.setEditable(isEditable());
-        selectPolicyScopeBox.setOptions(NODE_TYPE_OPTIONS);
+
+        selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
         selectPolicyScopeBox.setMandatory(true);
         // add value change handler that resets the node when node type is changed 
-        selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeTypeWrapper<?>>() {
+        selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
             @Override
-            public void onValueChange(ValueChangeEvent<NodeTypeWrapper<?>> event) {
+            public void onValueChange(ValueChangeEvent<NodeType> event) {
                 if (event.getValue() != null) {
                     // disable node selector if it's a root node (Organization/PMC)
                     Class<? extends PolicyNode> selectedNodeType = event.getValue().getType();
@@ -131,10 +142,21 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
-                    @SuppressWarnings("unchecked")
-                    NodeTypeWrapper<?> policyScope = getValue() == null || getValue().node().isNull() ? null : NodeTypeWrapper
-                            .wrap((Class<? extends PolicyNode>) getValue().node().getInstanceValueClass());
-
+                    @SuppressWarnings({ "rawtypes" })
+                    NodeType policyScope = null;
+                    if (getValue() != null && !getValue().node().isNull()) {
+                        @SuppressWarnings("unchecked")
+                        Class<? extends PolicyNode> populatedType = (Class<? extends PolicyNode>) getValue().node().getInstanceValueClass();
+                        for (@SuppressWarnings("rawtypes")
+                        NodeType type : AVAILABLE_NODE_TYPES) {
+                            if (type.getType().equals(populatedType)) {
+                                policyScope = type;
+                            }
+                        }
+                        if (policyScope == null) {
+                            throw new Error("got unsupported or unknown policy scope:" + getValue().getInstanceValueClass().getName());
+                        }
+                    }
                     if (policyScope == null) {
                         selectPolicyScopeBox.setValue(null, true);
                     } else {
@@ -153,9 +175,6 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
      * @author ArtyomB
      */
     private static class PolicyNodeEditor extends CEntityEditor<PolicyNode> {
-
-        private static final List<Class<? extends PolicyNode>> ASSIGNABLE_NODE_TYPES = Arrays.asList(Building.class, Complex.class, Province.class,
-                Country.class);
 
         public PolicyNodeEditor() {
             super(PolicyNode.class);
@@ -232,18 +251,17 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         }
     }
 
-    private static class NodeTypeWrapper<T extends PolicyNode> {
+    public static class NodeType<T extends PolicyNode> {
 
         private final String toString;
 
         private final Class<T> nodeType;
 
-        public static <TYPE extends PolicyNode> NodeTypeWrapper<TYPE> wrap(Class<TYPE> nodeType) {
-            return new NodeTypeWrapper<TYPE>(nodeType);
-        }
+        private final boolean hasOnlyOneInstance;
 
-        private NodeTypeWrapper(Class<T> nodeType) {
+        private NodeType(Class<T> nodeType, boolean hasOnlyOneInstance) {
             this.nodeType = nodeType;
+            this.hasOnlyOneInstance = hasOnlyOneInstance;
             this.toString = EntityFactory.getEntityMeta(nodeType).getCaption();
         }
 
@@ -254,6 +272,36 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
         public Class<T> getType() {
             return nodeType;
+        }
+
+        public boolean hasOnlyOneInstance() {
+            return this.hasOnlyOneInstance;
+        }
+
+        public static class NodeTypeBuilder<P extends PolicyNode> {
+
+            private final Class<P> nodeType;
+
+            private boolean hasOnlyOneInstance;
+
+            public NodeTypeBuilder(Class<P> nodeType) {
+                this.nodeType = nodeType;
+                this.hasOnlyOneInstance = false;
+            }
+
+            public NodeTypeBuilder<P> hasOnlyOneInstance() {
+                this.hasOnlyOneInstance = true;
+                return this;
+            }
+
+            public NodeTypeBuilder<P> hasManyInstances() {
+                this.hasOnlyOneInstance = false;
+                return this;
+            }
+
+            public NodeType<P> build() {
+                return new NodeType<P>(nodeType, hasOnlyOneInstance);
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.policy.policies.LegalTermsPolicy;
+import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -64,7 +64,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         ChargesSharedCalculation.calculateTotal(payment.applicationCharges());
 
         // Legal stuff:
-        LegalTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
+        LeaseTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
         payment.oneTimePaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.oneTimePaymentTerms()));
         payment.recurrentPaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.recurrentPaymentTerms()));
 
