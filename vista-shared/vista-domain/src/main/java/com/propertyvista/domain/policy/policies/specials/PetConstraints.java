@@ -18,10 +18,10 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 /**
- * Constraints for a specific type of pet ({@link Feature}) .
+ * Constraints for a specific type of pet ({@link ServiceItemType}) .
  * 
  * @author ArtyomB
  * 
@@ -35,5 +35,5 @@ public interface PetConstraints extends IEntity {
     IPrimitive<Double> maxWeight();
 
     @Owner
-    Feature pet();
+    ServiceItemType pet();
 }

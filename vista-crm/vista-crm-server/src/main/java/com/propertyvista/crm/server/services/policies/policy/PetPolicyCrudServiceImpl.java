@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.specials.PetConstraints;
@@ -42,26 +43,30 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
     }
 
     private void mergeChanges(PetPolicyDTO policyDTO) {
-        EntityQueryCriteria<Feature> criteria = new EntityQueryCriteria<Feature>(Feature.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().type(), Feature.Type.pet));
-        List<Feature> availablePets = Persistence.service().query(criteria);
+        EntityQueryCriteria<ServiceItemType> criteria = new EntityQueryCriteria<ServiceItemType>(ServiceItemType.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().featureType(), Feature.Type.pet));
+        List<ServiceItemType> availablePets = Persistence.service().query(criteria);
 
-        for (Feature availablePet : availablePets) {
-            boolean isNewPet = false;
-            for (PetConstraints constraints : policyDTO.constraints()) {
-                if (constraints.pet().equals(availablePet)) {
-                    isNewPet = true;
-                    break;
-                }
-            }
-            if (isNewPet) {
+        for (ServiceItemType availablePet : availablePets) {
+            if (isNewPet(availablePet, policyDTO)) {
                 policyDTO.constraints().add(createNewPetConstraints(availablePet));
             }
         }
 
     }
 
-    private PetConstraints createNewPetConstraints(Feature pet) {
+    private boolean isNewPet(ServiceItemType pet, PetPolicyDTO dto) {
+
+        for (PetConstraints constraints : dto.constraints()) {
+            if (constraints.pet().equals(pet)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private PetConstraints createNewPetConstraints(ServiceItemType pet) {
         PetConstraints constraints = EntityFactory.create(PetConstraints.class);
         constraints.pet().set(pet);
         constraints.maxNumber().setValue(0);

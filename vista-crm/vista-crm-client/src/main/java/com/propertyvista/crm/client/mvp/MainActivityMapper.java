@@ -118,6 +118,9 @@ import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolic
 import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.pet.PetPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.pet.PetPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
@@ -601,6 +604,19 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new LeaseTermsPolicyViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Settings.Policies.PetPolicy) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new PetPolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new PetPolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new PetPolicyViewerActivity(place);
                         break;
                     }
                 }
