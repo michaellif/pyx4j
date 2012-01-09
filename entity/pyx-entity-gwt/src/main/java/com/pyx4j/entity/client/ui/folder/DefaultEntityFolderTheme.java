@@ -118,6 +118,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
 
         style = new Style(".", StyleName.EntityFolderAddButtonLabel);
         style.addProperty("padding-left", "3px");
+        style.addProperty("font-weight", "normal");
         style.addProperty("float", "left");
         addStyle(style);
 
