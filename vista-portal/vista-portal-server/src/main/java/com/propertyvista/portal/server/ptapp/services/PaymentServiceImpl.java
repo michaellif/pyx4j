@@ -32,6 +32,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.domain.ptapp.Charges;
+import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
@@ -50,13 +51,15 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     public void retrieve(AsyncCallback<PaymentInformationDTO> callback, Key tenantId) {
         log.info("Retrieving PaymentInfo for tenant {}", tenantId);
 
-        PaymentInformationDTO payment = retrieveApplicationEntity(PaymentInformationDTO.class);
-        if (payment == null) {
+        PaymentInformation paymentDBO = retrieveApplicationEntity(PaymentInformation.class);
+        if (paymentDBO == null) {
             log.debug("Creating new payment");
-            payment = EntityFactory.create(PaymentInformationDTO.class);
-            payment.paymentMethod().type().setValue(PaymentType.Echeck);
-            payment.preauthoriseAgree().setValue(Boolean.TRUE);
+            paymentDBO = EntityFactory.create(PaymentInformationDTO.class);
+            paymentDBO.paymentMethod().type().setValue(PaymentType.Echeck);
+            paymentDBO.preauthoriseAgree().setValue(Boolean.TRUE);
         }
+
+        PaymentInformationDTO payment = paymentDBO.duplicate(PaymentInformationDTO.class);
 
         // TODO VladS find a better way to retrieve just monthlyCharges
         Charges charges = retrieveApplicationEntity(Charges.class);
@@ -75,7 +78,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     public void save(AsyncCallback<PaymentInformationDTO> callback, PaymentInformationDTO payment) {
 //        log.info("Saving PaymentInformationDTO\n", VistaDataPrinter.print(payment));
 
-        saveApplicationEntity(payment);
+        saveApplicationEntity(payment.duplicate(PaymentInformation.class));
 
         boolean callFireDemo = false;
         if (callFireDemo) {
