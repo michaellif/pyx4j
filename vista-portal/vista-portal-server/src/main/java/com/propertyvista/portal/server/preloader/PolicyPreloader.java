@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.policy.MiscPolicy;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
@@ -48,6 +49,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         Persistence.service().persist(organizationalPoliciesNode);
 
         List<? extends Policy> defaults = Arrays.asList(//@formatter:off
+                createMiscPolicy(),
                 createDefaultNumberOfIdsPolicy(),
                 createDefaultLeaseTermsPolicy(),
                 createDefaultPetPolicy(),
@@ -71,6 +73,18 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         } else {
             return "This is production";
         }
+    }
+
+    private MiscPolicy createMiscPolicy() {
+        MiscPolicy misc = EntityFactory.create(MiscPolicy.class);
+
+        misc.occupantsOver18areApplicants().setValue(false);
+        misc.occupantsPerBedRoom().setValue(2d);
+        misc.oneMonthDeposit().setValue(false);
+
+        Persistence.service().persist(misc);
+
+        return misc;
     }
 
     private NumberOfIDsPolicy createDefaultNumberOfIdsPolicy() {
