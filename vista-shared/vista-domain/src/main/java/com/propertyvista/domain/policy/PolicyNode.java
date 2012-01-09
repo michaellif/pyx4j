@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
- * Represents a node in organizational structure that can have a policy.
+ * Represents a node in organizational structure that can have a policy
  */
 @Inheritance
 @AbstractEntity

@@ -180,12 +180,6 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             super(PolicyNode.class);
         }
 
-        @Override
-        protected void onPopulate() {
-            super.onPopulate();
-            Class<?> c = getValue().getInstanceValueClass();
-        }
-
         @SuppressWarnings("unchecked")
         @Override
         public IsWidget createContent() {
