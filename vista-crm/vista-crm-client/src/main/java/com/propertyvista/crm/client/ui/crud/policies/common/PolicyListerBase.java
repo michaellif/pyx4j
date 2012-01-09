@@ -20,6 +20,7 @@ import java.util.Queue;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -27,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.dto.PolicyDTOBase;
@@ -85,14 +86,14 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         if (!itemsToRemove.isEmpty()) {
             final P item = itemsToRemove.poll();
             if (item.node().isInstanceOf(OrganizationPoliciesNode.class)) {
-                (new OkCancelDialog(i18n.tr("Are you sure it's ok to remove the policy for the whole company?")) {
-                    @Override
-                    public boolean onClickOk() {
-                        getPresenter().delete(item.getPrimaryKey());
-                        validateAndRemoveRecursively(itemsToRemove);
-                        return true;
-                    }
-                }).show();
+                MessageDialog.confirm(i18n.tr("Policy Removal Confirmation"), i18n.tr("Are you sure it's ok to remove the policy for the whole company?"),
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                getPresenter().delete(item.getPrimaryKey());
+                                validateAndRemoveRecursively(itemsToRemove);
+                            }
+                        });
             } else {
                 getPresenter().delete(item.getPrimaryKey());
                 validateAndRemoveRecursively(itemsToRemove);

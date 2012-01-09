@@ -16,9 +16,12 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
@@ -35,16 +38,31 @@ public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
     protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.TabDescriptor> createCustomTabPanels() {
         return Arrays.asList(
 
-        new TabDescriptor(inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())).asWidget(), proto().summaryTerms().getMeta()
-                .getCaption()),
+        new TabDescriptor(createSummaryTermsPanel(), proto().summaryTerms().getMeta().getCaption()),
 
-        new TabDescriptor(inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())).asWidget(), proto().oneTimePaymentTerms().getMeta()
-                .getCaption()),
+        new TabDescriptor(createOneTimePaymentTermsPanel(), proto().oneTimePaymentTerms().getMeta().getCaption()),
 
-        new TabDescriptor(inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())).asWidget(), proto().recurrentPaymentTerms().getMeta()
-                .getCaption())
+        new TabDescriptor(createRecurrentPaymentTermsPanel(), proto().recurrentPaymentTerms().getMeta().getCaption())
 
         );
+    }
+
+    private Widget createSummaryTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel();
+        container.setWidget(0, 0, inject(proto().summaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
+        return container;
+    }
+
+    private Widget createOneTimePaymentTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel();
+        container.setWidget(0, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())));
+        return container;
+    }
+
+    private Widget createRecurrentPaymentTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel();
+        container.setWidget(0, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())));
+        return container;
     }
 
     private static class LegalTermsDescriptorFolder extends VistaBoxFolder<LegalTermsDescriptor> {
