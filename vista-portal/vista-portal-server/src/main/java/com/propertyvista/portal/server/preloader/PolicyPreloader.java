@@ -29,11 +29,9 @@ import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
-import com.propertyvista.domain.policy.policies.GymUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
-import com.propertyvista.domain.policy.policies.PoolUsageFeePolicy;
 import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
@@ -53,9 +51,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
                 createDefaultNumberOfIdsPolicy(),
                 createDefaultLeaseTermsPolicy(),
                 createDefaultPetPolicy(),
-                createDefaultAllowedIdsPolicy(),
-                createDefaultGymUsageFeePolicy(),
-                createDefaultPoolUsageFeePolicy()
+                createDefaultAllowedIdsPolicy()
         );//@formatter:on
 
         for (Policy policy : defaults) {
@@ -113,20 +109,6 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
         Persistence.service().persist(allowedIDs);
         return allowedIDs;
-    }
-
-    private GymUsageFeePolicy createDefaultGymUsageFeePolicy() {
-        GymUsageFeePolicy policy = EntityFactory.create(GymUsageFeePolicy.class);
-        policy.monthlyGymFee().setValue(30.0);
-        Persistence.service().persist(policy);
-        return policy;
-    }
-
-    private PoolUsageFeePolicy createDefaultPoolUsageFeePolicy() {
-        PoolUsageFeePolicy policy = EntityFactory.create(PoolUsageFeePolicy.class);
-        policy.monthlyPoolFee().setValue(27.99);
-        Persistence.service().persist(policy);
-        return policy;
     }
 
     private LeaseTermsPolicy createDefaultLeaseTermsPolicy() {
