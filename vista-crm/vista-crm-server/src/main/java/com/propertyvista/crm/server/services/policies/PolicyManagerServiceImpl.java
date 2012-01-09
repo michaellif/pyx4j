@@ -15,6 +15,8 @@ package com.propertyvista.crm.server.services.policies;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.crm.rpc.services.policies.PolicyManagerService;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -25,12 +27,18 @@ public class PolicyManagerServiceImpl implements PolicyManagerService {
 
     @Override
     public void effectivePolicies(AsyncCallback<EffectivePoliciesDTO> callback, PolicyNode node) {
-        callback.onSuccess(PolicyManager.effectivePolicies(node));
+        EffectivePoliciesDTO dto = EntityFactory.create(EffectivePoliciesDTO.class);
+        dto.policies().addAll(PolicyManager.effectivePolicies(node));
+        callback.onSuccess(dto);
     }
 
     @Override
     public void effectivePolicy(AsyncCallback<Policy> callback, PolicyNode node, Policy policyProto) {
-        assert policyProto != null : "A policyProto must be provided";
+        if (policyProto == null) {
+            throw new Error("A policy prototype was not provided");
+        }
+
+        @SuppressWarnings("unchecked")
         Policy policy = PolicyManager.effectivePolicy(node, (Class<? extends Policy>) policyProto.getInstanceValueClass());
         if (policy != null) {
             callback.onSuccess(policy);

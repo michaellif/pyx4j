@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -31,7 +30,6 @@ import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.PolicyNode;
 import com.propertyvista.domain.policy.UnitPolicy;
-import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -49,17 +47,18 @@ public class PolicyManager {
     // TODO refactor this method -> change DTO to just list use DTO only in service
     /**
      * @param node
-     * @return PoliciesDTO that contains list of effective policies
+     * @return the list of effective policies, i.e. policies that are active at the specified node
      */
-    public static EffectivePoliciesDTO effectivePolicies(PolicyNode node) {
-        EffectivePoliciesDTO effectivePreset = EntityFactory.create(EffectivePoliciesDTO.class);
+    public static List<PolicyAtNode> effectivePolicies(PolicyNode node) {
+        List<PolicyAtNode> effectivePolicies = null;
+
         Class<? extends PolicyNode> requestedNodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
         if (node.isEmpty()) {
             Persistence.service().retrieve(node);
         }
         for (Class<? extends PolicyNode> nodeType : HIERARCHY) {
             if (nodeType.equals(node.getInstanceValueClass())) {
-                effectivePreset = merge(effectivePreset, policiesAtNode(node));
+                effectivePolicies = merge(effectivePolicies, policiesAtNode(node));
 
                 PolicyNode parentNode = parentOf(node);
                 if (parentNode == null) {
@@ -71,7 +70,7 @@ public class PolicyManager {
         }
 
         // Filter all the unwanted policies
-        Iterator<PolicyAtNode> i = effectivePreset.policies().iterator();
+        Iterator<PolicyAtNode> i = effectivePolicies.iterator();
         while (i.hasNext()) {
             Class<? extends Policy> policyClass = (Class<? extends Policy>) i.next().policy().getInstanceValueClass();
             if ((AptUnit.class.equals(requestedNodeClass) | Floorplan.class.equals(requestedNodeClass)) & !UnitPolicy.class.isAssignableFrom(policyClass)) {
@@ -80,7 +79,7 @@ public class PolicyManager {
                 i.remove();
             }
         }
-        return effectivePreset;
+        return effectivePolicies;
     }
 
     /**
@@ -94,8 +93,8 @@ public class PolicyManager {
      */
     // TODO refactor this, no realy has to use effectivePolicies(); 
     public static Policy effectivePolicy(PolicyNode node, Class<? extends Policy> policyClass) {
-        EffectivePoliciesDTO effectivePolicies = effectivePolicies(node);
-        for (PolicyAtNode policyAtNode : effectivePolicies.policies()) {
+        List<PolicyAtNode> effectivePolicies = effectivePolicies(node);
+        for (PolicyAtNode policyAtNode : effectivePolicies) {
             if (policyAtNode.policy().getInstanceValueClass().equals(policyClass)) {
                 return policyAtNode.policy().duplicate(policyClass);
             }
@@ -103,22 +102,22 @@ public class PolicyManager {
         return null;
     }
 
-    private static EffectivePoliciesDTO merge(EffectivePoliciesDTO effectivePolicies, List<PolicyAtNode> policies) {
+    private static List<PolicyAtNode> merge(List<PolicyAtNode> effectivePolicies, List<PolicyAtNode> policies) {
         if (effectivePolicies == null) {
-            effectivePolicies = EntityFactory.create(EffectivePoliciesDTO.class);
+            effectivePolicies = new LinkedList<PolicyAtNode>();
         }
 
         for (PolicyAtNode policy : policies) {
             boolean alreadyEffective = false;
 
-            for (PolicyAtNode effectivePolicy : effectivePolicies.policies()) {
+            for (PolicyAtNode effectivePolicy : effectivePolicies) {
                 if (effectivePolicy.policy().getInstanceValueClass().equals(policy.getInstanceValueClass())) {
                     alreadyEffective = true;
                     break;
                 }
             }
             if (!alreadyEffective) {
-                effectivePolicies.policies().add(policy);
+                effectivePolicies.add(policy);
             }
         }
 
