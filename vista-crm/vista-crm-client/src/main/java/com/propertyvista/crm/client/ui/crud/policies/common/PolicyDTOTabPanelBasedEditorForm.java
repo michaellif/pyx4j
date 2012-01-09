@@ -39,7 +39,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm.NodeType.NodeTypeBuilder;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -60,19 +59,11 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 // reserved for future:            
 //                AptUnit.class,
 //                Floorplan.class,
-                new NodeTypeBuilder(Building.class).build(),
-                new NodeTypeBuilder(Complex.class).build(),
-                new NodeTypeBuilder(Province.class).build(),
-                new NodeTypeBuilder(Country.class).build(),
-                new NodeTypeBuilder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build()
-    );//@formatter:on
-
-    @SuppressWarnings("unchecked")
-    private static final List<Class<? extends PolicyNode>> ASSIGNABLE_NODE_TYPES = Arrays.asList(//@formatter:off
-                Building.class,
-                Complex.class,
-                Province.class,
-                Country.class
+                new NodeType.Builder(Building.class).build(),
+                new NodeType.Builder(Complex.class).build(),
+                new NodeType.Builder(Province.class).build(),
+                new NodeType.Builder(Country.class).build(),
+                new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build()
     );//@formatter:on
 
     public PolicyDTOTabPanelBasedEditorForm(Class<POLICY_DTO> policyDTOClass, final IEditableComponentFactory factory) {
@@ -186,22 +177,24 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             FormFlexPanel content = new FormFlexPanel();
 
             final Map<Class<? extends PolicyNode>, CComponent<?, ?>> nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CComponent<?, ?>>();
-            for (Class<? extends PolicyNode> policyNodeType : ASSIGNABLE_NODE_TYPES) {
-                CComponent<? extends PolicyNode, ?> comp = null;
-                if (isEditable()) {
-                    CEntityComboBox<? extends PolicyNode> comboBox = new CEntityComboBox(policyNodeType);
-                    comboBox.addValueChangeHandler(new ValueChangeHandler() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent event) {
-                            setValue((PolicyNode) event.getValue());
-                        }
-                    });
-                    comp = comboBox;
-                } else {
-                    comp = new CEntityLabel();
+            for (NodeType nodeType : AVAILABLE_NODE_TYPES) {
+                if (!nodeType.hasOnlyOneInstance()) {
+                    CComponent<? extends PolicyNode, ?> comp = null;
+                    if (isEditable()) {
+                        CEntityComboBox<? extends PolicyNode> comboBox = new CEntityComboBox(nodeType.getType());
+                        comboBox.addValueChangeHandler(new ValueChangeHandler() {
+                            @Override
+                            public void onValueChange(ValueChangeEvent event) {
+                                setValue((PolicyNode) event.getValue());
+                            }
+                        });
+                        comp = comboBox;
+                    } else {
+                        comp = new CEntityLabel();
+                    }
+                    comp.setVisible(false);
+                    nodeTypeToComponentMap.put(nodeType.getType(), comp);
                 }
-                comp.setVisible(false);
-                nodeTypeToComponentMap.put(policyNodeType, comp);
             }
 
             int row = -1;
@@ -272,23 +265,23 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
             return this.hasOnlyOneInstance;
         }
 
-        public static class NodeTypeBuilder<P extends PolicyNode> {
+        public static class Builder<P extends PolicyNode> {
 
             private final Class<P> nodeType;
 
             private boolean hasOnlyOneInstance;
 
-            public NodeTypeBuilder(Class<P> nodeType) {
+            public Builder(Class<P> nodeType) {
                 this.nodeType = nodeType;
                 this.hasOnlyOneInstance = false;
             }
 
-            public NodeTypeBuilder<P> hasOnlyOneInstance() {
+            public Builder<P> hasOnlyOneInstance() {
                 this.hasOnlyOneInstance = true;
                 return this;
             }
 
-            public NodeTypeBuilder<P> hasManyInstances() {
+            public Builder<P> hasManyInstances() {
                 this.hasOnlyOneInstance = false;
                 return this;
             }
