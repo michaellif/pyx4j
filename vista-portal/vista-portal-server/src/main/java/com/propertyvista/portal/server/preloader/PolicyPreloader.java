@@ -82,9 +82,6 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     private PetPolicy createDefaultPetPolicy() {
         PetPolicy petPolicy = EntityFactory.create(PetPolicy.class);
-        petPolicy.maxPetWeight().setValue(50d);
-        petPolicy.maxNumberOfPets().setValue(10);
-        petPolicy.petChargeEquation().setValue("E = mc^2");
         Persistence.service().persist(petPolicy);
         return petPolicy;
     }

@@ -14,25 +14,22 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.UnitPolicy;
+import com.propertyvista.domain.policy.policies.specials.PetConstraints;
 
 @DiscriminatorValue("PetPolicy")
 public interface PetPolicy extends UnitPolicy {
 
-    /**
-     * Max pet weight in pounds.
-     */
-    IPrimitive<Double> maxPetWeight();
+    @MemberColumn(name = "petConstraints")
+    @Owned
+    IList<PetConstraints> constraints();
 
-    /**
-     * Max number of pets.
-     */
-    IPrimitive<Integer> maxNumberOfPets();
-
-    /**
-     * Some equation that directs how to calculate the charge for pet according to the pet type, weight etc...
-     */
-    IPrimitive<String> petChargeEquation();
+    /** This is required only to let the persistence engine to create a table */
+    @Deprecated
+    IPrimitive<Integer> x();
 }
