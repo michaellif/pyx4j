@@ -35,7 +35,7 @@ public interface ChargeItem extends IEntity {
     IPrimitive<Double> originalPrice();
 
     /*
-     * agreed price: contractual price value, override the Service Item’s price
+     * agreed price: contractual price value, override the Service Itemï¿½s price
      */
     @ToString(index = 2)
     @Format("#0.00")

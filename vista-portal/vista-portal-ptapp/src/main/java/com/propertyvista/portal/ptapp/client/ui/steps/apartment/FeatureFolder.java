@@ -38,7 +38,9 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
     public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(ChargeItem.class, modifiable);
         inheritContainerAccessRules(false);
-        setEditable(false);
+        setEditable(modifiable);
+
+        setItemContentEditable(false);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
@@ -47,7 +49,6 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
     @Override
     protected IFolderDecorator<ChargeItem> createDecorator() {
         IFolderDecorator<ChargeItem> decor = super.createDecorator();
-        decor.setAddButtonVisible(isModifiable());
         return decor;
     }
 

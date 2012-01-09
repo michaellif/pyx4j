@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.NativeTriggerComponent;
 
 import com.propertyvista.domain.File;
 
-public class NativeFileUploader extends NativeTriggerComponent<File> implements INativeEditableComponent<File> {
+public class NativeFileUploader extends NativeTriggerComponent<File> implements INativeComponent<File> {
 
     private final Anchor hyperlink;
 
