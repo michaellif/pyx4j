@@ -25,6 +25,10 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.SessionInactiveEvent;
+import com.pyx4j.security.client.SessionInactiveHandler;
+import com.pyx4j.security.client.SessionMonitor;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClentNavigUtils;
@@ -35,6 +39,7 @@ import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
@@ -60,6 +65,12 @@ public class PtAppSite extends VistaSite {
         RootPanel.get().add(new PtAppSitePanel());
 
         SessionInactiveDialog.register();
+        SessionMonitor.addSessionInactiveHandler(new SessionInactiveHandler() {
+            @Override
+            public void onSessionInactive(SessionInactiveEvent event) {
+                ClientContext.logout((AuthenticationService) GWT.create(PortalAuthenticationService.class), null);
+            }
+        });
 
         wizardManager = new PtAppWizardManager();
 

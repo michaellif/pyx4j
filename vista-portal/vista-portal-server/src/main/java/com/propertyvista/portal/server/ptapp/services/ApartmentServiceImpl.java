@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -107,13 +106,13 @@ public class ApartmentServiceImpl implements ApartmentService {
     public ApartmentInfoDTO retrieveData() {
         Lease lease = PtAppContext.getCurrentUserLease();
         if (!Persistence.service().retrieve(lease.unit())) {
-            throw new UserRuntimeException("There is no Unit selected!?.");
+            throw new Error("There is no Unit selected!?.");
         }
         if (!Persistence.service().retrieve(lease.unit().floorplan())) {
-            throw new UserRuntimeException("There is no unit Floor plan data!?.");
+            throw new Error("There is no unit Floor plan data!?.");
         }
         if (!Persistence.service().retrieve(lease.unit().belongsTo())) {
-            throw new UserRuntimeException("There is no unit building data!?.");
+            throw new Error("There is no unit building data!?.");
         }
         // fill DTO:
         ApartmentInfoDTO aptInfo = EntityFactory.create(ApartmentInfoDTO.class);
