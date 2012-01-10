@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.policies.policy;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 
 public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseTermsPolicy, LeaseTermsPolicyDTO> {
 
@@ -25,11 +26,31 @@ public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<Le
 
     @Override
     protected void persistDBO(LeaseTermsPolicy dbo, LeaseTermsPolicyDTO in) {
-        // FIXME remove these printlns after its clear what's wrong
-        System.out.println(dbo.summaryTerms().get(0).content());
-        System.out.println(dbo.oneTimePaymentTerms().content());
-        System.out.println(dbo.recurrentPaymentTerms().content());
+        StringBuffer errors = new StringBuffer();
+        if (!isValid(in, errors)) {
+            throw new Error(errors.toString());
+        }
         super.persistDBO(dbo, in);
     }
 
+    private static boolean isValid(LeaseTermsPolicyDTO in, StringBuffer errors) {
+        boolean isValid = true;
+        if (!(isValid &= !in.summaryTerms().isEmpty())) {
+            errors.append("Summary terms list must not be empty; ");
+        } else {
+            for (LegalTermsDescriptor terms : in.summaryTerms()) {
+                if (!(isValid &= isValid(terms))) {
+                    // TODO add message
+                }
+            }
+        }
+
+        // FIXME finish validation for lease terms
+        return isValid;
+    }
+
+    private static boolean isValid(LegalTermsDescriptor terms) {
+        // FIXME finish this
+        return true;
+    }
 }
