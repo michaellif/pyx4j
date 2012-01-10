@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -95,9 +94,6 @@ public class InquiryPanel extends Panel {
             }
         };
 
-        // add Error Message panel
-        form.add(new FeedbackPanel("form_messages"));
-
         // add form input fields
         // name
         form.add(new WicketUtils.DropDownList<Name.Prefix>("namePrefix", model.bind(lead.person().name().namePrefix()), Arrays.asList(Name.Prefix.values()),
@@ -107,23 +103,28 @@ public class InquiryPanel extends Panel {
         label = i18n.tr("First Name");
         form.add(new Label("firstNameLabel", label));
         form.add(new RequiredTextField<String>("firstName", model.bind(lead.person().name().firstName())).setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("firstNameError", "firstName"));
         label = i18n.tr("Last Name");
         form.add(new Label("lastNameLabel", label));
         form.add(new RequiredTextField<String>("lastName", model.bind(lead.person().name().lastName())).setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("lastNameError", "lastName"));
         // phone
         label = i18n.tr("Work Phone");
         form.add(new Label("workPhoneLabel", label));
         TextField<String> workPhone = new TextField<String>("workPhone", model.bind(lead.person().workPhone()));
         form.add(workPhone.setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("workPhoneError", "workPhone"));
         label = i18n.tr("Cell Phone");
         form.add(new Label("cellPhoneLabel", label));
         TextField<String> cellPhone = new TextField<String>("cellPhone", model.bind(lead.person().mobilePhone()));
         form.add(cellPhone.setLabel(new Model<String>(lead.person().mobilePhone().getMeta().getCaption())));
+        form.add(new FormErrorPanel("cellPhoneError", "cellPhone"));
         // email
         label = i18n.tr("Email Address");
         form.add(new Label("emailLabel", label));
         EmailTextField email = new EmailTextField("email", model.bind(lead.person().email().address()));
         form.add(email.setLabel(new Model<String>(label)));
+        form.add(new FormErrorPanel("emailError", "email", "inquiryForm"));
         // floorplan selector
         Long curFp = null;
         if (fp != null) {

@@ -2,7 +2,6 @@
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <div class="inquiryPanel">
 	<form wicket:id="inquiryForm" id="inquiryForm">
-		<div wicket:id="form_messages" />
 		<div class="inputEntry">
 				<label class="inputLabel"><wicket:i18n>Title</wicket:i18n></label>
 				<select wicket:id="namePrefix"/>
@@ -10,22 +9,27 @@
 		<div class="inputEntry">
 				<label class="inputLabel" wicket:id="firstNameLabel"/>
 				<input type="text" wicket:id="firstName"/>
+				<div wicket:id="firstNameError"/>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel" wicket:id="lastNameLabel"/>
 				<input type="text" wicket:id="lastName"/>
+				<div wicket:id="lastNameError"/>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel" wicket:id="workPhoneLabel"/>
-				<input type="text" wicket:id="workPhone"/> <span>Ext</span> <input type="text" wicket:id="workPhoneExt" style="width:50px"/>
+				<input type="text" wicket:id="workPhone"/>
+				<div wicket:id="workPhoneError"/>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel" wicket:id="cellPhoneLabel"/>
 				<input type="text" wicket:id="cellPhone"/>
+				<div wicket:id="cellPhoneError"/>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel" wicket:id="emailLabel"/>
 				<input type="email" wicket:id="email"/>
+				<div wicket:id="emailError"/>
 		</div>
 		<div class="inputEntry">
 				<label class="inputLabel"><wicket:i18n>Preferred Unit</wicket:i18n></label>

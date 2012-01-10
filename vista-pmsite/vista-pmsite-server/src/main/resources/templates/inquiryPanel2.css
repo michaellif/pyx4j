@@ -1,3 +1,12 @@
+.inquiryPanel .errorPanel {
+	padding:2px;
+	padding-left:15px;
+	margin:0;
+	margin-top:10px;
+	color:red;
+	background:white;
+	display:inline-block;
+}
 .inquiryPanel .inputEntry {
 	padding:10px 0;
 	margin:0 30px;
