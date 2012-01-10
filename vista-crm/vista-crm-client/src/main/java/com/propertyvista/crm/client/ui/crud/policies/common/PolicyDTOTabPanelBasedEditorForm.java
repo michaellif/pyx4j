@@ -193,6 +193,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                         comp = new CEntityLabel();
                     }
                     comp.setVisible(false);
+                    comp.setWidth("30em");
                     nodeTypeToComponentMap.put(nodeType.getType(), comp);
                 }
             }
