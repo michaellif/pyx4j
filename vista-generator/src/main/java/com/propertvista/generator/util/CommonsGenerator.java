@@ -150,7 +150,7 @@ public class CommonsGenerator {
         String phone = new String(number);
 
         if (!CommonsStringUtils.isEmpty(ext)) {
-            phone += " ex. " + ext;
+            phone += " x" + ext;
         }
 
         return phone;
