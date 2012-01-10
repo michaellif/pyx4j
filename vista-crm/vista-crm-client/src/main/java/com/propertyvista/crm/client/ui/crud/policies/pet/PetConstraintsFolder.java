@@ -23,8 +23,8 @@ import com.propertyvista.domain.policy.policies.specials.PetConstraints;
 
 public class PetConstraintsFolder extends VistaTableFolder<PetConstraints> {
 
-    public PetConstraintsFolder(boolean modifiable) {
-        super(PetConstraints.class, modifiable);
+    public PetConstraintsFolder() {
+        super(PetConstraints.class, false);
     }
 
     @Override
@@ -38,11 +38,4 @@ public class PetConstraintsFolder extends VistaTableFolder<PetConstraints> {
         new EntityFolderColumnDescriptor(proto().maxWeight(), "10em"));
     }
 
-    @Override
-    protected void onPopulate() {
-        // FIXME remove this function
-        super.onPopulate();
-
-        List<PetConstraints> pets = getValue();
-    }
 }

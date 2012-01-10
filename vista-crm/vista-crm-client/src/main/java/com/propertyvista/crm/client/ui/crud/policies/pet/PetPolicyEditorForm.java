@@ -24,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
-import com.propertyvista.domain.policy.policies.specials.PetConstraints;
 
 public class PetPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<PetPolicyDTO> {
 
@@ -41,18 +40,8 @@ public class PetPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<PetPol
 
     private Widget createSettignsForm() {
         FormFlexPanel content = new FormFlexPanel();
-        content.setWidget(0, 0, inject(proto().constraints(), new PetConstraintsFolder(isEditable())));
+        content.setWidget(0, 0, inject(proto().constraints(), new PetConstraintsFolder()));
         return content;
     }
 
-    @Override
-    protected void onPopulate() {
-        // FIXME Remove this function 
-        super.onPopulate();
-
-        PetPolicyDTO policy = getValue();
-        if (!policy.constraints().isEmpty()) {
-            PetConstraints constraints = policy.constraints().get(0);
-        }
-    }
 }
