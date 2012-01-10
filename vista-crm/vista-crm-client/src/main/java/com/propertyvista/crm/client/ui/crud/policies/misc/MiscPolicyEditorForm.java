@@ -41,8 +41,10 @@ public class MiscPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<MiscP
     private Widget createMiscPoliciesTab() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxPets())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsPerBedRoom())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().oneMonthDeposit())).labelWidth(20).componentWidth(3).build());
         return content;
     }

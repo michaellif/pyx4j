@@ -85,7 +85,8 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         misc.occupantsOver18areApplicants().setValue(false);
         misc.occupantsPerBedRoom().setValue(2d);
         misc.oneMonthDeposit().setValue(false);
-
+        misc.maxParkingSpots().setValue(3);
+        misc.maxPets().setValue(4);
         Persistence.service().persist(misc);
 
         return misc;
