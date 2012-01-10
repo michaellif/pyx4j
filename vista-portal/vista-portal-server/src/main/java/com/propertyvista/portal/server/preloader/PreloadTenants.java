@@ -38,7 +38,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
@@ -107,7 +107,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         for (int i = 1; i <= config().numTenants; i++) {
             String email = DemoData.UserType.TENANT.getEmail(i);
             Tenant tenant = generator.createTenant();
-            CrmUser user = UserPreloader.createUser(tenant.person().name().getStringView(), email, email, VistaTenantBehavior.TENANT);
+            TenantUser user = UserPreloader.createTenantUser(tenant.person().name().getStringView(), email, email, VistaTenantBehavior.Tenant);
             tenant.person().email().address().setValue(email);
             tenant.user().set(user);
             persistTenant(tenant);
@@ -130,7 +130,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
             String email = DemoData.UserType.NEW_TENANT.getEmail(i);
-            CrmUser user = UserPreloader.createUser(email, email, null);
+            TenantUser user = UserPreloader.createTenantUser(email, email, null);
             Tenant tenant = generator.createTenant();
             tenant.person().email().address().setValue(email);
             // Update user name

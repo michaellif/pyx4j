@@ -22,7 +22,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.selenium.D;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
@@ -40,7 +40,7 @@ public class PreloadedUsersTest extends PortalVerificationTestBase {
 
     public void testFullFlow() throws Exception {
         PTGenerator generator = new PTGenerator(VistaDevPreloadConfig.createTest());
-        CrmUser user = generator.createUser(1);
+        TenantUser user = generator.createUser(1);
         ApplicationSummaryGDO summary = generator.createSummary(user, null);
 
         selenium.click(VistaFormsDebugId.Auth_Login);

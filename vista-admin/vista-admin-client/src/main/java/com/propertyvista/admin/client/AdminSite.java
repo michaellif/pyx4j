@@ -32,7 +32,7 @@ import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class AdminSite extends VistaSite {
 
@@ -75,7 +75,7 @@ public class AdminSite extends VistaSite {
     }
 
     private void init() {
-        if (ClientSecurityController.checkBehavior(VistaTenantBehavior.PROPERTY_MANAGER)) {
+        if (ClientSecurityController.checkBehavior(VistaBasicBehavior.Admin)) {
             if (AdminSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
                 AppSite.getPlaceController().goTo(new AdminSiteMap.Management());
             } else {
@@ -87,19 +87,20 @@ public class AdminSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(((AdminAuthenticationService) GWT.create(AdminAuthenticationService.class)), new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(((AdminAuthenticationService) GWT.create(AdminAuthenticationService.class)),
+                new DefaultAsyncCallback<Boolean>() {
 
-            @Override
-            public void onSuccess(Boolean result) {
-                init();
-            }
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        init();
+                    }
 
-            @Override
-            public void onFailure(Throwable caught) {
-                //TODO handle it properly
-                AdminSite.getHistoryHandler().handleCurrentHistory();
-                super.onFailure(caught);
-            }
-        });
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        //TODO handle it properly
+                        AdminSite.getHistoryHandler().handleCurrentHistory();
+                        super.onFailure(caught);
+                    }
+                });
     }
 }

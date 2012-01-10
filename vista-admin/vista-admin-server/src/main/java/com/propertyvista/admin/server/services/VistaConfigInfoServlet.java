@@ -22,14 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 import com.pyx4j.essentials.server.admin.ConfigInfoServlet;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 
 @SuppressWarnings("serial")
 public class VistaConfigInfoServlet extends ConfigInfoServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        SecurityController.assertBehavior(VistaTenantBehavior.ADMIN);
+        SecurityController.assertBehavior(VistaBasicBehavior.Admin);
         super.doGet(request, response);
     }
 }

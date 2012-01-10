@@ -35,7 +35,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -94,7 +94,7 @@ public class PublicMediaServlet extends HttpServlet {
             return;
         }
         if (!PublicVisibilityType.global.equals(media.visibility().getValue())) {
-            if (!SecurityController.checkBehavior(VistaTenantBehavior.PROPERTY_MANAGER)) {
+            if (!SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }

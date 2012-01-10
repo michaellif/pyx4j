@@ -20,14 +20,14 @@ import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.VistaAdminService;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
     public VistaAdminAccessControlList() {
         grant(new IServiceExecutePermission(AdminAuthenticationService.class));
-        grant(VistaTenantBehavior.ADMIN, new IServiceExecutePermission(VistaAdminService.class));
-        grant(VistaTenantBehavior.ADMIN, new IServiceExecutePermission(PmcCrudService.class));
-        grant(VistaTenantBehavior.ADMIN, new IServiceExecutePermission(ImportUploadService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(VistaAdminService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PmcCrudService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(ImportUploadService.class));
     }
 }

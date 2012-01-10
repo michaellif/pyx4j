@@ -21,7 +21,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -31,5 +31,5 @@ public interface IUserEntity extends IEntity {
     @ReadOnly
     @Detached
     @MemberColumn(name = "user_id")
-    CrmUser user();
+    TenantUser user();
 }

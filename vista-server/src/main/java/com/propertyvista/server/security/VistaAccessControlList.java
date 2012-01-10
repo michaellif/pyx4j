@@ -29,7 +29,7 @@ import com.pyx4j.security.shared.CoreBehavior;
 import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -57,13 +57,13 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaCrmAccessControlList());
         merge(new VistaAdminAccessControlList());
 
-        grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.Query.class));
-        grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(ReportServices.class, "*"));
-        grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
+        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.Query.class));
+        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(ReportServices.class, "*"));
+        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
 
-        grant(VistaTenantBehavior.ADMIN, VistaTenantBehavior.PROPERTY_MANAGER);
-        grant(VistaTenantBehavior.ADMIN, new EntityPermission(CrmUser.class, EntityPermission.ALL));
-        grant(VistaTenantBehavior.ADMIN, new EntityPermission(CrmUserCredential.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.Admin, VistaBasicBehavior.CRM);
+        grant(VistaBasicBehavior.Admin, new EntityPermission(CrmUser.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.Admin, new EntityPermission(CrmUserCredential.class, EntityPermission.ALL));
 
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DatastoreAdminServices.class, "*"));
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DeferredProcessServices.class, "*"));

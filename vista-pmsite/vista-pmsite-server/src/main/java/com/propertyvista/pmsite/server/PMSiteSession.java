@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
+import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 
 public class PMSiteSession extends AuthenticatedWebSession {
 
@@ -42,7 +42,7 @@ public class PMSiteSession extends AuthenticatedWebSession {
         request.password().setValue(password);
 
         try {
-            VistaAuthenticationServicesImpl.beginSession(request);
+            new PortalAuthenticationServiceImpl().beginSession(request);
             return true;
         } catch (Throwable e) {
             // TODO What to do with Error messages ?

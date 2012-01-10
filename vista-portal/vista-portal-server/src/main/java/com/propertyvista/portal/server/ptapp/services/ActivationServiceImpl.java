@@ -45,12 +45,12 @@ import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
 
@@ -92,15 +92,15 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         AbstractAntiBot.assertCaptcha(request.captcha().getValue());
 
         // find user(s) with the same email
-        EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
+        EntityQueryCriteria<TenantUser> criteria = EntityQueryCriteria.create(TenantUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue().toLowerCase()));
-        List<CrmUser> users = Persistence.service().query(criteria);
+        List<TenantUser> users = Persistence.service().query(criteria);
         if (users.size() == 0) {
             throw new UserRuntimeException(i18n.tr("Email Not Registered"));
         }
-        CrmUser user = users.get(0);
+        TenantUser user = users.get(0);
 
-        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
+        TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
         if (credential == null) {
             throw new UserRuntimeException(i18n.tr("Invalid Login Or Password")); // TODO is this a correct message?
         }
@@ -138,16 +138,16 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         }
 
         final CrmUser userMeta = EntityFactory.create(CrmUser.class);
-        EntityQueryCriteria<CrmUser> criteria = new EntityQueryCriteria<CrmUser>(CrmUser.class);
+        EntityQueryCriteria<TenantUser> criteria = new EntityQueryCriteria<TenantUser>(TenantUser.class);
 
         criteria.add(PropertyCriterion.eq(userMeta.email(), token.email));
-        List<CrmUser> users = Persistence.service().query(criteria);
+        List<TenantUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
         }
-        CrmUser user = users.get(0);
+        TenantUser user = users.get(0);
 
-        CrmUserCredential cr = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
+        TenantUserCredential cr = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
         if (cr == null) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid User Account. Please Contact Support"));
         }
@@ -165,7 +165,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         cr.accessKey().setValue(null);
         Persistence.service().persist(cr);
 
-        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(VistaAuthenticationServicesImpl.beginSession(user, cr)));
+        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(new PtAuthenticationServiceImpl().beginSession(user, cr)));
 
     }
 }

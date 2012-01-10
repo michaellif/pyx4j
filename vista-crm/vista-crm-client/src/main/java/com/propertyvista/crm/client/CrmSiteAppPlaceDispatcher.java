@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -26,7 +26,7 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
 
@@ -56,7 +56,7 @@ public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
     }
 
     public boolean isAuthenticated() {
-        return ClientContext.isAuthenticated() && ClientSecurityController.checkAnyBehavior(VistaTenantBehavior.getCrmBehaviors());
+        return ClientContext.isAuthenticated() && SecurityController.checkAnyBehavior(VistaBasicBehavior.CRM);
     }
 
     protected AppPlace getDefaulPublicPlacePlace() {

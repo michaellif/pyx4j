@@ -7,49 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 10, 2012
+ * Created on Feb 5, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.server.domain.security;
 
-import java.util.Date;
-
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcBlacklist;
-import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 
-@AbstractEntity
 @RpcBlacklist
-public interface AbstractUserCredential<E extends AbstractUser, B extends Behavior> extends IEntity {
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = TenantUser.class)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface TenantUserCredential extends AbstractUserCredential<TenantUser, VistaTenantBehavior> {
 
+    @Override
     @Detached
     @MemberColumn(name = "usr")
-    E user();
+    TenantUser user();
 
-    IPrimitiveSet<B> behaviors();
-
-    IPrimitive<Boolean> enabled();
-
-    @RpcTransient
-    IPrimitive<String> credential();
-
-    @Timestamp(Timestamp.Update.Updated)
-    IPrimitive<Date> updated();
-
-    @RpcTransient
-    IPrimitive<String> accessKey();
-
-    @RpcTransient
-    IPrimitive<Date> accessKeyExpire();
-
+    @Override
+    IPrimitiveSet<VistaTenantBehavior> behaviors();
 }

@@ -104,7 +104,7 @@ public class PtAppWizardManager {
     }
 
     public void forwardTo(final AppPlace place, final AsyncCallback<AppPlace> callback) {
-        if (!ClientSecurityController.checkAnyBehavior(VistaTenantBehavior.PROSPECTIVE_TENANT, VistaTenantBehavior.GUARANTOR)) {
+        if (!ClientSecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.Guarantor)) {
             callback.onSuccess(null);
         }
         if (application != null) {

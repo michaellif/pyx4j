@@ -22,7 +22,7 @@ import com.propertyvista.crm.rpc.services.EmployeeCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee, EmployeeDTO> implements EmployeeCrudService {
@@ -39,10 +39,10 @@ public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee,
             Persistence.service().retrieve(dto.employees());
 
             //TODO proper Role
-            if (SecurityController.checkBehavior(VistaTenantBehavior.PROPERTY_MANAGER) && (in.user().getPrimaryKey() != null)) {
+            if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) && (in.user().getPrimaryKey() != null)) {
                 CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
                 dto.enabled().set(crs.enabled());
-                dto.behavior().set(crs.behavior());
+                dto.behaviors().set(crs.behaviors());
             }
         }
     }
@@ -60,10 +60,10 @@ public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee,
             user.name().setValue(dbo.name().getStringView());
             user.email().setValue(dbo.email().address().getStringView());
             Persistence.service().persist(user);
-            if (SecurityController.checkBehavior(VistaTenantBehavior.PROPERTY_MANAGER)) {
+            if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
                 CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
                 crs.enabled().set(in.enabled());
-                crs.behavior().set(in.behavior());
+                crs.behaviors().set(in.behaviors());
                 Persistence.service().persist(crs);
             }
         }

@@ -20,9 +20,10 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @Transient
 public interface EmployeeDTO extends Employee {
@@ -30,8 +31,9 @@ public interface EmployeeDTO extends Employee {
     @ReadOnly
     IPrimitive<Boolean> enabled();
 
-    @Caption(name = "Role")
-    IPrimitive<VistaTenantBehavior> behavior();
+    @Caption(name = "Permissions")
+    @ReadOnly
+    IPrimitiveSet<VistaCrmBehavior> behaviors();
 
     /* password is used for new entity creation only */
     @NotNull

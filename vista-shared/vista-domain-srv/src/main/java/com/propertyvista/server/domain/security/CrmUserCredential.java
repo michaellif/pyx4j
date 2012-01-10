@@ -17,21 +17,22 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CrmUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
+public interface CrmUserCredential extends AbstractUserCredential<CrmUser, VistaCrmBehavior> {
 
     @Override
     @Detached
     @MemberColumn(name = "usr")
     CrmUser user();
 
-    IPrimitive<VistaTenantBehavior> behavior();
+    @Override
+    IPrimitiveSet<VistaCrmBehavior> behaviors();
 }

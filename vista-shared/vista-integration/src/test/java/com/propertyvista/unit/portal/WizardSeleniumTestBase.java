@@ -26,7 +26,7 @@ import com.pyx4j.selenium.ISeleniumTestConfiguration;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.financial.Money;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.unit.VistaSeleniumTestBase;
 import com.propertyvista.unit.config.ApplicationId;
@@ -72,10 +72,10 @@ abstract class WizardSeleniumTestBase extends VistaSeleniumTestBase {
         assertVisible(new CompositeDebugId(VistaFormsDebugId.UserMessage_Prefix, type));
     }
 
-    protected CrmUser createTestUser() {
+    protected TenantUser createTestUser() {
         String strNow = new SimpleDateFormat("MMdd-hhmmss").format(Calendar.getInstance().getTime());
         String email = "tst" + strNow + DemoData.USERS_DOMAIN;
-        CrmUser user = EntityFactory.create(CrmUser.class);
+        TenantUser user = EntityFactory.create(TenantUser.class);
         user.name().setValue(email.substring(0, email.indexOf('@')));
         user.email().setValue(email);
         return user;

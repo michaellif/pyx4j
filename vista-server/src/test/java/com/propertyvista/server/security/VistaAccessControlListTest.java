@@ -107,7 +107,7 @@ public class VistaAccessControlListTest {
 
     @Test
     public void tenantServicePermissions() {
-        TestLifecycle.testSession(null, VistaTenantBehavior.PROSPECTIVE_TENANT);
+        TestLifecycle.testSession(null, VistaTenantBehavior.Tenant);
         TestLifecycle.beginRequest();
         assertPermission(true, ActivationService.class);
 
@@ -157,7 +157,7 @@ public class VistaAccessControlListTest {
     @Test
     @Ignore
     public void tenantApplicationEntityInstanceAccess() {
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaTenantBehavior.PROSPECTIVE_TENANT);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaTenantBehavior.Prospective);
         TestLifecycle.beginRequest();
 
         Application application = EntityFactory.create(Application.class);

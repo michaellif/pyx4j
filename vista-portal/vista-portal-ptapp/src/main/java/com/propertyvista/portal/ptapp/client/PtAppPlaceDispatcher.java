@@ -29,7 +29,7 @@ public class PtAppPlaceDispatcher extends AppPlaceDispatcher {
     @Override
     public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
 
-        if (ClientSecurityController.checkBehavior(VistaTenantBehavior.PROSPECTIVE_TENANT) || ClientSecurityController.checkBehavior(VistaTenantBehavior.GUARANTOR)) {
+        if (ClientSecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.Guarantor)) {
             if (newPlace instanceof WizardStepPlace) {
                 PtAppSite.getWizardManager().forwardTo(newPlace, callback);
                 return;

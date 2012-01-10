@@ -18,18 +18,19 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.CrmUser;
 
+//TODO rename to ISharedCrmUserEntity 
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ISharedUserEntity extends IUserEntity {
+public interface ISharedUserEntity extends IEntity {
 
     /*
      * To make it public set user.key to Key.DORMANT_KEY
      */
-    @Override
     @ReadOnly
     @Detached
     @NotNull

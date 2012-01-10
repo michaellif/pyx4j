@@ -98,7 +98,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().behavior()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().behaviors()), 20).build());
 
         return new CrmScrollPanel(main);
     }

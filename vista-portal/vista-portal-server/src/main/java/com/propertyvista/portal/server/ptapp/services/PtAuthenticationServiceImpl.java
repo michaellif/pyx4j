@@ -13,17 +13,21 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
-import com.pyx4j.security.shared.SecurityController;
-
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
+import com.propertyvista.server.domain.security.TenantUserCredential;
 
-public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl implements PtAuthenticationService {
+public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<TenantUser, TenantUserCredential> implements PtAuthenticationService {
+
+    public PtAuthenticationServiceImpl() {
+        super(TenantUser.class, TenantUserCredential.class);
+    }
 
     @Override
-    protected boolean hasRequiredSiteBehavior() {
-        return SecurityController.checkAnyBehavior(VistaTenantBehavior.PROSPECTIVE_TENANT, VistaTenantBehavior.GUARANTOR);
+    protected VistaBasicBehavior getApplicationBehavior() {
+        return VistaBasicBehavior.ProspectiveApp;
     }
 
 }

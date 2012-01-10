@@ -39,7 +39,7 @@ import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -92,7 +92,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             }
 
             String email = DemoData.UserType.PTENANT.getEmail(i);
-            CrmUser user = UserPreloader.createUser(email, email, VistaTenantBehavior.PROSPECTIVE_TENANT);
+            TenantUser user = UserPreloader.createTenantUser("", email, email, VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectivePrimary);
             ApplicationSummaryGDO summary = generator.createSummary(user, units.get(i - 1));
 
             // Update user name

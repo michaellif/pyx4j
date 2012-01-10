@@ -25,7 +25,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaLifecycle;
 
 public class AdminAuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements AdminAuthenticationService {
@@ -37,7 +37,7 @@ public class AdminAuthenticationServiceImpl extends com.pyx4j.security.server.Au
         final UserVisit visit = new UserVisit(null, "Admin");
 
         Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.add(VistaTenantBehavior.ADMIN);
+        behaviors.add(VistaBasicBehavior.Admin);
         callback.onSuccess(createAuthenticationResponse(VistaLifecycle.beginSession(visit, behaviors)));
     }
 

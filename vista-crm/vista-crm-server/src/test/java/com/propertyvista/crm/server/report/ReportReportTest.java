@@ -35,7 +35,7 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class ReportReportTest extends ReportsTestBase {
 
@@ -49,7 +49,7 @@ public class ReportReportTest extends ReportsTestBase {
         }
 
         // Ignore all security constrains
-        TestLifecycle.testSession(null, VistaTenantBehavior.PROPERTY_MANAGER);
+        TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
         createReport(ReportReport.createModel(retreiveData()));

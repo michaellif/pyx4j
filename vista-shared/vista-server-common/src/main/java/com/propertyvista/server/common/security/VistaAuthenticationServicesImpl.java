@@ -37,23 +37,35 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
 
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.server.domain.security.AbstractUserCredential;
 
-public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.AuthenticationServiceImpl {
+public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U, ?>> extends
+        com.pyx4j.security.server.AuthenticationServiceImpl {
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
 
     private static I18n i18n = I18n.get(VistaAuthenticationServicesImpl.class);
 
-    protected abstract boolean hasRequiredSiteBehavior();
+    protected final Class<U> userClass;
+
+    protected final Class<E> credentialClass;
+
+    protected VistaAuthenticationServicesImpl(Class<U> userClass, Class<E> credentialClass) {
+        this.userClass = userClass;
+        this.credentialClass = credentialClass;
+    }
+
+    protected abstract VistaBasicBehavior getApplicationBehavior();
 
     @Override
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
-        if (!hasRequiredSiteBehavior()) {
+        if (!SecurityController.checkBehavior(getApplicationBehavior())) {
             VistaLifecycle.endSession();
         }
         super.authenticate(callback, clientSystemInfo, sessionToken);
@@ -65,14 +77,14 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         assertClientSystemInfo(clientSystemInfo);
         // Try to begin Session
         String sessionToken = beginSession(request);
-        if (!hasRequiredSiteBehavior()) {
+        if (!SecurityController.checkBehavior(getApplicationBehavior())) {
             VistaLifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
-    public static String beginSession(AuthenticationRequest request) {
+    public String beginSession(AuthenticationRequest request) {
         switch (SystemMaintenance.getState()) {
         case Unavailable:
             throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
@@ -84,9 +96,9 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         String email = request.email().getValue().toLowerCase(Locale.ENGLISH).trim();
         AbstractAntiBot.assertLogin(email, request.captcha().getValue());
 
-        EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
+        EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-        List<CrmUser> users = Persistence.service().query(criteria);
+        List<U> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
             if (AbstractAntiBot.authenticationFailed(email)) {
@@ -95,9 +107,9 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
-        CrmUser user = users.get(0);
+        AbstractUser user = users.get(0);
 
-        CrmUserCredential cr = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
+        E cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
         if (cr == null) {
             throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
         }
@@ -115,9 +127,12 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         return beginSession(user, cr);
     }
 
-    public static String beginSession(CrmUser user, CrmUserCredential userCredential) {
+    public String beginSession(AbstractUser user, E userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
-        behaviors.add(userCredential.behavior().getValue());
+
+        behaviors.add(getApplicationBehavior());
+        behaviors.addAll(userCredential.behaviors());
+
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
         return VistaLifecycle.beginSession(visit, behaviors);

@@ -53,7 +53,7 @@ import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Tenant.Type;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
@@ -86,15 +86,15 @@ public class PTGenerator {
         this.config = config;
     }
 
-    public CrmUser createUser(int number) {
+    public TenantUser createUser(int number) {
         String email = DemoData.UserType.PTENANT.getEmail(number);
-        CrmUser user = EntityFactory.create(CrmUser.class);
+        TenantUser user = EntityFactory.create(TenantUser.class);
         user.name().setValue(email.substring(0, email.indexOf('@')));
         user.email().setValue(email);
         return user;
     }
 
-    public ApplicationSummaryGDO createSummary(CrmUser user, AptUnit selectedUnit) {
+    public ApplicationSummaryGDO createSummary(TenantUser user, AptUnit selectedUnit) {
         ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
 
         createTenantList(user, summary.tenants());
@@ -352,7 +352,7 @@ public class PTGenerator {
         return address;
     }
 
-    private void createTenantList(CrmUser user, IList<TenantSummaryGDO> list) {
+    private void createTenantList(TenantUser user, IList<TenantSummaryGDO> list) {
         int maxTenants = config.numTenantsInLease;
         if (Math.abs(this.seed) > 1000) {
             maxTenants = 1 + RandomUtil.randomInt(5);
@@ -364,7 +364,7 @@ public class PTGenerator {
         }
     }
 
-    private TenantSummaryGDO createTenantSummary(CrmUser user, int index) {
+    private TenantSummaryGDO createTenantSummary(TenantUser user, int index) {
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
 
         // Tenant as person, first to have the same random names
