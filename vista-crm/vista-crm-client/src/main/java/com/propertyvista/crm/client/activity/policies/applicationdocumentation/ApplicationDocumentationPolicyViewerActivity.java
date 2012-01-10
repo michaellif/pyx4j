@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.numberofids;
+package com.propertyvista.crm.client.activity.policies.applicationdocumentation;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;

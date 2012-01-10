@@ -7,27 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 22, 2011
+ * Created on Dec 28, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.numberofids;
+package com.propertyvista.crm.client.activity.policies.applicationdocumentation;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public class ApplicationDocumentationListerActivicty extends ListerActivityBase<ApplicationDocumentationPolicyDTO> {
+public class ApplicationDocumentationPolicyEditorActivity extends EditorActivityBase<ApplicationDocumentationPolicyDTO> implements
+        ApplicationDocumentationPolicyEdtiorView.Presenter {
 
-    public ApplicationDocumentationListerActivicty(Place place) {
-        super(place, PolicyViewFactory.instance(ApplicationDocumentationPolicyListerView.class), (AbstractListService<ApplicationDocumentationPolicyDTO>) GWT
+    public ApplicationDocumentationPolicyEditorActivity(Place place) {
+        super(place, PolicyViewFactory.instance(ApplicationDocumentationPolicyEdtiorView.class), (AbstractCrudService<ApplicationDocumentationPolicyDTO>) GWT
                 .create(ApplicationDocumentationPolicyCrudService.class), ApplicationDocumentationPolicyDTO.class);
     }
 
