@@ -107,7 +107,7 @@ public class VistaAccessControlListTest {
 
     @Test
     public void tenantServicePermissions() {
-        TestLifecycle.testSession(null, VistaTenantBehavior.Tenant);
+        TestLifecycle.testSession(null, VistaTenantBehavior.Prospective);
         TestLifecycle.beginRequest();
         assertPermission(true, ActivationService.class);
 
