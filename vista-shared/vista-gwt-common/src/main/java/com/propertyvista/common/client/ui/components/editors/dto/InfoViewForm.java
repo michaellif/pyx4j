@@ -125,7 +125,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 if (event.getValue()) {
                     sin.setValue(null);
                 }
-                sin.asWidget().setEnabled(!event.getValue());
+                sin.setEnabled(!event.getValue());
                 fileUpload.setVisible(event.getValue());
             }
         });

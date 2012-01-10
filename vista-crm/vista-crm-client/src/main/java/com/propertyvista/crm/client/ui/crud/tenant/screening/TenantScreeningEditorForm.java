@@ -202,7 +202,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
                 if (event.getValue()) {
                     sin.setValue(null);
                 }
-                sin.asWidget().setEnabled(!event.getValue());
+                sin.setEnabled(!event.getValue());
                 fileUpload.setVisible(event.getValue());
             }
         });

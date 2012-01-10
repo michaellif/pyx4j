@@ -168,6 +168,18 @@ public class NativePhone extends SimplePanel implements INativeFocusComponent<Ph
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public void onPropertyChange(PropertyChangeEvent event) {
         if (event.isEventOfType(PropertyName.repopulated)) {
             removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());

@@ -51,8 +51,7 @@ public class CEmail extends CFocusComponent<Email, NativeEmail> {
 
     @Override
     protected NativeEmail createWidget() {
-        NativeEmail w = new NativeEmail(this);
-        return w;
+        return new NativeEmail(this);
     }
 
     public void setFormat(IFormat<Email> format) {

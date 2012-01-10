@@ -21,8 +21,7 @@ public class CFileUploader extends CComponent<File, NativeFileUploader> {
 
     @Override
     protected NativeFileUploader createWidget() {
-        NativeFileUploader nativeFileUploader = new NativeFileUploader(this);
-        return nativeFileUploader;
+        return new NativeFileUploader(this);
     }
 
 }
