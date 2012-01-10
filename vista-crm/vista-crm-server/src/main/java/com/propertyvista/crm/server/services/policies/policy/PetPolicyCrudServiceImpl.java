@@ -15,6 +15,8 @@ package com.propertyvista.crm.server.services.policies.policy;
 
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -35,14 +37,21 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
     }
 
     @Override
+    public void initNewPolicy(AsyncCallback<PetPolicyDTO> callback) {
+        PetPolicyDTO dto = EntityFactory.create(PetPolicyDTO.class);
+        attachNewPets(dto);
+        callback.onSuccess(dto);
+    }
+
+    @Override
     protected void enhanceDTO(PetPolicy in, PetPolicyDTO dto, boolean fromList) {
         super.enhanceDTO(in, dto, fromList);
         if (!fromList) {
-            mergeChanges(dto);
+            attachNewPets(dto);
         }
     }
 
-    private void mergeChanges(PetPolicyDTO policyDTO) {
+    private void attachNewPets(PetPolicyDTO policyDTO) {
         EntityQueryCriteria<ServiceItemType> criteria = new EntityQueryCriteria<ServiceItemType>(ServiceItemType.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().featureType(), Feature.Type.pet));
         List<ServiceItemType> availablePets = Persistence.service().query(criteria);

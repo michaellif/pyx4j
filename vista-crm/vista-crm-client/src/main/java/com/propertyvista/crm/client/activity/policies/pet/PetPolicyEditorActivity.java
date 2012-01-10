@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.policies.pet;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
@@ -37,4 +38,8 @@ public class PetPolicyEditorActivity extends EditorActivityBase<PetPolicyDTO> {
 
     }
 
+    @Override
+    protected void createNewEntity(AsyncCallback<PetPolicyDTO> callback) {
+        ((PetPolicyCrudService) service).initNewPolicy(callback);
+    }
 }
