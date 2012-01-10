@@ -14,7 +14,6 @@
 package com.propertyvista.domain.policy.policies.specials;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -34,6 +33,5 @@ public interface PetConstraints extends IEntity {
     @Caption(description = "Maximumum allowed weight per pet")
     IPrimitive<Double> maxWeight();
 
-    @Owner
     ServiceItemType pet();
 }
