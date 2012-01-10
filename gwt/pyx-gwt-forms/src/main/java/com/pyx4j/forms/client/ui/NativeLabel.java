@@ -79,6 +79,18 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public void setFocus(boolean focused) {
     }
 

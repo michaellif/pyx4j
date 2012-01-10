@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
 public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
 
     @Override

@@ -206,6 +206,18 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public void setNativeValue(E value) {
         this.value = value;
         if ((this.value != null) && ((options == null) || !options.contains(this.value))) {

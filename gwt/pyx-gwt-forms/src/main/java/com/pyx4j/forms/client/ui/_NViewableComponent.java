@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Jan 10, 2012
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-public interface IAccessAdapter {
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
-    public boolean isEnabled(CComponent<?, ?> component);
+public abstract class _NViewableComponent<E extends Widget, T extends CComponent<?, ?>> extends SimplePanel {
 
-    public boolean isEditable(CComponent<?, ?> component);
+    private E editor;
 
-    public boolean isVisible(CComponent<?, ?> component);
+    final T cComponent;
 
-    public boolean isViewable(CComponent<?, ?> component);
+    public _NViewableComponent(T cComponent) {
+        super();
+        this.cComponent = cComponent;
+    }
+
+    public E getEditor() {
+        return editor;
+    }
+
+    public T getCComponent() {
+        return cComponent;
+    }
+
+    protected abstract E createEditor();
 
 }

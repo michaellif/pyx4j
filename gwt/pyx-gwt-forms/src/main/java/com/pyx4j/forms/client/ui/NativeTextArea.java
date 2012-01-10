@@ -94,4 +94,16 @@ public class NativeTextArea extends TextArea implements INativeFocusComponent<St
     public void onPropertyChange(PropertyChangeEvent event) {
     }
 
+    @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

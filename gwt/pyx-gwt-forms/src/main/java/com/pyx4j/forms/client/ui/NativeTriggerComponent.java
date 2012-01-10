@@ -180,6 +180,18 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
         return readOnly;
     }
 
+    @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
     private void setTriggerButtonEnabled(boolean enabled) {
         triggerButton.setEnabled(enabled);
     }

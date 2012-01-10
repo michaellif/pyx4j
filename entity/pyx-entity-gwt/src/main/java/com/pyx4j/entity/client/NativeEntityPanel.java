@@ -68,6 +68,18 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public void setNativeValue(E value) {
     }
 

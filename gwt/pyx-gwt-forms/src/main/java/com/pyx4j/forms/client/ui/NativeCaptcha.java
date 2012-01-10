@@ -61,6 +61,18 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public void setNativeValue(Pair<String, String> value) {
         if (value == null) {
             super.createNewChallenge();

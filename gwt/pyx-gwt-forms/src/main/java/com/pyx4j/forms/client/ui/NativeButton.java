@@ -77,6 +77,18 @@ public class NativeButton extends Button implements INativeFocusComponent<Void> 
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public void setNativeValue(Void value) {
         // TODO Auto-generated method stub
 

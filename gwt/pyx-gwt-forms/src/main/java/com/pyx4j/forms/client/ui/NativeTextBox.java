@@ -111,4 +111,15 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
         }
     }
 
+    @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

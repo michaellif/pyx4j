@@ -47,4 +47,9 @@ public class ContainerAccessAdapter implements IAccessAdapter {
         return container.isVisible();
     }
 
+    @Override
+    public boolean isViewable(CComponent<?, ?> component) {
+        return container.isViewable();
+    }
+
 }

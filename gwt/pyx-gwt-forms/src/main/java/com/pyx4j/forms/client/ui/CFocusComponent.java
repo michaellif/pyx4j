@@ -26,8 +26,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class CFocusComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeFocusComponent<DATA_TYPE>> extends
-        CComponent<DATA_TYPE, WIDGET_TYPE> {
+public abstract class CFocusComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeFocusComponent<DATA_TYPE>> extends CComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private int tabIndex = 0;
 

@@ -38,6 +38,8 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         editable,
 
+        viewable,
+
         modifiable, //Relates to property of component representing collection. If true collection's add/remove/up/down actions are enabled
 
         orderable,

@@ -89,6 +89,18 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
         return richTextArea.isEnabled();
     }
 
+    @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
     public void scrollToBottom() {
         //Workaround for initiation of "scrollHeight" - keep next line!!!
         DOM.getElementPropertyInt(getElement(), "scrollHeight");

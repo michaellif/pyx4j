@@ -100,6 +100,18 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public void setNativeValue(E value) {
         delegate.setNativeValue(value);
     }

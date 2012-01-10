@@ -53,8 +53,8 @@ import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeComponent<DATA_TYPE>> implements HasHandlers,
-        HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
+public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeComponent<DATA_TYPE>> implements HasHandlers, HasPropertyChangeHandlers,
+        IsWidget, HasValueChangeHandlers<DATA_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CComponent.class);
 
@@ -259,6 +259,26 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
+    public boolean isViewable() {
+        for (IAccessAdapter adapter : accessAdapters) {
+            if (!adapter.isViewable(this)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void setViewable(boolean viewable) {
+        if (viewable != isViewable()) {
+            defaultAccessAdapter.setViewable(viewable);
+            applyViewabilityRules();
+            revalidate();
+            if (!viewable) {
+                setVisited(false);
+            }
+        }
+    }
+
     public boolean isMandatory() {
         if (validators == null) {
             return false;
@@ -318,7 +338,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         asWidget().setWidth(getWidth());
         asWidget().setHeight(getHeight());
         setNativeValue(getValue());
-        this.addPropertyChangeHandler(asWidget());
+        this.addPropertyChangeHandler(widget);
     }
 
     public boolean isWidgetCreated() {
@@ -380,9 +400,18 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
+    public void applyViewabilityRules() {
+        boolean viewable = isViewable();
+        if (isWidgetCreated() && asWidget().isViewable() != viewable) {
+            asWidget().setViewable(viewable);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
+        }
+    }
+
     public void applyAccessibilityRules() {
         applyVisibilityRules();
         applyEnablingRules();
+        applyViewabilityRules();
         applyEditabilityRules();
     }
 
@@ -561,7 +590,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     protected void setNativeValue(DATA_TYPE value) {
         if (isWidgetCreated()) {
-            asWidget().setNativeValue(value);
+            widget.setNativeValue(value);
         }
     }
 
@@ -580,7 +609,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
             boolean isOrigEmpty = isValueEmpty();
             editing = false;
             try {
-                update(asWidget().getNativeValue());
+                update(widget.getNativeValue());
             } catch (ParseException e) {
                 update(null);
             }

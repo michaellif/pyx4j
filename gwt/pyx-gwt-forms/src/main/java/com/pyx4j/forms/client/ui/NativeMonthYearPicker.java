@@ -71,6 +71,18 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
     }
 
     @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public CComponent<?, ?> getCComponent() {
         return cComponent;
     }

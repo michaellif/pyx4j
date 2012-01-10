@@ -28,23 +28,27 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public interface INativeComponent<E> extends IsWidget, PropertyChangeHandler {
 
-    public void setEnabled(boolean enabled);
+    void setEnabled(boolean enabled);
 
-    public boolean isEnabled();
+    boolean isEnabled();
 
-    public void setVisible(boolean visible);
+    CComponent<?, ?> getCComponent();
 
-    public boolean isVisible();
+    void setWidth(String width);
 
-    public CComponent<?, ?> getCComponent();
+    void setHeight(String height);
 
-    public void setWidth(String width);
+    void setVisible(boolean visible);
 
-    public void setHeight(String height);
+    boolean isVisible();
 
-    public void setEditable(boolean editable);
+    void setEditable(boolean editable);
 
-    public boolean isEditable();
+    boolean isEditable();
+
+    void setViewable(boolean editable);
+
+    boolean isViewable();
 
     void setNativeValue(E value);
 

@@ -28,6 +28,8 @@ class ComponentAccessAdapter implements IAccessAdapter {
 
     private boolean editable = true;
 
+    private boolean viewable = false;
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -53,6 +55,15 @@ class ComponentAccessAdapter implements IAccessAdapter {
     @Override
     public boolean isVisible(CComponent<?, ?> component) {
         return visible;
+    }
+
+    public void setViewable(boolean viewable) {
+        this.viewable = viewable;
+    }
+
+    @Override
+    public boolean isViewable(CComponent<?, ?> component) {
+        return viewable;
     }
 
 }

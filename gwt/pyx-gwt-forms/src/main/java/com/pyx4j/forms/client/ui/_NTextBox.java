@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 7, 2012
+ * Created on Jan 10, 2012
  * @author michaellif
  * @version $Id$
  */
@@ -28,52 +28,67 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.widgets.client.TextBox;
 
-public class NativeMoneyBox extends HorizontalPanel implements INativeTextComponent<Double> {
+public class _NTextBox<E> extends _NViewableComponent<TextBox, CTextFieldBase<E, ?>> implements INativeTextComponent<E> {
 
-    private final NativeTextBox<Double> valueBox;
+    public _NTextBox(CTextFieldBase<E, ?> cComponent) {
+        super(cComponent);
+    }
 
-    public NativeMoneyBox(CMoneyField cMoneyField) {
-        super();
-        valueBox = new NativeTextBox<Double>(cMoneyField);
-        add(valueBox);
-        valueBox.setWidth("100%");
-        setCellWidth(valueBox, "100%");
-        add(new Label("$"));
+    @Override
+    protected TextBox createEditor() {
+        return new TextBox();
     }
 
     @Override
     public void setTabIndex(int tabIndex) {
-        valueBox.setTabIndex(tabIndex);
+        // TODO Auto-generated method stub
+
     }
 
     @Override
     public void setFocus(boolean focused) {
-        valueBox.setFocus(focused);
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return valueBox.addFocusHandler(handler);
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return valueBox.addBlurHandler(handler);
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        valueBox.setEnabled(enabled);
+        // TODO Auto-generated method stub
+
     }
 
     @Override
     public boolean isEnabled() {
-        return valueBox.isEnabled();
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     @Override
@@ -89,57 +104,51 @@ public class NativeMoneyBox extends HorizontalPanel implements INativeTextCompon
     }
 
     @Override
-    public CComponent<?, ?> getCComponent() {
-        return valueBox.getCComponent();
+    public void setNativeValue(E value) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    public void setEditable(boolean editable) {
-        valueBox.setEditable(editable);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return valueBox.isEditable();
-    }
-
-    @Override
-    public void setNativeValue(Double value) {
-        valueBox.setNativeValue(value);
-    }
-
-    @Override
-    public Double getNativeValue() throws ParseException {
-        return valueBox.getNativeValue();
+    public E getNativeValue() throws ParseException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
-        valueBox.onPropertyChange(event);
+        // TODO Auto-generated method stub
+
     }
 
     @Override
     public void setNativeText(String newValue) {
-        valueBox.setNativeText(newValue);
+        // TODO Auto-generated method stub
+
     }
 
     @Override
     public String getNativeText() {
-        return valueBox.getNativeText();
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return valueBox.addChangeHandler(handler);
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return valueBox.addKeyDownHandler(handler);
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return valueBox.addKeyUpHandler(handler);
+        // TODO Auto-generated method stub
+        return null;
     }
+
 }

@@ -97,6 +97,18 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
         return ((TextBox) getWidget()).isEnabled();
     }
 
+    @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
     public void addItem(String optionName) {
         ((MultiWordSuggestOracle) getSuggestOracle()).add(optionName);
     }

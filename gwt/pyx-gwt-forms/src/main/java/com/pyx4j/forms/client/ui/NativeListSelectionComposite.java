@@ -344,6 +344,7 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         refreshOptions();
     }
 
+    @Override
     public List<E> getNativeValue() {
         return selectedListBox.getItems();
     }
@@ -437,6 +438,18 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
     @Override
     public boolean isEditable() {
         return this.editable;
+    }
+
+    @Override
+    public void setViewable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isViewable() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     private void setEnabledComponents(boolean enabled) {
