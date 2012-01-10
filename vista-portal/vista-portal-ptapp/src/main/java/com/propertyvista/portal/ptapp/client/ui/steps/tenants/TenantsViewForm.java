@@ -30,8 +30,6 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     static I18n i18n = I18n.get(TenantsViewForm.class);
 
-    private int maxTenants;
-
     public TenantsViewForm() {
         super(TenantInApplicationListDTO.class, new VistaEditorsComponentFactory());
     }
@@ -58,13 +56,11 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
         });
 
-        maxTenants = proto().tenants().getMeta().getLength();
         super.addValueValidator(new EditableValueValidator<TenantInApplicationListDTO>() {
-
             @Override
             public ValidationFailure isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 int size = getValue().tenants().size();
-                return (size <= maxTenants) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue()))) ? null
+                return (size <= value.tenantsMaximum().getValue()) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue()))) ? null
                         : new ValidationFailure(i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants"));
             }
         });
