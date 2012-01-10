@@ -93,7 +93,7 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     private ApplicationDocumentationPolicy createDefaultApplicationDocumentationPolicy() {
         ApplicationDocumentationPolicy policy = EntityFactory.create(ApplicationDocumentationPolicy.class);
-        policy.numberOfRequiredIDs().setValue(5);
+        policy.numberOfRequiredIDs().setValue(2);
 
         IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
         id.name().setValue(i18n.tr("Passport"));
