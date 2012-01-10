@@ -87,6 +87,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
         EntityQueryCriteria<PolicyAtNode> criteria = new EntityQueryCriteria<PolicyAtNode>(PolicyAtNode.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
+        criteria.add(PropertyCriterion.eq(criteria.proto().policy(), dboClass));
         PolicyAtNode policyAtNode = Persistence.service().retrieve(criteria);
 
         if (policyAtNode != null) {
