@@ -7,33 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-22
+ * Created on Feb 5, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.server.domain.security;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.RpcBlacklist;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 
-@AbstractEntity
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ISharedUserEntity extends IUserEntity {
+@RpcBlacklist
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CrmUser.class)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
 
-    /*
-     * To make it public set user.key to Key.DORMANT_KEY
-     */
     @Override
-    @ReadOnly
     @Detached
-    @NotNull
-    @MemberColumn(name = "user_id")
+    @MemberColumn(name = "usr")
     CrmUser user();
 
+    IPrimitive<VistaTenantBehavior> behavior();
 }

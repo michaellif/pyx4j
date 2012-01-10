@@ -21,8 +21,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 
 @Transient
 public interface EmployeeDTO extends Employee {
@@ -31,7 +31,7 @@ public interface EmployeeDTO extends Employee {
     IPrimitive<Boolean> enabled();
 
     @Caption(name = "Role")
-    IPrimitive<VistaBehavior> behavior();
+    IPrimitive<VistaTenantBehavior> behavior();
 
     /* password is used for new entity creation only */
     @NotNull

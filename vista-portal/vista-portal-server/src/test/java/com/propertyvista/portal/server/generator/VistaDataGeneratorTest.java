@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 import com.propertvista.generator.PTGenerator;
 import com.propertvista.generator.gdo.ApplicationSummaryGDO;
 
-import com.propertyvista.domain.User;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.TestUtil;
 import com.propertyvista.server.common.reference.SharedData;
@@ -37,7 +37,7 @@ public class VistaDataGeneratorTest extends TestCase {
         VistaDevPreloadConfig config = VistaDevPreloadConfig.createTest();
         config.ptGenerationSeed = 250;
         PTGenerator generator1 = new PTGenerator(config);
-        User user1 = generator1.createUser(1);
+        CrmUser user1 = generator1.createUser(1);
 
         ApplicationSummaryGDO summary1 = generator1.createSummary(user1, null);
 
@@ -45,7 +45,7 @@ public class VistaDataGeneratorTest extends TestCase {
         VistaDevPreloadConfig configX = VistaDevPreloadConfig.createTest();
         configX.ptGenerationSeed = System.currentTimeMillis();
         PTGenerator generatorX = new PTGenerator(configX);
-        User userX = generatorX.createUser(1);
+        CrmUser userX = generatorX.createUser(1);
         generatorX.createSummary(userX, null);
 
         SharedData.init();
@@ -53,7 +53,7 @@ public class VistaDataGeneratorTest extends TestCase {
         VistaDevPreloadConfig config2 = VistaDevPreloadConfig.createTest();
         config2.ptGenerationSeed = System.currentTimeMillis();
         PTGenerator generator2 = new PTGenerator(config2);
-        User user2 = generator2.createUser(1);
+        CrmUser user2 = generator2.createUser(1);
         ApplicationSummaryGDO summary2 = generator2.createSummary(user2, null);
 
         TestUtil.assertEqual("Same data expected", summary1, summary2);

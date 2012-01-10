@@ -22,7 +22,6 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 import com.pyx4j.security.shared.AllPermissions;
 import com.pyx4j.security.shared.CoreBehavior;
 
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
@@ -31,6 +30,7 @@ import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
@@ -80,50 +80,50 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(new IServiceExecutePermission(SiteThemeServices.class));
 
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ApplicationService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ApartmentService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(TenantService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(TenantInfoService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(TenantFinancialService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(AddonsService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ChargesService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(SummaryService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(PaymentService.class));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ApplicationService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ApartmentService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(TenantService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(TenantInfoService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(TenantFinancialService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(AddonsService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ChargesService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(SummaryService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(PaymentService.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
         // Old TODO remove
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new ServiceExecutePermission(EntityServices.Query.class));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new ServiceExecutePermission(EntityServices.Query.class));
 
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Country.class, EntityPermission.READ));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Province.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(Country.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(Province.class, EntityPermission.READ));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
 
         InstanceAccess applicationEntityAccess = new ApplicationEntityInstanceAccess();
 
         //TODO Fix ME
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new AllPermissions());
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new AllPermissions());
 
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocumentData.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantInLeaseListDTO.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantInLease.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(PetsDTO.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantFinancialDTO.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(SummaryDTO.class, applicationEntityAccess, CRUD));
-        grant(VistaBehavior.PROSPECTIVE_TENANT, new EntityPermission(PaymentInformation.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(ApplicationDocumentData.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantInLeaseListDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantInLease.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(PetsDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(TenantFinancialDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(SummaryDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.PROSPECTIVE_TENANT, new EntityPermission(PaymentInformation.class, applicationEntityAccess, CRUD));
 
-        grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantDashboardService.class));
-        grant(VistaBehavior.TENANT, new IServiceExecutePermission(PersonalInfoCrudService.class));
-        grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantPaymentMethodCrudService.class));
-        grant(VistaBehavior.TENANT, new IServiceExecutePermission(TenantMaintenanceService.class));
+        grant(VistaTenantBehavior.TENANT, new IServiceExecutePermission(TenantDashboardService.class));
+        grant(VistaTenantBehavior.TENANT, new IServiceExecutePermission(PersonalInfoCrudService.class));
+        grant(VistaTenantBehavior.TENANT, new IServiceExecutePermission(TenantPaymentMethodCrudService.class));
+        grant(VistaTenantBehavior.TENANT, new IServiceExecutePermission(TenantMaintenanceService.class));
 
-        grant(VistaBehavior.TENANT, new EntityPermission(IssueElement.class, EntityPermission.READ));
-        grant(VistaBehavior.TENANT, new EntityPermission(IssueRepairSubject.class, EntityPermission.READ));
-        grant(VistaBehavior.TENANT, new EntityPermission(IssueSubjectDetails.class, EntityPermission.READ));
-        grant(VistaBehavior.TENANT, new EntityPermission(IssueClassification.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.TENANT, new EntityPermission(IssueElement.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.TENANT, new EntityPermission(IssueRepairSubject.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.TENANT, new EntityPermission(IssueSubjectDetails.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.TENANT, new EntityPermission(IssueClassification.class, EntityPermission.READ));
 
         grant(CoreBehavior.DEVELOPER, new AllPermissions());
 

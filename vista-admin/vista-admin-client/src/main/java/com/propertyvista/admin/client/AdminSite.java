@@ -32,7 +32,7 @@ import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
-import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 
 public class AdminSite extends VistaSite {
 
@@ -75,7 +75,7 @@ public class AdminSite extends VistaSite {
     }
 
     private void init() {
-        if (ClientSecurityController.checkBehavior(VistaBehavior.PROPERTY_MANAGER)) {
+        if (ClientSecurityController.checkBehavior(VistaTenantBehavior.PROPERTY_MANAGER)) {
             if (AdminSiteMap.Login.class.equals(AppSite.getPlaceController().getWhere().getClass())) {
                 AppSite.getPlaceController().goTo(new AdminSiteMap.Management());
             } else {

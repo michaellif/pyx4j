@@ -7,42 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on Jan 10, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain;
+package com.propertyvista.server.domain.security;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.security.AbstractUser;
 
+@AbstractEntity
 @RpcBlacklist
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = User.class)
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface UserCredential extends IEntity {
+public interface AbstractUserCredential<E extends AbstractUser> extends IEntity {
+
+    @Detached
+    @MemberColumn(name = "usr")
+    E user();
 
     IPrimitive<Boolean> enabled();
 
     @RpcTransient
     IPrimitive<String> credential();
-
-    @Detached
-    @MemberColumn(name = "usr")
-    User user();
-
-    IPrimitive<VistaBehavior> behavior();
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

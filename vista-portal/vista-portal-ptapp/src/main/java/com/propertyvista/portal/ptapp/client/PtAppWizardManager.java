@@ -30,7 +30,7 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
@@ -104,7 +104,7 @@ public class PtAppWizardManager {
     }
 
     public void forwardTo(final AppPlace place, final AsyncCallback<AppPlace> callback) {
-        if (!ClientSecurityController.checkAnyBehavior(VistaBehavior.PROSPECTIVE_TENANT, VistaBehavior.GUARANTOR)) {
+        if (!ClientSecurityController.checkAnyBehavior(VistaTenantBehavior.PROSPECTIVE_TENANT, VistaTenantBehavior.GUARANTOR)) {
             callback.onSuccess(null);
         }
         if (application != null) {

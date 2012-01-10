@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.User;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
@@ -36,7 +36,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
 
     @Override
     public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId) {
-        User currentUser = VistaContext.getCurrentUser();
+        CrmUser currentUser = VistaContext.getCurrentUser();
 
         ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
 

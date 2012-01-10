@@ -26,11 +26,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.User;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
@@ -42,7 +42,7 @@ import com.propertyvista.portal.server.ptapp.util.Converter;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantDashboardServiceImpl implements TenantDashboardService {
-    User currentUser = VistaContext.getCurrentUser();
+    CrmUser currentUser = VistaContext.getCurrentUser();
 
     @Override
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {

@@ -26,7 +26,7 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 
 public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
 
@@ -56,7 +56,7 @@ public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
     }
 
     public boolean isAuthenticated() {
-        return ClientContext.isAuthenticated() && ClientSecurityController.checkAnyBehavior(VistaBehavior.getCrmBehaviors());
+        return ClientContext.isAuthenticated() && ClientSecurityController.checkAnyBehavior(VistaTenantBehavior.getCrmBehaviors());
     }
 
     protected AppPlace getDefaulPublicPlacePlace() {

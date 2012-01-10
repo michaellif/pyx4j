@@ -20,15 +20,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.domain.User;
-import com.propertyvista.server.domain.UserCredential;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class UserAccessUtils {
 
     protected static I18n i18n = I18n.get(UserAccessUtils.class);
 
-    public static String createAccessToken(User user, int ttlDays) {
-        UserCredential credential = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
+    public static String createAccessToken(CrmUser user, int ttlDays) {
+        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
         if (credential == null) {
             throw new UserRuntimeException(i18n.tr("Invalid Login Or Password")); // TODO is this a correct message?
         }

@@ -39,8 +39,8 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
-import com.propertyvista.domain.User;
-import com.propertyvista.server.domain.UserCredential;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security.server.AuthenticationServiceImpl {
 
@@ -84,9 +84,9 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         String email = request.email().getValue().toLowerCase(Locale.ENGLISH).trim();
         AbstractAntiBot.assertLogin(email, request.captcha().getValue());
 
-        EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+        EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-        List<User> users = Persistence.service().query(criteria);
+        List<CrmUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
             if (AbstractAntiBot.authenticationFailed(email)) {
@@ -95,9 +95,9 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
-        User user = users.get(0);
+        CrmUser user = users.get(0);
 
-        UserCredential cr = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
+        CrmUserCredential cr = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
         if (cr == null) {
             throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
         }
@@ -115,7 +115,7 @@ public abstract class VistaAuthenticationServicesImpl extends com.pyx4j.security
         return beginSession(user, cr);
     }
 
-    public static String beginSession(User user, UserCredential userCredential) {
+    public static String beginSession(CrmUser user, CrmUserCredential userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());

@@ -34,11 +34,11 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
-import com.propertyvista.domain.User;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Vehicle;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
@@ -96,7 +96,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         VistaDevPreloadConfig config = VistaDevPreloadConfig.createTest();
         config.ptGenerationSeed = seed;
         PTGenerator generator = new PTGenerator(config);
-        User user = createTestUser();
+        CrmUser user = createTestUser();
         ApplicationSummaryGDO summary = generator.createSummary(user, null);
 
         createAccount(user);
@@ -134,7 +134,7 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         selenium.click(VistaFormsDebugId.Auth_LogOutTop);
     }
 
-    private void createAccount(User user) {
+    private void createAccount(CrmUser user) {
         selenium.type(proto(AccountCreationRequest.class).email(), user.email().getValue());
         selenium.type(proto(AccountCreationRequest.class).password(), user.email().getValue());
         selenium.type("id=recaptcha_response_field", "x");

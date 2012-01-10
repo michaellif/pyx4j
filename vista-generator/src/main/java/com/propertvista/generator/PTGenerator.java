@@ -39,7 +39,6 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.User;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -54,6 +53,7 @@ import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Tenant.Type;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
@@ -86,15 +86,15 @@ public class PTGenerator {
         this.config = config;
     }
 
-    public User createUser(int number) {
+    public CrmUser createUser(int number) {
         String email = DemoData.UserType.PTENANT.getEmail(number);
-        User user = EntityFactory.create(User.class);
+        CrmUser user = EntityFactory.create(CrmUser.class);
         user.name().setValue(email.substring(0, email.indexOf('@')));
         user.email().setValue(email);
         return user;
     }
 
-    public ApplicationSummaryGDO createSummary(User user, AptUnit selectedUnit) {
+    public ApplicationSummaryGDO createSummary(CrmUser user, AptUnit selectedUnit) {
         ApplicationSummaryGDO summary = EntityFactory.create(ApplicationSummaryGDO.class);
 
         createTenantList(user, summary.tenants());
@@ -352,7 +352,7 @@ public class PTGenerator {
         return address;
     }
 
-    private void createTenantList(User user, IList<TenantSummaryGDO> list) {
+    private void createTenantList(CrmUser user, IList<TenantSummaryGDO> list) {
         int maxTenants = config.numTenantsInLease;
         if (Math.abs(this.seed) > 1000) {
             maxTenants = 1 + RandomUtil.randomInt(5);
@@ -364,7 +364,7 @@ public class PTGenerator {
         }
     }
 
-    private TenantSummaryGDO createTenantSummary(User user, int index) {
+    private TenantSummaryGDO createTenantSummary(CrmUser user, int index) {
         TenantSummaryGDO tenantSummary = EntityFactory.create(TenantSummaryGDO.class);
 
         // Tenant as person, first to have the same random names

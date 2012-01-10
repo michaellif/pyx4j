@@ -32,8 +32,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.company.Employee;
@@ -41,6 +39,8 @@ import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -92,7 +92,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             }
 
             String email = DemoData.UserType.PTENANT.getEmail(i);
-            User user = UserPreloader.createUser(email, email, VistaBehavior.PROSPECTIVE_TENANT);
+            CrmUser user = UserPreloader.createUser(email, email, VistaTenantBehavior.PROSPECTIVE_TENANT);
             ApplicationSummaryGDO summary = generator.createSummary(user, units.get(i - 1));
 
             // Update user name

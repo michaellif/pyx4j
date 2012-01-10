@@ -28,10 +28,10 @@ import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
-import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
-import com.propertyvista.server.domain.UserCredential;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class VistaAccessControlList extends ServletContainerAclBuilder {
 
@@ -57,13 +57,13 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaCrmAccessControlList());
         merge(new VistaAdminAccessControlList());
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.Query.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(ReportServices.class, "*"));
-        grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.Query.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(ReportServices.class, "*"));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
 
-        grant(VistaBehavior.ADMIN, VistaBehavior.PROPERTY_MANAGER);
-        grant(VistaBehavior.ADMIN, new EntityPermission(User.class, EntityPermission.ALL));
-        grant(VistaBehavior.ADMIN, new EntityPermission(UserCredential.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.ADMIN, VistaTenantBehavior.PROPERTY_MANAGER);
+        grant(VistaTenantBehavior.ADMIN, new EntityPermission(CrmUser.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.ADMIN, new EntityPermission(CrmUserCredential.class, EntityPermission.ALL));
 
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DatastoreAdminServices.class, "*"));
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DeferredProcessServices.class, "*"));

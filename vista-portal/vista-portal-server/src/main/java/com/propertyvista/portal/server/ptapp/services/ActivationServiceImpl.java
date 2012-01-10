@@ -44,13 +44,13 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.domain.User;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.server.domain.UserCredential;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
 
@@ -92,15 +92,15 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         AbstractAntiBot.assertCaptcha(request.captcha().getValue());
 
         // find user(s) with the same email
-        EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+        EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue().toLowerCase()));
-        List<User> users = Persistence.service().query(criteria);
+        List<CrmUser> users = Persistence.service().query(criteria);
         if (users.size() == 0) {
             throw new UserRuntimeException(i18n.tr("Email Not Registered"));
         }
-        User user = users.get(0);
+        CrmUser user = users.get(0);
 
-        UserCredential credential = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
+        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
         if (credential == null) {
             throw new UserRuntimeException(i18n.tr("Invalid Login Or Password")); // TODO is this a correct message?
         }
@@ -137,17 +137,17 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid Email"));
         }
 
-        final User userMeta = EntityFactory.create(User.class);
-        EntityQueryCriteria<User> criteria = new EntityQueryCriteria<User>(User.class);
+        final CrmUser userMeta = EntityFactory.create(CrmUser.class);
+        EntityQueryCriteria<CrmUser> criteria = new EntityQueryCriteria<CrmUser>(CrmUser.class);
 
         criteria.add(PropertyCriterion.eq(userMeta.email(), token.email));
-        List<User> users = Persistence.service().query(criteria);
+        List<CrmUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
         }
-        User user = users.get(0);
+        CrmUser user = users.get(0);
 
-        UserCredential cr = Persistence.service().retrieve(UserCredential.class, user.getPrimaryKey());
+        CrmUserCredential cr = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
         if (cr == null) {
             throw new RuntimeExceptionSerializable(i18n.tr("Invalid User Account. Please Contact Support"));
         }

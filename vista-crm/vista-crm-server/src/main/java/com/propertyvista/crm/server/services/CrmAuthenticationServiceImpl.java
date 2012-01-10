@@ -16,14 +16,14 @@ package com.propertyvista.crm.server.services;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
-import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
 public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImpl implements CrmAuthenticationService {
 
     @Override
     protected boolean hasRequiredSiteBehavior() {
-        return SecurityController.checkAnyBehavior(VistaBehavior.getCrmBehaviors());
+        return SecurityController.checkAnyBehavior(VistaTenantBehavior.getCrmBehaviors());
     }
 
 }

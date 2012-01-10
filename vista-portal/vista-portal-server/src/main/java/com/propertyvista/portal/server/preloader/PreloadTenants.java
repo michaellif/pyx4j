@@ -30,8 +30,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.IssueClassification;
@@ -40,6 +38,8 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -107,7 +107,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
         for (int i = 1; i <= config().numTenants; i++) {
             String email = DemoData.UserType.TENANT.getEmail(i);
             Tenant tenant = generator.createTenant();
-            User user = UserPreloader.createUser(tenant.person().name().getStringView(), email, email, VistaBehavior.TENANT);
+            CrmUser user = UserPreloader.createUser(tenant.person().name().getStringView(), email, email, VistaTenantBehavior.TENANT);
             tenant.person().email().address().setValue(email);
             tenant.user().set(user);
             persistTenant(tenant);
@@ -130,7 +130,7 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
         for (int i = 1; i <= config().numUnAssigendTenants; i++) {
             String email = DemoData.UserType.NEW_TENANT.getEmail(i);
-            User user = UserPreloader.createUser(email, email, null);
+            CrmUser user = UserPreloader.createUser(email, email, null);
             Tenant tenant = generator.createTenant();
             tenant.person().email().address().setValue(email);
             // Update user name

@@ -23,7 +23,7 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.domain.User;
+import com.propertyvista.domain.security.CrmUser;
 
 public class VistaContext {
 
@@ -40,13 +40,13 @@ public class VistaContext {
         return v.getUserVisit().getPrincipalPrimaryKey();
     }
 
-    public static User getCurrentUser() {
+    public static CrmUser getCurrentUser() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
-        User user = EntityFactory.create(User.class);
+        CrmUser user = EntityFactory.create(CrmUser.class);
         user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());
         user.name().setValue(v.getUserVisit().getName());
         user.email().setValue(v.getUserVisit().getEmail());

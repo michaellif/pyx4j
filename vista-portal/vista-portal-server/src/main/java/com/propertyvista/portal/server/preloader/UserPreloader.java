@@ -28,38 +28,38 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.UserCredential;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class UserPreloader extends BaseVistaDevDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(UserPreloader.class);
 
-    public static User createUser(String email, String password, VistaBehavior behavior) {
+    public static CrmUser createUser(String email, String password, VistaTenantBehavior behavior) {
         return createUser(email.substring(0, email.indexOf('@')), email, password, behavior);
     }
 
-    public static User createUser(String name, String email, String password, VistaBehavior behavior) {
+    public static CrmUser createUser(String name, String email, String password, VistaTenantBehavior behavior) {
         if (!ApplicationMode.isDevelopment()) {
-            EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+            EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-            List<User> users = Persistence.service().query(criteria);
+            List<CrmUser> users = Persistence.service().query(criteria);
             if (users.size() != 0) {
                 log.debug("User already exists");
                 return users.get(0);
             }
         }
-        User user = EntityFactory.create(User.class);
+        CrmUser user = EntityFactory.create(CrmUser.class);
 
         user.name().setValue(name);
         user.email().setValue(email);
 
         Persistence.service().persist(user);
 
-        UserCredential credential = EntityFactory.create(UserCredential.class);
+        CrmUserCredential credential = EntityFactory.create(CrmUserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
@@ -82,7 +82,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue("Executive");
             emp.email().address().setValue(email);
 
-            emp.user().set(UserPreloader.createUser(emp.name().getStringView(), email, email, VistaBehavior.PROPERTY_MANAGER));
+            emp.user().set(UserPreloader.createUser(emp.name().getStringView(), email, email, VistaTenantBehavior.PROPERTY_MANAGER));
 
             Persistence.service().persist(emp);
 
@@ -96,7 +96,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
             emp.email().address().setValue(email);
 
-            emp.user().set(UserPreloader.createUser(emp.name().getStringView(), email, email, RandomUtil.random(VistaBehavior.getCrmBehaviors())));
+            emp.user().set(UserPreloader.createUser(emp.name().getStringView(), email, email, RandomUtil.random(VistaTenantBehavior.getCrmBehaviors())));
 
             Persistence.service().persist(emp);
             userCount++;
@@ -108,7 +108,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(User.class, UserCredential.class);
+            return deleteAll(CrmUser.class, CrmUserCredential.class);
         } else {
             return "This is production";
         }

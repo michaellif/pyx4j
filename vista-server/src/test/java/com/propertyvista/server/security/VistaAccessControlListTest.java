@@ -36,8 +36,8 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.PetsDTO;
@@ -107,7 +107,7 @@ public class VistaAccessControlListTest {
 
     @Test
     public void tenantServicePermissions() {
-        TestLifecycle.testSession(null, VistaBehavior.PROSPECTIVE_TENANT);
+        TestLifecycle.testSession(null, VistaTenantBehavior.PROSPECTIVE_TENANT);
         TestLifecycle.beginRequest();
         assertPermission(true, ActivationService.class);
 
@@ -157,7 +157,7 @@ public class VistaAccessControlListTest {
     @Test
     @Ignore
     public void tenantApplicationEntityInstanceAccess() {
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaBehavior.PROSPECTIVE_TENANT);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaTenantBehavior.PROSPECTIVE_TENANT);
         TestLifecycle.beginRequest();
 
         Application application = EntityFactory.create(Application.class);

@@ -26,9 +26,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.services.dashboard.AbstractMetadataService;
-import com.propertyvista.domain.User;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.common.security.VistaContext;
 
 abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
@@ -39,7 +39,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
     public void listMetadata(AsyncCallback<Vector<DashboardMetadata>> callback) {
 
         // Load shared dashboards:
-        User anyUser = EntityFactory.create(User.class);
+        CrmUser anyUser = EntityFactory.create(CrmUser.class);
         anyUser.setPrimaryKey(Key.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));
@@ -47,7 +47,7 @@ abstract class AbstractMetadataServiceImpl implements AbstractMetadataService {
         Vector<DashboardMetadata> vdm = Persistence.secureQuery(criteria);
 
         // Load current user's dashboards:
-        User user = EntityFactory.create(User.class);
+        CrmUser user = EntityFactory.create(CrmUser.class);
         user.setPrimaryKey(Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
         criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));

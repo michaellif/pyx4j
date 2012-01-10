@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.security;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -19,31 +19,54 @@ import java.util.Vector;
 
 import com.pyx4j.security.shared.Behavior;
 
-public enum VistaBehavior implements Behavior {
+public enum VistaTenantBehavior implements Behavior {
 
-    // TODO 
+    Prospective,
 
+    ProspectivePrimary,
+
+    ProspectiveSecondary,
+
+    Guarantor,
+
+    ProspectiveSubmited,
+
+    Tenant,
+
+    TenantPrimary,
+
+    TenantSecondary,
+
+    // TODO   remove
+
+    @Deprecated
     PROSPECTIVE_TENANT,
 
+    @Deprecated
     TENANT,
 
+    @Deprecated
     GUARANTOR,
 
+    @Deprecated
     PROPERTY_MANAGER(true),
 
+    @Deprecated
     PROPERTY_EMPLOYEE(true),
 
+    @Deprecated
     PRODUCTION_SUPPORT(true),
 
+    @Deprecated
     ADMIN;
 
     private final boolean crmUser;
 
-    VistaBehavior() {
+    VistaTenantBehavior() {
         crmUser = false;
     }
 
-    VistaBehavior(boolean crmUser) {
+    VistaTenantBehavior(boolean crmUser) {
         this.crmUser = crmUser;
     }
 
@@ -51,9 +74,9 @@ public enum VistaBehavior implements Behavior {
         return crmUser;
     }
 
-    public static List<VistaBehavior> getCrmBehaviors() {
-        List<VistaBehavior> c = new Vector<VistaBehavior>();
-        for (VistaBehavior b : EnumSet.allOf(VistaBehavior.class)) {
+    public static List<VistaTenantBehavior> getCrmBehaviors() {
+        List<VistaTenantBehavior> c = new Vector<VistaTenantBehavior>();
+        for (VistaTenantBehavior b : EnumSet.allOf(VistaTenantBehavior.class)) {
             if (b.isCrmUser()) {
                 c.add(b);
             }

@@ -51,7 +51,6 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -71,6 +70,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
@@ -91,10 +91,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         if (allowAllDuringDevelopment) {
             // Debug
-            grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission("*"));
-            grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission("*"));
-            grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission("*", EntityPermission.ALL));
-            grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission("*", EntityPermission.READ));
+            grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission("*"));
+            grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission("*"));
+            grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission("*", EntityPermission.ALL));
+            grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission("*", EntityPermission.READ));
         }
 
         grant(CoreBehavior.DEVELOPER, new AllPermissions());
@@ -103,102 +103,102 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Dashboard:
         InstanceAccess sharedUserEntityAccess = new SharedUserEntityInstanceAccess();
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(DashboardMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(GadgetMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(DashboardMetadataService.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(DashboardMetadataCrudService.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ReportMetadataService.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ReportMetadataCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(DashboardMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(GadgetMetadata.class, sharedUserEntityAccess, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(DashboardMetadataService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(DashboardMetadataCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ReportMetadataService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ReportMetadataCrudService.class));
 
         // Add All GadgetSettings
         //grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(MyGadgetSettings.class, EntityPermission.ALL));
 
 // - Building-related:
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Building.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(BuildingCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Building.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(BuildingCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Elevator.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ElevatorCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Elevator.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ElevatorCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Boiler.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(BoilerCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Boiler.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(BoilerCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Roof.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(RoofCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Roof.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(RoofCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Parking.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ParkingCrudService.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(ParkingSpot.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ParkingSpotCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Parking.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ParkingCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(ParkingSpot.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ParkingSpotCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(LockerArea.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LockerAreaCrudService.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Locker.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LockerCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(LockerArea.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LockerAreaCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Locker.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LockerCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Floorplan.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FloorplanCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Floorplan.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FloorplanCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UpdateUploadService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UpdateUploadService.class));
 
 // - Unit-related:
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnit.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UnitCrudService.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnitItem.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UnitItemCrudService.class));
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnitOccupancy.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UnitOccupancyCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnit.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UnitCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnitItem.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UnitItemCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(AptUnitOccupancy.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(UnitOccupancyCrudService.class));
 
 // - Tenant-related:
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Lead.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LeadCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Lead.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LeadCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Appointment.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(AppointmentCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Appointment.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(AppointmentCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Showing.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ShowingCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Showing.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ShowingCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Tenant.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(TenantCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Tenant.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(TenantCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(TenantInLease.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(TenantInLeaseCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(TenantInLease.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(TenantInLeaseCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(TenantScreening.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(TenantScreeningCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(TenantScreening.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(TenantScreeningCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Lease.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LeaseCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Lease.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(LeaseCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Application.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ApplicationCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Application.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ApplicationCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
 // - Service-related:
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Service.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ServiceCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Service.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ServiceCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Feature.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FeatureCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Feature.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(FeatureCrudService.class));
 
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Concession.class, EntityPermission.ALL));
-        grant(VistaBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ConcessionCrudService.class));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Concession.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new IServiceExecutePermission(ConcessionCrudService.class));
 
 // - Marketing-related:
 
 // - Other:
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Company.class, EntityPermission.ALL));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Company.class, EntityPermission.ALL));
 
 // - Old servies:
-        grant(VistaBehavior.PROPERTY_MANAGER, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
-        grant(VistaBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.class, "*"));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
+        grant(VistaTenantBehavior.PROPERTY_MANAGER, new ServiceExecutePermission(EntityServices.class, "*"));
 
         // All other roles have everything the same
-        for (VistaBehavior b : VistaBehavior.getCrmBehaviors()) {
-            if (b != VistaBehavior.PROPERTY_MANAGER) {
-                grant(b, VistaBehavior.PROPERTY_MANAGER);
+        for (VistaTenantBehavior b : VistaTenantBehavior.getCrmBehaviors()) {
+            if (b != VistaTenantBehavior.PROPERTY_MANAGER) {
+                grant(b, VistaTenantBehavior.PROPERTY_MANAGER);
             }
         }
 

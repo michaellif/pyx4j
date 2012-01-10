@@ -7,14 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on Jan 10, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.security;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
@@ -24,17 +25,16 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface User extends IEntity {
+@AbstractEntity
+public interface AbstractUser extends IEntity {
 
     @NotNull
     @ToString
-    //@Indexed(keywordLenght = 2, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     @Indexed
     IPrimitive<String> name();
 
     @Editor(type = EditorType.email)
     @NotNull
-    //@Indexed(keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
     @Indexed
     IPrimitive<String> email();
 

@@ -35,7 +35,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.User;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -72,9 +72,9 @@ public class SummaryReportTest extends ReportsTestBase {
     }
 
     private static SummaryDTO retreiveSummary() {
-        EntityQueryCriteria<User> userCriteria = EntityQueryCriteria.create(User.class);
+        EntityQueryCriteria<CrmUser> userCriteria = EntityQueryCriteria.create(CrmUser.class);
         userCriteria.add(PropertyCriterion.eq(userCriteria.proto().name(), DemoData.UserType.PTENANT.getEmail(0)));
-        User devUser = Persistence.service().retrieve(userCriteria);
+        CrmUser devUser = Persistence.service().retrieve(userCriteria);
         Assert.assertNotNull("devUser " + DemoData.UserType.PTENANT.getEmail(0), devUser);
 
         EntityQueryCriteria<Application> applicationCriteria = EntityQueryCriteria.create(Application.class);

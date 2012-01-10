@@ -33,9 +33,9 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
-import com.propertyvista.domain.User;
-import com.propertyvista.domain.VistaBehavior;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 
 public class DashboardReportTest extends ReportsTestBase {
 
@@ -49,7 +49,7 @@ public class DashboardReportTest extends ReportsTestBase {
         }
 
         // Ignore all security constrains
-        TestLifecycle.testSession(null, VistaBehavior.PROPERTY_MANAGER);
+        TestLifecycle.testSession(null, VistaTenantBehavior.PROPERTY_MANAGER);
         TestLifecycle.beginRequest();
 
         createReport(DashboardReport.createModel(retreiveData()));
@@ -61,7 +61,7 @@ public class DashboardReportTest extends ReportsTestBase {
     }
 
     private static DashboardMetadata retreiveData() {
-        User anyUser = EntityFactory.create(User.class);
+        CrmUser anyUser = EntityFactory.create(CrmUser.class);
         anyUser.setPrimaryKey(Key.DORMANT_KEY);
         EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), anyUser));

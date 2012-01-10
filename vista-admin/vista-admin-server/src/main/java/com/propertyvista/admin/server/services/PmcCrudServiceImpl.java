@@ -33,7 +33,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.VistaBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.UserPreloader;
@@ -84,12 +84,12 @@ public class PmcCrudServiceImpl implements PmcCrudService {
     private static void preloadPmc(PmcDTO pmc) {
         NamespaceManager.setNamespace(pmc.dnsName().getValue());
 
-        UserPreloader.createUser(pmc.email().getValue(), pmc.password().getValue(), VistaBehavior.PROPERTY_MANAGER);
+        UserPreloader.createUser(pmc.email().getValue(), pmc.password().getValue(), VistaTenantBehavior.PROPERTY_MANAGER);
 
         if (ApplicationMode.isDevelopment()) {
             for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                 String email = DemoData.UserType.PM.getEmail(i);
-                UserPreloader.createUser(email, email, VistaBehavior.PROPERTY_MANAGER);
+                UserPreloader.createUser(email, email, VistaTenantBehavior.PROPERTY_MANAGER);
             }
         }
         AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
