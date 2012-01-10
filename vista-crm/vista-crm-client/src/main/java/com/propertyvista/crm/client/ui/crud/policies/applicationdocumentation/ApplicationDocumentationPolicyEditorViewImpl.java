@@ -11,16 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.numberofids;
+package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
+import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public class NumberOfIDsPolicyEditorViewImpl extends CrmEditorViewImplBase<NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyEdtiorView {
+public class ApplicationDocumentationPolicyEditorViewImpl extends CrmEditorViewImplBase<ApplicationDocumentationPolicyDTO> implements
+        ApplicationDocumentationPolicyEdtiorView {
 
-    public NumberOfIDsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.NumberOfIds.class, new NumberOfIDsPolicyEditorForm(new CrmEditorsComponentFactory()));
+    public ApplicationDocumentationPolicyEditorViewImpl() {
+        super(CrmSiteMap.Settings.Policies.ApplicationDocumentation.class, new ApplicationDocumentationPolicyEditorForm(new CrmEditorsComponentFactory()));
     }
 }

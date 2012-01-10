@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
-import com.propertyvista.crm.rpc.services.policies.policy.NumberOfIDsPolicyCrudService;
-import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
+import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
+import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public class NumberOfIDsPolicyListerActivicty extends ListerActivityBase<NumberOfIDsPolicyDTO> {
+public class ApplicationDocumentationListerActivicty extends ListerActivityBase<ApplicationDocumentationPolicyDTO> {
 
-    public NumberOfIDsPolicyListerActivicty(Place place) {
-        super(place, PolicyViewFactory.instance(NumberOfIDsPolicyListerView.class), (AbstractListService<NumberOfIDsPolicyDTO>) GWT
-                .create(NumberOfIDsPolicyCrudService.class), NumberOfIDsPolicyDTO.class);
+    public ApplicationDocumentationListerActivicty(Place place) {
+        super(place, PolicyViewFactory.instance(ApplicationDocumentationPolicyListerView.class), (AbstractListService<ApplicationDocumentationPolicyDTO>) GWT
+                .create(ApplicationDocumentationPolicyCrudService.class), ApplicationDocumentationPolicyDTO.class);
     }
 
 }

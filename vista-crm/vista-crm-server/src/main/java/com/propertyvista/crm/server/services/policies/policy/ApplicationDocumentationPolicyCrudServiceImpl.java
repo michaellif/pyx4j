@@ -13,15 +13,16 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.propertyvista.crm.rpc.services.policies.policy.NumberOfIDsPolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
-import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
+import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 
-public class NumberOfIDsPolicyCrudServiceImpl extends GenericPolicyCrudService<NumberOfIDsPolicy, NumberOfIDsPolicyDTO> implements NumberOfIDsPolicyCrudService {
+public class ApplicationDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudService<ApplicationDocumentationPolicy, ApplicationDocumentationPolicyDTO>
+        implements ApplicationDocumentationPolicyCrudService {
 
-    public NumberOfIDsPolicyCrudServiceImpl() {
-        super(NumberOfIDsPolicy.class, NumberOfIDsPolicyDTO.class);
+    public ApplicationDocumentationPolicyCrudServiceImpl() {
+        super(ApplicationDocumentationPolicy.class, ApplicationDocumentationPolicyDTO.class);
     }
 
 }

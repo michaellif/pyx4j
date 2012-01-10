@@ -29,9 +29,8 @@ import com.propertyvista.domain.policy.MiscPolicy;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
-import com.propertyvista.domain.policy.policies.AllowedIDsPolicy;
+import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
-import com.propertyvista.domain.policy.policies.NumberOfIDsPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
@@ -50,10 +49,9 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
         List<? extends Policy> defaults = Arrays.asList(//@formatter:off
                 createMiscPolicy(),
-                createDefaultNumberOfIdsPolicy(),
+                createDefaultApplicationDocumentationPolicy(),
                 createDefaultLeaseTermsPolicy(),
-                createDefaultPetPolicy(),
-                createDefaultAllowedIdsPolicy()
+                createDefaultPetPolicy()
         );//@formatter:on
 
         for (Policy policy : defaults) {
@@ -87,39 +85,30 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         return misc;
     }
 
-    private NumberOfIDsPolicy createDefaultNumberOfIdsPolicy() {
-        NumberOfIDsPolicy numOfIDs = EntityFactory.create(NumberOfIDsPolicy.class);
-        numOfIDs.numberOfIDs().setValue(5);
-        Persistence.service().persist(numOfIDs);
-        return numOfIDs;
+    private ApplicationDocumentationPolicy createDefaultApplicationDocumentationPolicy() {
+        ApplicationDocumentationPolicy policy = EntityFactory.create(ApplicationDocumentationPolicy.class);
+        policy.numberOfRequiredIDs().setValue(5);
+
+        IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
+        id.name().setValue(i18n.tr("Passport"));
+        policy.allowedIDs().add(id);
+
+        id = EntityFactory.create(IdentificationDocument.class);
+        id.name().setValue(i18n.tr("Drivers License"));
+        policy.allowedIDs().add(id);
+
+        id = EntityFactory.create(IdentificationDocument.class);
+        id.name().setValue(i18n.tr("Citizenship Card"));
+        policy.allowedIDs().add(id);
+
+        Persistence.service().persist(policy);
+        return policy;
     }
 
     private PetPolicy createDefaultPetPolicy() {
         PetPolicy petPolicy = EntityFactory.create(PetPolicy.class);
         Persistence.service().persist(petPolicy);
         return petPolicy;
-    }
-
-    private AllowedIDsPolicy createDefaultAllowedIdsPolicy() {
-        // Allowed IDs default policy
-        AllowedIDsPolicy allowedIDs = EntityFactory.create(AllowedIDsPolicy.class);
-        IdentificationDocument id = EntityFactory.create(IdentificationDocument.class);
-        id.name().setValue(i18n.tr("Passport"));
-        Persistence.service().persist(id);
-        allowedIDs.allowedIDs().add(id);
-
-        id = EntityFactory.create(IdentificationDocument.class);
-        id.name().setValue(i18n.tr("Drivers License"));
-        Persistence.service().persist(id);
-        allowedIDs.allowedIDs().add(id);
-
-        id = EntityFactory.create(IdentificationDocument.class);
-        id.name().setValue(i18n.tr("Citizenship Card"));
-        Persistence.service().persist(id);
-        allowedIDs.allowedIDs().add(id);
-
-        Persistence.service().persist(allowedIDs);
-        return allowedIDs;
     }
 
     private LeaseTermsPolicy createDefaultLeaseTermsPolicy() {

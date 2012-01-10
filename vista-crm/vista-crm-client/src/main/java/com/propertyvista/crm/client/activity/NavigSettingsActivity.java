@@ -86,7 +86,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         NavigFolder folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.PetPolicy());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.NumberOfIds());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
         return folder;
     }
 }

@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
+import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyEdtiorView;
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.policies.numberofids.NumberOfIDsPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyListerView;
@@ -34,10 +34,10 @@ import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyViewerViewImpl
 public class PolicyViewFactory extends ViewFactoryBase {
     public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (NumberOfIDsPolicyListerView.class.equals(type)) {
-                map.put(NumberOfIDsPolicyListerView.class, new NumberOfIDsPolicyListerViewImpl());
-            } else if (NumberOfIDsPolicyEdtiorView.class.equals(type)) {
-                map.put(NumberOfIDsPolicyEdtiorView.class, new NumberOfIDsPolicyEditorViewImpl());
+            if (ApplicationDocumentationPolicyListerView.class.equals(type)) {
+                map.put(ApplicationDocumentationPolicyListerView.class, new ApplicationDocumentationPolicyListerViewImpl());
+            } else if (ApplicationDocumentationPolicyEdtiorView.class.equals(type)) {
+                map.put(ApplicationDocumentationPolicyEdtiorView.class, new ApplicationDocumentationPolicyEditorViewImpl());
 
             } else if (LeaseTermsPolicyListerView.class.equals(type)) {
                 map.put(LeaseTermsPolicyListerView.class, new LeaseTermsPolicyListerViewImpl());

@@ -15,6 +15,8 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -24,9 +26,12 @@ import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 @DiscriminatorValue("ApplicationDocumentationPolicy")
 public interface ApplicationDocumentationPolicy extends Policy {
 
-    @Caption(description = "The number of the IDs that is required for an application.")
+    @Caption(description = "The number of the IDs that is required for an application")
+    @NotNull
     IPrimitive<Integer> numberOfRequiredIDs();
 
-    @Caption(description = "IDs/Documentations that accepted as valid IDs.")
+    @Caption(description = "IDs/Documentations that accepted as valid IDs")
+    @Owned
+    @NotNull
     IList<IdentificationDocument> allowedIDs();
 }

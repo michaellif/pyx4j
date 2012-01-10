@@ -115,9 +115,9 @@ import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyListerActivicty;
-import com.propertyvista.crm.client.activity.policies.numberofids.NumberOfIDsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.numberofids.ApplicationDocumentationPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.numberofids.ApplicationDocumentationListerActivicty;
+import com.propertyvista.crm.client.activity.policies.numberofids.ApplicationDocumentationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivity;
@@ -582,16 +582,16 @@ public class MainActivityMapper implements AppActivityMapper {
                     }
 
 // - Policies:
-                } else if (place instanceof CrmSiteMap.Settings.Policies.NumberOfIds) {
+                } else if (place instanceof CrmSiteMap.Settings.Policies.ApplicationDocumentation) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:
-                        activity = new NumberOfIDsPolicyListerActivicty(place);
+                        activity = new ApplicationDocumentationListerActivicty(place);
                         break;
                     case editor:
-                        activity = new NumberOfIDsPolicyEditorActivity(place);
+                        activity = new ApplicationDocumentationPolicyEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new NumberOfIDsPolicyViewerActivity(place);
+                        activity = new ApplicationDocumentationPolicyViewerActivity(place);
                         break;
                     }
                 } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseTerms) {

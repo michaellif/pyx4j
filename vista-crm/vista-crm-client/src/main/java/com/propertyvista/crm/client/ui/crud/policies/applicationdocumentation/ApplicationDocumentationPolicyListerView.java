@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 28, 2011
+ * Created on Dec 22, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.numberofids;
+package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.policy.dto.NumberOfIDsPolicyDTO;
+import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public interface NumberOfIDsPolicyEdtiorView extends IEditorView<NumberOfIDsPolicyDTO> {
+public interface ApplicationDocumentationPolicyListerView extends IListerView<ApplicationDocumentationPolicyDTO> {
 
 }

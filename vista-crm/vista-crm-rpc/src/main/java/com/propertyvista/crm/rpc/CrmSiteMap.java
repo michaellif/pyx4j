@@ -269,9 +269,9 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "Number of Allowed IDs")
-            @NavigationItem(navigLabel = "Number of Allowed IDs")
-            public static class NumberOfIds extends CrudAppPlace {
+            @PlaceProperties(caption = "Application Documentation")
+            @NavigationItem(navigLabel = "Application Documentation")
+            public static class ApplicationDocumentation extends CrudAppPlace {
 
             }
 
