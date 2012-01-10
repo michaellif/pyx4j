@@ -32,10 +32,12 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
 
     private final CComponentViewForm form;
 
+    private CComponent editableComponent;
+
     public CComponentViewImpl() {
         setSize("100%", "100%");
 
-        form = new CComponentViewForm();
+        form = new CComponentViewForm(this);
         form.initContent();
 
         setWidget(form);
@@ -58,7 +60,7 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
             properties.title().setValue(cComponent.getTitle());
 
             if (cComponent instanceof CComponent) {
-                CComponent editableComponent = cComponent;
+                editableComponent = cComponent;
 
                 properties.componentValue().setValue(editableComponent.getValue() == null ? "null" : editableComponent.getValue().toString());
                 properties.title().setValue(editableComponent.getTitle());
@@ -74,5 +76,11 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
 
             form.populate(properties);
         }
+    }
+
+    @Override
+    public void onEnableComponent(boolean enabled) {
+        editableComponent.setEnabled(enabled);
+
     }
 }

@@ -20,6 +20,8 @@
  */
 package com.pyx4j.tester.client.view;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
@@ -33,8 +35,12 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
 
     private static I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 
-    public CComponentViewForm() {
+    private final CComponentView view;
+
+    public CComponentViewForm(CComponentView view) {
         super(CComponentProperties.class);
+
+        this.view = view;
     }
 
     @Override
@@ -52,7 +58,20 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatory())));
-        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enabled())));
+
+        TesterWidgetDecorator decorator = new TesterWidgetDecorator(inject(proto().enabled()));
+        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+            @Override
+            public void onValueChange(ValueChangeEvent event) {
+                System.out.println("++++++ onValueChange");
+
+                view.onEnableComponent(((Boolean) event.getValue()).booleanValue());
+
+            }
+
+        });
+
+        main.setWidget(row, 1, decorator);
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().editable())));
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().visible())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().valid())));
