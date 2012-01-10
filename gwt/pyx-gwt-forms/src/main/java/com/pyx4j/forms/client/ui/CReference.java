@@ -48,7 +48,7 @@ public abstract class CReference<E, T extends Widget & INativeReference<E>> exte
 
     public void setWordWrap(boolean wrap) {
         if (isWidgetCreated()) {
-            asWidget().setWordWrap(wrap);
+            getWidget().setWordWrap(wrap);
         }
         wordWrap = wrap;
     }

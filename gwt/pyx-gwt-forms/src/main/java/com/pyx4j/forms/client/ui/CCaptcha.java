@@ -35,14 +35,14 @@ public class CCaptcha extends CComponent<Pair<String, String>, NativeCaptcha> {
     public void retrieveValue() {
         //TODO validate if that code is needed
         if (isWidgetCreated() && isVisible()) {
-            setValue(asWidget().getNativeValue());
+            setValue(getWidget().getNativeValue());
         }
     }
 
     @Override
     public boolean isValueEmpty() {
         if (isWidgetCreated() && isVisible()) {
-            return CommonsStringUtils.isEmpty(asWidget().getValueResponse());
+            return CommonsStringUtils.isEmpty(getWidget().getValueResponse());
         } else {
             return true;
         }
@@ -55,7 +55,7 @@ public class CCaptcha extends CComponent<Pair<String, String>, NativeCaptcha> {
 
     public void createNewChallenge() {
         if (isWidgetCreated()) {
-            asWidget().createNewChallenge();
+            getWidget().createNewChallenge();
         }
     }
 

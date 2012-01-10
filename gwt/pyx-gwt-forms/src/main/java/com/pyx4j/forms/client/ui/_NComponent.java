@@ -1,0 +1,102 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2011 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on Jan 10, 2012
+ * @author michaellif
+ * @version $Id$
+ */
+package com.pyx4j.forms.client.ui;
+
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+
+public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
+
+    private WIDGET editor;
+
+    private HTML viewer;
+
+    final CCOMP cComponent;
+
+    private boolean viewable;
+
+    public _NComponent(CCOMP cComponent) {
+        super();
+        this.cComponent = cComponent;
+
+        setViewable(cComponent.isViewable());
+        setNativeValue(cComponent.getValue());
+
+    }
+
+    public WIDGET getEditor() {
+        return editor;
+    }
+
+    public HTML getViewer() {
+        return viewer;
+    }
+
+    @Override
+    public CCOMP getCComponent() {
+        return cComponent;
+    }
+
+    @Override
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
+            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (getCComponent().isValid()) {
+                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (getCComponent().isVisited()) {
+                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
+        }
+    }
+
+    protected abstract WIDGET initEditor();
+
+    protected HTML initViewer() {
+        return new HTML();
+    }
+
+    protected abstract void onEditorInit();
+
+    protected abstract void onViewerInit();
+
+    @Override
+    public void setViewable(boolean viewable) {
+        this.viewable = viewable;
+        if (viewable) {
+            viewer = initViewer();
+            setWidget(viewer);
+        } else {
+            editor = initEditor();
+            editor.setWidth(getCComponent().getWidth());
+            setWidget(editor);
+        }
+    }
+
+    @Override
+    public boolean isViewable() {
+        return viewable;
+    }
+}

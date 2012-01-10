@@ -107,7 +107,7 @@ public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implemen
             options.addAll(opt);
         }
         if (isWidgetCreated()) {
-            asWidget().setOptions(options);
+            getWidget().setOptions(options);
         }
         OptionsChangeEvent.fire(this, getOptions());
     }
@@ -127,7 +127,7 @@ public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implemen
 
     public void removeOption(E opt) {
         if (isWidgetCreated() && (options.contains(opt))) {
-            asWidget().removeOption(opt);
+            getWidget().removeOption(opt);
         }
         options.remove(opt);
         if (isValuesEquals(getValue(), opt)) {
@@ -141,19 +141,19 @@ public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implemen
         }
         if (options.contains(opt)) {
             if (isWidgetCreated()) {
-                asWidget().refreshOption(opt);
+                getWidget().refreshOption(opt);
             }
         } else {
             options.add(opt);
             if (isWidgetCreated()) {
-                asWidget().setOptions(options);
+                getWidget().setOptions(options);
             }
         }
     }
 
     public void refreshOption(E opt) {
         if (isWidgetCreated()) {
-            asWidget().refreshOption(opt);
+            getWidget().refreshOption(opt);
         }
     }
 
@@ -170,7 +170,7 @@ public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implemen
         if (isMandatory() != mandatory) {
             super.setMandatory(mandatory);
             if (isWidgetCreated()) {
-                asWidget().refreshOptions();
+                getWidget().refreshOptions();
             }
         }
     }
@@ -182,7 +182,7 @@ public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implemen
     public void setNoSelectionText(String noSelectionText) {
         this.noSelectionText = noSelectionText;
         if (isWidgetCreated()) {
-            asWidget().refreshOptions();
+            getWidget().refreshOptions();
         }
     }
 

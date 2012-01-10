@@ -62,9 +62,9 @@ public class CSuggestBox<E> extends CTextFieldBase<E, NativeSuggestBox<E>> imple
             E currentSelection = getValue();
             this.options.addAll(opt);
             if (isWidgetCreated()) {
-                asWidget().removeAllItems();
+                getWidget().removeAllItems();
                 for (E option : opt) {
-                    asWidget().addItem(getOptionName(option));
+                    getWidget().addItem(getOptionName(option));
                 }
                 setValue(currentSelection);
             }

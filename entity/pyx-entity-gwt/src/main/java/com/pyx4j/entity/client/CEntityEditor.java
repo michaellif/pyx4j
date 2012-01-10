@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.EqualsHelper;
@@ -104,10 +103,6 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     public final CComponent<?, ?> inject(IObject<?> member, CComponent<?, ?> comp) {
         bind(comp, member);
         return comp;
-    }
-
-    public void setWidget(IsWidget widget) {
-        asWidget().setWidget(widget);
     }
 
     @SuppressWarnings("unchecked")

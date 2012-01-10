@@ -45,7 +45,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     public Panel getContainer() {
-        return asWidget();
+        return getWidget();
     }
 
     @Override
@@ -54,11 +54,12 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     public void initContent() {
+        asWidget();
         decorator = createDecorator();
         if (decorator == null) {
-            asWidget().setWidget(createContent());
+            getWidget().setWidget(createContent());
         } else {
-            asWidget().setWidget(decorator);
+            getWidget().setWidget(decorator);
             decorator.setComponent(this);
         }
 

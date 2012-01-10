@@ -29,7 +29,7 @@ public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
 
     public void scrollToBottom() {
         if (isWidgetCreated()) {
-            asWidget().scrollToBottom();
+            getWidget().scrollToBottom();
         }
     }
 

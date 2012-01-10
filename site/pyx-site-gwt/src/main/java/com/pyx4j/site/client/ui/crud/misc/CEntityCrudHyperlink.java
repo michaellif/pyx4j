@@ -90,7 +90,7 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CAbstractHyperlink<
 
     private void setCaption() {
         if (isWidgetCreated()) {
-            asWidget().setText(caption);
+            getWidget().setText(caption);
         }
     }
 }

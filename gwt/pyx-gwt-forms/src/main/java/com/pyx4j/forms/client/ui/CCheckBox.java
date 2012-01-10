@@ -45,7 +45,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NativeCheckBox> {
     public void setAlignmet(Alignment alignment) {
         this.alignment = alignment;
         if (isWidgetCreated()) {
-            asWidget().setAlignmet(alignment);
+            getWidget().setAlignmet(alignment);
         }
     }
 

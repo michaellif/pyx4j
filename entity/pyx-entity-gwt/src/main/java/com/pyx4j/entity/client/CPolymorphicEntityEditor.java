@@ -134,7 +134,9 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 
         addValueChangeHandler(decorator);
 
-        asWidget().setWidget(decorator);
+        asWidget();
+
+        getWidget().setWidget(decorator);
 
         decorator.setEditor(this);
 

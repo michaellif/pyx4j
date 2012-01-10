@@ -53,8 +53,8 @@ import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeComponent<DATA_TYPE>> implements HasHandlers, HasPropertyChangeHandlers,
-        IsWidget, HasValueChangeHandlers<DATA_TYPE> {
+public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> implements HasHandlers, HasPropertyChangeHandlers, IsWidget,
+        HasValueChangeHandlers<DATA_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CComponent.class);
 
@@ -346,7 +346,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @Override
-    public WIDGET_TYPE asWidget() {
+    public Widget asWidget() {
         if (widget == null) {
             try {
                 widget = createWidget();
@@ -358,6 +358,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
             }
             onWidgetCreated();
         }
+        return widget.asWidget();
+    }
+
+    public WIDGET_TYPE getWidget() {
         return widget;
     }
 
@@ -372,7 +376,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void setDebugId(IDebugId debugId) {
         this.debugId = debugId;
         if ((widget != null) && (debugId != null)) {
-            widget.ensureDebugId(getDebugId().debugId());
+            widget.asWidget().ensureDebugId(getDebugId().debugId());
         }
     }
 
@@ -386,24 +390,24 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public void applyEnablingRules() {
         boolean enabled = isEnabled();
-        if (isWidgetCreated() && asWidget().isEnabled() != enabled) {
-            asWidget().setEnabled(enabled);
+        if (isWidgetCreated() && !isViewable() && widget.isEnabled() != enabled) {
+            widget.setEnabled(enabled);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
     }
 
     public void applyEditabilityRules() {
         boolean editable = isEditable();
-        if (isWidgetCreated() && asWidget().isEditable() != editable) {
-            asWidget().setEditable(editable);
+        if (isWidgetCreated() && !isViewable() && widget.isEditable() != editable) {
+            widget.setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
     }
 
     public void applyViewabilityRules() {
         boolean viewable = isViewable();
-        if (isWidgetCreated() && asWidget().isViewable() != viewable) {
-            asWidget().setViewable(viewable);
+        if (isWidgetCreated() && widget.isViewable() != viewable) {
+            widget.setViewable(viewable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
         }
     }

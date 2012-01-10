@@ -26,7 +26,7 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
         if (component instanceof CTextFieldBase) {
             if (component.isWidgetCreated()) {
                 try {
-                    component.asWidget().getNativeValue();
+                    component.getWidget().getNativeValue();
                 } catch (ParseException e) {
                     return new ValidationFailure(e.getMessage());
                 }

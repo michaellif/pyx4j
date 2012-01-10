@@ -22,133 +22,115 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.widgets.client.TextBox;
 
-public class _NTextBox<E> extends _NViewableComponent<TextBox, CTextFieldBase<E, ?>> implements INativeTextComponent<E> {
+public class _NTextBox<DATA> extends _NFocusComponent<DATA, TextBox, CTextFieldBase<DATA, ?>> implements INativeTextComponent<DATA> {
 
-    public _NTextBox(CTextFieldBase<E, ?> cComponent) {
+    public _NTextBox(CTextFieldBase<DATA, ?> cComponent) {
         super(cComponent);
     }
 
     @Override
-    protected TextBox createEditor() {
+    protected TextBox initEditor() {
         return new TextBox();
     }
 
     @Override
-    public void setTabIndex(int tabIndex) {
-        // TODO Auto-generated method stub
-
+    protected void onEditorInit() {
+        super.onEditorInit();
+        getEditor().addKeyDownHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    getCComponent().onEditingStop();
+                }
+            }
+        });
     }
 
     @Override
-    public void setFocus(boolean focused) {
-        // TODO Auto-generated method stub
-
+    public void setNativeValue(DATA value) {
+        String newValue = value == null ? "" : getCComponent().getFormat().format(value);
+        if (isViewable()) {
+            getViewer().setHTML(newValue);
+        } else {
+            if (!newValue.equals(getEditor().getText())) {
+                getEditor().setText(newValue);
+            }
+        }
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
+    public DATA getNativeValue() throws ParseException {
+        if (!isViewable()) {
+            try {
+                return getCComponent().getFormat().parse(getEditor().getText());
+            } catch (ParseException e) {
+                throw e;
+            }
+        } else {
+            assert false : "getNativeValue() shouldn't be called in viewable mode";
+            return null;
+        }
     }
 
     @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setViewable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isViewable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setNativeValue(E value) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public E getNativeValue() throws ParseException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
+    @Deprecated
     public void setNativeText(String newValue) {
-        // TODO Auto-generated method stub
-
+        assert false : "setNativeText shouldn't be called";
     }
 
     @Override
     public String getNativeText() {
-        // TODO Auto-generated method stub
-        return null;
+        if (!isViewable()) {
+            return getEditor().getText();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        if (!isViewable()) {
+            getEditor().setReadOnly(!editable);
+            if (editable) {
+                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            } else {
+                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            }
+        }
+    }
+
+    @Override
+    public boolean isEditable() {
+        return !getEditor().isReadOnly();
     }
 
     @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return getEditor().addChangeHandler(handler);
     }
 
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return getEditor().addKeyDownHandler(handler);
     }
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return getEditor().addKeyUpHandler(handler);
+    }
+
+    @Override
+    protected void onViewerInit() {
+
     }
 
 }

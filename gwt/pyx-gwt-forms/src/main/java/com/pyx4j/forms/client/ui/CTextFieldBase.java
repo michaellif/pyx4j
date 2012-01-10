@@ -61,21 +61,23 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
     }
 
     public void requestFocus() {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                INativeComponent<DATA_TYPE> impl = asWidget();
-                if (impl instanceof FocusWidget) {
-                    ((FocusWidget) impl).setFocus(true);
+        if (isWidgetCreated()) {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    INativeComponent<DATA_TYPE> impl = getWidget();
+                    if (impl instanceof FocusWidget) {
+                        ((FocusWidget) impl).setFocus(true);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
     public boolean isValueEmpty() {
         if (isWidgetCreated()) {
-            if (!CommonsStringUtils.isEmpty(asWidget().getNativeText())) {
+            if (!CommonsStringUtils.isEmpty(getWidget().getNativeText())) {
                 return false;
             }
         }
