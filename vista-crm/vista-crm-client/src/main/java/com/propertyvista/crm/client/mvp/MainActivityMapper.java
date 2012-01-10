@@ -112,7 +112,7 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
-import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationListerActivicty;
+import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
@@ -588,7 +588,7 @@ public class MainActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.Settings.Policies.ApplicationDocumentation) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:
-                        activity = new ApplicationDocumentationListerActivicty(place);
+                        activity = new ApplicationDocumentationPolicyListerActivicty(place);
                         break;
                     case editor:
                         activity = new ApplicationDocumentationPolicyEditorActivity(place);
