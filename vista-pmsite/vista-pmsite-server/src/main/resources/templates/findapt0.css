@@ -175,10 +175,10 @@
 	font-size:13px;
 }
 .advancedSearchWideWrap .typeselActiveHover {
-	background-color:#bbb !important;
+	background-color:#B5E329 !important;
 }
 .advancedSearchWideWrap .typeselActive {
-	background-color:#bbb !important;
+	background-color:#B5E329 !important;
 	color:#444 !important;
 	box-shadow:1px 1px 1px #000 inset, -1px -1px 1px #55565b;
 	padding-top:7px !important;

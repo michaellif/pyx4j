@@ -154,12 +154,13 @@
 }
 
 .advancedSearchNarrowWrap .typeselActiveHover {
-	background-color: #19181f !important;
+	background-color: #557329 !important;
 }
 
 .advancedSearchNarrowWrap .typeselActive {
-	background-color: #19181f !important;
-	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #55565b;
+	background-color: #85B329 !important;
+	color:#333 !important;
+	box-shadow:-1px -1px 1px #000 inset, 1px 1px 1px #113300;
 	padding-top: 2px !important;
 	padding-bottom: 4px !important;
 }
