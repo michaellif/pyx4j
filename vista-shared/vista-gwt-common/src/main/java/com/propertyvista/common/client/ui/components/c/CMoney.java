@@ -75,7 +75,7 @@ public class CMoney extends CTextFieldBase<Money, NativeMoney> {
     @Override
     public boolean isValueEmpty() {
         if (isWidgetCreated()) {
-            if (!CommonsStringUtils.isEmpty(asWidget().getNativeText())) {
+            if (!CommonsStringUtils.isEmpty(getWidget().getNativeText())) {
                 return false;
             }
         }

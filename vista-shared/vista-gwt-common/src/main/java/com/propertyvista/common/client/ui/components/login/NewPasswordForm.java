@@ -94,7 +94,6 @@ public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
         main.getElement().getStyle().setMarginTop(1, Unit.EM);
         main.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
-        setWidget(main);
         return main;
     }
 

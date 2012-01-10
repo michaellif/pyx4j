@@ -218,8 +218,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 }
             });
             link.setValue(compiledLocale.getLanguage());
-            Tooltip.tooltip(link.asWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
             locales.add(link);
+            Tooltip.tooltip(link.getWidget(), LocaleInfo.getLocaleNativeDisplayName(compiledLocale.name()));
             locales.add(new Label("/"));
         }
         if (locales.getWidgetCount() > 0) {
