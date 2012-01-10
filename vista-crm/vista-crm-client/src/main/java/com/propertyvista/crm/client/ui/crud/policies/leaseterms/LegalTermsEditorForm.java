@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -35,7 +34,7 @@ public class LegalTermsEditorForm extends CEntityDecoratableEditor<LegalTermsDes
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).labelWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description(), new CTextArea()), 60).labelWidth(10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 60).labelWidth(10).build());
         content.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().content(), new LegalTermsContentFolder(this)));
 

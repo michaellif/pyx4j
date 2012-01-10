@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.policy.policies.specials;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -28,6 +30,7 @@ public interface LegalTermsDescriptor extends IEntity {
     @NotNull
     IPrimitive<String> name();
 
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
     @Owned
