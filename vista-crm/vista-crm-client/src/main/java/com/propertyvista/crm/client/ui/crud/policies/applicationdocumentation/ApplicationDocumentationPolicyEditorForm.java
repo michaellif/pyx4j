@@ -25,6 +25,8 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
@@ -55,6 +57,18 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs(), new IdentificationDocumentFolder())).componentWidth(20).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRequiredIDs())).componentWidth(3).build());
+        get(proto().numberOfRequiredIDs()).addValueValidator(new EditableValueValidator<Integer>() {
+            @Override
+            public ValidationFailure isValid(CComponent<Integer, ?> component, Integer value) {
+                if (value == null || value == 0) {
+                    return new ValidationFailure(i18n.tr("At least one ID is required"));
+                } else if (getValue() != null && (getValue().allowedIDs().isEmpty() || value > getValue().allowedIDs().size())) {
+                    return new ValidationFailure(i18n.tr("The number of required IDs must not exceed the number of allowed IDs"));
+                } else {
+                    return null;
+                }
+            }
+        });
         return content;
     }
 
@@ -92,4 +106,5 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
         }
 
     }
+
 }

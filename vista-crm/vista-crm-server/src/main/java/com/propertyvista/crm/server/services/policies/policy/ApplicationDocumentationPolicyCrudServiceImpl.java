@@ -25,4 +25,18 @@ public class ApplicationDocumentationPolicyCrudServiceImpl extends GenericPolicy
         super(ApplicationDocumentationPolicy.class, ApplicationDocumentationPolicyDTO.class);
     }
 
+    @Override
+    protected void persistDBO(ApplicationDocumentationPolicy dbo, ApplicationDocumentationPolicyDTO in) {
+        if (dbo.allowedIDs().isNull() || dbo.allowedIDs().isEmpty()) {
+            throw new Error("At least one kind of allowed ID is required");
+        }
+        if (dbo.numberOfRequiredIDs().isNull() || dbo.numberOfRequiredIDs().getValue() < 1) {
+            throw new Error("The number of required IDs must be a positive integer");
+        }
+        if (dbo.numberOfRequiredIDs().getValue() > dbo.allowedIDs().size()) {
+            throw new Error("The number of required IDs must not exceed the number of allowed IDs");
+        }
+        super.persistDBO(dbo, in);
+    }
+
 }
