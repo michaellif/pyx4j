@@ -33,6 +33,4 @@ public interface CComponentView extends IsWidget {
     public interface ConsolePresenter {
 
     }
-
-    public void onEnableComponent(boolean enabled);
 }

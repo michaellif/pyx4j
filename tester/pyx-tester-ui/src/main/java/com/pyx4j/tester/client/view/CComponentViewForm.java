@@ -25,6 +25,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.CComponentProperties;
@@ -35,12 +36,12 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
 
     private static I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 
-    private final CComponentView view;
+    private CComponent component;
 
-    public CComponentViewForm(CComponentView view) {
+    public CComponentViewForm() {
         super(CComponentProperties.class);
 
-        this.view = view;
+        component = null;
     }
 
     @Override
@@ -63,10 +64,9 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
         decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
-                System.out.println("++++++ onValueChange");
 
-                view.onEnableComponent(((Boolean) event.getValue()).booleanValue());
-
+                if (component != null)
+                    component.setEnabled(((Boolean) event.getValue()).booleanValue());
             }
 
         });
@@ -78,5 +78,9 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().toolTip())));
 
         return main;
+    }
+
+    public void setComponent(CComponent component) {
+        this.component = component;
     }
 }
