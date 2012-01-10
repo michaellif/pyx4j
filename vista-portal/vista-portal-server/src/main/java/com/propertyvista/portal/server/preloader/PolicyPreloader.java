@@ -22,9 +22,13 @@ import com.propertvista.generator.BuildingsGenerator;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
@@ -35,10 +39,12 @@ import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.policies.specials.PetConstraints;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.CompiledLocale;
 
 public class PolicyPreloader extends BaseVistaDevDataPreloader {
+
     private static final I18n i18n = I18n.get(PolicyPreloader.class);
 
     @Override
@@ -107,6 +113,24 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     private PetPolicy createDefaultPetPolicy() {
         PetPolicy petPolicy = EntityFactory.create(PetPolicy.class);
+
+        EntityQueryCriteria<ServiceItemType> criteria = new EntityQueryCriteria<ServiceItemType>(ServiceItemType.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().featureType(), Feature.Type.pet));
+        for (ServiceItemType pet : Persistence.service().query(criteria)) {
+            PetConstraints constraints = EntityFactory.create(PetConstraints.class);
+            if (i18n.tr("Cat").equals(pet.name().getValue())) {
+                constraints.maxNumber().setValue(10);
+                constraints.maxWeight().setValue(5.0);
+            } else if (i18n.tr("Dog").equals(pet.name().getValue())) {
+                constraints.maxNumber().setValue(3);
+                constraints.maxWeight().setValue(50.0);
+            } else {
+                constraints.maxNumber().setValue(0);
+                constraints.maxWeight().setValue(0.0);
+            }
+            constraints.pet().set(pet);
+            petPolicy.constraints().add(constraints);
+        }
         Persistence.service().persist(petPolicy);
         return petPolicy;
     }
