@@ -263,6 +263,12 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Policies")
         public static class Policies extends AppPlace {
 
+            @PlaceProperties(caption = "Misc")
+            @NavigationItem(navigLabel = "Misc")
+            public static class Misc extends CrudAppPlace {
+
+            }
+
             @PlaceProperties(caption = "Pet Policy")
             @NavigationItem(navigLabel = "Pet Policy")
             public static class PetPolicy extends CrudAppPlace {

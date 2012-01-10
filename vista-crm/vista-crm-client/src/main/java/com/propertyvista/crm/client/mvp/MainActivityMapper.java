@@ -115,8 +115,11 @@ import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.numberofids.ApplicationDocumentationPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.misc.MiscPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.misc.MiscPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.misc.MiscPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.numberofids.ApplicationDocumentationListerActivicty;
+import com.propertyvista.crm.client.activity.policies.numberofids.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.numberofids.ApplicationDocumentationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyListerActivity;
@@ -617,6 +620,19 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new PetPolicyViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Settings.Policies.Misc) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new MiscPolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new MiscPolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new MiscPolicyViewerActivity(place);
                         break;
                     }
                 }

@@ -24,6 +24,12 @@ import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicy
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyListerView;
@@ -50,6 +56,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(PetPolicyEditorView.class, new PetPolicyEditorViewImpl());
             } else if (PetPolicyViewerView.class.equals(type)) {
                 map.put(PetPolicyViewerView.class, new PetPolicyViewerViewImpl());
+
+            } else if (MiscPolicyListerView.class.equals(type)) {
+                map.put(MiscPolicyListerView.class, new MiscPolicyListerViewImpl());
+            } else if (MiscPolicyEditorView.class.equals(type)) {
+                map.put(MiscPolicyEditorView.class, new MiscPolicyEditorViewImpl());
+            } else if (MiscPolicyViewerView.class.equals(type)) {
+                map.put(MiscPolicyViewerView.class, new MiscPolicyViewerViewImpl());
             }
 
         }

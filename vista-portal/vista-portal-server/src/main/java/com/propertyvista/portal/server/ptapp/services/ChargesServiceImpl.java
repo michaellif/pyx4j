@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.policy.MiscPolicy;
+import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
