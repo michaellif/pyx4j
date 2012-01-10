@@ -30,7 +30,7 @@ public interface PetConstraints extends IEntity {
     @Caption(description = "Maximum allowed number of pets")
     IPrimitive<Integer> maxNumber();
 
-    @Caption(description = "Maximumum allowed weight per pet")
+    @Caption(description = "Maximum allowed weight per pet")
     IPrimitive<Double> maxWeight();
 
     ServiceItemType pet();
