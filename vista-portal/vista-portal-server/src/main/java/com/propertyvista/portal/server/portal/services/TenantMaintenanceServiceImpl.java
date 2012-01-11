@@ -25,11 +25,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.maintenance.IssueClassification;
-import com.propertyvista.domain.maintenance.IssueElement;
-import com.propertyvista.domain.maintenance.IssueElementType;
-import com.propertyvista.domain.maintenance.IssueRepairSubject;
-import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.Tenant;
@@ -101,61 +96,19 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
 
     }
 
-    // -------------
-
     @Override
-    public void listIssueElements(AsyncCallback<Vector<IssueElement>> callback) {
-        Vector<IssueElement> dto = new Vector<IssueElement>();
-
-        {
-            EntityQueryCriteria<IssueElement> criteria = EntityQueryCriteria.create(IssueElement.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().type(), IssueElementType.ApartmentUnit));
-            List<IssueElement> elements = Persistence.service().query(criteria);
-            dto.addAll(elements);
+    public void rateTicket(AsyncCallback<VoidSerializable> callback, MaintananceDTO dto, Integer rate) {
+        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), dto.id()));
+        List<MaintenanceRequest> rs = Persistence.service().query(criteria);
+        if (rs.size() > 0) {
+            MaintenanceRequest req = rs.get(0);
+            req.surveyResponse().rating().setValue(rate);
+            Persistence.service().merge(req);
+            callback.onSuccess(null);
+        } else {
+            callback.onFailure(new Throwable("Ticket not found."));
         }
-
-        callback.onSuccess(dto);
-
-    }
-
-    @Override
-    public void getIssueRepairSubject(AsyncCallback<IssueElement> callback, IssueElement issueElement) {
-        issueElement.subjects().clear();
-
-        {
-            EntityQueryCriteria<IssueRepairSubject> criteria = EntityQueryCriteria.create(IssueRepairSubject.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().issueElement(), issueElement));
-            issueElement.subjects().addAll(Persistence.service().query(criteria));
-        }
-
-        callback.onSuccess(issueElement);
-    }
-
-    @Override
-    public void getIssueSubjectDetails(AsyncCallback<IssueRepairSubject> callback, IssueRepairSubject issueRepairSubject) {
-        issueRepairSubject.details().clear();
-
-        {
-            EntityQueryCriteria<IssueSubjectDetails> criteria = EntityQueryCriteria.create(IssueSubjectDetails.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().subject(), issueRepairSubject));
-            issueRepairSubject.details().addAll(Persistence.service().query(criteria));
-        }
-
-        callback.onSuccess(issueRepairSubject);
-    }
-
-    @Override
-    public void getIssueClassification(AsyncCallback<IssueSubjectDetails> callback, IssueSubjectDetails issueSubjectDetails) {
-        issueSubjectDetails.classifications().clear();
-
-        {
-            EntityQueryCriteria<IssueClassification> criteria = EntityQueryCriteria.create(IssueClassification.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().subjectDetails(), issueSubjectDetails));
-            issueSubjectDetails.classifications().addAll(Persistence.service().query(criteria));
-        }
-
-        callback.onSuccess(issueSubjectDetails);
-
     }
 
 }

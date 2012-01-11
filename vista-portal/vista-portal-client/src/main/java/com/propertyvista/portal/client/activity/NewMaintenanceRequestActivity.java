@@ -55,13 +55,15 @@ public class NewMaintenanceRequestActivity extends SecurityAwareActivity impleme
     @Override
     public void submit() {
         srv.createNewTicket(new DefaultAsyncCallback<VoidSerializable>() {
-
             @Override
             public void onSuccess(VoidSerializable result) {
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
             }
-
         }, request);
     }
 
+    @Override
+    public void cancel() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
+    }
 }

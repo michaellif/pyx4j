@@ -35,6 +35,7 @@ public interface MaintenanceView extends IsWidget {
 
         public void createNewRequest();
 
+        public void rateRequest(MaintananceDTO request, Integer rate);
     }
 
 }

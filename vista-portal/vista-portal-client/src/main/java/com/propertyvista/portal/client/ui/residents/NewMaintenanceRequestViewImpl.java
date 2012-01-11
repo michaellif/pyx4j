@@ -25,24 +25,26 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.ListBox;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
 public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaintenanceRequestView {
 
     private static I18n i18n = I18n.get(NewMaintenanceRequestViewImpl.class);
 
+    private final UserMessagePanel errorPanel;
+
     private final NewMaintenanceRequestForm form;
 
     private Presenter presenter;
 
     public NewMaintenanceRequestViewImpl() {
-        add(new UserMessagePanel());
+        // Input Error notification panel
+        errorPanel = new UserMessagePanel();
+        add(errorPanel);
 
         form = new NewMaintenanceRequestForm();
 
@@ -58,13 +60,12 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
 
             @Override
             public void onClick(ClickEvent event) {
-                // TODO use presenter
-                if (!form.isValid()) {
+                boolean formValid = form.isValid();
+                if (!formValid) {
                     form.setVisited(true);
                     Window.scrollTo(0, 0);
-                    AppSite.getEventBus().fireEvent(
-                            new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
-                                    UserMessageEvent.UserMessageType.ERROR));
+                    String msg = i18n.tr("The form was completed with errors outlined below. Please review and try again.");
+                    showError(msg);
                 } else {
                     presenter.submit();
                 }
@@ -78,8 +79,7 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
         cancelButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // TODO use presenter
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
+                presenter.cancel();
             }
         });
         buttonSet.setWidget(0, 1, cancelButton);
@@ -94,8 +94,15 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
 
     @Override
     public void populate(MaintenanceRequestDTO request) {
+        errorPanel.clearMessage();
+        form.reset();
         form.populate(request);
 
+    }
+
+    @Override
+    public void showError(String msg) {
+        errorPanel.setMessage(msg, UserMessageType.ERROR);
     }
 
     class Selector<E extends IEntity> extends ListBox {

@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
@@ -90,4 +91,12 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewTicket());
     }
 
+    @Override
+    public void rateRequest(MaintananceDTO request, Integer rate) {
+        srv.rateTicket(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+            }
+        }, request, rate);
+    }
 }

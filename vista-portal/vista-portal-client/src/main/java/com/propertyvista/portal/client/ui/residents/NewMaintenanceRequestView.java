@@ -23,9 +23,13 @@ public interface NewMaintenanceRequestView extends IsWidget {
 
     void populate(MaintenanceRequestDTO requests);
 
+    void showError(String msg);
+
     interface Presenter {
 
         public void submit();
+
+        public void cancel();
 
     }
 

@@ -18,6 +18,8 @@ import java.util.Vector;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -145,7 +147,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
             historyRequestsPanel.setHTML(row, 2, i18n.tr("Rate Service"));
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            for (MaintananceDTO request : historyRequests) {
+            for (final MaintananceDTO request : historyRequests) {
                 historyRequestsPanel.setHTML(++row, 0, request.description().getStringView());
                 historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
@@ -157,6 +159,14 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                 if (rate != null) {
                     rateIt.setRating(rate);
                 }
+                rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Integer> event) {
+                        presenter.rateRequest(request, event.getValue());
+                    }
+
+                });
                 historyRequestsPanel.setWidget(row, 2, rateIt);
 
                 historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());

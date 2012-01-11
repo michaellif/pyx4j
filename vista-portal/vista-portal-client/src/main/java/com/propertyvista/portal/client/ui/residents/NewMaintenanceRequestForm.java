@@ -38,6 +38,8 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<Maintena
 
     private static String defaultChoice = i18n.tr("Select");
 
+    private CEntityComboBox<IssueElement> mainCombo;
+
     public NewMaintenanceRequestForm() {
         super(MaintenanceRequestDTO.class);
         initContent();
@@ -76,7 +78,11 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<Maintena
         combo1.addValueChangeHandler(new ValueChangeHandler<IssueElement>() {
             @Override
             public void onValueChange(ValueChangeEvent<IssueElement> event) {
-                comboReset(combo2, PropertyCriterion.eq(combo2.proto().issueElement(), event.getValue()), defaultChoice);
+                if (event.getValue() != null) {
+                    comboReset(combo2, PropertyCriterion.eq(combo2.proto().issueElement(), event.getValue()), defaultChoice);
+                } else {
+                    comboClear(combo2, defaultRepairSubject);
+                }
                 // clear remaining selectors
                 comboClear(combo3, defaultSubjectDetails);
                 comboClear(combo4, defaultClassification);
@@ -86,7 +92,11 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<Maintena
         combo2.addValueChangeHandler(new ValueChangeHandler<IssueRepairSubject>() {
             @Override
             public void onValueChange(ValueChangeEvent<IssueRepairSubject> event) {
-                comboReset(combo3, PropertyCriterion.eq(combo3.proto().subject(), event.getValue()), defaultChoice);
+                if (event.getValue() != null) {
+                    comboReset(combo3, PropertyCriterion.eq(combo3.proto().subject(), event.getValue()), defaultChoice);
+                } else {
+                    comboClear(combo3, defaultSubjectDetails);
+                }
                 // clear remaining selectors
                 comboClear(combo4, defaultClassification);
             }
@@ -95,14 +105,23 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<Maintena
         combo3.addValueChangeHandler(new ValueChangeHandler<IssueSubjectDetails>() {
             @Override
             public void onValueChange(ValueChangeEvent<IssueSubjectDetails> event) {
-                comboReset(combo4, PropertyCriterion.eq(combo4.proto().subjectDetails(), event.getValue()), defaultChoice);
+                if (event.getValue() != null) {
+                    comboReset(combo4, PropertyCriterion.eq(combo4.proto().subjectDetails(), event.getValue()), defaultChoice);
+                } else {
+                    comboClear(combo4, defaultClassification);
+                }
             }
         });
 
         // Description
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
 
+        this.mainCombo = combo1;
         return content;
+    }
+
+    public void reset() {
+        mainCombo.setValue(null);
     }
 
     private void comboReset(CEntityComboBox<? extends IEntity> combo, PropertyCriterion crit, String title) {
