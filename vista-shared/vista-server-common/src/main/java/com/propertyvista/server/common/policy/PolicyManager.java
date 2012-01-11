@@ -44,7 +44,6 @@ public class PolicyManager {
     private static final List<Class<? extends PolicyNode>> HIERARCHY = Arrays.asList(AptUnit.class, Floorplan.class, Building.class, Complex.class,
             Province.class, Country.class, OrganizationPoliciesNode.class);
 
-    // TODO refactor this method -> change DTO to just list use DTO only in service
     /**
      * @param node
      * @return the list of effective policies, i.e. policies that are active at the specified node
