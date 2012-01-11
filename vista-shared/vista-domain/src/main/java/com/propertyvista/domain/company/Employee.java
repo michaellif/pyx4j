@@ -44,9 +44,11 @@ public interface Employee extends Person {
     CrmUser user();
 
     @Owned
+    @Detached
     IList<AssignedPortfolio> portfolios();
 
     @Owned
+    @Detached
     IList<ManagedEmployee> employees();
 
     @Owner

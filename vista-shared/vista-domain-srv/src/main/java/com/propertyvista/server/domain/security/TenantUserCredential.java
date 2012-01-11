@@ -26,13 +26,12 @@ import com.propertyvista.domain.security.VistaTenantBehavior;
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = TenantUser.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface TenantUserCredential extends AbstractUserCredential<TenantUser, VistaTenantBehavior> {
+public interface TenantUserCredential extends AbstractUserCredential<TenantUser> {
 
     @Override
     @Detached
     @MemberColumn(name = "usr")
     TenantUser user();
 
-    @Override
     IPrimitiveSet<VistaTenantBehavior> behaviors();
 }

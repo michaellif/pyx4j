@@ -44,7 +44,7 @@ import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.domain.security.AbstractUserCredential;
 
-public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U, ?>> extends
+public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
         com.pyx4j.security.server.AuthenticationServiceImpl {
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
@@ -131,12 +131,14 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         Set<Behavior> behaviors = new HashSet<Behavior>();
 
         behaviors.add(getApplicationBehavior());
-        behaviors.addAll(userCredential.behaviors());
+        addBehaviors(userCredential, behaviors);
 
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
         return VistaLifecycle.beginSession(visit, behaviors);
     }
+
+    protected abstract void addBehaviors(E userCredential, Set<Behavior> behaviors);
 
     @Override
     @IgnoreSessionToken

@@ -19,6 +19,7 @@ import java.util.EnumSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -43,9 +44,14 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         createRole("All", VistaCrmBehavior.values());
-        for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
-            createRole("Test-" + behavior.name(), behavior);
+        if (ApplicationMode.isDevelopment()) {
+            for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
+                createRole("Test-" + behavior.name(), behavior);
+            }
         }
+
+        //TODO Add roles reload with proper business names.
+
         return "Created " + rolesCount + " Roles";
     }
 

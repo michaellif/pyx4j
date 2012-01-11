@@ -13,24 +13,12 @@
  */
 package com.propertyvista.domain.security;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.security.shared.Behavior;
 
-@Caption(name = "Role")
-public interface CrmRole extends IEntity {
+public enum VistaDataAccessBehavior implements Behavior {
 
-    IPrimitive<String> name();
+    BuildingsAssigned,
 
-    IPrimitive<String> description();
-
-    @Caption(name = "Permissions")
-    IPrimitiveSet<VistaCrmBehavior> behaviors();
-
-    @MemberColumn(name = "rls")
-    ISet<CrmRole> roles();
+    BuildingsAll,
 
 }

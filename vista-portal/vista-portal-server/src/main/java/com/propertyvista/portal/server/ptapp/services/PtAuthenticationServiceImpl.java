@@ -13,6 +13,10 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
+import java.util.Set;
+
+import com.pyx4j.security.shared.Behavior;
+
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
@@ -28,6 +32,11 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
         return VistaBasicBehavior.ProspectiveApp;
+    }
+
+    @Override
+    protected void addBehaviors(TenantUserCredential userCredential, Set<Behavior> behaviors) {
+        behaviors.addAll(userCredential.behaviors());
     }
 
 }

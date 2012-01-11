@@ -13,9 +13,18 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.security.shared.Behavior;
+
 import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
+import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -28,6 +37,33 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
         return VistaBasicBehavior.CRM;
+    }
+
+    @Override
+    protected void addBehaviors(CrmUserCredential userCredential, Set<Behavior> behaviors) {
+
+        //TODO remove when switched to roles
+        behaviors.addAll(userCredential.behaviors());
+
+        addAllBehaviors(behaviors, userCredential.roles(), new HashSet<CrmRole>());
+
+        if (userCredential.accessAllBuildings().isBooleanTrue()) {
+            behaviors.add(VistaDataAccessBehavior.BuildingsAll);
+        } else {
+            behaviors.add(VistaDataAccessBehavior.BuildingsAssigned);
+        }
+
+    }
+
+    private void addAllBehaviors(Set<Behavior> behaviors, Collection<CrmRole> roles, Set<CrmRole> processed) {
+        for (CrmRole role : roles) {
+            if (!processed.contains(role)) {
+                Persistence.service().retrieve(role);
+                processed.add(role);
+                behaviors.addAll(role.behaviors());
+                addAllBehaviors(behaviors, role.roles(), processed);
+            }
+        }
     }
 
 }

@@ -97,6 +97,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.user().set(user);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
+        credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.behaviors().addAll(behaviors);
 
         Persistence.service().persist(credential);

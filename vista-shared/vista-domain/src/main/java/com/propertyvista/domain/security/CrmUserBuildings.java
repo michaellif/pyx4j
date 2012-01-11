@@ -13,24 +13,21 @@
  */
 package com.propertyvista.domain.security;
 
-import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
 
-@Caption(name = "Role")
-public interface CrmRole extends IEntity {
+import com.propertyvista.domain.property.asset.building.Building;
 
-    IPrimitive<String> name();
+public interface CrmUserBuildings extends IEntity {
 
-    IPrimitive<String> description();
+    @Indexed
+    @MemberColumn(name = "usr")
+    @JoinColumn
+    CrmUser user();
 
-    @Caption(name = "Permissions")
-    IPrimitiveSet<VistaCrmBehavior> behaviors();
-
-    @MemberColumn(name = "rls")
-    ISet<CrmRole> roles();
+    @JoinColumn
+    Building environment();
 
 }

@@ -23,20 +23,16 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.domain.security.AbstractUser;
 
 @AbstractEntity
 @RpcBlacklist
-public interface AbstractUserCredential<E extends AbstractUser, B extends Behavior> extends IEntity {
+public interface AbstractUserCredential<E extends AbstractUser> extends IEntity {
 
     @Detached
     @MemberColumn(name = "usr")
     E user();
-
-    IPrimitiveSet<B> behaviors();
 
     IPrimitive<Boolean> enabled();
 

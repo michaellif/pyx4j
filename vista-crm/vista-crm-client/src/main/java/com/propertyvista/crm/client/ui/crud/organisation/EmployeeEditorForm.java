@@ -118,6 +118,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Assigned Portfolios"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accessAllBuildings()), 5).build());
         main.setWidget(++row, 0, inject(proto().portfolios(), createPortfolioListView()));
 
         main.setH1(++row, 0, 2, i18n.tr("Managed Employees"));
