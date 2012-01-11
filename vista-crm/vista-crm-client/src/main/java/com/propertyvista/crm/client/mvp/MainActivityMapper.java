@@ -86,6 +86,8 @@ import com.propertyvista.crm.client.activity.crud.settings.ServiceItemTypeViewer
 import com.propertyvista.crm.client.activity.crud.settings.SiteActivity;
 import com.propertyvista.crm.client.activity.crud.settings.SiteEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.SiteViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
@@ -112,8 +114,8 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
-import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
@@ -557,6 +559,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new FeatureItemTypeViewerActivity(place);
                         break;
                     }
+
+                } else if (place instanceof CrmSiteMap.Settings.UserRole) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new CrmRoleEditorActivity(place);
+                        break;
+                    case viewer:
+                        break;
+                    case lister:
+                        activity = new CrmRoleListerActivity(place);
+                        break;
+
+                    }
+
 // - Complex:                    
                 } else if (place instanceof CrmSiteMap.Properties.Complex) {
                     switch (((CrudAppPlace) place).getType()) {

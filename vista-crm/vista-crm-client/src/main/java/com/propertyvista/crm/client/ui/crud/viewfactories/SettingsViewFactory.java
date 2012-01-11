@@ -30,6 +30,10 @@ import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEdito
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
+import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
@@ -52,7 +56,13 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new ServiceTypeViewerViewImpl());
             } else if (ServiceTypeEditorView.class.equals(type)) {
                 map.put(type, new ServiceTypeEditorViewImpl());
+
+            } else if (CrmRoleListerView.class.equals(type)) {
+                map.put(type, new CrmRoleListerViewImpl());
+            } else if (CrmRoleEditorView.class.equals(type)) {
+                map.put(type, new CrmRoleEditorViewImpl());
             }
+
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

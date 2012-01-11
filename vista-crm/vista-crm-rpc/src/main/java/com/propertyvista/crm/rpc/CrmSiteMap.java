@@ -301,7 +301,7 @@ public class CrmSiteMap implements SiteMap {
 
         @PlaceProperties(caption = "User Role")
         @NavigationItem(navigLabel = "User Role")
-        public static class UserRole extends AppPlace {
+        public static class UserRole extends CrudAppPlace {
         }
 
         @PlaceProperties(caption = "Service Dictionary")
