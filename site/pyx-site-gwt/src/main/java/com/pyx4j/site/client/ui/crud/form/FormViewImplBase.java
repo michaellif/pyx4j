@@ -113,7 +113,7 @@ public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel impleme
         LayoutPanel center = (LayoutPanel) getCenter();
         center.clear(); // remove current form...
 
-        if (form.asWidget() instanceof TabLayoutPanel) {
+        if (form.getWidget().getWidget() instanceof TabLayoutPanel) {
             center.add(this.form.getWidget());
         } else {
             center.add(new ScrollPanel(this.form.getWidget()));
