@@ -69,6 +69,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantScreening;
@@ -199,7 +200,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 //        }
 
         // Date Access
-        //grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingDatasetAccessRule(), Building.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingDatasetAccessRule(), Building.class);
 
         freeze();
     }
