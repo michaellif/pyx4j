@@ -35,6 +35,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
     private VistaDataPreloaders(boolean production) {
         add(new LocationPreloader());
         add(new ServiceCatalogPreloader());
+        add(new CrmRolesPreloader());
 
         if (production) {
             //DEMO add(new ProdSitePreloader());

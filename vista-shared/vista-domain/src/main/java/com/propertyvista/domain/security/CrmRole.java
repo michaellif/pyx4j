@@ -7,38 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on Jan 11, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.security;
+package com.propertyvista.domain.security;
 
-import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.RpcBlacklist;
-import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+@Caption(name = "Role")
+public interface CrmRole extends IEntity {
 
-@RpcBlacklist
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CrmUser.class)
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CrmUserCredential extends AbstractUserCredential<CrmUser, VistaCrmBehavior> {
+    IPrimitive<String> name();
 
-    @Override
-    @Detached
-    @MemberColumn(name = "usr")
-    CrmUser user();
+    IPrimitive<String> description();
 
-    @Override
-    @Deprecated
     IPrimitiveSet<VistaCrmBehavior> behaviors();
 
     @MemberColumn(name = "rls")
     IList<CrmRole> roles();
+
 }
