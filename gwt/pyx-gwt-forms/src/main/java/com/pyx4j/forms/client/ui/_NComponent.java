@@ -61,7 +61,7 @@ public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends C
     }
 
     public Button getTriggerButton() {
-        return triggerPanel.getTriggerButton();
+        return triggerPanel == null ? null : triggerPanel.getTriggerButton();
     }
 
     public HTML getViewer() {

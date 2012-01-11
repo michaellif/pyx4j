@@ -28,6 +28,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 
+import com.pyx4j.widgets.client.Button;
+
 public abstract class _NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOMP extends CTextComponent<DATA, ?>> extends
         _NFocusComponent<DATA, WIDGET, CCOMP> implements INativeTextComponent<DATA> {
 
@@ -71,7 +73,10 @@ public abstract class _NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOM
 
     @Override
     public void setEditable(boolean editable) {
-        getTriggerButton().setEnabled(editable);
+        Button triggerButton = getTriggerButton();
+        if (triggerButton != null) {
+            triggerButton.setEnabled(editable);
+        }
         if (!isViewable()) {
             getEditor().setReadOnly(!editable);
             if (editable) {
