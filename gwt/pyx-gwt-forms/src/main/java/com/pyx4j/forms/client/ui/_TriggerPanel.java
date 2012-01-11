@@ -50,6 +50,8 @@ public class _TriggerPanel extends HorizontalPanel implements HasDoubleClickHand
     public _TriggerPanel(final _NComponent<?, ?, ?> component, ImageResource triggerImage) {
         super();
 
+        setStyleName(DefaultCCOmponentsTheme.StyleName.TriggerPannel.name());
+
         this.component = component;
         component.getEditor().asWidget().setWidth("100%");
         add(component.getEditor());

@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultCCOmponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-
+        TriggerPannel
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -44,6 +44,7 @@ public class DefaultCCOmponentsTheme extends Theme {
     protected void initStyles() {
         initTextBoxStyle();
         initListBoxStyle();
+        initTriggerButtonStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -87,6 +88,16 @@ public class DefaultCCOmponentsTheme extends Theme {
         style.addProperty("border-color", "#f79494");
         style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
+    }
+
+    protected void initTriggerButtonStyle() {
+
+        Style style = new Style(".", StyleName.TriggerPannel, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("background", "transparent");
+        style.addProperty("border", "none");
+        style.addProperty("padding", "0");
+        addStyle(style);
+
     }
 
 }
