@@ -29,7 +29,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
+public class CTimeField extends CTextFieldBase<Time, _NTextBox<Time>> {
 
     protected static I18n i18n = I18n.get(CTimeField.class);
 
@@ -43,11 +43,13 @@ public class CTimeField extends CTextFieldBase<Time, NativeTextBox<Time>> {
         super(title);
         setTimeFormat(defaultTimeFormat);
         addValueValidator(new TextBoxParserValidator<Time>());
+        setWatermark("__:__ AM/PM");
+
     }
 
     @Override
-    protected NativeTextBox<Time> createWidget() {
-        return new NativeTextBox<Time>(this);
+    protected _NTextBox<Time> createWidget() {
+        return new _NTextBox<Time>(this);
     }
 
     public void setTimeFormat(String format) {

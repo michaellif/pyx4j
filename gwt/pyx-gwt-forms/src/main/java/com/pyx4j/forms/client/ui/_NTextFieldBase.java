@@ -24,11 +24,19 @@ import java.text.ParseException;
 
 import com.google.gwt.user.client.ui.ValueBoxBase;
 
+import com.pyx4j.widgets.client.WatermarkComponent;
+
 public abstract class _NTextFieldBase<DATA, WIDGET extends ValueBoxBase<?>> extends _NTextComponent<DATA, WIDGET, CTextFieldBase<DATA, ?>> implements
-        INativeTextComponent<DATA> {
+        INativeTextComponent<DATA>, WatermarkComponent {
 
     public _NTextFieldBase(CTextFieldBase<DATA, ?> cComponent) {
         super(cComponent);
+    }
+
+    @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
+        setWatermark(getCComponent().getWatermark());
     }
 
     @Override
@@ -54,6 +62,13 @@ public abstract class _NTextFieldBase<DATA, WIDGET extends ValueBoxBase<?>> exte
         } else {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
+        }
+    }
+
+    @Override
+    public void setWatermark(String watermark) {
+        if (getEditor() instanceof WatermarkComponent) {
+            ((WatermarkComponent) getEditor()).setWatermark(watermark);
         }
     }
 }

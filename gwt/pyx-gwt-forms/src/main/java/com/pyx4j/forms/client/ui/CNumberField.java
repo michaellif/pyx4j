@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
+public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, _NTextBox<E>> {
 
     private static I18n i18n = I18n.get(CNumberField.class);
 
@@ -44,8 +44,8 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
     }
 
     @Override
-    protected NativeTextBox<E> createWidget() {
-        return new NativeTextBox<E>(this);
+    protected _NTextBox<E> createWidget() {
+        return new _NTextBox<E>(this);
     }
 
     public void setRange(E from, E to) {

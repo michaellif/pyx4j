@@ -25,7 +25,7 @@ import java.text.ParseException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
+public class CPhoneField extends CTextFieldBase<String, _NTextBox<String>> {
 
     public CPhoneField() {
         this(null);
@@ -39,8 +39,8 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
     }
 
     @Override
-    protected NativeTextBox<String> createWidget() {
-        return new NativeTextBox<String>(this);
+    protected _NTextBox<String> createWidget() {
+        return new _NTextBox<String>(this);
     }
 
     public static class PhoneFormat implements IFormat<String> {
@@ -81,7 +81,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             }
-            String errorMessage = "Not a valid phone number. Must be in the format (123) 456-7890 x1234";
+            String errorMessage = "Invalid phone format. Use (123) 456-7890 x1234 format";
             if (!string.matches(regex)) {
                 throw new ParseException(errorMessage, 0);
             }
