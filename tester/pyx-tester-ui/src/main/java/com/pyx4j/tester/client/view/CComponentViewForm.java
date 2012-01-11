@@ -58,9 +58,19 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().componentValue())));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatory())));
+        TesterWidgetDecorator decorator = new TesterWidgetDecorator(inject(proto().mandatory()));
+        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+            @Override
+            public void onValueChange(ValueChangeEvent event) {
 
-        TesterWidgetDecorator decorator = new TesterWidgetDecorator(inject(proto().enabled()));
+                if (component != null)
+                    component.setMandatory(((Boolean) event.getValue()).booleanValue());
+            }
+
+        });
+        main.setWidget(++row, 0, decorator);
+
+        decorator = new TesterWidgetDecorator(inject(proto().enabled()));
         decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
@@ -70,12 +80,47 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
             }
 
         });
-
         main.setWidget(row, 1, decorator);
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().editable())));
-        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().visible())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().valid())));
-        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().toolTip())));
+
+        decorator = new TesterWidgetDecorator(inject(proto().editable()));
+        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+            @Override
+            public void onValueChange(ValueChangeEvent event) {
+
+                if (component != null)
+                    component.setEditable(((Boolean) event.getValue()).booleanValue());
+            }
+
+        });
+        main.setWidget(++row, 0, decorator);
+
+        decorator = new TesterWidgetDecorator(inject(proto().visible()));
+        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+            @Override
+            public void onValueChange(ValueChangeEvent event) {
+
+                if (component != null)
+                    component.setVisible(((Boolean) event.getValue()).booleanValue());
+            }
+
+        });
+        main.setWidget(row, 1, decorator);
+
+        decorator = new TesterWidgetDecorator(inject(proto().viewable()));
+        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+            @Override
+            public void onValueChange(ValueChangeEvent event) {
+
+                if (component != null)
+                    component.setViewable(((Boolean) event.getValue()).booleanValue());
+            }
+
+        });
+        main.setWidget(++row, 0, decorator);
+
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().valid())));
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().toolTip())));
 
         return main;
     }

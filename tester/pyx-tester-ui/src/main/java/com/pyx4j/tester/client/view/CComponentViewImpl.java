@@ -72,6 +72,7 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
                 properties.visible().setValue(editableComponent.isVisible());
                 properties.valid().setValue(editableComponent.isValid());
                 properties.toolTip().setValue(editableComponent.getTooltip());
+                properties.viewable().setValue(editableComponent.isViewable());
             }
 
             form.populate(properties);

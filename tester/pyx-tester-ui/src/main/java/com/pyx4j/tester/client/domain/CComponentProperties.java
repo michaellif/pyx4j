@@ -47,4 +47,6 @@ public interface CComponentProperties extends IEntity {
     @Editor(type = Editor.EditorType.label)
     IPrimitive<String> adapters();
 
+    IPrimitive<Boolean> viewable();
+
 }
