@@ -25,14 +25,12 @@ import java.text.ParseException;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
-public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INativeTextComponent<DATA_TYPE>> extends CTextComponent<DATA_TYPE, WIDGET_TYPE>
-        implements IAcceptText {
+public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptText {
 
-    private IFormat<DATA_TYPE> format;
+    private IFormat<DATA> format;
 
     public CTextFieldBase(String title) {
         super(title);
@@ -43,11 +41,11 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         this(null);
     }
 
-    public void setFormat(IFormat<DATA_TYPE> format) {
+    public void setFormat(IFormat<DATA> format) {
         this.format = format;
     }
 
-    public IFormat<DATA_TYPE> getFormat() {
+    public IFormat<DATA> getFormat() {
         return format;
     }
 
@@ -65,7 +63,7 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    INativeComponent<DATA_TYPE> impl = getWidget();
+                    INativeComponent<DATA> impl = getWidget();
                     if (impl instanceof FocusWidget) {
                         ((FocusWidget) impl).setFocus(true);
                     }
@@ -85,7 +83,7 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
     }
 
     @Override
-    public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
+    public boolean isValuesEquals(DATA value1, DATA value2) {
         //This takes in consideration that 2 values can be null but actual state of component is not empty after failed parsing
         return value1 != null && value1 == value2;
     }

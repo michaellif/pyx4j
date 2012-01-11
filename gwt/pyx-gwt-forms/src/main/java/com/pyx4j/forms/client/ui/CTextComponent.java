@@ -20,13 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeFocusComponent<DATA_TYPE>> extends CFocusComponent<DATA_TYPE, WIDGET_TYPE> {
+public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends INativeFocusComponent<DATA_TYPE>> extends CFocusComponent<DATA_TYPE, WIDGET_TYPE> {
 
     private TextComponentLengthValidator validator;
 

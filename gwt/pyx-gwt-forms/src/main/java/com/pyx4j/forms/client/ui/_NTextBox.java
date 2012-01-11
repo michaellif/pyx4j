@@ -20,117 +20,17 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
-
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-
 import com.pyx4j.widgets.client.TextBox;
 
-public class _NTextBox<DATA> extends _NFocusComponent<DATA, TextBox, CTextFieldBase<DATA, ?>> implements INativeTextComponent<DATA> {
+public class _NTextBox<DATA> extends _NTextFieldBase<DATA, TextBox> implements INativeTextComponent<DATA> {
 
     public _NTextBox(CTextFieldBase<DATA, ?> cComponent) {
         super(cComponent);
     }
 
     @Override
-    protected TextBox initEditor() {
+    protected TextBox createEditor() {
         return new TextBox();
-    }
-
-    @Override
-    protected void onEditorInit() {
-        super.onEditorInit();
-        getEditor().addKeyDownHandler(new KeyDownHandler() {
-            @Override
-            public void onKeyDown(KeyDownEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    getCComponent().onEditingStop();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void setNativeValue(DATA value) {
-        String newValue = value == null ? "" : getCComponent().getFormat().format(value);
-        if (isViewable()) {
-            getViewer().setHTML(newValue);
-        } else {
-            if (!newValue.equals(getEditor().getText())) {
-                getEditor().setText(newValue);
-            }
-        }
-    }
-
-    @Override
-    public DATA getNativeValue() throws ParseException {
-        if (!isViewable()) {
-            try {
-                return getCComponent().getFormat().parse(getEditor().getText());
-            } catch (ParseException e) {
-                throw e;
-            }
-        } else {
-            assert false : "getNativeValue() shouldn't be called in viewable mode";
-            return null;
-        }
-    }
-
-    @Override
-    @Deprecated
-    public void setNativeText(String newValue) {
-        assert false : "setNativeText shouldn't be called";
-    }
-
-    @Override
-    public String getNativeText() {
-        if (!isViewable()) {
-            return getEditor().getText();
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        if (!isViewable()) {
-            getEditor().setReadOnly(!editable);
-            if (editable) {
-                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
-            } else {
-                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
-            }
-        }
-    }
-
-    @Override
-    public boolean isEditable() {
-        return !getEditor().isReadOnly();
-    }
-
-    @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return getEditor().addChangeHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return getEditor().addKeyDownHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return getEditor().addKeyUpHandler(handler);
-    }
-
-    @Override
-    protected void onViewerInit() {
-
     }
 
 }

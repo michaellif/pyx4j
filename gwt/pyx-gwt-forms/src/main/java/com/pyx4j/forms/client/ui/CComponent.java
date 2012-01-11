@@ -261,11 +261,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public boolean isViewable() {
         for (IAccessAdapter adapter : accessAdapters) {
-            if (!adapter.isViewable(this)) {
-                return false;
+            if (adapter.isViewable(this)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public void setViewable(boolean viewable) {
@@ -293,7 +293,17 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
-            addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
+            if (mandatory) {
+                addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
+            } else {
+                EditableValueValidator<? super DATA_TYPE> mandatoryValidator = null;
+                for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
+                    if (validator instanceof MandatoryValidator) {
+                        mandatoryValidator = validator;
+                    }
+                }
+                removeValueValidator(mandatoryValidator);
+            }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
             revalidate();
         }
@@ -439,7 +449,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
         ValidationFailure newValidationFailure = null;
 
-        if (isVisible() && isEditable() && isEnabled()) {
+        if (isVisible() && isEditable() && isEnabled() && !isViewable()) {
             newValidationFailure = getValidationResult();
         }
 

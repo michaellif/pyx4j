@@ -42,7 +42,6 @@ public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CCo
         this.cComponent = cComponent;
 
         setViewable(cComponent.isViewable());
-        setNativeValue(cComponent.getValue());
 
     }
 
@@ -72,24 +71,44 @@ public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CCo
         }
     }
 
-    protected abstract WIDGET initEditor();
+    protected abstract WIDGET createEditor();
 
-    protected HTML initViewer() {
+    protected HTML createViewer() {
         return new HTML();
     }
 
-    protected abstract void onEditorInit();
+    protected void onEditorCreate() {
 
-    protected abstract void onViewerInit();
+    }
+
+    protected void onEditorInit() {
+        setNativeValue(cComponent.getValue());
+    }
+
+    protected void onViewerCreate() {
+
+    }
+
+    protected void onViewerInit() {
+        setNativeValue(cComponent.getValue());
+    }
 
     @Override
     public void setViewable(boolean viewable) {
         this.viewable = viewable;
         if (viewable) {
-            viewer = initViewer();
+            if (viewer == null) {
+                viewer = createViewer();
+                onViewerCreate();
+            }
+            onViewerInit();
             setWidget(viewer);
         } else {
-            editor = initEditor();
+            if (editor == null) {
+                editor = createEditor();
+                onEditorCreate();
+            }
+            onEditorInit();
             editor.setWidth(getCComponent().getWidth());
             setWidget(editor);
         }

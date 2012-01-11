@@ -36,17 +36,18 @@ public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP e
     }
 
     @Override
-    protected void onEditorInit() {
+    protected void onEditorCreate() {
+        super.onEditorCreate();
         getEditor().setTabIndex(getCComponent().getTabIndex());
 
-        addFocusHandler(new FocusHandler() {
+        getEditor().addFocusHandler(new FocusHandler() {
             @Override
             public void onFocus(FocusEvent event) {
                 getCComponent().onEditingStart();
             }
         });
 
-        addBlurHandler(new BlurHandler() {
+        getEditor().addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent event) {
                 getCComponent().onEditingStop();

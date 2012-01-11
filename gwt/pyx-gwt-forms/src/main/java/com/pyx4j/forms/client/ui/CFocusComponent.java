@@ -20,6 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 
 public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent<DATA>> extends CComponent<DATA, WIDGET> {
 
@@ -64,4 +68,26 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
         }
     }
 
+    @Override
+    @Deprecated
+    //TDOD !!!! Remove after all TEXT components migrated
+    protected void onWidgetCreated() {
+        super.onWidgetCreated();
+        WIDGET widget = super.getWidget();
+        widget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                onEditingStart();
+            }
+        });
+
+        widget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                onEditingStop();
+            }
+        });
+    }
 }
