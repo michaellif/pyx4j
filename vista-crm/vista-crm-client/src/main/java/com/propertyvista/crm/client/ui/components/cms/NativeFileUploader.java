@@ -24,11 +24,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
-import com.pyx4j.forms.client.ui.NativeTriggerComponent;
+import com.pyx4j.forms.client.ui.TriggerComponent;
 
 import com.propertyvista.domain.File;
 
-public class NativeFileUploader extends NativeTriggerComponent<File> implements INativeComponent<File> {
+public class NativeFileUploader extends TriggerComponent<File> implements INativeComponent<File> {
 
     private final Anchor hyperlink;
 
@@ -49,18 +49,6 @@ public class NativeFileUploader extends NativeTriggerComponent<File> implements 
     public void setFocus(boolean focused) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -145,6 +133,18 @@ public class NativeFileUploader extends NativeTriggerComponent<File> implements 
     protected void onTrigger(boolean show) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
