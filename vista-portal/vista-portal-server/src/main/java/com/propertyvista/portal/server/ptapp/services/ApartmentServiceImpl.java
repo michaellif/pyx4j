@@ -36,6 +36,7 @@ import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
@@ -43,6 +44,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
+import com.propertyvista.server.common.policy.PolicyManager;
 import com.propertyvista.server.common.util.AddressConverter;
 
 public class ApartmentServiceImpl implements ApartmentService {
@@ -162,6 +164,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         aptInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
         aptInfo.leaseTo().setValue(lease.leaseTo().getValue());
         aptInfo.unitRent().setValue(lease.serviceAgreement().serviceItem().item().price().getValue());
+
+        // policy limits:
+        MiscPolicy miscPolicy = (MiscPolicy) PolicyManager.effectivePolicy(lease.unit(), MiscPolicy.class);
+        if (miscPolicy == null) {
+            throw new Error("There is no MiscPolicy for the Unit!?.");
+        }
+
+        aptInfo.maxParkingSpots().setValue(miscPolicy.maxParkingSpots().getValue());
+        aptInfo.maxPets().setValue(miscPolicy.maxPets().getValue());
 
         return aptInfo;
     }

@@ -60,7 +60,7 @@ public interface ApartmentInfoDTO extends IEntity {
 
     Media picture();
 
-    // Service Catalogue stuff:
+    // Service Catalog stuff:
     IList<ServiceItemType> includedUtilities();
 
     IList<ServiceItemType> externalUtilities();
@@ -95,4 +95,9 @@ public interface ApartmentInfoDTO extends IEntity {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<Double> unitRent();
+
+    // limits:
+    IPrimitive<Integer> maxParkingSpots();
+
+    IPrimitive<Integer> maxPets();
 }

@@ -38,8 +38,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
     private final ApartmentViewForm apartmentViewForm;
 
-    // TODO obtain this value somewhere!.. 
-    private final int maxCount = 2;
+    private int maxCount;
 
     public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(ChargeItem.class, modifiable);
@@ -48,6 +47,14 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
+    }
+
+    protected int getMaxCount() {
+        return maxCount;
+    };
+
+    protected void setMaxCount(int maxCount) {
+        this.maxCount = maxCount;
     }
 
     @Override
@@ -69,12 +76,12 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     @Override
     protected void addItem() {
         if (apartmentViewForm != null) {
-            if (getValue().size() < maxCount) {
+            if (getValue().size() < getMaxCount()) {
                 new SelectFeatureBox(type, apartmentViewForm.getValue()) {
                     @Override
                     public boolean onClickOk() {
                         for (ServiceItem item : getSelectedItems()) {
-                            if (getValue().size() < maxCount) {
+                            if (getValue().size() < getMaxCount()) {
                                 ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                                 newItem.item().set(item);
                                 newItem.originalPrice().setValue(item.price().getValue());
@@ -86,7 +93,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                     }
                 }.show();
             } else {
-                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more than {0} items here!", maxCount));
+                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
             }
         }
     }
@@ -99,7 +106,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                 if (value == null) {
                     return null;
                 }
-                return (value.size() < maxCount) ? null : new ValidationFailure(i18n.tr("You cannot add more than {0} items here!", maxCount));
+                return (value.size() < getMaxCount()) ? null : new ValidationFailure(i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
             }
         });
         super.addValidations();

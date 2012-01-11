@@ -33,9 +33,7 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -50,7 +48,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantName(), "35em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.percentage(), "5em"));
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "7em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount().amount(), "7em"));
     }
 
     @Override
@@ -66,8 +64,8 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantCharge) {
             return new TenantChargeEditor();
-        } else if (member.getValueClass().equals(Money.class)) {
-            return new CMoneyLabel();
+//        } else if (member.getValueClass().equals(Money.class)) {
+//            return new CMoneyLabel();
         }
         return super.create(member);
     }

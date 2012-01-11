@@ -58,6 +58,10 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
     private final HTML welcome = new HTML();
 
+    private FeatureExFolder petFolder;
+
+    private FeatureExFolder parkingFolder;
+
     public ApartmentViewForm() {
         super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
         setEditable(false);
@@ -134,11 +138,11 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         main.setH1(++row, 0, 1, i18n.tr("Add-Ons"));
 
         petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
-        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), new FeatureExFolder(Feature.Type.pet, this, true)));
+        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), petFolder = new FeatureExFolder(Feature.Type.pet, this, true)));
         main.setWidget(++row, 0, petsPanel);
 
         parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
-        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), new FeatureExFolder(Feature.Type.parking, this, true)));
+        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), parkingFolder = new FeatureExFolder(Feature.Type.parking, this, true)));
         main.setWidget(++row, 0, parkingPanel);
 
         storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
@@ -172,5 +176,9 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         parkingPanel.setVisible(!getValue().agreedParking().isEmpty() || !getValue().availableParking().isEmpty());
         storagePanel.setVisible(!getValue().agreedStorage().isEmpty() || !getValue().availableStorage().isEmpty());
         otherPanel.setVisible(!getValue().agreedOther().isEmpty() || !getValue().availableOther().isEmpty());
+
+        // set maximum limits:
+        petFolder.setMaxCount(getValue().maxPets().getValue());
+        parkingFolder.setMaxCount(getValue().maxParkingSpots().getValue());
     }
 }

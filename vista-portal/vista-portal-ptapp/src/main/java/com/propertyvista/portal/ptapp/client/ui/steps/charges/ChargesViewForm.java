@@ -31,7 +31,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
@@ -103,8 +102,8 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
         totalRow.add(DecorationUtils.inline(total, "40.5em", null));
-        totalRow.add(DecorationUtils.inline(form.inject(member, new CMoneyLabel()), "7em"));
-        form.get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        totalRow.add(DecorationUtils.inline(form.inject(member.amount()/* , new CMoneyLabel() */), "7em"));
+        form.get(member.amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
         return totalRow;
     }
 
