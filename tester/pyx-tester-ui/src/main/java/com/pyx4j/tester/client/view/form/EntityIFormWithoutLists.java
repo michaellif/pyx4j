@@ -53,6 +53,13 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setHR(++row, 0, 1);
 
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextAreaI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextAreaII())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaII())));
+
+        main.setHR(++row, 0, 1);
+
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalInteger())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryInteger())));
 

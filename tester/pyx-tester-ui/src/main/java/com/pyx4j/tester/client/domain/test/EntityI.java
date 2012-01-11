@@ -57,6 +57,20 @@ public interface EntityI extends IEntity {
     @NotNull
     IPrimitive<String> mandatoryTextII();
 
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> optionalTextAreaI();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> optionalTextAreaII();
+
+    @Editor(type = EditorType.textarea)
+    @NotNull
+    IPrimitive<String> mandatoryTextAreaI();
+
+    @Editor(type = EditorType.textarea)
+    @NotNull
+    IPrimitive<String> mandatoryTextAreaII();
+
     IPrimitive<Integer> optionalInteger();
 
     @NotNull

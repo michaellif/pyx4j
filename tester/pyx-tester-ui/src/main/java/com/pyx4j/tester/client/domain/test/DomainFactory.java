@@ -33,6 +33,9 @@ public class DomainFactory {
         retVal.optionalInteger().setValue(counter++);
         retVal.optionalEnum().setValue(EntityI.Enum1.Value0);
 
+        retVal.optionalTextAreaII().setValue("Optional Text Area Member");
+        retVal.mandatoryTextAreaII().setValue("Mandatory Text Area Member");
+
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());
