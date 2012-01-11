@@ -15,6 +15,8 @@ package com.propertyvista.domain.company;
 
 import com.pyx4j.entity.shared.IEntity;
 
+//Remove this class use list directly in Employee
+@Deprecated
 public interface ManagedEmployee extends IEntity {
 
     Employee employee();
