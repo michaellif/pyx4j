@@ -165,6 +165,10 @@ class TableDDL {
         }
         sql.append(" ON ").append(tableName).append(" (");
         boolean first = true;
+        if (dialect.isMultitenant()) {
+            sql.append(" ns ");
+            first = false;
+        }
         for (String column : columnsSorted) {
             if (first) {
                 first = false;
