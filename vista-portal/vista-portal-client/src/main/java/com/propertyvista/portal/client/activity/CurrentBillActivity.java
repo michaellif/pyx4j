@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,7 +26,6 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.client.ui.residents.CurrentBillView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
@@ -63,26 +62,26 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         ChargeLine cLine = EntityFactory.create(ChargeLine.class);
         cLine.type().setValue(ChargeType.monthlyRent);
         cLine.label().setValue(ChargeType.monthlyRent.toString());
-        cLine.amount().amount().setValue(1200d);
+        cLine.amount().setValue(1200d);
         bill.charges().add(cLine);
 
         ChargeLine cLine2 = EntityFactory.create(ChargeLine.class);
         cLine2.label().setValue("Parking");
-        cLine2.amount().amount().setValue(100d);
+        cLine2.amount().setValue(100d);
         bill.charges().add(cLine2);
 
         ChargeLine cLine3 = EntityFactory.create(ChargeLine.class);
         cLine3.label().setValue("Locker");
-        cLine3.amount().amount().setValue(100d);
+        cLine3.amount().setValue(100d);
         bill.charges().add(cLine3);
 
         ChargeLine cLine4 = EntityFactory.create(ChargeLine.class);
         cLine4.label().setValue("Cable TV");
-        cLine4.amount().amount().setValue(90d);
+        cLine4.amount().setValue(90d);
         bill.charges().add(cLine4);
 
         bill.dueDate().setValue(new LogicalDate(new Date()));
-        bill.total().set(DomainUtil.createMoney(1490d));
+        bill.total().setValue(1490d);
         view.populate(bill);
 
         panel.setWidget(view);

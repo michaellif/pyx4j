@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -35,7 +36,6 @@ import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
@@ -92,7 +92,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         splitCharges.setVisible(getValue().paymentSplitCharges().charges().size() > 1);
     }
 
-    private static Widget createTotal(CEntityEditor<?> form, Money member) {
+    private static Widget createTotal(CEntityEditor<?> form, IPrimitive<Double> member) {
         FlowPanel totalRow = new FlowPanel();
 
         Widget sp = new VistaLineSeparator(48, Unit.EM);
@@ -102,8 +102,8 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
         totalRow.add(DecorationUtils.inline(total, "40.5em", null));
-        totalRow.add(DecorationUtils.inline(form.inject(member.amount()/* , new CMoneyLabel() */), "7em"));
-        form.get(member.amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        totalRow.add(DecorationUtils.inline(form.inject(member/* , new CMoneyLabel() */), "7em"));
+        form.get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
         return totalRow;
     }
 

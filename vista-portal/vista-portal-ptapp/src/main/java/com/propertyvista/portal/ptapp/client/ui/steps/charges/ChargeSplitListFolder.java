@@ -48,7 +48,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantName(), "35em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.percentage(), "5em"));
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount().amount(), "7em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.amount(), "7em"));
     }
 
     @Override

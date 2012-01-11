@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -52,7 +52,7 @@ public class ChargesSharedCalculation {
             pet.chargeLine().label().setValue("One time");
             break;
         }
-        pet.chargeLine().amount().set(DomainUtil.createMoney(petChargeRule.value().getValue()));
+        pet.chargeLine().amount().setValue(petChargeRule.value().getValue().doubleValue());
         return true;
     }
 
@@ -76,7 +76,7 @@ public class ChargesSharedCalculation {
     }
 
     private static ChargeLine calculateProrateCharge(Date rentStart, ChargeLine charge) {
-        double monthly = charge.amount().amount().getValue();
+        double monthly = charge.amount().getValue();
 
         // month end
         int currentDay = rentStart.getDate();
@@ -96,7 +96,7 @@ public class ChargesSharedCalculation {
         ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
         proratedCharge.type().setValue(ChargeType.prorated);
         proratedCharge.label().setValue(sb.toString());
-        proratedCharge.amount().set(DomainUtil.createMoney(proratedTotal));
+        proratedCharge.amount().setValue(proratedTotal);
 
         return proratedCharge;
     }
@@ -119,7 +119,7 @@ public class ChargesSharedCalculation {
     public static boolean calculatePaymentSplitCharges(Charges charges) {
         int totalSplitPrc = -1; // sum %, paid by co-applicants
 
-        // check % correctness: 
+        // check % correctness:
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             if (totalSplitPrc == -1) { // first (main) applicant
                 totalSplitPrc = 0; // reset first (main) applicant flag
@@ -141,16 +141,15 @@ public class ChargesSharedCalculation {
             if (mainApplicantCharge == null) {
                 mainApplicantCharge = charge;
             } else {
-                charge.amount().amount()
-                        .setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().amount().getValue() * charge.percentage().getValue() / 100d));
+                charge.amount().setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().getValue() * charge.percentage().getValue() / 100d));
 
                 totalSplitPrc += charge.percentage().getValue();
-                totalSplitVal += charge.amount().amount().getValue();
+                totalSplitVal += charge.amount().getValue();
             }
         }
 
         if (mainApplicantCharge != null) {
-            mainApplicantCharge.amount().amount().setValue(charges.monthlyCharges().total().amount().getValue() - totalSplitVal);
+            mainApplicantCharge.amount().setValue(charges.monthlyCharges().total().getValue() - totalSplitVal);
             mainApplicantCharge.percentage().setValue(100 - totalSplitPrc);
         }
 
@@ -161,17 +160,17 @@ public class ChargesSharedCalculation {
     public static void calculateTotal(ChargeLineList charges) {
         double total = 0d;
         for (Charge charge : charges.charges()) {
-            total += charge.amount().amount().getValue();
+            total += charge.amount().getValue();
         }
-        charges.total().set(DomainUtil.createMoney(total));
+        charges.total().setValue(total);
     }
 
     public static void calculateTotal(TenantChargeList charges) {
         double total = 0d;
         for (Charge charge : charges.charges()) {
-            total += charge.amount().amount().getValue();
+            total += charge.amount().getValue();
         }
-        charges.total().set(DomainUtil.createMoney(total));
+        charges.total().setValue(total);
     }
 
 }

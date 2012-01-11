@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -181,7 +181,7 @@ public class VistaDataPrinter {
             sb.append(pet.color().getStringView()).append(" ");
             sb.append(pet.breed().getStringView()).append(" ");
             sb.append(pet.weight().getValue()).append(" ").append(pet.weightUnit().getValue()).append(" $");
-            sb.append(pet.chargeLine().amount().amount().getValue());
+            sb.append(pet.chargeLine().amount().getValue());
         }
         return sb.toString();
     }
@@ -236,40 +236,40 @@ public class VistaDataPrinter {
         sb.append("Monthly\n");
         for (ChargeLine line : charges.monthlyCharges().charges()) {
             sb.append("\t$");
-            sb.append(line.amount().amount().getStringView());
+            sb.append(line.amount().getStringView());
             sb.append(" \t");
             sb.append(line.type().getStringView());
             sb.append("\n");
         }
 
         sb.append("Total \n\t$");
-        sb.append(charges.monthlyCharges().total().amount().getStringView());
+        sb.append(charges.monthlyCharges().total().getStringView());
         sb.append("\n");
 
-        sb.append("\nPro-Rated ").append(charges.proratedCharges().total().amount().getStringView()).append("\n");
+        sb.append("\nPro-Rated ").append(charges.proratedCharges().total().getStringView()).append("\n");
         for (ChargeLine line : charges.proratedCharges().charges()) {
             sb.append("\t$");
-            sb.append(line.amount().amount().getStringView());
+            sb.append(line.amount().getStringView());
             sb.append(" \t").append(line.label().getStringView());
             sb.append("\n");
         }
 
-        sb.append("\nApplication Charges ").append(charges.applicationCharges().total().amount().getStringView()).append("\n");
+        sb.append("\nApplication Charges ").append(charges.applicationCharges().total().getStringView()).append("\n");
         for (ChargeLine line : charges.applicationCharges().charges()) {
             sb.append("\t$");
-            sb.append(line.amount().amount().getStringView());
+            sb.append(line.amount().getStringView());
             sb.append(" \t");
             sb.append(line.type().getStringView());
             sb.append("\n");
         }
 
-        sb.append("\nTenants Payment Split ").append(charges.paymentSplitCharges().total().amount().getStringView()).append("\n");
+        sb.append("\nTenants Payment Split ").append(charges.paymentSplitCharges().total().getStringView()).append("\n");
         for (TenantCharge line : charges.paymentSplitCharges().charges()) {
             sb.append("\t").append(line.tenant().relationship().getStringView());
             sb.append(" ").append(line.tenant().tenant().person().name().firstName().getStringView()).append(" ")
                     .append(line.tenant().tenant().person().name().lastName().getStringView());
             sb.append(" \t").append(line.percentage().getValue()).append("% $");
-            sb.append(line.amount().amount().getValue());
+            sb.append(line.amount().getValue());
             sb.append("\n");
         }
 

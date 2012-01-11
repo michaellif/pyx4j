@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,12 +33,10 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
 import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
-import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
@@ -135,7 +134,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         }
     }
 
-    private Widget createTotal(Money member) {
+    private Widget createTotal(IPrimitive<Double> member) {
         FlowPanel totalRow = new FlowPanel();
 
         Widget sp = new VistaLineSeparator(48, Unit.EM);
@@ -146,7 +145,7 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
         totalRow.add(DecorationUtils.inline(total, "40.5em", null));
-        totalRow.add(DecorationUtils.inline(inject(member, new CMoneyLabel()), "7em"));
+        totalRow.add(DecorationUtils.inline(inject(member/* , new CMoneyLabel() */), "7em"));
         get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         return totalRow;

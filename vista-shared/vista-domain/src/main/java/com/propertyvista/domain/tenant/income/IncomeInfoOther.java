@@ -15,15 +15,19 @@ package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-
-import com.propertyvista.domain.financial.Money;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("other")
 @Caption(name = "Income Information Other")
 public interface IncomeInfoOther extends IEntity, IIncomeInfo {
     @Override
     @NotNull
-    Money monthlyAmount();
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> monthlyAmount();
 }

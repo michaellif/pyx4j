@@ -64,7 +64,8 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
 
         container.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
         container.setHR(++row, 0, 1);
-        container.setWidget(++row, 0, inject(proto().total(), new TotalLineViewer()));
+        //TODO review later (display total)
+        container.setWidget(++row, 0, inject(proto().total()/* , new TotalLineViewer() */));
         container.setWidget(++row, 0, inject(proto().dueDate(), new DueDateViewer()));
         container.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodViewer()));
         container.setWidget(++row, 0, inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));

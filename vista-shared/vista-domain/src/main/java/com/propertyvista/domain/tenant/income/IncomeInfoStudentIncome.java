@@ -16,6 +16,8 @@ package com.propertyvista.domain.tenant.income;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -24,7 +26,6 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.financial.Money;
 
 @DiscriminatorValue("student")
 @Caption(name = "Income Information Student Income")
@@ -58,7 +59,9 @@ public interface IncomeInfoStudentIncome extends IIncomeInfo {
     @Override
     @Caption(name = "Gross Monthly Amount")
     @NotNull
-    Money monthlyAmount();
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> monthlyAmount();
 
     @Override
     @Caption(name = "Program Start")

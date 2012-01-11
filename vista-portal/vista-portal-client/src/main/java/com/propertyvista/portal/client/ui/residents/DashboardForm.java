@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -209,7 +209,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             dataPanel.setHTML(++row, 0, value.ammount().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, "$" + value.ammount().amount().getValue());
+            dataPanel.setHTML(row, 1, "$" + value.ammount().getValue());
 
             dataPanel.setHTML(++row, 0, value.dueDate().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
@@ -219,7 +219,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             dataPanel.setHTML(++row, 0, value.lastPayment().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, "$" + value.lastPayment().amount().getValue());
+            dataPanel.setHTML(row, 1, "$" + value.lastPayment().getValue());
 
             dataPanel.setHTML(++row, 0, value.receivedOn().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());

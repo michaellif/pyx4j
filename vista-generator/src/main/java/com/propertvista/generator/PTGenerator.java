@@ -160,7 +160,7 @@ public class PTGenerator {
         employer.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
         employer.supervisorPhone().setValue(RandomUtil.randomPhone());
-        employer.monthlyAmount().set(DomainUtil.createMoney(1000d + RandomUtil.randomInt(4000)));
+        employer.monthlyAmount().setValue(1000d + RandomUtil.randomInt(4000));
         employer.position().setValue(RandomUtil.random(PreloadData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);
@@ -180,7 +180,7 @@ public class PTGenerator {
         selfEmpl.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         selfEmpl.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
         selfEmpl.supervisorPhone().setValue(RandomUtil.randomPhone());
-        selfEmpl.monthlyAmount().set(DomainUtil.createMoney(1000d + RandomUtil.randomInt(4000)));
+        selfEmpl.monthlyAmount().setValue(1000d + RandomUtil.randomInt(4000));
         selfEmpl.position().setValue(RandomUtil.random(PreloadData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);
@@ -491,7 +491,7 @@ public class PTGenerator {
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
             asset.percent().setValue((double) RandomUtil.randomInt(100));
-            asset.assetValue().setValue(DomainUtil.createMoney(100d + RandomUtil.randomInt(10000)).getValue());
+            asset.assetValue().setValue(500 + RandomUtil.randomDouble(500));
 
             ts.assets().add(asset);
         }

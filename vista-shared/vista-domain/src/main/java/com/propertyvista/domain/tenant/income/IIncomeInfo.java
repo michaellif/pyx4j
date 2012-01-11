@@ -16,14 +16,14 @@ package com.propertyvista.domain.tenant.income;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-
-import com.propertyvista.domain.financial.Money;
 
 /**
  * General required information for all Income types.
@@ -37,7 +37,9 @@ public interface IIncomeInfo extends IEntity {
     IPrimitive<String> name();
 
     @NotNull
-    Money monthlyAmount();
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> monthlyAmount();
 
     /**
      * Start of income period. For employment that would be employment start date.

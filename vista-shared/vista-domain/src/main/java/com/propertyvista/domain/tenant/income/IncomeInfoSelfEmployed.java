@@ -15,10 +15,11 @@ package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
-
-import com.propertyvista.domain.financial.Money;
 
 @DiscriminatorValue("selfEmployed")
 @Caption(name = "Income Information Self Employed")
@@ -36,12 +37,16 @@ public interface IncomeInfoSelfEmployed extends IEmploymentInfo {
     IPrimitive<Boolean> fullyOwned();
 
     @Caption(name = "Monthly Revenue")
-    Money monthlyRevenue();
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> monthlyRevenue();
 
     @Override
     @Caption(name = "Monthly Salary/Dividend")
     @NotNull
-    Money monthlyAmount();
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> monthlyAmount();
 
     @Caption(name = "Number Of Employees")
     IPrimitive<Integer> numberOfEmployees();

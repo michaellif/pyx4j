@@ -14,6 +14,9 @@
 package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -21,8 +24,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
-
-import com.propertyvista.domain.financial.Money;
 
 @Caption(name = "Personal Asset(s)")
 public interface PersonalAsset extends IEntity {
@@ -69,6 +70,8 @@ public interface PersonalAsset extends IEntity {
     IPrimitive<Double> percent();
 
     @NotNull
+    @Format("#0.00")
     @Caption(name = "Current Value")
-    Money assetValue();
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> assetValue();
 }
