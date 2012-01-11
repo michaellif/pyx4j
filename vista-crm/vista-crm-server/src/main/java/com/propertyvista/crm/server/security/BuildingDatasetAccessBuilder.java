@@ -7,25 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 28, 2011
+ * Created on Jan 11, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.util;
+package com.propertyvista.crm.server.security;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.common.security.VistaContext;
 
-public class CrmAppContext extends VistaContext {
+public class BuildingDatasetAccessBuilder {
 
-    public static Employee getCurrentUserEmployee() {
+    public static void updateAccessList(CrmUser user) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), VistaContext.getCurrentUser()));
-        return Persistence.service().retrieve(criteria);
+        Employee employee = Persistence.service().retrieve(criteria);
     }
-
 }

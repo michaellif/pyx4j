@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
+import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -51,6 +52,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
             behaviors.add(VistaDataAccessBehavior.BuildingsAll);
         } else {
             behaviors.add(VistaDataAccessBehavior.BuildingsAssigned);
+            BuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
         }
 
     }
