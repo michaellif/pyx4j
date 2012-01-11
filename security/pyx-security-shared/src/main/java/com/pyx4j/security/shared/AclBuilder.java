@@ -98,12 +98,14 @@ public class AclBuilder implements AclCreator {
     }
 
     protected void freeze() {
-        global.freeze();
-        for (Map.Entry<Behavior, PermissionsGroup> me : groups.entrySet()) {
-            me.getValue().freeze();
+        if (!frozen) {
+            global.freeze();
+            for (Map.Entry<Behavior, PermissionsGroup> me : groups.entrySet()) {
+                me.getValue().freeze();
+            }
+            groups = Collections.unmodifiableMap(groups);
+            frozen = true;
         }
-        groups = Collections.unmodifiableMap(groups);
-        frozen = true;
     }
 
     @Override
