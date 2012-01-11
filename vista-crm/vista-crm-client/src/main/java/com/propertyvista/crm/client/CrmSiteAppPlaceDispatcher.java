@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
@@ -56,7 +55,7 @@ public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
     }
 
     public boolean isAuthenticated() {
-        return ClientContext.isAuthenticated() && SecurityController.checkAnyBehavior(VistaBasicBehavior.CRM);
+        return SecurityController.checkBehavior(VistaBasicBehavior.CRM);
     }
 
     protected AppPlace getDefaulPublicPlacePlace() {

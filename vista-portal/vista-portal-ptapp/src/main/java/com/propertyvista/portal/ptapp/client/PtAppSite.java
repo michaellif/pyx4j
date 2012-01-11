@@ -39,7 +39,6 @@ import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
@@ -68,7 +67,7 @@ public class PtAppSite extends VistaSite {
         SessionMonitor.addSessionInactiveHandler(new SessionInactiveHandler() {
             @Override
             public void onSessionInactive(SessionInactiveEvent event) {
-                ClientContext.logout((AuthenticationService) GWT.create(PortalAuthenticationService.class), null);
+                ClientContext.logout((AuthenticationService) GWT.create(PtAuthenticationService.class), null);
             }
         });
 

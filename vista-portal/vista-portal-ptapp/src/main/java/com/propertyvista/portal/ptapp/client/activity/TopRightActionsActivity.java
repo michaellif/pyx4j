@@ -31,8 +31,8 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
@@ -88,7 +88,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void logout() {
-        ClientContext.logout((AuthenticationService) GWT.create(PortalAuthenticationService.class), null);
+        ClientContext.logout((AuthenticationService) GWT.create(PtAuthenticationService.class), null);
     }
 
     @Override

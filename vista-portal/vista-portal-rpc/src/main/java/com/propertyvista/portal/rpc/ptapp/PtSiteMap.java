@@ -16,6 +16,7 @@ package com.propertyvista.portal.rpc.ptapp;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class PtSiteMap implements SiteMap {
@@ -25,19 +26,19 @@ public class PtSiteMap implements SiteMap {
     public final static String STEP_ARG_NAME = "substep";
 
     @PlaceProperties(caption = "Application Form")
-    public static class Login extends AppPlace implements AuthPublicPlace {
+    public static class Login extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class RetrievePassword extends AppPlace implements AuthPublicPlace {
+    public static class RetrievePassword extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class ResetPassword extends AppPlace implements AuthPrivatePlace {
+    public static class ResetPassword extends AppPlace {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class ChangePassword extends AppPlace implements AuthPrivatePlace {
+    public static class ChangePassword extends AppPlace {
     }
 
     @NavigationItem(navigLabel = "Apartment")

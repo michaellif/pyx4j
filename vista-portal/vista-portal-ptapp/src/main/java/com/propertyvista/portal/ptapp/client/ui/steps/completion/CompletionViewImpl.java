@@ -33,8 +33,8 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordViewImpl;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap.Apartment;
+import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
@@ -71,7 +71,7 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
         logoutAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ClientContext.logout((AuthenticationService) GWT.create(PortalAuthenticationService.class), null);
+                ClientContext.logout((AuthenticationService) GWT.create(PtAuthenticationService.class), null);
             }
         });
         actions.add(logoutAction);
