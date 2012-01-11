@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -99,6 +101,11 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
     }
 
     @Override
+    public int getTabIndex() {
+        return 0;
+    }
+
+    @Override
     protected void onLoad() {
         super.onLoad();
         DomDebug.attachedWidget();
@@ -125,6 +132,24 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        // TODO Auto-generated method stub
+
     }
 
 }

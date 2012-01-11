@@ -26,6 +26,11 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.TextBox;
 
+@Deprecated
+/**
+ * 
+ * @deprecated Use {@link _NTextBox}
+ */
 public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E> {
 
     private final NativeTextBoxDelegate<E> delegate;
@@ -33,6 +38,7 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     public NativeTextBox(final CTextFieldBase<E, ?> cTextField) {
         super();
         delegate = new NativeTextBoxDelegate<E>(this, cTextField);
+
     }
 
     @Override

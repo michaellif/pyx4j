@@ -23,6 +23,10 @@ package com.pyx4j.forms.client.ui;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
@@ -97,6 +101,24 @@ public abstract class ListSelectionPopup<E> extends Dialog {
 
         @Override
         public void onPropertyChange(PropertyChangeEvent event) {
+        }
+
+        @Override
+        public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void setAccessKey(char key) {
+            // TODO Auto-generated method stub
+
         }
 
     }

@@ -20,14 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -37,17 +33,20 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.gwt.commons.BrowserType;
 
-public abstract class NativeTriggerComponent<E> extends HorizontalPanel implements Focusable, HasDoubleClickHandlers, INativeFocusComponent<E> {
+public abstract class TriggerComponent<E> extends HorizontalPanel implements Focusable, HasDoubleClickHandlers, INativeFocusComponent<E> {
 
-    private FocusWidget focusWidget;
+    private FocusWidget widget;
 
     private Composite composite;
 
@@ -59,24 +58,23 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
     private boolean readOnly = false;
 
-    public NativeTriggerComponent() {
+    public TriggerComponent() {
         super();
     }
 
-    public void construct(FocusWidget focusWidget) {
-        construct(null, focusWidget, ImageFactory.getImages().triggerBlueUp(), ImageFactory.getImages().triggerBlueDown());
+    public void construct(FocusWidget widget) {
+        construct(null, widget, ImageFactory.getImages().triggerBlueUp(), ImageFactory.getImages().triggerBlueDown());
     }
 
-    public void construct(Composite composite, FocusWidget focusWidget, ImageResource upImage, ImageResource downImage) {
+    public void construct(Composite composite, FocusWidget widget, ImageResource upImage, ImageResource downImage) {
+        this.widget = widget;
         if (composite == null) {
-            this.focusWidget = focusWidget;
-            focusWidget.setWidth("100%");
-            add(focusWidget);
-            setCellWidth(focusWidget, "100%");
+            widget.setWidth("100%");
+            add(widget);
+            setCellWidth(widget, "100%");
         } else {
-            this.focusWidget = focusWidget;
             this.composite = composite;
-            focusWidget.setWidth("100%");
+            widget.setWidth("100%");
             composite.setWidth("100%");
             add(composite);
             setCellWidth(composite, "100%");
@@ -84,8 +82,8 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        focusWidget.addFocusHandler(focusHandlerManager);
-        focusWidget.addBlurHandler(focusHandlerManager);
+        widget.addFocusHandler(focusHandlerManager);
+        widget.addBlurHandler(focusHandlerManager);
 
         triggerButton = new NativeTriggerButton(upImage, downImage);
         triggerButton.setWidth("1%");
@@ -150,7 +148,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
     @Override
     protected void onEnsureDebugId(String baseID) {
         //super.onEnsureDebugId(baseID);
-        focusWidget.ensureDebugId(baseID);
+        ((Widget) widget).ensureDebugId(baseID);
         // Special name for selenium to fire events instead of click
         triggerButton.ensureDebugId(CompositeDebugId.debugId(baseID, CCompDebugId.trigger));
     }
@@ -198,44 +196,36 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
     @Override
     public int getTabIndex() {
-        return focusWidget.getTabIndex();
+        return widget.getTabIndex();
     }
 
     @Override
     public void setTabIndex(int index) {
-        focusWidget.setTabIndex(index);
+        widget.setTabIndex(index);
     }
 
     @Override
     public void setAccessKey(char key) {
-        focusWidget.setAccessKey(key);
+        widget.setAccessKey(key);
     }
 
     @Override
     public void setFocus(boolean focused) {
-        focusWidget.setFocus(focused);
+        widget.setFocus(focused);
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        return focusHandlerManager.addHandler(FocusEvent.getType(), focusHandler);
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return widget.addKeyUpHandler(handler);
     }
 
     @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return widget.addKeyDownHandler(handler);
     }
 
     protected GroupFocusHandler getGroupFocusHandler() {
         return focusHandlerManager;
-    }
-
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return focusWidget.addKeyUpHandler(handler);
-    }
-
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return focusWidget.addKeyDownHandler(handler);
     }
 
     @Override
@@ -246,7 +236,7 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
     protected abstract void onTrigger(boolean show);
 
     public FocusWidget getWidget() {
-        return focusWidget;
+        return widget;
     }
 
     public Composite getComposite() {
@@ -263,5 +253,49 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
     protected void onUnload() {
         super.onUnload();
         DomDebug.detachWidget();
+    }
+
+    class NativeTriggerButton extends FocusPanel {
+
+        private final Image gwtPushButton;
+
+        private boolean enabled = true;
+
+        public NativeTriggerButton(ImageResource upImage, ImageResource downImage) {
+            super();
+            gwtPushButton = new Image(upImage);
+            setWidget(gwtPushButton);
+
+            gwtPushButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    if (enabled) {
+                        NativeTriggerButton.this.fireEvent(event);
+                        event.stopPropagation();
+                    }
+                }
+            });
+
+        }
+
+        @Override
+        protected void onEnsureDebugId(String baseID) {
+            gwtPushButton.ensureDebugId(baseID);
+        }
+
+        @Override
+        public HandlerRegistration addClickHandler(ClickHandler handler) {
+            return addDomHandler(handler, ClickEvent.getType());
+        }
+
+        @Override
+        public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+            return addDomHandler(handler, KeyDownEvent.getType());
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
     }
 }

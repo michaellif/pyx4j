@@ -21,8 +21,6 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public interface INativeTextComponent<DATA> extends INativeFocusComponent<DATA> {
@@ -33,7 +31,4 @@ public interface INativeTextComponent<DATA> extends INativeFocusComponent<DATA> 
 
     public HandlerRegistration addChangeHandler(ChangeHandler handler);
 
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler);
-
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler);
 }

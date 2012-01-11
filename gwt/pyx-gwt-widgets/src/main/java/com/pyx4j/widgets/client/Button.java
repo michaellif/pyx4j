@@ -119,6 +119,7 @@ public class Button extends FocusPanel {
             if (visible) {
                 textLabel.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
                 textLabel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat scroll left center");
+                textLabel.setHeight(image.getHeight() + "px");
             } else {
                 textLabel.getElement().getStyle().setProperty("paddingLeft", "0px");
                 textLabel.getElement().getStyle().setProperty("background", "none");

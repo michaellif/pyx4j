@@ -22,15 +22,18 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
 //TODO doesn't follow convention on calling onEditStop+update
-public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements INativeListBox<E> {
+public class NativeListBox<E> extends TriggerComponent<List<E>> implements INativeListBox<E> {
 
     final private CListBox<E> cListBox;
 
@@ -44,7 +47,7 @@ public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements
         super();
         this.cListBox = cListBox;
         nativeListBox = new InnerListBox();
-        construct(nativeListBox);
+//        construct(nativeListBox);
         setTabIndex(cListBox.getTabIndex());
         setDisplayProperties(properties);
 
@@ -166,6 +169,18 @@ public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements
 
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

@@ -24,14 +24,21 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FocusWidget;
 
 public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP extends CFocusComponent<DATA, ?>> extends _NComponent<DATA, WIDGET, CCOMP>
         implements INativeFocusComponent<DATA> {
 
     public _NFocusComponent(CCOMP cComponent) {
-        super(cComponent);
+        this(cComponent, null);
+    }
+
+    public _NFocusComponent(CCOMP cComponent, ImageResource triggerImage) {
+        super(cComponent, triggerImage);
 
     }
 
@@ -61,8 +68,18 @@ public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP e
     }
 
     @Override
+    public int getTabIndex() {
+        return getEditor().getTabIndex();
+    }
+
+    @Override
     public void setFocus(boolean focused) {
         getEditor().setFocus(focused);
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        getEditor().setAccessKey(key);
     }
 
     @Override
@@ -76,7 +93,18 @@ public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP e
     }
 
     @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return getEditor().addKeyDownHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return getEditor().addKeyUpHandler(handler);
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
+        getTriggerButton().setEnabled(enabled);
         getEditor().setEnabled(enabled);
         if (enabled) {
             getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
@@ -92,4 +120,5 @@ public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP e
         }
         return getEditor().isEnabled();
     }
+
 }

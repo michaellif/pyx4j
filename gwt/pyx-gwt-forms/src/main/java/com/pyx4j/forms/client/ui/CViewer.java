@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public abstract class CViewer<E> extends CFocusComponent<E, NativeViewer<E>> {
+public abstract class CViewer<E> extends CComponent<E, NativeViewer<E>> {
 
     public CViewer() {
         super();

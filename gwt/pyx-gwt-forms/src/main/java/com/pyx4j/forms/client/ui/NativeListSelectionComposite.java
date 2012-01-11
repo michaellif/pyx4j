@@ -419,6 +419,11 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
     }
 
     @Override
+    public int getTabIndex() {
+        return optionsListBox.getTabIndex();
+    }
+
+    @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
         setEnabledComponents(editable && this.isEnabled());

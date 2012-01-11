@@ -48,11 +48,11 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
 
     private final FocusPanel focusPanel;
 
-    private final NativeDatePicker nativeDatePicker;
+    private final _NDatePicker nativeDatePicker;
 
     private final DateFormat dateFormat;
 
-    public DatePickerDropDownPanel(final NativeDatePicker nativeDatePicker) {
+    public DatePickerDropDownPanel(final _NDatePicker nativeDatePicker) {
         this.nativeDatePicker = nativeDatePicker;
         this.getElement().getStyle().setProperty("zIndex", "2");
 

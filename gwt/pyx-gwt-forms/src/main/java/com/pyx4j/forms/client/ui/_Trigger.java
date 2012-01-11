@@ -14,30 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 10, 2012
+ * Created on Jan 11, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.resources.client.ImageResource;
+public interface _Trigger {
 
-import com.pyx4j.widgets.client.TextBox;
+    void executeOn();
 
-public class _NTextBox<DATA> extends _NTextFieldBase<DATA, TextBox> implements INativeTextComponent<DATA> {
-
-    public _NTextBox(CTextFieldBase<DATA, ?> cComponent) {
-        this(cComponent, null);
-    }
-
-    public _NTextBox(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
-        super(cComponent, triggerImage);
-
-    }
-
-    @Override
-    protected TextBox createEditor() {
-        return new TextBox();
-    }
+    void executeOff();
 
 }

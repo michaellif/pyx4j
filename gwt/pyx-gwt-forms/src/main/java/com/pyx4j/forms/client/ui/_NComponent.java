@@ -20,26 +20,37 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.widgets.client.Button;
 
-public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
+public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
 
     private WIDGET editor;
 
     private HTML viewer;
 
-    final CCOMP cComponent;
+    private final CCOMP cComponent;
 
     private boolean viewable;
 
+    private _TriggerPanel triggerPanel;
+
+    private ImageResource triggerImage;
+
     public _NComponent(CCOMP cComponent) {
+        this(cComponent, null);
+    }
+
+    public _NComponent(CCOMP cComponent, ImageResource triggerImage) {
         super();
         this.cComponent = cComponent;
+        this.triggerImage = triggerImage;
 
         setViewable(cComponent.isViewable());
 
@@ -47,6 +58,10 @@ public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CCo
 
     public WIDGET getEditor() {
         return editor;
+    }
+
+    public Button getTriggerButton() {
+        return triggerPanel.getTriggerButton();
     }
 
     public HTML getViewer() {
@@ -78,7 +93,7 @@ public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CCo
     }
 
     protected void onEditorCreate() {
-
+        editor.asWidget().setWidth(getCComponent().getWidth());
     }
 
     protected void onEditorInit() {
@@ -107,10 +122,16 @@ public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CCo
             if (editor == null) {
                 editor = createEditor();
                 onEditorCreate();
+                if (triggerImage != null) {
+                    triggerPanel = new _TriggerPanel(this, triggerImage);
+                }
             }
             onEditorInit();
-            editor.setWidth(getCComponent().getWidth());
-            setWidget(editor);
+            if (triggerImage == null) {
+                setWidget(editor);
+            } else {
+                setWidget(triggerPanel);
+            }
         }
     }
 
@@ -118,4 +139,19 @@ public abstract class _NComponent<DATA, WIDGET extends Widget, CCOMP extends CCo
     public boolean isViewable() {
         return viewable;
     }
+
+    public void executeOn() {
+    }
+
+    public void executeOff() {
+    }
+
+    protected GroupFocusHandler getGroupFocusHandler() {
+        if (triggerPanel != null) {
+            return triggerPanel.getGroupFocusHandler();
+        } else {
+            return null;
+        }
+    }
+
 }

@@ -26,6 +26,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -169,6 +171,30 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeFoc
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public int getTabIndex() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        // TODO Auto-generated method stub
+
     }
 
 }

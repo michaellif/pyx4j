@@ -26,6 +26,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -277,6 +279,30 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
 
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
+    }
+
+    @Override
+    public int getTabIndex() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        // TODO Auto-generated method stub
+
     }
 
 }

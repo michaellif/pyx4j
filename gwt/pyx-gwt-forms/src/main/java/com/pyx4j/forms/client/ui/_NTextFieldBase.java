@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 
 import com.pyx4j.widgets.client.WatermarkComponent;
@@ -30,7 +31,12 @@ public abstract class _NTextFieldBase<DATA, WIDGET extends ValueBoxBase<?>> exte
         INativeTextComponent<DATA>, WatermarkComponent {
 
     public _NTextFieldBase(CTextFieldBase<DATA, ?> cComponent) {
-        super(cComponent);
+        this(cComponent, null);
+    }
+
+    public _NTextFieldBase(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
+        super(cComponent, triggerImage);
+
     }
 
     @Override

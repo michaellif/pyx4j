@@ -23,15 +23,16 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 
-public class NativeDatePicker extends NativeTriggerComponent<Date> implements INativeTextComponent<Date> {
+@Deprecated
+public class NativeDatePicker extends TriggerComponent<Date> implements INativeTextComponent<Date> {
 
     private final NativeTextBox<Date> textBox;
 
@@ -47,14 +48,14 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
         textBox.setNativeValue(datePicker.getValue());
         setTabIndex(datePicker.getTabIndex());
 
-        textBox.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (datePickerDropDown != null) {
-                    datePickerDropDown.hideDatePicker();
-                }
-            }
-        });
+//        textBox.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                if (datePickerDropDown != null) {
+//                    datePickerDropDown.hideDatePicker();
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -74,8 +75,9 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     }
 
     @Override
+    @Deprecated
     public void setNativeText(String newValue) {
-        textBox.setText(newValue);
+        assert false : "setNativeText shouldn't be called";
     }
 
     @Override
@@ -87,7 +89,7 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     protected void onTrigger(boolean show) {
         if (show) {
             if (datePickerDropDown == null) {
-                datePickerDropDown = new DatePickerDropDownPanel(this);
+                datePickerDropDown = new DatePickerDropDownPanel(null);
                 datePickerDropDown.addFocusHandler(getGroupFocusHandler());
                 datePickerDropDown.addBlurHandler(getGroupFocusHandler());
             }
@@ -138,6 +140,18 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
                 textBox.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
             }
         }
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

@@ -20,14 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
-public class NativeViewer<E> extends SimplePanel implements INativeFocusComponent<E> {
+public class NativeViewer<E> extends SimplePanel implements INativeComponent<E> {
 
     private final CViewer<E> cComponent;
 
@@ -76,14 +73,6 @@ public class NativeViewer<E> extends SimplePanel implements INativeFocusComponen
     }
 
     @Override
-    public void setFocus(boolean focused) {
-    }
-
-    @Override
-    public void setTabIndex(int tabIndex) {
-    }
-
-    @Override
     protected void onLoad() {
         super.onLoad();
         DomDebug.attachedWidget();
@@ -101,18 +90,6 @@ public class NativeViewer<E> extends SimplePanel implements INativeFocusComponen
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public void setViewable(boolean editable) {
         // TODO Auto-generated method stub
 
@@ -123,4 +100,5 @@ public class NativeViewer<E> extends SimplePanel implements INativeFocusComponen
         // TODO Auto-generated method stub
         return false;
     }
+
 }

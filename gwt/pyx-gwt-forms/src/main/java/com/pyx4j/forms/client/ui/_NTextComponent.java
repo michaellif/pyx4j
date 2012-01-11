@@ -24,15 +24,20 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 
 public abstract class _NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOMP extends CTextComponent<DATA, ?>> extends
         _NFocusComponent<DATA, WIDGET, CCOMP> implements INativeTextComponent<DATA> {
 
     public _NTextComponent(CCOMP cComponent) {
-        super(cComponent);
+        this(cComponent, null);
+    }
+
+    public _NTextComponent(CCOMP cComponent, ImageResource triggerImage) {
+        super(cComponent, triggerImage);
+
     }
 
     @Override
@@ -66,6 +71,7 @@ public abstract class _NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOM
 
     @Override
     public void setEditable(boolean editable) {
+        getTriggerButton().setEnabled(editable);
         if (!isViewable()) {
             getEditor().setReadOnly(!editable);
             if (editable) {
@@ -84,16 +90,6 @@ public abstract class _NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOM
     @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         return getEditor().addChangeHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return getEditor().addKeyDownHandler(handler);
-    }
-
-    @Override
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return getEditor().addKeyUpHandler(handler);
     }
 
 }

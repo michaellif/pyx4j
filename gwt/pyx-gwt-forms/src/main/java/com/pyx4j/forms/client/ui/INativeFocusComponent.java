@@ -22,16 +22,19 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.Focusable;
 
-public interface INativeFocusComponent<E> extends INativeComponent<E> {
+public interface INativeFocusComponent<E> extends INativeComponent<E>, Focusable {
 
-    public void setTabIndex(int tabIndex);
+    HandlerRegistration addFocusHandler(FocusHandler focusHandler);
 
-    public void setFocus(boolean focused);
+    HandlerRegistration addBlurHandler(BlurHandler blurHandler);
 
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler);
+    HandlerRegistration addKeyDownHandler(KeyDownHandler handler);
 
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler);
+    HandlerRegistration addKeyUpHandler(KeyUpHandler handler);
 
 }

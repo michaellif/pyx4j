@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -214,6 +216,30 @@ public class NativeRichTextArea extends DockPanel implements INativeRichTextComp
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
         return richTextArea.addBlurHandler(blurHandler);
+    }
+
+    @Override
+    public int getTabIndex() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        // TODO Auto-generated method stub
+
     }
 
 }

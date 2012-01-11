@@ -28,7 +28,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CMoneyField extends CTextFieldBase<Double, NativeMoneyBox> {
+public class CMoneyField extends CTextFieldBase<Double, _NTextBox<Double>> {
 
     private static I18n i18n = I18n.get(CMoneyField.class);
 
@@ -39,8 +39,8 @@ public class CMoneyField extends CTextFieldBase<Double, NativeMoneyBox> {
     }
 
     @Override
-    protected NativeMoneyBox createWidget() {
-        return new NativeMoneyBox(this);
+    protected _NTextBox<Double> createWidget() {
+        return new _NTextBox<Double>(this);
 
     }
 
@@ -57,7 +57,7 @@ public class CMoneyField extends CTextFieldBase<Double, NativeMoneyBox> {
             if (value == null) {
                 return "";
             } else {
-                return nf.format(value);
+                return "$" + nf.format(value);
             }
         }
 
@@ -67,10 +67,10 @@ public class CMoneyField extends CTextFieldBase<Double, NativeMoneyBox> {
                 return null; // empty value case
             }
             try {
-                string = string.replaceAll("[,]+", "");
+                string = string.replaceAll("[,$]+", "");
                 return Double.valueOf(string);
             } catch (NumberFormatException e) {
-                throw new ParseException(i18n.tr("Should be a number"), 0);
+                throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
             }
         }
 
