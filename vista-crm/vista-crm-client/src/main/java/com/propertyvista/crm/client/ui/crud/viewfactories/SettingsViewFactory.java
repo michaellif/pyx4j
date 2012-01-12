@@ -34,6 +34,8 @@ import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerViewImpl;
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
@@ -61,6 +63,8 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new CrmRoleListerViewImpl());
             } else if (CrmRoleEditorView.class.equals(type)) {
                 map.put(type, new CrmRoleEditorViewImpl());
+            } else if (CrmRoleViewerView.class.equals(type)) {
+                map.put(type, new CrmRoleViewerViewImpl());
             }
 
         }

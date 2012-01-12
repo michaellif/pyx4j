@@ -88,6 +88,7 @@ import com.propertyvista.crm.client.activity.crud.settings.SiteEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
@@ -566,6 +567,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new CrmRoleEditorActivity(place);
                         break;
                     case viewer:
+                        activity = new CrmRoleViewerActivity(place);
                         break;
                     case lister:
                         activity = new CrmRoleListerActivity(place);
