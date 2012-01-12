@@ -14,6 +14,8 @@
 package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,6 +27,7 @@ public interface CrmRole extends IEntity {
 
     IPrimitive<String> name();
 
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
     @Caption(name = "Permissions")
