@@ -26,12 +26,11 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.ValueBoxBase;
 
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.ITextWidget;
 
-public abstract class NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOMP extends CTextComponent<DATA, ?>> extends
-        NFocusComponent<DATA, WIDGET, CCOMP> implements INativeTextComponent<DATA> {
+public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends NFocusComponent<DATA, WIDGET, CCOMP>
+        implements INativeTextComponent<DATA> {
 
     public NTextComponent(CCOMP cComponent) {
         this(cComponent, null);
@@ -69,27 +68,6 @@ public abstract class NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOMP
         } else {
             return null;
         }
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        Button triggerButton = getTriggerButton();
-        if (triggerButton != null) {
-            triggerButton.setEnabled(editable);
-        }
-        if (!isViewable()) {
-            getEditor().setReadOnly(!editable);
-            if (editable) {
-                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
-            } else {
-                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
-            }
-        }
-    }
-
-    @Override
-    public boolean isEditable() {
-        return !getEditor().isReadOnly();
     }
 
     @Override

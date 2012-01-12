@@ -30,11 +30,7 @@ public class ContainerAccessAdapter implements IAccessAdapter {
 
     @Override
     public boolean isEnabled(CComponent<?, ?> component) {
-        if (component instanceof CButton) {
-            return container.isEditable() && container.isEnabled();
-        } else {
-            return container.isEnabled();
-        }
+        return container.isEnabled();
     }
 
     @Override

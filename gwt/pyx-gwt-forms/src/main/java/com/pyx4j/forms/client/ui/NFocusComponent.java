@@ -28,12 +28,10 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FocusWidget;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.widgets.client.IFocusWidget;
 
-public abstract class NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP extends CFocusComponent<DATA, ?>> extends NComponent<DATA, WIDGET, CCOMP>
+public abstract class NFocusComponent<DATA, WIDGET extends IFocusWidget, CCOMP extends CFocusComponent<DATA, ?>> extends NComponent<DATA, WIDGET, CCOMP>
         implements INativeFocusComponent<DATA> {
 
     public NFocusComponent(CCOMP cComponent) {
@@ -103,38 +101,6 @@ public abstract class NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP ex
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
         return getEditor().addKeyUpHandler(handler);
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        getTriggerButton().setEnabled(enabled);
-        getEditor().setEnabled(enabled);
-        if (enabled) {
-            getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
-        } else {
-            getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
-        }
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-            if (getCComponent().isValid()) {
-                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-            } else if (getCComponent().isVisited()) {
-                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-            }
-        }
-    }
-
-    @Override
-    public boolean isEnabled() {
-        if (isViewable()) {
-            assert false : "isEnabled shouldn't be called in viewable mode";
-        }
-        return getEditor().isEnabled();
     }
 
 }

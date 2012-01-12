@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
-public class TextBox extends com.google.gwt.user.client.ui.TextBox implements WatermarkComponent {
+public class TextBox extends com.google.gwt.user.client.ui.TextBox implements ITextWidget, WatermarkComponent {
 
     private TextWatermark watermark;
 
@@ -62,6 +62,16 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
         } else {
             return super.getText();
         }
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        setReadOnly(!editable);
+    }
+
+    @Override
+    public boolean isEditable() {
+        return !isReadOnly();
     }
 
 }

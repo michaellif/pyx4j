@@ -25,7 +25,11 @@ import com.google.gwt.dom.client.LabelElement;
 
 import com.pyx4j.commons.css.CSSClass;
 
-public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
+public class CheckBox extends com.google.gwt.user.client.ui.CheckBox implements IFocusWidget {
+
+    private boolean enabled = true;
+
+    private boolean editable = true;
 
     public CheckBox() {
         super();
@@ -48,5 +52,27 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
         ensureDebugId(inputElem, baseID);
         labelElem.setHtmlFor(inputElem.getId());
 
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        super.setEnabled(enabled && this.isEditable());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+        super.setEnabled(editable && this.isEnabled());
+    }
+
+    @Override
+    public boolean isEditable() {
+        return editable;
     }
 }

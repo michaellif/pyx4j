@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
-public class Button extends FocusPanel {
+public class Button extends FocusPanel implements IFocusWidget {
 
     private final HTML textLabel;
 
@@ -131,10 +131,12 @@ public class Button extends FocusPanel {
         DomEvent.fireNativeEvent(Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false), this);
     }
 
+    @Override
     public boolean isEnabled() {
         return !DOM.getElementPropertyBoolean(getElement(), "disabled");
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         DOM.setElementPropertyBoolean(getElement(), "disabled", !enabled);
         buttonFacesHandler.enable(enabled);
@@ -215,6 +217,15 @@ public class Button extends FocusPanel {
             return enabled;
         }
 
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
     }
 
 }

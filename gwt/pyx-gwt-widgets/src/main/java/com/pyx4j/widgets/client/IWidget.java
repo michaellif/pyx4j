@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,27 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Jan 12, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
-import java.text.ParseException;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.widgets.client.IWidget;
+public interface IWidget extends IsWidget {
 
-public interface INativeComponent<E> extends IWidget, PropertyChangeHandler {
+    void setEnabled(boolean enabled);
 
-    CComponent<?, ?> getCComponent();
+    boolean isEnabled();
 
-    void setViewable(boolean editable);
+    void setEditable(boolean editable);
 
-    boolean isViewable();
+    boolean isEditable();
 
-    void setNativeValue(E value);
+    void setVisible(boolean visible);
 
-    E getNativeValue() throws ParseException;
+    boolean isVisible();
+
+    void setWidth(String width);
+
+    void setHeight(String height);
+
+    void addStyleDependentName(String styleSuffix);
+
+    void removeStyleDependentName(String styleSuffix);
 
 }

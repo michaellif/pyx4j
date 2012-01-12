@@ -49,7 +49,6 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
-import com.pyx4j.forms.client.ui.NativeCheckBox;
 
 public class WidgetDecorator extends FlexTable {
 
@@ -97,10 +96,6 @@ public class WidgetDecorator extends FlexTable {
         label.setStyleName(WidgetDecoratorLabel.name());
 
         Cursor.setDefault(label.getElement());
-
-        if (nativeComponent instanceof NativeCheckBox) {
-            ((NativeCheckBox) nativeComponent).setText(null);
-        }
 
         if (nativeComponent instanceof Focusable) {
             label.addClickHandler(new ClickHandler() {

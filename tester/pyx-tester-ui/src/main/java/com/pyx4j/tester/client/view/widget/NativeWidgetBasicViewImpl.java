@@ -28,11 +28,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
-import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -78,17 +76,6 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
         DatePickerComposite datePickerMulti = new DatePickerComposite(3, starting, minDate, maxDate, new ArrayList<Date>());
         main.setWidget(++row, 0, datePickerMulti);
-
-        main.setHR(++row, 0, 1);
-
-        CButton btn = new CButton("Say \"Hello\"", new Command() {
-            @Override
-            public void execute() {
-
-            }
-        });
-
-        main.setWidget(++row, 0, btn);
 
         main.setHR(++row, 0, 1);
 

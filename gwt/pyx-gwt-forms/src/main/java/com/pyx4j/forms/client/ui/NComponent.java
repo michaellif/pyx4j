@@ -22,12 +22,14 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.IWidget;
 
-public abstract class NComponent<DATA, WIDGET extends IsWidget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
+public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
 
     private WIDGET editor;
 
@@ -136,6 +138,66 @@ public abstract class NComponent<DATA, WIDGET extends IsWidget, CCOMP extends CC
             return triggerPanel.getGroupFocusHandler();
         } else {
             return null;
+        }
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        Button triggerButton = getTriggerButton();
+        if (triggerButton != null) {
+            triggerButton.setEnabled(enabled);
+        }
+
+        if (getEditor() != null) {
+            getEditor().setEnabled(enabled);
+            if (enabled) {
+                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+            } else {
+                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+            }
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        if (isViewable()) {
+            assert false : "isEnabled shouldn't be called in viewable mode";
+        }
+        return getEditor().isEnabled();
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        Button triggerButton = getTriggerButton();
+        if (triggerButton != null) {
+            triggerButton.setEnabled(editable);
+        }
+
+        if (getEditor() != null) {
+            getEditor().setEditable(editable);
+            if (editable) {
+                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            } else {
+                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            }
+        }
+    }
+
+    @Override
+    public boolean isEditable() {
+        return getEditor().isEditable();
+    }
+
+    @Override
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
+            getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (getCComponent().isValid()) {
+                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (getCComponent().isVisited()) {
+                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 

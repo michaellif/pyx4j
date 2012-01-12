@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,27 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Jan 12, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
-import java.text.ParseException;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.widgets.client.IWidget;
+public interface ITextWidget extends IFocusWidget {
 
-public interface INativeComponent<E> extends IWidget, PropertyChangeHandler {
+    String getText();
 
-    CComponent<?, ?> getCComponent();
+    void setText(String text);
 
-    void setViewable(boolean editable);
-
-    boolean isViewable();
-
-    void setNativeValue(E value);
-
-    E getNativeValue() throws ParseException;
+    HandlerRegistration addChangeHandler(ChangeHandler handler);
 
 }
