@@ -74,16 +74,4 @@ public class NCheckBox extends NFocusComponent<Boolean, CheckBox, CCheckBox> imp
         getElement().getStyle().setProperty("textAlign", alignment.name());
     }
 
-    @Override
-    public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
 }
