@@ -45,7 +45,7 @@ public class _NDatePicker extends _NTextBox<Date> implements INativeTextComponen
     }
 
     @Override
-    public void executeOn() {
+    public void onTriggerOn() {
         if (datePickerDropDown == null) {
             datePickerDropDown = new DatePickerDropDownPanel(_NDatePicker.this);
             datePickerDropDown.addFocusHandler(getGroupFocusHandler());
@@ -55,7 +55,7 @@ public class _NDatePicker extends _NTextBox<Date> implements INativeTextComponen
     }
 
     @Override
-    public void executeOff() {
+    public void onTriggerOff() {
         if (datePickerDropDown != null) {
             datePickerDropDown.hideDatePicker();
         }

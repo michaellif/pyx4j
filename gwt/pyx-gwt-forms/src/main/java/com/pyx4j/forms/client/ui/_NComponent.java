@@ -140,10 +140,10 @@ public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends C
         return viewable;
     }
 
-    public void executeOn() {
+    public void onTriggerOn() {
     }
 
-    public void executeOff() {
+    public void onTriggerOff() {
     }
 
     protected GroupFocusHandler getGroupFocusHandler() {

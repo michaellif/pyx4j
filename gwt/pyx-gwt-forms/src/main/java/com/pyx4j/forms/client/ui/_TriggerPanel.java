@@ -87,7 +87,7 @@ public class _TriggerPanel extends HorizontalPanel implements HasDoubleClickHand
 
             @Override
             public void onClick(ClickEvent event) {
-                component.executeOn();
+                component.onTriggerOn();
             }
         });
 
@@ -99,10 +99,10 @@ public class _TriggerPanel extends HorizontalPanel implements HasDoubleClickHand
                 case KeyCodes.KEY_TAB:
                 case KeyCodes.KEY_ESCAPE:
                 case KeyCodes.KEY_UP:
-                    component.executeOff();
+                    component.onTriggerOff();
                     break;
                 case KeyCodes.KEY_DOWN:
-                    component.executeOn();
+                    component.onTriggerOn();
                     break;
                 }
 
@@ -112,7 +112,7 @@ public class _TriggerPanel extends HorizontalPanel implements HasDoubleClickHand
         this.addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                component.executeOn();
+                component.onTriggerOn();
             }
         });
     }
