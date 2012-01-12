@@ -35,7 +35,9 @@ public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implem
 
             new MemberColumnDescriptor.Builder(proto().name()).build(),
 
-            new MemberColumnDescriptor.Builder(proto().description()).build());
+            new MemberColumnDescriptor.Builder(proto().description()).build(),
+
+            new MemberColumnDescriptor.Builder(proto().behaviors()).build());
         }
     }
 }
