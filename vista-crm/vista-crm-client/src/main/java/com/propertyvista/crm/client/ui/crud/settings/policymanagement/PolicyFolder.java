@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -21,10 +22,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CButton;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
@@ -71,10 +72,10 @@ public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
             VerticalPanel controlsPanel = new VerticalPanel();
             controlsPanel.setSize("15em", "100%");
             controlsPanel.add(inheritedLabel = new Label(i18n.tr("inherited")));
-            controlsPanel.add(new CButton("Override", new Command() {
+            controlsPanel.add(new Button("Override", new ClickHandler() {
 
                 @Override
-                public void execute() {
+                public void onClick(ClickEvent event) {
                     if (policyEditor != null) {
                         // TODO somehow make the component editable
                     }
