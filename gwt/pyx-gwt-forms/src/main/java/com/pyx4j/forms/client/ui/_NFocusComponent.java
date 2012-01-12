@@ -30,6 +30,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FocusWidget;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+
 public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP extends CFocusComponent<DATA, ?>> extends _NComponent<DATA, WIDGET, CCOMP>
         implements INativeFocusComponent<DATA> {
 
@@ -110,6 +113,19 @@ public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP e
             getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
         } else {
             getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+        }
+    }
+
+    @Override
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (event.isEventOfType(PropertyName.repopulated)) {
+            getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+            if (getCComponent().isValid()) {
+                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (getCComponent().isVisited()) {
+                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            }
         }
     }
 

@@ -25,8 +25,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.Button;
 
 public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
@@ -71,19 +69,6 @@ public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends C
     @Override
     public CCOMP getCComponent() {
         return cComponent;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-            if (getCComponent().isValid()) {
-                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-            } else if (getCComponent().isVisited()) {
-                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-            }
-        }
     }
 
     protected abstract WIDGET createEditor();
