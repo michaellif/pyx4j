@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.Button;
 
-public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
+public abstract class NComponent<DATA, WIDGET extends IsWidget, CCOMP extends CComponent<DATA, ?>> extends SimplePanel implements INativeComponent<DATA> {
 
     private WIDGET editor;
 
@@ -37,15 +37,15 @@ public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends C
 
     private boolean viewable;
 
-    private _TriggerPanel triggerPanel;
+    private TriggerPanel triggerPanel;
 
     private ImageResource triggerImage;
 
-    public _NComponent(CCOMP cComponent) {
+    public NComponent(CCOMP cComponent) {
         this(cComponent, null);
     }
 
-    public _NComponent(CCOMP cComponent, ImageResource triggerImage) {
+    public NComponent(CCOMP cComponent, ImageResource triggerImage) {
         super();
         this.cComponent = cComponent;
         this.triggerImage = triggerImage;
@@ -108,7 +108,7 @@ public abstract class _NComponent<DATA, WIDGET extends IsWidget, CCOMP extends C
                 editor = createEditor();
                 onEditorCreate();
                 if (triggerImage != null) {
-                    triggerPanel = new _TriggerPanel(this, triggerImage);
+                    triggerPanel = new TriggerPanel(this, triggerImage);
                 }
             }
             onEditorInit();

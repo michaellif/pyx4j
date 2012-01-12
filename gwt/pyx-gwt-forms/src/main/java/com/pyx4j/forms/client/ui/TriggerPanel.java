@@ -39,15 +39,15 @@ import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.Button;
 
-public class _TriggerPanel extends HorizontalPanel implements HasDoubleClickHandlers {
+public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandlers {
 
-    private final _NComponent<?, ?, ?> component;
+    private final NComponent<?, ?, ?> component;
 
     private final Button triggerButton;
 
     private final GroupFocusHandler focusHandlerManager;
 
-    public _TriggerPanel(final _NComponent<?, ?, ?> component, ImageResource triggerImage) {
+    public TriggerPanel(final NComponent<?, ?, ?> component, ImageResource triggerImage) {
         super();
 
         setStyleName(DefaultCCOmponentsTheme.StyleName.TriggerPannel.name());
@@ -59,9 +59,9 @@ public class _TriggerPanel extends HorizontalPanel implements HasDoubleClickHand
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        if (component.getEditor() instanceof _NFocusComponent) {
-            ((_NFocusComponent<?, ?, ?>) component.getEditor()).addFocusHandler(focusHandlerManager);
-            ((_NFocusComponent<?, ?, ?>) component.getEditor()).addBlurHandler(focusHandlerManager);
+        if (component.getEditor() instanceof NFocusComponent) {
+            ((NFocusComponent<?, ?, ?>) component.getEditor()).addFocusHandler(focusHandlerManager);
+            ((NFocusComponent<?, ?, ?>) component.getEditor()).addBlurHandler(focusHandlerManager);
         }
 
         triggerButton = new Button(new Image(triggerImage));

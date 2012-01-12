@@ -28,7 +28,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CMoneyField extends CTextFieldBase<Double, _NTextBox<Double>> {
+public class CMoneyField extends CTextFieldBase<Double, NTextBox<Double>> {
 
     private static I18n i18n = I18n.get(CMoneyField.class);
 
@@ -39,8 +39,8 @@ public class CMoneyField extends CTextFieldBase<Double, _NTextBox<Double>> {
     }
 
     @Override
-    protected _NTextBox<Double> createWidget() {
-        return new _NTextBox<Double>(this);
+    protected NTextBox<Double> createWidget() {
+        return new NTextBox<Double>(this);
 
     }
 

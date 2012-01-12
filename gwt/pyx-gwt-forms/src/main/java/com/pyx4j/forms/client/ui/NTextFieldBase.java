@@ -27,14 +27,14 @@ import com.google.gwt.user.client.ui.ValueBoxBase;
 
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public abstract class _NTextFieldBase<DATA, WIDGET extends ValueBoxBase<?>> extends _NTextComponent<DATA, WIDGET, CTextFieldBase<DATA, ?>> implements
+public abstract class NTextFieldBase<DATA, WIDGET extends ValueBoxBase<?>> extends NTextComponent<DATA, WIDGET, CTextFieldBase<DATA, ?>> implements
         INativeTextComponent<DATA>, WatermarkComponent {
 
-    public _NTextFieldBase(CTextFieldBase<DATA, ?> cComponent) {
+    public NTextFieldBase(CTextFieldBase<DATA, ?> cComponent) {
         this(cComponent, null);
     }
 
-    public _NTextFieldBase(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
+    public NTextFieldBase(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
         super(cComponent, triggerImage);
 
     }

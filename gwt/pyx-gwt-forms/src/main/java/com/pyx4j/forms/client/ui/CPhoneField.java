@@ -25,7 +25,7 @@ import java.text.ParseException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public class CPhoneField extends CTextFieldBase<String, _NTextBox<String>> {
+public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
 
     public CPhoneField() {
         this(null);
@@ -39,8 +39,8 @@ public class CPhoneField extends CTextFieldBase<String, _NTextBox<String>> {
     }
 
     @Override
-    protected _NTextBox<String> createWidget() {
-        return new _NTextBox<String>(this);
+    protected NTextBox<String> createWidget() {
+        return new NTextBox<String>(this);
     }
 
     public static class PhoneFormat implements IFormat<String> {

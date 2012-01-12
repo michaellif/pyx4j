@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface _Trigger {
+public interface Trigger {
 
     void executeOn();
 

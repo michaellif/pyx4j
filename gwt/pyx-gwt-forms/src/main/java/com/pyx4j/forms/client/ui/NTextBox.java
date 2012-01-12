@@ -24,13 +24,13 @@ import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.widgets.client.TextBox;
 
-public class _NTextBox<DATA> extends _NTextFieldBase<DATA, TextBox> implements INativeTextComponent<DATA> {
+public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox> implements INativeTextComponent<DATA> {
 
-    public _NTextBox(CTextFieldBase<DATA, ?> cComponent) {
+    public NTextBox(CTextFieldBase<DATA, ?> cComponent) {
         this(cComponent, null);
     }
 
-    public _NTextBox(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
+    public NTextBox(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
         super(cComponent, triggerImage);
 
     }

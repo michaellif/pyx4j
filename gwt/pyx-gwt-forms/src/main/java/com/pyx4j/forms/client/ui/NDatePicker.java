@@ -27,11 +27,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.forms.client.ImageFactory;
 
-public class _NDatePicker extends _NTextBox<Date> implements INativeTextComponent<Date> {
+public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<Date> {
 
     private DatePickerDropDownPanel datePickerDropDown;
 
-    public _NDatePicker(CDatePicker cComponent) {
+    public NDatePicker(CDatePicker cComponent) {
         super(cComponent, ImageFactory.getImages().triggerBlueUp());
 
         getEditor().addClickHandler(new ClickHandler() {
@@ -47,7 +47,7 @@ public class _NDatePicker extends _NTextBox<Date> implements INativeTextComponen
     @Override
     public void onTriggerOn() {
         if (datePickerDropDown == null) {
-            datePickerDropDown = new DatePickerDropDownPanel(_NDatePicker.this);
+            datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this);
             datePickerDropDown.addFocusHandler(getGroupFocusHandler());
             datePickerDropDown.addBlurHandler(getGroupFocusHandler());
         }

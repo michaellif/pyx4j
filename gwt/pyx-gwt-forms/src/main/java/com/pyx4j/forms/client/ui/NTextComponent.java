@@ -30,14 +30,14 @@ import com.google.gwt.user.client.ui.ValueBoxBase;
 
 import com.pyx4j.widgets.client.Button;
 
-public abstract class _NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOMP extends CTextComponent<DATA, ?>> extends
-        _NFocusComponent<DATA, WIDGET, CCOMP> implements INativeTextComponent<DATA> {
+public abstract class NTextComponent<DATA, WIDGET extends ValueBoxBase<?>, CCOMP extends CTextComponent<DATA, ?>> extends
+        NFocusComponent<DATA, WIDGET, CCOMP> implements INativeTextComponent<DATA> {
 
-    public _NTextComponent(CCOMP cComponent) {
+    public NTextComponent(CCOMP cComponent) {
         this(cComponent, null);
     }
 
-    public _NTextComponent(CCOMP cComponent, ImageResource triggerImage) {
+    public NTextComponent(CCOMP cComponent, ImageResource triggerImage) {
         super(cComponent, triggerImage);
 
     }

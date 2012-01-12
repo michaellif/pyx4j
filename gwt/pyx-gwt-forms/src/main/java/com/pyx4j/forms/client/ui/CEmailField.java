@@ -26,7 +26,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CEmailField extends CTextFieldBase<String, _NTextBox<String>> {
+public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
 
     private static I18n i18n = I18n.get(CEmailField.class);
 
@@ -51,8 +51,8 @@ public class CEmailField extends CTextFieldBase<String, _NTextBox<String>> {
     }
 
     @Override
-    protected _NTextBox<String> createWidget() {
-        return new _NTextBox<String>(this);
+    protected NTextBox<String> createWidget() {
+        return new NTextBox<String>(this);
     }
 
     public static class EmailFormat implements IFormat<String> {

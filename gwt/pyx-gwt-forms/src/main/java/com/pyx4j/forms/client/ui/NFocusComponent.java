@@ -33,14 +33,14 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 
-public abstract class _NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP extends CFocusComponent<DATA, ?>> extends _NComponent<DATA, WIDGET, CCOMP>
+public abstract class NFocusComponent<DATA, WIDGET extends FocusWidget, CCOMP extends CFocusComponent<DATA, ?>> extends NComponent<DATA, WIDGET, CCOMP>
         implements INativeFocusComponent<DATA> {
 
-    public _NFocusComponent(CCOMP cComponent) {
+    public NFocusComponent(CCOMP cComponent) {
         this(cComponent, null);
     }
 
-    public _NFocusComponent(CCOMP cComponent, ImageResource triggerImage) {
+    public NFocusComponent(CCOMP cComponent, ImageResource triggerImage) {
         super(cComponent, triggerImage);
 
     }

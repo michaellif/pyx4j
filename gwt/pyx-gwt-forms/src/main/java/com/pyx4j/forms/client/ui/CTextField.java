@@ -25,7 +25,7 @@ import java.text.ParseException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.RegexValidator;
 
-public class CTextField extends CTextFieldBase<String, _NTextBox<String>> {
+public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
 
     public CTextField() {
         this(null);
@@ -43,8 +43,8 @@ public class CTextField extends CTextFieldBase<String, _NTextBox<String>> {
     }
 
     @Override
-    protected _NTextBox<String> createWidget() {
-        return new _NTextBox<String>(this);
+    protected NTextBox<String> createWidget() {
+        return new NTextBox<String>(this);
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

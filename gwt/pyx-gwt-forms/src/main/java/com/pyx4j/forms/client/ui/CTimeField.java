@@ -29,7 +29,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CTimeField extends CTextFieldBase<Time, _NTextBox<Time>> {
+public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
 
     protected static I18n i18n = I18n.get(CTimeField.class);
 
@@ -48,8 +48,8 @@ public class CTimeField extends CTextFieldBase<Time, _NTextBox<Time>> {
     }
 
     @Override
-    protected _NTextBox<Time> createWidget() {
-        return new _NTextBox<Time>(this);
+    protected NTextBox<Time> createWidget() {
+        return new NTextBox<Time>(this);
     }
 
     public void setTimeFormat(String format) {

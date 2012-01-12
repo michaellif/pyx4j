@@ -26,11 +26,11 @@ import com.google.gwt.user.client.DOM;
 
 import com.pyx4j.widgets.client.TextArea;
 
-public class _NTextArea extends _NTextComponent<String, TextArea, CTextComponent<String, ?>> implements INativeTextComponent<String> {
+public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<String, ?>> implements INativeTextComponent<String> {
 
     private Integer visibleLines;
 
-    public _NTextArea(CTextArea cComponent) {
+    public NTextArea(CTextArea cComponent) {
         super(cComponent);
     }
 

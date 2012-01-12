@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CDatePicker extends CTextFieldBase<Date, _NDatePicker> {
+public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
     private static final I18n i18n = I18n.get(CDatePicker.class);
 
@@ -54,8 +54,8 @@ public class CDatePicker extends CTextFieldBase<Date, _NDatePicker> {
     }
 
     @Override
-    protected _NDatePicker createWidget() {
-        return new _NDatePicker(this);
+    protected NDatePicker createWidget() {
+        return new NDatePicker(this);
     }
 
     public void setDateConditionValidationMessage(String dateConditionValidationMessage) {

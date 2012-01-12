@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
-public class CTextArea extends CTextComponent<String, _NTextArea> {
+public class CTextArea extends CTextComponent<String, NTextArea> {
 
     private int rows = 4;
 
@@ -36,8 +36,8 @@ public class CTextArea extends CTextComponent<String, _NTextArea> {
     }
 
     @Override
-    protected _NTextArea createWidget() {
-        _NTextArea nativeTextArea = new _NTextArea(this);
+    protected NTextArea createWidget() {
+        NTextArea nativeTextArea = new NTextArea(this);
         nativeTextArea.setVisibleLines(getRows());
         return nativeTextArea;
     }
