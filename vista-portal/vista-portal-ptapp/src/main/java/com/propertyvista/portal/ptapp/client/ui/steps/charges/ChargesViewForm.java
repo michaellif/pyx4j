@@ -102,7 +102,10 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
         totalRow.add(DecorationUtils.inline(total, "40.5em", null));
-        totalRow.add(DecorationUtils.inline(form.inject(member/* , new CMoneyLabel() */), "7em"));
+        totalRow.add(DecorationUtils.inline(form.inject(member), "7em"));
+        form.inject(member).setEditable(false);
+        // TODO replace with:
+//        form.inject(member).setViewable(true);
         form.get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
         return totalRow;
     }

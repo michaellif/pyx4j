@@ -21,23 +21,21 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.c.CMoneyLabel;
 import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.financial.Money;
 
 public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
 
     public ChargeLineFolder(boolean modifyable) {
         super(ChargeLine.class, modifyable);
-        setOrderable(false);
+        inheritContainerAccessRules(false);
         setModifiable(false);
+        setEditable(false);
+// TODO replace with:
+//        setViewable(true);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Money.class)) {
-            return new CMoneyLabel();
-        }
         return super.create(member);
     }
 

@@ -27,7 +27,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CNumberField;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,6 +46,8 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
 
+    private final boolean readOnly;
+
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.tenantName(), "35em"));
@@ -56,16 +60,19 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         return COLUMNS;
     }
 
-    ChargeSplitListFolder(boolean summaryViewMode) {
+    ChargeSplitListFolder(boolean modifiable) {
         super(TenantCharge.class, false);
+        inheritContainerAccessRules(false);
+        setModifiable(false);
+//        setEditable(false);
+
+        this.readOnly = !modifiable;
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantCharge) {
             return new TenantChargeEditor();
-//        } else if (member.getValueClass().equals(Money.class)) {
-//            return new CMoneyLabel();
         }
         return super.create(member);
     }
@@ -101,6 +108,17 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().tenantName()) {
                 return inject(column.getObject(), new CEntityLabel<Name>());
+            } else if (column.getObject() == proto().amount()) {
+                return inject(column.getObject(), new CNumberLabel());
+            } else if (column.getObject() == proto().percentage()) {
+                CComponent<?, ?> prc;
+                if (readOnly) {
+                    prc = inject(column.getObject(), new CNumberLabel());
+                } else {
+                    prc = inject(column.getObject(), new CIntegerField());
+                    prc.inheritContainerAccessRules(false);
+                }
+                return prc;
             }
             return super.createCell(column);
         }
