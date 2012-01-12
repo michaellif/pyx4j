@@ -25,7 +25,7 @@ import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 
-public class PersonalInfoActivity extends SecurityAwareActivity {
+public class PersonalInfoActivity extends SecurityAwareActivity implements PersonalInfoView.Presenter {
 
     private final PersonalInfoView view;
 
@@ -33,6 +33,7 @@ public class PersonalInfoActivity extends SecurityAwareActivity {
 
     public PersonalInfoActivity(Place place) {
         this.view = PortalViewFactory.instance(PersonalInfoView.class);
+        this.view.setPresenter(this);
         withPlace(place);
         srv = GWT.create(PersonalInfoCrudService.class);
     }
@@ -54,6 +55,18 @@ public class PersonalInfoActivity extends SecurityAwareActivity {
 
         }, null);
 
+    }
+
+    @Override
+    public void save(ResidentDTO info) {
+        srv.save(new DefaultAsyncCallback<ResidentDTO>() {
+            @Override
+            public void onSuccess(ResidentDTO result) {
+                view.populate(result);
+                view.showNote("Operation completed successfully.");
+            }
+
+        }, info);
     }
 
 }

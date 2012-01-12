@@ -36,31 +36,44 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
 
     @Override
     public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId) {
-        CrmUser currentUser = VistaContext.getCurrentUser();
-
-        ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
-
-        {
+        try {
+            CrmUser currentUser = VistaContext.getCurrentUser();
+            // find associated tenant entry
             EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
             Tenant tenant = Persistence.service().retrieve(criteria);
-            dto.setValue(tenant.person().getValue());
             Persistence.service().retrieve(tenant.emergencyContacts());
+            // build dto
+            ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
+            dto.setValue(tenant.person().getValue());
             dto.emergencyContacts().addAll(tenant.emergencyContacts());
-            // add current address
+            // add current address if any
             EntityQueryCriteria<TenantScreening> critAddr = EntityQueryCriteria.create(TenantScreening.class);
             critAddr.add(PropertyCriterion.eq(critAddr.proto().tenant(), tenant));
             List<TenantScreening> result = Persistence.service().query(critAddr);
             if (result.size() > 0) {
                 dto.currentAddress().set(result.get(0).currentAddress());
             }
+            callback.onSuccess(dto);
+        } catch (Exception e) {
+            callback.onFailure(new Throwable("Operation failed. No data found."));
         }
-        callback.onSuccess(dto);
     }
 
     @Override
-    public void save(AsyncCallback<ResidentDTO> callback, ResidentDTO editableEntity) {
-        // TODO Auto-generated method stub
+    public void save(AsyncCallback<ResidentDTO> callback, ResidentDTO dto) {
+        try {
+            CrmUser currentUser = VistaContext.getCurrentUser();
+            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
+            Tenant tenant = Persistence.service().retrieve(criteria);
+            tenant.person().set(dto);
+            tenant.emergencyContacts().set(dto.emergencyContacts());
+            Persistence.service().persist(tenant);
+            callback.onSuccess(dto);
+        } catch (Exception e) {
+            callback.onFailure(new Throwable("Operation failed. No data found."));
+        }
     }
 
     @Override

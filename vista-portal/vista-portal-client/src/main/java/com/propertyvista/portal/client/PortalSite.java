@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
+import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
@@ -26,6 +27,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
@@ -52,6 +54,8 @@ public class PortalSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
+
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
         if (RootPanel.get(RESIDENT_INSERTION_ID) != null) {
             getHistoryHandler().register(getPlaceController(), getEventBus(), new PortalSiteMap.Residents());

@@ -19,12 +19,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ListBox;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
@@ -35,7 +35,7 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
 
     private static I18n i18n = I18n.get(NewMaintenanceRequestViewImpl.class);
 
-    private final UserMessagePanel errorPanel;
+    private final UserMessagePanel errorPanel = new UserMessagePanel();
 
     private final NewMaintenanceRequestForm form;
 
@@ -43,7 +43,6 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
 
     public NewMaintenanceRequestViewImpl() {
         // Input Error notification panel
-        errorPanel = new UserMessagePanel();
         add(errorPanel);
 
         form = new NewMaintenanceRequestForm();
@@ -60,8 +59,7 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
 
             @Override
             public void onClick(ClickEvent event) {
-                boolean formValid = form.isValid();
-                if (!formValid) {
+                if (!form.isValid()) {
                     form.setVisited(true);
                     Window.scrollTo(0, 0);
                     String msg = i18n.tr("The form was completed with errors outlined below. Please review and try again.");

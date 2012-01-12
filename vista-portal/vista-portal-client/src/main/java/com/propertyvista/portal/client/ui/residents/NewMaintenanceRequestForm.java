@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
@@ -41,7 +42,7 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<Maintena
     private CEntityComboBox<IssueElement> mainCombo;
 
     public NewMaintenanceRequestForm() {
-        super(MaintenanceRequestDTO.class);
+        super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
         initContent();
     }
 

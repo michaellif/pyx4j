@@ -22,7 +22,11 @@ public interface PersonalInfoView extends IsWidget {
 
     void populate(ResidentDTO personalInfo);
 
-    interface Presenter {
+    public void showError(String msg);
 
+    public void showNote(String msg);
+
+    interface Presenter {
+        public void save(ResidentDTO personalInfo);
     }
 }

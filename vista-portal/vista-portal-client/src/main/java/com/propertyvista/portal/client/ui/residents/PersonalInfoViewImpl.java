@@ -20,26 +20,26 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
 public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView {
 
-    private final PersonalInfoForm form;
-
-    private PersonalInfoView.Presenter presenter;
-
     private static I18n i18n = I18n.get(PersonalInfoViewImpl.class);
 
+    private final UserMessagePanel errorPanel = new UserMessagePanel();
+
+    private final PersonalInfoForm form;
+
+    private Presenter presenter;
+
     public PersonalInfoViewImpl() {
-        add(new UserMessagePanel());
+        add(errorPanel);
 
         form = new PersonalInfoForm();
-        form.initContent();
         add(form);
 
         Button saveButton = new Button(i18n.tr("Save"));
@@ -52,11 +52,12 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
                     form.setVisited(true);
-                    Window.scrollTo(0, 0);
-                    AppSite.getEventBus().fireEvent(
-                            new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
-                                    UserMessageEvent.UserMessageType.ERROR));
+                    String msg = i18n.tr("The form was completed with errors outlined below. Please review and try again.");
+                    showError(msg);
+                } else {
+                    presenter.save(form.getValue());
                 }
+                Window.scrollTo(0, 0);
             }
         });
 
@@ -72,8 +73,17 @@ public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView 
 
     @Override
     public void populate(ResidentDTO personalInfo) {
+        errorPanel.clearMessage();
         form.populate(personalInfo);
-
     }
 
+    @Override
+    public void showError(String msg) {
+        errorPanel.setMessage(msg, UserMessageType.ERROR);
+    }
+
+    @Override
+    public void showNote(String msg) {
+        errorPanel.setMessage(msg, UserMessageType.INFO);
+    }
 }

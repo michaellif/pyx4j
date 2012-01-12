@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.person.Person;
 
 @Transient
@@ -28,10 +27,6 @@ public interface ResidentDTO extends Person {
 
     @Caption(name = "Address")
     PriorAddress currentAddress();
-
-    @Length(3)
-    @Caption(name = "Vehicles")
-    IList<Vehicle> vehicles();
 
     @Length(3)
     @Caption(name = "Emergency Contacts")
