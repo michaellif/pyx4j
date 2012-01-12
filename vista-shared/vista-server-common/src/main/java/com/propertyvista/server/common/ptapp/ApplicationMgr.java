@@ -77,4 +77,9 @@ public class ApplicationMgr {
         ma.createDate().setValue(new LogicalDate());
         return ma;
     }
+
+    public static void makeApplicationCompleted(Application application) {
+
+    }
+
 }

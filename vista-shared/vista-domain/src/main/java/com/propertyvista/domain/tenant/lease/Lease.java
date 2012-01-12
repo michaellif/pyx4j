@@ -45,11 +45,13 @@ public interface Lease extends IEntity {
 
         ApplicationInProgress,
 
-        PendingApproval,
+        PendingDecision,
 
-        Declined,
+        Approved, // Application
 
-        Approved,
+        Declined, // Application
+
+        ApplicationCancelled, // Application
 
         Completed,
 
@@ -126,4 +128,5 @@ public interface Lease extends IEntity {
 
     @ReadOnly
     IPrimitive<LogicalDate> createDate();
+
 }

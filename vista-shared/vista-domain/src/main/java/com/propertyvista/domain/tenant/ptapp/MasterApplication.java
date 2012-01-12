@@ -39,21 +39,21 @@ public interface MasterApplication extends IEntity {
     @XmlType(name = "ApplicationStatus")
     public enum Status {
 
-        Invited,
+        Invited, // Mapped to Lease status ApplicationInProgress
 
-        Incomplete,
+        Incomplete, // Mapped to Lease status ApplicationInProgress
 
-        Submitted,
+        Submitted, // Mapped to Lease status ApplicationInProgress for Application or PendingDecision for MasterApplication
 
-        PendingDecision,
+        PendingDecision, // Mapped to Lease status PendingDecision
 
-        Approved,
+        InformationRequested, // Mapped to Lease status ApplicationInProgress
 
-        Declined,
+        Approved, // Mapped to Lease status Approved
 
-        InformationRequested,
+        Declined, // Mapped to Lease status Approved
 
-        Cancelled;
+        Cancelled; // Mapped to Lease status ApplicationCancelled
 
         @Override
         public String toString() {

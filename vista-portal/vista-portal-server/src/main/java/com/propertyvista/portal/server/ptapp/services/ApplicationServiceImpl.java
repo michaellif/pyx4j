@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Tenant;
@@ -31,8 +32,10 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.server.common.ptapp.ApplicationMgr;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
 
@@ -89,15 +92,16 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
     @Override
     public void getApplicationProgress(AsyncCallback<Application> callback, ApplicationWizardStep currentStep, ApplicationWizardSubstep currentSubstep) {
-        Application progress = Persistence.service().retrieve(Application.class, PtAppContext.getCurrentUserApplicationPrimaryKey());
+        Application application = PtAppContext.getCurrentUserApplication();
 
         if (currentStep != null) {
-            int idx = progress.steps().indexOf(currentStep);
+            int idx = application.steps().indexOf(currentStep);
             if (idx == -1) {
                 throw new Error("Invalid Step received");
             }
 
-            currentStep = progress.steps().get(idx);
+            currentStep = application.steps().get(idx);
+            ApplicationWizardStep.Status origStatus = currentStep.status().getValue();
             //TODO hasAlert ?
             if (currentSubstep != null) {
                 int idxSub = currentStep.substeps().indexOf(currentSubstep);
@@ -117,10 +121,14 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             boolean currentStepCompleated = (currentStep.status().getValue() == ApplicationWizardStep.Status.complete);
 
             if (currentStepCompleated) {
+                if (origStatus != ApplicationWizardStep.Status.complete) {
+                    onStepCompleted(application, currentStep);
+                }
+
                 // Move to next regular step
                 idx++;
-                iterOverSteps: while (idx < progress.steps().size()) {
-                    ApplicationWizardStep nextStep = progress.steps().get(idx);
+                iterOverSteps: while (idx < application.steps().size()) {
+                    ApplicationWizardStep nextStep = application.steps().get(idx);
                     // navigate to next invalid step
                     switch (nextStep.status().getValue()) {
                     case latest:
@@ -140,7 +148,14 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             }
 
         }
-        callback.onSuccess(progress);
+        callback.onSuccess(application);
+    }
+
+    private void onStepCompleted(Application application, ApplicationWizardStep currentStep) {
+        if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
+            ApplicationMgr.makeApplicationCompleted(application);
+        }
+
     }
 
     private boolean selectSubStep(ApplicationWizardStep currentStep, int startWithSubIndex) {

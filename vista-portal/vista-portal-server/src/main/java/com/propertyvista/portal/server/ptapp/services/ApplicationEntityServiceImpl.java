@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
-import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -26,7 +25,7 @@ import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
-public class ApplicationEntityServiceImpl extends EntityServicesImpl {
+public class ApplicationEntityServiceImpl {
 
     protected static I18n i18n = I18n.get(ApplicationEntityServiceImpl.class);
 
