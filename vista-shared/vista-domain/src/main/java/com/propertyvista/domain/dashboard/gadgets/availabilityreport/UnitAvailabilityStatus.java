@@ -15,12 +15,10 @@ package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,6 +27,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.dashboard.gadgets.CommonGadgetColumns;
 import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
+import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
@@ -64,18 +64,23 @@ public interface UnitAvailabilityStatus extends IEntity {
         }
     }
 
-    IPrimitive<LogicalDate> statusDate();
+    @EmbeddedEntity
+    CommonGadgetColumns common();
 
-    @Owner
     @ReadOnly
-    @Detached
-    AptUnit belongsTo();
+    AptUnit unit();
 
     /** This is optimization to avoid additional join while we answer queries */
     @ReadOnly
-    @Detached
-    Building buildingBelongsTo();
+    Building building();
 
+    @ReadOnly
+    Floorplan floorplan();
+
+    @ReadOnly
+    Complex complex();
+
+    // REFERENCED DATA
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> propertyCode();
 
@@ -93,13 +98,16 @@ public interface UnitAvailabilityStatus extends IEntity {
 
     /** {@link AptUnit#info()} -> {@link AptUnitInfo#number()} */
     @CustomComparator(clazz = ComparableComparator.class)
-    IPrimitive<String> unit();
+    IPrimitive<String> unitName();
 
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> floorplanName();
 
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<String> floorplanMarketingName();
+
+    // STATUS DATA    
+    IPrimitive<LogicalDate> statusDate();
 
     @Caption(name = "Vacant/Notice")
     @CustomComparator(clazz = ComparableComparator.class)
@@ -161,7 +169,4 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Format("MM/dd/yyyy")
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LogicalDate> availableFromDay();
-
-    @EmbeddedEntity
-    CommonGadgetColumns common();
 }

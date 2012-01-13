@@ -109,9 +109,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 lastUnit = unit;
                 status.set(null);
                 status.statusDate().setValue(start);
-                status.belongsTo().setPrimaryKey(unit.getPrimaryKey());
+                status.unit().setPrimaryKey(unit.getPrimaryKey());
 
-                status.unit().setValue(unit.info().number().getValue());
+                status.unitName().setValue(unit.info().number().getValue());
 
                 EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
                 leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), unit));
@@ -128,7 +128,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 status.floorplanName().setValue(unit.floorplan().name().getValue());
                 status.floorplanMarketingName().setValue(unit.floorplan().marketingName().getValue());
 
-                status.buildingBelongsTo().setPrimaryKey(building.getPrimaryKey());
+                status.building().setPrimaryKey(building.getPrimaryKey());
                 status.buildingName().setValue(building.info().name().getValue());
                 status.propertyCode().setValue(building.propertyCode().getValue());
                 status.complexName().setValue(building.complex().name().getValue());
@@ -189,7 +189,7 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
         if (!statuses.isEmpty()) {
             // add 1 turnover at the end
             UnitAvailabilityStatus s = (UnitAvailabilityStatus) statuses.get(statuses.size() - 1);
-            status.belongsTo().set(lastUnit);
+            status.unit().set(lastUnit);
             status.statusDate().setValue(new LogicalDate(end.getTime() + MIN_EVENT_DELTA));
             status.vacancyStatus().setValue(null);
             statuses.add(status.duplicate());

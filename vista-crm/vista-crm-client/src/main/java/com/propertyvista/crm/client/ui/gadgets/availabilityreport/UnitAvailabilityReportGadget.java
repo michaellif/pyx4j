@@ -248,7 +248,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     col(proto().common().owner().company().name(), i18n.tr("Owner"), false),
                     col(proto().common().propertyManger().name(), i18n.tr("Property Manager"), true),                
                     col(proto().complexName(), false),
-                    col(proto().unit(), true),
+                    col(proto().unitName(), true),
                     col(proto().floorplanName(), false),
                     col(proto().floorplanMarketingName(), false),
                     col(proto().vacancyStatus(), true),

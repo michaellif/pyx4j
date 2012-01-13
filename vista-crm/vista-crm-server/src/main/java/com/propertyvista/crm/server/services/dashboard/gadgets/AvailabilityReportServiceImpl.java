@@ -58,7 +58,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
             ArrayList<UnitAvailabilityStatusDTO> allUnitStatuses = new ArrayList<UnitAvailabilityStatusDTO>();
             if (!buildings.isEmpty()) {
-                criteria.add(PropertyCriterion.in(criteria.proto().buildingBelongsTo(), buildings));
+                criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
             }
             if (to == null) {
                 to = new LogicalDate();
@@ -67,13 +67,13 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
             // use descending order of the status date in order to select the most recent statuses first
             // use unit pk sorting in order to make tacking of already added unit statuses
-            criteria.setSorts(Arrays.asList(new Sort(criteria.proto().belongsTo().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+            criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
                     .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
             List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
 
             Key pervUnitPK = null;
             for (UnitAvailabilityStatus unitStatus : unfiltered) {
-                Key thisUnitPK = unitStatus.belongsTo().getPrimaryKey();
+                Key thisUnitPK = unitStatus.unit().getPrimaryKey();
                 if (!thisUnitPK.equals(pervUnitPK)) {
                     allUnitStatuses.add(computeTransientFields(unitStatus, to));
                     pervUnitPK = thisUnitPK;
@@ -149,7 +149,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().buildingBelongsTo(), buildings));
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
         }
         if (toDate == null) {
             toDate = new LogicalDate();
@@ -179,7 +179,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         HashSet<Key> checkedUnits = new HashSet<Key>(unitStatuses.size());
 
         for (UnitAvailabilityStatus unitStatus : unitStatuses) {
-            if (!checkedUnits.add(unitStatus.belongsTo().getPrimaryKey())) {
+            if (!checkedUnits.add(unitStatus.unit().getPrimaryKey())) {
                 continue;
             } else {
                 ++total;
@@ -243,7 +243,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         // sort the results by unitKey and then date so that we can check data for each unit separately  
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().belongsTo().getPath().toString(), false), new Sort(criteria.proto().statusDate().getPath()
+        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), false), new Sort(criteria.proto().statusDate().getPath()
                 .toString(), false)));
         if (fromDate != null) {
             criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.GREATER_THAN_OR_EQUAL, fromDate));
@@ -252,7 +252,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             criteria.add(new PropertyCriterion(criteria.proto().statusDate(), Restriction.LESS_THAN_OR_EQUAL, toDate));
         }
         if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().buildingBelongsTo(), buildings));
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
         }
 
         List<UnitAvailabilityStatus> statuses = Persistence.service().query(criteria);
@@ -272,7 +272,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         Iterator<UnitAvailabilityStatus> i = statuses.iterator();
         while (i.hasNext()) {
             UnitAvailabilityStatus status = i.next();
-            Key thisUnitPK = status.belongsTo().getPrimaryKey();
+            Key thisUnitPK = status.unit().getPrimaryKey();
             VacancyStatus vacancy = status.vacancyStatus().getValue();
             long statusTime = status.statusDate().getValue().getTime();
 
