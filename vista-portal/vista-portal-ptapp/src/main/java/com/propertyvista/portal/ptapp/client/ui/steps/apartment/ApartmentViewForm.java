@@ -25,7 +25,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
@@ -63,8 +62,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
     private FeatureExFolder parkingFolder;
 
     public ApartmentViewForm() {
-        super(ApartmentInfoDTO.class, new VistaViewersComponentFactory());
-        setEditable(false);
+        super(ApartmentInfoDTO.class);
+        setViewable(true);
     }
 
     @Override
