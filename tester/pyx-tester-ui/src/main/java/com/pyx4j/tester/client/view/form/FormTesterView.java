@@ -44,4 +44,6 @@ public interface FormTesterView extends IsWidget {
     void installForm(TestFormType formType);
 
     void populate(EntityI entity);
+
+    void clean();
 }

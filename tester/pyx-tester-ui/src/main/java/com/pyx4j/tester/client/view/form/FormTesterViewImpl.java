@@ -150,4 +150,10 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
         this.presenter = presenter;
 
     }
+
+    @Override
+    public void clean() {
+        currentForm.populateNew();
+
+    }
 }

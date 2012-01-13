@@ -51,22 +51,18 @@ public class FormTesterActivity extends AbstractActivity implements FormTesterVi
 
     @Override
     public void onClickPopulate() {
-        System.out.println("++++++ onClickPopulate");
-
         view.populate(DomainFactory.createEntityI());
-
     }
 
     @Override
     public void onClickClean() {
         System.out.println("++++++ onClickClean");
-
+        view.clean();
     }
 
     @Override
     public void onClickRepopulate() {
-        System.out.println("++++++ onClickRepopulate");
-
+        view.populate(DomainFactory.createEntityINext());
     }
 
 }

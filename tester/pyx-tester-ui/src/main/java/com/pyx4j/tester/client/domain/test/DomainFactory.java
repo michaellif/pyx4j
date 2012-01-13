@@ -26,24 +26,31 @@ public class DomainFactory {
 
     private static int counter = 0;
 
+    private static int poscounter = 0;
+
+    private static int intvalues[] = { 0, 1, 2, 3 };
+
+    private static String optstrvalues[] = { "Optional String 0", "Optional String 1", "Optional String 2", "Optional String 3" };
+
+    private static String mndstrvalues[] = { "Mandatory String 0", "Mandatory String 1", "Mandatory String 2", "Mandatory String 3" };
+
+    private static String opttxtvalues[] = { "Optional Text Area 0", "Optional Text Area 1", "Optional Text Area 2", "Optional Text Area 3" };
+
+    private static String mndtxtvalues[] = { "Mandatory Text Area 0", "Mandatory Text Area 1", "Mandatory Text Area 2", "Mandatory Text Area 3" };
+
+    private static EntityI.Enum1 enumvalues[] = { EntityI.Enum1.Value0, EntityI.Enum1.Value1, EntityI.Enum1.Value2, EntityI.Enum1.Value3 };
+
     public static EntityI createEntityI() {
-        EntityI retVal = EntityFactory.create(EntityI.class);
-        retVal.optionalTextI().setValue("Optional String Member");
-        retVal.mandatoryTextI().setValue("Mandatory String Member");
-        retVal.optionalInteger().setValue(counter++);
-        retVal.optionalEnum().setValue(EntityI.Enum1.Value0);
+        poscounter = 0;
+        return createEntityI(0);
+    }
 
-        retVal.optionalTextAreaII().setValue("Optional Text Area Member");
-        retVal.mandatoryTextAreaII().setValue("Mandatory Text Area Member");
+    public static EntityI createEntityINext() {
 
-        retVal.entityIIList().add(createEntityII());
-        retVal.entityIIList().add(createEntityII());
-        retVal.entityIIList().add(createEntityII());
-        retVal.entityIVList().add(createEntityIV());
-        retVal.entityIVList().add(createEntityIV());
-        retVal.entityIVList().add(createEntityIV());
-        retVal.entityIVList().add(createEntityIV());
-        return retVal;
+        if (++poscounter >= intvalues.length)
+            poscounter = 0;
+
+        return createEntityI(poscounter);
     }
 
     public static EntityII createEntityII() {
@@ -64,6 +71,27 @@ public class DomainFactory {
         EntityIV retVal = EntityFactory.create(EntityIV.class);
         retVal.stringMember().setValue("== EntityII Value ==");
         retVal.integerMember().setValue(counter++);
+        return retVal;
+    }
+
+    private static EntityI createEntityI(int pos) {
+        EntityI retVal = EntityFactory.create(EntityI.class);
+
+        retVal.optionalTextI().setValue(optstrvalues[pos]);
+        retVal.mandatoryTextI().setValue(mndstrvalues[pos]);
+        retVal.optionalInteger().setValue(intvalues[pos]);
+        retVal.optionalEnum().setValue(enumvalues[pos]);
+
+        retVal.optionalTextAreaII().setValue(opttxtvalues[pos]);
+        retVal.mandatoryTextAreaII().setValue(mndtxtvalues[pos]);
+
+        retVal.entityIIList().add(createEntityII());
+        retVal.entityIIList().add(createEntityII());
+        retVal.entityIIList().add(createEntityII());
+        retVal.entityIVList().add(createEntityIV());
+        retVal.entityIVList().add(createEntityIV());
+        retVal.entityIVList().add(createEntityIV());
+        retVal.entityIVList().add(createEntityIV());
         return retVal;
     }
 }
