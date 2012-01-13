@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,7 +24,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
     public TenantLister() {
         super(TenantDTO.class, CrmSiteMap.Tenants.Tenant.class, false, true);
 
-        // TODO: currently we use just person tenant, so we'll display more data for them: 
+        // TODO: currently we use just person tenant, so we'll display more data for them:
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().displayName()));
 //        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type()));
 
@@ -42,7 +42,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
         new Builder(proto().person().workPhone()).sortable(false).build(),
 
-        new Builder(proto().person().email().address()).title("E-mail address").build()
+        new Builder(proto().person().email()).title("E-mail address").build()
 
         );
     }

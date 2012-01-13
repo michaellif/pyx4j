@@ -45,7 +45,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
@@ -180,7 +179,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             } else if (proto().tenant().person().birthDate() == column.getObject()) {
                 comp = inject(column.getObject(), new CLabel());
             } else if (proto().tenant().person().email() == column.getObject()) {
-                comp = inject(column.getObject(), new CEmailLabel());
+                comp = inject(column.getObject()/* , new CEmailLabel() */);
             } else {
                 comp = super.createCell(column);
 

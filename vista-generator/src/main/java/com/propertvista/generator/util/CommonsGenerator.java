@@ -28,8 +28,6 @@ import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Email.Type;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
@@ -105,7 +103,7 @@ public class CommonsGenerator {
         person.mobilePhone().setValue(createPhone());
         person.workPhone().setValue(createPhone(DataGenerator.randomPhone("905"), "123"));
 
-        person.email().set(createEmail(name));
+        person.email().setValue(createEmail(name));
 
         return person;
     }
@@ -125,17 +123,8 @@ public class CommonsGenerator {
         return person;
     }
 
-    public static Email createEmail(Name person) {
-        return createEmail(RandomUtil.randomPersonEmail(person), Type.home);
-    }
-
-    public static Email createEmail(String address, Email.Type type) {
-        Email email = EntityFactory.create(Email.class);
-
-        email.type().setValue(type);
-        email.address().setValue(address);
-
-        return email;
+    public static String createEmail(Name person) {
+        return (RandomUtil.randomPersonEmail(person)/* , Type.home */);
     }
 
     public static String createPhone() {

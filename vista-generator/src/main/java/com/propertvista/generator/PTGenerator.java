@@ -44,7 +44,6 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.extradata.Pet;
 import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
@@ -130,7 +129,7 @@ public class PTGenerator {
         contact.homePhone().setValue(CommonsGenerator.createPhone());
         contact.mobilePhone().setValue(CommonsGenerator.createPhone());
 
-        contact.email().set(CommonsGenerator.createEmail(contact.name()));
+        contact.email().setValue(CommonsGenerator.createEmail(contact.name()));
 
         PriorAddress address = createAddress();
         contact.address().set(address);
@@ -345,9 +344,8 @@ public class PTGenerator {
         address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
         address.managerName().setValue("Mr. " + DataGenerator.randomLastName());
         address.managerPhone().setValue(CommonsGenerator.createPhone());
-        address.managerEmail().set(
-                CommonsGenerator.createEmail(DataGenerator.randomFirstName().toLowerCase() + "@" + DataGenerator.random(PreloadData.EMAIL_DOMAINS),
-                        Email.Type.work));
+        address.managerEmail().setValue(DataGenerator.randomFirstName().toLowerCase() + "@" + DataGenerator.random(PreloadData.EMAIL_DOMAINS)
+        /* , Email.Type.work */);
 
         return address;
     }
@@ -405,7 +403,7 @@ public class PTGenerator {
         if (index == 0) {
             tenantSummary.tenant().person().name().namePrefix().setValue(null);
             tenantSummary.tenant().person().name().middleName().setValue("");
-            tenantSummary.tenant().person().email().address().setValue(user.email().getValue());
+            tenantSummary.tenant().person().email().setValue(user.email().getValue());
             user.name().setValue(tenantSummary.tenant().person().name().getStringView());
         }
 
@@ -503,7 +501,7 @@ public class PTGenerator {
             guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
             guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
             guarantor.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
-            guarantor.email().set(CommonsGenerator.createEmail(guarantor.name()));
+            guarantor.email().setValue(CommonsGenerator.createEmail(guarantor.name()));
             ts.guarantors().add(guarantor);
         }
 

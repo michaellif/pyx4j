@@ -18,11 +18,11 @@ import com.propertvista.generator.PreloadData;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.company.CompanyEmail;
 import com.propertyvista.domain.company.CompanyPhone;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.company.OrganizationContacts;
-import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.property.vendor.Contract;
 import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Vendor;
@@ -52,8 +52,9 @@ public class CompanyVendor {
         company.website().setValue(website);
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            String email = "contact" + (i + 1) + "@" + domain;
-            company.emails().add(CommonsGenerator.createEmail(email, Email.Type.work));
+            CompanyEmail email = EntityFactory.create(CompanyEmail.class);
+            email.email().setValue("contact" + (i + 1) + "@" + domain);
+            company.emails().add(email /* , Email.Type.work */);
         }
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {

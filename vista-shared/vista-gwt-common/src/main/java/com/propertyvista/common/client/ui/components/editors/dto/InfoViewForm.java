@@ -40,7 +40,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEmailLabel;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
@@ -98,7 +97,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email(), new CEmailLabel()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()/* , new CEmailLabel() */), 25).build());
 
         main.setH1(++row, 0, 1, i18n.tr("Secure Information"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().driversLicense()), 20).build());
