@@ -34,6 +34,11 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
     public NDatePicker(CDatePicker cComponent) {
         super(cComponent, ImageFactory.getImages().triggerBlueUp());
 
+    }
+
+    @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
         getEditor().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -42,6 +47,7 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
                 }
             }
         });
+
     }
 
     @Override

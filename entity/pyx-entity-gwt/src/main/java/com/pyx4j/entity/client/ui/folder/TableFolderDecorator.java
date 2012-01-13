@@ -139,7 +139,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     }
 
     private void applyFolderProperties() {
-        if (folder.isEditable() && folder.isEnabled()) {
+        if (folder.isEditable() && folder.isEnabled() & !folder.isViewable()) {
             renderMandatoryStars(true);
         }
     }

@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
-public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
+public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
 
     private List<E> options;
 
@@ -71,8 +71,8 @@ public class CComboBox<E> extends CFocusComponent<E, NativeComboBox<E>> implemen
     }
 
     @Override
-    protected NativeComboBox<E> createWidget() {
-        NativeComboBox<E> nativeComboBox = new NativeComboBox<E>(this);
+    protected NComboBox<E> createWidget() {
+        NComboBox<E> nativeComboBox = new NComboBox<E>(this);
         nativeComboBox.setOptions(options);
         return nativeComboBox;
     }

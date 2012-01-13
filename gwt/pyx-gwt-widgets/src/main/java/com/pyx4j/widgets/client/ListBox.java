@@ -20,7 +20,11 @@
  */
 package com.pyx4j.widgets.client;
 
-public class ListBox extends com.google.gwt.user.client.ui.ListBox {
+public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IFocusWidget {
+
+    private boolean enabled = true;
+
+    private boolean editable = true;
 
     public ListBox() {
         this(false);
@@ -29,6 +33,28 @@ public class ListBox extends com.google.gwt.user.client.ui.ListBox {
     public ListBox(boolean multipleSelect) {
         super(multipleSelect);
         setStyleName(DefaultWidgetsTheme.StyleName.ListBox.name());
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        super.setEnabled(enabled && this.isEditable());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+        super.setEnabled(editable && this.isEnabled());
+    }
+
+    @Override
+    public boolean isEditable() {
+        return editable;
     }
 
 }

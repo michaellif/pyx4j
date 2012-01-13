@@ -190,13 +190,15 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-            if (getCComponent().isValid()) {
+        if (getEditor() != null) {
+            if (event.isEventOfType(PropertyName.repopulated)) {
                 getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-            } else if (getCComponent().isVisited()) {
-                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
+                if (getCComponent().isValid()) {
+                    getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                } else if (getCComponent().isVisited()) {
+                    getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                }
             }
         }
     }

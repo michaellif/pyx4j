@@ -27,17 +27,13 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
 
 /**
  *
  */
-public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<E> {
-
-    private final CComboBox<E> comboBox;
+public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> implements INativeFocusComponent<E> {
 
     private E value;
 
@@ -49,23 +45,40 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
 
     private boolean deferredSetSelectedStarted = false;
 
-    private boolean enabled = true;
+    public NComboBox(final CComboBox<E> comboBox) {
+        super(comboBox);
+    }
 
-    private boolean editable = true;
+    @Override
+    protected ListBox createEditor() {
+        return new ListBox();
+    }
 
-    public NativeComboBox(final CComboBox<E> comboBox) {
-        super();
-        this.comboBox = comboBox;
-        addChangeHandler(new ChangeHandler() {
+    @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
+        getEditor().addChangeHandler(new ChangeHandler() {
 
             @Override
             public void onChange(ChangeEvent event) {
-                CComboBox<E> comboBox = NativeComboBox.this.comboBox;
-                comboBox.onEditingStop();
+                getCComponent().onEditingStop();
             }
         });
-        setTabIndex(comboBox.getTabIndex());
+        setTabIndex(getCComponent().getTabIndex());
+    }
 
+    @Override
+    public void setNativeValue(E newValue) {
+        this.value = newValue;
+        if (isViewable()) {
+            getViewer().setHTML(getCComponent().getItemName(newValue));
+        } else {
+            if ((this.value != null) && ((options == null) || !options.contains(this.value))) {
+                refreshOptions();
+            } else {
+                setSelectedValue(this.value);
+            }
+        }
     }
 
     public void setOptions(List<E> opt) {
@@ -74,45 +87,47 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
     }
 
     public void refreshOption(E opt) {
-        setItemText(getNativeOptionIndex(opt), comboBox.getItemName(opt));
+        getEditor().setItemText(getNativeOptionIndex(opt), getCComponent().getItemName(opt));
     }
 
     public void removeOption(E opt) {
-        removeItem(getNativeOptionIndex(opt));
+        getEditor().removeItem(getNativeOptionIndex(opt));
     }
 
     public void refreshOptions() {
-        super.clear();
+        if (getEditor() != null) {
+            getEditor().clear();
 
-        firstNativeItemIsNoSelection = !comboBox.isMandatory();
-        if (firstNativeItemIsNoSelection) {
-            super.addItem(comboBox.getItemName(null));
-        }
+            firstNativeItemIsNoSelection = !getCComponent().isMandatory();
+            if (firstNativeItemIsNoSelection) {
+                getEditor().addItem(getCComponent().getItemName(null));
+            }
 
-        if ((this.value != null) && ((options == null) || !options.contains(this.value))) {
-            switch (comboBox.getPolicy()) {
-            case KEEP:
-                super.addItem(comboBox.getItemName(this.value));
-                notInOptionsValue = this.value;
-                break;
-            case DISCARD:
-                if (options != null) {
-                    comboBox.setValue(null);
+            if ((this.value != null) && ((options == null) || !options.contains(this.value))) {
+                switch (getCComponent().getPolicy()) {
+                case KEEP:
+                    getEditor().addItem(getCComponent().getItemName(this.value));
+                    notInOptionsValue = this.value;
+                    break;
+                case DISCARD:
+                    if (options != null) {
+                        getCComponent().setValue(null);
+                    }
+                    notInOptionsValue = null;
+                    break;
+
                 }
+            } else {
                 notInOptionsValue = null;
-                break;
-
             }
-        } else {
-            notInOptionsValue = null;
-        }
 
-        if (options != null) {
-            for (E o : options) {
-                super.addItem(comboBox.getItemName(o));
+            if (options != null) {
+                for (E o : options) {
+                    getEditor().addItem(getCComponent().getItemName(o));
+                }
             }
+            setSelectedValue(this.value);
         }
-        setSelectedValue(this.value);
     }
 
     private E getValueByNativeOptionIndex(int index) {
@@ -173,63 +188,8 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        super.setEnabled(enabled && this.isEditable());
-        if (enabled) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
-        } else {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
-        }
-
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-        super.setEnabled(editable && this.isEnabled());
-        if (editable) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
-        } else {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
-        }
-    }
-
-    @Override
-    public boolean isEditable() {
-        return editable;
-    }
-
-    @Override
-    public void setViewable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isViewable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setNativeValue(E value) {
-        this.value = value;
-        if ((this.value != null) && ((options == null) || !options.contains(this.value))) {
-            refreshOptions();
-        } else {
-            setSelectedValue(this.value);
-        }
-    }
-
-    @Override
     public E getNativeValue() {
-        this.value = getValueByNativeOptionIndex(getSelectedIndex());
+        this.value = getValueByNativeOptionIndex(getEditor().getSelectedIndex());
         return this.value;
     }
 
@@ -241,23 +201,17 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
                 @Override
                 public void execute() {
                     deferredSetSelectedStarted = false;
-                    setSelectedIndex(getNativeOptionIndex(NativeComboBox.this.value));
+                    getEditor().setSelectedIndex(getNativeOptionIndex(NComboBox.this.value));
                 }
             });
         }
     }
 
     @Override
-    public CComboBox<E> getCComponent() {
-        return comboBox;
-    }
-
-    @Override
     protected void onLoad() {
         super.onLoad();
-        DomDebug.attachedWidget();
         if (options == null) {
-            comboBox.retriveOptions(new AsyncOptionsReadyCallback<E>() {
+            getCComponent().retriveOptions(new AsyncOptionsReadyCallback<E>() {
                 @Override
                 public void onOptionsReady(List<E> opt) {
                     setOptions(opt);
@@ -269,21 +223,9 @@ public class NativeComboBox<E> extends ListBox implements INativeFocusComponent<
     @Override
     protected void onUnload() {
         super.onUnload();
-        DomDebug.detachWidget();
         options = null;
-        super.clear();
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
-            if (comboBox.isValid()) {
-                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-            } else if (comboBox.isVisited()) {
-                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
-            }
+        if (getEditor() != null) {
+            getEditor().clear();
         }
     }
 

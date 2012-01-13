@@ -74,20 +74,22 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
     protected void onWidgetCreated() {
         super.onWidgetCreated();
         WIDGET widget = super.getWidget();
-        widget.addFocusHandler(new FocusHandler() {
+        if (!(widget instanceof NFocusComponent)) {
+            widget.addFocusHandler(new FocusHandler() {
 
-            @Override
-            public void onFocus(FocusEvent event) {
-                onEditingStart();
-            }
-        });
+                @Override
+                public void onFocus(FocusEvent event) {
+                    onEditingStart();
+                }
+            });
 
-        widget.addBlurHandler(new BlurHandler() {
+            widget.addBlurHandler(new BlurHandler() {
 
-            @Override
-            public void onBlur(BlurEvent event) {
-                onEditingStop();
-            }
-        });
+                @Override
+                public void onBlur(BlurEvent event) {
+                    onEditingStop();
+                }
+            });
+        }
     }
 }
