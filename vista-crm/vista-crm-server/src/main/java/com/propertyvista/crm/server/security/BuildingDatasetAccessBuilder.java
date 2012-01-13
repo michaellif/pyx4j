@@ -17,15 +17,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class BuildingDatasetAccessBuilder {
 
     public static void updateAccessList(CrmUser user) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), VistaContext.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), CrmAppContext.getCurrentUser()));
         Employee employee = Persistence.service().retrieve(criteria);
     }
 }

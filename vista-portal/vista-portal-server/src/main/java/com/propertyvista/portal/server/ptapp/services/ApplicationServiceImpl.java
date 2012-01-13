@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -46,7 +46,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
     @Override
     public void getApplication(AsyncCallback<Application> callback) {
 
-        CrmUser currentUser = PtAppContext.getCurrentUser();
+        TenantUser currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
 
         Tenant tenant;

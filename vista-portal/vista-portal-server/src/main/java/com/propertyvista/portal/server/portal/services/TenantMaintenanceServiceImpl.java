@@ -31,14 +31,14 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
+import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
 
     private Tenant getOwner() {
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), VistaContext.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), TenantAppContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }
 

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,6 +27,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -50,6 +52,19 @@ public class PtAppContext extends VistaContext {
             v.setAttribute("pt-visit", attr);
         }
         return attr;
+    }
+
+    public static TenantUser getCurrentUser() {
+        Visit v = Context.getVisit();
+        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
+            log.trace("no session");
+            throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
+        }
+        TenantUser user = EntityFactory.create(TenantUser.class);
+        user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());
+        user.name().setValue(v.getUserVisit().getName());
+        user.email().setValue(v.getUserVisit().getEmail());
+        return user;
     }
 
     public static void setCurrentUserApplication(Application application) {

@@ -30,7 +30,6 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
@@ -39,10 +38,8 @@ import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;
-import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantDashboardServiceImpl implements TenantDashboardService {
-    CrmUser currentUser = VistaContext.getCurrentUser();
 
     @Override
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {
@@ -50,7 +47,7 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
 
         // get tenant
         EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
-        crit.add(PropertyCriterion.eq(crit.proto().user(), VistaContext.getCurrentUser()));
+        crit.add(PropertyCriterion.eq(crit.proto().user(), TenantAppContext.getCurrentUser()));
         Tenant tenant = Persistence.service().retrieve(crit);
 
         Persistence.service().retrieve(tenant.user());

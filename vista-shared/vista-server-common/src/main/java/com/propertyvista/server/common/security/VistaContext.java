@@ -17,13 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
-
-import com.propertyvista.domain.security.CrmUser;
 
 public class VistaContext {
 
@@ -38,19 +35,6 @@ public class VistaContext {
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
         return v.getUserVisit().getPrincipalPrimaryKey();
-    }
-
-    public static CrmUser getCurrentUser() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
-        }
-        CrmUser user = EntityFactory.create(CrmUser.class);
-        user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());
-        user.name().setValue(v.getUserVisit().getName());
-        user.email().setValue(v.getUserVisit().getEmail());
-        return user;
     }
 
 }
