@@ -29,6 +29,8 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,6 +40,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -87,6 +90,8 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     @Override
     protected void addItem() {
+        filterOutAlreadySelectedTenants();
+
         new SelectTenantBox(tenantListerView) {
             @Override
             public boolean onClickOk() {
@@ -114,6 +119,21 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 return true;
             }
         }.show();
+    }
+
+    private void filterOutAlreadySelectedTenants() {
+        if (tenantListerView.getPresenter() instanceof ListerActivityBase) {
+            ListerActivityBase<Tenant> listerActivity = (ListerActivityBase<Tenant>) tenantListerView.getPresenter();
+
+            List<DataTableFilterData> restrictAlreadySelectedTenants = new ArrayList<DataTableFilterData>(getValue().size());
+            Tenant tenantProto = EntityFactory.getEntityPrototype(Tenant.class);
+            for (TenantInLease alreadySelected : getValue()) {
+                restrictAlreadySelectedTenants.add(new DataTableFilterData(tenantProto.id().getPath(), Operators.isNot, alreadySelected.tenant().id()
+                        .getValue()));
+            }
+            listerActivity.setPreDefinedFilters(restrictAlreadySelectedTenants);
+            listerActivity.populate();
+        }
     }
 
     private boolean isApplicantPresent() {
