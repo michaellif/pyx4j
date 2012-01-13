@@ -41,7 +41,7 @@ public interface ApartmentInfoDTO extends IEntity {
     // Floorplan data:
     IPrimitive<String> floorplan();
 
-    @Caption(name = "bedrooms")
+    @Caption(name = "Bedrooms")
     IPrimitive<String> bedroomsAndDens();
 
     IPrimitive<String> bedrooms();
