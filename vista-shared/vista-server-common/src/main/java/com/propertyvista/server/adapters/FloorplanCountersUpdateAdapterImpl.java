@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class FloorplanCountersUpdateAdapter implements com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter {
+public class FloorplanCountersUpdateAdapterImpl implements com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter {
 
     @Override
     public boolean allowModifications(AptUnit entity, MemberMeta meta, Object valueOrig, Object valueNew) {
