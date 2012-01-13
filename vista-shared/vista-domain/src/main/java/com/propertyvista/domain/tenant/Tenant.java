@@ -15,23 +15,32 @@ package com.propertyvista.domain.tenant;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.security.TenantUser;
 
-public interface Tenant extends IUserEntity {
+public interface Tenant extends IEntity {
+
+    @NotNull
+    @ReadOnly
+    @Detached
+    @MemberColumn(name = "user_id")
+    TenantUser user();
 
     @I18n
     @XmlType(name = "TenantType")

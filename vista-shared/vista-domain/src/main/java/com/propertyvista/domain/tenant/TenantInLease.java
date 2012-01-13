@@ -33,6 +33,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 
 @ToStringFormat("{0} - {1}, {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -95,6 +96,12 @@ public interface TenantInLease extends IBoundToApplication {
     @ReadOnly
     @ToString(index = 0)
     Tenant tenant();
+
+    @Override
+    @NotNull
+    @Indexed
+    @Detached
+    Application application();
 
     @ToString(index = 2)
     @NotNull

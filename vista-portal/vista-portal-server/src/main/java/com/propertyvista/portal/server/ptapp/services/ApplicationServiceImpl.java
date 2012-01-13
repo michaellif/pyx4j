@@ -32,6 +32,7 @@ import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -81,6 +82,16 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             application = Persistence.service().retrieve(criteria);
             if (application == null) {
                 throw new UserRuntimeException(i18n.tr("You have no applications assigned"));
+            }
+
+            if (application.status().getValue() == MasterApplication.Status.Invited) {
+                application.status().setValue(MasterApplication.Status.Incomplete);
+                Persistence.service().persist(application);
+                Persistence.service().retrieve(application.belongsTo());
+                if (application.belongsTo().status().getValue() == MasterApplication.Status.Invited) {
+                    application.belongsTo().status().setValue(MasterApplication.Status.Incomplete);
+                    Persistence.service().persist(application.belongsTo());
+                }
             }
         }
 
