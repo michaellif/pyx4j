@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-09-22
+ * Created on Jan 13, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.server;
+package com.pyx4j.entity.adapters;
 
-public class ApplicationMode {
+import com.pyx4j.entity.shared.IEntity;
 
-    public static final class ModeImpl implements com.pyx4j.config.shared.ApplicationMode.Mode {
+public interface EntityModificationAdapter<E extends IEntity> {
 
-        @Override
-        public boolean isDevelopment() {
-            return ServerSideConfiguration.instance().isDevelopmentBehavior();
-        }
+    public void onBeforeUpdate(E origEntity, Object newEntity);
 
-    }
 }

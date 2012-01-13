@@ -37,6 +37,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.entity.adapters.EntityModificationAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
 import com.pyx4j.entity.annotations.Adapters;
@@ -458,7 +459,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
-            entityMembersModificationAdapters = adapters.modificationAdapters();
+            entityMembersModificationAdapters = adapters.memberModificationAdapters();
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
@@ -522,6 +523,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 updated = true;
             }
         }
+        if (updated && (adapters != null) && adapters.entityModificationAdapters() != null) {
+            for (Class<? extends EntityModificationAdapter<?>> adapterClass : adapters.entityModificationAdapters()) {
+                @SuppressWarnings("rawtypes")
+                EntityModificationAdapter adapter = AdapterFactory.getEntityModificationAdapters(adapterClass);
+                adapter.onBeforeUpdate(baseEntity, entity);
+            }
+        }
         return updated;
     }
 
@@ -553,7 +561,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
-            entityMembersModificationAdapters = adapters.modificationAdapters();
+            entityMembersModificationAdapters = adapters.memberModificationAdapters();
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();

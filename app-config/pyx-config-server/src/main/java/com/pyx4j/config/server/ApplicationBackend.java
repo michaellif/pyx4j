@@ -24,7 +24,7 @@ import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 
 public class ApplicationBackend {
 
-    public static class ApplicationBackendConfig implements com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig {
+    public static class ApplicationBackendConfigImpl implements com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig {
 
         @Override
         public ApplicationBackendType getBackendType() {

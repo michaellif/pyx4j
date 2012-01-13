@@ -392,7 +392,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = iEntity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
-            entityMembersModificationAdapters = adapters.modificationAdapters();
+            entityMembersModificationAdapters = adapters.memberModificationAdapters();
         }
 
         nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {

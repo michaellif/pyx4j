@@ -25,10 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.pyx4j.entity.adapters.EntityModificationAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 
 /**
  * Collection of Entity behaviors that are used on back-end.
+ * 
+ * This works like database triggers and are triggered/called only when Persistence.service().merge(...) is called.
  * 
  * TODO find a better name.
  */
@@ -36,6 +39,10 @@ import com.pyx4j.entity.adapters.MemberModificationAdapter;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Adapters {
 
-    Class<? extends MemberModificationAdapter<?>>[] modificationAdapters() default {};
+    Class<? extends MemberModificationAdapter<?>>[] memberModificationAdapters() default {};
 
+    /**
+     * EntityModificationAdapters are fired after all MemberModificationAdapters
+     */
+    Class<? extends EntityModificationAdapter<?>>[] entityModificationAdapters() default {};
 }

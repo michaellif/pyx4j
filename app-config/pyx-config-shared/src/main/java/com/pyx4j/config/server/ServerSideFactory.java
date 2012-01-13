@@ -30,6 +30,8 @@ public class ServerSideFactory {
         }
         if (interfaceCalss.getSimpleName().startsWith("I") && Character.isUpperCase(interfaceCalss.getSimpleName().charAt(1))) {
             interfaceClassName = interfaceClassName.replace(interfaceCalss.getSimpleName(), "Server" + interfaceCalss.getSimpleName().substring(1));
+        } else {
+            interfaceClassName = interfaceClassName + "Impl";
         }
         try {
             Class<T> klass = (Class<T>) Class.forName(interfaceClassName);
