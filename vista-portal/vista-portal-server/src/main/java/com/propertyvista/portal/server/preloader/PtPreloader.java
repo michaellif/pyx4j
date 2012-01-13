@@ -92,7 +92,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             }
 
             String email = DemoData.UserType.PTENANT.getEmail(i);
-            TenantUser user = UserPreloader.createTenantUser("", email, email, VistaTenantBehavior.ProspectivePrimary);
+            TenantUser user = UserPreloader.createTenantUser("", email, email, VistaTenantBehavior.ProspectiveApplicant);
             ApplicationSummaryGDO summary = generator.createSummary(user, units.get(i - 1));
 
             // Update user name

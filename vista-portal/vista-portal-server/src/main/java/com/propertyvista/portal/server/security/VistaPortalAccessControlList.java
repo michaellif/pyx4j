@@ -115,10 +115,11 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.Prospective, new EntityPermission(SummaryDTO.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(PaymentInformation.class, applicationEntityAccess, CRUD));
 
-        grant(VistaTenantBehavior.ProspectivePrimary, VistaTenantBehavior.Prospective);
-        grant(VistaTenantBehavior.ProspectiveSecondary, VistaTenantBehavior.Prospective);
+        grant(VistaTenantBehavior.ProspectiveApplicant, VistaTenantBehavior.Prospective);
+        grant(VistaTenantBehavior.ProspectiveCoApplicant, VistaTenantBehavior.Prospective);
 
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationService.class));
+        grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(SummaryService.class));
 
         // -------------
 

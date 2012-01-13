@@ -92,7 +92,7 @@ public class ApplicationMgr {
                 a.belongsTo().set(ma);
                 a.status().setValue(MasterApplication.Status.Invited);
                 a.steps().addAll(ApplicationMgr.createApplicationProgress());
-                a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectivePrimary));
+                a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveApplicant));
                 a.lease().set(ma.lease());
 
                 tenantInLease.application().set(a);
@@ -112,7 +112,7 @@ public class ApplicationMgr {
 
         TenantUser user = application.user();
         TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
-        boolean isPrimary = credential.behaviors().contains(VistaTenantBehavior.ProspectivePrimary);
+        boolean isPrimary = credential.behaviors().contains(VistaTenantBehavior.ProspectiveApplicant);
         credential.behaviors().clear();
         credential.behaviors().add(VistaTenantBehavior.ProspectiveSubmited);
         Persistence.service().persist(credential);
@@ -129,12 +129,12 @@ public class ApplicationMgr {
         if (isPrimary) {
             Persistence.service().retrieve(lease.tenants());
             for (TenantInLease tenantInLease : lease.tenants()) {
-                if (TenantInLease.Role.CoApplicant == tenantInLease.role().getValue()) {
+                if ((TenantInLease.Role.CoApplicant == tenantInLease.role().getValue() && (!tenantInLease.takeOwnership().isBooleanTrue()))) {
                     Application a = EntityFactory.create(Application.class);
                     a.belongsTo().set(ma);
                     a.status().setValue(MasterApplication.Status.Invited);
                     a.steps().addAll(ApplicationMgr.createApplicationProgress());
-                    a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveSecondary));
+                    a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveCoApplicant));
                     a.lease().set(ma.lease());
                     Persistence.service().persist(a);
 
