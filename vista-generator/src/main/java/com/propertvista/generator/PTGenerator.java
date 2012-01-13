@@ -79,6 +79,8 @@ public class PTGenerator {
 
     private final VistaDevPreloadConfig config;
 
+    private int reservedCoApplicantNumber = 0;
+
     public PTGenerator(VistaDevPreloadConfig config) {
         this.seed = config.ptGenerationSeed;
         DataGenerator.setRandomSeed(config.ptGenerationSeed);
@@ -405,6 +407,10 @@ public class PTGenerator {
             tenantSummary.tenant().person().name().middleName().setValue("");
             tenantSummary.tenant().person().email().setValue(user.email().getValue());
             user.name().setValue(tenantSummary.tenant().person().name().getStringView());
+        } else if (!tenantSummary.tenantInLease().takeOwnership().getValue()
+                && (tenantSummary.tenantInLease().role().getValue() == TenantInLease.Role.CoApplicant)) {
+            String email = DemoData.UserType.PCOAPPLICANT.getEmail(++reservedCoApplicantNumber);
+            tenantSummary.tenant().person().email().setValue(email);
         }
 
         EmergencyContact ec1 = createEmergencyContact();

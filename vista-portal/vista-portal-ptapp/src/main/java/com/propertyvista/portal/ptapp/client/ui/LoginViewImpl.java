@@ -99,6 +99,11 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             protected void onDevLogin(NativeEvent event, int nativeKeyCode) {
                 setDevLoginValues(event, nativeKeyCode);
             }
+
+            @Override
+            protected String[][] devLogins() {
+                return new String[][] { { "Press 'Ctrl+Q' to login as Applicant", "Q" }, { "Press 'Ctrl+E' to login as CoApplicant", "E" } };
+            }
         };
         form.initContent();
         form.get(form.proto().captcha()).setVisible(false);
@@ -146,6 +151,9 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         switch (nativeKeyCode) {
         case 'Q':
             type = DemoData.UserType.PTENANT;
+            break;
+        case 'E':
+            type = DemoData.UserType.PCOAPPLICANT;
             break;
         }
         if (type != null) {
