@@ -36,8 +36,8 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.domain.company.AssignedPortfolio;
-import com.propertyvista.domain.company.ManagedEmployee;
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
 
 public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -128,18 +128,18 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     private CComponent<?, ?> createPortfolioListView() {
-        return new VistaTableFolder<AssignedPortfolio>(AssignedPortfolio.class, isEditable()) {
+        return new VistaTableFolder<Portfolio>(Portfolio.class, isEditable()) {
 
             @Override
             public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().portfolio(), "40em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "40em"));
                 return columns;
             }
 
             @Override
-            protected IFolderDecorator<AssignedPortfolio> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedPortfolio>(this, this.isEditable()) {
+            protected IFolderDecorator<Portfolio> createDecorator() {
+                return new VistaTableFolderDecorator<Portfolio>(this, this.isEditable()) {
                     {
                         setShowHeader(false);
                     }
@@ -150,18 +150,22 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     private CComponent<?, ?> createEmpoloyeeListView() {
-        return new VistaTableFolder<ManagedEmployee>(ManagedEmployee.class, isEditable()) {
+        return new VistaTableFolder<Employee>(Employee.class, isEditable()) {
 
             @Override
             public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().employee(), "40em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().title(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().namePrefix(), "5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().firstName(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().lastName(), "20em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name().nameSuffix(), "5em"));
                 return columns;
             }
 
             @Override
-            protected IFolderDecorator<ManagedEmployee> createDecorator() {
-                return new VistaTableFolderDecorator<ManagedEmployee>(this, this.isEditable()) {
+            protected IFolderDecorator<Employee> createDecorator() {
+                return new VistaTableFolderDecorator<Employee>(this, this.isEditable()) {
                     {
                         setShowHeader(false);
                     }
