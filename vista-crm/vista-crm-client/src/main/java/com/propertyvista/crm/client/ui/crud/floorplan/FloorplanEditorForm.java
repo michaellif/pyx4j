@@ -19,13 +19,11 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -38,11 +36,15 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
     private static final I18n i18n = I18n.get(FloorplanEditorForm.class);
 
     public FloorplanEditorForm() {
-        this(new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public FloorplanEditorForm(IEditableComponentFactory factory) {
-        super(FloorplanDTO.class, factory);
+    public FloorplanEditorForm(boolean viewMode) {
+        super(FloorplanDTO.class);
+        if (viewMode) {
+            setEditable(false);
+            setViewable(true);
+        }
     }
 
     @Override
