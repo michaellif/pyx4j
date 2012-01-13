@@ -16,22 +16,33 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.domain.company.AssignedBuilding;
 import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
@@ -80,4 +91,32 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             }
         };
     }
+
+    private abstract static class SelectBuildingDialog extends OkCancelDialog {
+
+        private final IListerView<Building> buildingListerView;
+
+        private final DeckLayoutPanel container;
+
+        public SelectBuildingDialog(List<Building> alreadySelectedBuidlings) {
+            super(i18n.tr("Select Buildings") + "...");
+
+            container = new DeckLayoutPanel();
+            container.setSize("800px", "600px");
+
+            setBody(container);
+
+            buildingListerView = new ListerInternalViewImplBase<Building>(new SelectedBuildingLister());
+            @SuppressWarnings("unchecked")
+            final ListerActivityBase<Building> buildingListerActivity = new ListerActivityBase<Building>(null, buildingListerView,
+                    (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
+
+            buildingListerActivity.start(container, new SimpleEventBus());
+        }
+
+        protected Building getSelectedItem() {
+            return buildingListerView.getLister().getSelectedItem();
+        }
+    }
+
 }
