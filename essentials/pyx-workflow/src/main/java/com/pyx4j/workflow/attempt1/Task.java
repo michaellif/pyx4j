@@ -16,12 +16,14 @@ import java.util.List;
 public interface Task extends Condition {
 
     public static enum TaskStatus {
-        Started, Ready, Triggered, Completed
+        New, Started, Ready, Triggered, Completed
     }
 
     public void addCondition(Condition cond);
 
     public List<Condition> getConditions();
+
+    public TaskStatus getStatus();
 
     public void execute();
 

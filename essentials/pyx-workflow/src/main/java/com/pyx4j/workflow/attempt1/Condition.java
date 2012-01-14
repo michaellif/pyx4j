@@ -15,7 +15,7 @@ public interface Condition {
 
     public boolean isTrue(); // check for any type
 
-    public boolean isTrue(ValueType type);
+    public boolean isTrue(Class<? extends ValueType> typeClass);
 
-    public void set(ValueType type, boolean value);
+    public void setCondValue(Class<? extends ValueType> typeClass, boolean value);
 }
