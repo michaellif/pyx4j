@@ -72,24 +72,41 @@ public interface EntityI extends IEntity {
     @NotNull
     IPrimitive<String> mandatoryTextAreaII();
 
-    IPrimitive<Integer> optionalInteger();
+    IPrimitive<Integer> optionalIntegerI();
+
+    IPrimitive<Integer> optionalIntegerII();
 
     @NotNull
-    IPrimitive<Integer> mandatoryInteger();
+    IPrimitive<Integer> mandatoryIntegerI();
+
+    @NotNull
+    IPrimitive<Integer> mandatoryIntegerII();
 
     IPrimitive<Boolean> checkBox();
 
     @Editor(type = EditorType.password)
-    IPrimitive<String> optionalPassword();
+    IPrimitive<String> optionalPasswordI();
+
+    @Editor(type = EditorType.password)
+    IPrimitive<String> optionalPasswordII();
 
     @Editor(type = EditorType.password)
     @NotNull
-    IPrimitive<String> mandatoryPassword();
+    IPrimitive<String> mandatoryPasswordI();
 
-    IPrimitive<Enum1> optionalEnum();
+    @Editor(type = EditorType.password)
+    @NotNull
+    IPrimitive<String> mandatoryPasswordII();
+
+    IPrimitive<Enum1> optionalEnumI();
 
     @NotNull
-    IPrimitive<Enum1> mandatoryEnum();
+    IPrimitive<Enum1> mandatoryEnumI();
+
+    IPrimitive<Enum1> optionalEnumII();
+
+    @NotNull
+    IPrimitive<Enum1> mandatoryEnumII();
 
     @Editor(type = EditorType.suggest)
     IPrimitive<String> optionalSuggest();
@@ -123,11 +140,11 @@ public interface EntityI extends IEntity {
     IPrimitive<String> mandatoryPhone();
 
     @Editor(type = EditorType.money)
-    IPrimitive<String> optionalMoney();
+    IPrimitive<Double> optionalMoney();
 
     @Editor(type = EditorType.money)
     @NotNull
-    IPrimitive<String> mandatoryMoney();
+    IPrimitive<Double> mandatoryMoney();
 
     @Owned
     IList<EntityII> entityIIList();

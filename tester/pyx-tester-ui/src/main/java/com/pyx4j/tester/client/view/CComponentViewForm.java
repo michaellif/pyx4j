@@ -118,7 +118,9 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
         });
         main.setWidget(++row, 0, decorator);
 
-        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().valid())));
+        decorator = new TesterWidgetDecorator(inject(proto().valid()));
+        decorator.getComnponent().setViewable(true);
+        main.setWidget(row, 1, decorator);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().toolTip())));
 

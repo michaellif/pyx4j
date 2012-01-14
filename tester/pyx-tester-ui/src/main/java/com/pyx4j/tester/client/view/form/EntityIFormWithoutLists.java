@@ -63,8 +63,11 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalInteger())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryInteger())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalIntegerI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerI())));
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalIntegerII())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerII())));
 
         main.setHR(++row, 0, 1);
 
@@ -72,13 +75,18 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPassword())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPassword())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPasswordI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPasswordI())));
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPasswordII())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPasswordII())));
 
         main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnum())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnum())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnumI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumI())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnumII())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumII())));
 
         main.setHR(++row, 0, 1);
 

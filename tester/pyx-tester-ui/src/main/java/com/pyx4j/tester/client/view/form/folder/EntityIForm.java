@@ -79,7 +79,7 @@ public class EntityIForm extends CEntityEditor<EntityI> {
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextI())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalInteger())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalIntegerI())));
 
         main.setH2(++row, 0, 1, i18n.tr("Box Folder"));
         main.setWidget(++row, 0, inject(proto().entityIIList(), new EntityIIFolder()));

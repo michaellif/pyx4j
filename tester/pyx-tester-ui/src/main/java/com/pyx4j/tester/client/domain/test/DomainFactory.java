@@ -20,6 +20,9 @@
  */
 package com.pyx4j.tester.client.domain.test;
 
+import java.sql.Time;
+import java.util.Date;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 public class DomainFactory {
@@ -39,6 +42,20 @@ public class DomainFactory {
     private static String mndtxtvalues[] = { "Mandatory Text Area 0", "Mandatory Text Area 1", "Mandatory Text Area 2", "Mandatory Text Area 3" };
 
     private static EntityI.Enum1 enumvalues[] = { EntityI.Enum1.Value0, EntityI.Enum1.Value1, EntityI.Enum1.Value2, EntityI.Enum1.Value3 };
+
+    private static String pwdvalues[] = { "Password 0", "Password 1", "Password 2", "Password 3" };
+
+    private static String suggestvalues[] = { "Saggest Value 0", "Saggest Value 1", "Saggest Value 2", "Saggest Value 3" };
+
+    private static Date datevalues[] = { new Date("1/1/2000"), new Date("1/1/2010"), new Date("1/1/2011"), new Date("3/1/2012") };
+
+    private static Time timevalues[] = { new Time(3, 20, 15), new Time(11, 59, 59), new Time(13, 13, 13), new Time(19, 20, 21) };
+
+    private static String phonevalues[] = { "1234567890x321", "4163576348", "3357786543x22", "5567890073" };
+
+    private static String emailvalues[] = { "dobrik@yahoo.ca", "murzik@hotmail.com", "byaka@gmail.com", "bublik@mail.ru" };
+
+    private static Double moneyvalues[] = { 20.33, 0.00, 77.00, 8.00 };
 
     public static EntityI createEntityI() {
         poscounter = 0;
@@ -79,11 +96,36 @@ public class DomainFactory {
 
         retVal.optionalTextI().setValue(optstrvalues[pos]);
         retVal.mandatoryTextI().setValue(mndstrvalues[pos]);
-        retVal.optionalInteger().setValue(intvalues[pos]);
-        retVal.optionalEnum().setValue(enumvalues[pos]);
+        retVal.optionalIntegerI().setValue(intvalues[pos]);
+        retVal.mandatoryIntegerI().setValue(intvalues[pos]);
+        retVal.optionalEnumI().setValue(enumvalues[pos]);
+        retVal.mandatoryEnumI().setValue(enumvalues[pos]);
+        retVal.optionalPasswordI().setValue(pwdvalues[pos]);
+        retVal.mandatoryPasswordI().setValue(pwdvalues[pos]);
 
         retVal.optionalTextAreaII().setValue(opttxtvalues[pos]);
         retVal.mandatoryTextAreaII().setValue(mndtxtvalues[pos]);
+
+        retVal.optionalSuggest().setValue(suggestvalues[pos]);
+        retVal.mandatorySuggest().setValue(suggestvalues[pos]);
+
+        retVal.optionalDatePicker().setValue(datevalues[pos]);
+        retVal.mandatoryDatePicker().setValue(datevalues[pos]);
+
+        retVal.optionalTimePicker().setValue(timevalues[pos]);
+        retVal.mandatoryTimePicker().setValue(timevalues[pos]);
+
+        retVal.optionalSingleMonthDatePicker().setValue(datevalues[pos]);
+        retVal.mandatorySingleMonthDatePicker().setValue(datevalues[pos]);
+
+        retVal.optionalPhone().setValue(phonevalues[pos]);
+        retVal.mandatoryPhone().setValue(phonevalues[pos]);
+
+        retVal.optionalEmail().setValue(emailvalues[pos]);
+        retVal.mandatoryEmail().setValue(emailvalues[pos]);
+
+        retVal.optionalMoney().setValue(moneyvalues[pos]);
+        retVal.mandatoryMoney().setValue(moneyvalues[pos]);
 
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());

@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.tester.client.domain.test.EntityI;
@@ -46,7 +47,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
     private final Button repopulateButton;
 
-    private final ScrollPanel formPanel;
+    private final SimplePanel formPanel;
 
     private final HashMap<TestFormType, CEntityEditor<EntityI>> map = new HashMap<TestFormType, CEntityEditor<EntityI>>();
 
@@ -100,7 +101,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
         container.add(buttonPanel, DockPanel.NORTH);
 
-        formPanel = new ScrollPanel();
+        formPanel = new SimplePanel();
         formPanel.setSize("100%", "100%");
         container.add(formPanel, DockPanel.NORTH);
 
