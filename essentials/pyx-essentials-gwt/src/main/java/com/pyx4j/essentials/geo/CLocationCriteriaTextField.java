@@ -30,12 +30,12 @@ import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.NativeTextBox;
+import com.pyx4j.forms.client.ui.NTextBox;
 import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NativeTextBox<GeoCriteria>> implements HasAsyncValue<GeoCriteria>, IAcceptText {
+public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTextBox<GeoCriteria>> implements HasAsyncValue<GeoCriteria>, IAcceptText {
 
     private static I18n i18n = I18n.get(CLocationCriteriaTextField.class);
 
@@ -49,8 +49,8 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, Nati
     }
 
     @Override
-    protected NativeTextBox<GeoCriteria> createWidget() {
-        return new NativeTextBox<GeoCriteria>(this);
+    protected NTextBox<GeoCriteria> createWidget() {
+        return new NTextBox<GeoCriteria>(this);
     }
 
     @Override
