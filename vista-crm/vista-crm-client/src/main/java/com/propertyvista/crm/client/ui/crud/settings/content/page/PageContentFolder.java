@@ -57,6 +57,9 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
             @Override
             public ValidationFailure isValid(CComponent<IList<PageContent>, ?> component, IList<PageContent> value) {
+                if (value == null) {
+                    return null;
+                }
                 return !value.isEmpty() ? null : new ValidationFailure(i18n.tr("At least one content item is necessary"));
             }
 
