@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.income;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -56,6 +57,7 @@ public interface PersonalIncome extends IEntity {
     IncomeInfoStudentIncome studentIncome();
 
     @Owned
+    @Caption(name = "Proof Of Employment")
     IList<ApplicationDocument> documents();
 
 }

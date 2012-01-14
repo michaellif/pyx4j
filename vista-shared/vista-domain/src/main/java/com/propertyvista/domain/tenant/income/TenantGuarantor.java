@@ -55,6 +55,7 @@ public interface TenantGuarantor extends IUserEntity, Person {
     IPrimitive<LogicalDate> birthDate();
 
     @Owned
+    @Caption(name = "Identification Documents")
     IList<ApplicationDocument> documents();
 
 // Financial:

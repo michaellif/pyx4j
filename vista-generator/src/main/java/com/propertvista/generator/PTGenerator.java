@@ -227,7 +227,7 @@ public class PTGenerator {
 
         Persistence.service().persist(applicationDocumentData);
         applicationDocument.fileSize().setValue(applicationDocumentData.data().getValue().length);
-        applicationDocument.dataId().set(applicationDocumentData.id());
+        applicationDocument.blobKey().set(applicationDocumentData.id());
     }
 
     private void createPets(IList<Pet> pets) {

@@ -59,7 +59,7 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
         int deleted = 0;
         for (Key dataKey : dataKeys) {
             EntityQueryCriteria<ApplicationDocument> criteria = EntityQueryCriteria.create(ApplicationDocument.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().dataId(), dataKey));
+            criteria.add(PropertyCriterion.eq(criteria.proto().blobKey(), dataKey));
             ApplicationDocument doc = Persistence.service().retrieve(criteria);
             if (doc == null) {
                 log.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);

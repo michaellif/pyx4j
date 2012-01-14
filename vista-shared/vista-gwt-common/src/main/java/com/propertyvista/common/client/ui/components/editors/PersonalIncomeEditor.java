@@ -15,7 +15,6 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import java.util.Date;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -82,17 +81,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
         main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
-
-        if (isEditable()) {
-            main.setWidget(
-                    ++row,
-                    0,
-                    new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income))).customLabel(
-                            i18n.tr("Please Attach proof Of Employment")).build());
-            fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
-            fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
-            fileUpload.asWidget().setWidth("40em");
-        }
+        main.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income))).build());
 
         return main;
     }
@@ -101,9 +91,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
     protected void onPopulate() {
         super.onPopulate();
         setVisibility(getValue().incomeSource().getValue());
-        if (fileUpload != null) {
-            fileUpload.setTenantID(((IEntity) (getValue().getParent().getParent())).getPrimaryKey());
-        }
+        fileUpload.setTenantID(((IEntity) (getValue().getParent().getParent())).getPrimaryKey());
     }
 
     @SuppressWarnings("unchecked")
@@ -114,42 +102,30 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         get(proto().studentIncome()).setVisible(false);
         get(proto().socialServices()).setVisible(false);
         get(proto().otherIncomeInformation()).setVisible(false);
-        if (fileUpload != null) {
-            fileUpload.setVisible(false);
-        }
+        fileUpload.setVisible(false);
 
         if (incomeSource != null) {
             switch (incomeSource) {
             case fulltime:
             case parttime:
                 get(proto().employer()).setVisible(true);
-                if (fileUpload != null) {
-                    fileUpload.setVisible(true);
-                }
+                fileUpload.setVisible(true);
                 break;
             case selfemployed:
                 get(proto().selfEmployed()).setVisible(true);
-                if (fileUpload != null) {
-                    fileUpload.setVisible(true);
-                }
+                fileUpload.setVisible(true);
                 break;
             case seasonallyEmployed:
                 get(proto().seasonallyEmployed()).setVisible(true);
-                if (fileUpload != null) {
-                    fileUpload.setVisible(true);
-                }
+                fileUpload.setVisible(true);
                 break;
             case socialServices:
                 get(proto().socialServices()).setVisible(true);
-                if (fileUpload != null) {
-                    fileUpload.setVisible(true);
-                }
+                fileUpload.setVisible(true);
                 break;
             case student:
                 get(proto().studentIncome()).setVisible(true);
-                if (fileUpload != null) {
-                    fileUpload.setVisible(true);
-                }
+                fileUpload.setVisible(true);
                 break;
             default:
                 @SuppressWarnings("rawtypes")

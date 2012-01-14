@@ -15,14 +15,13 @@ package com.propertyvista.domain.media;
 
 import java.io.Serializable;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.File;
 import com.propertyvista.domain.IBoundToApplication;
 
-public interface ApplicationDocument extends IEntity, IBoundToApplication {
+public interface ApplicationDocument extends File, IBoundToApplication {
 
     public static enum DocumentType implements Serializable {
 
@@ -35,11 +34,4 @@ public interface ApplicationDocument extends IEntity, IBoundToApplication {
     // This is not shown in UI only defines where the document is attached.
     @MemberColumn(name = "tp")
     IPrimitive<DocumentType> type();
-
-    IPrimitive<Key> dataId();
-
-    IPrimitive<String> filename();
-
-    IPrimitive<Integer> fileSize();
-
 }

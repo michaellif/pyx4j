@@ -65,6 +65,7 @@ public interface TenantScreening extends IEntity {
 
     @Owned
     @Detached
+    @Caption(name = "Identification Documents")
     IList<ApplicationDocument> documents();
 
     //=============== Financial =============//
