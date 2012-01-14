@@ -21,6 +21,8 @@
 package com.pyx4j.essentials.rpc.report;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
@@ -32,6 +34,8 @@ public class ReportRequest implements Serializable {
     private EntityQueryCriteria<?> criteria;
 
     private int timezoneOffset;
+
+    private HashMap<String, Serializable> parameters;
 
     public ReportRequest() {
 
@@ -59,5 +63,13 @@ public class ReportRequest implements Serializable {
 
     public void setCriteria(EntityQueryCriteria<?> criteria) {
         this.criteria = criteria;
+    }
+
+    public Map<String, Serializable> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(HashMap<String, Serializable> parameters) {
+        this.parameters = parameters;
     }
 }

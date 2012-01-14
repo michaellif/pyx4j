@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.client;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -43,14 +46,22 @@ public class ReportDialog extends DeferredProcessDialog {
     private String downloadUrl;
 
     public static void start(ReportService<?> reportService, EntityQueryCriteria<?> criteria) {
+        start(reportService, criteria, null);
+    }
+
+    public static void start(ReportService<?> reportService, EntityQueryCriteria<?> criteria, HashMap<String, Serializable> parameters) {
+        ReportRequest reportRequest = new ReportRequest();
+        reportRequest.setTimezoneOffset(TimeUtils.getTimezoneOffset());
+        reportRequest.setCriteria(criteria);
+        reportRequest.setParameters(parameters);
+        start(reportService, reportRequest);
+    }
+
+    public static void start(ReportService<?> reportService, ReportRequest reportRequest) {
 
         final ReportDialog rd = new ReportDialog("Report", "Creating report...");
         rd.reportService = reportService;
         rd.show();
-
-        ReportRequest reportRequest = new ReportRequest();
-        reportRequest.setTimezoneOffset(TimeUtils.getTimezoneOffset());
-        reportRequest.setCriteria(criteria);
 
         AsyncCallback<String> callback = new BlockingAsyncCallback<String>() {
 
