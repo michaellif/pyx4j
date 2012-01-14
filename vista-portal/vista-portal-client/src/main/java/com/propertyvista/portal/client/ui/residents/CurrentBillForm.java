@@ -62,7 +62,7 @@ public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBi
 
         int row = -1;
 
-        container.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
+        container.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder()));
         container.setHR(++row, 0, 1);
         //TODO review later (display total)
         container.setWidget(++row, 0, inject(proto().total()/* , new TotalLineViewer() */));

@@ -26,11 +26,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -45,14 +43,16 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
 
     private final FormFlexPanel splitCharges = new FormFlexPanel();
 
+    private final boolean editable;
+
     public ChargesViewForm() {
-        this(new VistaEditorsComponentFactory());
+        this(true);
     }
 
-    public ChargesViewForm(IEditableComponentFactory factory) {
-        super(Charges.class, factory);
-        setEditable(factory instanceof VistaEditorsComponentFactory);
-
+    public ChargesViewForm(boolean editable) {
+        super(Charges.class);
+        this.editable = editable;
+        setViewable(true);
         addValueChangeHandler(new ValueChangeHandler<Charges>() {
             @Override
             public void onValueChange(ValueChangeEvent<Charges> event) {
@@ -71,15 +71,14 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().monthlyCharges(), new ChargesSubCategoryViewForm(factory, proto().monthlyCharges().getMeta().getCaption())));
-        main.setWidget(++row, 0, inject(proto().oneTimeCharges(), new ChargesSubCategoryViewForm(factory, proto().oneTimeCharges().getMeta().getCaption())));
-        main.setWidget(++row, 0, inject(proto().proratedCharges(), new ChargesSubCategoryViewForm(factory, proto().proratedCharges().getMeta().getCaption())));
-        main.setWidget(++row, 0,
-                inject(proto().applicationCharges(), new ChargesSubCategoryViewForm(factory, proto().applicationCharges().getMeta().getCaption())));
+        main.setWidget(++row, 0, inject(proto().monthlyCharges(), new ChargesSubCategoryViewForm(proto().monthlyCharges().getMeta().getCaption())));
+        main.setWidget(++row, 0, inject(proto().oneTimeCharges(), new ChargesSubCategoryViewForm(proto().oneTimeCharges().getMeta().getCaption())));
+        main.setWidget(++row, 0, inject(proto().proratedCharges(), new ChargesSubCategoryViewForm(proto().proratedCharges().getMeta().getCaption())));
+        main.setWidget(++row, 0, inject(proto().applicationCharges(), new ChargesSubCategoryViewForm(proto().applicationCharges().getMeta().getCaption())));
 
         int row1 = -1;
         splitCharges.setH1(++row1, 0, 1, proto().paymentSplitCharges().getMeta().getCaption());
-        splitCharges.setWidget(++row1, 0, inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(isEditable())));
+        splitCharges.setWidget(++row1, 0, inject(proto().paymentSplitCharges().charges(), new ChargeSplitListFolder(editable)));
         splitCharges.setWidget(++row1, 0, createTotal(this, proto().paymentSplitCharges().total()));
         main.setWidget(++row, 0, splitCharges);
 
@@ -99,13 +98,11 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         sp.getElement().getStyle().setProperty("border", "1px dotted black");
         totalRow.add(sp);
+
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
         totalRow.add(DecorationUtils.inline(total, "40.5em", null));
         totalRow.add(DecorationUtils.inline(form.inject(member), "7em"));
-        form.inject(member).setEditable(false);
-        // TODO replace with:
-//        form.inject(member).setViewable(true);
         form.get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
         return totalRow;
     }
@@ -119,9 +116,8 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
     private static class ChargesSubCategoryViewForm extends CEntityDecoratableEditor<ChargeLineList> {
         private final String caption;
 
-        public ChargesSubCategoryViewForm(IEditableComponentFactory factory, String caption) {
-            super(ChargeLineList.class, factory);
-            setEditable(factory instanceof VistaEditorsComponentFactory);
+        public ChargesSubCategoryViewForm(String caption) {
+            super(ChargeLineList.class);
             this.caption = caption;
         }
 
@@ -130,7 +126,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
             FormFlexPanel content = new FormFlexPanel();
             int row = -1;
             content.setH1(++row, 0, 1, caption);
-            content.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder(isEditable())));
+            content.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder()));
             content.setWidget(++row, 0, createTotal(this, proto().total()));
 
             return content;

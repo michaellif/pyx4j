@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -76,7 +77,10 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         int row = -1;
 
         main.setH1(++row, 0, 1, proto().applicationCharges().charges().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().applicationCharges().charges(), new ChargeLineFolder(isEditable())));
+
+        ChargeLineFolder folder = new ChargeLineFolder();
+        folder.setViewable(true);
+        main.setWidget(++row, 0, inject(proto().applicationCharges().charges(), folder));
         main.setWidget(++row, 0, createTotal(proto().applicationCharges().total()));
 
         main.setBR(++row, 0, 1);
@@ -145,7 +149,10 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
         totalRow.add(DecorationUtils.inline(total, "40.5em", null));
-        totalRow.add(DecorationUtils.inline(inject(member/* , new CMoneyLabel() */), "7em"));
+
+        CDoubleField field = new CDoubleField();
+        field.setViewable(true);
+        totalRow.add(DecorationUtils.inline(inject(member, field), "7em"));
         get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         return totalRow;

@@ -25,13 +25,9 @@ import com.propertyvista.domain.charges.ChargeLine;
 
 public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
 
-    public ChargeLineFolder(boolean modifyable) {
-        super(ChargeLine.class, modifyable);
-        inheritContainerAccessRules(false);
+    public ChargeLineFolder() {
+        super(ChargeLine.class, false);
         setModifiable(false);
-        setEditable(false);
-// TODO replace with:
-//        setViewable(true);
     }
 
     @Override
@@ -46,4 +42,5 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
         columns.add(new EntityFolderColumnDescriptor(proto().amount(), "7em"));
         return columns;
     }
+
 }
