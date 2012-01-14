@@ -20,9 +20,14 @@
  */
 package com.pyx4j.tester.client.view.form;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
+import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
@@ -74,6 +79,21 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnum())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnum())));
+
+        main.setHR(++row, 0, 1);
+
+        Collection<String> options = new ArrayList<String>();
+        for (int i = 0; i < 10; i++) {
+            options.add("string" + i);
+        }
+
+        CAbstractSuggestBox<String> box = new CSuggestStringBox();
+        box.setOptions(options);
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalSuggest(), box)));
+
+        box = new CSuggestStringBox();
+        box.setOptions(options);
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatorySuggest(), box)));
 
         main.setHR(++row, 0, 1);
 

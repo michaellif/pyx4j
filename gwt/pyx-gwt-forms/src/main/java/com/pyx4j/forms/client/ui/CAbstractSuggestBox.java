@@ -30,22 +30,22 @@ import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 
-public class CSuggestBox<E> extends CTextFieldBase<E, NativeSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
+public abstract class CAbstractSuggestBox<E> extends CTextFieldBase<E, NSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 
     private List<E> options = new ArrayList<E>();
 
-    public CSuggestBox() {
+    public CAbstractSuggestBox() {
         this(null);
     }
 
-    public CSuggestBox(String title) {
+    public CAbstractSuggestBox(String title) {
         super(title);
         setWidth("100%");
     }
 
     @Override
-    protected NativeSuggestBox<E> createWidget() {
-        NativeSuggestBox<E> nativeTextField = new NativeSuggestBox<E>(this);
+    protected NSuggestBox<E> createWidget() {
+        NSuggestBox<E> nativeTextField = new NSuggestBox<E>(this);
         setOptions(options);
         return nativeTextField;
     }
@@ -57,17 +57,9 @@ public class CSuggestBox<E> extends CTextFieldBase<E, NativeSuggestBox<E>> imple
 
     public void setOptions(Collection<E> opt) {
         this.options = new ArrayList<E>();
-        this.options.clear();
-        if (opt != null) {
-            E currentSelection = getValue();
-            this.options.addAll(opt);
-            if (isWidgetCreated()) {
-                getWidget().removeAllItems();
-                for (E option : opt) {
-                    getWidget().addItem(getOptionName(option));
-                }
-                setValue(currentSelection);
-            }
+        this.options.addAll(opt);
+        if (isWidgetCreated()) {
+            getWidget().refreshOptions();
         }
         OptionsChangeEvent.fire(this, getOptions());
     }

@@ -53,15 +53,25 @@ public class NativeTextBoxDelegate<E> {
     }
 
     public void setNativeValue(E value) {
-        String newValue = value == null ? "" : cTextBox.getFormat().format(value);
-        if (!newValue.equals(nativeTextBox.getNativeText())) {
-            nativeTextBox.setNativeText(newValue);
+        if (value == null) {
+            nativeTextBox.setNativeText("");
+        } else if (cTextBox.getFormat() == null) {
+            nativeTextBox.setNativeText(value.toString());
+        } else {
+            String newValue = cTextBox.getFormat().format(value);
+            if (!newValue.equals(nativeTextBox.getNativeText())) {
+                nativeTextBox.setNativeText(newValue);
+            }
         }
     }
 
     public E getNativeValue() throws ParseException {
         try {
-            return cTextBox.getFormat().parse(nativeTextBox.getNativeText());
+            if (cTextBox.getFormat() == null) {
+                return (E) nativeTextBox.getNativeText();
+            } else {
+                return cTextBox.getFormat().parse(nativeTextBox.getNativeText());
+            }
         } catch (ParseException e) {
             throw e;
         }

@@ -91,6 +91,13 @@ public interface EntityI extends IEntity {
     @NotNull
     IPrimitive<Enum1> mandatoryEnum();
 
+    @Editor(type = EditorType.suggest)
+    IPrimitive<String> optionalSuggest();
+
+    @NotNull
+    @Editor(type = EditorType.suggest)
+    IPrimitive<String> mandatorySuggest();
+
     IPrimitive<Date> optionalDatePicker();
 
     @NotNull

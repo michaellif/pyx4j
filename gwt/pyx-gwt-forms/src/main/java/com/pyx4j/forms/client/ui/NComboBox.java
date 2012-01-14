@@ -37,8 +37,6 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
 
     private E value;
 
-    private List<E> options;
-
     private boolean firstNativeItemIsNoSelection = false;
 
     private E notInOptionsValue = null;
@@ -73,17 +71,12 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
         if (isViewable()) {
             getViewer().setHTML(getCComponent().getItemName(newValue));
         } else {
-            if ((this.value != null) && ((options == null) || !options.contains(this.value))) {
+            if ((this.value != null) && ((getCComponent().getOptions() == null) || !getCComponent().getOptions().contains(this.value))) {
                 refreshOptions();
             } else {
                 setSelectedValue(this.value);
             }
         }
-    }
-
-    public void setOptions(List<E> opt) {
-        this.options = opt;
-        refreshOptions();
     }
 
     public void refreshOption(E opt) {
@@ -103,14 +96,14 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
                 getEditor().addItem(getCComponent().getItemName(null));
             }
 
-            if ((this.value != null) && ((options == null) || !options.contains(this.value))) {
+            if ((this.value != null) && ((getCComponent().getOptions() == null) || !getCComponent().getOptions().contains(this.value))) {
                 switch (getCComponent().getPolicy()) {
                 case KEEP:
                     getEditor().addItem(getCComponent().getItemName(this.value));
                     notInOptionsValue = this.value;
                     break;
                 case DISCARD:
-                    if (options != null) {
+                    if (getCComponent().getOptions() != null) {
                         getCComponent().setValue(null);
                     }
                     notInOptionsValue = null;
@@ -121,8 +114,8 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
                 notInOptionsValue = null;
             }
 
-            if (options != null) {
-                for (E o : options) {
+            if (getCComponent().getOptions() != null) {
+                for (E o : getCComponent().getOptions()) {
                     getEditor().addItem(getCComponent().getItemName(o));
                 }
             }
@@ -145,7 +138,7 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
             }
         }
 
-        if (options == null) {
+        if (getCComponent().getOptions() == null) {
             return null;
         }
 
@@ -155,7 +148,7 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
         if (notInOptionsValue != null) {
             index--;
         }
-        return options.get(index);
+        return getCComponent().getOptions().get(index);
     }
 
     private int getNativeOptionIndex(E opt) {
@@ -167,8 +160,8 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
             }
         } else {
             int index = -1;
-            if (options != null) {
-                index = options.indexOf(opt);
+            if (getCComponent().getOptions() != null) {
+                index = getCComponent().getOptions().indexOf(opt);
             }
             if (index != -1) {
                 if (firstNativeItemIsNoSelection) {
@@ -210,11 +203,11 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
     @Override
     protected void onLoad() {
         super.onLoad();
-        if (options == null) {
+        if (getCComponent().getOptions() == null) {
             getCComponent().retriveOptions(new AsyncOptionsReadyCallback<E>() {
                 @Override
                 public void onOptionsReady(List<E> opt) {
-                    setOptions(opt);
+                    refreshOptions();
                 }
             });
         }
@@ -223,7 +216,6 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
     @Override
     protected void onUnload() {
         super.onUnload();
-        options = null;
         if (getEditor() != null) {
             getEditor().clear();
         }

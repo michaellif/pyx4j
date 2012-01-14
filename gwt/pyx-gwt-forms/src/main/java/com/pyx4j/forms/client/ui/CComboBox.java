@@ -73,7 +73,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     @Override
     protected NComboBox<E> createWidget() {
         NComboBox<E> nativeComboBox = new NComboBox<E>(this);
-        nativeComboBox.setOptions(options);
+        nativeComboBox.refreshOptions();
         return nativeComboBox;
     }
 
@@ -107,7 +107,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             options.addAll(opt);
         }
         if (isWidgetCreated()) {
-            getWidget().setOptions(options);
+            getWidget().refreshOptions();
         }
         OptionsChangeEvent.fire(this, getOptions());
     }
@@ -146,7 +146,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         } else {
             options.add(opt);
             if (isWidgetCreated()) {
-                getWidget().setOptions(options);
+                getWidget().refreshOptions();
             }
         }
     }

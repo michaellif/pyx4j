@@ -50,7 +50,7 @@ import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.CSuggestBox;
+import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTimeField;
@@ -90,7 +90,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                 if (mm.isEntity()) {
                     return new CEntitySuggestBox(mm.getObjectClass());
                 } else {
-                    return new CSuggestBox();
+                    return new CSuggestStringBox();
                 }
             case captcha:
                 return new CCaptcha();

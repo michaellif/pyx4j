@@ -27,14 +27,14 @@ import com.google.gwt.resources.client.ImageResource;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget> extends NTextComponent<DATA, WIDGET, CTextFieldBase<DATA, ?>> implements
-        INativeTextComponent<DATA>, WatermarkComponent {
+public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP extends CTextFieldBase<DATA, ?>> extends NTextComponent<DATA, WIDGET, CCOMP>
+        implements INativeTextComponent<DATA>, WatermarkComponent {
 
-    public NTextFieldBase(CTextFieldBase<DATA, ?> cComponent) {
+    public NTextFieldBase(CCOMP cComponent) {
         this(cComponent, null);
     }
 
-    public NTextFieldBase(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
+    public NTextFieldBase(CCOMP cComponent, ImageResource triggerImage) {
         super(cComponent, triggerImage);
 
     }

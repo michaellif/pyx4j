@@ -49,12 +49,12 @@ import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
-import com.pyx4j.forms.client.ui.CSuggestBox;
+import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
-public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
+public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
 
     private static final Logger log = LoggerFactory.getLogger(CEntitySuggestBox.class);
 
@@ -326,7 +326,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
 
     @Override
     public boolean isValueEmpty() {
-        if (super.isValueEmpty() || getValue().isNull()) {
+        if (getValue() == null || super.isValueEmpty() || getValue().isNull()) {
             return true;
         }
         return CommonsStringUtils.isEmpty(getFormat().format(getValue()));

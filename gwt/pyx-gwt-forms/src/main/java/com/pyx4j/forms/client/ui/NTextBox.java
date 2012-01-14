@@ -24,7 +24,7 @@ import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.widgets.client.TextBox;
 
-public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox> implements INativeTextComponent<DATA> {
+public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox, CTextFieldBase<DATA, ?>> implements INativeTextComponent<DATA> {
 
     public NTextBox(CTextFieldBase<DATA, ?> cComponent) {
         this(cComponent, null);
