@@ -68,6 +68,8 @@ public class CMoneyField extends CTextFieldBase<Double, NTextBox<Double>> {
             }
             try {
                 string = string.replaceAll("[,$]+", "");
+                // f and d are parsed by Double but we want to show error (VISTA-996)
+                string = string.replaceAll("[fd]+", "a");
                 return Double.valueOf(string);
             } catch (NumberFormatException e) {
                 throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);

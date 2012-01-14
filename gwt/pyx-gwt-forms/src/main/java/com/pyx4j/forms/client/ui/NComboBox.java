@@ -203,7 +203,7 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>> impl
     @Override
     protected void onLoad() {
         super.onLoad();
-        if (getCComponent().getOptions() == null) {
+        if (getCComponent().getOptions() != null) {
             getCComponent().retriveOptions(new AsyncOptionsReadyCallback<E>() {
                 @Override
                 public void onOptionsReady(List<E> opt) {
