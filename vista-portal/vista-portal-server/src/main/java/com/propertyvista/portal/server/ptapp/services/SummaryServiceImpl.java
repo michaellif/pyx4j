@@ -39,7 +39,6 @@ import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
-import com.propertyvista.misc.ServletMapping;
 import com.propertyvista.portal.domain.ptapp.IAgree;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
@@ -166,7 +165,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             Downloadable d = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
             String fileName = "ApplicationSummary.pdf";
             d.save(fileName);
-            callback.onSuccess(ServletMapping.REPORTS_DOWNLOAD + "/" + System.currentTimeMillis() + "/" + fileName);
+            callback.onSuccess(System.currentTimeMillis() + "/" + fileName);
         } finally {
             IOUtils.closeQuietly(bos);
         }

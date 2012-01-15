@@ -33,7 +33,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.server.report.DashboardReport;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.misc.ServletMapping;
 
 public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl implements DashboardMetadataService {
 
@@ -55,7 +54,7 @@ public class DashboardMetadataServiceImpl extends AbstractMetadataServiceImpl im
             Downloadable d = new Downloadable(bos.toByteArray(), Downloadable.getContentType(DownloadFormat.PDF));
             String fileName = "Dashboard.pdf";
             d.save(fileName);
-            callback.onSuccess(ServletMapping.REPORTS_DOWNLOAD + "/" + System.currentTimeMillis() + "/" + fileName);
+            callback.onSuccess(System.currentTimeMillis() + "/" + fileName);
         } finally {
             IOUtils.closeQuietly(bos);
         }
