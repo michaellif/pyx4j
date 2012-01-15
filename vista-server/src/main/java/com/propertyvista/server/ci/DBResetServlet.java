@@ -16,6 +16,7 @@ package com.propertyvista.server.ci;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Vector;
@@ -149,14 +150,14 @@ public class DBResetServlet extends HttpServlet {
                     case allAddMockup:
                     case allMini:
                         for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                            preloadPmc(buf, demoPmc.name(), type);
+                            preloadPmc(req, buf, demoPmc.name(), type);
                         }
                         break;
                     case addPmcMockup:
                     case addPmcMockupTest1:
                     case preloadPmcWithMockup:
                     case preloadPmc:
-                        preloadPmc(buf, NamespaceManager.getNamespace(), type);
+                        preloadPmc(req, buf, NamespaceManager.getNamespace(), type);
                         break;
                     case clearPmc: {
                         String thisPmcName = NamespaceManager.getNamespace();
@@ -197,7 +198,7 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
-    private void preloadPmc(StringBuilder buf, String demoPmcName, ResetType type) {
+    private void preloadPmc(HttpServletRequest req, StringBuilder buf, String demoPmcName, ResetType type) {
         long pmcStart = System.currentTimeMillis();
         NamespaceManager.setNamespace(Pmc.adminNamespace);
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
@@ -218,20 +219,24 @@ public class DBResetServlet extends HttpServlet {
         }
 
         DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
+        VistaDevPreloadConfig cfg;
         switch (type) {
         case preloadPmcWithMockup:
         case addPmcMockup:
         case addPmcMockupTest1:
         case allAddMockup:
         case allWithMockup:
-            VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
+            cfg = VistaDevPreloadConfig.createDefault();
             cfg.mockupData = true;
-            preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
             break;
         case allMini:
-            preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), VistaDevPreloadConfig.createUIDesignMini());
+            cfg = VistaDevPreloadConfig.createUIDesignMini();
             break;
+        default:
+            cfg = VistaDevPreloadConfig.createDefault();
         }
+        setPreloadConfigParameter(req, cfg);
+        preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
 
         if (type.name().toLowerCase().contains("add")) {
             Vector<DataPreloaderInfo> dpis = preloaders.getDataPreloaderInfo();
@@ -259,5 +264,22 @@ public class DBResetServlet extends HttpServlet {
 
         log.info("Preloaded PMC '{}' {}", demoPmcName, TimeUtils.secSince(pmcStart));
         buf.append("Preloaded PMC '" + demoPmcName + "' " + TimeUtils.secSince(pmcStart));
+    }
+
+    private void setPreloadConfigParameter(HttpServletRequest req, VistaDevPreloadConfig cfg) {
+        for (Field field : cfg.getClass().getFields()) {
+            String value = req.getParameter(field.getName());
+            if (value != null) {
+                try {
+                    if (field.getType().equals(Integer.class) || field.getType().equals(int.class)) {
+                        field.setInt(cfg, Integer.valueOf(value));
+                    } else if (field.getType().equals(Long.class) || field.getType().equals(long.class)) {
+                        field.setLong(cfg, Long.valueOf(value));
+                    }
+                } catch (Throwable e) {
+                    throw new Error(e);
+                }
+            }
+        }
     }
 }
