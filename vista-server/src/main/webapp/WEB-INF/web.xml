@@ -270,6 +270,11 @@
 	<!-- See ServletMapping class when moving to Servlet v3 -->
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
         <url-pattern>/ptapp/download/*</url-pattern>
     </servlet-mapping>
 
