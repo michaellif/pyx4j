@@ -43,7 +43,6 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.server.contexts.Context;
 
 public class SearchReportDeferredProcess<E extends IEntity> implements IDeferredProcess {
 
@@ -213,7 +212,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
         if (formatCompleate) {
             DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
             r.setCompleted();
-            r.setDownloadLink(Context.getRequest().getContextPath() + "/download/" + System.currentTimeMillis() + "/" + getFileName());
+            r.setDownloadLink(System.currentTimeMillis() + "/" + getFileName());
             return r;
         } else {
             DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();

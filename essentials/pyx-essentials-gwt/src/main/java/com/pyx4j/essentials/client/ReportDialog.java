@@ -38,26 +38,29 @@ import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
+import com.pyx4j.site.client.NavigationUri;
 
 public class ReportDialog extends DeferredProcessDialog {
 
     private ReportService<?> reportService;
 
+    private String downloadServletPath;
+
     private String downloadUrl;
 
-    public static void start(ReportService<?> reportService, EntityQueryCriteria<?> criteria) {
-        start(reportService, criteria, null);
+    public static ReportDialog start(ReportService<?> reportService, EntityQueryCriteria<?> criteria) {
+        return start(reportService, criteria, null);
     }
 
-    public static void start(ReportService<?> reportService, EntityQueryCriteria<?> criteria, HashMap<String, Serializable> parameters) {
+    public static ReportDialog start(ReportService<?> reportService, EntityQueryCriteria<?> criteria, HashMap<String, Serializable> parameters) {
         ReportRequest reportRequest = new ReportRequest();
         reportRequest.setTimezoneOffset(TimeUtils.getTimezoneOffset());
         reportRequest.setCriteria(criteria);
         reportRequest.setParameters(parameters);
-        start(reportService, reportRequest);
+        return start(reportService, reportRequest);
     }
 
-    public static void start(ReportService<?> reportService, ReportRequest reportRequest) {
+    public static ReportDialog start(ReportService<?> reportService, ReportRequest reportRequest) {
 
         final ReportDialog rd = new ReportDialog("Report", "Creating report...");
         rd.reportService = reportService;
@@ -79,14 +82,20 @@ public class ReportDialog extends DeferredProcessDialog {
         };
 
         reportService.createDownload(callback, reportRequest);
+        return rd;
     }
 
     public ReportDialog(String title, String initialMessage) {
         super(title, initialMessage);
+        downloadServletPath = NavigationUri.getDeploymentBaseURL() + "download/";
     }
 
     protected boolean useDownloadFrame() {
         return !BrowserType.isIE(); /* && !ClientState.isSeleniumMode(); */
+    }
+
+    public void setDownloadServletPath(String path) {
+        downloadServletPath = path;
     }
 
     @Override
@@ -95,13 +104,13 @@ public class ReportDialog extends DeferredProcessDialog {
         if (result.isCompletedSuccess()) {
             downloadUrl = ((DeferredReportProcessProgressResponse) result).getDownloadLink();
             if (useDownloadFrame()) {
-                new DownloadFrame(downloadUrl);
+                new DownloadFrame(downloadServletPath + downloadUrl);
                 dialog.hide();
             } else {
                 VerticalPanel vp = new VerticalPanel();
                 this.setWidget(vp);
-                vp.add(new HTML("Report creation compleated"));
-                HTML downloadLink = new HTML("<a href=\"" + downloadUrl + "\" target=\"_blank\">Download</a>");
+                vp.add(new HTML("Report creation completed"));
+                HTML downloadLink = new HTML("<a href=\"" + downloadServletPath + downloadUrl + "\" target=\"_blank\">Download</a>");
                 downloadLink.addClickHandler(new ClickHandler() {
 
                     @Override
