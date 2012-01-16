@@ -14,6 +14,9 @@
 package com.propertyvista.crm.server.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +47,7 @@ public class AvailablilityReportManagerTest {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
-    private static final LogicalDate MIN_DATE = new LogicalDate(Long.MIN_VALUE);
+    private static final LogicalDate MIN_DATE = new LogicalDate(0);
 
     private static final LogicalDate MAX_DATE = new LogicalDate(Long.MAX_VALUE);
 
@@ -65,6 +68,15 @@ public class AvailablilityReportManagerTest {
         unit = EntityFactory.create(AptUnit.class);
 
         lease1 = EntityFactory.create(Lease.class);
+        try {
+            lease1.unit().set(unit);
+            lease1.expectedMoveIn().setValue(new LogicalDate(DATE_FORMAT.parse("2010.2.2")));
+            lease1.expectedMoveOut().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.1")));
+            lease1.actualMoveIn().setValue(lease1.expectedMoveIn().getValue());
+            lease1.actualMoveOut().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.1")));
+        } catch (ClassCastException e) {
+        } catch (ParseException e) {
+        }
 
         lease2 = EntityFactory.create(Lease.class);
     }
@@ -77,7 +89,6 @@ public class AvailablilityReportManagerTest {
         available.dateFrom().setValue(MIN_DATE);
         available.dateTo().setValue(MAX_DATE);
         available.status().setValue(Status.available);
-
         occupancy.add(available);
 
         LogicalDate date = new LogicalDate(DATE_FORMAT.parse("2010.1.1"));
@@ -87,5 +98,56 @@ public class AvailablilityReportManagerTest {
         assertEquals(RentReadinessStatus.RentReady, status.rentReadinessStatus().getValue());
         assertEquals(true, status.isScoped().getValue());
         assertEquals(RentedStatus.Unrented, status.rentedStatus().getValue());
+        assertNull(status.moveInDay().getValue());
+        assertNull(status.moveOutDay().getValue());
+
+        available.dateTo().setValue(new LogicalDate(DATE_FORMAT.parse("2010.2.1")));
+        AptUnitOccupancy leased = EntityFactory.create(AptUnitOccupancy.class);
+        leased.status().setValue(Status.leased);
+        leased.lease().set(lease1);
+        leased.dateFrom().setValue(new LogicalDate(DATE_FORMAT.parse("2010.2.2")));
+        leased.dateTo().setValue(MAX_DATE);
+        occupancy.add(leased);
+
+        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
+        assertEquals(VacancyStatus.Vacant, status.vacancyStatus().getValue());
+        assertEquals(RentReadinessStatus.RentReady, status.rentReadinessStatus().getValue());
+        assertTrue(status.isScoped().getValue());
+        assertEquals(RentedStatus.Rented, status.rentedStatus().getValue());
+        assertEquals(status.moveInDay().getValue(), lease1.expectedMoveIn().getValue());
+        assertNull(status.moveOutDay().getValue());
+
+        date = new LogicalDate(DATE_FORMAT.parse("2010.2.2"));
+        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
+        assertNull(status.vacancyStatus().getValue());
+        assertNull(status.rentReadinessStatus().getValue());
+        assertNull(status.isScoped().getValue());
+        assertNull(status.rentedStatus().getValue());
+        assertNull(status.moveInDay().getValue());
+        assertNull(status.moveOutDay().getValue());
+
+        date = new LogicalDate(DATE_FORMAT.parse("2010.2.5"));
+        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
+        assertNull(status.vacancyStatus().getValue());
+        assertNull(status.rentReadinessStatus().getValue());
+        assertNull(status.isScoped().getValue());
+        assertNull(status.rentedStatus().getValue());
+        assertNull(status.moveInDay().getValue());
+        assertNull(status.moveOutDay().getValue());
+
+        leased.dateTo().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.1")));
+        AptUnitOccupancy vacant = EntityFactory.create(AptUnitOccupancy.class);
+        vacant.status().setValue(Status.vacant);
+        vacant.dateFrom().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.2")));
+        vacant.dateTo().setValue(MAX_DATE);
+        occupancy.add(vacant);
+
+        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
+        assertEquals(VacancyStatus.Notice, status.vacancyStatus().getValue());
+        assertNull(status.rentReadinessStatus().getValue());
+        assertFalse(status.isScoped().getValue());
+        assertEquals(RentedStatus.Unrented, status.rentedStatus().getValue());
+        assertNull(status.moveInDay().getValue());
+        assertEquals(new LogicalDate(DATE_FORMAT.parse("2011.1.1")), status.moveOutDay().getValue());
     }
 }
