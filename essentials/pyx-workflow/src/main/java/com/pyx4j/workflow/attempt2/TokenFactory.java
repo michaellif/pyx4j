@@ -14,22 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 14, 2012
+ * Created on Jan 15, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.workflow.attempt2.domain;
+package com.pyx4j.workflow.attempt2;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-
-public interface Case extends IEntity {
-
-    IPrimitive<String> processId();
-
-    IList<WorkItem> workItems();
-
-    IList<Token> tokens();
+public interface TokenFactory {
 
 }

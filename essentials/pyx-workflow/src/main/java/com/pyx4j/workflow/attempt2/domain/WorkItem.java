@@ -21,7 +21,6 @@
 package com.pyx4j.workflow.attempt2.domain;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface WorkItem extends IEntity {
@@ -32,5 +31,4 @@ public interface WorkItem extends IEntity {
 
     IPrimitive<Boolean> enabled();
 
-    IList<Token> tokens();
 }

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.workflow.attempt2.domain.Case;
+import com.pyx4j.workflow.attempt2.domain.Token;
 
 public enum WorkflowManager {
 
@@ -48,7 +49,13 @@ public enum WorkflowManager {
         c.processId().setValue(processId);
 
         Process process = processes.get(processId);
-        Place startPlace = process.getStartPlace();
+
+        Place<?> startPlace = process.getStartPlace();
+
+        Token token = process.createStartToken();
+        token.placeId().setValue(startPlace.getPlaceId());
+
+        c.tokens().add(token);
 
         return c;
     }

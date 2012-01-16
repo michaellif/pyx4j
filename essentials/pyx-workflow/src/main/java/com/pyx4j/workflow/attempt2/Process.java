@@ -26,7 +26,7 @@ import java.util.Map;
 import com.pyx4j.workflow.attempt2.Transition.TriggerType;
 import com.pyx4j.workflow.attempt2.domain.Token;
 
-public class Process {
+public abstract class Process {
 
     private final String id;
 
@@ -55,6 +55,8 @@ public class Process {
         transitions.put(id, transition);
         return transition;
     }
+
+    public abstract Token createStartToken();
 
     public Place<?> getStartPlace() {
         for (Place<?> place : places.values()) {

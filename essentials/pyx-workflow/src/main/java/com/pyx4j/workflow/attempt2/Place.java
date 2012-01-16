@@ -40,6 +40,10 @@ public class Place<T extends Token> {
 
     }
 
+    public String getPlaceId() {
+        return id;
+    }
+
     public void input(Transition transition) {
         inputs.add(transition);
     }

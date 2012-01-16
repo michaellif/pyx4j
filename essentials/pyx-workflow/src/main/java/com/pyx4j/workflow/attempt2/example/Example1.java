@@ -20,6 +20,7 @@
  */
 package com.pyx4j.workflow.attempt2.example;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.workflow.attempt2.Condition;
 import com.pyx4j.workflow.attempt2.Place;
 import com.pyx4j.workflow.attempt2.Process;
@@ -48,6 +49,11 @@ public class Example1 {
             b.input(Token2.class, placeB, null);
             b.output(Token2.class, placeC, null);
 
+        }
+
+        @Override
+        public Token1 createStartToken() {
+            return EntityFactory.create(Token1.class);
         }
 
     }
@@ -85,7 +91,7 @@ public class Example1 {
 
         Case testCase = WorkflowManager.Instance.openCase("TestProcess");
 
-        testCase.workItems().get(0).enabled().setValue(true);
+        WorkflowManager.Instance.triggerCase(testCase);
 
         WorkflowManager.Instance.triggerCase(testCase);
 
