@@ -130,7 +130,11 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     protected Object parsValue(IPrimitive<?> primitive, String value) {
         if (Date.class.isAssignableFrom(primitive.getValueClass())) {
-            return DateUtils.detectDateformat(value);
+            if ("".equals(value)) {
+                return null;
+            } else {
+                return DateUtils.detectDateformat(value);
+            }
         } else if (Number.class.isAssignableFrom(primitive.getValueClass())) {
             // Is Local English?
             return primitive.parse(value.replaceAll(",", ""));
