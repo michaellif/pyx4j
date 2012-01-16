@@ -109,7 +109,7 @@ public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> 
             }
         });
 
-        rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTANANCE"), newTicket);
+        rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
         rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
 
         Anchor newReservations = new Anchor(i18n.tr("Order Service"));
