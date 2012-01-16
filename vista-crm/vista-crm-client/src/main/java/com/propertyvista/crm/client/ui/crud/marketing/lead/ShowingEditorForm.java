@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,12 +19,12 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -37,11 +37,15 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
     private static final I18n i18n = I18n.get(ShowingEditorForm.class);
 
     public ShowingEditorForm() {
-        this(new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public ShowingEditorForm(IEditableComponentFactory factory) {
-        super(Showing.class, factory);
+    public ShowingEditorForm(boolean viewMode) {
+        super(Showing.class);
+        if (viewMode) {
+            setEditable(false);
+            setViewable(true);
+        }
     }
 
     @Override
@@ -49,12 +53,13 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
 
         if (isEditable()) {
-            HorizontalPanel unitPanel = new HorizontalPanel();
-            unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel<AptUnit>()), 20).build());
-            unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
+            HorizontalPanel unitPanel1 = new HorizontalPanel();
+            HorizontalPanel unitPanel2 = new HorizontalPanel();
+            unitPanel1.add(new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
+            unitPanel2.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel<AptUnit>()), 20).build());
+            unitPanel2.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     new SelectUnitBox(((ShowingEditorView) getParentView()).getBuildingListerView(), ((ShowingEditorView) getParentView()).getUnitListerView()) {
@@ -66,9 +71,17 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
                     }.show();
                 }
             }));
-            main.setWidget(++row, 0, unitPanel);
+            main.setWidget(++row, 0, unitPanel1);
+            main.setWidget(++row, 0, unitPanel2);
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit()), 20).build());
+            main.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))), 20)
+                            .build());
+            main.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(MainActivityMapper.getCrudAppPlace(AptUnit.class))), 20)
+                            .build());
         }
 
         row = -1;

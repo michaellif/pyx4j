@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -34,7 +33,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
@@ -48,11 +46,15 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public LeadEditorForm() {
-        this(new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public LeadEditorForm(IEditableComponentFactory factory) {
-        super(Lead.class, factory);
+    public LeadEditorForm(boolean viewMode) {
+        super(Lead.class);
+        if (viewMode) {
+            setEditable(false);
+            setViewable(true);
+        }
     }
 
     @Override
@@ -157,7 +159,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         if (!isEditable()) {
             return new ScrollPanel(((LeadViewerView) getParentView()).getAppointmentsListerView().asWidget());
         }
-        return new HTML(); // just stub - not necessary for editing mode!.. 
+        return new HTML(); // just stub - not necessary for editing mode!..
     }
 
     //
