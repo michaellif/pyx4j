@@ -84,9 +84,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     protected void persistDBO(Lease dbo, LeaseDTO in) {
         // persist non-owned lists items:
-        for (TenantInLease item : dbo.tenants()) {
-            Persistence.service().merge(item);
-        }
         for (ChargeItem item : dbo.serviceAgreement().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
@@ -94,6 +91,13 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         }
         updateAdjustments(dbo.serviceAgreement());
         Persistence.service().merge(dbo);
+
+        int no = 0;
+        for (TenantInLease item : dbo.tenants()) {
+            item.lease().set(dbo);
+            item.orderInLease().setValue(no++);
+            Persistence.service().merge(item);
+        }
     }
 
     private void updateAdjustments(ServiceAgreement serviceAgreement) {
@@ -181,12 +185,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
         Persistence.service().retrieve(lease.tenants());
-
         MasterApplication ma = ApplicationMgr.createMasterApplication(lease);
-        ma.createDate().setValue(new LogicalDate());
-
-        Persistence.service().persist(ma);
-        Persistence.service().persist(lease);
 
         //TODO Move sendmail to separate function
 //        if ((false) && (user != null)) {

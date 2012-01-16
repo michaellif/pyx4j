@@ -28,13 +28,13 @@ public class DemoData {
 
     public static enum UserType {
 
-        PTENANT("p", 3),
+        PTENANT("p", 6),
 
         PCOAPPLICANT("c", 6),
 
         TENANT("t", 3),
 
-        NEW_TENANT("n", 3),
+        NEW_TENANT("n", 10),
 
         PM("m", 3),
 

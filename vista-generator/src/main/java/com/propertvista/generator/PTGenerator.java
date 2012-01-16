@@ -73,6 +73,8 @@ import com.propertyvista.server.domain.ApplicationDocumentData;
 
 public class PTGenerator {
 
+    public static boolean equifaxDemo = false;
+
     private final static Logger log = LoggerFactory.getLogger(PTGenerator.class);
 
     private final long seed;
@@ -459,7 +461,10 @@ public class PTGenerator {
         tenantSummary.tenantScreening().legalQuestions().set(legalQuestions);
 
         createFinancialInfo(tenantSummary.tenantScreening());
-        createEquifaxApproival(tenantSummary.tenantScreening());
+
+        if (equifaxDemo) {
+            createEquifaxApproival(tenantSummary.tenantScreening());
+        }
 
         return tenantSummary;
     }

@@ -82,9 +82,14 @@ public class ApplicationMgr {
 
     public static MasterApplication createMasterApplication(Lease lease) {
         lease.status().setValue(Lease.Status.ApplicationInProgress);
+        Persistence.service().persist(lease);
+
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
         ma.lease().set(lease);
         ma.status().setValue(MasterApplication.Status.Invited);
+        ma.createDate().setValue(new LogicalDate());
+        Persistence.service().persist(ma);
+
         Persistence.service().retrieve(lease.tenants());
         for (TenantInLease tenantInLease : lease.tenants()) {
             if (TenantInLease.Role.Applicant == tenantInLease.role().getValue()) {
@@ -94,15 +99,16 @@ public class ApplicationMgr {
                 a.steps().addAll(ApplicationMgr.createApplicationProgress());
                 a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveApplicant));
                 a.lease().set(ma.lease());
+                Persistence.service().persist(a);
 
                 tenantInLease.application().set(a);
+                Persistence.service().persist(tenantInLease);
 
                 ma.applications().add(a);
                 break;
             }
         }
 
-        ma.createDate().setValue(new LogicalDate());
         return ma;
     }
 
@@ -147,7 +153,6 @@ public class ApplicationMgr {
                 }
             }
             if (!allApplicationsSubmited) {
-                Persistence.service().persist(ma);
                 // TODO send E-mail to created applications
             }
         } else {

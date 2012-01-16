@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -81,14 +82,8 @@ public interface Lease extends IEntity {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    /**
-     * Double-references - TenantInLease holds main reference!
-     * Note: Is not maintained! Should be synchronised if necessary in service!!!
-     * 
-     * @link LeaseCrudService re-fills this list every time on Lease retrieve with current tenants which has referenced the Lease.
-     *       Every other service retrieved the lease supposed to do the same!!!
-     */
     @Detached
+    @JoinTable(value = TenantInLease.class, orderColumn = TenantInLease.OrderInLeaseId.class, cascade = false)
     IList<TenantInLease> tenants();
 
     // Dates:

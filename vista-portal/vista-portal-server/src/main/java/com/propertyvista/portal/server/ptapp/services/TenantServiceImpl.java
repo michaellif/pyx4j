@@ -63,6 +63,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         lease.tenants().clear();
 
         TenantInApplicationListDTO currentTenants = EntityFactory.create(TenantInApplicationListDTO.class);
+        int no = 0;
         for (TenantInLeaseDTO tenantInApplication : tenants.tenants()) {
             // Find existing record
             TenantInLease tenantInLease = EntityFactory.create(TenantInLease.class);
@@ -85,6 +86,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
 
             // save Tenant in Lease: 
             tenantInLease.lease().set(lease);
+            tenantInLease.orderInLease().setValue(no++);
             new TenantConverter.TenantEditorConverter().copyDTOtoDBO(tenantInApplication, tenantInLease);
             Persistence.service().merge(tenantInLease.tenant());
             Persistence.service().merge(tenantInLease);
@@ -94,8 +96,6 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             tenantInApplication.setPrimaryKey(tenantInLease.getPrimaryKey());
             currentTenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
-
-        Persistence.service().merge(lease);
 
         // remove deleted tenants:
         for (TenantInLease orphan : existingTenants) {

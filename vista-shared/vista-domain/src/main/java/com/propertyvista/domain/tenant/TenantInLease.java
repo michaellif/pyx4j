@@ -18,8 +18,11 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTableOrderColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -90,7 +93,15 @@ public interface TenantInLease extends IBoundToApplication {
     @Detached
     @NotNull
     @Indexed
+    @JoinColumn
     Lease lease();
+
+    interface OrderInLeaseId extends ColumnId {
+
+    }
+
+    @JoinTableOrderColumn(OrderInLeaseId.class)
+    IPrimitive<Integer> orderInLease();
 
     @NotNull
     @ReadOnly

@@ -19,12 +19,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -68,8 +68,9 @@ public interface MasterApplication extends IEntity {
 
     IPrimitive<Status> status();
 
-    @Owned
-    IList<Application> applications();
+    @Detached
+    @JoinTable(value = Application.class, cascade = false)
+    ISet<Application> applications();
 
     Employee decidedBy();
 

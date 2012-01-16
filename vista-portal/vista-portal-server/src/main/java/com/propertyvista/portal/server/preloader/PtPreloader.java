@@ -97,8 +97,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
             // Update user name
             Persistence.service().persist(user);
-            //TODO create users for CoApplicants
-            persistFullApplication(summary, generator);
+            persistFullApplication(summary, generator, i);
             numCreated++;
         }
 
@@ -107,7 +106,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
         return b.toString();
     }
 
-    private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator) {
+    private void persistFullApplication(ApplicationSummaryGDO summary, PTGenerator generator, int cnt) {
 
         LeaseHelper.updateLease(summary.lease());
 
@@ -130,52 +129,60 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
-            if (!tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().isNull()) {
-                overalPercentageApproval += tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue();
+            if (PTGenerator.equifaxDemo) {
+                if (!tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().isNull()) {
+                    overalPercentageApproval += tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue();
 
-                if (maxPercentageApproval < tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue()) {
-                    maxPercentageApproval = tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue();
+                    if (maxPercentageApproval < tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue()) {
+                        maxPercentageApproval = tenantSummary.tenantScreening().equifaxApproval().percenrtageApproved().getValue();
+                    }
                 }
-            }
 
-            Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval().checkResultDetails());
-            Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval());
+                Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval().checkResultDetails());
+                Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval());
+            }
             Persistence.service().persist(tenantSummary.tenantScreening());
 
             summary.lease().tenants().add(tenantSummary.tenantInLease());
         }
 
-        MasterApplication ma = ApplicationMgr.createMasterApplication(summary.lease());
-        ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
+        // Create working appl. only for first half 
+        if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
 
-        if (maxPercentageApproval > 80) {
-            ma.status().setValue(Status.Approved);
-            ma.equifaxApproval().suggestedDecision().setValue(Decision.Approve);
-        } else if (overalPercentageApproval > 20) {
-            ma.status().setValue(Status.InformationRequested);
-            ma.equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
-        } else if (overalPercentageApproval > 50) {
-            ma.status().setValue(Status.Declined);
-            ma.equifaxApproval().suggestedDecision().setValue(Decision.Decline);
-        } else {
-            ma.equifaxApproval().suggestedDecision().setValue(Decision.Pending);
+            MasterApplication ma = ApplicationMgr.createMasterApplication(summary.lease());
+            if (PTGenerator.equifaxDemo) {
+                ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
+
+                if (maxPercentageApproval > 80) {
+                    ma.status().setValue(Status.Approved);
+                    ma.equifaxApproval().suggestedDecision().setValue(Decision.Approve);
+                } else if (overalPercentageApproval > 20) {
+                    ma.status().setValue(Status.InformationRequested);
+                    ma.equifaxApproval().suggestedDecision().setValue(Decision.RequestInfo);
+                } else if (overalPercentageApproval > 50) {
+                    ma.status().setValue(Status.Declined);
+                    ma.equifaxApproval().suggestedDecision().setValue(Decision.Decline);
+                } else {
+                    ma.equifaxApproval().suggestedDecision().setValue(Decision.Pending);
+                }
+
+                switch (ma.status().getValue()) {
+                case Approved:
+                case InformationRequested:
+                case Declined:
+                case Cancelled:
+                    EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+                    ma.decidedBy().set(RandomUtil.random(Persistence.service().query(criteria)));
+                    ma.decisionDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
+                    ma.decisionReason().setValue("Decided according current application state and Equifax check results");
+                }
+
+                Persistence.service().persist(summary.lease());
+                Persistence.service().persist(ma.equifaxApproval().checkResultDetails());
+                Persistence.service().persist(ma.equifaxApproval());
+                Persistence.service().persist(ma);
+            }
         }
-
-        switch (ma.status().getValue()) {
-        case Approved:
-        case InformationRequested:
-        case Declined:
-        case Cancelled:
-            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-            ma.decidedBy().set(RandomUtil.random(Persistence.service().query(criteria)));
-            ma.decisionDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
-            ma.decisionReason().setValue("Decided according current application state and Equifax check results");
-        }
-
-        Persistence.service().persist(summary.lease());
-        Persistence.service().persist(ma.equifaxApproval().checkResultDetails());
-        Persistence.service().persist(ma.equifaxApproval());
-        Persistence.service().persist(ma);
 
 //TODO
 //        log.debug("Charges: " + VistaDataPrinter.print(summary.charges()));

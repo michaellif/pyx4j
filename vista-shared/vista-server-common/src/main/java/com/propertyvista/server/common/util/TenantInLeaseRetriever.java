@@ -60,6 +60,7 @@ public class TenantInLeaseRetriever extends TenantRetriever {
         // update Tenants double links:
         EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
+        criteria.asc(criteria.proto().orderInLease());
         List<TenantInLease> tenants = Persistence.service().query(criteria);
 
         // here: clear the current list, add queried tenants placing Applicant first:  
