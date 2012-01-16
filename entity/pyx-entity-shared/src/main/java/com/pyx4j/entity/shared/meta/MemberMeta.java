@@ -85,6 +85,8 @@ public interface MemberMeta {
      */
     public boolean isOwnedRelationships();
 
+    public boolean isCascadePersist();
+
     /**
      * @see com.pyx4j.entity.annotations.Owner
      */
@@ -137,20 +139,5 @@ public interface MemberMeta {
     public List<Validator> getValidators();
 
     public boolean isValidatorAnnotationPresent(Class<? extends Annotation> annotationClass);
-
-    // --- TODO ---
-    //    public boolean isPrimitive();
-    //
-    //    /**
-    //     * Returns <code>true</code> if this field represents Collection type.
-    //     */
-    //    public boolean isCollection();
-    //
-    //    /**
-    //     * If this field represents an array, Set or List, this method returns the component
-    //     * type of the array or Parameterized Type Argument for collections. Otherwise, it
-    //     * returns <code>null</code>.
-    //     */
-    //    public Class<?> getComponentType();    
 
 }

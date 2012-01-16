@@ -62,8 +62,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
      */
     public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
             @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
-            boolean persistenceTransient, boolean rpcTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean owner, boolean embedded,
-            boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
+            boolean persistenceTransient, boolean rpcTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean cascadePersist, boolean owner,
+            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -73,6 +73,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.data.rpcTransient = rpcTransient;
         this.data.attachLevel = attachLevel;
         this.data.ownedRelationships = ownedRelationships;
+        this.data.cascadePersist = cascadePersist;
         this.data.owner = owner;
         this.data.embedded = embedded;
         this.data.objectClass = objectClass;
@@ -148,6 +149,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public boolean isCascadePersist() {
+        return data.cascadePersist;
+    }
+
+    @Override
     public boolean isOwner() {
         return data.owner;
     }
@@ -178,6 +184,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public Class<? extends IObject> getObjectClass() {
         return data.objectClass;
     }

@@ -14,24 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 8, 2012
+ * Created on Jan 15, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.rdb.oracle;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.rdb.JoinTableTestCase;
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-/**
- * Optional marker for join columns in JoinTable, By default Entity class match is used.
- */
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface JoinColumn {
+public class JoinTableTest extends JoinTableTestCase {
 
-    // Not implemented for now.
-    Class<? extends ColumnId> value() default ColumnId.class;
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getOraclePersistenceEnvironment();
+    }
+
 }

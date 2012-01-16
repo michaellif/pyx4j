@@ -238,9 +238,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             tm.insert(connection, entity);
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                if (!member.getMemberMeta().isCascadePersist()) {
                     // Never update
-                    continue;
+                    return;
                 }
                 CollectionsTableModel.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
@@ -276,7 +276,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         try {
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                if (!member.getMemberMeta().isCascadePersist()) {
                     // Never update
                     continue;
                 }
@@ -304,13 +304,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                 }
             }
+            boolean updated = tm.update(connection, entity);
             List<IEntity> cascadeRemove = new Vector<IEntity>();
-            boolean updated = tm.update(connection, entity, cascadeRemove);
-
+            if (updated) {
+                for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                    CollectionsTableModel.update(connection, connectionProvider.getDialect(), entity, member, cascadeRemove);
+                }
+            }
             for (IEntity ce : cascadeRemove) {
                 cascadeDelete(connection, ce.getEntityMeta(), ce.getPrimaryKey(), ce);
             }
-
             return updated;
         } finally {
             if (trace) {

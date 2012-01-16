@@ -14,24 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 8, 2012
+ * Created on Jan 15, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.commons;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public interface Filter<E> {
 
-/**
- * Optional marker for join columns in JoinTable, By default Entity class match is used.
- */
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface JoinColumn {
+    boolean accept(E input);
 
-    // Not implemented for now.
-    Class<? extends ColumnId> value() default ColumnId.class;
 }

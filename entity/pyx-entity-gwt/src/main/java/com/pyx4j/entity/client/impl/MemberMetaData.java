@@ -35,6 +35,8 @@ public class MemberMetaData {
 
     public boolean ownedRelationships;
 
+    public boolean cascadePersist;
+
     public boolean owner;
 
     public boolean embedded;
@@ -72,6 +74,7 @@ public class MemberMetaData {
         this.nullString = "";
         this.valueClassIsNumber = isNumber;
         this.attachLevel = AttachLevel.Attached;
+        this.cascadePersist = true;
     }
 
     // Most commonly used definitions are shared here for code size and memory optimization.

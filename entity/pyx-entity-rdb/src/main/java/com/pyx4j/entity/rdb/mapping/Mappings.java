@@ -109,7 +109,7 @@ public class Mappings {
                 if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
                     log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
                 }
-                for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                for (MemberOperationsMeta member : model.operationsMeta().getManagedCollectionMembers()) {
                     if (usedTableNames.contains(member.sqlName().toLowerCase(Locale.ENGLISH))) {
                         log.warn("redefining/extending table {} for member {}", member.sqlName(), member.getMemberPath());
                     }
@@ -124,17 +124,17 @@ public class Mappings {
                     if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
                         ensureSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
                     }
-                    for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                    for (MemberOperationsMeta member : model.operationsMeta().getManagedCollectionMembers()) {
                         ensureSequence(dialect, member.getSqlSequenceName());
                     }
                 }
                 tables.put(entityMeta.getEntityClass(), model);
                 usedTableNames.add(model.getTableName().toLowerCase(Locale.ENGLISH));
-                for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+                for (MemberOperationsMeta member : model.operationsMeta().getManagedCollectionMembers()) {
                     usedTableNames.add(member.sqlName().toLowerCase(Locale.ENGLISH));
                 }
             } else if (traceInit) {
-                log.trace(Trace.id() + "ensureTable {} TableModel alredy created", entityMeta.getPersistenceName());
+                log.trace(Trace.id() + "ensureTable {} TableModel already created", entityMeta.getPersistenceName());
             }
         }
 
@@ -168,7 +168,7 @@ public class Mappings {
         }
         usedTableNames.remove(model.getTableName().toLowerCase(Locale.ENGLISH));
         tables.remove(entityMeta.getEntityClass());
-        for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+        for (MemberOperationsMeta member : model.operationsMeta().getManagedCollectionMembers()) {
             usedTableNames.remove(member.sqlName().toLowerCase(Locale.ENGLISH));
         }
 
@@ -176,7 +176,7 @@ public class Mappings {
             if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
                 droppedSequence(dialect, dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));
             }
-            for (MemberOperationsMeta member : model.operationsMeta().getCollectionMembers()) {
+            for (MemberOperationsMeta member : model.operationsMeta().getManagedCollectionMembers()) {
                 droppedSequence(dialect, member.getSqlSequenceName());
             }
         }

@@ -35,6 +35,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -66,6 +67,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final AttachLevel attachLevel;
 
     private final boolean ownedRelationships;
+
+    public final boolean cascadePersist;
 
     private final boolean owner;
 
@@ -173,6 +176,13 @@ public class MemberMetaImpl implements MemberMeta {
         owner = (method.getAnnotation(Owner.class) != null);
         assert (!(owner == true && ownedRelationships == true));
 
+        JoinTable joinTable = method.getAnnotation(JoinTable.class);
+        if (joinTable != null) {
+            cascadePersist = joinTable.cascade();
+        } else {
+            cascadePersist = true;
+        }
+
         Detached detachedAnnotation = method.getAnnotation(Detached.class);
         if (detachedAnnotation == null) {
             attachLevel = AttachLevel.Attached;
@@ -233,6 +243,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public boolean isOwnedRelationships() {
         return ownedRelationships;
+    }
+
+    @Override
+    public boolean isCascadePersist() {
+        return cascadePersist;
     }
 
     @Override

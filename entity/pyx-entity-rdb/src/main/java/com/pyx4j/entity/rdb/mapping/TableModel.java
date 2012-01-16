@@ -120,7 +120,7 @@ public class TableModel {
             }
         }
 
-        for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+        for (MemberOperationsMeta member : entityOperationsMeta.getManagedCollectionMembers()) {
             TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
             if (memberTableMetadata == null) {
                 SQLUtils.execute(connection, TableDDL.sqlCreateCollectionMember(dialect, member));
@@ -355,7 +355,7 @@ public class TableModel {
         }
     }
 
-    public boolean update(Connection connection, IEntity entity, List<IEntity> cascadeRemove) {
+    public boolean update(Connection connection, IEntity entity) {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(sqlUpdate());
@@ -367,13 +367,7 @@ public class TableModel {
                 parameterIndex++;
                 stmt.setString(parameterIndex, NamespaceManager.getNamespace());
             }
-            boolean updated = (stmt.executeUpdate() == 1);
-            if (updated) {
-                for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                    CollectionsTableModel.update(connection, dialect, entity, member, cascadeRemove);
-                }
-            }
-            return updated;
+            return (stmt.executeUpdate() == 1);
         } catch (SQLException e) {
             log.error("{} SQL {}", tableName, sqlUpdate());
             log.error("{} SQL update error", tableName, e);

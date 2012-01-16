@@ -28,11 +28,14 @@ public class MemberCollectionOperationsMeta extends MemberOperationsMeta {
 
     private final String sqlValueName;
 
+    private final String sqlOrderColumnName;
+
     public MemberCollectionOperationsMeta(EntityMemberAccess memberAccess, ValueAdapter valueAdapter, String sqlName, MemberMeta memberMeta, String memberPath,
-            String sqlOwnerName, String sqlValueName) {
+            String sqlOwnerName, String sqlValueName, String sqlOrderColumnName) {
         super(memberAccess, valueAdapter, sqlName, memberMeta, memberPath);
         this.sqlOwnerName = sqlOwnerName;
         this.sqlValueName = sqlValueName;
+        this.sqlOrderColumnName = sqlOrderColumnName;
     }
 
     public String sqlOwnerName() {
@@ -41,6 +44,10 @@ public class MemberCollectionOperationsMeta extends MemberOperationsMeta {
 
     public String sqlValueName() {
         return sqlValueName;
+    }
+
+    public String sqlOrderColumnName() {
+        return sqlOrderColumnName;
     }
 
 }

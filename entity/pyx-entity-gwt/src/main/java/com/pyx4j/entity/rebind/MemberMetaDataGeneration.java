@@ -38,6 +38,8 @@ public class MemberMetaDataGeneration extends MemberMetaData {
 
         && (ownedRelationships == other.ownedRelationships)
 
+        && (cascadePersist == other.cascadePersist)
+
         && (owner == other.owner)
 
         && (embedded == other.embedded)

@@ -62,7 +62,7 @@ public class CollectionsTableModel {
 
     @SuppressWarnings("unchecked")
     public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member) {
-        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+        if (!member.getMemberMeta().isCascadePersist()) {
             // Never update
             return;
         }
@@ -98,7 +98,7 @@ public class CollectionsTableModel {
             }
 
             if (isList) {
-                sql.append(", seq");
+                sql.append(", ").append(member.sqlOrderColumnName());
                 numberOfParams++;
             }
             if (dialect.isMultitenant()) {
@@ -168,7 +168,7 @@ public class CollectionsTableModel {
 
     @SuppressWarnings("unchecked")
     public static void update(Connection connection, Dialect dialect, IEntity entity, MemberCollectionOperationsMeta member, List<IEntity> cascadeRemove) {
-        if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+        if (!member.getMemberMeta().isCascadePersist()) {
             // Never update
             return;
         }
@@ -201,7 +201,7 @@ public class CollectionsTableModel {
                 sql.append(name);
             }
             if (isList) {
-                sql.append(", seq");
+                sql.append(", ").append(member.sqlOrderColumnName());
             }
             if (dialect.isMultitenant()) {
                 sql.append(", ns");
@@ -226,12 +226,12 @@ public class CollectionsTableModel {
                 if (valueIdx != -1) {
                     insertData.remove(value);
                     if (isList) {
-                        if (valueIdx != rs.getInt("seq")) {
+                        if (valueIdx != rs.getInt(member.sqlOrderColumnName())) {
                             if (EntityPersistenceServiceRDB.trace) {
-                                log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt("seq") + "->" + valueIdx + ")",
-                                        member.sqlName());
+                                log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt(member.sqlOrderColumnName())
+                                        + "->" + valueIdx + ")", member.sqlName());
                             }
-                            rs.updateInt("seq", valueIdx);
+                            rs.updateInt(member.sqlOrderColumnName(), valueIdx);
                             rs.updateRow();
                         }
                     }
@@ -281,7 +281,7 @@ public class CollectionsTableModel {
                 sql.append(" AND ns = ?");
             }
             if (isList) {
-                sql.append(" ORDER BY seq");
+                sql.append(" ORDER BY ").append(member.sqlOrderColumnName());
             }
             stmt = connection.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
@@ -338,7 +338,7 @@ public class CollectionsTableModel {
             sql.append(')');
             sql.append(" ORDER BY ").append(member.sqlOwnerName());
             if (isList) {
-                sql.append(", seq");
+                sql.append(", ").append(member.sqlOrderColumnName());
             }
             stmt = connection.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 

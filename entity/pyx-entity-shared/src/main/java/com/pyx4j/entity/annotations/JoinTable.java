@@ -25,7 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.annotations.JoinColumn.ColumnId;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
@@ -41,5 +40,10 @@ public @interface JoinTable {
     boolean cascade() default true;
 
     // Not implemented for now.
-    Class<? extends JoinColumn.ColumnId> mappedby() default ColumnId.class;
+    Class<? extends ColumnId> mappedby() default ColumnId.class;
+
+    /**
+     * Required for IList collections
+     */
+    Class<? extends ColumnId> orderColumn() default ColumnId.class;
 }

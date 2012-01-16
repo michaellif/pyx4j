@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 8, 2012
+ * Created on Jan 15, 2012
  * @author vlads
  * @version $Id$
  */
@@ -26,12 +26,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Optional marker for join columns in JoinTable, By default Entity class match is used.
+ * IPrimitive<Integer> column for sorting IList collections
+ * 
+ * Analog of org.hibernate.annotations.IndexColumn
+ * 
  */
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JoinColumn {
+public @interface JoinTableOrderColumn {
 
-    // Not implemented for now.
-    Class<? extends ColumnId> value() default ColumnId.class;
+    Class<? extends ColumnId> value();
+
 }

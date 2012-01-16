@@ -14,24 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 8, 2012
+ * Created on Jan 15, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.test.shared.domain.join;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * Optional marker for join columns in JoinTable, By default Entity class match is used.
- */
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface JoinColumn {
+public interface BRefCascadeOwner extends IEntity {
 
-    // Not implemented for now.
-    Class<? extends ColumnId> value() default ColumnId.class;
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
+
+    @JoinTable(value = BRefCascadeChild.class, orderColumn = BRefCascadeChild.SortColumnId.class, cascade = true)
+    IList<BRefCascadeChild> children();
 }

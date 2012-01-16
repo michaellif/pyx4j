@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui;
 
+//TODO use com.pyx4j.commons.Filter
+
 public interface OptionsFilter<E> {
 
     public boolean acceptOption(E entity);

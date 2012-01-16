@@ -137,8 +137,8 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     protected abstract MemberMeta createMemberMeta(String memberName);
 
     private static MemberMeta primaryKeyMeta = new ClientMemberMetaImpl(IEntity.PRIMARY_KEY, i18n.tr("Id"), "", "", com.pyx4j.commons.Key.class,
-            com.pyx4j.entity.shared.IPrimitive.class, ObjectClassType.Primitive, false, false, false, AttachLevel.Attached, false, false, false, false, -1,
-            null, false, "");
+            com.pyx4j.entity.shared.IPrimitive.class, ObjectClassType.Primitive, false, false, false, AttachLevel.Attached, false, true, false, false, false,
+            -1, null, false, "");
 
     @Override
     public MemberMeta getMemberMeta(String memberName) {

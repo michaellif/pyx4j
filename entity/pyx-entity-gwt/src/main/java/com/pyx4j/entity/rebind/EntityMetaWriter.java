@@ -45,6 +45,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -386,6 +387,12 @@ public class EntityMetaWriter {
             data.owner = (method.getAnnotation(Owner.class) != null);
             assert (!(data.owner == true && data.ownedRelationships == true));
 
+            data.cascadePersist = true;
+            JoinTable joinTable = method.getAnnotation(JoinTable.class);
+            if (joinTable != null) {
+                data.cascadePersist = joinTable.cascade();
+            }
+
             Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
             boolean indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());
 
@@ -495,6 +502,7 @@ public class EntityMetaWriter {
         writer.print(Boolean.valueOf(data.rpcTransient).toString() + ", ");
         writer.print(AttachLevel.class.getSimpleName() + "." + data.attachLevel.name() + ", ");
         writer.print(Boolean.valueOf(data.ownedRelationships).toString() + ", ");
+        writer.print(Boolean.valueOf(data.cascadePersist).toString() + ", ");
         writer.print(Boolean.valueOf(data.owner).toString() + ", ");
         writer.print(Boolean.valueOf(data.embedded).toString() + ", ");
         writer.print(Boolean.valueOf(indexed).toString() + ", ");
