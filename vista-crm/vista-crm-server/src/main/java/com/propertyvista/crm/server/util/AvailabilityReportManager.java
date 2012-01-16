@@ -35,7 +35,6 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.OffMarketType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AvailabilityReportManager {
@@ -145,20 +144,18 @@ public class AvailabilityReportManager {
                 if (AptUnitOccupancy.Status.leased.equals(nextOccupancyStatus.status().getValue())) {
                     status.rentedStatus().setValue(RentedStatus.Rented);
                     status.moveInDay().setValue(retrieveMoveInDateFromLease(nextOccupancyStatus.lease()));
-                    break;
                 }
             }
         } else if (currentOccupancyStatus.equals(AptUnitOccupancy.Status.offMarket)) {
             status.rentedStatus().setValue(RentedStatus.OffMarket);
-            if (currentOccupancyState.offMarket().equals(OffMarketType.construction)) {
-                status.vacancyStatus().setValue(VacancyStatus.Vacant);
-                status.rentReadinessStatus().setValue(RentReadinessStatus.RenoInProgress);
-            }
+            status.vacancyStatus().setValue(VacancyStatus.Vacant);
+            status.rentReadinessStatus().setValue(RentReadinessStatus.RenoInProgress);
+            status.isScoped().setValue(true);
         } else if (currentOccupancyStatus.equals(AptUnitOccupancy.Status.reserved)) {
             status.vacancyStatus().setValue(VacancyStatus.Vacant);
             status.rentedStatus().setValue(RentedStatus.OffMarket);
         }
-
+        status.statusDate().setValue(when);
         return status;
     }
 

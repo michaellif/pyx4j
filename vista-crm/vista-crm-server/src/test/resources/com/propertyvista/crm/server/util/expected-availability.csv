@@ -1,0 +1,28 @@
+testCaseNumber,statusDate,vacancyStatus,isScoped,rentReadinessStatus,rentedStatus,moveOutDay,moveInDay
+1,2009-12-19,Vacant,true,RentReady,Unrented,"",""
+2,2009-12-20,Vacant,true,RentReady,Rented,"",2010-01-01
+3,2010-01-01,"","","","","","",""
+4,2010-02-01,"","","","","","",""
+5,2010-11-01,Notice,false,"",Unrented,2011-12-31,""
+6,2010-11-02,Notice,false,"",Unrented,2011-12-31,""
+6,2010-12-31,Notice,false,"",Unrented,2011-12-31,""
+8,2011-01-01,Vacant,false,"",Unrented,"",""
+9,2011-01-05,Vacant,false,"",Unrented,"",""
+
+# scoped: needs repairs
+10,2011-01-15,Vacant,true,RenoInProgress,OffMarket,"",""
+
+# construction started
+11,2011-01-16,Vacant,true,RenoInProgress,OffMarket,"",""
+12,2011-01-17,Vacant,true,RenoInProgress,OffMarket,"",""
+
+# rented
+13,2011-01-18,Vacant,true,RenoInProgress,Rented,"",""
+14,2011-01-19,Vacant,true,RenoInProgress,Rented,"",""
+
+# construction ended
+15,2011-01-21,Vacant,true,RentReady,Rented,"",""
+16,2011-01-22,Vacant,true,RentReady,Rented,"",""
+
+# rent start
+17,2010-01-01,"","","","","","",""

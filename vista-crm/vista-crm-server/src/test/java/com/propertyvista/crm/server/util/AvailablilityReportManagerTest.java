@@ -14,13 +14,10 @@
 package com.propertyvista.crm.server.util;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
@@ -33,11 +30,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentReadinessStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.VacancyStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -45,17 +40,7 @@ public class AvailablilityReportManagerTest {
 
     private static final boolean TEST_ON_MYSQL = false;
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
-
-    private static final LogicalDate MIN_DATE = new LogicalDate(0);
-
-    private static final LogicalDate MAX_DATE = new LogicalDate(Long.MAX_VALUE);
-
-    private AptUnit unit;
-
-    private Lease lease1;
-
-    private Lease lease2;
+    private static AptUnit unit;
 
     @Before
     public void setUp() {
@@ -66,88 +51,110 @@ public class AvailablilityReportManagerTest {
         }
 
         unit = EntityFactory.create(AptUnit.class);
-
-        lease1 = EntityFactory.create(Lease.class);
-        try {
-            lease1.unit().set(unit);
-            lease1.expectedMoveIn().setValue(new LogicalDate(DATE_FORMAT.parse("2010.2.2")));
-            lease1.expectedMoveOut().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.1")));
-            lease1.actualMoveIn().setValue(lease1.expectedMoveIn().getValue());
-            lease1.actualMoveOut().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.1")));
-        } catch (ClassCastException e) {
-        } catch (ParseException e) {
-        }
-
-        lease2 = EntityFactory.create(Lease.class);
     }
 
     @Test
     public void testComputeUnitAvailabliltiy() throws ParseException {
-        List<AptUnitOccupancy> occupancy = new ArrayList<AptUnitOccupancy>();
+//        LinkedList<AptUnitOccupancyEventEffect> mockupOccupancies = partitionToEvents(new LinkedList<MockupOccupancyStatus>(EntityCSVReciver.create(
+//                MockupOccupancyStatus.class).loadFile(IOUtils.resourceFileName("mockup-occupancy.csv", AvailablilityReportManagerTest.class))));
+//
+//        LinkedList<MockupExpectedAvailabliltiyStatus> expected = new LinkedList<MockupExpectedAvailabliltiyStatus>(EntityCSVReciver.create(
+//                MockupExpectedAvailabliltiyStatus.class).loadFile(IOUtils.resourceFileName("expected-availability.csv", AvailablilityReportManagerTest.class)));
+//
+//        assertTrue(!mockupOccupancies.isEmpty());
+//
+//        AptUnitOccupancyEventEffect mockupOccupancy = null;
+//        while (!expected.isEmpty()) {
+//            MockupExpectedAvailabliltiyStatus expectedStatus = expected.pop();
+//
+//            while (!mockupOccupancies.isEmpty() & mockupOccupancies.peek().timestamp.compareTo(expectedStatus.statusDate().getValue()) <= 0) {
+//                mockupOccupancy = mockupOccupancies.poll();
+//            }
+//            UnitAvailabilityStatus status = AvailabilityReportManager.computeUnitAvailabilityStatus(new LogicalDate(expectedStatus.statusDate().getValue()),
+//                    mockupOccupancy.occupancy);
+//            assertIsOk(expectedStatus, status);
+//        }
 
-        AptUnitOccupancy available = EntityFactory.create(AptUnitOccupancy.class);
-        available.dateFrom().setValue(MIN_DATE);
-        available.dateTo().setValue(MAX_DATE);
-        available.status().setValue(Status.available);
-        occupancy.add(available);
+    }
 
-        LogicalDate date = new LogicalDate(DATE_FORMAT.parse("2010.1.1"));
+    private void assertIsOk(MockupExpectedAvailabliltiyStatus expectedStatus, UnitAvailabilityStatus status) {
+        String msg = "test case #" + expectedStatus.testCaseNumber().getValue() + " failed for property: ";
+        assertEquals(msg + status.statusDate().getPath().toString(), expectedStatus.statusDate().getValue(), status.statusDate().getValue());
+        assertEquals(msg + status.vacancyStatus().getPath().toString(), expectedStatus.vacancyStatus().getValue(), status.vacancyStatus().getValue());
+        assertEquals(msg + status.rentReadinessStatus().getPath().toString(), expectedStatus.rentReadinessStatus().getValue(), status.rentReadinessStatus()
+                .getValue());
+        assertEquals(msg + status.isScoped().getPath().toString(), expectedStatus.isScoped().getValue(), status.isScoped().getValue());
+        assertEquals(msg + status.rentedStatus().getPath().toString(), expectedStatus.rentedStatus().getValue(), status.rentedStatus().getValue());
+        assertEquals(msg + status.moveInDay().getPath().toString(), expectedStatus.moveInDay().getValue(), status.moveInDay().getValue());
+        assertEquals(msg + status.moveOutDay().getPath().toString(), expectedStatus.moveOutDay().getValue(), status.moveOutDay().getValue());
+    }
 
-        UnitAvailabilityStatus status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
-        assertEquals(VacancyStatus.Vacant, status.vacancyStatus().getValue());
-        assertEquals(RentReadinessStatus.RentReady, status.rentReadinessStatus().getValue());
-        assertEquals(true, status.isScoped().getValue());
-        assertEquals(RentedStatus.Unrented, status.rentedStatus().getValue());
-        assertNull(status.moveInDay().getValue());
-        assertNull(status.moveOutDay().getValue());
+    private final AptUnitOccupancy convert(MockupOccupancyStatus mockup) {
+        AptUnitOccupancy status = EntityFactory.create(AptUnitOccupancy.class);
+        status.unit().set(unit);
+        status.status().set(mockup.status());
+        status.dateFrom().set(mockup.dateFrom());
+        status.dateTo().set(mockup.dateTo());
 
-        available.dateTo().setValue(new LogicalDate(DATE_FORMAT.parse("2010.2.1")));
-        AptUnitOccupancy leased = EntityFactory.create(AptUnitOccupancy.class);
-        leased.status().setValue(Status.leased);
-        leased.lease().set(lease1);
-        leased.dateFrom().setValue(new LogicalDate(DATE_FORMAT.parse("2010.2.2")));
-        leased.dateTo().setValue(MAX_DATE);
-        occupancy.add(leased);
+        if (Status.available.equals(mockup.status().getValue())) {
 
-        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
-        assertEquals(VacancyStatus.Vacant, status.vacancyStatus().getValue());
-        assertEquals(RentReadinessStatus.RentReady, status.rentReadinessStatus().getValue());
-        assertTrue(status.isScoped().getValue());
-        assertEquals(RentedStatus.Rented, status.rentedStatus().getValue());
-        assertEquals(status.moveInDay().getValue(), lease1.expectedMoveIn().getValue());
-        assertNull(status.moveOutDay().getValue());
+        } else if (Status.leased.equals(mockup.status().getValue())) {
+            Lease lease = EntityFactory.create(Lease.class);
+            lease.leaseFrom().setValue(status.dateFrom().getValue());
+            lease.expectedMoveIn().setValue(status.dateFrom().getValue());
+            lease.leaseTo().setValue(status.dateFrom().getValue());
+            lease.expectedMoveOut().setValue(status.dateTo().getValue());
+            status.lease().set(lease);
+        } else if (Status.offMarket.equals(mockup.status().getValue())) {
+            status.offMarket().setValue(OffMarketType.construction);
+        }
 
-        date = new LogicalDate(DATE_FORMAT.parse("2010.2.2"));
-        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
-        assertNull(status.vacancyStatus().getValue());
-        assertNull(status.rentReadinessStatus().getValue());
-        assertNull(status.isScoped().getValue());
-        assertNull(status.rentedStatus().getValue());
-        assertNull(status.moveInDay().getValue());
-        assertNull(status.moveOutDay().getValue());
+        return status;
+    }
 
-        date = new LogicalDate(DATE_FORMAT.parse("2010.2.5"));
-        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
-        assertNull(status.vacancyStatus().getValue());
-        assertNull(status.rentReadinessStatus().getValue());
-        assertNull(status.isScoped().getValue());
-        assertNull(status.rentedStatus().getValue());
-        assertNull(status.moveInDay().getValue());
-        assertNull(status.moveOutDay().getValue());
+    private class AptUnitOccupancyEventEffect {
 
-        leased.dateTo().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.1")));
-        AptUnitOccupancy vacant = EntityFactory.create(AptUnitOccupancy.class);
-        vacant.status().setValue(Status.vacant);
-        vacant.dateFrom().setValue(new LogicalDate(DATE_FORMAT.parse("2011.1.2")));
-        vacant.dateTo().setValue(MAX_DATE);
-        occupancy.add(vacant);
+        private final LogicalDate timestamp;
 
-        status = AvailabilityReportManager.computeUnitAvailabilityStatus(date, occupancy);
-        assertEquals(VacancyStatus.Notice, status.vacancyStatus().getValue());
-        assertNull(status.rentReadinessStatus().getValue());
-        assertFalse(status.isScoped().getValue());
-        assertEquals(RentedStatus.Unrented, status.rentedStatus().getValue());
-        assertNull(status.moveInDay().getValue());
-        assertEquals(new LogicalDate(DATE_FORMAT.parse("2011.1.1")), status.moveOutDay().getValue());
+        private final List<AptUnitOccupancy> occupancy;
+
+        public AptUnitOccupancyEventEffect(LogicalDate timestamp, List<MockupOccupancyStatus> mockup) {
+            this.timestamp = timestamp;
+            this.occupancy = new ArrayList<AptUnitOccupancy>();
+            for (MockupOccupancyStatus mockupStatus : mockup) {
+                this.occupancy.add(convert(mockupStatus));
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "(" + timestamp.toString() + ": " + occupancy.toString() + ")";
+        }
+    }
+
+    private LinkedList<AptUnitOccupancyEventEffect> partitionToEvents(LinkedList<MockupOccupancyStatus> mockup) {
+        LinkedList<AptUnitOccupancyEventEffect> states = new LinkedList<AptUnitOccupancyEventEffect>();
+        LogicalDate lastTimestamp = null;
+        while (!mockup.isEmpty()) {
+
+            if (lastTimestamp == null || !lastTimestamp.equals(mockup.peek().statusDate().getValue())) {
+                lastTimestamp = new LogicalDate(mockup.peek().statusDate().getValue());
+            }
+            List<MockupOccupancyStatus> mockupState = new ArrayList<MockupOccupancyStatus>();
+            while (!mockup.isEmpty() && lastTimestamp.equals(mockup.peek().statusDate().getValue())) {
+                MockupOccupancyStatus temp = mockup.pop();
+                // the following strange manipulation is required because we recieve "Date" in the IPrimitive<Date> fields from CSVs.
+                temp.statusDate().setValue(new LogicalDate(temp.statusDate().getValue()));
+                if (!temp.dateFrom().isNull()) {
+                    temp.dateFrom().setValue(new LogicalDate(temp.dateFrom().getValue()));
+                }
+                if (!temp.dateTo().isNull()) {
+                    temp.dateTo().setValue(new LogicalDate(temp.dateTo().getValue()));
+                }
+                mockupState.add(temp);
+            }
+            states.add(new AptUnitOccupancyEventEffect(lastTimestamp, mockupState));
+        }
+        return states;
     }
 }
