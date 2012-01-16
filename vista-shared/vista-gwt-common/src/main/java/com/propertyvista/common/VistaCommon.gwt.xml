@@ -14,8 +14,6 @@
 
     <inherits name='com.propertyvista.Domain' />
     
-    <inherits name='gwtupload.GWTUpload' />
-    
     <source path="client"/>
     
     <extend-configuration-property name="rpc.blacklist" value="gwtupload.client.*" />

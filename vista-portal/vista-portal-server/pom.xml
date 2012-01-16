@@ -58,7 +58,7 @@
             <artifactId>vista-importer</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-payment</artifactId>
@@ -121,11 +121,6 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.googlecode.gwtupload</groupId>
-            <artifactId>gwtupload</artifactId>
         </dependency>
 
         <dependency>
