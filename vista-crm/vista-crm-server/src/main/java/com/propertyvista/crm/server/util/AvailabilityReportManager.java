@@ -142,7 +142,7 @@ public class AvailabilityReportManager {
             status.rentedStatus().setValue(RentedStatus.Unrented);
             while (i.hasNext()) {
                 AptUnitOccupancy nextOccupancyStatus = i.next();
-                if (AptUnitOccupancy.Status.leased.equals(nextOccupancyStatus)) {
+                if (AptUnitOccupancy.Status.leased.equals(nextOccupancyStatus.status().getValue())) {
                     status.rentedStatus().setValue(RentedStatus.Rented);
                     status.moveInDay().setValue(retrieveMoveInDateFromLease(nextOccupancyStatus.lease()));
                     break;
@@ -173,7 +173,7 @@ public class AvailabilityReportManager {
             }
         });
         if (index < 0) {
-            index = (-index) - 1;
+            index = (-index) - 2;
         }
         return occupancy.listIterator(index);
     }
