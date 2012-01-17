@@ -31,11 +31,14 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 
 public class TestLifecycle {
 
     static class TestContext {
+
+        String namespace = "-t-";
 
         MockHttpSession session;
 
@@ -59,13 +62,21 @@ public class TestLifecycle {
         testContext.behaviours = new HashSet<Behavior>(Arrays.asList(behaviours));
     }
 
+    public static void testNamespace(String namespace) {
+        TestContext testContext = threadLocalContext.get();
+        testContext.namespace = namespace;
+    }
+
     public static void beginRequest() {
         MockHttpServletRequest httprequest = new MockHttpServletRequest();
         HttpServletResponse httpresponse = new MockHttpServletResponse();
-        Lifecycle.beginRequest(httprequest, httpresponse);
 
         // Auto init test sessions
         TestContext testContext = threadLocalContext.get();
+
+        NamespaceManager.setNamespace(testContext.namespace);
+        Lifecycle.beginRequest(httprequest, httpresponse);
+
         if ((testContext.session == null) && ((testContext.userVisit != null) || (testContext.behaviours != null))) {
             Lifecycle.beginSession(testContext.userVisit, testContext.behaviours);
         }
