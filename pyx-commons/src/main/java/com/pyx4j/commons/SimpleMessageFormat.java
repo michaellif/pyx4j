@@ -199,8 +199,10 @@ public class SimpleMessageFormat {
                     formatedArg = TimeUtils.durationFormat(duration);
                 }
             } else if (formatType.equals("date")) {
+                assert formatStyle != null : "Null formatStyle is unexpected in " + formatPattern;
                 formatedArg = SimpleDateFormatImpl.format(formatStyle, (Date) arg);
             } else if (formatType.equals("time")) {
+                assert formatStyle != null : "Null formatStyle is unexpected in " + formatPattern;
                 formatedArg = SimpleDateFormatImpl.formatTime(formatStyle, (Date) arg);
             } else if (formatType.equals("choice")) {
                 String[] choices = formatStyle.split("\\|");
