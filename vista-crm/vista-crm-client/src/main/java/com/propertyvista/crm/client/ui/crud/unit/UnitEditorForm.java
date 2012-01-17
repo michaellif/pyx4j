@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
@@ -50,6 +51,8 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     private static final I18n i18n = I18n.get(UnitEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
+
+    private SimplePanel buildingPlace;
 
     public UnitEditorForm() {
         this(new CrmEditorsComponentFactory());
@@ -83,14 +86,28 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
-        // restrict floorplan combo here to current building:
-        CComponent<Floorplan, ?> comp = get(proto().floorplan());
-        if (isEditable() && comp instanceof CEntityComboBox<?>) {
-            @SuppressWarnings("unchecked")
-            CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
-            combo.resetCriteria(); // reload options with new criteria...
-            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), getValue().belongsTo().detach()));
+        if (isEditable()) {
+            // setupBuioldingEditor:
+            CComponent<?, ?> building = null;
+            if (getValue().belongsTo().isEmpty()) {
+                CEntityComboBox<Building> combo = new CEntityComboBox<Building>(Building.class);
+                combo.addValueChangeHandler(new ValueChangeHandler<Building>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Building> event) {
+                        setupFloorplanCombo(event.getValue());
+                    }
+                });
+                building = combo;
+            } else {
+                CEntityLabel<Building> label = new CEntityLabel<Building>();
+                label.populate(getValue().belongsTo());
+                building = label;
+                setupFloorplanCombo(getValue().belongsTo());
+            }
+
+            buildingPlace.setWidget(new DecoratorBuilder(inject(proto().belongsTo(), building), 20).build());
         }
+
     }
 
     @Override
@@ -115,13 +132,13 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().availableForRent()), 9).build());
 
         main.setBR(++row, 0, 0);
-        CComponent<?, ?> belongs;
         if (isEditable()) {
-            belongs = new CEntityLabel<Building>();
+            main.setWidget(++row, 0, buildingPlace = new SimplePanel());
         } else {
-            belongs = new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class));
+            main.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().belongsTo(), new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))),
+                            20).build());
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().belongsTo(), belongs), 20).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
@@ -171,5 +188,16 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(0, 0, inject(proto().marketing(), new MarketingEditor()));
 
         return new CrmScrollPanel(main);
+    }
+
+    private void setupFloorplanCombo(Building building) {
+        // restrict floorplan combo here to current building:
+        CComponent<Floorplan, ?> comp = get(proto().floorplan());
+        if (isEditable() && comp instanceof CEntityComboBox<?>) {
+            @SuppressWarnings("unchecked")
+            CEntityComboBox<Floorplan> combo = (CEntityComboBox<Floorplan>) comp;
+            combo.resetCriteria(); // reload options with new criteria...
+            combo.addCriterion(PropertyCriterion.eq(combo.proto().building(), building.detach()));
+        }
     }
 }
