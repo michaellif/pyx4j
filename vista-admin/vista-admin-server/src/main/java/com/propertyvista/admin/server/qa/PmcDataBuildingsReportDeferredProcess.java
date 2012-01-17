@@ -76,22 +76,22 @@ public class PmcDataBuildingsReportDeferredProcess extends SearchReportDeferredP
             if (!PublicVisibilityType.global.equals(building.marketing().visibility().getValue())) {
                 continue;
             }
-            super.reportEntity(pmc);
-            formater.cell(building.info().address().province().name().getStringView());
-            formater.cell(building.info().address().city().getStringView());
-            formater.cell(building.getPrimaryKey());
-            formater.cell(building.propertyCode().getStringView());
-
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
             List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
-            nextFloorplan: for (Floorplan floorplan : floorplans) {
-                formater.cell(floorplan.getPrimaryKey());
-                //Get only one Floorplan
-                break nextFloorplan;
+            for (Floorplan floorplan : floorplans) {
+                exportPmcBuilding(pmc, building, floorplan);
             }
-            formater.newRow();
         }
+    }
 
+    private void exportPmcBuilding(Pmc pmc, Building building, Floorplan floorplan) {
+        super.reportEntity(pmc);
+        formater.cell(building.info().address().province().name().getStringView());
+        formater.cell(building.info().address().city().getStringView());
+        formater.cell(building.getPrimaryKey());
+        formater.cell(building.propertyCode().getStringView());
+        formater.cell(floorplan.getPrimaryKey());
+        formater.newRow();
     }
 }
