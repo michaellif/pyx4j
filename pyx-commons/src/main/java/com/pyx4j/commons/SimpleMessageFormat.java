@@ -47,7 +47,7 @@ public class SimpleMessageFormat {
     }
 
     public SimpleMessageFormat(String pattern) {
-        assert pattern == null : "Null date format is unexpected";
+        assert pattern != null : "Null format pattern is unexpected";
         format = pattern;
         scanPos = 0;
         recursionLevel = 0;
