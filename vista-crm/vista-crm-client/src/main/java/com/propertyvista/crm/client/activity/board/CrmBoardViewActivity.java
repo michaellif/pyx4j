@@ -41,7 +41,7 @@ public abstract class CrmBoardViewActivity<V extends BoardView> extends BoardVie
         if (view instanceof CrmBoardView && ((CrmBoardView) view).getBuildingListerView() != null) {
             IListerView.Presenter buildingsLister = new ListerActivityBase<Building>(getPlace(), ((CrmBoardView) view).getBuildingListerView(),
                     (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
-            buildingsLister.populate(0);
+            buildingsLister.retrieveData(0);
         }
     }
 }

@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -80,27 +78,27 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                 populate(false);
             }
         });
-        dataTablePanel.setFirstActionHandler(new ClickHandler() {
+        dataTablePanel.setFirstActionHandler(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 firstListPage();
             }
         });
-        dataTablePanel.setPrevActionHandler(new ClickHandler() {
+        dataTablePanel.setPrevActionHandler(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 prevListPage();
             }
         });
-        dataTablePanel.setNextActionHandler(new ClickHandler() {
+        dataTablePanel.setNextActionHandler(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 nextListPage();
             }
         });
-        dataTablePanel.setLastActionHandler(new ClickHandler() {
+        dataTablePanel.setLastActionHandler(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 lastListPage();
             }
         });

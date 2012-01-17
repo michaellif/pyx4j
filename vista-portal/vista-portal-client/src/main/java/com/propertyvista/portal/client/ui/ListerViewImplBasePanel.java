@@ -93,8 +93,8 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        getLister().populate(entityes, pageNumber, hasMoreData, totalRows);
+    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
+        getLister().populateData(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     @Override

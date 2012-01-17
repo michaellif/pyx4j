@@ -90,7 +90,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
 
     @Override
     public void onPopulateSuccess(Lead result) {
-        buildingsLister.populate(0);
+        buildingsLister.retrieveData(0);
 
         populateUnitLister(result.building());
 
@@ -101,7 +101,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
         if (!selected.isEmpty()) {
             unitsLister.setParentFiltering(selected.getPrimaryKey());
         }
-        unitsLister.populate(0);
+        unitsLister.retrieveData(0);
     }
 
     @Override

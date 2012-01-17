@@ -65,15 +65,15 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
     public void onPopulateSuccess(Showing result) {
         super.onPopulateSuccess(result);
 
-        buildingsLister.populate(0);
-        unitsLister.populate(0);
+        buildingsLister.retrieveData(0);
+        unitsLister.retrieveData(0);
     }
 
     @Override
     public void setSelectedBuilding(Building selected) {
         // update unit lister with building units:
         unitsLister.setParentFiltering(selected.getPrimaryKey());
-        unitsLister.populate(0);
+        unitsLister.retrieveData(0);
     }
 
     @Override

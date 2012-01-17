@@ -93,7 +93,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
-        tenantsLister.populate(0);
+        tenantsLister.retrieveData(0);
 
         leaseFrom = result.leaseFrom().getValue();
         leaseTo = result.leaseTo().getValue();
@@ -134,7 +134,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     @Override
     public void setSelectedBuilding(Building selected) {
         if (selected == null) {
-            buildingsLister.populate(0);
+            buildingsLister.retrieveData(0);
         }
         populateUnitLister(selected);
     }
@@ -205,7 +205,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             filters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operators.lessThan, leaseTo));
             unitsLister.setPreDefinedFilters(filters);
         }
-        unitsLister.populate(0);
+        unitsLister.retrieveData(0);
     }
 
     @Override

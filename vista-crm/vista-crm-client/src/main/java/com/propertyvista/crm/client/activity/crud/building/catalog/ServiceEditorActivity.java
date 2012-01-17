@@ -74,10 +74,10 @@ public class ServiceEditorActivity extends EditorActivityBase<Service> implement
         super.onPopulateSuccess(result);
 
         featureLister.setParentFiltering(result.catalog().getPrimaryKey());
-        featureLister.populate(0);
+        featureLister.retrieveData(0);
 
         concessionLister.setParentFiltering(result.catalog().getPrimaryKey());
-        concessionLister.populate(0);
+        concessionLister.retrieveData(0);
     }
 
     @Override
