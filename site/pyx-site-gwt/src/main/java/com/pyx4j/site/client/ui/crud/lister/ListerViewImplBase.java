@@ -89,12 +89,12 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(Presenter<E> presenter) {
         getLister().setPresenter(presenter);
     }
 
     @Override
-    public Presenter getPresenter() {
+    public Presenter<E> getPresenter() {
         return getLister().getPresenter();
     }
 
@@ -106,11 +106,6 @@ public class ListerViewImplBase<E extends IEntity> extends DockLayoutPanel imple
     @Override
     public int getPageNumber() {
         return getLister().getPageNumber();
-    }
-
-    @Override
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        getLister().populateData(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     @Override

@@ -31,7 +31,9 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public interface IListerView<E extends IEntity> extends IView<E> {
 
-    public interface Presenter extends IView.Presenter {
+    public interface Presenter<E extends IEntity> extends IView.Presenter {
+
+        public ListerDataSource<E> getDataSource();
 
         void setParentFiltering(Key parentID);
 
@@ -53,17 +55,15 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     }
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(Presenter<E> presenter);
 
-    Presenter getPresenter();
+    Presenter<E> getPresenter();
 
     ListerBase<E> getLister();
 
     int getPageSize();
 
     int getPageNumber();
-
-    void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows);
 
     void discard();
 
@@ -76,5 +76,4 @@ public interface IListerView<E extends IEntity> extends IView<E> {
     void setSorting(List<Sort> sorts);
 
     void onDeleted(Key itemID, boolean isSuccessful);
-
 }

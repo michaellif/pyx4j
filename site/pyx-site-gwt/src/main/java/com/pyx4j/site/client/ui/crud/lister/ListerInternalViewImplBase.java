@@ -23,7 +23,7 @@ package com.pyx4j.site.client.ui.crud.lister;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
-public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel implements IListerView<E> {
+public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel implements IListerView<E> {
 
     protected static I18n i18n = I18n.get(ListerInternalViewImplBase.class);
 
@@ -81,11 +81,6 @@ public class ListerInternalViewImplBase<E extends IEntity> extends ScrollPanel i
     @Override
     public int getPageNumber() {
         return getLister().getPageNumber();
-    }
-
-    @Override
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        getLister().populateData(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     @Override

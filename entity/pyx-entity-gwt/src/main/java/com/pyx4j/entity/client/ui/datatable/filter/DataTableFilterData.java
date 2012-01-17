@@ -23,6 +23,8 @@ package com.pyx4j.entity.client.ui.datatable.filter;
 import java.io.Serializable;
 
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -84,6 +86,30 @@ public class DataTableFilterData {
     public boolean isFilterOK() {
         return (getMemberPath() != null && getOperand() != null && (getValue() != null || (getOperand().equals(Operators.is) || getOperand().equals(
                 Operators.isNot))));
+    }
+
+    public PropertyCriterion convertToPropertyCriterion() {
+        PropertyCriterion criterion = null;
+        if (isFilterOK()) {
+            switch (getOperand()) {
+            case is:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.EQUAL, getValue());
+                break;
+            case isNot:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.NOT_EQUAL, getValue());
+                break;
+            case like:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.RDB_LIKE, getValue());
+                break;
+            case greaterThan:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.GREATER_THAN, getValue());
+                break;
+            case lessThan:
+                criterion = new PropertyCriterion(getMemberPath(), Restriction.LESS_THAN, getValue());
+                break;
+            }
+        }
+        return criterion;
     }
 
 }

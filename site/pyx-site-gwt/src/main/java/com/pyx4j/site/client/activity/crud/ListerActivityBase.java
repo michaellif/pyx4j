@@ -20,9 +20,7 @@
  */
 package com.pyx4j.site.client.activity.crud;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -32,31 +30,21 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter {
+public class ListerActivityBase<E extends IEntity> extends AbstractActivity implements IListerView.Presenter<E> {
 
     private final IListerView<E> view;
 
+    private final ListerDataSource<E> dataSource;
+
     private final AbstractListService<E> service;
-
-    private final Class<E> entityClass;
-
-    private DataTableFilterData parentFiltering;
-
-    private List<DataTableFilterData> preDefinedFilters;
 
     private Key parentID;
 
@@ -68,7 +56,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
         this.view = view;
         this.service = service;
-        this.entityClass = entityClass;
+        this.dataSource = new ListerDataSource<E>(entityClass, service);
         view.setPresenter(this);
 
         view.getMemento().setCurrentPlace(place);
@@ -89,31 +77,25 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void setParentFiltering(Key parentID) {
-        if (parentID != null) {
-            String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
-            assert (ownerMemberName != null) : "No @Owner in " + entityClass;
-            parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, parentID);
-        } else {
-            parentFiltering = null; // release it!..
-        }
+    public ListerDataSource<E> getDataSource() {
+        return dataSource;
+    }
 
+    @Override
+    public void setParentFiltering(Key parentID) {
+        dataSource.setParentFiltering(parentID);
         this.parentID = parentID; // save parent id for newItem creation...
 
     }
 
-    protected boolean isFilterCreateEmptyDataSet() {
-        return (parentFiltering != null) && (parentID == null);
-    }
-
     @Override
     public List<DataTableFilterData> getPreDefinedFilters() {
-        return preDefinedFilters;
+        return dataSource.getPreDefinedFilters();
     }
 
     @Override
     public void setPreDefinedFilters(List<DataTableFilterData> preDefinedFilters) {
-        this.preDefinedFilters = preDefinedFilters;
+        dataSource.setPreDefinedFilters(preDefinedFilters);
     }
 
     @Override
@@ -121,29 +103,22 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         view.getLister().restoreState();
     }
 
+    // TODO : check this optimization (in retrieveData):
+//    protected boolean isFilterCreateEmptyDataSet() {
+//        return (parentFiltering != null) && (parentID == null);
+//    }
+
     @Override
-    public void retrieveData(final int pageNumber) {
+    public void retrieveData(int pageNumber) {
+
+        // TODO : check this optimization:
         // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list 
-        if (isFilterCreateEmptyDataSet()) {
-            view.populateData(new Vector<E>(), pageNumber, false, 0);
-            return;
-        }
+//        if (isFilterCreateEmptyDataSet()) {
+//            view.populateData(new Vector<E>(), pageNumber, false, 0);
+//            return;
+//        }
 
-        EntityListCriteria<E> criteria = constructSearchCriteria();
-        criteria.setPageSize(view.getPageSize());
-        criteria.setPageNumber(pageNumber);
-
-        service.list(new AsyncCallback<EntitySearchResult<E>>() {
-            @Override
-            public void onSuccess(EntitySearchResult<E> result) {
-                view.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-        }, criteria);
+        view.getLister().obtain(pageNumber);
     }
 
     @Override
@@ -186,51 +161,5 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onDeleted(Key itemID, boolean isSuccessful) {
         view.onDeleted(itemID, isSuccessful);
-    }
-
-    protected EntityListCriteria<E> constructSearchCriteria() {
-        List<DataTableFilterData> currentFilters = new ArrayList<DataTableFilterData>();
-
-        // combine filters:
-        if (parentFiltering != null) {
-            currentFilters.add(parentFiltering);
-        }
-        if (preDefinedFilters != null) {
-            currentFilters.addAll(preDefinedFilters);
-        }
-
-        List<DataTableFilterData> userDefinedFilters = view.getFilters();
-        if (userDefinedFilters != null) {
-            currentFilters.addAll(userDefinedFilters);
-        }
-
-        // construct search criteria:
-        EntityListCriteria<E> criteria = new EntityListCriteria<E>(entityClass);
-        for (DataTableFilterData fd : currentFilters) {
-            if (fd.isFilterOK()) {
-                switch (fd.getOperand()) {
-                case is:
-                    criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.EQUAL, fd.getValue()));
-                    break;
-                case isNot:
-                    criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.NOT_EQUAL, fd.getValue()));
-                    break;
-                case like:
-                    criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.RDB_LIKE, fd.getValue()));
-                    break;
-                case greaterThan:
-                    criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.GREATER_THAN, fd.getValue()));
-                    break;
-                case lessThan:
-                    criteria.add(new PropertyCriterion(fd.getMemberPath(), Restriction.LESS_THAN, fd.getValue()));
-                    break;
-                }
-            }
-        }
-
-        // apply sorts:
-        criteria.setSorts(view.getSorting());
-
-        return criteria;
     }
 }

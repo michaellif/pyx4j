@@ -32,10 +32,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.EntityDataSource;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
-import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
@@ -49,7 +47,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 
-public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
+public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     public static enum MementoKeys {
         page, filterData, sortingData
@@ -57,7 +55,7 @@ public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
 
     private final DataTablePanel<E> dataTablePanel;
 
-    private EntityDataSource<E> optionsDataSource;
+    private ListerDataSource<E> dataSource;
 
     private List<ItemSelectionHandler<E>> itemSelectionHandlers;
 
@@ -65,7 +63,7 @@ public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
 
     private final IMemento memento = new MementoImpl();
 
-    public AbstractLister(Class<E> clazz) {
+    public BasicLister(Class<E> clazz) {
         this.clazz = clazz;
         setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Lister.name());
         dataTablePanel = new DataTablePanel<E>(clazz);
@@ -110,12 +108,6 @@ public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
         });
 
         dataTablePanel.getDataTable().setHasCheckboxColumn(true);
-        dataTablePanel.getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
-            @Override
-            public void onCheck(boolean isAnyChecked) {
-                setActionsActive(isAnyChecked);
-            }
-        });
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
@@ -137,12 +129,12 @@ public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
         add(dataTablePanel);
     }
 
-    public AbstractLister(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
+    public BasicLister(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
         this(clazz);
 
         if (allowZoomIn) {
             // item selection stuff:
-            getDataTablePanel().getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
+            dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
                 @Override
                 public void onSelect(int selectedRow) {
                     E item = getDataTablePanel().getDataTable().getSelectedItem();
@@ -154,39 +146,48 @@ public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
 
             // new item stuff:
             if (allowAddNew) {
-                getDataTablePanel().setAddActionHandler(new ClickHandler() {
+                dataTablePanel.setAddActionHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         onItemNew();
                     }
                 });
             }
-            getDataTablePanel().getDataTable().setHasDetailsNavigation(true);
+            dataTablePanel.getDataTable().setHasDetailsNavigation(true);
         } else {
-            getDataTablePanel().getDataTable().setHasDetailsNavigation(false);
+            dataTablePanel.getDataTable().setHasDetailsNavigation(false);
         }
     }
 
-    public void setOptionsDataSource(EntityDataSource<E> dataSource) {
-        this.optionsDataSource = optionsDataSource;
+    public void setDataSource(ListerDataSource<E> dataSource) {
+        this.dataSource = dataSource;
     }
 
-    protected void obtain(final int pageNumber) {
-        assert optionsDataSource != null : "dataSource is not installed";
+    public ListerDataSource<E> getDataSource() {
+        return dataSource;
+    }
+
+    public void obtain(final int pageNumber) {
+        assert dataSource != null : "dataSource is not installed";
 
         EntityListCriteria<E> criteria = EntityListCriteria.create(clazz);
         criteria.setPageNumber(pageNumber);
-        optionsDataSource.obtain(criteria, new DefaultAsyncCallback<EntitySearchResult<E>>() {
+        criteria.setPageSize(dataTablePanel.getPageSize());
+        criteria.setSorts(getSorting());
+
+        dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(EntitySearchResult<E> result) {
-                populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
+                dataTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
             }
         });
     }
 
-    protected abstract void onItemSelect(E item);
+    protected void onItemSelect(E item) {
+    }
 
-    protected abstract void onItemNew();
+    protected void onItemNew() {
+    }
 
     @SuppressWarnings("unchecked")
     public void setColumnDescriptors(ColumnDescriptor<?>... columnDescriptors) {
@@ -316,15 +317,6 @@ public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
         }
     }
 
-    private void setActionsActive(boolean active) {
-        //TODO
-//        for (Widget w : actionsPanel) {
-//            if (!w.equals(btnNewItem) && w instanceof FocusWidget) {
-//                ((FocusWidget) w).setEnabled(active);
-//            }
-//        }
-    }
-
     public void discard() {
         dataTablePanel.discard();
     }
@@ -357,18 +349,26 @@ public abstract class AbstractLister<E extends IEntity> extends VerticalPanel {
         if (filters != null && filters.size() > 0) {
             setFilters(filters);
         }
+
         setSorting(sorts);
+
         // should be called last:
         obtain(pageNumber);
-    }
-
-    public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        setActionsActive(false);
-        dataTablePanel.populateData(entityes, pageNumber, hasMoreData, totalRows);
     }
 
     public DataTablePanel<E> getDataTablePanel() {
         return dataTablePanel;
     }
 
+    protected EntityListCriteria<E> updateCriteria(EntityListCriteria<E> criteria) {
+        if (getFilters() != null) {
+            for (DataTableFilterData fd : getFilters()) {
+                if (fd.isFilterOK()) {
+                    criteria.add(fd.convertToPropertyCriterion());
+                }
+            }
+        }
+
+        return criteria;
+    }
 }

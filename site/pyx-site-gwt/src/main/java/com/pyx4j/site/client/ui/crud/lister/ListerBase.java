@@ -24,13 +24,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public abstract class ListerBase<E extends IEntity> extends AbstractLister<E> implements IListerView<E> {
+public abstract class ListerBase<E extends IEntity> extends BasicLister<E> implements IListerView<E> {
 
     public interface ItemSelectionHandler<E> {
         void onSelect(E selectedItem);
     }
 
-    protected Presenter presenter;
+    private Presenter<E> presenter;
 
     private Class<? extends CrudAppPlace> itemOpenPlaceClass;
 
@@ -73,12 +73,13 @@ public abstract class ListerBase<E extends IEntity> extends AbstractLister<E> im
 // IListerView implementation:
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(Presenter<E> presenter) {
         this.presenter = presenter;
+        setDataSource(presenter.getDataSource());
     }
 
     @Override
-    public Presenter getPresenter() {
+    public Presenter<E> getPresenter() {
         return presenter;
     }
 
@@ -91,10 +92,4 @@ public abstract class ListerBase<E extends IEntity> extends AbstractLister<E> im
     public void onDeleted(Key itemID, boolean isSuccessful) {
         // TODO Auto-generated method stub
     }
-
-    @Override
-    public void obtain(int pageNumber) {
-        getPresenter().retrieveData(pageNumber);
-    }
-
 }
