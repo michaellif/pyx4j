@@ -313,10 +313,20 @@
         <servlet-class>com.propertyvista.portal.server.upload.ApplicationDocumentServlet</servlet-class>
     </servlet>
 
-    <!-- See ServletMapping class when moving to Servlet v3 -->
     <servlet-mapping>
         <servlet-name>ApplicationDocumentServlet</servlet-name>
-        <url-pattern>/ptapp/application_document</url-pattern>
+        <url-pattern>/application_document/*</url-pattern>
+    </servlet-mapping>
+    
+    <!--  need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->
+    <servlet-mapping>
+        <servlet-name>ApplicationDocumentServlet</servlet-name>
+        <url-pattern>/crm/application_document/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ApplicationDocumentServlet</servlet-name>
+        <url-pattern>/ptapp/application_document/*</url-pattern>
     </servlet-mapping>
 
 

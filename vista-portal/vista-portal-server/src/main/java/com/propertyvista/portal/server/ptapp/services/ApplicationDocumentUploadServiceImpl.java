@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -26,7 +27,10 @@ import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
@@ -58,15 +62,21 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
 
         ApplicationDocumentUploadDTO dto = (ApplicationDocumentUploadDTO) process.getData();
 
-        TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, dto.tenantId().getValue());
+        TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, dto.tenantInLeaseId().getValue());
         if (tenant == null) {
-            throw new Error("Unknown tenantId: " + dto.tenantId().getValue());
+            throw new Error("Unknown tenantId: " + dto.tenantInLeaseId().getValue());
         }
-        if (!tenant.application().id().getValue().equals(PtAppContext.getCurrentUserApplication().id().getValue())) {
-            throw new Error("Wrong TenantId: " + dto.tenantId().getValue());
+        if (SecurityController.checkBehavior(VistaTenantBehavior.Prospective)) {
+            if (!EqualsHelper.equals(tenant.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
+                throw new Error("Wrong ApplicationId: " + tenant.application().getPrimaryKey());
+            }
+        } else {
+            SecurityController.assertBehavior(VistaCrmBehavior.Tenants);
         }
 
         ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data.data, response.fileContentType, tenant);
+
+        Persistence.secureSave(applicationDocumentData);
 
         response.uploadKey = applicationDocumentData.id().getValue();
 
@@ -79,7 +89,6 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
         applicationDocumentData.tenant().set(tenant.tenant());
         applicationDocumentData.contentType().setValue(contentType);
         applicationDocumentData.application().set(tenant.application());
-        ApplicationEntityServiceImpl.saveApplicationEntity(applicationDocumentData);
         return applicationDocumentData;
     }
 

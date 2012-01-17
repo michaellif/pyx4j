@@ -21,6 +21,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface ApplicationDocumentUploadDTO extends IEntity {
 
-    IPrimitive<Key> tenantId();
+    IPrimitive<Key> tenantInLeaseId();
 
 }

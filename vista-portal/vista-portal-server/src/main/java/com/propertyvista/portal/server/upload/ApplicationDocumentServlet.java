@@ -21,67 +21,66 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.Persistence;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.propertyvista.misc.ApplicationDocumentServletParameters;
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.Key;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.security.shared.SecurityController;
+
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.domain.ApplicationDocumentData;
 
+@SuppressWarnings("serial")
 public class ApplicationDocumentServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+    private final static Logger log = LoggerFactory.getLogger(ApplicationDocumentServlet.class);
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * 
-     * @param request
-     *            servlet request
-     * @param response
-     *            servlet response
-     * @throws ServletException
-     *             if a servlet-specific error occurs
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String dataId = request.getParameter(ApplicationDocumentServletParameters.DATA_ID);
-        if (dataId == null) {
-            response.getWriter().println("dataId parameter is missing");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String filename = request.getPathInfo();
+        String id = FilenameUtils.getPathNoEndSeparator(filename);
+        if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
+            response.setStatus(HttpServletResponse.SC_GONE);
             return;
         }
 
-        ApplicationDocumentData adata = Persistence.service().retrieve(ApplicationDocumentData.class, new Key(dataId));
+        //TODO deserialize key
+        ApplicationDocumentData adata = Persistence.service().retrieve(ApplicationDocumentData.class, new Key(id));
         if (adata == null) {
-            throw new ServletException("Cannot retrieve binary data: adata is null");
+            log.debug("no such document {} {}", id, filename);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
         }
-        if (!adata.application().id().getValue().equals(PtAppContext.getCurrentUserApplication().id().getValue())) {
-            throw new ServletException("Cannot retrieve data: wrong application Id: " + adata.application().id().getValue() + " != "
-                    + PtAppContext.getCurrentUserApplication().id().getValue());
-        }
-        if (adata.data() == null) {
-            throw new ServletException("Cannot retrieve binary data: adata.data() is null");
+
+        if (SecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectiveSubmited)) {
+            if (!EqualsHelper.equals(adata.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
+                log.debug("no access to document {} {}", id, filename);
+                if (ApplicationMode.isDevelopment()) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
+            }
+        } else if (!SecurityController.checkBehavior(VistaCrmBehavior.Tenants)) {
+            log.debug("no access to document {} {}", id, filename);
+            if (ApplicationMode.isDevelopment()) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+            return;
         }
         response.setContentType(adata.contentType().getValue());
         response.getOutputStream().write(adata.data().getValue());
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     * 
-     * @param request
-     *            servlet request
-     * @param response
-     *            servlet response
-     * @throws ServletException
-     *             if a servlet-specific error occurs
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }// </editor-fold>
 
 }

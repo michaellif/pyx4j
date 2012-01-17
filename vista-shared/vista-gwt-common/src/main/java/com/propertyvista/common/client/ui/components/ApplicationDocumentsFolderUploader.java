@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -49,8 +48,6 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
-import com.propertyvista.misc.ApplicationDocumentServletParameters;
-import com.propertyvista.misc.ServletMapping;
 
 public class ApplicationDocumentsFolderUploader extends VistaTableFolder<ApplicationDocument> {
 
@@ -118,9 +115,7 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
                 CHyperlink link = new CHyperlink(new Command() {
                     @Override
                     public void execute() {
-                        String url = GWT.getModuleBaseURL() + ServletMapping.APPLICATIONDOCUMENT + "?" + ApplicationDocumentServletParameters.DATA_ID + "="
-                                + getValue().blobKey().getValue();
-                        Window.open(url, "_blank", null);
+                        Window.open(MediaUtils.createApplicationDocumentUrl(getValue()), "_blank", null);
                     }
                 });
                 return inject(column.getObject(), link);

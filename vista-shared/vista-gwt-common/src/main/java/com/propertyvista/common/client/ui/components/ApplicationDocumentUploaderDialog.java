@@ -67,7 +67,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
             @Override
             protected ApplicationDocumentUploadDTO getUploadData() {
                 ApplicationDocumentUploadDTO dto = EntityFactory.create(ApplicationDocumentUploadDTO.class);
-                dto.tenantId().setValue(tenantId);
+                dto.tenantInLeaseId().setValue(tenantId);
                 return dto;
             }
 

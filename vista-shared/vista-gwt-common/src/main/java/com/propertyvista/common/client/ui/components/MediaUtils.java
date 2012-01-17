@@ -18,13 +18,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.domain.File;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class MediaUtils {
-
-    // TODO: check PublicVisibilityType of the media here and allow/decline display here... 
 
     public static Image createPublicMediaImage(Key mediaId, ThumbnailSize size) {
         if (mediaId == null) {
@@ -34,5 +33,10 @@ public class MediaUtils {
             return new Image(ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + size.name() + "."
                     + ImageConsts.THUMBNAIL_TYPE);
         }
+    }
+
+    public static String createApplicationDocumentUrl(File file) {
+        return ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
+                + file.filename().getStringView();
     }
 }
