@@ -57,7 +57,11 @@ public class Lifecycle {
         HttpSession session = httprequest.getSession(false);
         Context.setSession(session);
         if (session != null) {
+            String namespace = (String) session.getAttribute(Context.NAMESPACE);
             Visit visit = (Visit) session.getAttribute(Context.SESSION_VISIT);
+            if ((visit != null) && (!NamespaceManager.getNamespace().equals(namespace))) {
+                throw new RuntimeException("namespace access error");
+            }
             Context.setVisit(visit);
             String clientAclTimeStamp = httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER);
             if ((visit != null) && visit.isUserLoggedIn()) {
@@ -185,6 +189,7 @@ public class Lifecycle {
         Visit visit = new Visit(sessionToken);
         session.setAttribute(Context.SESSION_VISIT, visit);
         Context.setVisit(visit);
+        session.setAttribute(Context.NAMESPACE, NamespaceManager.getNamespace());
 
         return sessionToken;
     }

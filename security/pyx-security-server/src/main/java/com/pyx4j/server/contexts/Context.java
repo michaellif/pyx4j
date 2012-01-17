@@ -36,6 +36,8 @@ public class Context {
 
     static final String SESSION_VISIT = "visit";
 
+    static final String NAMESPACE = "namespace";
+
     private static class RequestContext {
 
         HttpServletRequest request;
