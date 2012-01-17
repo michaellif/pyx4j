@@ -29,6 +29,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -129,7 +130,13 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     }
 
     protected Object parsValue(IPrimitive<?> primitive, String value) {
-        if (Date.class.isAssignableFrom(primitive.getValueClass())) {
+        if (LogicalDate.class.isAssignableFrom(primitive.getValueClass())) {
+            if ("".equals(value)) {
+                return null;
+            } else {
+                return new LogicalDate(DateUtils.detectDateformat(value));
+            }
+        } else if (Date.class.isAssignableFrom(primitive.getValueClass())) {
             if ("".equals(value)) {
                 return null;
             } else {
