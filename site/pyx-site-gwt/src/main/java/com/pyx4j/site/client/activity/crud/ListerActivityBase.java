@@ -122,10 +122,10 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     @Override
-    public void populate(final int pageNumber) {
+    public void retrieveData(final int pageNumber) {
         // Fix/Optimization for new parent Entity. e.g. Do not go to server to get empty list 
         if (isFilterCreateEmptyDataSet()) {
-            view.populate(new Vector<E>(), pageNumber, false, 0);
+            view.populateData(new Vector<E>(), pageNumber, false, 0);
             return;
         }
 
@@ -136,7 +136,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         service.list(new AsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(EntitySearchResult<E> result) {
-                view.populate(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
+                view.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
             }
 
             @Override
@@ -148,7 +148,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void refresh() {
-        populate(view.getPageNumber());
+        retrieveData(view.getPageNumber());
     }
 
     @Override
@@ -173,7 +173,7 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
             @Override
             public void onSuccess(Boolean result) {
                 onDeleted(itemID, true);
-                populate(view.getPageNumber());
+                retrieveData(view.getPageNumber());
             }
 
             @Override

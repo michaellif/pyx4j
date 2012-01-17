@@ -29,6 +29,6 @@ public interface WorkItem extends IEntity {
 
     IPrimitive<String> transitionId();
 
-    IPrimitive<Boolean> enabled();
+    // IPrimitive<Boolean> enabled();
 
 }

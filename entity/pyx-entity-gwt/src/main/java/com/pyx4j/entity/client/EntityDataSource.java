@@ -20,15 +20,14 @@
  */
 package com.pyx4j.entity.client;
 
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public interface EntityDataSource<E extends IEntity> {
 
-    public void obtain(EntityQueryCriteria<E> criteria, AsyncCallback<List<E>> handlingCallback, boolean background);
+    public void obtain(EntityQueryCriteria<E> criteria, AsyncCallback<EntitySearchResult<E>> handlingCallback);
 
 }

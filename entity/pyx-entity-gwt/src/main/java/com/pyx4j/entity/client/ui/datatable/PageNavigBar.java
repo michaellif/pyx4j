@@ -26,8 +26,10 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -68,7 +70,7 @@ public class PageNavigBar extends Toolbar {
 
     private HandlerRegistration lastActionHandlerRegistration;
 
-    private ClickHandler pageSizeClickHandler;
+    private Command pageSizeActionCommand;
 
     private final DataTableActionsBar actionsBar;
 
@@ -118,63 +120,83 @@ public class PageNavigBar extends Toolbar {
                 if (actionsBar.getDataTableModel() != null) {
                     actionsBar.getDataTableModel().setPageSize(Integer.valueOf(pageSizeSelector.getValue(pageSizeSelector.getSelectedIndex())));
                     // Actually fire event
-                    if (pageSizeClickHandler != null) {
-                        pageSizeClickHandler.onClick(null);
+                    if (pageSizeActionCommand != null) {
+                        pageSizeActionCommand.execute();
                     }
                 }
             }
         });
     }
 
-    public void setFirstActionHandler(ClickHandler firstActionHandler) {
+    public void setFirstActionCommand(final Command firstActionCommand) {
         if (firstActionHandlerRegistration != null) {
             firstActionHandlerRegistration.removeHandler();
         }
-        if (firstActionHandler != null) {
-            firstActionHandlerRegistration = firstButton.addClickHandler(firstActionHandler);
+        if (firstActionCommand != null) {
+            firstActionHandlerRegistration = firstButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    firstActionCommand.execute();
+                }
+            });
         } else {
             firstActionHandlerRegistration = null;
         }
 
     }
 
-    public void setPrevActionHandler(ClickHandler prevActionHandler) {
+    public void setPrevActionCommand(final Command prevActionCommand) {
         if (prevActionHandlerRegistration != null) {
             prevActionHandlerRegistration.removeHandler();
         }
-        if (prevActionHandler != null) {
-            prevActionHandlerRegistration = prevButton.addClickHandler(prevActionHandler);
+        if (prevActionCommand != null) {
+            prevActionHandlerRegistration = prevButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    prevActionCommand.execute();
+                }
+            });
         } else {
             prevActionHandlerRegistration = null;
         }
 
     }
 
-    public void setNextActionHandler(ClickHandler nextActionHandler) {
+    public void setNextActionCommand(final Command nextActionCommand) {
         if (nextActionHandlerRegistration != null) {
             nextActionHandlerRegistration.removeHandler();
         }
-        if (nextActionHandler != null) {
-            nextActionHandlerRegistration = nextButton.addClickHandler(nextActionHandler);
+        if (nextActionCommand != null) {
+            nextActionHandlerRegistration = nextButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    nextActionCommand.execute();
+                }
+            });
         } else {
             nextActionHandlerRegistration = null;
         }
     }
 
-    public void setLastActionHandler(ClickHandler lastActionHandler) {
+    public void setLastActionCommand(final Command lastActionCommand) {
         if (lastActionHandlerRegistration != null) {
             lastActionHandlerRegistration.removeHandler();
         }
-        if (lastActionHandler != null) {
-            lastActionHandlerRegistration = lastButton.addClickHandler(lastActionHandler);
+        if (lastActionCommand != null) {
+            lastActionHandlerRegistration = lastButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    lastActionCommand.execute();
+                }
+            });
         } else {
             lastActionHandlerRegistration = null;
         }
 
     }
 
-    public void setPageSizeActionHandler(ClickHandler clickHandler) {
-        pageSizeClickHandler = clickHandler;
+    public void setPageSizeActionCommand(Command pageSizeActionCommand) {
+        this.pageSizeActionCommand = pageSizeActionCommand;
     }
 
     public void onTableModelChanged(DataTableModelEvent e) {

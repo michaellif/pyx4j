@@ -132,34 +132,34 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         filterPanel.setFilterApplyCommand(filterActionCommand);
     }
 
-    public void setFirstActionHandler(ClickHandler firstActionHandler) {
-        topActionsBar.getPageNavigBar().setFirstActionHandler(firstActionHandler);
-        bottomActionsBar.getPageNavigBar().setFirstActionHandler(firstActionHandler);
+    public void setFirstActionHandler(Command firstActionCommand) {
+        topActionsBar.getPageNavigBar().setFirstActionCommand(firstActionCommand);
+        bottomActionsBar.getPageNavigBar().setFirstActionCommand(firstActionCommand);
     }
 
-    public void setPrevActionHandler(ClickHandler prevActionHandler) {
-        topActionsBar.getPageNavigBar().setPrevActionHandler(prevActionHandler);
-        bottomActionsBar.getPageNavigBar().setPrevActionHandler(prevActionHandler);
+    public void setPrevActionHandler(Command prevActionCommand) {
+        topActionsBar.getPageNavigBar().setPrevActionCommand(prevActionCommand);
+        bottomActionsBar.getPageNavigBar().setPrevActionCommand(prevActionCommand);
     }
 
-    public void setNextActionHandler(ClickHandler nextActionHandler) {
-        topActionsBar.getPageNavigBar().setNextActionHandler(nextActionHandler);
-        bottomActionsBar.getPageNavigBar().setNextActionHandler(nextActionHandler);
+    public void setNextActionHandler(Command nextActionCommand) {
+        topActionsBar.getPageNavigBar().setNextActionCommand(nextActionCommand);
+        bottomActionsBar.getPageNavigBar().setNextActionCommand(nextActionCommand);
     }
 
-    public void setLastActionHandler(ClickHandler lastActionHandler) {
-        topActionsBar.getPageNavigBar().setLastActionHandler(lastActionHandler);
-        bottomActionsBar.getPageNavigBar().setLastActionHandler(lastActionHandler);
+    public void setLastActionHandler(Command lastActionCommand) {
+        topActionsBar.getPageNavigBar().setLastActionCommand(lastActionCommand);
+        bottomActionsBar.getPageNavigBar().setLastActionCommand(lastActionCommand);
+    }
+
+    public void setPageSizeActionHandler(Command pageSizeActionCommand) {
+        topActionsBar.getPageNavigBar().setPageSizeActionCommand(pageSizeActionCommand);
+        bottomActionsBar.getPageNavigBar().setPageSizeActionCommand(pageSizeActionCommand);
     }
 
     public void setPageSizeOptions(List<Integer> pageSizeOptions) {
         topActionsBar.getPageNavigBar().setPageSizeOptions(pageSizeOptions);
         bottomActionsBar.getPageNavigBar().setPageSizeOptions(pageSizeOptions);
-    }
-
-    public void setPageSizeActionHandler(ClickHandler clickHandler) {
-        topActionsBar.getPageNavigBar().setPageSizeActionHandler(clickHandler);
-        bottomActionsBar.getPageNavigBar().setPageSizeActionHandler(clickHandler);
     }
 
     public void addUpperActionItem(Widget widget) {

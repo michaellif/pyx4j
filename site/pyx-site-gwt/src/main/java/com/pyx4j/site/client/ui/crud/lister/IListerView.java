@@ -39,7 +39,7 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void setPreDefinedFilters(List<DataTableFilterData> filters);
 
-        void populate(int pageNumber);
+        void retrieveData(int pageNumber);
 
         void view(Class<? extends CrudAppPlace> openPlaceClass, Key itemID);
 
@@ -63,7 +63,7 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
     int getPageNumber();
 
-    void populate(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows);
+    void populateData(List<E> entityes, int pageNumber, boolean hasMoreData, int totalRows);
 
     void discard();
 

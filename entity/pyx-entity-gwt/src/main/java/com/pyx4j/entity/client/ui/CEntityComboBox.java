@@ -239,7 +239,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
             };
             isLoading = true;
             if (optionsDataSource != null) {
-                optionsDataSource.obtain(criteria, handlingCallback, true);
+                //TODO  optionsDataSource.obtain(criteria, handlingCallback, true);
             } else {
                 if (ReferenceDataManager.isCached(criteria)) {
                     ReferenceDataManager.obtain(criteria, handlingCallback, true);
