@@ -159,7 +159,7 @@ public class TableModel {
         Connection connection = connectionProvider.getConnection(ConnectionTarget.forUpdate);
         List<String> sqls = new Vector<String>();
         try {
-            for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+            for (MemberOperationsMeta member : entityOperationsMeta.getManagedCollectionMembers()) {
                 TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
                 if (memberTableMetadata != null) {
                     sqls.add("drop table " + member.sqlName());
