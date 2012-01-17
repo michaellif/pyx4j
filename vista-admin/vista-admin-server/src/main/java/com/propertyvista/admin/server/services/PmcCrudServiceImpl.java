@@ -15,7 +15,6 @@ package com.propertyvista.admin.server.services;
 
 import java.util.EnumSet;
 import java.util.Locale;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +24,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -41,45 +39,39 @@ import com.propertyvista.portal.server.preloader.UserPreloader;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.admin.Pmc;
 
-public class PmcCrudServiceImpl implements PmcCrudService {
+public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
 
     private final static Logger log = LoggerFactory.getLogger(PmcCrudServiceImpl.class);
+
+    public PmcCrudServiceImpl() {
+        super(Pmc.class, PmcDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bind(dtoProto.name(), dboProto.name());
+        bind(dtoProto.dnsName(), dboProto.dnsName());
+        bind(dtoProto.created(), dboProto.created());
+    }
 
     @Override
     public void createAccount(AsyncCallback<PmcDTO> callback, PmcAccountCreationRequest request) {
         // TODO Auto-generated method stub
     }
 
-    private static Pmc convertDTO2DBO(PmcDTO src) {
-        Pmc dst = EntityFactory.create(Pmc.class);
-        dst.setPrimaryKey(src.getPrimaryKey());
-        dst.name().setValue(src.name().getValue());
-        dst.dnsName().setValue(src.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-        return dst;
-    }
-
-    private static PmcDTO convertDBO2DTO(Pmc src) {
-        PmcDTO dst = EntityFactory.create(PmcDTO.class);
-        dst.setPrimaryKey(src.getPrimaryKey());
-        dst.name().setValue(src.name().getValue());
-        dst.dnsName().setValue(src.dnsName().getValue());
-        return dst;
-    }
-
     @Override
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
-        Pmc entity;
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            entity = convertDTO2DBO(editableEntity);
-            Persistence.service().persist(entity);
+            editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+
+            super.create(callback, editableEntity);
 
             preloadPmc(editableEntity);
 
         } finally {
             NamespaceManager.remove();
         }
-        callback.onSuccess(convertDBO2DTO(entity));
     }
 
     private static void preloadPmc(PmcDTO pmc) {
@@ -100,64 +92,41 @@ public class PmcCrudServiceImpl implements PmcCrudService {
 
     @Override
     public void retrieve(AsyncCallback<PmcDTO> callback, Key entityId) {
-        Pmc entity;
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            entity = Persistence.service().retrieve(Pmc.class, entityId);
+            super.retrieve(callback, entityId);
         } finally {
             NamespaceManager.remove();
         }
-        callback.onSuccess(convertDBO2DTO(entity));
     }
 
     @Override
     public void save(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
-        Pmc entity;
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            entity = convertDTO2DBO(editableEntity);
-            Persistence.service().merge(entity);
+            super.save(callback, editableEntity);
         } finally {
             NamespaceManager.remove();
         }
-        callback.onSuccess(convertDBO2DTO(entity));
     }
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<PmcDTO>> callback, EntityListCriteria<PmcDTO> criteria) {
-        EntitySearchResult<PmcDTO> result;
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            EntityListCriteria<Pmc> c = EntityListCriteria.create(Pmc.class);
-            c.setPageNumber(criteria.getPageNumber());
-            c.setPageSize(criteria.getPageSize());
-            // TODO enhanceSearchCriteria
-
-            EntitySearchResult<Pmc> data = Persistence.secureQuery(c);
-
-            result = new EntitySearchResult<PmcDTO>();
-            result.setEncodedCursorReference(data.getEncodedCursorReference());
-            result.hasMoreData(data.hasMoreData());
-            result.setData(new Vector<PmcDTO>());
-            for (Pmc entity : data.getData()) {
-                result.getData().add(convertDBO2DTO(entity));
-            }
+            super.list(callback, criteria);
         } finally {
             NamespaceManager.remove();
         }
-        callback.onSuccess(result);
-
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         try {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
-            Persistence.service().delete(Pmc.class, entityId);
+            super.delete(callback, entityId);
         } finally {
             NamespaceManager.remove();
         }
-        callback.onSuccess(true);
     }
-
 }

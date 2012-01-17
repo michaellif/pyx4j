@@ -13,11 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -28,10 +24,13 @@ public class PmcLister extends ListerBase<PmcDTO> {
     public PmcLister() {
         super(PmcDTO.class, AdminSiteMap.Management.PMC.class, false, true);
 
-        List<ColumnDescriptor<PmcDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<PmcDTO>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dnsName(), true));
-        setColumnDescriptors(columnDescriptors);
+        setColumnDescriptors(
+
+        new MemberColumnDescriptor.Builder(proto().name()).build(),
+
+        new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
+
+        new MemberColumnDescriptor.Builder(proto().created()).build());
 
     }
 
