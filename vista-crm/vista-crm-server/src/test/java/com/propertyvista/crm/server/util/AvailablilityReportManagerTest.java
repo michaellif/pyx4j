@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -26,13 +27,14 @@ import org.junit.Test;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -55,26 +57,25 @@ public class AvailablilityReportManagerTest {
 
     @Test
     public void testComputeUnitAvailabliltiy() throws ParseException {
-//        LinkedList<AptUnitOccupancyEventEffect> mockupOccupancies = partitionToEvents(new LinkedList<MockupOccupancyStatus>(EntityCSVReciver.create(
-//                MockupOccupancyStatus.class).loadFile(IOUtils.resourceFileName("mockup-occupancy.csv", AvailablilityReportManagerTest.class))));
-//
-//        LinkedList<MockupExpectedAvailabliltiyStatus> expected = new LinkedList<MockupExpectedAvailabliltiyStatus>(EntityCSVReciver.create(
-//                MockupExpectedAvailabliltiyStatus.class).loadFile(IOUtils.resourceFileName("expected-availability.csv", AvailablilityReportManagerTest.class)));
-//
-//        assertTrue(!mockupOccupancies.isEmpty());
-//
-//        AptUnitOccupancyEventEffect mockupOccupancy = null;
-//        while (!expected.isEmpty()) {
-//            MockupExpectedAvailabliltiyStatus expectedStatus = expected.pop();
-//
-//            while (!mockupOccupancies.isEmpty() & mockupOccupancies.peek().timestamp.compareTo(expectedStatus.statusDate().getValue()) <= 0) {
-//                mockupOccupancy = mockupOccupancies.poll();
-//            }
-//            UnitAvailabilityStatus status = AvailabilityReportManager.computeUnitAvailabilityStatus(new LogicalDate(expectedStatus.statusDate().getValue()),
-//                    mockupOccupancy.occupancy);
-//            assertIsOk(expectedStatus, status);
-//        }
+        LinkedList<AptUnitOccupancyEventEffect> mockupOccupancies = partitionToEvents(new LinkedList<MockupOccupancyStatus>(EntityCSVReciver.create(
+                MockupOccupancyStatus.class).loadFile(IOUtils.resourceFileName("mockup-occupancy.csv", AvailablilityReportManagerTest.class))));
 
+        LinkedList<MockupExpectedAvailabliltiyStatus> expected = new LinkedList<MockupExpectedAvailabliltiyStatus>(EntityCSVReciver.create(
+                MockupExpectedAvailabliltiyStatus.class).loadFile(IOUtils.resourceFileName("expected-availability.csv", AvailablilityReportManagerTest.class)));
+
+        assertTrue(!mockupOccupancies.isEmpty());
+
+        AptUnitOccupancyEventEffect mockupOccupancy = null;
+        while (!expected.isEmpty()) {
+            MockupExpectedAvailabliltiyStatus expectedStatus = expected.pop();
+
+            while (!mockupOccupancies.isEmpty() && (mockupOccupancies.peek().eventTimestamp.compareTo(expectedStatus.statusDate().getValue()) <= 0)) {
+                mockupOccupancy = mockupOccupancies.poll();
+            }
+            UnitAvailabilityStatus status = AvailabilityReportManager.computeUnitAvailabilityStatus(expectedStatus.statusDate().getValue(),
+                    mockupOccupancy.occupancy);
+            assertIsOk(expectedStatus, status);
+        }
     }
 
     private void assertIsOk(MockupExpectedAvailabliltiyStatus expectedStatus, UnitAvailabilityStatus status) {
@@ -106,7 +107,7 @@ public class AvailablilityReportManagerTest {
             lease.expectedMoveOut().setValue(status.dateTo().getValue());
             status.lease().set(lease);
         } else if (Status.offMarket.equals(mockup.status().getValue())) {
-            status.offMarket().setValue(OffMarketType.construction);
+            status.offMarket().setValue(mockup.offMarket().getValue());
         }
 
         return status;
@@ -114,12 +115,16 @@ public class AvailablilityReportManagerTest {
 
     private class AptUnitOccupancyEventEffect {
 
-        private final LogicalDate timestamp;
+        private final LogicalDate eventTimestamp;
 
         private final List<AptUnitOccupancy> occupancy;
 
-        public AptUnitOccupancyEventEffect(LogicalDate timestamp, List<MockupOccupancyStatus> mockup) {
-            this.timestamp = timestamp;
+        public AptUnitOccupancyEventEffect(LogicalDate eventTimestamp, List<MockupOccupancyStatus> mockup) {
+            assert eventTimestamp != null : "timestamp must not be null";
+            assert mockup != null : "mockup occupancy must not be null";
+            assert !mockup.isEmpty() : "mockup occupancy must not be empty";
+
+            this.eventTimestamp = eventTimestamp;
             this.occupancy = new ArrayList<AptUnitOccupancy>();
             for (MockupOccupancyStatus mockupStatus : mockup) {
                 this.occupancy.add(convert(mockupStatus));
@@ -128,7 +133,7 @@ public class AvailablilityReportManagerTest {
 
         @Override
         public String toString() {
-            return "(" + timestamp.toString() + ": " + occupancy.toString() + ")";
+            return "(" + eventTimestamp.toString() + ": " + occupancy.toString() + ")";
         }
     }
 
@@ -136,21 +141,15 @@ public class AvailablilityReportManagerTest {
         LinkedList<AptUnitOccupancyEventEffect> states = new LinkedList<AptUnitOccupancyEventEffect>();
         LogicalDate lastTimestamp = null;
         while (!mockup.isEmpty()) {
-
             if (lastTimestamp == null || !lastTimestamp.equals(mockup.peek().statusDate().getValue())) {
-                lastTimestamp = new LogicalDate(mockup.peek().statusDate().getValue());
+                lastTimestamp = mockup.peek().statusDate().getValue();
             }
             List<MockupOccupancyStatus> mockupState = new ArrayList<MockupOccupancyStatus>();
             while (!mockup.isEmpty() && lastTimestamp.equals(mockup.peek().statusDate().getValue())) {
                 MockupOccupancyStatus temp = mockup.pop();
-                // the following strange manipulation is required because we recieve "Date" in the IPrimitive<Date> fields from CSVs.
-                temp.statusDate().setValue(new LogicalDate(temp.statusDate().getValue()));
-                if (!temp.dateFrom().isNull()) {
-                    temp.dateFrom().setValue(new LogicalDate(temp.dateFrom().getValue()));
-                }
-                if (!temp.dateTo().isNull()) {
-                    temp.dateTo().setValue(new LogicalDate(temp.dateTo().getValue()));
-                }
+                temp.statusDate().setValue(temp.statusDate().getValue());
+                temp.dateFrom().setValue(temp.dateFrom().getValue());
+                temp.dateTo().setValue(temp.dateTo().getValue());
                 mockupState.add(temp);
             }
             states.add(new AptUnitOccupancyEventEffect(lastTimestamp, mockupState));

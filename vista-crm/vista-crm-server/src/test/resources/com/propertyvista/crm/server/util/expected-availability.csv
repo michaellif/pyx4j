@@ -1,28 +1,40 @@
 testCaseNumber,statusDate,vacancyStatus,isScoped,rentReadinessStatus,rentedStatus,moveOutDay,moveInDay
+
+# initial state
 1,2009-12-19,Vacant,true,RentReady,Unrented,"",""
+
+# 2009-12-20: rented (starts at 2011-01-24)
 2,2009-12-20,Vacant,true,RentReady,Rented,"",2010-01-01
+
+# 2010-01-01: rent started
 3,2010-01-01,"","","","","","",""
 4,2010-02-01,"","","","","","",""
+
+# 2010-11-01: got move out notice (move out at 2011-12-31)
 5,2010-11-01,Notice,false,"",Unrented,2011-12-31,""
-6,2010-11-02,Notice,false,"",Unrented,2011-12-31,""
-6,2010-12-31,Notice,false,"",Unrented,2011-12-31,""
-8,2011-01-01,Vacant,false,"",Unrented,"",""
-9,2011-01-05,Vacant,false,"",Unrented,"",""
+7,2010-11-02,Notice,false,"",Unrented,2011-12-31,""
+8,2010-12-31,Notice,false,"",Unrented,2011-12-31,""
 
-# scoped: needs repairs
-10,2011-01-15,Vacant,true,RenoInProgress,OffMarket,"",""
+# 2010-12-31: move out
+9,2011-01-01,Vacant,false,"",Unrented,"",""
+10,2011-01-05,Vacant,false,"",Unrented,"",""
 
-# construction started
-11,2011-01-16,Vacant,true,RenoInProgress,OffMarket,"",""
-12,2011-01-17,Vacant,true,RenoInProgress,OffMarket,"",""
+# 2011-01-10: scoped (needs repairs, i.e. repairs were scheduled for 2011-01-16 to 2011-01-20)
+11,2011-01-10,Vacant,true,NeedsRepairs,Unrented,"",""
+12,2011-01-14,Vacant,true,NeedsRepairs,Unrented,"",""
 
-# rented
-13,2011-01-18,Vacant,true,RenoInProgress,Rented,"",""
-14,2011-01-19,Vacant,true,RenoInProgress,Rented,"",""
+# 2011-01-16: construction started
+13,2011-01-16,Vacant,true,RenoInProgress,Unrented,"",""
+14,2011-01-17,Vacant,true,RenoInProgress,Unrented,"",""
 
-# construction ended
-15,2011-01-21,Vacant,true,RentReady,Rented,"",""
-16,2011-01-22,Vacant,true,RentReady,Rented,"",""
+# 2011-01-18: rented (starts at 2011-02-25)
+15,2011-01-18,Vacant,true,RenoInProgress,Rented,"",2011-02-25
+16,2011-01-19,Vacant,true,RenoInProgress,Rented,"",2011-02-25
 
-# rent start
-17,2010-01-01,"","","","","","",""
+# 2011-01-21: construction ended
+17,2011-01-21,Vacant,true,RentReady,Rented,"",2011-02-25
+18,2011-01-23,Vacant,true,RentReady,Rented,"",2011-02-25
+
+# 2011-02-25: rent started
+19,2011-02-25,"","","","","","",""
+20,2011-02-27,"","","","","","",""
