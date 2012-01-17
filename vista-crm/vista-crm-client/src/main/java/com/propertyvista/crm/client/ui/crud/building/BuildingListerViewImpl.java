@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import java.util.List;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -42,11 +40,5 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
         });
         addActionButton(upload);
 
-    }
-
-    @Override
-    public void populateData(List<BuildingDTO> entityes, int pageNumber, boolean hasMoreData, int totalRows) {
-        super.populateData(entityes, pageNumber, hasMoreData, totalRows);
-        upload.setEnabled(true);
     }
 }

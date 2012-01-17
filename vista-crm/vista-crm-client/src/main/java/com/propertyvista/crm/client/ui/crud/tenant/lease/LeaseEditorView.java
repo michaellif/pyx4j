@@ -23,7 +23,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -35,7 +34,7 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
         IListerView.Presenter getUnitPresenter();
 
-        IListerView.Presenter getTenantPresenter();
+//        IListerView.Presenter getTenantPresenter();
 
         void initUnitSelection();
 
@@ -54,7 +53,7 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
     IListerView<AptUnit> getUnitListerView();
 
-    IListerView<Tenant> getTenantListerView();
+//    IListerView<Tenant> getTenantListerView();
 
     void showSelectTypePopUp(AsyncCallback<Service.Type> callback);
 }

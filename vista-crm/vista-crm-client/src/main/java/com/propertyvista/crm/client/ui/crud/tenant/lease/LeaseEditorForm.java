@@ -166,11 +166,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         if (isEditable()) {
-            main.setWidget(
-                    0,
-                    0,
-                    inject(proto().tenants(), new TenantInLeaseFolder(this, ((LeaseEditorView) getParentView()).getTenantListerView(),
-                            (LeaseEditorView) getParentView())));
+            main.setWidget(0, 0, inject(proto().tenants(), new TenantInLeaseFolder(this, (LeaseEditorView) getParentView())));
         } else {
             main.setWidget(0, 0, inject(proto().tenants(), new TenantInLeaseFolder(this)));
         }

@@ -36,7 +36,6 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
-import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -46,7 +45,6 @@ import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
@@ -57,7 +55,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
     private final IListerView.Presenter unitsLister;
 
-    private final IListerView.Presenter tenantsLister;
+//    private final IListerView.Presenter tenantsLister;
 
     private LogicalDate leaseFrom, leaseTo;
 
@@ -71,8 +69,8 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         unitsLister = new ListerActivityBase<AptUnit>(place, ((LeaseEditorView) view).getUnitListerView(),
                 (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
 
-        tenantsLister = new ListerActivityBase<Tenant>(place, ((LeaseEditorView) view).getTenantListerView(),
-                (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class), Tenant.class);
+//        tenantsLister = new ListerActivityBase<Tenant>(place, ((LeaseEditorView) view).getTenantListerView(),
+//                (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class), Tenant.class);
 
     }
 
@@ -86,14 +84,14 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         return unitsLister;
     }
 
-    @Override
-    public Presenter getTenantPresenter() {
-        return tenantsLister;
-    }
+//    @Override
+//    public Presenter getTenantPresenter() {
+//        return tenantsLister;
+//    }
 
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
-        tenantsLister.retrieveData(0);
+//        tenantsLister.retrieveData(0);
 
         leaseFrom = result.leaseFrom().getValue();
         leaseTo = result.leaseTo().getValue();

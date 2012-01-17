@@ -24,13 +24,11 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.propertyvista.common.client.ui.components.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.SelectedBuildingLister;
-import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
 import com.propertyvista.crm.client.ui.crud.unit.SelectedUnitLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> implements LeaseEditorView {
@@ -39,7 +37,7 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
     private final IListerView<AptUnit> unitLister;
 
-    private final IListerView<Tenant> tenantLister;
+//    private final IListerView<Tenant> tenantLister;
 
     public LeaseEditorViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
@@ -52,8 +50,8 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
             }
         });
         unitLister = new ListerInternalViewImplBase<AptUnit>(new SelectedUnitLister(/* readOnly */));
-        tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
-        tenantLister.getLister().setHasCheckboxColumn(true);
+//        tenantLister = new ListerInternalViewImplBase<Tenant>(new SelectTenantLister(/* readOnly */));
+//        tenantLister.getLister().setHasCheckboxColumn(true);
 
         // set main form here: 
         setForm(new LeaseEditorForm());
@@ -69,10 +67,10 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
         return unitLister;
     }
 
-    @Override
-    public IListerView<Tenant> getTenantListerView() {
-        return tenantLister;
-    }
+//    @Override
+//    public IListerView<Tenant> getTenantListerView() {
+//        return tenantLister;
+//    }
 
     @Override
     public void showSelectTypePopUp(final AsyncCallback<Service.Type> callback) {

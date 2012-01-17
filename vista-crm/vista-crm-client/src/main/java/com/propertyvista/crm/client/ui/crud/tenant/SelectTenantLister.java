@@ -18,16 +18,15 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.domain.tenant.Tenant;
 
-public class SelectTenantLister extends ListerBase<Tenant> {
+public class SelectTenantLister extends BasicLister<Tenant> {
 
     public SelectTenantLister() {
-        super(Tenant.class, null, false, false);
-        getDataTablePanel().getDataTable().setMarkSelectedRow(true);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
+        super(Tenant.class);
+        setHasCheckboxColumn(true);
 
         List<ColumnDescriptor<Tenant>> columnDescriptors = new ArrayList<ColumnDescriptor<Tenant>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));

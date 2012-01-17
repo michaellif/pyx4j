@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -33,21 +34,24 @@ import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
+import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
+import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Relationship;
@@ -59,18 +63,15 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     private final CEntityEditor<? extends Lease> parent;
 
-    private final IListerView<Tenant> tenantListerView;
-
     private final LeaseEditorView view;
 
     public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent) {
-        this(parent, null, null); // view mode constructor
+        this(parent, null); // view mode constructor
     }
 
-    public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent, IListerView<Tenant> tenantListerView, LeaseEditorView view) {
+    public TenantInLeaseFolder(CEntityEditor<? extends Lease> parent, LeaseEditorView view) {
         super(TenantInLease.class, parent.isEditable());
         this.parent = parent;
-        this.tenantListerView = tenantListerView;
         this.view = view;
         setOrderable(false);
     }
@@ -89,9 +90,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     @Override
     protected void addItem() {
-        filterOutAlreadySelectedTenants();
-
-        new SelectTenantBox(tenantListerView) {
+        new SelectTenantBox(getValue()) {
             @Override
             public boolean onClickOk() {
                 for (Tenant tenant : getSelectedItem()) {
@@ -118,21 +117,6 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                 return true;
             }
         }.show();
-    }
-
-    private void filterOutAlreadySelectedTenants() {
-        if (tenantListerView.getPresenter() instanceof ListerActivityBase) {
-            ListerActivityBase<Tenant> listerActivity = (ListerActivityBase<Tenant>) tenantListerView.getPresenter();
-
-            List<DataTableFilterData> restrictAlreadySelectedTenants = new ArrayList<DataTableFilterData>(getValue().size());
-            Tenant tenantProto = EntityFactory.getEntityPrototype(Tenant.class);
-            for (TenantInLease alreadySelected : getValue()) {
-                restrictAlreadySelectedTenants.add(new DataTableFilterData(tenantProto.id().getPath(), Operators.isNot, alreadySelected.tenant().id()
-                        .getValue()));
-            }
-            listerActivity.setPreDefinedFilters(restrictAlreadySelectedTenants);
-            listerActivity.populate();
-        }
     }
 
     private boolean isApplicantPresent() {
@@ -273,18 +257,29 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     private abstract class SelectTenantBox extends OkCancelDialog {
 
-        private final IListerView<Tenant> tenantListerView;
+        private final SelectTenantLister tenantLister;
 
-        public SelectTenantBox(IListerView<Tenant> tenantListerView) {
+        @SuppressWarnings("unchecked")
+        public SelectTenantBox(IList<TenantInLease> currentTenants) {
             super(i18n.tr("Select Tenant"));
-            this.tenantListerView = tenantListerView;
+
+            tenantLister = new SelectTenantLister();
+
+            ListerDataSource<Tenant> listerDataSource = new ListerDataSource<Tenant>(Tenant.class,
+                    (AbstractListService<Tenant>) GWT.create(SelectTenantCrudService.class));
+
+            filterOutAlreadySelectedTenants(listerDataSource, currentTenants);
+
+            tenantLister.setDataSource(listerDataSource);
+            tenantLister.obtain(0);
+
             setBody(createBody());
             setSize("700px", "400px");
         }
 
         protected Widget createBody() {
-            getOkButton().setEnabled(!tenantListerView.getLister().getCheckedItems().isEmpty());
-            tenantListerView.getLister().getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+            getOkButton().setEnabled(!tenantLister.getCheckedItems().isEmpty());
+            tenantLister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
 
                 @Override
                 public void onCheck(boolean isAnyChecked) {
@@ -293,13 +288,26 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
             });
 
             VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(tenantListerView.asWidget());
+            vPanel.add(tenantLister.asWidget());
             vPanel.setWidth("100%");
             return vPanel;
         }
 
         protected List<Tenant> getSelectedItem() {
-            return tenantListerView.getLister().getCheckedItems();
+            return tenantLister.getCheckedItems();
         }
+
+        private void filterOutAlreadySelectedTenants(ListerDataSource<Tenant> listerDataSource, IList<TenantInLease> currentTenants) {
+
+            List<DataTableFilterData> restrictAlreadySelectedTenants = new ArrayList<DataTableFilterData>(getValue().size());
+            Tenant tenantProto = EntityFactory.getEntityPrototype(Tenant.class);
+            for (TenantInLease alreadySelected : currentTenants) {
+                restrictAlreadySelectedTenants.add(new DataTableFilterData(tenantProto.id().getPath(), Operators.isNot, alreadySelected.tenant().id()
+                        .getValue()));
+            }
+
+            listerDataSource.setPreDefinedFilters(restrictAlreadySelectedTenants);
+        }
+
     }
 }
