@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -100,7 +99,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().percentage() && !readOnly) {
-                CComponent<?, ?> prc = inject(column.getObject(), new CIntegerField());
+                CComponent<?, ?> prc = inject(column.getObject());
                 prc.inheritContainerAccessRules(false);
                 return prc;
             }

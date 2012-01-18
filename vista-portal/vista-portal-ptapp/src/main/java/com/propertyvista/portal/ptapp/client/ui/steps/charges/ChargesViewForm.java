@@ -125,6 +125,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
             int row = -1;
+
             content.setH1(++row, 0, 1, caption);
             content.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder()));
             content.setWidget(++row, 0, createTotal(this, proto().total()));
