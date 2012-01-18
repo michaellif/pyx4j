@@ -45,6 +45,11 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     Presenter getPresenter();
 
+    /**
+     * Notifies view about supposed editing mode - view can select appropriate from here.
+     * 
+     * @param mode
+     */
     void setEditMode(EditMode mode);
 
     public E getValue();
