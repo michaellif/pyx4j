@@ -22,10 +22,12 @@ package com.pyx4j.entity.test.shared.domain.join;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
+@Table(prefix = "test")
 public interface AccPrincipal extends IEntity {
 
     IPrimitive<String> testId();

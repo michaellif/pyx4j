@@ -20,8 +20,10 @@
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 
+@Table(prefix = "test")
 public interface AccSubjectPrincipal extends IEntity {
 
     AccPrincipal principal();

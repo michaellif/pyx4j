@@ -276,7 +276,18 @@ public class CollectionsTableModel {
                 }
                 sql.append(name);
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
+            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
+
+            boolean firstWhereColumn = true;
+            for (String name : member.getOwnerValueAdapter().getColumnNames(member.sqlOwnerName())) {
+                if (firstWhereColumn) {
+                    firstWhereColumn = false;
+                } else {
+                    sql.append(" AND ");
+                }
+                sql.append(name).append(" = ?");
+            }
+
             if (dialect.isMultitenant()) {
                 sql.append(" AND ns = ?");
             }
@@ -286,9 +297,12 @@ public class CollectionsTableModel {
             stmt = connection.prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
             stmt.setMaxRows(0);
-            stmt.setLong(1, entity.getPrimaryKey().asLong());
+            int parameterIndex = 1;
+            parameterIndex += member.getOwnerValueAdapter().bindValue(stmt, parameterIndex, entity);
+
             if (dialect.isMultitenant()) {
-                stmt.setString(2, NamespaceManager.getNamespace());
+                stmt.setString(parameterIndex, NamespaceManager.getNamespace());
+                parameterIndex++;
             }
             rs = stmt.executeQuery();
 

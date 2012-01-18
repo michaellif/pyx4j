@@ -26,6 +26,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.join.BRefCascadeChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefCascadeOwner;
+import com.pyx4j.entity.test.shared.domain.join.BRefPolyReadChild;
+import com.pyx4j.entity.test.shared.domain.join.BRefPolyReadOwner1;
+import com.pyx4j.entity.test.shared.domain.join.BRefPolyReadOwner2;
 import com.pyx4j.entity.test.shared.domain.join.BRefReadChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefReadOwner;
 
@@ -62,6 +65,45 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
 
         }
 
+    }
+
+    public void testBackreferencesReadOwnerPolymorphic() {
+        // Setup data
+        String testId = uniqueString();
+
+        BRefPolyReadOwner1 owner1 = EntityFactory.create(BRefPolyReadOwner1.class);
+        owner1.name().setValue(uniqueString());
+        owner1.testId().setValue(testId);
+        srv.persist(owner1);
+
+        BRefPolyReadOwner2 owner2 = EntityFactory.create(BRefPolyReadOwner2.class);
+        owner2.name().setValue(uniqueString());
+        owner2.testId().setValue(testId);
+        srv.persist(owner2);
+
+        BRefPolyReadChild c1 = EntityFactory.create(BRefPolyReadChild.class);
+        c1.name().setValue(uniqueString());
+        c1.testId().setValue(testId);
+        c1.sortColumn().setValue(2);
+        c1.bRefOwner().set(owner1);
+        srv.persist(c1);
+
+        BRefPolyReadChild c2 = EntityFactory.create(BRefPolyReadChild.class);
+        c2.name().setValue(uniqueString());
+        c2.testId().setValue(testId);
+        c2.sortColumn().setValue(1);
+        c2.bRefOwner().set(owner2);
+        srv.persist(c2);
+
+        {
+            BRefPolyReadOwner1 owner1r = srv.retrieve(BRefPolyReadOwner1.class, owner1.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", 1, owner1r.children().size());
+            Assert.assertEquals("Inserted value1 present", c1, owner1r.children().get(0));
+
+            BRefPolyReadOwner2 owner2r = srv.retrieve(BRefPolyReadOwner2.class, owner2.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", 1, owner2r.children().size());
+            Assert.assertEquals("Inserted value1 present", c2, owner2r.children().get(0));
+        }
     }
 
     public void TODO_testBackreferencesCascade() {

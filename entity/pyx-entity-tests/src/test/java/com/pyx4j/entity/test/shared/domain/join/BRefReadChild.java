@@ -24,9 +24,11 @@ import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTableOrderColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Table(prefix = "test")
 public interface BRefReadChild extends IEntity {
 
     IPrimitive<String> testId();

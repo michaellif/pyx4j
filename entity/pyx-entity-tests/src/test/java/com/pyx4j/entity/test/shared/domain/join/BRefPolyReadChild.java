@@ -14,25 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 30, 2011
+ * Created on Jan 15, 2012
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
-import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 @Table(prefix = "test")
-public interface AccSubject extends IEntity {
+public interface BRefPolyReadChild extends IEntity {
 
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
 
-    @JoinTable(AccSubjectPrincipal.class)
-    ISet<AccPrincipal> access();
+    @Owner
+    @JoinColumn
+    BRefPolyReadAbstractOwner bRefOwner();
+
+    interface SortColumnId extends ColumnId {
+
+    }
+
+    @JoinTableOrderColumn(SortColumnId.class)
+    IPrimitive<Integer> sortColumn();
 }

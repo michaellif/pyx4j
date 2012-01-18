@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AccPrincipal.class)
+@Table(prefix = "test", primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AccPrincipal.class)
 public interface AccPrincipalEdit extends IEntity {
 
     IPrimitive<String> testId();
