@@ -15,11 +15,9 @@ package com.propertyvista.admin.client.ui.administration;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 
-import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.client.ui.decorations.AdminScrollPanel;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -27,11 +25,11 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceState> {
 
     public MaintenanceEditorForm() {
-        this(new AdminEditorsComponentFactory());
+        this(false);
     }
 
-    public MaintenanceEditorForm(IEditableComponentFactory factory) {
-        super(SystemMaintenanceState.class, factory);
+    public MaintenanceEditorForm(boolean viewMode) {
+        super(SystemMaintenanceState.class, viewMode);
     }
 
     @Override

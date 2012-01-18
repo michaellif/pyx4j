@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.forms.client.ui.CHyperlink;
 
-import com.propertyvista.admin.client.ui.components.AdminViewersComponentFactory;
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
@@ -27,7 +26,7 @@ import com.propertyvista.admin.rpc.PmcDTO;
 public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implements PmcViewerView {
 
     public PmcViewerViewImpl() {
-        super(AdminSiteMap.Management.PMC.class, new PmcEditorForm(new AdminViewersComponentFactory()));
+        super(AdminSiteMap.Management.PMC.class, new PmcEditorForm(true));
 
         CHyperlink upload = new CHyperlink(new Command() {
             @Override

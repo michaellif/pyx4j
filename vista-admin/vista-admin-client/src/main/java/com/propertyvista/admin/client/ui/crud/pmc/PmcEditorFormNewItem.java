@@ -15,9 +15,6 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-
-import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
@@ -25,11 +22,11 @@ import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 public class PmcEditorFormNewItem extends AdminEntityForm<PmcDTO> {
 
     public PmcEditorFormNewItem() {
-        this(new AdminEditorsComponentFactory());
+        this(false);
     }
 
-    public PmcEditorFormNewItem(IEditableComponentFactory factory) {
-        super(PmcDTO.class, factory);
+    public PmcEditorFormNewItem(boolean viewMode) {
+        super(PmcDTO.class, viewMode);
     }
 
     @Override

@@ -88,7 +88,6 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
 
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrudEntityForm<E> form) {
         this(placeClass);
-        form.initContent();
         setForm(form);
     }
 

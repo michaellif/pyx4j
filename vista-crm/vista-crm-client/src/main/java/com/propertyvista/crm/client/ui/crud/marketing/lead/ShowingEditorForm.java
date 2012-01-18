@@ -41,11 +41,7 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
     }
 
     public ShowingEditorForm(boolean viewMode) {
-        super(Showing.class);
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
+        super(Showing.class, viewMode);
     }
 
     @Override

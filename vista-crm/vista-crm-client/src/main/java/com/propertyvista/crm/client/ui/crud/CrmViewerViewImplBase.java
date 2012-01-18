@@ -19,7 +19,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -29,11 +29,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     protected final String defaultCaption;
 
-    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass) {
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         this(placeClass, false);
     }
 
-    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, boolean viewOnly) {
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
         super(new CrmTitleBar(), null, CrmTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
@@ -52,12 +52,12 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         }
     }
 
-    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form) {
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
         this(placeClass);
         setForm(form);
     }
 
-    public CrmViewerViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form, boolean viewOnly) {
+    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form, boolean viewOnly) {
         this(placeClass, viewOnly);
         setForm(form);
     }

@@ -39,11 +39,7 @@ public class AppointmentEditorForm extends CrmEntityForm<Appointment> {
     }
 
     public AppointmentEditorForm(boolean viewMode) {
-        super(Appointment.class);
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
+        super(Appointment.class, viewMode);
     }
 
     @Override

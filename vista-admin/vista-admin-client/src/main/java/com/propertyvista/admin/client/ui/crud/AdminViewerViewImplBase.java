@@ -30,25 +30,36 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
     protected final String defaultCaption;
 
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+        this(placeClass, false);
+    }
+
+    public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
         super(new AdminHeaderDecorator(), null, VistaAdminTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption);
 
-        Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.edit();
-            }
-        });
-        btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.EditButton);
+        if (!viewOnly) {
+            Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.edit();
+                }
+            });
+            btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.EditButton);
 
-        addToolbarItem(btnEdit);
+            addToolbarItem(btnEdit);
+        }
 
     }
 
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, AdminEntityForm<E> form) {
         this(placeClass);
+        setForm(form);
+    }
+
+    public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, AdminEntityForm<E> form, boolean viewOnly) {
+        this(placeClass, viewOnly);
         setForm(form);
     }
 

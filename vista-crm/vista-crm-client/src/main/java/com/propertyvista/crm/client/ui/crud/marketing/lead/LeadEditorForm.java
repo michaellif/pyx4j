@@ -50,11 +50,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
     }
 
     public LeadEditorForm(boolean viewMode) {
-        super(Lead.class);
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
+        super(Lead.class, viewMode);
     }
 
     @Override

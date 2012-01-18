@@ -23,7 +23,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
@@ -41,7 +41,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
 
     protected EditMode mode;
 
-    public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass) {
+    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(new CrmTitleBar(), new Toolbar(), CrmTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
@@ -84,7 +84,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         enableButtons(false);
     }
 
-    public CrmEditorViewImplBase(Class<? extends AppPlace> placeClass, CrmEntityForm<E> form) {
+    public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
         this(placeClass);
         setForm(form);
     }

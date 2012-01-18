@@ -40,11 +40,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
     }
 
     public FloorplanEditorForm(boolean viewMode) {
-        super(FloorplanDTO.class);
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
+        super(FloorplanDTO.class, viewMode);
     }
 
     @Override

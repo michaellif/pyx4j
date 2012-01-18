@@ -13,7 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud;
 
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
@@ -22,10 +21,10 @@ import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory
 public abstract class AdminEntityForm<E extends IEntity> extends CrudEntityForm<E> {
 
     public AdminEntityForm(Class<E> rootClass) {
-        super(rootClass, new AdminEditorsComponentFactory());
+        this(rootClass, false);
     }
 
-    public AdminEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
-        super(rootClass, factory);
+    public AdminEntityForm(Class<E> rootClass, boolean viewMode) {
+        super(rootClass, new AdminEditorsComponentFactory(), viewMode);
     }
 }
