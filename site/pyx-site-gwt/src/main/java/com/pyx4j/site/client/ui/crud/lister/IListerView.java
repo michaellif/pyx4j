@@ -35,9 +35,11 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         public ListerDataSource<E> getDataSource();
 
-        void setParentFiltering(Key parentID);
+        void setParent(Key parentID);
 
         List<DataTableFilterData> getPreDefinedFilters();
+
+        void setFilterByParent(boolean flag);
 
         void setPreDefinedFilters(List<DataTableFilterData> filters);
 

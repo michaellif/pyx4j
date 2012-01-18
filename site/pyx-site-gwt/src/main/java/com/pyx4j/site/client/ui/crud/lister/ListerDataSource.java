@@ -61,13 +61,13 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     // filtering mechanics:
 
     public void setParentFiltering(Key parentID) {
-        if (parentID != null) {
-            String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
-            assert (ownerMemberName != null) : "No @Owner in " + entityClass;
-            parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, parentID);
-        } else {
-            parentFiltering = null; // release it!..
-        }
+        String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
+        assert (ownerMemberName != null) : "No @Owner in " + entityClass;
+        parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, parentID);
+    }
+
+    public void clearParentFiltering() {
+        parentFiltering = null;
     }
 
     public List<DataTableFilterData> getPreDefinedFilters() {
