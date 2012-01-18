@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
@@ -29,14 +28,12 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
@@ -62,10 +59,6 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     ChargeSplitListFolder(boolean modifiable) {
         super(TenantCharge.class, false);
-        inheritContainerAccessRules(false);
-        setModifiable(false);
-//        setEditable(false);
-
         this.readOnly = !modifiable;
     }
 
@@ -106,18 +99,9 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().tenantName()) {
-                return inject(column.getObject(), new CEntityLabel<Name>());
-            } else if (column.getObject() == proto().amount()) {
-                return inject(column.getObject(), new CNumberLabel());
-            } else if (column.getObject() == proto().percentage()) {
-                CComponent<?, ?> prc;
-                if (readOnly) {
-                    prc = inject(column.getObject(), new CNumberLabel());
-                } else {
-                    prc = inject(column.getObject(), new CIntegerField());
-                    prc.inheritContainerAccessRules(false);
-                }
+            if (column.getObject() == proto().percentage() && !readOnly) {
+                CComponent<?, ?> prc = inject(column.getObject(), new CIntegerField());
+                prc.inheritContainerAccessRules(false);
                 return prc;
             }
             return super.createCell(column);
@@ -144,6 +128,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             // set main applicant percent as read-only (it's always calculated):
             if ((getValue().tenant().role().getValue() == Role.Applicant)) {
                 get(proto().percentage()).setEditable(false);
+                get(proto().percentage()).setViewable(true);
             }
         }
 
