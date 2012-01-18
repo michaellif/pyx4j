@@ -34,6 +34,7 @@ import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -48,7 +49,8 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.SelectEmployeeCrudService;
+import com.propertyvista.crm.rpc.services.SelectEmployeeListService;
+import com.propertyvista.crm.rpc.services.SelectPortfolioListService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.person.Name;
@@ -133,7 +135,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Assigned Portfolios"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accessAllBuildings()), 5).build());
-        main.setWidget(++row, 0, inject(proto().portfolios(), createPortfolioListView()));
+        main.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder()));
 
         main.setH1(++row, 0, 2, i18n.tr("Managed Employees"));
         main.setWidget(++row, 0, inject(proto().employees(), new EmployeeFolder()));
@@ -141,25 +143,74 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private CComponent<?, ?> createPortfolioListView() {
-        return new VistaTableFolder<Portfolio>(Portfolio.class, isEditable()) {
+    private class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
-            @Override
-            public List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().name(), "40em"));
-                return columns;
-            }
+        public PortfolioFolder() {
+            super(Portfolio.class, EmployeeEditorForm.this.isEditable());
+        }
 
-            @Override
-            protected IFolderDecorator<Portfolio> createDecorator() {
-                return new VistaTableFolderDecorator<Portfolio>(this, this.isEditable()) {
-                    {
-                        setShowHeader(false);
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return java.util.Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "15em"),
+
+            new EntityFolderColumnDescriptor(proto().description(), "20em"));
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Portfolio) {
+                return new CEntityFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
+                    @Override
+                    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?, ?> comp = null;
+                        if (proto().name() == column.getObject()) {
+                            if (isEditable()) {
+                                comp = inject(column.getObject(), new CLabel());
+                            } else {
+                                comp = new CHyperlink(new Command() {
+                                    @Override
+                                    public void execute() {
+                                        AppSite.getPlaceController().goTo(
+                                                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Organization.Portfolio.class)
+                                                        .formViewerPlace(getValue().id().getValue()));
+                                    }
+                                });
+                                comp = inject(column.getObject(), comp);
+                            }
+                        } else if (proto().description() == column.getObject()) {
+                            comp = inject(column.getObject(), new CLabel());
+                        } else {
+                            comp = super.createCell(column);
+                        }
+                        return comp;
                     }
                 };
+            } else {
+                return super.create(member);
             }
-        };
+        }
+
+        @Override
+        protected IFolderDecorator<Portfolio> createDecorator() {
+            return new VistaTableFolderDecorator<Portfolio>(this, this.isEditable()) {
+                {
+                    setShowHeader(false);
+                }
+            };
+        }
+
+        @Override
+        protected void addItem() {
+            new SelectPortfolioBox(getValue()) {
+                @Override
+                public boolean onClickOk() {
+                    for (Portfolio portfolio : getSelectedItems()) {
+                        addItem(portfolio);
+                    }
+                    return true;
+                }
+            }.show();
+        }
     }
 
     private class EmployeeFolder extends VistaTableFolder<Employee> {
@@ -243,6 +294,37 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         }
     };
 
+    private abstract class SelectPortfolioBox extends SelectEntityFromListDialog<Portfolio> {
+
+        public SelectPortfolioBox(List<Portfolio> alreadySelected) {
+            super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
+        }
+
+        @Override
+        protected ColumnDescriptor<?>[] defineColumnDescriptors() {
+            return new ColumnDescriptor<?>[] {//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build()                    
+            }; //@formatter:on
+        }
+
+        @Override
+        protected AbstractListService<Portfolio> getSelectService() {
+            return GWT.<AbstractListService<Portfolio>> create(SelectPortfolioListService.class);
+        }
+
+        @Override
+        protected String width() {
+            return "700px";
+        }
+
+        @Override
+        protected String height() {
+            return "400px";
+        }
+
+    }
+
     private abstract class SelectEmployeeBox extends SelectEntityFromListDialog<Employee> {
 
         public SelectEmployeeBox(List<Employee> alreadySelected) {
@@ -262,7 +344,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         @Override
         protected AbstractListService<Employee> getSelectService() {
-            return GWT.<AbstractListService<Employee>> create(SelectEmployeeCrudService.class);
+            return GWT.<AbstractListService<Employee>> create(SelectEmployeeListService.class);
         }
 
         @Override

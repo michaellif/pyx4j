@@ -11,16 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.crm.rpc.services.SelectEmployeeCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+
 import com.propertyvista.domain.company.Employee;
 
-public class SelectEmployeeCrudServiceImpl extends GenericCrudServiceImpl<Employee> implements SelectEmployeeCrudService {
-
-    public SelectEmployeeCrudServiceImpl() {
-        super(Employee.class);
-    }
+public interface SelectEmployeeListService extends AbstractCrudService<Employee> {
 
 }
