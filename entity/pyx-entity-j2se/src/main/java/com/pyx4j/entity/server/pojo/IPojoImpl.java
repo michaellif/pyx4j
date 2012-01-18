@@ -26,8 +26,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 
 @XmlTransient
 public abstract class IPojoImpl<E extends IEntity> implements IPojo<E> {
@@ -58,7 +58,7 @@ public abstract class IPojoImpl<E extends IEntity> implements IPojo<E> {
         this.entity = entity;
     }
 
-    protected static final <T extends IEntity> IPojo<T>[] toArray(IPojo<T>[] pojoArray, IList<T> entityList) {
+    protected static final <T extends IEntity> IPojo<T>[] toArray(IPojo<T>[] pojoArray, ICollection<T, ?> entityList) {
         ArrayList<IPojo<T>> a = new ArrayList<IPojo<T>>();
         for (T ent : entityList) {
             a.add(ServerEntityFactory.getPojo(ent));
@@ -66,7 +66,7 @@ public abstract class IPojoImpl<E extends IEntity> implements IPojo<E> {
         return a.toArray(pojoArray);
     }
 
-    protected static final <T extends IEntity> void fromArray(IPojo<T>[] pojoArray, IList<T> entityList) {
+    protected static final <T extends IEntity> void fromArray(IPojo<T>[] pojoArray, ICollection<T, ?> entityList) {
         entityList.clear();
         if (pojoArray != null) {
             for (IPojo<T> p : pojoArray) {
