@@ -32,11 +32,27 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityEditor<E>
     private IFormView<? extends IEntity> parentView;
 
     public CrudEntityForm(Class<E> rootClass) {
+        this(rootClass, false);
+    }
+
+    public CrudEntityForm(Class<E> rootClass, boolean viewMode) {
         super(rootClass);
+        if (viewMode) {
+            setEditable(false);
+            setViewable(true);
+        }
     }
 
     public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
+        this(rootClass, factory, false);
+    }
+
+    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, boolean viewMode) {
         super(rootClass, factory);
+        if (viewMode) {
+            setEditable(false);
+            setViewable(true);
+        }
     }
 
     public void setParentView(IFormView<? extends IEntity> parentView) {
