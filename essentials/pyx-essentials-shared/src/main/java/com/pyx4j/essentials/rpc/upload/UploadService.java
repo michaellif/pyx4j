@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface UploadService<E extends IEntity> extends IService {
+public interface UploadService<U extends IEntity, R extends IEntity> extends IService {
 
     public static final String PostCorrelationID = "correlationID";
 
@@ -42,10 +42,10 @@ public interface UploadService<E extends IEntity> extends IService {
 
     public void getMaxFileSize(AsyncCallback<Long> callback);
 
-    public void prepareUpload(AsyncCallback<UploadId> callback, E data);
+    public void prepareUpload(AsyncCallback<UploadId> callback, U data);
 
     public void cancelUpload(AsyncCallback<VoidSerializable> callback, UploadId uploadId);
 
-    public void getUploadResponse(AsyncCallback<UploadResponse> callback, UploadId uploadId);
+    public void getUploadResponse(AsyncCallback<UploadResponse<R>> callback, UploadId uploadId);
 
 }

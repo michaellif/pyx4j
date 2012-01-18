@@ -20,9 +20,10 @@
  */
 package com.pyx4j.essentials.server.upload;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 
-public interface UploadReciver {
+public interface UploadReciver<U extends IEntity, R extends IEntity> {
 
     /**
      * @return Maximum size of a single uploaded file.
@@ -40,6 +41,6 @@ public interface UploadReciver {
         processWillContinue
     }
 
-    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess process, UploadResponse response);
+    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<U, R> process, UploadResponse<R> response);
 
 }

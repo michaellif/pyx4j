@@ -37,11 +37,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class UploadServiceImpl<E extends IEntity> implements UploadService<E>, UploadReciver {
+public abstract class UploadServiceImpl<U extends IEntity, R extends IEntity> implements UploadService<U, R>, UploadReciver<U, R> {
 
     private static I18n i18n = I18n.get(UploadServiceImpl.class);
 
-    protected void onpPepareUpload(E data, UploadId id) {
+    protected void onpPepareUpload(U data, UploadId id) {
 
     }
 
@@ -51,10 +51,10 @@ public abstract class UploadServiceImpl<E extends IEntity> implements UploadServ
     }
 
     @Override
-    public void prepareUpload(AsyncCallback<UploadId> callback, E data) {
+    public void prepareUpload(AsyncCallback<UploadId> callback, U data) {
         UploadId id = new UploadId();
         onpPepareUpload(data, id);
-        id.setDeferredCorrelationId(DeferredProcessRegistry.register(new UploadDeferredProcess(data)));
+        id.setDeferredCorrelationId(DeferredProcessRegistry.register(new UploadDeferredProcess<U, R>(data)));
         callback.onSuccess(id);
     }
 
@@ -64,8 +64,9 @@ public abstract class UploadServiceImpl<E extends IEntity> implements UploadServ
     }
 
     @Override
-    public void getUploadResponse(AsyncCallback<UploadResponse> callback, UploadId uploadId) {
-        UploadDeferredProcess process = (UploadDeferredProcess) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
+    public void getUploadResponse(AsyncCallback<UploadResponse<R>> callback, UploadId uploadId) {
+        @SuppressWarnings("unchecked")
+        UploadDeferredProcess<U, R> process = (UploadDeferredProcess<U, R>) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
         if (process != null) {
             DeferredProcessProgressResponse response = process.status();
             if (response.isCompleted()) {

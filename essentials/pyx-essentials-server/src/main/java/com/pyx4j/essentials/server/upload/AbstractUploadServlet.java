@@ -65,7 +65,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 
-    private final Map<Class<UploadService<?>>, Class<? extends UploadReciver>> mappedUploads = new HashMap<Class<UploadService<?>>, Class<? extends UploadReciver>>();
+    private final Map<Class<UploadService<?, ?>>, Class<? extends UploadReciver>> mappedUploads = new HashMap<Class<UploadService<?, ?>>, Class<? extends UploadReciver>>();
 
     /**
      * Used for development tests
@@ -73,10 +73,10 @@ public abstract class AbstractUploadServlet extends HttpServlet {
     protected int slowUploadSeconds = 0;
 
     @SuppressWarnings("unchecked")
-    protected <T extends UploadReciver & UploadService<?>> void bind(Class<T> serviceImpClass) {
+    protected <T extends UploadReciver & UploadService<?, ?>> void bind(Class<T> serviceImpClass) {
         for (Class<?> itf : serviceImpClass.getInterfaces()) {
             if (UploadService.class.isAssignableFrom(itf)) {
-                mappedUploads.put((Class<UploadService<?>>) itf, (Class<? extends UploadReciver>) serviceImpClass);
+                mappedUploads.put((Class<UploadService<?, ?>>) itf, (Class<? extends UploadReciver>) serviceImpClass);
                 return;
             }
         }
@@ -87,6 +87,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
@@ -98,6 +99,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             out.println(i18n.tr("No Session"));
             return;
         }
+        @SuppressWarnings("rawtypes")
         UploadDeferredProcess process = null;
         try {
             if (!ServletFileUpload.isMultipartContent(request)) {
@@ -106,8 +108,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             }
             String serviceClassId = request.getPathInfo().substring(1);
             //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
-            @SuppressWarnings("unchecked")
-            Class<UploadService<?>> serviceClass = (Class<UploadService<?>>) Class.forName(serviceClassId);
+            Class<UploadService<?, ?>> serviceClass = (Class<UploadService<?, ?>>) Class.forName(serviceClassId);
             SecurityController.assertPermission(new IServiceExecutePermission(serviceClass));
             Class<? extends UploadReciver> reciverClass = mappedUploads.get(serviceClass);
             if (reciverClass == null) {
@@ -125,6 +126,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             fileUpload.setProgressListener(progressListener);
 
             UploadData uploadData = new UploadData();
+            @SuppressWarnings("rawtypes")
             UploadResponse uploadResponse = new UploadResponse();
             try {
                 FileItemIterator iterator = fileUpload.getItemIterator(request);
@@ -134,7 +136,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                         log.debug(" form field {}", item.getFieldName());
                         if (UploadService.PostCorrelationID.equals(item.getFieldName())) {
                             uploadData.deferredCorrelationId = Streams.asString(item.openStream());
-                            process = (UploadDeferredProcess) DeferredProcessRegistry.get(uploadData.deferredCorrelationId);
+                            process = (UploadDeferredProcess<?, ?>) DeferredProcessRegistry.get(uploadData.deferredCorrelationId);
                             if (process != null) {
                                 progressListener.processInfo = process.status();
                                 process.setResponse(uploadResponse);

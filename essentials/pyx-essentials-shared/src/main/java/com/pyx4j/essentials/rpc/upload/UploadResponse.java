@@ -23,9 +23,10 @@ package com.pyx4j.essentials.rpc.upload;
 import java.io.Serializable;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.IEntity;
 
 @SuppressWarnings("serial")
-public class UploadResponse implements Serializable {
+public class UploadResponse<E extends IEntity> implements Serializable {
 
     public String fileName;
 
@@ -58,5 +59,7 @@ public class UploadResponse implements Serializable {
      * Optional message sent by the server. Can be null;
      */
     public String message;
+
+    public E data;
 
 }

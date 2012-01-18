@@ -50,13 +50,13 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class UploadPanel<E extends IEntity> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
+public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 
     private static I18n i18n = I18n.get(UploadPanel.class);
 
-    private final UploadService<E> service;
+    private final UploadService<U, R> service;
 
     private final FormPanel uploadForm;
 
@@ -84,7 +84,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
 
     }
 
-    public UploadPanel(UploadService<E> service) {
+    public UploadPanel(UploadService<U, R> service) {
         this.service = service;
         uploadForm = new FormPanel();
         uploadForm.setAction("upload/" + ((IServiceBase) service).getServiceClassId());
@@ -149,7 +149,7 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
         postDescription.setValue(description);
     }
 
-    protected E getUploadData() {
+    protected U getUploadData() {
         return null;
     }
 
@@ -272,16 +272,16 @@ public class UploadPanel<E extends IEntity> extends SimplePanel implements FormP
 
     private final void onSubmitUploadComplete() {
         if (uploadId != null) {
-            service.getUploadResponse(new DefaultAsyncCallback<UploadResponse>() {
+            service.getUploadResponse(new DefaultAsyncCallback<UploadResponse<R>>() {
                 @Override
-                public void onSuccess(UploadResponse result) {
+                public void onSuccess(UploadResponse<R> result) {
                     onUploadComplete(result);
                 }
             }, uploadId);
         }
     }
 
-    protected void onUploadComplete(UploadResponse serverUploadResponse) {
+    protected void onUploadComplete(UploadResponse<R> serverUploadResponse) {
     }
 
 }

@@ -133,7 +133,7 @@ public class Persistence {
 
         //TODO we should apply DatasetAccessRule
 
-        PersistenceServicesFactory.getPersistenceService().merge(entity);
+        Persistence.service().merge(entity);
     }
 
 }
