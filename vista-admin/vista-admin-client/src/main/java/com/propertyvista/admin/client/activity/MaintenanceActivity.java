@@ -26,7 +26,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.admin.client.ui.administration.MaintenanceView;
-import com.propertyvista.admin.client.viewfactories.AdministrationVeiwFactory;
+import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.admin.rpc.services.VistaAdminService;
 
 public class MaintenanceActivity extends AbstractActivity implements IEditorView.Presenter {
@@ -45,8 +45,9 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-        container.setWidget(view);
+        view.discard();
         populate();
+        container.setWidget(view);
     }
 
     public MaintenanceActivity withPlace(Place place) {

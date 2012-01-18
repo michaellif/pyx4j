@@ -11,17 +11,17 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.viewfactories;
+package com.propertyvista.admin.client.viewfactories.crud;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.admin.client.ui.administration.MaintenanceView;
 import com.propertyvista.admin.client.ui.administration.MaintenanceViewImpl;
-import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 
 public class AdministrationVeiwFactory extends ViewFactoryBase {
 
-    public static <T extends IsWidget> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());

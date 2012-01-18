@@ -35,7 +35,7 @@ import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 
 public class AdminVeiwFactory extends ViewFactoryBase {
 
-    public static IsWidget instance(Class<?> type) {
+    public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (com.propertyvista.admin.client.ui.NavigView.class.equals(type)) {
                 map.put(type, new com.propertyvista.admin.client.ui.NavigViewImpl());
@@ -60,6 +60,12 @@ public class AdminVeiwFactory extends ViewFactoryBase {
                 map.put(type, new AccountViewImpl());
             }
         }
-        return map.get(type);
+
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }

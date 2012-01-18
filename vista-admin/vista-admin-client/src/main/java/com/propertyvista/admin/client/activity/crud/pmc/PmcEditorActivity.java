@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorView;
-import com.propertyvista.admin.client.viewfactories.ManagementVeiwFactory;
+import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 

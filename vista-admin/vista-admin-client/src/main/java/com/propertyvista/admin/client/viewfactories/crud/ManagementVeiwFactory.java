@@ -11,9 +11,10 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.viewfactories;
+package com.propertyvista.admin.client.viewfactories.crud;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcEditorViewImpl;
@@ -21,11 +22,10 @@ import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerViewImpl;
-import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 
 public class ManagementVeiwFactory extends ViewFactoryBase {
 
-    public static IsWidget instance(Class<?> type) {
+    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (PmcListerView.class.equals(type)) {
                 map.put(type, new PmcListerViewImpl());
@@ -35,6 +35,12 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
                 map.put(type, new PmcEditorViewImpl());
             }
         }
-        return map.get(type);
+
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }
