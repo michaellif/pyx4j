@@ -7,19 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Jan 18, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation;
+package com.propertyvista.crm.server.services;
 
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.crm.rpc.services.SelectEmployeeCrudService;
+import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.company.Employee;
 
-public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
+public class SelectEmployeeCrudServiceImpl extends GenericCrudServiceImpl<Employee> implements SelectEmployeeCrudService {
 
-    public EmployeeViewerViewImpl() {
-        super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm(true));
+    public SelectEmployeeCrudServiceImpl() {
+        super(Employee.class);
     }
+
 }

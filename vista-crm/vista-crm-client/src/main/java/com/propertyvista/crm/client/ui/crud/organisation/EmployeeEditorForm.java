@@ -16,28 +16,42 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.SelectEntityFromListDialog;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.domain.company.AssignedPortfolio;
-import com.propertyvista.domain.company.ManagedEmployee;
+import com.propertyvista.crm.rpc.services.SelectEmployeeCrudService;
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.person.Name;
 
 public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -46,11 +60,11 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public EmployeeEditorForm() {
-        super(EmployeeDTO.class, new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public EmployeeEditorForm(IEditableComponentFactory factory) {
-        super(EmployeeDTO.class, factory);
+    public EmployeeEditorForm(boolean viewMode) {
+        super(EmployeeDTO.class, viewMode);
     }
 
     @Override
@@ -122,46 +136,24 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         main.setWidget(++row, 0, inject(proto().portfolios(), createPortfolioListView()));
 
         main.setH1(++row, 0, 2, i18n.tr("Managed Employees"));
-        main.setWidget(++row, 0, inject(proto().employees(), createEmpoloyeeListView()));
+        main.setWidget(++row, 0, inject(proto().employees(), new EmployeeFolder()));
 
         return new CrmScrollPanel(main);
     }
 
     private CComponent<?, ?> createPortfolioListView() {
-        return new VistaTableFolder<AssignedPortfolio>(AssignedPortfolio.class, isEditable()) {
+        return new VistaTableFolder<Portfolio>(Portfolio.class, isEditable()) {
 
             @Override
             public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().portfolio(), "40em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().name(), "40em"));
                 return columns;
             }
 
             @Override
-            protected IFolderDecorator<AssignedPortfolio> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedPortfolio>(this, this.isEditable()) {
-                    {
-                        setShowHeader(false);
-                    }
-                };
-            }
-
-        };
-    }
-
-    private CComponent<?, ?> createEmpoloyeeListView() {
-        return new VistaTableFolder<ManagedEmployee>(ManagedEmployee.class, isEditable()) {
-
-            @Override
-            public List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().employee(), "40em"));
-                return columns;
-            }
-
-            @Override
-            protected IFolderDecorator<ManagedEmployee> createDecorator() {
-                return new VistaTableFolderDecorator<ManagedEmployee>(this, this.isEditable()) {
+            protected IFolderDecorator<Portfolio> createDecorator() {
+                return new VistaTableFolderDecorator<Portfolio>(this, this.isEditable()) {
                     {
                         setShowHeader(false);
                     }
@@ -169,4 +161,119 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             }
         };
     }
+
+    private class EmployeeFolder extends VistaTableFolder<Employee> {
+
+        public EmployeeFolder() {
+            super(Employee.class, EmployeeEditorForm.this.isEditable());
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().title(), "20em"));
+            return columns;
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Employee) {
+                return new CEntityFolderRowEditor<Employee>(Employee.class, columns()) {
+
+                    @Override
+                    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?, ?> comp = null;
+                        if (proto().title() == column.getObject()) {
+                            comp = inject(column.getObject(), new CLabel());
+                        } else if (proto().name() == column.getObject()) {
+                            if (isEditable()) {
+                                comp = inject(column.getObject(), new CEntityLabel<Name>());
+                            } else {
+                                comp = inject(column.getObject(), new CEntityHyperlink<Name>(new Command() {
+                                    @Override
+                                    public void execute() {
+                                        AppSite.getPlaceController().goTo(
+                                                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Organization.Employee.class)
+                                                        .formViewerPlace(getValue().id().getValue()));
+                                    }
+                                }));
+                            }
+                        } else {
+                            comp = inject(column.getObject(), new CLabel());
+                        }
+
+                        return comp;
+                    }
+                };
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        protected IFolderDecorator<Employee> createDecorator() {
+            return new VistaTableFolderDecorator<Employee>(this, this.isEditable()) {
+                {
+                    setShowHeader(false);
+                }
+            };
+        }
+
+        @Override
+        protected void addItem() {
+            new SelectEmployeeBox(getValue()) {
+
+                @Override
+                protected void setPreDefinedFilters(java.util.List<DataTableFilterData> preDefinedFilters) {
+                    // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
+                    // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)
+                    preDefinedFilters.add(new DataTableFilterData(proto().id().getPath(), Operators.isNot, EmployeeEditorForm.this.getValue().id().getValue()));
+                    super.setPreDefinedFilters(preDefinedFilters);
+                };
+
+                @Override
+                public boolean onClickOk() {
+                    for (Employee employee : getSelectedItems()) {
+                        addItem(employee);
+                    }
+                    return true;
+                }
+            }.show();
+        }
+    };
+
+    private abstract class SelectEmployeeBox extends SelectEntityFromListDialog<Employee> {
+
+        public SelectEmployeeBox(List<Employee> alreadySelected) {
+            super(Employee.class, true, alreadySelected, i18n.tr("Select Employee"));
+        }
+
+        @Override
+        protected ColumnDescriptor<?>[] defineColumnDescriptors() {
+            return new ColumnDescriptor<?>[] {//@formatter:off                    
+                    new MemberColumnDescriptor.Builder(proto().title()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().namePrefix()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().firstName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().lastName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().nameSuffix()).build(),
+            }; //@formatter:on
+        }
+
+        @Override
+        protected AbstractListService<Employee> getSelectService() {
+            return GWT.<AbstractListService<Employee>> create(SelectEmployeeCrudService.class);
+        }
+
+        @Override
+        protected String width() {
+            return "700px";
+        }
+
+        @Override
+        protected String height() {
+            return "400px";
+        }
+    }
+
 }

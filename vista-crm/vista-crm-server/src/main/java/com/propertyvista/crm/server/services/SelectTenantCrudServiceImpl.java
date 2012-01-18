@@ -13,11 +13,12 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.AbstractListServiceImpl;
+
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.tenant.Tenant;
 
-public class SelectTenantCrudServiceImpl extends GenericCrudServiceImpl<Tenant> implements SelectTenantCrudService {
+public class SelectTenantCrudServiceImpl extends AbstractListServiceImpl<Tenant> implements SelectTenantCrudService {
 
     public SelectTenantCrudServiceImpl() {
         super(Tenant.class);

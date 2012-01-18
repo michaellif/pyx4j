@@ -45,11 +45,11 @@ public interface Employee extends Person {
 
     @Owned
     @Detached
-    IList<AssignedPortfolio> portfolios();
+    IList<Portfolio> portfolios();
 
     @Owned
     @Detached
-    IList<ManagedEmployee> employees();
+    IList<Employee> employees();
 
     @Owner
     @Detached

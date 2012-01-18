@@ -7,17 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 20, 2011
- * @author Vlad
+ * Created on Jan 18, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.company;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-//Remove this class use list directly in Employee
-@Deprecated
-public interface AssignedPortfolio extends IEntity {
+import com.propertyvista.domain.company.Employee;
 
-    Portfolio portfolio();
+public interface SelectEmployeeCrudService extends AbstractCrudService<Employee> {
+
 }
