@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -32,7 +33,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;

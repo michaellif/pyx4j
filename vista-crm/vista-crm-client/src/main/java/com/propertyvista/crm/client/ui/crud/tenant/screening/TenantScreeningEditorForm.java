@@ -28,6 +28,7 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -43,7 +44,6 @@ import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFold
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;

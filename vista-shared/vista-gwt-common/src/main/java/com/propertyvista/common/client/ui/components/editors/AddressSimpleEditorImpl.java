@@ -16,11 +16,11 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.common.client.ui.validators.RevalidationTrigger;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
