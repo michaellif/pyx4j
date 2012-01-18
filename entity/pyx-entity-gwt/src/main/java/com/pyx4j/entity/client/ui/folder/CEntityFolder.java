@@ -208,6 +208,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         addItem((E) EntityFactory.create(entityPrototype.getValueClass()));
     }
 
+    @SuppressWarnings("unchecked")
     protected void addItem(E newEntity) {
         if (getValue() == null) {
             log.warn("Request to add item has been issued before the form populated with value");
@@ -215,6 +216,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
 
         final CEntityFolderItem<E> item = createItemPrivate();
+
         createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
@@ -224,6 +226,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 ValueChangeEvent.fire(CEntityFolder.this, getValue());
             }
         });
+
+        if (item.getDecorator() instanceof BoxFolderItemDecorator) {
+            ((BoxFolderItemDecorator<E>) item.getDecorator()).setExpended(true);
+        }
 
     }
 
