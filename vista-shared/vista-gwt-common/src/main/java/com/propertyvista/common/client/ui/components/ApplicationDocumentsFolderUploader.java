@@ -47,19 +47,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 
 public class ApplicationDocumentsFolderUploader extends VistaTableFolder<ApplicationDocument> {
 
     private static I18n i18n = I18n.get(ApplicationDocumentsFolderUploader.class);
 
-    private final DocumentType documentType;
-
     private Key tenantId;
 
-    public ApplicationDocumentsFolderUploader(DocumentType documentType) {
+    public ApplicationDocumentsFolderUploader() {
         super(ApplicationDocument.class);
-        this.documentType = documentType;
     }
 
     private static final List<EntityFolderColumnDescriptor> COLUMNS;
@@ -88,18 +84,9 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
         new ApplicationDocumentUploaderDialog(i18n.tr("Upload Document File"), tenantId) {
 
             @Override
-            protected void onUploadComplete(UploadResponse serverUploadResponse) {
-                ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
-                newDocument.type().setValue(documentType);
-
-                newDocument.blobKey().setValue(serverUploadResponse.uploadKey);
-                newDocument.filename().setValue(serverUploadResponse.fileName);
-                newDocument.fileSize().setValue(serverUploadResponse.fileSize);
-                newDocument.timestamp().setValue(serverUploadResponse.timestamp);
-                newDocument.contentMimeType().setValue(serverUploadResponse.fileContentType);
-
+            protected void onUploadComplete(UploadResponse<ApplicationDocument> serverUploadResponse) {
                 // add new document to the folder-list:
-                addItem(newDocument);
+                addItem(serverUploadResponse.data);
             }
         }.show();
     }

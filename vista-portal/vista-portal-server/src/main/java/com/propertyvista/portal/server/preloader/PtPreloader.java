@@ -51,7 +51,7 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
 import com.propertyvista.server.common.ptapp.ApplicationMgr;
-import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class PtPreloader extends BaseVistaDevDataPreloader {
 
@@ -62,7 +62,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, Pet.class,
-                    EmergencyContact.class, Summary.class, PriorAddress.class, ApplicationDocumentData.class);
+                    EmergencyContact.class, Summary.class, PriorAddress.class, ApplicationDocumentBlob.class);
         } else {
             return "This is production";
         }
@@ -119,13 +119,22 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
             tenantSummary.tenantInLease().lease().set(summary.lease());
             Persistence.service().persist(tenantSummary.tenantInLease());
+            summary.lease().tenants().add(tenantSummary.tenantInLease());
 
+            Persistence.service().persist(tenantSummary.tenantScreening());
+
+            int no = 0;
             for (ApplicationDocument applicationDocument : tenantSummary.tenantScreening().documents()) {
                 generator.attachDocumentData(applicationDocument);
+                applicationDocument.orderInOwner().setValue(no++);
+                Persistence.service().persist(applicationDocument);
             }
             for (PersonalIncome income : tenantSummary.tenantScreening().incomes()) {
+                no = 0;
                 for (ApplicationDocument applicationDocument : income.documents()) {
                     generator.attachDocumentData(applicationDocument);
+                    applicationDocument.orderInOwner().setValue(no++);
+                    Persistence.service().persist(applicationDocument);
                 }
             }
 
@@ -141,14 +150,10 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval().checkResultDetails());
                 Persistence.service().persist(tenantSummary.tenantScreening().equifaxApproval());
             }
-            Persistence.service().persist(tenantSummary.tenantScreening());
-
-            summary.lease().tenants().add(tenantSummary.tenantInLease());
         }
 
         // Create working appl. only for first half 
         if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
-
             MasterApplication ma = ApplicationMgr.createMasterApplication(summary.lease());
             if (PTGenerator.equifaxDemo) {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);

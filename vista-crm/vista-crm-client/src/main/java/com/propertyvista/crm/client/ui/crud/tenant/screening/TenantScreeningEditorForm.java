@@ -49,7 +49,6 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.misc.BusinessRules;
 
@@ -187,8 +186,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo))).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader())).build());
 
         get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 

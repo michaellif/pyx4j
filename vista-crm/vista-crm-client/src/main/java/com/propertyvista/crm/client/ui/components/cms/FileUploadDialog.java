@@ -33,7 +33,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     private static I18n i18n = I18n.get(FileUploadDialog.class);
 
-    private final UploadPanel<IEntity> uploadPanel;
+    private final UploadPanel<IEntity, IEntity> uploadPanel;
 
     private final Dialog dialog;
 
@@ -41,7 +41,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
     public FileUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity>((UploadService<IEntity>) GWT.create(MediaUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, IEntity>((UploadService<IEntity, IEntity>) GWT.create(MediaUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -56,7 +56,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
                 dialog.hide();
                 FileUploadDialog.this.onUploadComplete(serverUploadResponse);
             }

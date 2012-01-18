@@ -47,7 +47,6 @@ import com.propertyvista.common.client.ui.components.folders.EmergencyContactFol
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
@@ -110,7 +109,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.securityInfo))).customLabel(
+                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader())).customLabel(
                         i18n.tr("Please Attach proof Of Citizenship")).build());
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);

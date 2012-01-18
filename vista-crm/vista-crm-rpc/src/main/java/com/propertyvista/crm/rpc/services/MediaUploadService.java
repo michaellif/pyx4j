@@ -20,8 +20,9 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 
 import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
+import com.propertyvista.domain.File;
 
-public interface MediaUploadService extends UploadService<MediaUploadDTO> {
+public interface MediaUploadService extends UploadService<MediaUploadDTO, File> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.BMP);

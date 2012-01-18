@@ -28,10 +28,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
+import com.propertyvista.domain.File;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 
-public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO> implements MediaUploadService {
+public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO, File> implements MediaUploadService {
 
     private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
@@ -51,11 +52,12 @@ public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO> im
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<MediaUploadDTO, File> process,
+            final UploadResponse<File> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
 
-        MediaUploadDTO mediaUploadDTO = (MediaUploadDTO) process.getData();
+        MediaUploadDTO mediaUploadDTO = process.getData();
         ThumbnailService.persist(blobKey, response.fileName, data.data, mediaUploadDTO.target().getValue());
         response.uploadKey = blobKey;
         return ProcessingStatus.completed;

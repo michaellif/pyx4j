@@ -26,16 +26,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaTenantBehavior;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 @SuppressWarnings("serial")
 public class ApplicationDocumentServlet extends HttpServlet {
@@ -53,15 +52,16 @@ public class ApplicationDocumentServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        ApplicationDocumentData adata = Persistence.service().retrieve(ApplicationDocumentData.class, new Key(id));
-        if (adata == null) {
+        ApplicationDocument doc = Persistence.service().retrieve(ApplicationDocument.class, new Key(id));
+        if (doc == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         if (SecurityController.checkAnyBehavior(VistaTenantBehavior.Prospective, VistaTenantBehavior.ProspectiveSubmited)) {
-            if (!EqualsHelper.equals(adata.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
+            // assert access to the document
+            if (false) {
                 log.debug("no access to document {} {}", id, filename);
                 if (ApplicationMode.isDevelopment()) {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -79,6 +79,14 @@ public class ApplicationDocumentServlet extends HttpServlet {
             }
             return;
         }
+
+        ApplicationDocumentBlob adata = Persistence.service().retrieve(ApplicationDocumentBlob.class, doc.blobKey().getValue());
+        if (adata == null) {
+            log.debug("no such blob {} {}", id, filename);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         response.setContentType(adata.contentType().getValue());
         response.getOutputStream().write(adata.data().getValue());
     }

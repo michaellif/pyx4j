@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
@@ -40,7 +41,7 @@ import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
-public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> implements UpdateUploadService {
+public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO, IEntity> implements UpdateUploadService {
 
     private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
@@ -63,7 +64,8 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<UpdateUploadDTO, IEntity> process,
+            final UploadResponse<IEntity> response) {
         final String namespace = NamespaceManager.getNamespace();
         Thread t = new DeferredProcessorThread("Update", process, new Runnable() {
             @Override
@@ -78,7 +80,7 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO> 
         return ProcessingStatus.processWillContinue;
     }
 
-    private static void runImport(UploadData data, UploadDeferredProcess process, UploadResponse response) {
+    private static void runImport(UploadData data, UploadDeferredProcess<UpdateUploadDTO, IEntity> process, UploadResponse<IEntity> response) {
 
         ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
         process.status().setProgress(0);

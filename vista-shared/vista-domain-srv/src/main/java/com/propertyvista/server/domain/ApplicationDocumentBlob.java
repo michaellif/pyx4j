@@ -15,7 +15,6 @@ package com.propertyvista.server.domain;
 
 import java.util.Date;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -23,17 +22,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.tenant.Tenant;
-
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ApplicationDocumentData extends IEntity, IBoundToApplication {
-
-    // TODO VladS  Security: tenant and/or application to be set properly
-
-    @Detached
-    Tenant tenant();
+public interface ApplicationDocumentBlob extends IEntity {
 
     IPrimitive<String> contentType();
 

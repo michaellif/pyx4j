@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantScreening;
 
@@ -88,8 +89,17 @@ public class TenantRetriever {
 
     public void saveScreening() {
         Persistence.service().merge(tenantScreening);
+
         // save detached entities:
-        Persistence.service().merge(tenantScreening.documents());
+        if (!financial) {
+            int no = 0;
+            for (ApplicationDocument applicationDocument : tenantScreening.documents()) {
+                applicationDocument.orderInOwner().setValue(no++);
+                //TODO assert Documents Id
+                Persistence.service().merge(applicationDocument);
+            }
+        }
+
         if (financial) {
             Persistence.service().merge(tenantScreening.incomes());
             Persistence.service().merge(tenantScreening.assets());

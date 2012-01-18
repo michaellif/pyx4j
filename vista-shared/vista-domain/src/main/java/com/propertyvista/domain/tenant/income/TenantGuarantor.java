@@ -15,7 +15,9 @@ package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -28,10 +30,12 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.person.Person;
 
 @ToStringFormat("{0}, {1}")
-public interface TenantGuarantor extends IUserEntity, Person {
+@DiscriminatorValue("TenantGuarantor")
+public interface TenantGuarantor extends IUserEntity, Person, ApplicationDocumentHolder {
 
     @I18n
     public enum Relationship {
@@ -54,8 +58,10 @@ public interface TenantGuarantor extends IUserEntity, Person {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> birthDate();
 
+    @Override
     @Owned
     @Caption(name = "Identification Documents")
+    @JoinTable(value = ApplicationDocument.class, orderColumn = ApplicationDocument.OrderColumnId.class, cascade = false)
     IList<ApplicationDocument> documents();
 
 // Financial:

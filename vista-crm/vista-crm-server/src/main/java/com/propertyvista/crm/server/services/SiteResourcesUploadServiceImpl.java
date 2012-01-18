@@ -34,7 +34,7 @@ import com.propertyvista.server.common.blob.BlobService;
  * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
  * 
  */
-public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity> implements SiteResourcesUploadService {
+public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity, IEntity> implements SiteResourcesUploadService {
 
     private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
@@ -54,7 +54,7 @@ public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity> i
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<IEntity, IEntity> process, final UploadResponse<IEntity> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
         response.uploadKey = blobKey;

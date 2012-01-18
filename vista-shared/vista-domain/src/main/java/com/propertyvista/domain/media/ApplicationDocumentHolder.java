@@ -7,23 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 23, 2011
+ * Created on Jan 17, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.rpc.services;
+package com.propertyvista.domain.media;
 
-import java.util.Collection;
-import java.util.EnumSet;
-
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.admin.rpc.PmcImportDTO;
+@AbstractEntity
+@Inheritance
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface ApplicationDocumentHolder extends IEntity {
 
-public interface ImportUploadService extends UploadService<PmcImportDTO, IEntity> {
-
-    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML);
+    IList<ApplicationDocument> documents();
 
 }

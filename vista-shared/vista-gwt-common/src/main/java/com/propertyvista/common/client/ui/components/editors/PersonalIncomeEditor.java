@@ -33,7 +33,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.media.ApplicationDocument.DocumentType;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
@@ -81,8 +80,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
         main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader(DocumentType.income))).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader())).build());
 
         return main;
     }

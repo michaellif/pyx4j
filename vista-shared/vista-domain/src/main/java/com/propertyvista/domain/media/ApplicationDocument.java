@@ -13,25 +13,33 @@
  */
 package com.propertyvista.domain.media;
 
-import java.io.Serializable;
-
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.File;
-import com.propertyvista.domain.IBoundToApplication;
 
-public interface ApplicationDocument extends File, IBoundToApplication {
+public interface ApplicationDocument extends File {
 
-    public static enum DocumentType implements Serializable {
+    @Override
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    @ReadOnly
+    IPrimitive<Key> blobKey();
 
-        securityInfo,
+    @Owner
+    @JoinColumn
+    //TODO @ReadOnly  assign once only  
+    ApplicationDocumentHolder owner();
 
-        income;
+    interface OrderColumnId extends ColumnId {
 
     }
 
-    // This is not shown in UI only defines where the document is attached.
-    @MemberColumn(name = "tp")
-    IPrimitive<DocumentType> type();
+    @JoinTableOrderColumn(OrderColumnId.class)
+    IPrimitive<Integer> orderInOwner();
 }

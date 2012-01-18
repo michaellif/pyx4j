@@ -27,6 +27,7 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
@@ -35,7 +36,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
 
     private static I18n i18n = I18n.get(ApplicationDocumentUploaderDialog.class);
 
-    private final UploadPanel<ApplicationDocumentUploadDTO> uploadPanel;
+    private final UploadPanel<ApplicationDocumentUploadDTO, ApplicationDocument> uploadPanel;
 
     private final Dialog dialog;
 
@@ -43,8 +44,8 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
     public ApplicationDocumentUploaderDialog(String title, final Key tenantId) {
         dialog = new Dialog(title, this, null);
 
-        uploadPanel = new UploadPanel<ApplicationDocumentUploadDTO>(
-                (UploadService<ApplicationDocumentUploadDTO>) GWT.create(ApplicationDocumentUploadService.class)) {
+        uploadPanel = new UploadPanel<ApplicationDocumentUploadDTO, ApplicationDocument>(
+                (UploadService<ApplicationDocumentUploadDTO, ApplicationDocument>) GWT.create(ApplicationDocumentUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -59,7 +60,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<ApplicationDocument> serverUploadResponse) {
                 dialog.hide();
                 ApplicationDocumentUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
@@ -86,7 +87,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
         dialog.show();
     }
 
-    protected abstract void onUploadComplete(UploadResponse serverUploadResponse);
+    protected abstract void onUploadComplete(UploadResponse<ApplicationDocument> serverUploadResponse);
 
     @Override
     public boolean onClickOk() {

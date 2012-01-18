@@ -28,6 +28,7 @@ import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
+import com.propertyvista.domain.File;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
@@ -35,7 +36,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
 
     private static I18n i18n = I18n.get(MediaUploadDialog.class);
 
-    private final UploadPanel<MediaUploadDTO> uploadPanel;
+    private final UploadPanel<MediaUploadDTO, File> uploadPanel;
 
     private final Dialog dialog;
 
@@ -43,7 +44,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
     public MediaUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
-        uploadPanel = new UploadPanel<MediaUploadDTO>((UploadService<MediaUploadDTO>) GWT.create(MediaUploadService.class)) {
+        uploadPanel = new UploadPanel<MediaUploadDTO, File>((UploadService<MediaUploadDTO, File>) GWT.create(MediaUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -58,7 +59,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<File> serverUploadResponse) {
                 dialog.hide();
                 MediaUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
@@ -85,7 +86,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
         dialog.show();
     }
 
-    protected abstract void onUploadComplete(UploadResponse serverUploadResponse);
+    protected abstract void onUploadComplete(UploadResponse<File> serverUploadResponse);
 
     protected abstract ImageTarget getImageTarget();
 

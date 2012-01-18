@@ -38,10 +38,9 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
-import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
 
@@ -77,26 +76,24 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
             return;
         }
 
-        int totalCountExpected = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        int totalCountExpected = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentBlob.class));
 
         //first run on on fully linked and recently created records - no records deletions expected
         instance.execute(context);
-        int totalCountAfter = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        int totalCountAfter = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentBlob.class));
         Assert.assertEquals("It was expected no changes since all records are linked and recent", totalCountExpected, totalCountAfter);
 
         //create new application data record
-        List<ApplicationDocumentData> allDocData = Persistence.service().query(
-                EntityQueryCriteria.create(ApplicationDocumentData.class));
-        ApplicationDocumentData data1 = allDocData.get(0);
-        ApplicationDocumentData applicationDocumentData = createDataRecord(data1.tenant());
+        List<ApplicationDocumentBlob> allDocData = Persistence.service().query(EntityQueryCriteria.create(ApplicationDocumentBlob.class));
+        ApplicationDocumentBlob data1 = allDocData.get(0);
+        ApplicationDocumentBlob applicationDocumentData = createDataRecord();
         totalCountExpected++;
-        totalCountAfter = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentData.class));
+        totalCountAfter = Persistence.service().count(EntityQueryCriteria.create(ApplicationDocumentBlob.class));
         Assert.assertEquals("It was expected record count increased since we added one more data record", totalCountExpected, totalCountAfter);
 
         instance.execute(context);
 
-        ApplicationDocumentData data = Persistence.service().retrieve(ApplicationDocumentData.class,
-                applicationDocumentData.id().getValue());
+        ApplicationDocumentBlob data = Persistence.service().retrieve(ApplicationDocumentBlob.class, applicationDocumentData.id().getValue());
         Assert.assertNotNull("Cannot find data record", data);
 
         //update record creation date to back in time to make it appear as old
@@ -106,7 +103,7 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
         Persistence.service().persist(applicationDocumentData);
 
         instance.execute(context);
-        data = Persistence.service().retrieve(ApplicationDocumentData.class, applicationDocumentData.id().getValue());
+        data = Persistence.service().retrieve(ApplicationDocumentBlob.class, applicationDocumentData.id().getValue());
         Assert.assertNull("Record is still in DB - expected to be cleaned up", data);
 
         /*
@@ -214,12 +211,8 @@ public class CleanOrphanUploadsJobTest extends VistaDBTestBase {
         //scheduler.start();
     }
 
-    private static ApplicationDocumentData createDataRecord(Tenant tenantInfo) {
-        ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
-        applicationDocumentData.tenant().set(tenantInfo);
-
-// TODO: There is no application in Tenant now!..
-//        applicationDocumentData.application().set(tenantInfo.application());
+    private static ApplicationDocumentBlob createDataRecord() {
+        ApplicationDocumentBlob applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
 
         applicationDocumentData.data().setValue(new byte[0]);
         applicationDocumentData.contentType().setValue("image/jpeg");

@@ -136,6 +136,9 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         Double masterApplicationProgress = 1.0;
 
         for (Application app : dto.applications()) {
+            if (app.isValueDetached()) {
+                Persistence.service().retrieve(app);
+            }
             ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
 
             EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);

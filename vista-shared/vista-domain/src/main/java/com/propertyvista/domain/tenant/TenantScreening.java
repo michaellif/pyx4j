@@ -16,10 +16,12 @@ package com.propertyvista.domain.tenant;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -32,6 +34,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
@@ -39,7 +42,8 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.misc.EquifaxApproval;
 
-public interface TenantScreening extends IEntity {
+@DiscriminatorValue("TenantScreening")
+public interface TenantScreening extends IEntity, ApplicationDocumentHolder {
 
     @Owner
     @Detached
@@ -63,9 +67,11 @@ public interface TenantScreening extends IEntity {
     @Caption(name = "General Questions")
     LegalQuestions legalQuestions();
 
+    @Override
     @Owned
     @Detached
     @Caption(name = "Identification Documents")
+    @JoinTable(value = ApplicationDocument.class, orderColumn = ApplicationDocument.OrderColumnId.class, cascade = false)
     IList<ApplicationDocument> documents();
 
     //=============== Financial =============//

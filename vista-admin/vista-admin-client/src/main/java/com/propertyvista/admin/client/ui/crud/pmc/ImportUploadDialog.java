@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -41,7 +42,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
 
     private final CEntityEditor<PmcImportDTO> form;
 
-    private final UploadPanel<PmcImportDTO> uploadPanel;
+    private final UploadPanel<PmcImportDTO, IEntity> uploadPanel;
 
     private final Dialog dialog;
 
@@ -49,7 +50,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
     private ImportUploadDialog(PmcDTO pmc) {
         dialog = new Dialog(i18n.tr("Upload Import.xml"), this, null);
 
-        uploadPanel = new UploadPanel<PmcImportDTO>((UploadService<PmcImportDTO>) GWT.create(ImportUploadService.class)) {
+        uploadPanel = new UploadPanel<PmcImportDTO, IEntity>((UploadService<PmcImportDTO, IEntity>) GWT.create(ImportUploadService.class)) {
             @Override
             protected PmcImportDTO getUploadData() {
                 return form.getValue();
@@ -68,7 +69,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
                 dialog.hide();
                 MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
             }

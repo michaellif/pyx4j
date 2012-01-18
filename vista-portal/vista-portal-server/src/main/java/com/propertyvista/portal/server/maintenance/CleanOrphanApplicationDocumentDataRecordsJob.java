@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
 
@@ -42,7 +42,7 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
 
         // select list of keys from addlicationDocumentData for records created within last 7 days,
         // but not later then last 24 hours (to avoid purging data that was recently created
-        EntityQueryCriteria<ApplicationDocumentData> allDataCriteria = EntityQueryCriteria.create(ApplicationDocumentData.class);
+        EntityQueryCriteria<ApplicationDocumentBlob> allDataCriteria = EntityQueryCriteria.create(ApplicationDocumentBlob.class);
         Calendar minDate = new GregorianCalendar();
         minDate.add(Calendar.DATE, -7);
         log.debug("minDate={}", minDate);
@@ -63,7 +63,7 @@ public class CleanOrphanApplicationDocumentDataRecordsJob implements Job {
             ApplicationDocument doc = Persistence.service().retrieve(criteria);
             if (doc == null) {
                 log.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);
-                Persistence.service().delete(ApplicationDocumentData.class, dataKey);
+                Persistence.service().delete(ApplicationDocumentBlob.class, dataKey);
                 deleted++;
             }
         }

@@ -17,7 +17,9 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<TenantScreening> implements TenantScreeningCrudService {
 
@@ -33,6 +35,25 @@ public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<Tenan
             Persistence.service().retrieve(entity.incomes());
             Persistence.service().retrieve(entity.assets());
             Persistence.service().retrieve(entity.guarantors());
+        }
+    }
+
+    @Override
+    protected void persistDBO(TenantScreening dbo) {
+        super.persistDBO(dbo);
+
+        int no = 0;
+        for (ApplicationDocument applicationDocument : dbo.documents()) {
+            applicationDocument.owner().set(dbo);
+            applicationDocument.orderInOwner().setValue(no++);
+            Persistence.service().merge(applicationDocument);
+        }
+        for (PersonalIncome income : dbo.incomes()) {
+            no = 0;
+            for (ApplicationDocument applicationDocument : income.documents()) {
+                applicationDocument.orderInOwner().setValue(no++);
+                Persistence.service().merge(applicationDocument);
+            }
         }
     }
 }

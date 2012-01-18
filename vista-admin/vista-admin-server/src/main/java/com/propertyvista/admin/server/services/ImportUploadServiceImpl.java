@@ -25,6 +25,7 @@ import org.xml.sax.InputSource;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
@@ -46,7 +47,7 @@ import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.admin.Pmc;
 
-public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO> implements ImportUploadService {
+public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEntity> implements ImportUploadService {
 
     private final static Logger log = LoggerFactory.getLogger(ImportUploadServiceImpl.class);
 

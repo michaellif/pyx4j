@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -34,7 +35,7 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
 
     private static I18n i18n = I18n.get(UpdateUploadDialog.class);
 
-    private final UploadPanel<UpdateUploadDTO> uploadPanel;
+    private final UploadPanel<UpdateUploadDTO, IEntity> uploadPanel;
 
     private final Dialog dialog;
 
@@ -42,7 +43,7 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
     private UpdateUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Update.xml"), this, null);
 
-        uploadPanel = new UploadPanel<UpdateUploadDTO>((UploadService<UpdateUploadDTO>) GWT.create(UpdateUploadService.class)) {
+        uploadPanel = new UploadPanel<UpdateUploadDTO, IEntity>((UploadService<UpdateUploadDTO, IEntity>) GWT.create(UpdateUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -57,7 +58,7 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
                 dialog.hide();
                 MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
             }

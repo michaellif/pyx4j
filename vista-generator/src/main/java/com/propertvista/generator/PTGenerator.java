@@ -64,12 +64,13 @@ import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.misc.EquifaxResult;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.common.reference.SharedData;
-import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class PTGenerator {
 
@@ -195,31 +196,25 @@ public class PTGenerator {
         return selfEmpl;
     }
 
-    public ApplicationDocument createApplicationDocument(TenantInLease tenantInfo, String fileName, ApplicationDocument.DocumentType documentType) {
-        assert (tenantInfo.application() != null);
+    public ApplicationDocument createApplicationDocument(Application application, String fileName) {
         if (IOUtils.getResource("pt-docs/" + fileName, PTGenerator.class) == null) {
             throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
         }
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
-        applicationDocument.application().set(tenantInfo.application());
-        applicationDocument.type().setValue(documentType);
         applicationDocument.filename().setValue(fileName);
         return applicationDocument;
     }
 
     public void attachDocumentData(ApplicationDocument applicationDocument) {
         String fileName = applicationDocument.filename().getValue();
-        ApplicationDocumentData applicationDocumentData;
+        ApplicationDocumentBlob applicationDocumentData;
         try {
             byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, PTGenerator.class);
             if (data == null) {
                 throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
             }
             String contentType = MimeMap.getContentType(FilenameUtils.getExtension(fileName));
-            applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
-            //TODO VladS security settings !
-            //applicationDocumentData.tenant().set();
-            applicationDocumentData.application().set(applicationDocument.application());
+            applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
             applicationDocumentData.data().setValue(data);
             applicationDocumentData.contentType().setValue(contentType);
 
@@ -431,10 +426,8 @@ public class PTGenerator {
 
         tenantSummary.tenantScreening().notCanadianCitizen().setValue(RandomUtil.randomBoolean());
         if (tenantSummary.tenantScreening().notCanadianCitizen().isBooleanTrue()) {
-            ApplicationDocument.DocumentType documentType = ApplicationDocument.DocumentType.securityInfo;
-
             String fileName = "doc-security" + RandomUtil.randomInt(3) + ".jpg";
-            tenantSummary.tenantScreening().documents().add(createApplicationDocument(tenantSummary.tenantInLease(), fileName, documentType));
+            tenantSummary.tenantScreening().documents().add(createApplicationDocument(tenantSummary.tenantInLease().application(), fileName));
         } else {
             tenantSummary.tenantScreening().secureIdentifier().setValue("649 951 282");
         }
@@ -460,7 +453,7 @@ public class PTGenerator {
         LegalQuestions legalQuestions = createLegalQuestions();
         tenantSummary.tenantScreening().legalQuestions().set(legalQuestions);
 
-        createFinancialInfo(tenantSummary.tenantScreening());
+        createFinancialInfo(tenantSummary.tenantScreening(), tenantSummary.tenantInLease().application());
 
         if (equifaxDemo) {
             createEquifaxApproival(tenantSummary.tenantScreening());
@@ -469,7 +462,7 @@ public class PTGenerator {
         return tenantSummary;
     }
 
-    private void createFinancialInfo(TenantScreening ts) {
+    private void createFinancialInfo(TenantScreening ts, Application application) {
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
@@ -480,12 +473,8 @@ public class PTGenerator {
 
             //income.active().setValue(RandomUtil.randomBoolean());
 
-            //TODO
-//            if (IncomeSource.fulltime.equals(income.incomeSource().getValue())) {
-//                ApplicationDocument applicationDocument = createApplicationDocument(tenant, "doc-income" + RandomUtil.randomInt(3) + ".jpg",
-//                        ApplicationDocument.DocumentType.income);
-//                income.documents().add(applicationDocument);
-//            }
+            ApplicationDocument applicationDocument = createApplicationDocument(application, "doc-income" + RandomUtil.randomInt(3) + ".jpg");
+            income.documents().add(applicationDocument);
 
             ts.incomes().add(income);
         }

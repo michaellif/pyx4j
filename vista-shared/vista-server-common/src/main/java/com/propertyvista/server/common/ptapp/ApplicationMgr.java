@@ -105,11 +105,10 @@ public class ApplicationMgr {
                 Persistence.service().persist(tenantInLease);
 
                 ma.applications().add(a);
-                break;
+                return ma;
             }
         }
-
-        return ma;
+        throw new Error("Main applicant not found");
     }
 
     public static void makeApplicationCompleted(Application application) {

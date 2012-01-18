@@ -59,7 +59,7 @@ import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
-import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
@@ -106,7 +106,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.Prospective, new AllPermissions());
 
         grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
-        grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocumentData.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocumentBlob.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(TenantInLeaseListDTO.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(TenantInLease.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(PetsDTO.class, applicationEntityAccess, CRUD));

@@ -17,7 +17,6 @@ import java.util.Collection;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -29,21 +28,22 @@ import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationDocumentUploadDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.domain.ApplicationDocumentData;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
-public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<ApplicationDocumentUploadDTO> implements ApplicationDocumentUploadService {
+public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<ApplicationDocumentUploadDTO, ApplicationDocument> implements
+        ApplicationDocumentUploadService {
 
     private static I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(ApplicationDocumentData.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(ApplicationDocumentBlob.class).data().getMeta().getLength();
     }
 
     @Override
@@ -57,39 +57,42 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess process, UploadResponse response) {
+    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<ApplicationDocumentUploadDTO, ApplicationDocument> process,
+            UploadResponse<ApplicationDocument> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
 
-        ApplicationDocumentUploadDTO dto = (ApplicationDocumentUploadDTO) process.getData();
+        ApplicationDocumentUploadDTO dto = process.getData();
 
         TenantInLease tenant = Persistence.service().retrieve(TenantInLease.class, dto.tenantInLeaseId().getValue());
         if (tenant == null) {
             throw new Error("Unknown tenantId: " + dto.tenantInLeaseId().getValue());
         }
         if (SecurityController.checkBehavior(VistaTenantBehavior.Prospective)) {
-            if (!EqualsHelper.equals(tenant.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
-                throw new Error("Wrong ApplicationId: " + tenant.application().getPrimaryKey());
-            }
+            //TODO
+//            if (!EqualsHelper.equals(tenant.application().getPrimaryKey(), PtAppContext.getCurrentUserApplicationPrimaryKey())) {
+//                throw new Error("Wrong ApplicationId: " + tenant.application().getPrimaryKey());
+//            }
         } else {
             SecurityController.assertBehavior(VistaCrmBehavior.Tenants);
         }
 
-        ApplicationDocumentData applicationDocumentData = createApplicationDocumentData(data.data, response.fileContentType, tenant);
+        ApplicationDocumentBlob applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
+        applicationDocumentData.data().setValue(data.data);
+        applicationDocumentData.contentType().setValue(response.fileContentType);
 
         Persistence.secureSave(applicationDocumentData);
 
-        response.uploadKey = applicationDocumentData.id().getValue();
+        ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
+        newDocument.blobKey().setValue(applicationDocumentData.id().getValue());
+        newDocument.filename().setValue(response.fileName);
+        newDocument.fileSize().setValue(response.fileSize);
+        newDocument.timestamp().setValue(response.timestamp);
+        newDocument.contentMimeType().setValue(response.fileContentType);
+        Persistence.service().persist(newDocument);
+
+        response.data = newDocument;
 
         return ProcessingStatus.completed;
-    }
-
-    private ApplicationDocumentData createApplicationDocumentData(byte[] data, String contentType, TenantInLease tenant) {
-        ApplicationDocumentData applicationDocumentData = EntityFactory.create(ApplicationDocumentData.class);
-        applicationDocumentData.data().setValue(data);
-        applicationDocumentData.tenant().set(tenant.tenant());
-        applicationDocumentData.contentType().setValue(contentType);
-        applicationDocumentData.application().set(tenant.application());
-        return applicationDocumentData;
     }
 
 }

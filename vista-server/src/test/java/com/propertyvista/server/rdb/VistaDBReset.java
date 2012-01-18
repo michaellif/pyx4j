@@ -42,6 +42,7 @@ public class VistaDBReset {
         NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
         RDBUtils.dropAllEntityTables();
         SchedulerHelper.dbReset();
+        RDBUtils.initAllEntityTables();
         log.info("Generating new Data...");
         long start = System.currentTimeMillis();
         //log.info(conf.getDataPreloaders().preloadAll());
