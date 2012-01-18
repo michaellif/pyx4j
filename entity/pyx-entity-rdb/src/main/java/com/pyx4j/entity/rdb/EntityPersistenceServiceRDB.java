@@ -240,7 +240,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             for (MemberCollectionOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
                 if (!member.getMemberMeta().isCascadePersist()) {
                     // Never update
-                    return;
+                    continue;
                 }
                 CollectionsTableModel.validate(entity, member);
                 if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
