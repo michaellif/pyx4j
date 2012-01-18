@@ -29,7 +29,6 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.company.AssignedBuilding;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.gadgets.arrears.Arrears;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
@@ -103,8 +102,8 @@ public class MockupTenantPreloader extends AbstractMockupPreloader {
             Portfolio portfolio = null;
             while (i.hasNext()) {
                 Portfolio tmp = i.next();
-                for (AssignedBuilding assBuilding : tmp.buildings()) {
-                    if (assBuilding.building().equals(building)) {
+                for (Building assBuilding : tmp.buildings()) {
+                    if (assBuilding.equals(building)) {
                         portfolio = tmp;
                         break;
                     }

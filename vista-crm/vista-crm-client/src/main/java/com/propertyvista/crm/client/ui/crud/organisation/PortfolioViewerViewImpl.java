@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation;
 
-import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Portfolio;
@@ -21,6 +20,6 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioViewerViewImpl extends CrmViewerViewImplBase<Portfolio> implements PortfolioViewerView {
 
     public PortfolioViewerViewImpl() {
-        super(CrmSiteMap.Organization.Portfolio.class, new PortfolioEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Organization.Portfolio.class, new PortfolioEditorForm(true));
     }
 }

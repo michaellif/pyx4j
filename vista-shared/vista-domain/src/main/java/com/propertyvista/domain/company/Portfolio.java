@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.property.asset.building.Building;
+
 public interface Portfolio extends IEntity {
 
     @NotNull
@@ -31,5 +33,5 @@ public interface Portfolio extends IEntity {
     IPrimitive<String> description();
 
     @Owned
-    IList<AssignedBuilding> buildings();
+    IList<Building> buildings();
 }

@@ -13,36 +13,48 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.SelectEntityFromListDialog;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.company.AssignedBuilding;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
     private static final I18n i18n = I18n.get(PortfolioEditorForm.class);
 
     public PortfolioEditorForm() {
-        super(Portfolio.class, new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public PortfolioEditorForm(IEditableComponentFactory factory) {
-        super(Portfolio.class, factory);
+    public PortfolioEditorForm(boolean viewMode) {
+        super(Portfolio.class, viewMode);
     }
 
     @Override
@@ -54,30 +66,121 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
 
         main.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
-        main.setWidget(++row, 0, inject(proto().buildings(), createBuildingListView()));
+        main.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder()));
 
         return new CrmScrollPanel(main);
     }
 
-    private CComponent<?, ?> createBuildingListView() {
-        return new VistaTableFolder<AssignedBuilding>(AssignedBuilding.class, isEditable()) {
-            private final VistaTableFolder<AssignedBuilding> parent = this;
+    private class BuildingFolder extends VistaTableFolder<Building> {
 
-            @Override
-            public List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().building(), "60em"));
-                return columns;
-            }
+        public BuildingFolder() {
+            super(Building.class, PortfolioEditorForm.this.isEditable());
+        }
 
-            @Override
-            protected IFolderDecorator<AssignedBuilding> createDecorator() {
-                return new VistaTableFolderDecorator<AssignedBuilding>(parent, parent.isEditable()) {
-                    {
-                        setShowHeader(false);
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off
+                    new EntityFolderColumnDescriptor(proto().propertyCode(), "5em"),
+                    new EntityFolderColumnDescriptor(proto().complex().name(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().info().address().city() , "10em"),
+                    new EntityFolderColumnDescriptor(proto().info().address().province().name() , "10em"),
+                    new EntityFolderColumnDescriptor(proto().info().address().country().name() , "10em")
+            );//@formatter:on
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Building) {
+                return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
+                    @Override
+                    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?, ?> comp = null;
+                        if (proto().propertyCode() == column.getObject()) {
+                            if (isEditable()) {
+                                comp = inject(proto().propertyCode(), new CLabel());
+                            } else {
+                                comp = inject(proto().propertyCode(), new CHyperlink(new Command() {
+                                    @Override
+                                    public void execute() {
+                                        AppSite.getPlaceController().goTo(
+                                                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Building.class)
+                                                        .formViewerPlace(getValue().id().getValue()));
+                                    }
+                                }));
+                            }
+                        } else if (column.getObject() instanceof IPrimitive) {
+                            comp = inject(proto().getMember(column.getObject().getPath()), new CLabel());
+                        } else {
+                            comp = super.createCell(column);
+                        }
+
+                        return comp;
                     }
                 };
+            } else {
+                return super.create(member);
             }
-        };
+        }
+
+        @Override
+        protected IFolderDecorator<Building> createDecorator() {
+            return new VistaTableFolderDecorator<Building>(this, this.isEditable()) {
+                {
+                    setShowHeader(false);
+                }
+            };
+        }
+
+        @Override
+        protected void addItem() {
+            new SelectBuildingBox(getValue()) {
+                @Override
+                public boolean onClickOk() {
+                    for (Building building : getSelectedItems()) {
+                        addItem(building);
+                    }
+                    return true;
+                }
+            }.show();
+        }
+
+    }
+
+    private abstract class SelectBuildingBox extends SelectEntityFromListDialog<Building> {
+
+        public SelectBuildingBox(List<Building> alreadySelected) {
+            super(Building.class, true, alreadySelected, i18n.tr("Select Buildings"));
+        }
+
+        @Override
+        protected ColumnDescriptor<?>[] defineColumnDescriptors() {
+            return new ColumnDescriptor<?>[] {//@formatter:off                    
+                    new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().complex()).build(),
+                    new MemberColumnDescriptor.Builder(proto().propertyManager()).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketing().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().city()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().province()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().country()).build(),
+            }; //@formatter:on
+        }
+
+        @Override
+        protected AbstractListService<Building> getSelectService() {
+            return GWT.<AbstractListService<Building>> create(SelectBuildingCrudService.class);
+        }
+
+        @Override
+        protected String width() {
+            return "700px";
+        }
+
+        @Override
+        protected String height() {
+            return "400px";
+        }
+
     }
 }
