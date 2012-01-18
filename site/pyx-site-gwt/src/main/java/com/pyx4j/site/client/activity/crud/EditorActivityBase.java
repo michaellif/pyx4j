@@ -108,6 +108,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
+        // should be called first in start - some views can set appropriate form according to the current mode
         view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
         view.discard();
         populate();
