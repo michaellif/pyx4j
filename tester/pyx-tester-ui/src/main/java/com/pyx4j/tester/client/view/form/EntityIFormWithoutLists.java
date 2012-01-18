@@ -25,10 +25,15 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSuggestStringBox;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
@@ -75,10 +80,8 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPasswordI())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPasswordI())));
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPasswordII())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPasswordII())));
 
         main.setHR(++row, 0, 1);
@@ -138,5 +141,22 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 //        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entityIVListNotOwned(), new CEntityListBox<EntityIV>())));
 
         return main;
+    }
+
+    @Override
+    public void addValidations() {
+        EditableValueValidator<String> passwordConfirmValidator = new EditableValueValidator<String>() {
+
+            @Override
+            public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+                return CommonsStringUtils.equals(get(proto().mandatoryPasswordI()).getValue(), get(proto().mandatoryPasswordII()).getValue()) ? null
+                        : new ValidationFailure("Passwords do not match.");
+            }
+
+        };
+        get(proto().mandatoryPasswordII()).addValueValidator(passwordConfirmValidator);
+
+        get(proto().mandatoryPasswordI()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().mandatoryPasswordII())));
+
     }
 }

@@ -85,12 +85,6 @@ public interface EntityI extends IEntity {
     IPrimitive<Boolean> checkBox();
 
     @Editor(type = EditorType.password)
-    IPrimitive<String> optionalPasswordI();
-
-    @Editor(type = EditorType.password)
-    IPrimitive<String> optionalPasswordII();
-
-    @Editor(type = EditorType.password)
     @NotNull
     IPrimitive<String> mandatoryPasswordI();
 

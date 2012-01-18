@@ -100,8 +100,6 @@ public class DomainFactory {
         retVal.mandatoryIntegerI().setValue(intvalues[pos]);
         retVal.optionalEnumI().setValue(enumvalues[pos]);
         retVal.mandatoryEnumI().setValue(enumvalues[pos]);
-        retVal.optionalPasswordI().setValue(pwdvalues[pos]);
-        retVal.mandatoryPasswordI().setValue(pwdvalues[pos]);
 
         retVal.optionalTextAreaII().setValue(opttxtvalues[pos]);
         retVal.mandatoryTextAreaII().setValue(mndtxtvalues[pos]);
