@@ -51,7 +51,7 @@ public class LockerAreaViewerActivity extends ViewerActivityBase<LockerAreaDTO> 
     public void onPopulateSuccess(LockerAreaDTO result) {
         super.onPopulateSuccess(result);
 
-        lockerLister.setParentFiltering(result.getPrimaryKey());
+        lockerLister.setParent(result.getPrimaryKey());
         lockerLister.populate();
     }
 

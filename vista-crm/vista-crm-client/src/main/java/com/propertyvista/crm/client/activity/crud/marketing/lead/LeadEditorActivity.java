@@ -99,7 +99,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
 
     public void populateUnitLister(Building selected) {
         if (!selected.isEmpty()) {
-            unitsLister.setParentFiltering(selected.getPrimaryKey());
+            unitsLister.setParent(selected.getPrimaryKey());
         }
         unitsLister.retrieveData(0);
     }

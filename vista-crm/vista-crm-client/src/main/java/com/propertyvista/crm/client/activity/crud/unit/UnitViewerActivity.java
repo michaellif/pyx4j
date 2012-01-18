@@ -64,10 +64,10 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
     public void onPopulateSuccess(AptUnitDTO result) {
         super.onPopulateSuccess(result);
 
-        unitItemsLister.setParentFiltering(result.getPrimaryKey());
+        unitItemsLister.setParent(result.getPrimaryKey());
         unitItemsLister.populate();
 
-        OccupanciesLister.setParentFiltering(result.getPrimaryKey());
+        OccupanciesLister.setParent(result.getPrimaryKey());
         OccupanciesLister.populate();
     }
 

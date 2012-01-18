@@ -81,7 +81,7 @@ public class LeadViewerActivity extends ViewerActivityBase<Lead> implements Lead
     protected void onPopulateSuccess(Lead result) {
         super.onPopulateSuccess(result);
 
-        appointmentsLister.setParentFiltering(result.getPrimaryKey());
+        appointmentsLister.setParent(result.getPrimaryKey());
         appointmentsLister.populate();
     }
 

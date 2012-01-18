@@ -54,7 +54,7 @@ public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implemen
         super.onPopulateSuccess(result);
 
         if (Tenant.Type.person.equals(result.type().getValue())) {
-            screeningLister.setParentFiltering(result.getPrimaryKey());
+            screeningLister.setParent(result.getPrimaryKey());
             screeningLister.populate();
         }
     }

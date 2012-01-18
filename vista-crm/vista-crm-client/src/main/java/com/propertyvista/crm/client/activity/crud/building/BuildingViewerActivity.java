@@ -176,40 +176,40 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
 
         // -------------------------------------------------------
 
-        floorplanLister.setParentFiltering(result.getPrimaryKey());
+        floorplanLister.setParent(result.getPrimaryKey());
         floorplanLister.populate();
 
-        unitLister.setParentFiltering(result.getPrimaryKey());
+        unitLister.setParent(result.getPrimaryKey());
         unitLister.populate();
 
         // -------------------------------------------------------
 
-        elevatorLister.setParentFiltering(result.getPrimaryKey());
+        elevatorLister.setParent(result.getPrimaryKey());
         elevatorLister.populate();
 
-        boilerLister.setParentFiltering(result.getPrimaryKey());
+        boilerLister.setParent(result.getPrimaryKey());
         boilerLister.populate();
 
-        roofLister.setParentFiltering(result.getPrimaryKey());
+        roofLister.setParent(result.getPrimaryKey());
         roofLister.populate();
 
         // -------------------------------------------------------
 
-        parkingLister.setParentFiltering(result.getPrimaryKey());
+        parkingLister.setParent(result.getPrimaryKey());
         parkingLister.populate();
 
-        lockerAreaLister.setParentFiltering(result.getPrimaryKey());
+        lockerAreaLister.setParent(result.getPrimaryKey());
         lockerAreaLister.populate();
 
         // -----------------------------------------------------------------------
 
-        serviceLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
+        serviceLister.setParent(result.serviceCatalog().getPrimaryKey());
         serviceLister.populate();
 
-        featureLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
+        featureLister.setParent(result.serviceCatalog().getPrimaryKey());
         featureLister.populate();
 
-        concessionLister.setParentFiltering(result.serviceCatalog().getPrimaryKey());
+        concessionLister.setParent(result.serviceCatalog().getPrimaryKey());
         concessionLister.populate();
     }
 

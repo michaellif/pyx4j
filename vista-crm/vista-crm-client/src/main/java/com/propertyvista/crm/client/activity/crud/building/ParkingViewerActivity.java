@@ -51,7 +51,7 @@ public class ParkingViewerActivity extends ViewerActivityBase<ParkingDTO> implem
     public void onPopulateSuccess(ParkingDTO result) {
         super.onPopulateSuccess(result);
 
-        spotLister.setParentFiltering(result.getPrimaryKey());
+        spotLister.setParent(result.getPrimaryKey());
         spotLister.populate();
     }
 

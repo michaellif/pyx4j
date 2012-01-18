@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 
 public class AppointmentViewerActivity extends ViewerActivityBase<Appointment> implements AppointmentViewerView.Presenter {
 
-    private final IListerView.Presenter showingsLister;
+    private final IListerView.Presenter<Showing> showingsLister;
 
     @SuppressWarnings("unchecked")
     public AppointmentViewerActivity(Place place) {
@@ -44,7 +44,7 @@ public class AppointmentViewerActivity extends ViewerActivityBase<Appointment> i
     }
 
     @Override
-    public Presenter getShowingsPresenter() {
+    public Presenter<Showing> getShowingsPresenter() {
         return showingsLister;
     }
 
@@ -52,7 +52,7 @@ public class AppointmentViewerActivity extends ViewerActivityBase<Appointment> i
     protected void onPopulateSuccess(Appointment result) {
         super.onPopulateSuccess(result);
 
-        showingsLister.setParentFiltering(result.getPrimaryKey());
+        showingsLister.setParent(result.getPrimaryKey());
         showingsLister.populate();
     }
 

@@ -69,7 +69,7 @@ public class ComplexViewerActivity extends ViewerActivityBase<ComplexDTO> implem
 
         super.onPopulateSuccess(result);
 
-        buildingListerActivity.setParentFiltering(result.id().getValue());
+        buildingListerActivity.setParent(result.id().getValue());
         buildingListerActivity.populate();
     }
 }

@@ -72,7 +72,7 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
     @Override
     public void setSelectedBuilding(Building selected) {
         // update unit lister with building units:
-        unitsLister.setParentFiltering(selected.getPrimaryKey());
+        unitsLister.setParent(selected.getPrimaryKey());
         unitsLister.retrieveData(0);
     }
 

@@ -55,10 +55,10 @@ public class MasterApplicationViewerActivity extends ViewerActivityBase<MasterAp
     public void onPopulateSuccess(MasterApplicationDTO result) {
         super.onPopulateSuccess(result);
 
-        applicationLister.setParentFiltering(result.getPrimaryKey());
+        applicationLister.setParent(result.getPrimaryKey());
         applicationLister.populate();
 
-        tenantLister.setParentFiltering(result.lease().getPrimaryKey());
+        tenantLister.setParent(result.lease().getPrimaryKey());
         tenantLister.populate();
     }
 
