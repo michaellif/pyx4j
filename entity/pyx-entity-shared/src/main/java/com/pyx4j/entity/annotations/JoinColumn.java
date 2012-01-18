@@ -32,6 +32,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JoinColumn {
 
-    // Not implemented for now.
+    /**
+     * @see JoinTable#mappedby
+     */
     Class<? extends ColumnId> value() default ColumnId.class;
 }

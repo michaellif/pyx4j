@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 /**
  * Define the join table between entities for many(one) to many(one) relationship.
- * N.B. implemented only for query.
+ * N.B. implemented only for query and Entity read.
  */
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
@@ -37,9 +37,15 @@ public @interface JoinTable {
 
     Class<? extends IEntity> value();
 
+    /**
+     * N.B. cascade() true is not implemented!
+     */
     boolean cascade() default true;
 
-    // Not implemented for now.
+    /**
+     * Optional, Should match value of @JoinColumn when defined.
+     * By default Entity class match is used. Or first column with @JoinColumn annotation without value.
+     */
     Class<? extends ColumnId> mappedby() default ColumnId.class;
 
     /**
