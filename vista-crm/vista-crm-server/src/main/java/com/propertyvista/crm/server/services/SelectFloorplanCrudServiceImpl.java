@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.crm.rpc.services.SelectFloorplanCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -21,5 +23,14 @@ public class SelectFloorplanCrudServiceImpl extends GenericCrudServiceImpl<Floor
 
     public SelectFloorplanCrudServiceImpl() {
         super(Floorplan.class);
+    }
+
+    @Override
+    protected void enhanceRetrieve(Floorplan entity, boolean fromList) {
+        if (fromList) {
+            Persistence.service().retrieve(entity.building());
+            Persistence.service().retrieve(entity.building().complex());
+        }
+        super.enhanceRetrieve(entity, fromList);
     }
 }

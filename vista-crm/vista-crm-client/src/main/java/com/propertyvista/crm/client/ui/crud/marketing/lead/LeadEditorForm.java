@@ -13,6 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,22 +25,23 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
+import com.propertyvista.crm.rpc.services.SelectFloorplanCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 
@@ -118,11 +124,15 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new SelectFloorplanBox() {
+                    new SelectFloorplanDialog() {
                         @Override
                         public boolean onClickOk() {
-                            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItem());
-                            return true;
+                            if (!getSelectedItems().isEmpty()) {
+                                ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItems().get(0));
+                                return true;
+                            } else {
+                                return false;
+                            }
                         }
                     }.show();
                 }
@@ -158,40 +168,75 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         return new HTML(); // just stub - not necessary for editing mode!..
     }
 
-    //
-    //Selection Boxes:
+    private class SelectFloorplanDialog extends EntitySelectorDialog<Floorplan> {
 
-    private abstract class SelectFloorplanBox extends OkCancelDialog {
-
-        private Floorplan selectedItem;
-
-        public SelectFloorplanBox() {
-            super("Building/Floorplan Selection");
-            setBody(createBody());
-            setSize("900px", "500px");
+        public SelectFloorplanDialog() {
+            super(Floorplan.class, false, new ArrayList<Floorplan>(1), i18n.tr("Building/Floorplan Selection"));
         }
 
-        protected Widget createBody() {
-            getOkButton().setEnabled(false);
-            ((LeadEditorView) getParentView()).getFloorplanListerView().getLister().addItemSelectionHandler(new ItemSelectionHandler<Floorplan>() {
-                @Override
-                public void onSelect(Floorplan selected) {
-                    selectedItem = selected;
-                    getOkButton().setEnabled(true);
-                }
-            });
-
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Building") + ":"));
-            vPanel.add(((LeadEditorView) getParentView()).getBuildingListerView().asWidget());
-            vPanel.add(new CrmSectionSeparator(i18n.tr("Select Floorplan") + ":"));
-            vPanel.add(((LeadEditorView) getParentView()).getFloorplanListerView().asWidget());
-            vPanel.setWidth("100%");
-            return vPanel;
+        @Override
+        protected String width() {
+            return "900px";
         }
 
-        protected Floorplan getSelectedItem() {
-            return selectedItem;
+        @Override
+        protected String height() {
+            return "500px";
+        }
+
+        @Override
+        public boolean onClickOk() {
+            return false;
+        }
+
+        @Override
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
+            return Arrays.asList(//@formatter:off
+                    // building columns                    
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().country(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().province(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().city(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetName(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetNumber(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().type(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().name(), true).build(),
+
+                    new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().complex(), true).build(),
+
+                    new MemberColumnDescriptor.Builder(proto().building().marketing().name(), true).title(i18n.tr("Marketing Name")).build(),
+
+                    new MemberColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().totalStoreys(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().residentialStoreys(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().structureType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().structureBuildYear(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().constructionType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().foundationType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().floorType(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().landArea(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().waterSupply(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().centralAir(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().centralHeat(), false).build(),
+
+                    new MemberColumnDescriptor.Builder(proto().building().info().address(), false).build(),
+
+                    new MemberColumnDescriptor.Builder(proto().building().contacts().website(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().contacts().email(), false).title(i18n.tr("Email")).build(),
+                    
+                    // floorplan columns
+                    new MemberColumnDescriptor.Builder(proto().name(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketingName(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().floorCount(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().bedrooms(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().dens(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().bathrooms(), true).build()
+            );//@formatter:on
+        }
+
+        @Override
+        protected AbstractListService<Floorplan> getSelectService() {
+            return GWT.<AbstractListService<Floorplan>> create(SelectFloorplanCrudService.class);
         }
     }
 }

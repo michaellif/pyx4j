@@ -22,49 +22,18 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.LeadCrudService;
-import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
-import com.propertyvista.crm.rpc.services.SelectFloorplanCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadEditorActivity extends EditorActivityBase<Lead> implements LeadEditorView.Presenter {
 
-    private final IListerView.Presenter buildingsLister;
-
-    private final IListerView.Presenter unitsLister;
-
     @SuppressWarnings("unchecked")
     public LeadEditorActivity(Place place) {
         super(place, MarketingViewFactory.instance(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
-
-        buildingsLister = new ListerActivityBase<Building>(place, ((LeadEditorView) view).getBuildingListerView(),
-                (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
-
-        unitsLister = new ListerActivityBase<Floorplan>(place, ((LeadEditorView) view).getFloorplanListerView(),
-                (AbstractCrudService<Floorplan>) GWT.create(SelectFloorplanCrudService.class), Floorplan.class);
-    }
-
-    @Override
-    public Presenter getBuildingPresenter() {
-        return buildingsLister;
-    }
-
-    @Override
-    public Presenter getFloorplanPresenter() {
-        return unitsLister;
-    }
-
-    @Override
-    public void setSelectedBuilding(Building selected) {
-        populateUnitLister(selected);
     }
 
     @Override
@@ -86,22 +55,6 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
                 throw new UnrecoverableClientError(caught);
             }
         }, selected.getPrimaryKey());
-    }
-
-    @Override
-    public void onPopulateSuccess(Lead result) {
-        buildingsLister.retrieveData(0);
-
-        populateUnitLister(result.building());
-
-        super.onPopulateSuccess(result);
-    }
-
-    public void populateUnitLister(Building selected) {
-        if (!selected.isEmpty()) {
-            unitsLister.setParent(selected.getPrimaryKey());
-        }
-        unitsLister.retrieveData(0);
     }
 
     @Override
