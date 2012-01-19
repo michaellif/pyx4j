@@ -74,19 +74,17 @@ public class UnitDetailsPage extends BasePage {
         add(new FloorplanInfoPanel("floorplanInfoPanel", fp));
 
         // right side - floorplan details
-        Integer minArea = null;
-        AreaMeasurementUnit areaUnits = null;
+        Integer minArea = null, maxArea = null;
+        AreaMeasurementUnit areaUnits = AreaMeasurementUnit.sqFeet;
         for (AptUnit u : fpUnits) {
             minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
-            if (areaUnits == null) {
-                areaUnits = u.info().areaUnits().getValue();
-            }
+            maxArea = DomainUtil.max(maxArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
         }
 
         add(new Label("backButton", i18n.tr("Back")).add(AttributeModifier.replace("onClick", "history.back()")));
         add(new Label("name", fp.marketingName().getValue()));
         add(new Label("rooms", "bedrooms: " + fp.bedrooms().getValue() + ", bathrooms: " + fp.bathrooms().getValue()
-                + ((minArea != null) ? (", from " + Math.round(minArea) + " " + areaUnits) : "")));
+                + ((minArea != null) ? (", " + minArea + " - " + maxArea + " " + areaUnits) : "")));
         add(new Label("description", fp.description().getValue()));
         add(new ListView<FloorplanAmenity>("amenities", amenities) {
             private static final long serialVersionUID = 1L;

@@ -30,10 +30,12 @@ import templates.TemplateResources;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
@@ -50,6 +52,8 @@ public class AptDetailsPage extends BasePage {
     private static final I18n i18n = I18n.get(AptDetailsPage.class);
 
     public static final String LocalizedPageTitle = i18n.tr("Apartment Details");
+
+    static final String NAString = i18n.tr("Not Available");
 
     public AptDetailsPage(PageParameters params) {
         super(params);
@@ -93,18 +97,36 @@ public class AptDetailsPage extends BasePage {
                 item.add(new Label("name", floorPlan.marketingName().getValue()));
                 item.add(new Label("beds", String.valueOf(floorPlan.bedrooms().getValue())));
                 item.add(new Label("bath", String.valueOf(floorPlan.bathrooms().getValue())));
-                String price = "price not available";
-                Double minPrice = null;
+                // get price and area range
+                Double minPrice = null, maxPrice = null;
+                Integer minArea = null, maxArea = null;
+                AreaMeasurementUnit areaUnits = AreaMeasurementUnit.sqFeet;
                 for (AptUnit u : fpUnits.get(floorPlan)) {
+                    //price
                     Double _prc = u.financial()._marketRent().getValue();
                     if (minPrice == null || minPrice > _prc) {
                         minPrice = _prc;
                     }
+                    if (maxPrice == null || maxPrice < _prc) {
+                        maxPrice = _prc;
+                    }
+                    //area
+                    minArea = DomainUtil.min(minArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
+                    maxArea = DomainUtil.max(maxArea, DomainUtil.getAreaInSqFeet(u.info().area(), u.info().areaUnits()));
                 }
-                if (minPrice != null) {
-                    price = "from $" + String.valueOf(Math.round(minPrice));
+                // price
+                String price = NAString;
+                if (minPrice != null && maxPrice != null) {
+                    price = "$" + String.valueOf(Math.round(minPrice)) + " - $" + String.valueOf(Math.round(maxPrice));
                 }
                 item.add(new Label("price", price));
+                // area
+                String area = NAString;
+                if (minArea != null && maxArea != null) {
+                    area = minArea + " - " + maxArea + " " + areaUnits;
+                }
+                item.add(new Label("area", area));
+                // UnitDetails link
                 item.add(new BookmarkablePageLink<Void>("unitDetails", UnitDetailsPage.class, new PageParameters().add(PMSiteApplication.ParamNameFloorplan,
                         floorPlan.id().getValue())));
             }
