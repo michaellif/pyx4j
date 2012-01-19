@@ -26,4 +26,6 @@ public interface VistaCrmBehaviorDTO extends IEntity {
 
     IPrimitive<VistaCrmBehavior> behavior();
 
+    IPrimitive<String> permissions();
+
 }
