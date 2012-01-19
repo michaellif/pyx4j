@@ -43,16 +43,16 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
         Tree tree = new Tree();
 
         TreeItem formRoot = new TreeItem("Form");
-        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormBasic(), "A")));
-        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormVisibility(), "B")));
+//        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormBasic(), "A")));
+//        formRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Form.FormVisibility(), "B")));
         AppPlace place = new TesterSiteMap.FormTester();
         place.arg(FormTesterActivity.FORM_TYPE, FormTesterView.TestFormType.FormBasic.name());
         formRoot.addItem(new TreeItem(new NavigItemAnchor(place, FormTesterView.TestFormType.FormBasic.name())));
         tree.addItem(formRoot);
 
         TreeItem folderRoot = new TreeItem("Folders");
-        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderLayout(), "D")));
-        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderValidation(), "E")));
+//        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderLayout(), "D")));
+//        folderRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.Folder.FolderValidation(), "E")));
         place = new TesterSiteMap.FormTester();
         place.arg(FormTesterActivity.FORM_TYPE, FormTesterView.TestFormType.FolderLayout.name());
         folderRoot.addItem(new TreeItem(new NavigItemAnchor(place, FormTesterView.TestFormType.FolderLayout.name())));

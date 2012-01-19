@@ -53,45 +53,44 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextII())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextII())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextII())));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextII())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextAreaI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextAreaII())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaII())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextAreaII())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaI())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaII())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalIntegerI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerI())));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().optionalIntegerI())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerI())));
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalIntegerII())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerII())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalIntegerII())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerII())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().checkBox())));
-
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPasswordI())));
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPasswordII())));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatoryPasswordII())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnumI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnumII())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumII())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumI())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnumII())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumII())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
         Collection<String> options = new ArrayList<String>();
         for (int i = 0; i < 10; i++) {
@@ -100,43 +99,46 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         CAbstractSuggestBox<String> box = new CSuggestStringBox();
         box.setOptions(options);
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalSuggest(), box)));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalSuggest(), box)));
 
         box = new CSuggestStringBox();
         box.setOptions(options);
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatorySuggest(), box)));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatorySuggest(), box)));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalDatePicker())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryDatePicker())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryDatePicker())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTimePicker())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTimePicker())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTimePicker())));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatoryTimePicker())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalSingleMonthDatePicker())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalSingleMonthDatePicker())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatorySingleMonthDatePicker())));
 
-        main.setHR(++row, 0, 1);
+        //main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPhone())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPhone())));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().optionalPhone())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPhone())));
 
-        main.setHR(++row, 0, 1);
+//        main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEmail())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEmail())));
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEmail())));
 
-        main.setHR(++row, 0, 1);
+//        main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalMoney())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryMoney())));
+//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalMoney())));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatoryMoney())));
 
-        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().checkBox())));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        //main.setHR(++row, 0, 1);
 
 //        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entityIVListNotOwned(), new CEntityListBox<EntityIV>())));
 

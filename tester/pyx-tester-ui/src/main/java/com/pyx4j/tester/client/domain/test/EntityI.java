@@ -50,37 +50,24 @@ public interface EntityI extends IEntity {
     @Caption(description = "Description for optionalStringMemberI")
     IPrimitive<String> optionalTextI();
 
-    IPrimitive<String> optionalTextII();
-
     @NotNull
     IPrimitive<String> mandatoryTextI();
-
-    @NotNull
-    IPrimitive<String> mandatoryTextII();
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> optionalTextAreaI();
 
-    @Editor(type = EditorType.textarea)
-    IPrimitive<String> optionalTextAreaII();
+//    @Editor(type = EditorType.textarea)
+//    IPrimitive<String> optionalTextAreaII();
 
-    @Editor(type = EditorType.textarea)
-    @NotNull
-    IPrimitive<String> mandatoryTextAreaI();
+//    @Editor(type = EditorType.textarea)
+//    @NotNull
+//    IPrimitive<String> mandatoryTextAreaI();
 
-    @Editor(type = EditorType.textarea)
-    @NotNull
-    IPrimitive<String> mandatoryTextAreaII();
+//    @Editor(type = EditorType.textarea)
+//    @NotNull
+//    IPrimitive<String> mandatoryTextAreaII();
 
     IPrimitive<Integer> optionalIntegerI();
-
-    IPrimitive<Integer> optionalIntegerII();
-
-    @NotNull
-    IPrimitive<Integer> mandatoryIntegerI();
-
-    @NotNull
-    IPrimitive<Integer> mandatoryIntegerII();
 
     IPrimitive<Boolean> checkBox();
 
@@ -94,16 +81,11 @@ public interface EntityI extends IEntity {
 
     IPrimitive<Enum1> optionalEnumI();
 
-    @NotNull
-    IPrimitive<Enum1> mandatoryEnumI();
+//    @NotNull
+//    IPrimitive<Enum1> mandatoryEnumI();
 
-    IPrimitive<Enum1> optionalEnumII();
-
-    @NotNull
-    IPrimitive<Enum1> mandatoryEnumII();
-
-    @Editor(type = EditorType.suggest)
-    IPrimitive<String> optionalSuggest();
+//    @Editor(type = EditorType.suggest)
+//    IPrimitive<String> optionalSuggest();
 
     @NotNull
     @Editor(type = EditorType.suggest)
@@ -111,17 +93,17 @@ public interface EntityI extends IEntity {
 
     IPrimitive<Date> optionalDatePicker();
 
-    @NotNull
-    IPrimitive<Date> mandatoryDatePicker();
+//    @NotNull
+//    IPrimitive<Date> mandatoryDatePicker();
 
-    @Editor(type = EditorType.timepicker)
-    IPrimitive<Time> optionalTimePicker();
+//    @Editor(type = EditorType.timepicker)
+//    IPrimitive<Time> optionalTimePicker();
 
     @NotNull
     @Editor(type = EditorType.timepicker)
     IPrimitive<Time> mandatoryTimePicker();
 
-    IPrimitive<Date> optionalSingleMonthDatePicker();
+//    IPrimitive<Date> optionalSingleMonthDatePicker();
 
     @NotNull
     IPrimitive<Date> mandatorySingleMonthDatePicker();
@@ -129,12 +111,12 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.phone)
     IPrimitive<String> optionalPhone();
 
-    @Editor(type = EditorType.phone)
-    @NotNull
-    IPrimitive<String> mandatoryPhone();
+//    @Editor(type = EditorType.phone)
+//    @NotNull
+//    IPrimitive<String> mandatoryPhone();
 
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> optionalMoney();
+//    @Editor(type = EditorType.money)
+//    IPrimitive<Double> optionalMoney();
 
     @Editor(type = EditorType.money)
     @NotNull
@@ -148,8 +130,8 @@ public interface EntityI extends IEntity {
 
     IList<EntityIV> entityIVListNotOwned();
 
-    @Editor(type = EditorType.email)
-    IPrimitive<String> optionalEmail();
+//    @Editor(type = EditorType.email)
+//    IPrimitive<String> optionalEmail();
 
     @Editor(type = EditorType.email)
     @NotNull
