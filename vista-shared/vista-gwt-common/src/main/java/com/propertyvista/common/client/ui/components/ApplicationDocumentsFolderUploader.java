@@ -24,13 +24,10 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
@@ -46,6 +43,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.domain.media.ApplicationDocument;
 
 public class ApplicationDocumentsFolderUploader extends VistaTableFolder<ApplicationDocument> {
@@ -70,6 +68,11 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
     public List<EntityFolderColumnDescriptor> columns() {
         return COLUMNS;
     }
+
+//    @Override
+//    protected IFolderDecorator<ApplicationDocument> createDecorator() {
+//        return new UploaderFolderDecorator();
+//    }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
@@ -123,10 +126,9 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
 
     private class UploaderFolderDecorator extends HorizontalPanel implements IFolderDecorator<ApplicationDocument> {
 
-        private SimplePanel appDocsListHolder;
+        private final VistaTableFolderDecorator<ApplicationDocument> vistaTableFolder;
 
         public UploaderFolderDecorator() {
-            super();
 
             HTML side = new HTML("&nbsp;&nbsp;&nbsp;");
             add(side);
@@ -139,34 +141,29 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
             add(new Image(VistaImages.INSTANCE.clip()));
 
-            FlowPanel fp = new FlowPanel();
-            fp.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            fp.add(new HTML(HtmlUtils.h4(i18n.tr("Attached Files") + ":")));
-            fp.add(appDocsListHolder = new SimplePanel());
-            appDocsListHolder.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-
-            add(fp);
-            setCellVerticalAlignment(fp, HorizontalPanel.ALIGN_TOP);
-            setCellWidth(fp, "100%");
+            vistaTableFolder = new VistaTableFolderDecorator<ApplicationDocument>(ApplicationDocumentsFolderUploader.this, true);
+            vistaTableFolder.getElement().getStyle().setMarginLeft(1, Unit.EM);
+            add(vistaTableFolder);
         }
 
         @Override
         public void onValueChange(ValueChangeEvent<IList<ApplicationDocument>> event) {
+            vistaTableFolder.onValueChange(event);
         }
 
         @Override
         public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
-            return null;
+            return vistaTableFolder.addItemAddClickHandler(handler);
         }
 
         @Override
         public void setAddButtonVisible(boolean show) {
-            // TODO Auto-generated method stub
+            vistaTableFolder.setAddButtonVisible(show);
         }
 
         @Override
         public void setComponent(CEntityFolder<ApplicationDocument> w) {
-            // TODO Auto-generated method stub
+            vistaTableFolder.setComponent(w);
         }
     }
 
