@@ -14,10 +14,11 @@
 package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -28,32 +29,28 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
     public PmcViewerViewImpl() {
         super(AdminSiteMap.Management.PMC.class, new PmcEditorForm(true));
 
-        CHyperlink upload = new CHyperlink(new Command() {
+        Button upload = new Button("Upload import.xml", new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 ImportUploadDialog.show(form.getValue());
             }
         });
-        upload.setValue("Upload import.xml");
         addToolbarItem(upload.asWidget());
 
-        CHyperlink downloadFull = new CHyperlink(new Command() {
+        Button downloadFull = new Button("Download export.xml", new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 Window.open(GWT.getModuleBaseURL() + "export.xml", null, null);
             }
         });
-        downloadFull.setValue("Download export.xml");
         addToolbarItem(downloadFull.asWidget());
 
-        CHyperlink downloadNoImages = new CHyperlink(new Command() {
+        Button downloadNoImages = new Button("Download export.xml (no images)", new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 Window.open(GWT.getModuleBaseURL() + "export.xml?images=false", null, null);
             }
         });
-        downloadNoImages.setValue("Download export.xml (no images)");
         addToolbarItem(downloadNoImages.asWidget());
-
     }
 }
