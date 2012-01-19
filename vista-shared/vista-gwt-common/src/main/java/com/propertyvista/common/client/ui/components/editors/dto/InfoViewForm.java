@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
@@ -63,7 +63,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         }
     };
 
-    private ApplicationDocumentsFolderUploader fileUpload;
+    private ApplicationDocumentUploaderFolder fileUpload;
 
     public InfoViewForm() {
         this(new VistaEditorsComponentFactory());
@@ -109,7 +109,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader())).customLabel(
+                new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).customLabel(
                         i18n.tr("Please Attach proof Of Citizenship")).build());
         fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
         fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);

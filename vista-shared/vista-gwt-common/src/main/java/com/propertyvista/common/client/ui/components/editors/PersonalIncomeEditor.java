@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
@@ -48,7 +48,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
 
     private static I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
-    private ApplicationDocumentsFolderUploader fileUpload;
+    private ApplicationDocumentUploaderFolder fileUpload;
 
     public PersonalIncomeEditor() {
         super(PersonalIncome.class);
@@ -80,7 +80,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
         main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).build());
 
         return main;
     }

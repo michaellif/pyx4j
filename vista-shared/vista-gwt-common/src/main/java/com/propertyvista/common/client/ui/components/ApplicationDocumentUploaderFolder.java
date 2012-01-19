@@ -46,13 +46,13 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.domain.media.ApplicationDocument;
 
-public class ApplicationDocumentsFolderUploader extends VistaTableFolder<ApplicationDocument> {
+public class ApplicationDocumentUploaderFolder extends VistaTableFolder<ApplicationDocument> {
 
-    private static I18n i18n = I18n.get(ApplicationDocumentsFolderUploader.class);
+    private static I18n i18n = I18n.get(ApplicationDocumentUploaderFolder.class);
 
     private Key tenantId;
 
-    public ApplicationDocumentsFolderUploader() {
+    public ApplicationDocumentUploaderFolder() {
         super(ApplicationDocument.class);
     }
 
@@ -96,7 +96,7 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
 
     private class ApplicationDocumentEditor extends CEntityFolderRowEditor<ApplicationDocument> {
         public ApplicationDocumentEditor() {
-            super(ApplicationDocument.class, ApplicationDocumentsFolderUploader.COLUMNS);
+            super(ApplicationDocument.class, ApplicationDocumentUploaderFolder.COLUMNS);
         }
 
         @Override
@@ -141,7 +141,7 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
             add(new HTML("&nbsp;&nbsp;&nbsp;"));
             add(new Image(VistaImages.INSTANCE.clip()));
 
-            vistaTableFolder = new VistaTableFolderDecorator<ApplicationDocument>(ApplicationDocumentsFolderUploader.this, true);
+            vistaTableFolder = new VistaTableFolderDecorator<ApplicationDocument>(ApplicationDocumentUploaderFolder.this, true);
             vistaTableFolder.getElement().getStyle().setMarginLeft(1, Unit.EM);
             add(vistaTableFolder);
         }

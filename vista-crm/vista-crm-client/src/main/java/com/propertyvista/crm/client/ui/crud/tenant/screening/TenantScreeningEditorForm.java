@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentsFolderUploader;
+import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
@@ -58,7 +58,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    private ApplicationDocumentsFolderUploader fileUpload;
+    private ApplicationDocumentUploaderFolder fileUpload;
 
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
         @Override
@@ -186,7 +186,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
         main.setWidget(++row, 0, new DecoratorBuilder(sin, 7).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notCanadianCitizen()), 3).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentsFolderUploader())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ApplicationDocumentUploaderFolder())).build());
 
         get(proto().notCanadianCitizen()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
