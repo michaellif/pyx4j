@@ -15,31 +15,17 @@ package com.propertyvista.crm.client.activity.crud.organisation;
 
 import java.util.EnumSet;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.InMemeoryListService;
 
 import com.propertyvista.crm.rpc.VistaCrmBehaviorDTOCoverter;
 import com.propertyvista.crm.rpc.services.CrmRoleBehaviorDTOListService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
-public class CrmRoleBehaviorDTOListServiceImpl implements CrmRoleBehaviorDTOListService {
+public class CrmRoleBehaviorDTOListServiceImpl extends InMemeoryListService<VistaCrmBehaviorDTO> implements CrmRoleBehaviorDTOListService {
 
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<VistaCrmBehaviorDTO>> callback, EntityListCriteria<VistaCrmBehaviorDTO> criteria) {
-        EntitySearchResult<VistaCrmBehaviorDTO> r = new EntitySearchResult<VistaCrmBehaviorDTO>();
-        r.setData(VistaCrmBehaviorDTOCoverter.toDTO(EnumSet.allOf(VistaCrmBehavior.class)));
-
-        //TODO vlads Add in memory filer for criteria
-
-        callback.onSuccess(r);
-    }
-
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+    public CrmRoleBehaviorDTOListServiceImpl() {
+        super(VistaCrmBehaviorDTOCoverter.toDTO(EnumSet.allOf(VistaCrmBehavior.class)));
     }
 
 }
