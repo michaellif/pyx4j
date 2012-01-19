@@ -107,8 +107,8 @@ public class PropertyMarker extends Marker {
     }
 
     public native String getDetailsUrl()/*-{
-                                        return $wnd.getAptDetailsUrl();
-                                        }-*/;
+		return $wnd.getAptDetailsUrl();
+    }-*/;
 
     public class PropertyCard extends DockPanel {
 
@@ -160,7 +160,7 @@ public class PropertyMarker extends Marker {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    Window.Location.replace(getDetailsUrl() + "=" + property.getPrimaryKey().asLong());
+                    Window.Location.replace(getDetailsUrl() + "=" + property.propertyCode().getValue());
                 }
             });
             content.add(viewDetailsItem);

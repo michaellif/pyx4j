@@ -25,18 +25,18 @@ import java.io.Serializable;
 public class PromoDataModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long propId;
+    private String propCode;
 
     private String img;
 
     private String address;
 
-    public Long getPropId() {
-        return propId;
+    public String getPropCode() {
+        return propCode;
     }
 
-    public void setPropId(Long id) {
-        propId = id;
+    public void setPropCode(String code) {
+        propCode = code;
     }
 
     public String getImg() {

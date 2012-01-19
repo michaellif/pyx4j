@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
@@ -50,7 +51,7 @@ public class PromoPanel extends Panel {
             protected void populateItem(ListItem<PromoDataModel> item) {
                 PromoDataModel promo = item.getModelObject();
                 PageParameters params = new PageParameters();
-                params.add("propId", promo.getPropId());
+                params.add(PMSiteApplication.ParamNameBuilding, promo.getPropCode());
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("propLink", AptDetailsPage.class, params);
                 link.add(new SimpleImage("picture", promo.getImg()));
                 item.add(link);

@@ -41,14 +41,15 @@ public class InquiryPage extends BasePage {
 
     public InquiryPage(PageParameters params) {
         super(params);
-        Long planId = null, propId = null;
+        Long planId = null;
+        String propCode = null;
         try {
             planId = params.get(PMSiteApplication.ParamNameFloorplan).toLong();
         } catch (Exception ignore) {
             // ignore
         }
         try {
-            propId = params.get(PMSiteApplication.ParamNameBuilding).toLong();
+            propCode = params.get(PMSiteApplication.ParamNameBuilding).toString();
         } catch (Exception ignore) {
             // ignore
         }
@@ -60,8 +61,8 @@ public class InquiryPage extends BasePage {
             fp = PropertyFinder.getFloorplanDetails(planId);
             Persistence.service().retrieve(fp.building());
             add(new FloorplanInfoPanel("infoPanel", fp));
-        } else if (propId != null) {
-            bld = PropertyFinder.getBuildingDetails(propId);
+        } else if (propCode != null) {
+            bld = PropertyFinder.getBuildingDetails(propCode);
             add(new BuildingInfoPanel("infoPanel", bld));
         } else {
 //          throw new RuntimeException();

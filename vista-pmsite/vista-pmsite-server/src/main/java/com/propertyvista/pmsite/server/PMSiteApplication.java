@@ -214,12 +214,12 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         return (PMSiteApplication) WebApplication.get();
     }
 
-    public static String getAptDetailsPagePath(Long propId, String lang) {
+    public static String getAptDetailsPagePath(String propCode, String lang) {
         for (String path : MountMap.keySet()) {
             Class<? extends Page> pageClass = MountMap.get(path);
             if (AptDetailsPage.class.equals(pageClass)) {
                 Url url = Url.parse(path);
-                url.addQueryParameter(ParamNameBuilding, propId);
+                url.addQueryParameter(ParamNameBuilding, propCode);
                 url.addQueryParameter(ParamNameLang, lang);
                 return url.toString();
             }

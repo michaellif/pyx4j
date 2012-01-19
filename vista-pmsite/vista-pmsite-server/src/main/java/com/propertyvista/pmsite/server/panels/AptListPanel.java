@@ -39,6 +39,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
@@ -69,10 +70,11 @@ public class AptListPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Building> item) {
                 Building propInfo = item.getModelObject();
-                Long propId = propInfo.getPrimaryKey().asLong();
+                String propCode = propInfo.propertyCode().getValue();
                 // PropertyDetailsDTO
                 item.add(new SimpleImage("picture", PMSiteContentManager.getFistVisibleMediaImgUrl(propInfo.media(), ThumbnailSize.small)));
-                item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add("propId", propId)));
+                item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add(PMSiteApplication.ParamNameBuilding,
+                        propCode)));
                 if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
                     GeoPoint pt = propInfo.info().address().location().getValue();
                     item.add(new JSActionLink("aptMapview", "showLocation(" + pt.getLat() + ", " + pt.getLng() + ")", false));

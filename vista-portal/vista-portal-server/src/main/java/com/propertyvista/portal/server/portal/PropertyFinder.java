@@ -199,6 +199,16 @@ public class PropertyFinder {
     public static Building getBuildingDetails(long propId) {
         EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().id(), new Key(propId)));
+        return getBuildingDetails(dbCriteria);
+    }
+
+    public static Building getBuildingDetails(String propCode) {
+        EntityQueryCriteria<Building> dbCriteria = EntityQueryCriteria.create(Building.class);
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().propertyCode(), propCode));
+        return getBuildingDetails(dbCriteria);
+    }
+
+    private static Building getBuildingDetails(EntityQueryCriteria<Building> dbCriteria) {
         List<Building> buildings = Persistence.service().query(dbCriteria);
         if (buildings.size() != 1) {
             return null;

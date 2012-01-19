@@ -54,15 +54,15 @@ public class AptDetailsPage extends BasePage {
     public AptDetailsPage(PageParameters params) {
         super(params);
 
-        Long propId = null;
+        String propCode = null;
         try {
-            propId = params.get(PMSiteApplication.ParamNameBuilding).toLong();
+            propCode = params.get(PMSiteApplication.ParamNameBuilding).toString();
         } catch (Exception e) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "Invalid parameter: " + PMSiteApplication.ParamNameBuilding);
         }
 
-        final Building propInfo = PropertyFinder.getBuildingDetails(propId);
+        final Building propInfo = PropertyFinder.getBuildingDetails(propCode);
         if (propInfo == null) {
             // redirect to findapt page
             redirectOrFail(FindAptPage.class, "Could not get building details");

@@ -39,14 +39,15 @@ public class InquirySuccessPage extends BasePage {
 
     public InquirySuccessPage(PageParameters params) {
         super(params);
-        Long planId = null, propId = null;
+        Long planId = null;
+        String propCode = null;
         try {
             planId = params.get(PMSiteApplication.ParamNameFloorplan).toLong();
         } catch (Exception ignore) {
             // ignore
         }
         try {
-            propId = params.get(PMSiteApplication.ParamNameBuilding).toLong();
+            propCode = params.get(PMSiteApplication.ParamNameBuilding).toString();
         } catch (Exception ignore) {
             // ignore
         }
@@ -60,8 +61,8 @@ public class InquirySuccessPage extends BasePage {
             add(new FloorplanInfoPanel("infoPanel", fp));
             backLink = new BookmarkablePageLink<Void>("backLink", UnitDetailsPage.class, params);
             backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + UnitDetailsPage.LocalizedPageTitle));
-        } else if (propId != null) {
-            bld = PropertyFinder.getBuildingDetails(propId);
+        } else if (propCode != null) {
+            bld = PropertyFinder.getBuildingDetails(propCode);
             add(new BuildingInfoPanel("infoPanel", bld));
             backLink = new BookmarkablePageLink<Void>("backLink", AptDetailsPage.class, params);
             backLink.setBody(new Model<String>(i18n.tr("Back to") + " " + AptDetailsPage.LocalizedPageTitle));

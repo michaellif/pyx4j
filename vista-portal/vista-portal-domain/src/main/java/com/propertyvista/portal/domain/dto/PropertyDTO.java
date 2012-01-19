@@ -39,6 +39,8 @@ public interface PropertyDTO extends IEntity {
     @Caption(name = "Location")
     IPrimitive<GeoPoint> location();
 
+    IPrimitive<String> propertyCode();
+
     IPrimitive<Key> mainMedia();
 
     IList<FloorplanPropertyDTO> floorplansProperty();
