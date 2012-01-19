@@ -20,7 +20,6 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.charges.ChargeLine;
 
 public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {

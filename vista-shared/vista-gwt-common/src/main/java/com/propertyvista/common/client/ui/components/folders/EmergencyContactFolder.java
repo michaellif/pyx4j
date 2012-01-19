@@ -17,7 +17,6 @@ import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
-import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.editors.EmergencyContactEditor;
 import com.propertyvista.domain.EmergencyContact;
 

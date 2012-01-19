@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.misc.EquifaxResult;

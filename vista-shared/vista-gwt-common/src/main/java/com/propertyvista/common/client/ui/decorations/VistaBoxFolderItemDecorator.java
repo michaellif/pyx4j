@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 
 public class VistaBoxFolderItemDecorator<E extends IEntity> extends BoxFolderItemDecorator<E> {
     protected static I18n i18n = I18n.get(VistaBoxFolderItemDecorator.class);

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components;
+package com.propertyvista.common.client.ui.components.dialogs;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -28,6 +28,7 @@ import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import com.pyx4j.widgets.client.dialog.OkDialog;
+
 
 public abstract class SelectTypeDialog<E extends Enum<E>> extends OkDialog {
     public static interface CellTemplate extends SafeHtmlTemplates {

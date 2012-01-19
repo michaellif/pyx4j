@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.domain.contact.Email;
 
 public class EmailFolder extends VistaTableFolder<Email> {

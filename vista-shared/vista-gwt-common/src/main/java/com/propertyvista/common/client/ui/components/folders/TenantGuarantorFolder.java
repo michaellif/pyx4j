@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components.folders;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
-import com.propertyvista.common.client.ui.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.editors.TenantGuarantorEditor;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 

@@ -19,7 +19,7 @@ import java.util.List;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.SelectDialog;
+import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;

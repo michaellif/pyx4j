@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
