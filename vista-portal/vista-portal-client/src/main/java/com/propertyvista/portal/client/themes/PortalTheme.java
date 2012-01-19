@@ -31,7 +31,6 @@ import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
@@ -173,14 +172,6 @@ public class PortalTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Display));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("border-top-width", "1px");
-        style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-color", ThemeColors.object1, 0.4);
-        style.addProperty("margin-bottom", "0.3em");
-        style.addProperty("width", "400px");
         addStyle(style);
 
         String gwtButton = (".gwt-Button");

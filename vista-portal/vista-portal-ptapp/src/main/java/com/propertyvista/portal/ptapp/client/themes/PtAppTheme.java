@@ -28,8 +28,6 @@ import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.decorations.VistaHeaderBar;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
@@ -96,20 +94,6 @@ public class PtAppTheme extends VistaTheme {
         addStyle(style);
         style = new Style(".body-navig");
         style.addProperty("background", "url('" + PortalImages.INSTANCE.bodyBackground().getSafeUri().asString() + "') repeat-x 0 0 #F7F7F7");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(VistaHeaderBar.DEFAULT_STYLE_PREFIX));
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
-        style.addProperty("margin", "0.4em 0 0.4em 0");
-        style.addProperty("width", "930px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("border-top-width", "1px");
-        style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-color", ThemeColors.object1, 0.4);
-        style.addProperty("margin-bottom", "0.3em");
-        style.addProperty("width", "400px");
         addStyle(style);
     }
 

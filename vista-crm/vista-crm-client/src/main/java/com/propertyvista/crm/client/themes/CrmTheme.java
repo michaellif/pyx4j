@@ -32,7 +32,6 @@ import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
@@ -444,15 +443,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
-
-        style = new Style(Selector.valueOf(VistaLineSeparator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("border-top-width", "1px");
-        style.addProperty("border-top-style", "dotted");
-        style.addProperty("border-top-color", ThemeColors.object1, 0.4);
-        style.addProperty("margin", "0.2em 0 0.5em 0");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
     }
 
     protected void initDashboardView() {

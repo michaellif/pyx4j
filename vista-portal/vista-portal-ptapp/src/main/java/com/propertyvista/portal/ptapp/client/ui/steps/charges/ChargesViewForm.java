@@ -32,7 +32,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -93,18 +92,19 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
 
     private static Widget createTotal(CEntityEditor<?> form, IPrimitive<Double> member) {
         FlowPanel totalRow = new FlowPanel();
-
-        Widget sp = new VistaLineSeparator(48, Unit.EM);
-        sp.getElement().getStyle().setPadding(0, Unit.EM);
-        sp.getElement().getStyle().setProperty("border", "1px dotted black");
-        totalRow.add(sp);
-
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
         totalRow.add(DecorationUtils.inline(total, "40.5em", null));
-        totalRow.add(DecorationUtils.inline(form.inject(member), "7em"));
+        totalRow.add(DecorationUtils.inline(form.inject(member), "6em"));
+
+        form.get(member).setViewable(true);
         form.get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        return totalRow;
+
+        FormFlexPanel main = new FormFlexPanel();
+        main.setHR(0, 0, 1);
+        main.setWidget(1, 0, totalRow);
+        main.setWidth("48em");
+        return main;
     }
 
     /**

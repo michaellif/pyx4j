@@ -30,7 +30,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
@@ -96,7 +95,7 @@ public class AvailabiltySummaryGadget extends AbstractGadget<AvailabilitySummary
                     main.setWidget(row, ++col, new DecoratorBuilder(inject(proto().vacantRented()), COMPONENT_WIDTH, LABEL_WIDTH).build());
                     main.setWidget(row, ++col, new DecoratorBuilder(inject(proto().noticeRented()), COMPONENT_WIDTH, LABEL_WIDTH).build());
 
-                    main.setWidget(++row, 0, new VistaLineSeparator());
+                    main.setHR(++row, 0, 2);
                     main.getFlexCellFormatter().setColSpan(row, 0, 3);
 
                     main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().total()), COMPONENT_WIDTH, LABEL_WIDTH).build());
