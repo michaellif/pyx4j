@@ -92,7 +92,7 @@ public class SortingFactory<X extends IEntity> {
         Iterator<Sort> i = sortingCriteria.iterator();
         while (i.hasNext()) {
             Sort sortingCriterion = i.next();
-            String dboProperty = dto2dboPropertyMap.get(sortingCriterion.getPropertyName());
+            String dboProperty = dto2dboPropertyMap.get(sortingCriterion.getPropertyPath());
             if (dboProperty != null) {
                 i.remove();
                 extractedSorts.add(new Sort(dboProperty, sortingCriterion.isDescending()));
@@ -129,7 +129,7 @@ public class SortingFactory<X extends IEntity> {
             sortCriteria = new ArrayList<Path>();
 
             for (Sort sortCriterion : relevantSortCriteria) {
-                final Comparator cmp = propertyToComparatorMap.get(sortCriterion.getPropertyName());
+                final Comparator cmp = propertyToComparatorMap.get(sortCriterion.getPropertyPath());
                 if (cmp == null) {
                     // TODO maybe throw exception/log error (someone is trying to sort something that has no associated comparator)
                     continue;
@@ -147,7 +147,7 @@ public class SortingFactory<X extends IEntity> {
                 } else {
                     comps.add(cmp);
                 }
-                sortCriteria.add(new Path(sortCriterion.getPropertyName()));
+                sortCriteria.add(new Path(sortCriterion.getPropertyPath()));
             }
         }
 

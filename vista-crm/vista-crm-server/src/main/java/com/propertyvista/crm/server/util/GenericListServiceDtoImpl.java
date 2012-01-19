@@ -54,11 +54,11 @@ public abstract class GenericListServiceDtoImpl<DBO extends IEntity, DTO extends
     }
 
     protected void enhancePropertyCriterion(EntityListCriteria<DBO> dbCriteria, PropertyCriterion propertyCriterion) {
-        throw new Error("Unsupported Criterion property " + propertyCriterion.getPropertyName());
+        throw new Error("Unsupported Criterion property " + propertyCriterion.getPropertyPath());
     }
 
     protected String enhancePropertySorts(EntityListCriteria<DBO> dbCriteria, Sort sort) {
-        throw new Error("Unsupported Sort property " + sort.getPropertyName());
+        throw new Error("Unsupported Sort property " + sort.getPropertyPath());
     }
 
     protected String convertPropertyDTOPathToDBO(String path, DBO dboProto, DTO dtoProto) {
@@ -70,7 +70,7 @@ public abstract class GenericListServiceDtoImpl<DBO extends IEntity, DTO extends
             for (Criterion cr : dtoCriteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                    String path = propertyCriterion.getPropertyName();
+                    String path = propertyCriterion.getPropertyPath();
                     if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
                         String dbObjectPath = convertPropertyDTOPathToDBO(path, dbCriteria.proto(), dtoCriteria.proto());
                         dbCriteria.add(new PropertyCriterion(dbObjectPath, propertyCriterion.getRestriction(), propertyCriterion.getValue()));
@@ -83,7 +83,7 @@ public abstract class GenericListServiceDtoImpl<DBO extends IEntity, DTO extends
         if ((dtoCriteria.getSorts() != null) && (!dtoCriteria.getSorts().isEmpty())) {
             // Just copy all Sorts for now. Change to non sortable one that are failing
             for (Sort s : dtoCriteria.getSorts()) {
-                String path = s.getPropertyName();
+                String path = s.getPropertyPath();
 
                 if (path.startsWith(dtoCriteria.proto().getObjectClass().getSimpleName())) {
                     path = convertPropertyDTOPathToDBO(path, dbCriteria.proto(), dtoCriteria.proto());

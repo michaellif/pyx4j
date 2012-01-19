@@ -84,7 +84,7 @@ public class TransientPropertySortEngine<X extends IEntity> {
         Iterator<Sort> i = sortingCriteria.iterator();
         while (i.hasNext()) {
             Sort s = i.next();
-            if (getTransientProperties().containsKey(s.getPropertyName())) {
+            if (getTransientProperties().containsKey(s.getPropertyPath())) {
                 i.remove();
                 extractedSorts.add(s);
             }
@@ -98,7 +98,7 @@ public class TransientPropertySortEngine<X extends IEntity> {
         List<Comparator> comparators = new LinkedList<Comparator>();
 
         for (Sort sortCriterion : sortCriteria) {
-            Comparator comparator = getTransientProperties().get(sortCriterion.getPropertyName());
+            Comparator comparator = getTransientProperties().get(sortCriterion.getPropertyPath());
             if (comparator != null) {
                 relevantSortCriteria.add(sortCriterion);
                 comparators.add(comparator);
@@ -125,7 +125,7 @@ public class TransientPropertySortEngine<X extends IEntity> {
             sortCriteria = relevantSortCriteria;
 
             for (Sort sortCriterion : sortCriteria) {
-                final Comparator cmp = getTransientProperties().get(sortCriterion.getPropertyName());
+                final Comparator cmp = getTransientProperties().get(sortCriterion.getPropertyPath());
                 if (cmp == null) {
                     // TODO maybe throw exception/log error (someone is trying to sort something that has no associated comparator)
                     continue;
@@ -156,8 +156,8 @@ public class TransientPropertySortEngine<X extends IEntity> {
                 Sort sortCriterion = si.next();
                 @SuppressWarnings("rawtypes")
                 Comparator cmp = ci.next();
-                Object val1 = paramT1.getMember(new Path(sortCriterion.getPropertyName())).getValue();
-                Object val2 = paramT2.getMember(new Path(sortCriterion.getPropertyName())).getValue();
+                Object val1 = paramT1.getMember(new Path(sortCriterion.getPropertyPath())).getValue();
+                Object val2 = paramT2.getMember(new Path(sortCriterion.getPropertyPath())).getValue();
                 int result = cmp.compare(val1, val2);
                 if (result != 0) {
                     return result;
