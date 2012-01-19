@@ -95,7 +95,8 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
         }
 
         //@formatter:off    
-         @Override
+        @SuppressWarnings("unchecked")
+        @Override
         public List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(
                     colh(proto().propertyCode()),

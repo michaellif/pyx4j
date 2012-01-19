@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -31,40 +27,38 @@ public class SelectedBuildingLister extends ListerBase<Building> {
         super(Building.class, null, false, false);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(5);
+        setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().info().address().country(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().info().address().province(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().info().address().city(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().info().address().streetName(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().info().address().streetNumber(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().info().type(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().country(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().province(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().city(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().streetName(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().streetNumber(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().name(), true));
+                new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().complex(), true).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().propertyCode(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().complex(), true));
+                new MemberColumnDescriptor.Builder(proto().marketing().name(), true).title(i18n.tr("Marketing Name")).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().marketing().name(), i18n.tr("Marketing Name"), true));
+                new MemberColumnDescriptor.Builder(proto().info().shape(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().totalStoreys(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().residentialStoreys(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().structureType(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().structureBuildYear(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().constructionType(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().foundationType(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().floorType(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().landArea(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().waterSupply(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().centralAir(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().centralHeat(), false).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().shape(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().totalStoreys(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().residentialStoreys(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().structureType(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().structureBuildYear(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().constructionType(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().foundationType(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().floorType(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().landArea(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().waterSupply(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().centralAir(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().centralHeat(), false));
+                new MemberColumnDescriptor.Builder(proto().info().address(), false).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address(), false));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().contacts().website(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().contacts().email(), i18n.tr("Email"), false));
-
-        setColumnDescriptors(columnDescriptors);
+                new MemberColumnDescriptor.Builder(proto().contacts().website(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().contacts().email(), true).title(i18n.tr("Email")).build()
+                );//@formatter:on
 
     }
 

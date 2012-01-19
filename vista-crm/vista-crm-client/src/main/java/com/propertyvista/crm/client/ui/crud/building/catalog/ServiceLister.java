@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -28,11 +24,11 @@ public class ServiceLister extends ListerBase<Service> {
     public ServiceLister() {
         super(Service.class, CrmSiteMap.Properties.Service.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
+        setColumnDescriptors(
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
-        setColumnDescriptors(columnDescriptors);
+        new MemberColumnDescriptor.Builder(proto().type()).build(),
+
+        new MemberColumnDescriptor.Builder(proto().name()).build());
     }
 
 }

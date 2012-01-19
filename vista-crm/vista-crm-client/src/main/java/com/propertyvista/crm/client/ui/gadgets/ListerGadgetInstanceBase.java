@@ -182,6 +182,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
      * @return
      */
     // FIXME get rid of this
+    @Deprecated
     protected final ColumnDescriptor col(IObject<?> member, String title, boolean visible) {
         if (title == null) {
             return ColumnDescriptorFactory.createColumnDescriptor(proto(), member, visible);
@@ -190,19 +191,27 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         }
     }
 
+    // FIXME get rid of this
+    @Deprecated
     protected final ColumnDescriptor col(IObject<?> member, boolean visible) {
         return col(member, null, visible);
     }
 
+    // FIXME get rid of this
+    @Deprecated
     protected final ColumnDescriptor colv(IObject<?> member) {
         return col(member, true);
     }
 
+    // FIXME get rid of this
+    @Deprecated
     protected final ColumnDescriptor colv(IObject<?> member, String title) {
         return col(member, title, true);
     }
 
     /** Create invisible (hidden) column */
+    // FIXME get rid of this
+    @Deprecated
     protected final ColumnDescriptor colh(IObject<?> member) {
         return col(member, false);
     }

@@ -13,13 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.role;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
 public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
 
@@ -35,6 +41,26 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).componentWidth(20).build());
 
         return content;
+    }
+
+    private static class CrmRoleFolder extends VistaTableFolder<VistaCrmBehaviorDTO> {
+
+        public CrmRoleFolder() {
+            super(VistaCrmBehaviorDTO.class);
+            setViewable(true);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(new EntityFolderColumnDescriptor(proto().behavior(), "20em"));
+        }
+
+        private void addItems() {
+
+//            EnumSet<VistaCrmBehavior> alreadySelected = EnumSet.of(paramE)  
+//            
+//            new SelectTypeDialog<Enum<VistaCrmBehavior>>(i18n.tr("Select Roles..."), )
+        }
     }
 
 }
