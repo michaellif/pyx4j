@@ -17,12 +17,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportService;
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.ui.crud.AdminListerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -36,9 +37,9 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
         setLister(new PmcLister());
 
         {
-            CHyperlink downloadFull = new CHyperlink(new Command() {
+            Button downloadFull = new Button("QA Download images.csv", new ClickHandler() {
                 @Override
-                public void execute() {
+                public void onClick(ClickEvent event) {
                     EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
                     // TODO move to activity use and call ListerActivityBase.constructSearchCriteria()
                     HashMap<String, Serializable> params = new HashMap<String, Serializable>();
@@ -46,21 +47,19 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     ReportDialog.start((ReportService<?>) GWT.create(PmcDataReportService.class), criteria, params);
                 }
             });
-            downloadFull.setValue("QA Download images.csv");
-            addActionButton(downloadFull.asWidget());
+            addActionButton(downloadFull);
         }
 
         {
-            CHyperlink downloadFull = new CHyperlink(new Command() {
+            Button downloadFull = new Button("QA Download buildings.csv", new ClickHandler() {
                 @Override
-                public void execute() {
+                public void onClick(ClickEvent event) {
                     EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
                     // TODO move to activity use and call ListerActivityBase.constructSearchCriteria()
                     ReportDialog.start((ReportService<?>) GWT.create(PmcDataReportService.class), criteria);
                 }
             });
-            downloadFull.setValue("QA Download buildings.csv");
-            addActionButton(downloadFull.asWidget());
+            addActionButton(downloadFull);
         }
 
     }
