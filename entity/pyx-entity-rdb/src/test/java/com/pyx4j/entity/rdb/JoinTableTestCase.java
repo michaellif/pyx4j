@@ -20,10 +20,19 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
+import com.pyx4j.entity.test.shared.domain.join.AccPrincipal;
+import com.pyx4j.entity.test.shared.domain.join.AccPrincipalEdit;
+import com.pyx4j.entity.test.shared.domain.join.AccSubject;
+import com.pyx4j.entity.test.shared.domain.join.AccSubjectPrincipal;
 import com.pyx4j.entity.test.shared.domain.join.BRefCascadeChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefCascadeOwner;
 import com.pyx4j.entity.test.shared.domain.join.BRefPolyReadChild;
@@ -33,6 +42,80 @@ import com.pyx4j.entity.test.shared.domain.join.BRefReadChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefReadOwner;
 
 public abstract class JoinTableTestCase extends DatastoreTestBase {
+
+    public void testJoinTableUpdate() {
+        String testId = uniqueString();
+
+        AccPrincipal principal1 = EntityFactory.create(AccPrincipal.class);
+        principal1.name().setValue(uniqueString());
+        principal1.testId().setValue(testId);
+        srv.persist(principal1);
+
+        AccPrincipal principal2 = EntityFactory.create(AccPrincipal.class);
+        principal2.name().setValue(uniqueString());
+        principal2.testId().setValue(testId);
+        srv.persist(principal2);
+
+        AccSubject subject1 = EntityFactory.create(AccSubject.class);
+        subject1.name().setValue(uniqueString());
+        subject1.testId().setValue(testId);
+        srv.persist(subject1);
+
+        AccSubject subject2 = EntityFactory.create(AccSubject.class);
+        subject2.name().setValue(uniqueString());
+        subject2.testId().setValue(testId);
+        srv.persist(subject2);
+
+        AccSubjectPrincipal join11 = EntityFactory.create(AccSubjectPrincipal.class);
+        join11.principal().set(principal1);
+        join11.subject().set(subject1);
+        srv.persist(join11);
+
+        AccSubjectPrincipal join22 = EntityFactory.create(AccSubjectPrincipal.class);
+        join22.principal().set(principal2);
+        join22.subject().set(subject2);
+        srv.persist(join22);
+
+        {
+            // Test data not updated with JoinTable - should not update "cascade = false"
+            AccSubject subject1r1 = srv.retrieve(AccSubject.class, subject1.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", AttachLevel.Detached, subject1r1.access().getAttachLevel());
+            subject1r1.access().setAttachLevel(AttachLevel.Attached);
+            Assert.assertEquals("Data retrieved using JoinTable", AttachLevel.Attached, subject1r1.access().getAttachLevel());
+
+            subject1r1.access().add(principal2);
+            srv.persist(subject1r1);
+
+            // Verify join table itself is not updated
+            EntityQueryCriteria<AccSubjectPrincipal> criteria = EntityQueryCriteria.create(AccSubjectPrincipal.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().subject(), subject1));
+
+            List<AccSubjectPrincipal> data = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, data.size());
+        }
+
+        {
+            AccPrincipalEdit edit1 = EntityFactory.create(AccPrincipalEdit.class);
+            edit1.name().setValue(uniqueString());
+            edit1.testId().setValue(testId);
+            edit1.setPrimaryKey(principal1.getPrimaryKey());
+            srv.persist(edit1);
+
+            AccPrincipalEdit edit1r1 = srv.retrieve(AccPrincipalEdit.class, principal1.getPrimaryKey());
+
+            Assert.assertEquals("Data retrieved using JoinTable", 1, edit1r1.subjects().size());
+            Assert.assertTrue("Inserted value present", edit1r1.subjects().contains(subject1));
+
+            // Update tabe now
+            edit1r1.subjects().add(subject2);
+            srv.persist(edit1r1);
+
+            AccPrincipalEdit edit1r2 = srv.retrieve(AccPrincipalEdit.class, principal1.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", 2, edit1r2.subjects().size());
+            Assert.assertTrue("Inserted value present", edit1r2.subjects().contains(subject1));
+            Assert.assertTrue("Inserted value present", edit1r2.subjects().contains(subject2));
+        }
+    }
 
     public void testBackreferencesRead() {
         // Setup data

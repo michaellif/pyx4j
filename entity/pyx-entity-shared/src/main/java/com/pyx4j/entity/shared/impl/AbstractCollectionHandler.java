@@ -75,6 +75,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
             if ((data != null) && (data.get(getFieldName()) == AttachLevel.Detached)) {
                 data.put(getFieldName(), null);
             }
+            break;
         case Detached:
             getOwner().setMemberValue(getFieldName(), AttachLevel.Detached);
             break;

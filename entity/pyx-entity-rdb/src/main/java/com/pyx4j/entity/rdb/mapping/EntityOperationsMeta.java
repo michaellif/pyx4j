@@ -308,8 +308,11 @@ public class EntityOperationsMeta {
                             }
                         } else {
                             if (joinColumn.value() == ColumnId.class) {
-                                ownerMemberMeta = jmemberMeta;
-                                break;
+                                if ((rootEntityMeta.getEntityClass().isAssignableFrom(jmemberMeta.getObjectClass()))
+                                        || (rootEntityClass.isAssignableFrom(jmemberMeta.getObjectClass()))) {
+                                    ownerMemberMeta = jmemberMeta;
+                                    break;
+                                }
                             }
                         }
                     }

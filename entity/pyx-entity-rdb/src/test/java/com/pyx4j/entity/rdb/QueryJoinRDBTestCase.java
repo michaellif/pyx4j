@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -224,28 +225,29 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             // Test join
             Assert.assertEquals("result set size", 1, data.size());
             // Test data retrieval with JoinTable
-            Assert.assertEquals("Data retrieved using JoinTable", 1, data.get(0).access().size());
-            Assert.assertEquals("Data retrieved using JoinTable", principal1, data.get(0).access().iterator().next());
+            Assert.assertEquals("Data retrieved using JoinTable", AttachLevel.Detached, data.get(0).access().getAttachLevel());
+            boolean ok = true;
+            try {
+                data.get(0).access().size();
+                ok = false;
+            } catch (Throwable e) {
+            }
+            Assert.assertEquals("Data retrieved using JoinTable", true, ok);
         }
 
-        // Test update with JoinTable
-        AccSubject subject1r2 = srv.retrieve(AccSubject.class, subject1.getPrimaryKey());
-        subject1r2.access().add(principal2);
-        srv.persist(subject1r2);
-
-        // Verify data updated
+        // Verify data retrival for second table
         {
-            AccSubject subject1r3 = srv.retrieve(AccSubject.class, subject1.getPrimaryKey());
-            Assert.assertEquals("Data retrieved using JoinTable", 2, subject1r3.access().size());
-            Assert.assertTrue("Inserted value present", subject1r3.access().contains(principal2));
-            Assert.assertTrue("Original value present", subject1r3.access().contains(principal1));
-
-            // Verify join table itself update
-            EntityQueryCriteria<AccSubjectPrincipal> criteria = EntityQueryCriteria.create(AccSubjectPrincipal.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().subject(), subject1r3));
-
-            List<AccSubjectPrincipal> data = srv.query(criteria);
-            Assert.assertEquals("result set size", 2, data.size());
+            EntityQueryCriteria<AccPrincipal> criteria = EntityQueryCriteria.create(AccPrincipal.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().subjects(), subject1));
+            AccPrincipal principal1r1 = srv.retrieve(criteria);
+            Assert.assertEquals("Data retrieved using JoinTable", 1, principal1r1.subjects().size());
+            Assert.assertTrue("Inserted value present", principal1r1.subjects().contains(subject1));
+        }
+        {
+            AccPrincipal principal1r2 = srv.retrieve(AccPrincipal.class, subject1.getPrimaryKey());
+            Assert.assertEquals("Data retrieved using JoinTable", 1, principal1r2.subjects().size());
+            Assert.assertTrue("Inserted value present", principal1r2.subjects().contains(subject1));
         }
     }
 }

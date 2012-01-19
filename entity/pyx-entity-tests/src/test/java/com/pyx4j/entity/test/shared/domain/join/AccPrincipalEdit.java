@@ -34,7 +34,7 @@ public interface AccPrincipalEdit extends IEntity {
 
     IPrimitive<String> name();
 
-    @JoinTable(AccSubjectPrincipal.class)
+    @JoinTable(value = AccSubjectPrincipal.class, cascade = true)
     @Owned
     ISet<AccSubject> subjects();
 
