@@ -17,33 +17,24 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityHyperlink;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -84,7 +75,8 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().propertyCode(), "5em"),
-                    new EntityFolderColumnDescriptor(proto().info(), "30em")                    
+                    new EntityFolderColumnDescriptor(proto().info().name(), "10em"),                    
+                    new EntityFolderColumnDescriptor(proto().info().type(), "20em")
             );//@formatter:on
         }
 
@@ -92,41 +84,8 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof Building) {
                 return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
-                    @SuppressWarnings("rawtypes")
-                    @Override
-                    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?, ?> comp = null;
-                        if (column.getObject() instanceof IEntity) {
-                            if (isEditable()) {
-                                comp = inject(proto().getMember(column.getObject().getPath()), new CEntityLabel());
-                            } else {
-                                comp = inject(proto().getMember(column.getObject().getPath()), new CEntityHyperlink(new Command() {
-                                    @Override
-                                    public void execute() {
-                                        AppSite.getPlaceController().goTo(
-                                                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Building.class)
-                                                        .formViewerPlace(getValue().id().getValue()));
-                                    }
-                                }));
-                            }
-                        } else if (column.getObject() instanceof IPrimitive) {
-                            if (isEditable()) {
-                                comp = inject(proto().getMember(column.getObject().getPath()), new CLabel());
-                            } else {
-                                comp = inject(proto().getMember(column.getObject().getPath()), new CHyperlink(new Command() {
-                                    @Override
-                                    public void execute() {
-                                        AppSite.getPlaceController().goTo(
-                                                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Building.class)
-                                                        .formViewerPlace(getValue().id().getValue()));
-                                    }
-                                }));
-                            }
-                        } else {
-                            comp = super.createCell(column);
-                        }
-
-                        return comp;
+                    {
+                        setViewable(true);
                     }
                 };
             } else {
