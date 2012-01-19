@@ -13,6 +13,8 @@
  */
 package com.propertyvista.admin.server.qa;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -87,11 +89,19 @@ public class PmcDataBuildingsReportDeferredProcess extends SearchReportDeferredP
 
     private void exportPmcBuilding(Pmc pmc, Building building, Floorplan floorplan) {
         super.reportEntity(pmc);
-        formater.cell(building.info().address().province().name().getStringView());
-        formater.cell(building.info().address().city().getStringView());
+        formater.cell(escapeURI(building.info().address().province().name().getStringView()));
+        formater.cell(escapeURI(building.info().address().city().getStringView()));
         formater.cell(building.getPrimaryKey());
         formater.cell(building.propertyCode().getStringView());
         formater.cell(floorplan.getPrimaryKey());
         formater.newRow();
+    }
+
+    private String escapeURI(String value) {
+        try {
+            return URLEncoder.encode(value, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            throw new Error(e);
+        }
     }
 }
