@@ -46,6 +46,9 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends Generi
         callback.onSuccess(entity);
     }
 
+    /**
+     * This is empty method. Don't need to call it in Override
+     */
     protected void enhanceSave(DBO entity) {
     }
 

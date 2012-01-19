@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.propertyvista.crm.rpc.VistaCrmBehaviorDTOCoverter;
 import com.propertyvista.crm.rpc.services.CrmRoleCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.security.CrmRole;
@@ -21,6 +22,20 @@ public class CrmRoleCrudServiceImpl extends GenericCrudServiceImpl<CrmRole> impl
 
     public CrmRoleCrudServiceImpl() {
         super(CrmRole.class);
+    }
+
+    @Override
+    protected void enhanceSave(CrmRole entity) {
+        entity.behaviors().clear();
+        VistaCrmBehaviorDTOCoverter.toDBO(entity.permissions(), entity.behaviors());
+    }
+
+    @Override
+    protected void enhanceRetrieve(CrmRole entity, boolean fromList) {
+        if (!fromList) {
+            entity.permissions().clear();
+            entity.permissions().addAll(VistaCrmBehaviorDTOCoverter.toDTO(entity.behaviors()));
+        }
     }
 
 }

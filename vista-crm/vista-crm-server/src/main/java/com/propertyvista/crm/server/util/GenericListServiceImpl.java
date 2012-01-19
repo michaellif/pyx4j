@@ -33,6 +33,9 @@ public abstract class GenericListServiceImpl<DBO extends IEntity> implements Abs
         this.dboClass = dboClass;
     }
 
+    /**
+     * This is empty method. Don't need to call it in Override
+     */
     protected void enhanceRetrieve(DBO entity, boolean fromList) {
     }
 
