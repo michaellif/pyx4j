@@ -46,7 +46,7 @@ public class FeatureTypeLister extends ListerBase<ServiceItemType> {
             }
         }));
 
-        List<ColumnDescriptor<ServiceItemType>> columnDescriptors = new ArrayList<ColumnDescriptor<ServiceItemType>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().featureType(), true));
         setColumnDescriptors(columnDescriptors);

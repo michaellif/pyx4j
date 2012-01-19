@@ -28,7 +28,7 @@ public class LockerLister extends ListerBase<Locker> {
     public LockerLister() {
         super(Locker.class, CrmSiteMap.Properties.Locker.class, false, true);
 
-        List<ColumnDescriptor<Locker>> columnDescriptors = new ArrayList<ColumnDescriptor<Locker>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         setColumnDescriptors(columnDescriptors);

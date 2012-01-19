@@ -123,19 +123,18 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
             super(Building.class, true, alreadySelected, i18n.tr("Select Buildings"));
         }
 
-        @SuppressWarnings("unchecked")
         @Override
-        protected List<ColumnDescriptor<Building>> defineColumnDescriptors() {
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off                    
-                    new MemberColumnDescriptor.Builder(proto().propertyCode()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().complex()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().propertyManager()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().marketing().name()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().info().name()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().info().type()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().info().address().city()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().info().address().province()).<Building>build(),
-                    new MemberColumnDescriptor.Builder(proto().info().address().country()).<Building>build()
+                    new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().complex()).build(),
+                    new MemberColumnDescriptor.Builder(proto().propertyManager()).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketing().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().city()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().province()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().country()).build()
             ); //@formatter:on
         }
 

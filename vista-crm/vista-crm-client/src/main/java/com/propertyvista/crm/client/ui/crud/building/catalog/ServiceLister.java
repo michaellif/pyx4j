@@ -29,7 +29,7 @@ public class ServiceLister extends ListerBase<Service> {
         super(Service.class, CrmSiteMap.Properties.Service.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        List<ColumnDescriptor<Service>> columnDescriptors = new ArrayList<ColumnDescriptor<Service>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         setColumnDescriptors(columnDescriptors);

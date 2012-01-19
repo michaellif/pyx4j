@@ -23,13 +23,12 @@ import com.pyx4j.entity.shared.Path;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 
 public class ColumnDescriptorConverter {
-    public static <E extends IEntity> ColumnDescriptor<E> columnDescriptorFromEntity(Class<E> describedEntityClass,
-            ColumnDescriptorEntity columnDescriptorEntity) {
+    public static <E extends IEntity> ColumnDescriptor columnDescriptorFromEntity(Class<E> describedEntityClass, ColumnDescriptorEntity columnDescriptorEntity) {
         if (columnDescriptorEntity != null && !columnDescriptorEntity.isNull()) {
             IEntity proto = EntityFactory.getEntityPrototype(describedEntityClass);
             IObject<?> member = proto.getMember(new Path(columnDescriptorEntity.propertyPath().getValue()));
 
-            ColumnDescriptor<E> columnDescriptor = new MemberColumnDescriptor.Builder(member).title(columnDescriptorEntity.title().getValue())
+            ColumnDescriptor columnDescriptor = new MemberColumnDescriptor.Builder(member).title(columnDescriptorEntity.title().getValue())
                     .sortable(columnDescriptorEntity.sortable().getValue()).width(columnDescriptorEntity.width().getValue())
                     .wordWrap(columnDescriptorEntity.wordWrap().getValue()).visible(columnDescriptorEntity.visiblily().getValue()).build();
 
@@ -39,7 +38,7 @@ public class ColumnDescriptorConverter {
         }
     }
 
-    public static <E extends IEntity> ColumnDescriptorEntity columnDescriptorToEntity(ColumnDescriptor<E> columnDescriptor, ColumnDescriptorEntity entity) {
+    public static <E extends IEntity> ColumnDescriptorEntity columnDescriptorToEntity(ColumnDescriptor columnDescriptor, ColumnDescriptorEntity entity) {
         assert entity != null;
 
         entity.propertyPath().setValue(columnDescriptor.getColumnName());

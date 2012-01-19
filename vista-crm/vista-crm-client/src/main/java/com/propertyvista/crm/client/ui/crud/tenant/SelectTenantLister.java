@@ -28,7 +28,7 @@ public class SelectTenantLister extends BasicLister<Tenant> {
         super(Tenant.class);
         setHasCheckboxColumn(true);
 
-        List<ColumnDescriptor<Tenant>> columnDescriptors = new ArrayList<ColumnDescriptor<Tenant>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().birthDate(), true));

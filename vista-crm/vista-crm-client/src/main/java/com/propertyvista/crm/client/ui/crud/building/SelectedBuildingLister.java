@@ -32,7 +32,7 @@ public class SelectedBuildingLister extends ListerBase<Building> {
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(5);
 
-        List<ColumnDescriptor<Building>> columnDescriptors = new ArrayList<ColumnDescriptor<Building>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().country(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().province(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().address().city(), true));

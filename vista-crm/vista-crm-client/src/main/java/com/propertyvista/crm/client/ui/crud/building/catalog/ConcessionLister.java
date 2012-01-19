@@ -33,7 +33,7 @@ public class ConcessionLister extends ListerBase<Concession> {
         super(Concession.class, CrmSiteMap.Properties.Concession.class, false, !readOnly);
         getDataTablePanel().setFilteringEnabled(!readOnly);
 
-        List<ColumnDescriptor<Concession>> columnDescriptors = new ArrayList<ColumnDescriptor<Concession>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().term(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().value(), true));

@@ -104,7 +104,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         });
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
-            public void onChange(ColumnDescriptor<E> column) {
+            public void onChange(ColumnDescriptor column) {
                 for (ColumnDescriptorEntity entity : getMetadata().columnDescriptors()) {
                     if (entity.propertyPath().getValue().equals(column.getColumnName())) {
                         getMetadata().sortAscending().setValue(dataTablePanel.getDataTableModel().isSortAscending());
@@ -120,7 +120,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         dataTablePanel.getDataTable().addColumnSelectionChangeHandler(new DataTable.ColumnSelectionHandler() {
             @Override
             public void onColumSelectionChanged() {
-                Iterator<ColumnDescriptor<E>> columnDescriptors = dataTablePanel.getDataTableModel().getColumnDescriptors().iterator();
+                Iterator<ColumnDescriptor> columnDescriptors = dataTablePanel.getDataTableModel().getColumnDescriptors().iterator();
                 Iterator<ColumnDescriptorEntity> columnDescriptorEntities = getMetadata().columnDescriptors().iterator();
                 while (columnDescriptors.hasNext()) {
                     assert columnDescriptorEntities.hasNext() : "DataTable's column descriptors and gadget metadata's column descriptor arrays don't match";
@@ -164,7 +164,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
      */
     public abstract void populatePage(int pageNumber);
 
-    public abstract List<ColumnDescriptor<E>> defineColumnDescriptors();
+    public abstract List<ColumnDescriptor> defineColumnDescriptors();
 
     /**
      * Actions, Override in derived class for your own select item procedure.
@@ -182,7 +182,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
      * @return
      */
     // FIXME get rid of this
-    protected final ColumnDescriptor<E> col(IObject<?> member, String title, boolean visible) {
+    protected final ColumnDescriptor col(IObject<?> member, String title, boolean visible) {
         if (title == null) {
             return ColumnDescriptorFactory.createColumnDescriptor(proto(), member, visible);
         } else {
@@ -190,31 +190,31 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         }
     }
 
-    protected final ColumnDescriptor<E> col(IObject<?> member, boolean visible) {
+    protected final ColumnDescriptor col(IObject<?> member, boolean visible) {
         return col(member, null, visible);
     }
 
-    protected final ColumnDescriptor<E> colv(IObject<?> member) {
+    protected final ColumnDescriptor colv(IObject<?> member) {
         return col(member, true);
     }
 
-    protected final ColumnDescriptor<E> colv(IObject<?> member, String title) {
+    protected final ColumnDescriptor colv(IObject<?> member, String title) {
         return col(member, title, true);
     }
 
     /** Create invisible (hidden) column */
-    protected final ColumnDescriptor<E> colh(IObject<?> member) {
+    protected final ColumnDescriptor colh(IObject<?> member) {
         return col(member, false);
     }
 
     /** Create invisible (hidden) column */
-    protected final ColumnDescriptor<E> colh(IObject<?> member, String title) {
+    protected final ColumnDescriptor colh(IObject<?> member, String title) {
         return col(member, title, false);
     }
 
     @SuppressWarnings("unchecked")
-    private List<ColumnDescriptor<E>> fetchColumnDescriptorsFromSettings() {
-        List<ColumnDescriptor<E>> columnDescriptors = new ArrayList<ColumnDescriptor<E>>();
+    private List<ColumnDescriptor> fetchColumnDescriptorsFromSettings() {
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         if (getMetadata().columnDescriptors().isEmpty()) {
             // normally this should happen only once in gadget's lifetime
             // we do it here because of two reasons:
@@ -238,7 +238,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     }
 
     private void storeDefaultColumnDescriptorsToSettings(GADGET_TYPE settings) {
-        for (ColumnDescriptor<E> columnDescriptor : defineColumnDescriptors()) {
+        for (ColumnDescriptor columnDescriptor : defineColumnDescriptors()) {
             ColumnDescriptorEntity entity = EntityFactory.create(ColumnDescriptorEntity.class);
             settings.columnDescriptors().add(ColumnDescriptorConverter.columnDescriptorToEntity(columnDescriptor, entity));
         }

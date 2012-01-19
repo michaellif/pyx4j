@@ -29,7 +29,7 @@ public class TenantScreeningLister extends ListerBase<TenantScreening> {
         super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
-        List<ColumnDescriptor<TenantScreening>> columnDescriptors = new ArrayList<ColumnDescriptor<TenantScreening>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().createDate(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().driversLicense(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().secureIdentifier(), true));

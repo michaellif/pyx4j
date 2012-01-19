@@ -28,7 +28,7 @@ public class ParkingSpotLister extends ListerBase<ParkingSpot> {
     public ParkingSpotLister() {
         super(ParkingSpot.class, CrmSiteMap.Properties.ParkingSpot.class, false, true);
 
-        List<ColumnDescriptor<ParkingSpot>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingSpot>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         setColumnDescriptors(columnDescriptors);

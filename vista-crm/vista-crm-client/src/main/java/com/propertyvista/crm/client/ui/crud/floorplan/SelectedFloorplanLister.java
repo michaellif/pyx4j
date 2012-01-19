@@ -29,7 +29,7 @@ public class SelectedFloorplanLister extends ListerBase<Floorplan> {
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(8);
 
-        List<ColumnDescriptor<Floorplan>> columnDescriptors = new ArrayList<ColumnDescriptor<Floorplan>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), false));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().marketingName(), true));
 

@@ -33,7 +33,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<AptUnitDTO>> columnDescriptors = Arrays.asList((ColumnDescriptor<AptUnitDTO>[]) new ColumnDescriptor[] {
+        List<ColumnDescriptor> columnDescriptors = Arrays.asList(new ColumnDescriptor[] {
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().buildingCode(), true),
                 ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().name(), i18n.tr("Floorplan Name"), true),
                 ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().marketingName(), i18n.tr("Floorplan Marketing Name"), true),

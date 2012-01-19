@@ -29,7 +29,7 @@ public class UnitItemLister extends ListerBase<AptUnitItem> {
         super(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        List<ColumnDescriptor<AptUnitItem>> columnDescriptors = new ArrayList<ColumnDescriptor<AptUnitItem>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().flooringType(), true));

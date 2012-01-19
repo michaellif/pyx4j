@@ -29,7 +29,7 @@ public class ParkingLister extends ListerBase<ParkingDTO> {
         super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        List<ColumnDescriptor<ParkingDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ParkingDTO>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().levels(), true));

@@ -89,9 +89,8 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
         }
 
         //@formatter:off
-        @SuppressWarnings("unchecked")
         @Override    
-        public List<ColumnDescriptor<BuildingDTO>> defineColumnDescriptors() {
+        public List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(
                     colh(proto().complex()),
                     colv(proto().propertyCode()),

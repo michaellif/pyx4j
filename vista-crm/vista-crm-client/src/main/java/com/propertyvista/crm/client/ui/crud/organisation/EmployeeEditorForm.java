@@ -303,10 +303,10 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         @SuppressWarnings("unchecked")
         @Override
-        protected List<ColumnDescriptor<Portfolio>> defineColumnDescriptors() {
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().name()).<Portfolio>build(),
-                    new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).<Portfolio>build()                    
+                    new MemberColumnDescriptor.Builder(proto().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build()                    
             ); //@formatter:on
         }
 
@@ -335,13 +335,13 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         @SuppressWarnings("unchecked")
         @Override
-        protected List<ColumnDescriptor<Employee>> defineColumnDescriptors() {
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off                    
-                    new MemberColumnDescriptor.Builder(proto().title()).<Employee>build(),
-                    new MemberColumnDescriptor.Builder(proto().name().namePrefix()).<Employee>build(),
-                    new MemberColumnDescriptor.Builder(proto().name().firstName()).<Employee>build(),
-                    new MemberColumnDescriptor.Builder(proto().name().lastName()).<Employee>build(),
-                    new MemberColumnDescriptor.Builder(proto().name().nameSuffix()).<Employee>build()
+                    new MemberColumnDescriptor.Builder(proto().title()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().namePrefix()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().firstName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().lastName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().name().nameSuffix()).build()
             ); //@formatter:on
         }
 

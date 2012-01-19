@@ -28,7 +28,7 @@ public class ShowingLister extends ListerBase<Showing> {
     public ShowingLister() {
         super(Showing.class, Marketing.Showing.class, false, true);
 
-        List<ColumnDescriptor<Showing>> columnDescriptors = new ArrayList<ColumnDescriptor<Showing>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().building(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().unit(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));

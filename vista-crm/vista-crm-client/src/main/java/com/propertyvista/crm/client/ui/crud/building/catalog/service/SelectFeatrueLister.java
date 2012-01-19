@@ -30,7 +30,7 @@ public class SelectFeatrueLister extends ListerBase<Feature> {
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);
 
-        List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().isMandatory(), true));

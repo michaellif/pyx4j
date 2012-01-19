@@ -29,7 +29,7 @@ public class AppointmentLister extends ListerBase<Appointment> {
         super(Appointment.class, Marketing.Appointment.class, false, true);
 
         @SuppressWarnings("unchecked")
-        List<ColumnDescriptor<Appointment>> columnDescriptors = Arrays.asList((ColumnDescriptor<Appointment>[]) new ColumnDescriptor[] {
+        List<ColumnDescriptor> columnDescriptors = Arrays.asList(new ColumnDescriptor[] {
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().date(), true),
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().time(), true),
                 ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().agent(), true),

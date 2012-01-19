@@ -28,7 +28,7 @@ public class ComplexLister extends ListerBase<ComplexDTO> {
     public ComplexLister() {
         super(ComplexDTO.class, CrmSiteMap.Properties.Complex.class, false, true);
 
-        List<ColumnDescriptor<ComplexDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<ComplexDTO>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         setColumnDescriptors(columnDescriptors);
     }

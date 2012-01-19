@@ -37,7 +37,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
 
     private static final I18n i18n = I18n.get(PolicyListerBase.class);
 
-    protected List<ColumnDescriptor<P>> defaultColumns;
+    protected List<ColumnDescriptor> defaultColumns;
 
     @SuppressWarnings("unchecked")
     public PolicyListerBase(Class<P> clazz, Class<? extends CrudAppPlace> itemOpenPlaceClass) {
@@ -54,10 +54,10 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         }));
 
         defaultColumns = Arrays.asList(//@formatter:off
-                 new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).<P>build(),
-                 new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).<P>build()
+                 new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                 new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
         );//@formatter:on
-        setColumnDescriptors(new LinkedList<ColumnDescriptor<P>>());
+        setColumnDescriptors(new LinkedList<ColumnDescriptor>());
     }
 
     /**
@@ -65,8 +65,8 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
      * are added implicitly, so there's no need to `set' them.
      */
     @Override
-    public void setColumnDescriptors(List<ColumnDescriptor<P>> columnDescriptors) {
-        List<ColumnDescriptor<P>> columns = new LinkedList<ColumnDescriptor<P>>(defaultColumns);
+    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
+        List<ColumnDescriptor> columns = new LinkedList<ColumnDescriptor>(defaultColumns);
         columns.addAll(columnDescriptors);
         super.setColumnDescriptors(columns);
     }
@@ -76,10 +76,10 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
      * are added implicitly, so there's no need to `set' them.
      */
     @Override
-    public void setColumnDescriptors(ColumnDescriptor<?>... columnDescriptors) {
-        List<ColumnDescriptor<?>> columns = new LinkedList<ColumnDescriptor<?>>(defaultColumns);
+    public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
+        List<ColumnDescriptor> columns = new LinkedList<ColumnDescriptor>(defaultColumns);
         columns.addAll(Arrays.asList(columnDescriptors));
-        super.setColumnDescriptors(columns.toArray(new ColumnDescriptor<?>[columns.size()]));
+        super.setColumnDescriptors(columns.toArray(new ColumnDescriptor[columns.size()]));
     };
 
     public void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {

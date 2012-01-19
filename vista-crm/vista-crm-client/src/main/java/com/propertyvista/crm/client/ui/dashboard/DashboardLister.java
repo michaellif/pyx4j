@@ -47,7 +47,7 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
             }
         }));
 
-        List<ColumnDescriptor<DashboardMetadata>> columnDescriptors = new ArrayList<ColumnDescriptor<DashboardMetadata>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));

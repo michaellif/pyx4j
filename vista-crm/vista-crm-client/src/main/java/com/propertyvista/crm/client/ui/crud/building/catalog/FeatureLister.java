@@ -29,7 +29,7 @@ public class FeatureLister extends ListerBase<Feature> {
         super(Feature.class, CrmSiteMap.Properties.Feature.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        List<ColumnDescriptor<Feature>> columnDescriptors = new ArrayList<ColumnDescriptor<Feature>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().isMandatory(), true));

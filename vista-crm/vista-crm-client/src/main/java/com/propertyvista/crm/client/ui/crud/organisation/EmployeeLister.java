@@ -28,7 +28,7 @@ public class EmployeeLister extends ListerBase<EmployeeDTO> {
     public EmployeeLister() {
         super(EmployeeDTO.class, CrmSiteMap.Organization.Employee.class, false, true);
 
-        List<ColumnDescriptor<EmployeeDTO>> columnDescriptors = new ArrayList<ColumnDescriptor<EmployeeDTO>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().title(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name().firstName(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name().lastName(), true));

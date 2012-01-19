@@ -237,10 +237,9 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             return false;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         //@formatter:off
-        public List<ColumnDescriptor<UnitAvailabilityStatusDTO>> defineColumnDescriptors() {
+        public List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(
                     col(proto().propertyCode(), true),
                     col(proto().buildingName(), false),

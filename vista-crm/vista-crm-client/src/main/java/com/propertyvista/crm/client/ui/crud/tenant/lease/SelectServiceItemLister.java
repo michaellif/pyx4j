@@ -29,7 +29,7 @@ public class SelectServiceItemLister extends ListerBase<ServiceItem> {
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(5);
 
-        List<ColumnDescriptor<ServiceItem>> columnDescriptors = new ArrayList<ColumnDescriptor<ServiceItem>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().price(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));

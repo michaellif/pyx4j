@@ -30,7 +30,7 @@ public class SelectConcessionLister extends ListerBase<Concession> {
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);
 
-        List<ColumnDescriptor<Concession>> columnDescriptors = new ArrayList<ColumnDescriptor<Concession>>();
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().term(), true));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().value(), true));

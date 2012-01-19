@@ -55,9 +55,8 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         }
 
         //@formatter:off
-        @SuppressWarnings("unchecked")
         @Override
-        public List<ColumnDescriptor<ArrearsSummary>> defineColumnDescriptors() {
+        public List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(
                     colv(proto().thisMonth(), i18n.tr("Total this month")),
                     colv(proto().monthAgo(), i18n.tr("Total 0-30")),
