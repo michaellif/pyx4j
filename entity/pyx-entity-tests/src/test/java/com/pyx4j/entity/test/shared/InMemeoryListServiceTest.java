@@ -29,11 +29,32 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityCriteriaFilter;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
 public class InMemeoryListServiceTest extends InitializerTestBase {
+
+    private void assertCriteria(String message, Employee input, Criterion criterion, boolean accepted) {
+        EntityListCriteria<Employee> criteria = EntityListCriteria.create(Employee.class);
+        criteria.add(criterion);
+
+        EntityCriteriaFilter<Employee> filter = new EntityCriteriaFilter<Employee>(criteria);
+        assertEquals(message, accepted, filter.accept(input));
+    }
+
+    public void testCriteria() {
+
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("Bob");
+        assertCriteria("Wild card match", emp, PropertyCriterion.like(emp.firstName(), "B*"), true);
+        assertCriteria("Wild card do not math", emp, PropertyCriterion.like(emp.firstName(), "o*"), false);
+        assertCriteria("No Wild card math", emp, PropertyCriterion.like(emp.firstName(), "o"), true);
+        assertCriteria("No Wild card math", emp, PropertyCriterion.like(emp.firstName(), "b"), true);
+
+    }
 
     public void testCriteriaAndSort() {
         final List<Employee> emps = new Vector<Employee>();

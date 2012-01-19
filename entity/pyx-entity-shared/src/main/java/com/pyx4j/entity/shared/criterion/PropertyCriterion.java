@@ -32,6 +32,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @SuppressWarnings("serial")
 public class PropertyCriterion implements Criterion {
 
+    public static final char WILDCARD_CHAR = '*';
+
     public static enum Restriction {
         LESS_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL, EQUAL, NOT_EQUAL, IN,
 
@@ -84,6 +86,10 @@ public class PropertyCriterion implements Criterion {
 
     public static PropertyCriterion eq(IObject<?> member, Serializable value) {
         return new PropertyCriterion(member.getPath().toString(), Restriction.EQUAL, value);
+    }
+
+    public static PropertyCriterion like(IObject<?> member, String value) {
+        return new PropertyCriterion(member.getPath().toString(), Restriction.RDB_LIKE, value);
     }
 
     @Deprecated

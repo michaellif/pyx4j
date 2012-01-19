@@ -78,8 +78,24 @@ public class EntityCriteriaFilter<E extends IEntity> implements Filter<E> {
             return !EqualsHelper.equals(value, propertyCriterion.getValue());
         case EQUAL:
             return EqualsHelper.equals(value, propertyCriterion.getValue());
+        case RDB_LIKE:
+            return wildCardMatches((String) (propertyCriterion.getValue()), value);
         default:
             throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
+        }
+    }
+
+    private static boolean hasLikeValue(String pattern) {
+        return pattern.contains(String.valueOf(PropertyCriterion.WILDCARD_CHAR));
+    }
+
+    private boolean wildCardMatches(String pattern, Object value) {
+        if (value == null) {
+            return false;
+        } else if (hasLikeValue(pattern)) {
+            return value.toString().matches(pattern.replace(String.valueOf(PropertyCriterion.WILDCARD_CHAR), ".*?") + ".*");
+        } else {
+            return value.toString().matches(".*?" + pattern + ".*");
         }
     }
 }
