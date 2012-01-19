@@ -42,8 +42,8 @@ import com.propertyvista.admin.client.mvp.MainActivityMapper;
 import com.propertyvista.admin.client.mvp.NavigActivityMapper;
 import com.propertyvista.admin.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.admin.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.admin.client.themes.VistaAdminPalette;
-import com.propertyvista.admin.client.themes.VistaAdminTheme;
+import com.propertyvista.admin.client.themes.AdminPalette;
+import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
 public class AdminPanel extends LayoutPanel {
@@ -54,7 +54,7 @@ public class AdminPanel extends LayoutPanel {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(new VistaAdminTheme(), new VistaAdminPalette());
+        StyleManger.installTheme(new AdminTheme(), new AdminPalette());
 
         setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
 

@@ -16,9 +16,9 @@ package com.propertyvista.admin.client.themes;
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.ThemeColors;
 
-public class VistaAdminPalette extends Palette {
+public class AdminPalette extends Palette {
 
-    public VistaAdminPalette() {
+    public AdminPalette() {
 
         putThemeColor(ThemeColors.object1, "#906b5b");
         putThemeColor(ThemeColors.object2, "#666666");

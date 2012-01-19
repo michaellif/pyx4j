@@ -22,7 +22,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.client.themes.VistaAdminTheme;
+import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
@@ -34,7 +34,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
     }
 
     public AdminViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
-        super(new AdminHeaderDecorator(), null, VistaAdminTheme.defaultHeaderHeight);
+        super(new AdminHeaderDecorator(), null, AdminTheme.defaultHeaderHeight);
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         ((AdminHeaderDecorator) getHeader()).setCaption(defaultCaption);
@@ -46,7 +46,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
                     presenter.edit();
                 }
             });
-            btnEdit.addStyleName(btnEdit.getStylePrimaryName() + VistaAdminTheme.StyleSuffixEx.EditButton);
+            btnEdit.addStyleName(btnEdit.getStylePrimaryName() + AdminTheme.StyleSuffixEx.EditButton);
 
             addToolbarItem(btnEdit);
         }

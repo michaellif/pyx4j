@@ -33,12 +33,13 @@ import com.propertyvista.admin.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.admin.client.ui.ShortCutsViewImpl;
 import com.propertyvista.admin.client.ui.components.AnchorButton;
 import com.propertyvista.admin.client.ui.decorations.AdminActionsBarDecorator;
+import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 
-public class VistaAdminTheme extends VistaTheme {
+public class AdminTheme extends VistaTheme {
 
     public static double defaultHeaderHeight = 3;
 
@@ -52,7 +53,7 @@ public class VistaAdminTheme extends VistaTheme {
         SaveButton, CancelButton, EditButton, ActionButton;
     }
 
-    public VistaAdminTheme() {
+    public AdminTheme() {
         initStyles();
     }
 
@@ -388,6 +389,15 @@ public class VistaAdminTheme extends VistaTheme {
         style = new Style(Selector.valueOf(prefix, AdminActionsBarDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("font-size", "1.3em");
+        addStyle(style);
+
+        prefix = AdminHeaderDecorator.DEFAULT_STYLE_PREFIX;
+        style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", ThemeColors.object1, 1);
+        style.addProperty("color", ThemeColors.object1, 0.1);
+        style.addProperty("padding", "0.3em 1em 0.4em 1em");
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("width", "100%");
         addStyle(style);
     }
 }
