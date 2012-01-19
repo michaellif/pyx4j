@@ -182,6 +182,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
                     ma.decisionReason().setValue("Decided according current application state and Equifax check results");
                 }
 
+                ma.createDate().setValue(summary.lease().createDate().getValue());
+
                 Persistence.service().persist(summary.lease());
                 Persistence.service().persist(ma.equifaxApproval().checkResultDetails());
                 Persistence.service().persist(ma.equifaxApproval());
