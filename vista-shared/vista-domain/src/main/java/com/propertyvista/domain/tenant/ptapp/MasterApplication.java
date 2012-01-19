@@ -20,7 +20,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -83,7 +84,7 @@ public interface MasterApplication extends IEntity {
     @Detached
     Lease lease();
 
-    @ReadOnly
+    @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
     EquifaxApproval equifaxApproval();

@@ -26,6 +26,8 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -51,7 +53,12 @@ public interface TenantScreening extends IEntity, ApplicationDocumentHolder {
     Tenant tenant();
 
     @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> screeningDate();
+    @Timestamp(Update.Created)
+    IPrimitive<LogicalDate> createDate();
+
+    @Format("MM/dd/yyyy")
+    @Timestamp(Update.Updated)
+    IPrimitive<LogicalDate> updateDate();
 
     /**
      * TODO I think that it is better to have a list here since some forms may ask for

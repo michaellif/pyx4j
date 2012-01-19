@@ -417,7 +417,8 @@ public class PTGenerator {
         tenantSummary.tenant().emergencyContacts().add(ec2);
 
         // Screening
-        tenantSummary.tenantScreening().screeningDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
+        tenantSummary.tenantScreening().createDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
+        tenantSummary.tenantScreening().updateDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
 

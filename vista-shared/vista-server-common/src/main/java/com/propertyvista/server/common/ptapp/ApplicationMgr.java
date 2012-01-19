@@ -16,7 +16,6 @@ package com.propertyvista.server.common.ptapp;
 import java.util.List;
 import java.util.Vector;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
@@ -87,7 +86,6 @@ public class ApplicationMgr {
         MasterApplication ma = EntityFactory.create(MasterApplication.class);
         ma.lease().set(lease);
         ma.status().setValue(MasterApplication.Status.Invited);
-        ma.createDate().setValue(new LogicalDate());
         Persistence.service().persist(ma);
 
         Persistence.service().retrieve(lease.tenants());
