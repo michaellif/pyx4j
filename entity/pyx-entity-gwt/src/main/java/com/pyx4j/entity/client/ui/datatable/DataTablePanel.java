@@ -209,7 +209,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         return dataTable.toString();
     }
 
-    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
         getDataTableModel().setColumnDescriptors(columnDescriptors);
     }
 

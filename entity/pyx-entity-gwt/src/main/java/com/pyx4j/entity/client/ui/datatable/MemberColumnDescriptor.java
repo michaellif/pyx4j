@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
+public class MemberColumnDescriptor extends ColumnDescriptor {
 
     protected MemberColumnDescriptor(Builder builder) {
         super(builder);
@@ -44,7 +44,7 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
     }
 
     @Override
-    public String convert(E entity) {
+    public String convert(IEntity entity) {
         Object value = entity.getMember(getColumnPath()).getValue();
         if (value == null) {
             return "";
@@ -73,19 +73,19 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
         }
 
         @Override
-        public <E extends IEntity> ColumnDescriptor<E> build() {
-            ColumnDescriptor<E> cd = null;
+        public ColumnDescriptor build() {
+            ColumnDescriptor cd = null;
             MemberMeta mm = member.getMeta();
             if (mm.isEntity()) {
-                cd = new MemberEntityColumnDescriptor<E>(this);
+                cd = new MemberEntityColumnDescriptor(this);
             } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
-                cd = new MemberEntityCollectionColumnDescriptor<E>(this);
+                cd = new MemberEntityCollectionColumnDescriptor(this);
             } else if (member instanceof IPrimitiveSet<?>) {
-                cd = new MemberCollectionColumnDescriptor<E>(this);
+                cd = new MemberCollectionColumnDescriptor(this);
             } else if (member instanceof IPrimitive<?>) {
-                cd = new MemberPrimitiveColumnDescriptor<E>(this);
+                cd = new MemberPrimitiveColumnDescriptor(this);
             } else {
-                cd = new MemberColumnDescriptor<E>(this);
+                cd = new MemberColumnDescriptor(this);
             }
             return cd;
         }

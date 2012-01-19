@@ -23,14 +23,14 @@ package com.pyx4j.entity.client.ui.datatable;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public class MemberPrimitiveColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
+public class MemberPrimitiveColumnDescriptor extends MemberColumnDescriptor {
 
     protected MemberPrimitiveColumnDescriptor(Builder builder) {
         super(builder);
     }
 
     @Override
-    public String convert(E entity) {
+    public String convert(IEntity entity) {
         return ((IPrimitive<?>) entity.getMember(getColumnPath())).getStringView();
     }
 

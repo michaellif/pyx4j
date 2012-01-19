@@ -26,12 +26,13 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class DataTableConverterAdapter<E extends IEntity> implements DataTableConverter<E> {
 
-    private final List<ColumnDescriptor<E>> columnDescriptors;
+    private final List<ColumnDescriptor> columnDescriptors;
 
-    public DataTableConverterAdapter(List<ColumnDescriptor<E>> columnDescriptors) {
+    public DataTableConverterAdapter(List<ColumnDescriptor> columnDescriptors) {
         this.columnDescriptors = columnDescriptors;
     }
 
+    @Override
     public String[][] convert(List<E> list) {
         String[][] data = new String[][] {};
         data = new String[list.size()][columnDescriptors.size()];

@@ -26,7 +26,7 @@ import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.entity.shared.IEntity;
 
-public class MemberCollectionColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
+public class MemberCollectionColumnDescriptor extends MemberColumnDescriptor {
 
     private static class StringConverter implements ToStringConverter<Object> {
 
@@ -47,7 +47,7 @@ public class MemberCollectionColumnDescriptor<E extends IEntity> extends MemberC
 
     @SuppressWarnings("unchecked")
     @Override
-    public String convert(E entity) {
+    public String convert(IEntity entity) {
         Object value = entity.getMember(getColumnPath());
         if (value == null) {
             return "";

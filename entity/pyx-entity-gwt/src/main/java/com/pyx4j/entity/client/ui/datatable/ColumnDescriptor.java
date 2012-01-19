@@ -22,7 +22,7 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class ColumnDescriptor<E> {
+public class ColumnDescriptor {
 
     public static final String DEFAULT_WIDTH = "100px";
 
@@ -97,7 +97,7 @@ public class ColumnDescriptor<E> {
     }
 
     //TODO should be abstract
-    public String convert(E entity) {
+    public String convert(IEntity entity) {
         return entity.toString();
     }
 
@@ -109,7 +109,7 @@ public class ColumnDescriptor<E> {
     @Override
     public boolean equals(Object obj) {
         if ((builder.columnName != null) && (obj instanceof ColumnDescriptor)) {
-            return builder.columnName.equals(((ColumnDescriptor<?>) obj).builder.columnName);
+            return builder.columnName.equals(((ColumnDescriptor) obj).builder.columnName);
         } else {
             return false;
         }
@@ -181,8 +181,8 @@ public class ColumnDescriptor<E> {
             return this;
         }
 
-        public <E extends IEntity> ColumnDescriptor<E> build() {
-            return new ColumnDescriptor<E>(this);
+        public ColumnDescriptor build() {
+            return new ColumnDescriptor(this);
         }
     }
 

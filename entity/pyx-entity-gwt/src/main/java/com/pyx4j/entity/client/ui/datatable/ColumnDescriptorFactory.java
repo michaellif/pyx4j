@@ -29,16 +29,16 @@ import com.pyx4j.entity.shared.IObject;
 @Deprecated
 public class ColumnDescriptorFactory {
 
-    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, boolean visible) {
+    public static <E extends IEntity> ColumnDescriptor createColumnDescriptor(E meta, IObject<?> member, boolean visible) {
         return new MemberColumnDescriptor.Builder(member, visible).build();
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width, boolean visible) {
+    public static <E extends IEntity> ColumnDescriptor createColumnDescriptor(E meta, IObject<?> member, String width, boolean visible) {
         return createColumnDescriptor(meta, member, width, false, visible);
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width, boolean wordWrap, boolean visible) {
-        ColumnDescriptor<E> cd = createColumnDescriptor(meta, member, visible);
+    public static <E extends IEntity> ColumnDescriptor createColumnDescriptor(E meta, IObject<?> member, String width, boolean wordWrap, boolean visible) {
+        ColumnDescriptor cd = createColumnDescriptor(meta, member, visible);
         cd.setWidth(width);
         cd.setWordWrap(wordWrap);
         return cd;
@@ -46,17 +46,17 @@ public class ColumnDescriptorFactory {
 
 // custom titled column creation:
 
-    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, boolean visible) {
+    public static <E extends IEntity> ColumnDescriptor createTitledColumnDescriptor(E meta, IObject<?> member, String title, boolean visible) {
         return createTitledColumnDescriptor(meta, member, title, ColumnDescriptor.DEFAULT_WIDTH, false, visible);
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean visible) {
+    public static <E extends IEntity> ColumnDescriptor createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean visible) {
         return createTitledColumnDescriptor(meta, member, title, width, false, visible);
     }
 
-    public static <E extends IEntity> ColumnDescriptor<E> createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean wordWrap,
+    public static <E extends IEntity> ColumnDescriptor createTitledColumnDescriptor(E meta, IObject<?> member, String title, String width, boolean wordWrap,
             boolean visible) {
-        ColumnDescriptor<E> cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member, visible);
+        ColumnDescriptor cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member, visible);
         cd.setColumnTitle(title);
         cd.setWidth(width);
         cd.setWordWrap(wordWrap);

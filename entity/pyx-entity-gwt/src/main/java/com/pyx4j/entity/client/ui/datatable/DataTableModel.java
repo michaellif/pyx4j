@@ -39,13 +39,13 @@ public class DataTableModel<E extends IEntity> {
 
     private final ArrayList<DataItem<E>> data = new ArrayList<DataItem<E>>();
 
-    private List<ColumnDescriptor<E>> columnDescriptors;
+    private List<ColumnDescriptor> columnDescriptors;
 
-    private ColumnDescriptor<E> sortColumn;
+    private ColumnDescriptor sortColumn;
 
     private boolean sortAscending = true;
 
-    private ColumnDescriptor<E> secondarySortColumn;
+    private ColumnDescriptor secondarySortColumn;
 
     private boolean secondarySortAscending = true;
 
@@ -65,22 +65,22 @@ public class DataTableModel<E extends IEntity> {
         data.clear();
     }
 
-    public List<ColumnDescriptor<E>> getColumnDescriptors() {
+    public List<ColumnDescriptor> getColumnDescriptors() {
         return columnDescriptors;
     }
 
-    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
         this.columnDescriptors = columnDescriptors;
 
     }
 
-    public ColumnDescriptor<E> getColumnDescriptor(int index) {
+    public ColumnDescriptor getColumnDescriptor(int index) {
         return columnDescriptors.get(index);
     }
 
-    public ColumnDescriptor<E> getVisibleColumnDescriptor(int index) {
+    public ColumnDescriptor getVisibleColumnDescriptor(int index) {
         int i = -1;
-        for (ColumnDescriptor<E> descriptor : columnDescriptors) {
+        for (ColumnDescriptor descriptor : columnDescriptors) {
             if (descriptor.isVisible()) {
                 i++;
                 if (index == i) {
@@ -128,11 +128,11 @@ public class DataTableModel<E extends IEntity> {
         }
     }
 
-    public ColumnDescriptor<E> getSortColumn() {
+    public ColumnDescriptor getSortColumn() {
         return sortColumn;
     }
 
-    public void setSortColumn(ColumnDescriptor<E> sortColumn) {
+    public void setSortColumn(ColumnDescriptor sortColumn) {
         this.sortColumn = sortColumn;
     }
 
@@ -144,11 +144,11 @@ public class DataTableModel<E extends IEntity> {
         this.sortAscending = ascending;
     }
 
-    public ColumnDescriptor<E> getSecondarySortColumn() {
+    public ColumnDescriptor getSecondarySortColumn() {
         return secondarySortColumn;
     }
 
-    public void setSecondarySortColumn(ColumnDescriptor<E> sortColumn) {
+    public void setSecondarySortColumn(ColumnDescriptor sortColumn) {
         this.secondarySortColumn = sortColumn;
     }
 
@@ -162,11 +162,11 @@ public class DataTableModel<E extends IEntity> {
 
     public List<Sort> getSortCriteria() {
         List<Sort> sorting = new ArrayList<Sort>(2);
-        ColumnDescriptor<E> primarySortColumn = getSortColumn();
+        ColumnDescriptor primarySortColumn = getSortColumn();
         if (primarySortColumn != null) {
             sorting.add(new Sort(primarySortColumn.getColumnName(), !isSortAscending()));
         }
-        ColumnDescriptor<E> secondarySortColumn = getSecondarySortColumn();
+        ColumnDescriptor secondarySortColumn = getSecondarySortColumn();
         if (secondarySortColumn != null) {
             sorting.add(new Sort(secondarySortColumn.getColumnName(), !isSecondarySortAscending()));
         }

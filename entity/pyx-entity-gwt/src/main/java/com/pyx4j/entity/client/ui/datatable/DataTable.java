@@ -337,7 +337,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             ++colIndex;
         }
 
-        for (ColumnDescriptor<E> columnDescriptor : model.getColumnDescriptors()) {
+        for (ColumnDescriptor columnDescriptor : model.getColumnDescriptors()) {
             if (!columnDescriptor.isVisible()) {
                 continue;
             }
@@ -380,7 +380,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         clearTable();
 
         List<DataItem<E>> data = model.getData();
-        List<ColumnDescriptor<E>> columnDescriptors = model.getColumnDescriptors();
+        List<ColumnDescriptor> columnDescriptors = model.getColumnDescriptors();
 
         int rowIndex = 1;
         for (DataItem<E> dataItem : data) {
@@ -396,7 +396,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 ++colIndex;
             }
 
-            for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
+            for (ColumnDescriptor columnDescriptor : columnDescriptors) {
 
                 if (!columnDescriptor.isVisible()) {
                     continue;
@@ -474,7 +474,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     protected void processHeaderClick(int column) {
 
         if (hasColumnClickSorting()) {
-            ColumnDescriptor<E> columnDescriptor = model.getVisibleColumnDescriptor(column);
+            ColumnDescriptor columnDescriptor = model.getVisibleColumnDescriptor(column);
             if (columnDescriptor.isSortable()) {
                 if (columnDescriptor.equals(model.getSortColumn())) {
                     model.setSortAscending(!model.isSortAscending());
@@ -551,7 +551,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
             FlowPanel panel = new FlowPanel();
 
-            for (ColumnDescriptor<E> column : model.getColumnDescriptors()) {
+            for (ColumnDescriptor column : model.getColumnDescriptors()) {
                 CheckBox columnCheck = new CheckBox(column.getColumnTitle());
                 columnCheck.setValue(column.isVisible());
                 columnChecksList.add(columnCheck);
@@ -618,7 +618,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     public interface SortChangeHandler<E> {
-        void onChange(ColumnDescriptor<E> column);
+        void onChange(ColumnDescriptor column);
     }
 
     public interface ColumnSelectionHandler {

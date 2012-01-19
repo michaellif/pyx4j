@@ -85,7 +85,7 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
 
     protected abstract String height();
 
-    protected abstract List<ColumnDescriptor<E>> defineColumnDescriptors();
+    protected abstract List<ColumnDescriptor> defineColumnDescriptors();
 
     protected abstract AbstractListService<E> getSelectService();
 

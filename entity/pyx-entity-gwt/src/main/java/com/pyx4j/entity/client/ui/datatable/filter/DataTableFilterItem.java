@@ -63,9 +63,9 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
     private final IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     private class FieldData {
-        private final ColumnDescriptor<E> cd;
+        private final ColumnDescriptor cd;
 
-        public FieldData(ColumnDescriptor<E> cd) {
+        public FieldData(ColumnDescriptor cd) {
             this.cd = cd;
         }
 
@@ -93,7 +93,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         });
 
         Collection<FieldData> fds = new ArrayList<FieldData>();
-        for (ColumnDescriptor<E> cd : parent.getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
+        for (ColumnDescriptor cd : parent.getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
             //only sortable columns can be searchable 
             if (cd.isSortable()) {
                 fds.add(new FieldData(cd));

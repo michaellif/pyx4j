@@ -111,7 +111,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
-            public void onChange(ColumnDescriptor<E> column) {
+            public void onChange(ColumnDescriptor column) {
                 obtain(getPageNumber());
             }
         });
@@ -189,12 +189,11 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     protected void onItemNew() {
     }
 
-    @SuppressWarnings("unchecked")
-    public void setColumnDescriptors(ColumnDescriptor<?>... columnDescriptors) {
-        dataTablePanel.setColumnDescriptors(Arrays.asList((ColumnDescriptor<E>[]) columnDescriptors));
+    public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
+        dataTablePanel.setColumnDescriptors(Arrays.asList(columnDescriptors));
     }
 
-    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
+    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
         dataTablePanel.setColumnDescriptors(columnDescriptors);
     }
 
@@ -302,7 +301,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         if (sorts != null) {
             boolean primarySet = false;
             for (Sort sort : sorts) {
-                for (ColumnDescriptor<E> column : dataTablePanel.getDataTableModel().getColumnDescriptors()) {
+                for (ColumnDescriptor column : dataTablePanel.getDataTableModel().getColumnDescriptors()) {
                     if (column.getColumnName().compareTo(sort.getPropertyName()) == 0) {
                         dataTablePanel.getDataTableModel().setSortAscending(!sort.isDescending());
                         if (!primarySet) {

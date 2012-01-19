@@ -22,14 +22,14 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class MemberEntityColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
+public class MemberEntityColumnDescriptor extends MemberColumnDescriptor {
 
     protected MemberEntityColumnDescriptor(Builder builder) {
         super(builder);
     }
 
     @Override
-    public String convert(E entity) {
+    public String convert(IEntity entity) {
         return ((IEntity) entity.getMember(getColumnPath())).getStringView();
     }
 }

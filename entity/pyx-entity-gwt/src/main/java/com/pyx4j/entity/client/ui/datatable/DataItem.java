@@ -44,7 +44,7 @@ public class DataItem<E extends IEntity> {
         this.checked = checked;
     }
 
-    public Object getCellValue(ColumnDescriptor<E> descriptor) {
+    public Object getCellValue(ColumnDescriptor descriptor) {
         return descriptor.convert(entity);
     }
 
