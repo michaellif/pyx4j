@@ -14,6 +14,8 @@
 package com.propertyvista.admin.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
 import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
@@ -26,5 +28,28 @@ public abstract class AdminEntityForm<E extends IEntity> extends CrudEntityForm<
 
     public AdminEntityForm(Class<E> rootClass, boolean viewMode) {
         super(rootClass, new AdminEditorsComponentFactory(), viewMode);
+    }
+
+    // decoration stuff:
+    protected class DecoratorBuilder extends WidgetDecorator.Builder {
+
+        public DecoratorBuilder(CComponent<?, ?> component) {
+            super(component);
+            readOnlyMode(!isEditable());
+        }
+
+        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentWidth(componentWidth);
+        }
+
+        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth, double labelWidth) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentWidth(componentWidth);
+            labelWidth(labelWidth);
+        }
+
     }
 }

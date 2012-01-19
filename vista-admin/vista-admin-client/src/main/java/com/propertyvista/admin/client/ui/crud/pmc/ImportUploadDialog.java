@@ -24,6 +24,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -33,7 +35,6 @@ import com.pyx4j.widgets.client.dialog.OkOptionText;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class ImportUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
@@ -84,10 +85,12 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
         form = new CEntityEditor<PmcImportDTO>(PmcImportDTO.class) {
             @Override
             public IsWidget createContent() {
-                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
-                main.add(uploadPanel);
-                main.add(inject(proto().type()), 10);
-                main.add(inject(proto().ignoreMissingMedia()), 10);
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, uploadPanel);
+                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().type())).componentWidth(10).build());
+                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().ignoreMissingMedia())).componentWidth(10).build());
                 return main;
             }
         };

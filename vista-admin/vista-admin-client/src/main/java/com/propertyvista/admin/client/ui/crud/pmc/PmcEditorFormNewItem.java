@@ -15,9 +15,10 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.PmcDTO;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 
 public class PmcEditorFormNewItem extends AdminEntityForm<PmcDTO> {
 
@@ -31,14 +32,14 @@ public class PmcEditorFormNewItem extends AdminEntityForm<PmcDTO> {
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().name()), 15);
-        main.add(inject(proto().dnsName()), 15);
-        main.add(inject(proto().email()), 15);
-        main.add(inject(proto().password()), 15);
+        int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 15).build());
 
-        main.setWidth("100%");
         return main;
     }
 

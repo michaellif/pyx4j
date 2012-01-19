@@ -32,7 +32,6 @@ import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.common.client.ui.decorations.VistaLineSeparator;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
@@ -42,7 +41,6 @@ import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmActionsBarDecorator;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
@@ -103,7 +101,6 @@ public class CrmTheme extends VistaTheme {
         initHeadersStyle();
 
         initSectionSeparatorStyle();
-        initVistaDecoratorsPanelStyles();
 
         initDashboardView();
         initDashboardReport();
@@ -122,16 +119,6 @@ public class CrmTheme extends VistaTheme {
 
         Style style = new Style("a");
         style.addProperty("color", "#333");
-        addStyle(style);
-
-        // editor forms:
-        style = new Style(Selector.valueOf(VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME));
-//        style.addProperty("color", ThemeColor.TEXT);
-//        style.addProperty("WebkitBoxSizing", "border-box");
-//        style.addProperty("MozBoxSizing", "border-box");
-//        style.addProperty("boxSizing", "border-box");
-//        style.addProperty("padding", "0.7em");
-//        style.addProperty("margin", "0.7em");
         addStyle(style);
     }
 
@@ -466,29 +453,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-    }
-
-    protected void initVistaDecoratorsPanelStyles() {
-        String prefix = VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME;
-
-        Style style = new Style(Selector.valueOf(prefix));
-
-        /*
-         * anchors within the class:
-         */
-        style = new Style(Selector.valueOf(prefix + " a:link, " + prefix + " a:visited, " + prefix + " a:active"));
-        style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColors.object1, 0.85);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix + " a:hover"));
-        style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        // internal scroll panel:
-        style = new Style(Selector.valueOf(CrmScrollPanel.DEFAULT_STYLE_PREFIX));
-        style.addProperty("padding", "1em");
-        addStyle(style);
     }
 
     protected void initDashboardView() {

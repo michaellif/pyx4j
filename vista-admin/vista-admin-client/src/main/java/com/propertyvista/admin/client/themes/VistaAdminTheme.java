@@ -33,12 +33,10 @@ import com.propertyvista.admin.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.admin.client.ui.ShortCutsViewImpl;
 import com.propertyvista.admin.client.ui.components.AnchorButton;
 import com.propertyvista.admin.client.ui.decorations.AdminActionsBarDecorator;
-import com.propertyvista.admin.client.ui.decorations.AdminScrollPanel;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 
 public class VistaAdminTheme extends VistaTheme {
 
@@ -97,7 +95,6 @@ public class VistaAdminTheme extends VistaTheme {
         initButtonStylesEx();
         initHeadersStyle();
 
-        initVistaDecoratorsPanelStyles();
         initTabPanelStyles();
         initDialogBoxStyles();
         initMenuBarStyles();
@@ -109,11 +106,6 @@ public class VistaAdminTheme extends VistaTheme {
 
         Style style = new Style("a");
         style.addProperty("color", "#333");
-        addStyle(style);
-
-        // editor forms:
-        style = new Style(Selector.valueOf(VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME));
-        style.addProperty("color", ThemeColors.foreground);
         addStyle(style);
     }
 
@@ -398,28 +390,4 @@ public class VistaAdminTheme extends VistaTheme {
         style.addProperty("font-size", "1.3em");
         addStyle(style);
     }
-
-    protected void initVistaDecoratorsPanelStyles() {
-        String prefix = VistaDecoratorsFlowPanel.DEFAULT_STYLE_NAME;
-
-        Style style = new Style(Selector.valueOf(prefix));
-
-        /*
-         * anchors within the class:
-         */
-        style = new Style(Selector.valueOf(prefix + " a:link, a:visited, a:active"));
-        style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColors.object1, 0.85);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix + " a:hover"));
-        style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        // internal scroll panel:
-        style = new Style(Selector.valueOf(AdminScrollPanel.DEFAULT_STYLE_PREFIX));
-        style.addProperty("padding", "1em");
-        addStyle(style);
-    }
-
 }

@@ -16,11 +16,9 @@ package com.propertyvista.admin.client.ui.administration;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
-import com.pyx4j.forms.client.ui.CBooleanLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.admin.client.ui.decorations.AdminScrollPanel;
-import com.propertyvista.common.client.ui.decorations.VistaDecoratorsFlowPanel;
 
 public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceState> {
 
@@ -34,17 +32,20 @@ public class MaintenanceEditorForm extends AdminEntityForm<SystemMaintenanceStat
 
     @Override
     public IsWidget createContent() {
-        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(!isEditable());
+        FormFlexPanel main = new FormFlexPanel();
 
-        main.add(inject(proto().inEffect(), new CBooleanLabel()), 10);
-        main.add(inject(proto().type()), 10);
-        main.add(inject(proto().externalConnections()), 10);
-        main.add(inject(proto().startDate()), 10);
-        main.add(inject(proto().startTime()), 10);
-        main.add(inject(proto().gracePeriod()), 10);
-        main.add(inject(proto().duration()), 10);
-        main.add(inject(proto().message()), 20);
+        int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inEffect()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().externalConnections()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startDate()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startTime()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().gracePeriod()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().duration()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().message()), 20).build());
 
-        return new AdminScrollPanel(main);
+        get(proto().inEffect()).setViewable(true);
+
+        return main;
     }
 }
