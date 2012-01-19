@@ -17,7 +17,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -25,6 +24,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.admin.client.themes.AdminTheme;

@@ -15,12 +15,12 @@ package com.propertyvista.admin.client.ui.crud;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;

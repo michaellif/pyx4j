@@ -61,16 +61,13 @@ public class AdminTheme extends VistaTheme {
         addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new DefaultWidgetsTheme());
-
         addTheme(new DefaultWidgetDecoratorTheme());
-
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
             protected ThemeColors getBackgroundColor() {
                 return ThemeColors.foreground;
             }
         });
-
         addTheme(new DefaultEntityFolderTheme() {
             @Override
             protected ThemeColors getBackgroundColor() {
@@ -78,13 +75,14 @@ public class AdminTheme extends VistaTheme {
             }
         });
 
-        addTheme(new DraggerMixin());
-        addTheme(new CrmSitePanelTheme());
         addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultSiteCrudPanelsTheme());
         addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new DefaultCCOmponentsTheme());
+
+        addTheme(new CrmSitePanelTheme());
+        addTheme(new DraggerMixin());
 
         initGeneralStyles();
         initBodyStyles();
