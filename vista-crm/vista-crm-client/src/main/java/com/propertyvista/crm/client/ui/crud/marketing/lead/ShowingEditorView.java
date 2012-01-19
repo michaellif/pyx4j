@@ -14,9 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
 
@@ -24,16 +22,7 @@ public interface ShowingEditorView extends IEditorView<Showing> {
 
     interface Presenter extends IEditorView.Presenter {
 
-        IListerView.Presenter getBuildingPresenter();
-
-        IListerView.Presenter getUnitPresenter();
-
-        void setSelectedBuilding(Building selected);
-
         void setSelectedUnit(AptUnit selected);
     }
 
-    IListerView<Building> getBuildingListerView();
-
-    IListerView<AptUnit> getUnitListerView();
 }
