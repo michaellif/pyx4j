@@ -22,7 +22,8 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -121,7 +122,7 @@ public interface Lease extends IEntity {
     // should be loaded in service when necessary!..
     IList<Document> documents();
 
-    @ReadOnly
+    @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
 }

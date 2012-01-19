@@ -17,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -70,7 +69,6 @@ public class LeadCrudServiceImpl extends GenericCrudServiceImpl<Lead> implements
             Persistence.service().merge(tenant);
 
             Lease lease = EntityFactory.create(Lease.class);
-            lease.createDate().setValue(new LogicalDate());
             lease.leaseID().setValue(RandomUtil.randomLetters(10));
             lease.type().setValue(RandomUtil.randomEnum(Service.Type.class));
             lease.status().setValue(Lease.Status.Draft);

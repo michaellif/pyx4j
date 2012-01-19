@@ -119,7 +119,7 @@ public class PTGenerator {
         summary.lease().expectedMoveOut().setValue(RandomUtil.randomLogicalDate(2013, 2013));
         summary.lease().signDate().setValue(RandomUtil.randomLogicalDate(2012, 2012));
 
-        summary.lease().createDate().setValue(new LogicalDate());
+        summary.lease().createDate().setValue(RandomUtil.randomLogicalDate(2010, 2012));
 
         //summary.charges().set(createCharges(summary, selectedUnit));
 
