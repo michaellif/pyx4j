@@ -18,7 +18,6 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -110,7 +109,6 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     private void updateAdjustments(ChargeItem chargeItem) {
         for (ChargeItemAdjustment cia : chargeItem.adjustments()) {
             if (cia.createdWhen().isNull()) {
-                cia.createdWhen().setValue(new LogicalDate());
                 cia.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
         }

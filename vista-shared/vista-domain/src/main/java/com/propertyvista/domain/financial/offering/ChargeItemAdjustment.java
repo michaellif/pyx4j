@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -85,5 +87,6 @@ public interface ChargeItemAdjustment extends IEntity {
 
     Employee createdBy();
 
+    @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createdWhen();
 }
