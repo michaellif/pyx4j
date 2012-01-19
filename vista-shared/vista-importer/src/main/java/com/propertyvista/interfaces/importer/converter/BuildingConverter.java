@@ -27,6 +27,7 @@ public class BuildingConverter extends EntityDtoBinder<Building, BuildingIO> {
     @Override
     protected void bind() {
         bind(dtoProto.propertyCode(), dboProto.propertyCode());
+        bind(dtoProto.externalId(), dboProto.externalId());
         bind(dtoProto.legalName(), dboProto.info().name());
         bind(dtoProto.totalStoreys(), dboProto.info().totalStoreys());
         bind(dtoProto.residentialStoreys(), dboProto.info().residentialStoreys());

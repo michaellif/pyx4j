@@ -40,6 +40,8 @@ public interface BuildingIO extends IEntity {
 
     IPrimitive<String> propertyCode();
 
+    IPrimitive<String> externalId();
+
     IPrimitive<String> legalName();
 
     IPrimitive<String> website();
@@ -105,5 +107,7 @@ public interface BuildingIO extends IEntity {
     IList<Roof> roofs();
 
     IList<LockerArea> lockerAreas();
+	
+	IList<AptUnitIO> units();
 
 }

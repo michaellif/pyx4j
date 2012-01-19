@@ -111,7 +111,7 @@ public class BuildingUpdater extends ImportPersister {
     }
 
     public ImportCounters updateData(BuildingIO buildingIO, MediaConfig mediaConfig) {
-        if (buildingIO.propertyCode().isNull()) {
+        if (buildingIO.propertyCode().isNull() && buildingIO.externalId().isNull()) {
             throw new UserRuntimeException("propertyCode can't be empty");
         }
         ImportCounters counters = new ImportCounters();
@@ -119,7 +119,12 @@ public class BuildingUpdater extends ImportPersister {
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            if (buildingIO.propertyCode().isNull()){
+                criteria.add(PropertyCriterion.eq(criteria.proto().externalId(), buildingIO.externalId().getValue()));
+            } else{
+                criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            }
+
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
                 buildingIsNew = true;
@@ -186,6 +191,8 @@ public class BuildingUpdater extends ImportPersister {
                 } else {
                     log.debug("updated floorplan {} {}", buildingIO.propertyCode().getValue(), floorplanIO.name().getValue());
                 }
+            } else {
+                log.debug("unchanged floorplan {} {}", buildingIO.propertyCode().getValue(), floorplanIO.name().getValue());
             }
 
             for (AptUnitIO aptUnitIO : floorplanIO.units()) {
@@ -224,10 +231,41 @@ public class BuildingUpdater extends ImportPersister {
                         log.debug("updated AptUnit {} {}", buildingIO.propertyCode().getValue() + " " + floorplanIO.name().getValue(), aptUnitIO.number()
                                 .getValue());
                     }
+                } else {
+                    log.debug("unchanged AptUnit {} {}", buildingIO.propertyCode().getValue() + " " + floorplanIO.name().getValue(), aptUnitIO.number()
+                            .getValue());
                 }
 
             }
         }
+
+        for (AptUnitIO aptUnitIO : buildingIO.units()) {
+            AptUnit unit = null;
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
+            List<AptUnit> units = Persistence.service().query(criteria);
+            if (units.size() == 1) {
+                unit = units.get(0);
+            } else if (units.size() == 0) {
+                throw new UserRuntimeException("AptUnit '" + aptUnitIO.number().getValue() + "' in '" + buildingIO.propertyCode().getValue() + "' not found");
+            } else if (units.size() > 1) {
+                throw new UserRuntimeException("More then one AptUnit '" + aptUnitIO.number().getValue() + "' in '" + buildingIO.propertyCode().getValue()
+                        + "' found");
+            }
+            boolean unitUpdated = false;
+            unitUpdated = new AptUnitConverter().updateDBO(aptUnitIO, unit);
+
+            if (unitUpdated) {
+                Persistence.service().merge(unit);
+                counters.units += 1;
+                log.debug("updated AptUnit {} {}", buildingIO.propertyCode().getValue(), aptUnitIO.number().getValue());
+            } else {
+                log.debug("unchanged AptUnit {} {}", buildingIO.propertyCode().getValue(), aptUnitIO.number().getValue());
+            }
+
+        }
+
         return counters;
     }
 }

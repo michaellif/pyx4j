@@ -58,6 +58,8 @@ public interface Building extends PolicyNode {
     @Indexed(uniqueConstraint = true)
     IPrimitive<String> propertyCode();
 
+    IPrimitive<String> externalId();
+
     @Editor(type = EditorType.suggest)
     @Reference(adapter = PropertyManagerReferenceAdapter.class)
     PropertyManager propertyManager();

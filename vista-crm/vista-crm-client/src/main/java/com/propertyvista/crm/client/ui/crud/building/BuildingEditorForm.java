@@ -30,18 +30,18 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -59,11 +59,11 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public BuildingEditorForm() {
-        this(new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public BuildingEditorForm(IEditableComponentFactory factory) {
-        super(BuildingDTO.class, factory);
+    public BuildingEditorForm(boolean viewMode) {
+        super(BuildingDTO.class);
     }
 
     @Override
@@ -156,8 +156,15 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().propertyManager()), 20).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complexPrimary()), 15).build());
 
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex()), 15).build());
+        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().externalId()), 15).build());
 
+        if (isEditable()) {
+            main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex()), 15).build());
+        } else {
+            main.setWidget(row++, 1,
+                    new DecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(MainActivityMapper.getCrudAppPlace(Complex.class))), 15)
+                            .build());
+        }
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
