@@ -15,20 +15,15 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
@@ -40,16 +35,10 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
@@ -146,112 +135,46 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
         private boolean applicant;
 
-        private Widget relationship;
-
-        private CComboBox<Role> role;
-
         public TenantInLeaseEditor() {
             super(TenantInLease.class, columns());
+            setViewable(true);
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp = null;
-            if (proto().tenant() == column.getObject()) {
-                comp = inject(column.getObject(), new CEntityLabel());
-            } else if (proto().tenant().person().birthDate() == column.getObject()) {
-                comp = inject(column.getObject(), new CLabel());
-            } else if (proto().tenant().person().email() == column.getObject()) {
-                comp = inject(column.getObject()/* , new CEmailLabel() */);
-            } else {
-                comp = super.createCell(column);
-
-                if (proto().role() == column.getObject() && comp instanceof CComboBox) {
-                    role = ((CComboBox) comp);
-                } else if (proto().relationship() == column.getObject()) {
-                    relationship = comp.asWidget();
-                }
+            CComponent<?, ?> comp = super.createCell(column);
+            if (proto().role() == column.getObject() || proto().relationship() == column.getObject()) {
+                comp.inheritContainerAccessRules(false);
+                comp.setEditable(true);
             }
             return comp;
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         protected void onPopulate() {
             super.onPopulate();
 
             applicant = (getValue().role().getValue() == Role.Applicant);
             if (applicant) {
-                relationship.setVisible(false);
-                if (role != null) {
-                    role.setEditable(false);
-                }
-            } else if (role != null) {
+                get(proto().role()).setViewable(true);
+                get(proto().relationship()).setVisible(false);
+            } else if (get(proto().role()) instanceof CComboBox) {
                 Collection<TenantInLease.Role> roles = EnumSet.allOf(TenantInLease.Role.class);
                 roles.remove(TenantInLease.Role.Applicant);
-                role.setOptions(roles);
+                ((CComboBox<Role>) get(proto().role())).setOptions(roles);
             }
 
             if (!applicant && !getValue().tenant().person().birthDate().isNull()) {
-                if (ValidationUtils.isOlderThen18(getValue().tenant().person().birthDate().getValue())) {
-                    enableRole();
-                } else {
+                if (!ValidationUtils.isOlderThen18(getValue().tenant().person().birthDate().getValue())) {
                     setMandatoryDependant();
                 }
-            }
-        }
-
-        @Override
-        public void addValidations() {
-
-            get(proto().tenant().person().birthDate()).addValueValidator(new OldAgeValidator());
-            get(proto().tenant().person().birthDate()).addValueValidator(new BirthdayDateValidator());
-            get(proto().tenant().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
-                @Override
-                public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                    TenantInLease.Role status = getValue().role().getValue();
-                    if ((status == TenantInLease.Role.Applicant) || (status == TenantInLease.Role.CoApplicant)) {
-                        // TODO I Believe that this is not correct, this logic has to be applied to Dependents as well, as per VISTA-273
-                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationFailure(i18n
-                                .tr("Applicant and Co-applicant must be at least 18 years old"));
-                    } else {
-                        return null;
-                    }
-                }
-
-            });
-
-            if (!applicant) { // all this stuff isn't for primary applicant:
-                get(proto().tenant().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-
-                    @Override
-                    public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-                        TenantInLease.Role role = getValue().role().getValue();
-                        if ((role == null) || (role == TenantInLease.Role.Dependent)) {
-                            if (ValidationUtils.isOlderThen18(event.getValue())) {
-                                boolean currentEditableState = get(proto().role()).isEditable();
-                                enableRole();
-                                if (!currentEditableState) {
-                                    get(proto().role()).setValue(null);
-                                }
-                            } else {
-                                setMandatoryDependant();
-                            }
-                        }
-                    }
-                });
-
-                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<TenantInLease.Role>(get(proto().tenant().person().birthDate())));
             }
         }
 
         private void setMandatoryDependant() {
             get(proto().role()).setValue(TenantInLease.Role.Dependent);
             get(proto().role()).setEditable(false);
-        }
-
-        private void enableRole() {
-            get(proto().role()).setEditable(true);
         }
     }
 
@@ -308,6 +231,5 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
             listerDataSource.setPreDefinedFilters(restrictAlreadySelectedTenants);
         }
-
     }
 }
