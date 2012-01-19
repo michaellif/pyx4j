@@ -76,7 +76,8 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             int row = -1;
             CLabel content = new CLabel();
             content.setAllowHtml(true);
-            main.setWidget(++row, 0, inject(proto().content().content(), content));
+            ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), content).asWidget());
+            main.setWidget(++row, 0, scroll);
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder()));
 
@@ -84,13 +85,12 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             get(proto().content().content()).asWidget().setWidth("auto");
             get(proto().content().content()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content.name());
             get(proto().agrees()).asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Agrees.name());
+            scroll.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Scroll.name());
 
             main.setStyleName(DEFAULT_STYLE_PREFIX);
             main.setWidth("100%");
 
-            ScrollPanel scroll = new ScrollPanel(main.asWidget());
-            scroll.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Scroll.name());
-            return scroll;
+            return main;
         }
     }
 }
