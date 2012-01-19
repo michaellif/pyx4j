@@ -21,6 +21,8 @@
 package com.pyx4j.site.client.ui.crud.lister;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
+import com.pyx4j.entity.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -53,10 +56,24 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
         this.alreadySelected = new ArrayList<E>(alreadySelected);
-        lister = new SelectEntityLister(this.entityClass, this.isMultiselect);
+        lister = new SelectEntityLister(this.entityClass);
+        if (this.isMultiselect) {
+            lister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+                @Override
+                public void onCheck(boolean isAnyChecked) {
+                    getOkButton().setEnabled(isAnyChecked);
+                }
+            });
+        } else {
+            lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+                @Override
+                public void onSelect(int selectedRow) {
+                    getOkButton().setEnabled(lister.getSelectedItem() != null);
+                }
+            });
+        }
         dataSource = new ListerDataSource<E>(entityClass, getSelectService());
         setPreDefinedFilters(new LinkedList<DataTableFilterData>());
-
         lister.setDataSource(dataSource);
         lister.obtain(0);
 
@@ -68,31 +85,25 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
 
     protected abstract String height();
 
-    protected abstract ColumnDescriptor<?>[] defineColumnDescriptors();
+    protected abstract List<ColumnDescriptor<E>> defineColumnDescriptors();
 
     protected abstract AbstractListService<E> getSelectService();
 
     protected Widget createBody() {
         getOkButton().setEnabled(!lister.getCheckedItems().isEmpty());
-        lister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
-
-            @Override
-            public void onCheck(boolean isAnyChecked) {
-                getOkButton().setEnabled(isAnyChecked);
-            }
-        });
-
         VerticalPanel vPanel = new VerticalPanel();
         vPanel.add(lister.asWidget());
         vPanel.setWidth("100%");
         return vPanel;
     }
 
+    @SuppressWarnings("unchecked")
     protected List<E> getSelectedItems() {
         if (isMultiselect) {
             return lister.getCheckedItems();
         } else {
-            return lister.getSelectedItems();
+            E item = lister.getSelectedItem();
+            return item == null ? Collections.EMPTY_LIST : Arrays.asList(item);
         }
     }
 
@@ -120,9 +131,13 @@ public abstract class EntitySelectorDialog<E extends IEntity> extends OkCancelDi
 
     private class SelectEntityLister extends BasicLister<E> {
 
-        public SelectEntityLister(Class<E> clazz, boolean isMultiselect) {
+        public SelectEntityLister(Class<E> clazz) {
             super(clazz);
-            setHasCheckboxColumn(isMultiselect);
+            if (EntitySelectorDialog.this.isMultiselect) {
+                setHasCheckboxColumn(true);
+            } else {
+                setSelectable(true);
+            }
 
             setColumnDescriptors(EntitySelectorDialog.this.defineColumnDescriptors());
         }
