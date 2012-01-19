@@ -21,11 +21,14 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityHyperlink;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -81,10 +84,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().propertyCode(), "5em"),
-                    new EntityFolderColumnDescriptor(proto().complex().name(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().info().address().city() , "10em"),
-                    new EntityFolderColumnDescriptor(proto().info().address().province().name() , "10em"),
-                    new EntityFolderColumnDescriptor(proto().info().address().country().name() , "10em")
+                    new EntityFolderColumnDescriptor(proto().info(), "30em")                    
             );//@formatter:on
         }
 
@@ -92,14 +92,15 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof Building) {
                 return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
+                    @SuppressWarnings("rawtypes")
                     @Override
                     protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?, ?> comp = null;
-                        if (proto().propertyCode() == column.getObject()) {
+                        if (column.getObject() instanceof IEntity) {
                             if (isEditable()) {
-                                comp = inject(proto().propertyCode(), new CLabel());
+                                comp = inject(proto().getMember(column.getObject().getPath()), new CEntityLabel());
                             } else {
-                                comp = inject(proto().propertyCode(), new CHyperlink(new Command() {
+                                comp = inject(proto().getMember(column.getObject().getPath()), new CEntityHyperlink(new Command() {
                                     @Override
                                     public void execute() {
                                         AppSite.getPlaceController().goTo(
@@ -109,7 +110,18 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
                                 }));
                             }
                         } else if (column.getObject() instanceof IPrimitive) {
-                            comp = inject(proto().getMember(column.getObject().getPath()), new CLabel());
+                            if (isEditable()) {
+                                comp = inject(proto().getMember(column.getObject().getPath()), new CLabel());
+                            } else {
+                                comp = inject(proto().getMember(column.getObject().getPath()), new CHyperlink(new Command() {
+                                    @Override
+                                    public void execute() {
+                                        AppSite.getPlaceController().goTo(
+                                                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.Building.class)
+                                                        .formViewerPlace(getValue().id().getValue()));
+                                    }
+                                }));
+                            }
                         } else {
                             comp = super.createCell(column);
                         }
