@@ -24,6 +24,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -37,7 +39,7 @@ import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
+import com.propertyvista.crm.client.ui.components.boxes.SelectUnitDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -113,16 +115,28 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
 
             HorizontalPanel unitPanel = new HorizontalPanel();
             unitPanel.add(new DecoratorBuilder(inject(proto().unit(), new CEntityLabel()), 20).build());
-
             unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).initUnitSelection();
-                    new SelectUnitBox(((LeaseEditorView) getParentView()).getBuildingListerView(), ((LeaseEditorView) getParentView()).getUnitListerView()) {
+                    new SelectUnitDialog(true) {
+                        @Override
+                        protected void setPreDefinedFilters(java.util.List<DataTableFilterData> preDefinedFilters) {
+                            if (!getValue().leaseFrom().isNull() & getValue().leaseTo().isNull() & preDefinedFilters != null) {
+                                preDefinedFilters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.greaterThan, getValue()
+                                        .leaseFrom().getValue()));
+                                preDefinedFilters.add(new DataTableFilterData(proto().availableForRent().getPath(), Operators.lessThan, getValue().leaseTo()
+                                        .getValue()));
+                            }
+                        };
+
                         @Override
                         public boolean onClickOk() {
-                            ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
-                            return true;
+                            if (!getSelectedItems().isEmpty()) {
+                                ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
+                                return true;
+                            } else {
+                                return false;
+                            }
                         }
                     }.show();
                 }

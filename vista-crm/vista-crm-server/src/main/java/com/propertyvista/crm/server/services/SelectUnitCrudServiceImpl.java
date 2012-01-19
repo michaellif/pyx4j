@@ -28,6 +28,7 @@ public class SelectUnitCrudServiceImpl extends GenericCrudServiceImpl<AptUnit> i
     @Override
     protected void enhanceRetrieve(AptUnit entity, boolean fromList) {
         // load detached entities (temporary):
+        Persistence.service().retrieve(entity.belongsTo());
         Persistence.service().retrieve(entity.floorplan());
         // TODO actually just this is necessary, but it' doesn't implemented still:
         //Persistence.service().retrieve(entity.floorplan().name());

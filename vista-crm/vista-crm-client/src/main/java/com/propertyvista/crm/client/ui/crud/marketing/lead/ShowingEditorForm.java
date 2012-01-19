@@ -25,7 +25,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.components.boxes.SelectUnitBox;
+import com.propertyvista.crm.client.ui.components.boxes.SelectUnitDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -58,10 +58,10 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
             unitPanel2.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new SelectUnitBox(((ShowingEditorView) getParentView()).getBuildingListerView(), ((ShowingEditorView) getParentView()).getUnitListerView()) {
+                    new SelectUnitDialog() {
                         @Override
                         public boolean onClickOk() {
-                            ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItem());
+                            ((ShowingEditorView.Presenter) ((ShowingEditorView) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
                             return true;
                         }
                     }.show();

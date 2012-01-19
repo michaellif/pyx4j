@@ -16,12 +16,10 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItem;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.dto.LeaseDTO;
@@ -29,16 +27,6 @@ import com.propertyvista.dto.LeaseDTO;
 public interface LeaseEditorView extends IEditorView<LeaseDTO> {
 
     interface Presenter extends IEditorView.Presenter {
-
-        IListerView.Presenter getBuildingPresenter();
-
-        IListerView.Presenter getUnitPresenter();
-
-//        IListerView.Presenter getTenantPresenter();
-
-        void initUnitSelection();
-
-        void setSelectedBuilding(Building selected);
 
         void setSelectedUnit(AptUnit selected);
 
@@ -49,11 +37,6 @@ public interface LeaseEditorView extends IEditorView<LeaseDTO> {
         void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item);
     }
 
-    IListerView<Building> getBuildingListerView();
-
-    IListerView<AptUnit> getUnitListerView();
-
-//    IListerView<Tenant> getTenantListerView();
-
     void showSelectTypePopUp(AsyncCallback<Service.Type> callback);
+
 }

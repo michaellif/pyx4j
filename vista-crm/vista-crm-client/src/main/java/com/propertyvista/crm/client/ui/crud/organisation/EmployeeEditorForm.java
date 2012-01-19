@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.organisation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -95,7 +96,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName()), 20).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().maidenName()), 20).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Employee")).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Employee")).build());
             get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             get(proto().name()).asWidget().getElement().getStyle().setFontSize(1.1, Unit.EM);
         }
@@ -300,12 +301,13 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        protected ColumnDescriptor<?>[] defineColumnDescriptors() {
-            return new ColumnDescriptor<?>[] {//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build()                    
-            }; //@formatter:on
+        protected List<ColumnDescriptor<Portfolio>> defineColumnDescriptors() {
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().name()).<Portfolio>build(),
+                    new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).<Portfolio>build()                    
+            ); //@formatter:on
         }
 
         @Override
@@ -331,15 +333,16 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             super(Employee.class, true, alreadySelected, i18n.tr("Select Employee"));
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        protected ColumnDescriptor<?>[] defineColumnDescriptors() {
-            return new ColumnDescriptor<?>[] {//@formatter:off                    
-                    new MemberColumnDescriptor.Builder(proto().title()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().namePrefix()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().firstName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().lastName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().name().nameSuffix()).build(),
-            }; //@formatter:on
+        protected List<ColumnDescriptor<Employee>> defineColumnDescriptors() {
+            return Arrays.asList(//@formatter:off                    
+                    new MemberColumnDescriptor.Builder(proto().title()).<Employee>build(),
+                    new MemberColumnDescriptor.Builder(proto().name().namePrefix()).<Employee>build(),
+                    new MemberColumnDescriptor.Builder(proto().name().firstName()).<Employee>build(),
+                    new MemberColumnDescriptor.Builder(proto().name().lastName()).<Employee>build(),
+                    new MemberColumnDescriptor.Builder(proto().name().nameSuffix()).<Employee>build()
+            ); //@formatter:on
         }
 
         @Override

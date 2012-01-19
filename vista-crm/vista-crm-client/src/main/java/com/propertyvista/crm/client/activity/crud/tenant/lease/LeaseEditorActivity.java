@@ -21,29 +21,21 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
-import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
-import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -51,51 +43,13 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements LeaseEditorView.Presenter {
 
-    private final IListerView.Presenter buildingsLister;
-
-    private final IListerView.Presenter unitsLister;
-
-//    private final IListerView.Presenter tenantsLister;
-
-    private LogicalDate leaseFrom, leaseTo;
-
     @SuppressWarnings("unchecked")
     public LeaseEditorActivity(Place place) {
         super(place, TenantViewFactory.instance(LeaseEditorView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
-
-        buildingsLister = new ListerActivityBase<Building>(place, ((LeaseEditorView) view).getBuildingListerView(),
-                (AbstractCrudService<Building>) GWT.create(SelectBuildingCrudService.class), Building.class);
-
-        unitsLister = new ListerActivityBase<AptUnit>(place, ((LeaseEditorView) view).getUnitListerView(),
-                (AbstractCrudService<AptUnit>) GWT.create(SelectUnitCrudService.class), AptUnit.class);
-
-//        tenantsLister = new ListerActivityBase<Tenant>(place, ((LeaseEditorView) view).getTenantListerView(),
-//                (AbstractCrudService<Tenant>) GWT.create(SelectTenantCrudService.class), Tenant.class);
-
     }
-
-    @Override
-    public Presenter getBuildingPresenter() {
-        return buildingsLister;
-    }
-
-    @Override
-    public Presenter getUnitPresenter() {
-        return unitsLister;
-    }
-
-//    @Override
-//    public Presenter getTenantPresenter() {
-//        return tenantsLister;
-//    }
 
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
-//        tenantsLister.retrieveData(0);
-
-        leaseFrom = result.leaseFrom().getValue();
-        leaseTo = result.leaseTo().getValue();
-
         fillserviceItems(result);
         fillServiceEligibilityData(result, result.serviceAgreement().serviceItem().item());
 
@@ -120,21 +74,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
                 callback.onFailure(caught);
             }
         });
-    }
-
-    @Override
-    public void initUnitSelection() {
-        leaseFrom = view.getValue().leaseFrom().getValue();
-        leaseTo = view.getValue().leaseTo().getValue();
-        setSelectedBuilding(null);
-    }
-
-    @Override
-    public void setSelectedBuilding(Building selected) {
-        if (selected == null) {
-            buildingsLister.retrieveData(0);
-        }
-        populateUnitLister(selected);
     }
 
     @Override
@@ -189,21 +128,6 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             public void onSuccess(Boolean result) {
             }
         }, tenant.getPrimaryKey());
-    }
-
-    public void populateUnitLister(Building selected) {
-        if (selected != null) {
-            unitsLister.setParent(selected.getPrimaryKey());
-        } else {
-            unitsLister.setParent(null);
-        }
-        if (leaseFrom != null && leaseTo != null) {
-            List<DataTableFilterData> filters = new ArrayList<DataTableFilterData>(2);
-            filters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operators.greaterThan, leaseFrom));
-            filters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(AptUnit.class).availableForRent().getPath(), Operators.lessThan, leaseTo));
-            unitsLister.setPreDefinedFilters(filters);
-        }
-        unitsLister.retrieveData(0);
     }
 
     @Override
