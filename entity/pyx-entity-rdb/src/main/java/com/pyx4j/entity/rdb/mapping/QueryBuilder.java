@@ -135,9 +135,9 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sortsSql.append(", ");
                 }
-                MemeberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyName(), true);
+                MemeberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyPath(), true);
                 if (descr == null) {
-                    throw new RuntimeException("Unknown member " + sort.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
+                    throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + entityMeta.getEntityClass().getName());
                 }
                 sortsSql.append(descr.alias).append('.');
                 sortsSql.append(descr.memberOper.sqlName());
@@ -180,13 +180,13 @@ public class QueryBuilder<T extends IEntity> {
         bindHolder.bindValue = propertyCriterion.getValue();
 
         String secondPersistenceName = null;
-        if (propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
+        if (propertyCriterion.getPropertyPath().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX)) {
             // TODO create index binders and value adapters
-            sql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyName()));
+            sql.append(mainTableSqlAlias).append('.').append(dialect.getNamingConvention().sqlFieldName(propertyCriterion.getPropertyPath()));
         } else {
-            memeberWithAlias = getMemberOperationsMetaByPath(mainTableSqlAlias, propertyCriterion.getPropertyName(), false);
+            memeberWithAlias = getMemberOperationsMetaByPath(mainTableSqlAlias, propertyCriterion.getPropertyPath(), false);
             if (memeberWithAlias == null) {
-                throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyName() + " in " + entityMeta.getEntityClass().getName());
+                throw new RuntimeException("Unknown member " + propertyCriterion.getPropertyPath() + " in " + entityMeta.getEntityClass().getName());
             }
             objectClassType = memeberWithAlias.memberOper.getMemberMeta().getObjectClassType();
             bindHolder.adapter = memeberWithAlias.memberOper.getValueAdapter().getQueryValueBindAdapter(propertyCriterion.getRestriction(),

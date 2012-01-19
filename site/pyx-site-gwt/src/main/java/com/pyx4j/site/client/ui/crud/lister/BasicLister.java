@@ -302,7 +302,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
             boolean primarySet = false;
             for (Sort sort : sorts) {
                 for (ColumnDescriptor column : dataTablePanel.getDataTableModel().getColumnDescriptors()) {
-                    if (column.getColumnName().compareTo(sort.getPropertyName()) == 0) {
+                    if (column.getColumnName().compareTo(sort.getPropertyPath()) == 0) {
                         dataTablePanel.getDataTableModel().setSortAscending(!sort.isDescending());
                         if (!primarySet) {
                             dataTablePanel.getDataTableModel().setSortColumn(column);

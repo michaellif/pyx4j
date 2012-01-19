@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.test.shared.domain.Task;
 
-public class PrimitiveSetTest extends InitializerTestCase {
+public class PrimitiveSetTest extends InitializerTestBase {
 
     public void testManipulations() {
         Task task = EntityFactory.create(Task.class);

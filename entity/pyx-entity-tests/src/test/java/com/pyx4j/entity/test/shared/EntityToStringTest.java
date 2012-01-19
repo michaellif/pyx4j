@@ -33,7 +33,7 @@ import com.pyx4j.entity.test.shared.domain.format.StringIntFields;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFieldsChoiceFormated;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFieldsFormated;
 
-public class EntityToStringTest extends InitializerTestCase {
+public class EntityToStringTest extends InitializerTestBase {
 
     public void testStringView() {
         City city = EntityFactory.create(City.class);

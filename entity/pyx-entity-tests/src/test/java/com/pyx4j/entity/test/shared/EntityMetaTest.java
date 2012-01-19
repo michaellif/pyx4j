@@ -42,7 +42,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 
-public class EntityMetaTest extends InitializerTestCase {
+public class EntityMetaTest extends InitializerTestBase {
 
     public void testEmployeeMemberList() {
         Employee emp = EntityFactory.create(Employee.class);

@@ -30,7 +30,7 @@ import com.pyx4j.entity.test.shared.domain.Organization;
 import com.pyx4j.entity.test.shared.domain.bidir.Child;
 import com.pyx4j.entity.test.shared.domain.bidir.Master;
 
-public class BidirectionalRelationshipTest extends InitializerTestCase {
+public class BidirectionalRelationshipTest extends InitializerTestBase {
 
     public void testOwnedEntityValue() {
         Master m = EntityFactory.create(Master.class);

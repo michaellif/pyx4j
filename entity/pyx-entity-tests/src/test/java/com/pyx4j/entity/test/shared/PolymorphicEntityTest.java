@@ -33,7 +33,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.OwnedByDiferentOwners;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntityDTO;
 
-public class PolymorphicEntityTest extends InitializerTestCase {
+public class PolymorphicEntityTest extends InitializerTestBase {
 
     public void testAssignments() {
 

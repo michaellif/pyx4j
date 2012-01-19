@@ -22,10 +22,10 @@ package com.pyx4j.entity.test.server;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.test.shared.InitializerTestCase;
+import com.pyx4j.entity.test.shared.InitializerTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
-public class EntityMetaServerTest extends InitializerTestCase {
+public class EntityMetaServerTest extends InitializerTestBase {
 
     public void testPersistenceName() {
         EntityMeta empMeta = EntityFactory.getEntityMeta(Employee.class);

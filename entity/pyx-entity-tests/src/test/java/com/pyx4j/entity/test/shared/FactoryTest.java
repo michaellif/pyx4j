@@ -32,7 +32,7 @@ import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
-public class FactoryTest extends InitializerTestCase {
+public class FactoryTest extends InitializerTestBase {
 
     public void testObjectCreation() {
         Country country = EntityFactory.create(Country.class);

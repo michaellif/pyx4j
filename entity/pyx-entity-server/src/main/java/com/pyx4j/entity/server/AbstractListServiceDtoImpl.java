@@ -70,9 +70,9 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
             for (Criterion cr : dtoCriteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                    Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyName()));
+                    Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
                     if (path == null) {
-                        path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyName(), dbCriteria.proto(), dtoCriteria.proto());
+                        path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dbCriteria.proto(), dtoCriteria.proto());
                     }
                     dbCriteria.add(new PropertyCriterion(path.toString(), propertyCriterion.getRestriction(), propertyCriterion.getValue()));
                 }
@@ -80,9 +80,9 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         }
         if ((dtoCriteria.getSorts() != null) && (!dtoCriteria.getSorts().isEmpty())) {
             for (Sort s : dtoCriteria.getSorts()) {
-                Path path = getBoundDboMemberPath(new Path(s.getPropertyName()));
+                Path path = getBoundDboMemberPath(new Path(s.getPropertyPath()));
                 if (path == null) {
-                    path = convertPropertyDTOPathToDBOPath(s.getPropertyName(), dbCriteria.proto(), dtoCriteria.proto());
+                    path = convertPropertyDTOPathToDBOPath(s.getPropertyPath(), dbCriteria.proto(), dtoCriteria.proto());
                 }
                 if (s.isDescending()) {
                     dbCriteria.desc(path.toString());

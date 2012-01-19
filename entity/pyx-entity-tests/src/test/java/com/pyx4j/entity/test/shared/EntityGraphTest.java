@@ -35,7 +35,7 @@ import com.pyx4j.entity.test.shared.domain.ownership.LeafReference;
 import com.pyx4j.entity.test.shared.domain.ownership.OwnedLeaf;
 import com.pyx4j.entity.test.shared.domain.ownership.RootEnity;
 
-public class EntityGraphTest extends InitializerTestCase {
+public class EntityGraphTest extends InitializerTestBase {
 
     public void testSimpleGraphIteration() {
 

@@ -50,7 +50,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
         private static final long serialVersionUID = -9007568149350718889L;
 
-        private String propertyName;
+        private String propertyPath;
 
         private boolean descending;
 
@@ -58,13 +58,13 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
         }
 
-        public Sort(String propertyName, boolean descending) {
-            this.propertyName = propertyName;
+        public Sort(String propertyPath, boolean descending) {
+            this.propertyPath = propertyPath;
             this.descending = descending;
         }
 
-        public String getPropertyName() {
-            return this.propertyName;
+        public String getPropertyPath() {
+            return this.propertyPath;
         }
 
         public boolean isDescending() {
@@ -73,7 +73,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
         @Override
         public String toString() {
-            return getPropertyName() + (isDescending() ? " Desc" : " Asc");
+            return getPropertyPath() + (isDescending() ? " Desc" : " Asc");
         }
 
     }
@@ -133,16 +133,16 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         }
     }
 
-    public EntityQueryCriteria<E> asc(String propertyName) {
-        return sort(new Sort(propertyName, false));
+    public EntityQueryCriteria<E> asc(String propertyPath) {
+        return sort(new Sort(propertyPath, false));
     }
 
     public EntityQueryCriteria<E> asc(IObject<?> member) {
         return asc(member.getPath().toString());
     }
 
-    public EntityQueryCriteria<E> desc(String propertyName) {
-        return sort(new Sort(propertyName, true));
+    public EntityQueryCriteria<E> desc(String propertyPath) {
+        return sort(new Sort(propertyPath, true));
     }
 
     public EntityQueryCriteria<E> desc(IObject<?> member) {

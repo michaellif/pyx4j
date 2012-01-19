@@ -33,7 +33,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 
-public class EntityReflectionTest extends InitializerTestCase {
+public class EntityReflectionTest extends InitializerTestBase {
 
     public void testAddressMemberList() {
         Address address = EntityFactory.create(Address.class);

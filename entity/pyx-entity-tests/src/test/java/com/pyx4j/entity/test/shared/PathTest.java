@@ -27,7 +27,7 @@ import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 
-public class PathTest extends InitializerTestCase {
+public class PathTest extends InitializerTestBase {
 
     public void testPathCalculation() {
         Employee emp = EntityFactory.create(Employee.class);

@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 
 import com.pyx4j.entity.test.env.ConfigureTestsEnv;
 
-public abstract class InitializerTestCase extends TestCase {
+public abstract class InitializerTestBase extends TestCase {
 
     @Override
     protected void setUp() throws Exception {

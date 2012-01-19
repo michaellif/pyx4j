@@ -48,51 +48,50 @@ public class InMemeoryListService<E extends IEntity> implements AbstractListServ
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria) {
-        EntitySearchResult<E> r = new EntitySearchResult<E>();
-        List<E> sorted = new Vector<E>(values);
+        try {
+            EntitySearchResult<E> r = new EntitySearchResult<E>();
+            List<E> sorted = new Vector<E>(values);
 
-        if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
-            ListIterator<Sort> sorts = criteria.getSorts().listIterator(criteria.getSorts().size() - 1);
-            while (sorts.hasPrevious()) {
-                Collections.sort(sorted, createComparator(sorts.previous()));
-            }
-        }
-
-        Filter<E> f = new EntityCriteriaFilter<E>(criteria);
-        int offset = 0;
-        if (criteria.getPageSize() > 0) {
-            offset = criteria.getPageSize() * criteria.getPageNumber();
-        }
-        int cnt = 0;
-        for (E dto : sorted) {
-            cnt++;
-            if (cnt < offset) {
-                continue;
-            }
-            if (f.accept(dto)) {
-                r.add(dto);
-                if ((criteria.getPageSize() > 0) && (r.getData().size() > criteria.getPageSize())) {
-                    break;
+            if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
+                ListIterator<Sort> sorts = criteria.getSorts().listIterator(criteria.getSorts().size());
+                while (sorts.hasPrevious()) {
+                    Collections.sort(sorted, createComparator(sorts.previous()));
                 }
             }
+
+            Filter<E> f = new EntityCriteriaFilter<E>(criteria);
+            int offset = 0;
+            if (criteria.getPageSize() > 0) {
+                offset = criteria.getPageSize() * criteria.getPageNumber();
+            }
+            int cnt = 0;
+            for (E dto : sorted) {
+                if (f.accept(dto)) {
+                    if ((cnt >= offset) && ((criteria.getPageSize() < 0) || (r.getData().size() < criteria.getPageSize()))) {
+                        r.add(dto);
+                    }
+                    cnt++;
+                }
+            }
+            r.setTotalRows(cnt);
+
+            callback.onSuccess(r);
+        } catch (Throwable e) {
+            callback.onFailure(e);
         }
-        r.setTotalRows(sorted.size());
-
-        callback.onSuccess(r);
-
     }
 
     private Comparator<? super E> createComparator(final Sort sort) {
-        final Path path = new Path(sort.getPropertyName());
+        final Path path = new Path(sort.getPropertyPath());
 
         return new Comparator<E>() {
 
             @Override
             public int compare(E paramT1, E paramT2) {
                 if (sort.isDescending()) {
-                    return getValue(paramT1).compareTo(getValue(paramT2));
-                } else {
                     return getValue(paramT2).compareTo(getValue(paramT1));
+                } else {
+                    return getValue(paramT1).compareTo(getValue(paramT2));
                 }
             }
 

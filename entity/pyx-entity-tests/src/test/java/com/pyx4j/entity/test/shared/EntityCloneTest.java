@@ -26,7 +26,7 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
 
-public class EntityCloneTest extends InitializerTestCase {
+public class EntityCloneTest extends InitializerTestBase {
 
     public void testFirstLevelClone() {
         Employee employee = EntityFactory.create(Employee.class);

@@ -37,7 +37,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
-public class EntityEqualsTest extends InitializerTestCase {
+public class EntityEqualsTest extends InitializerTestBase {
 
     static public void assertNotEquals(String message, long expected, long actual) {
         if (expected != actual) {

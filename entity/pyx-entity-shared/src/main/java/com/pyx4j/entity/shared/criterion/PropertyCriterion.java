@@ -38,7 +38,7 @@ public class PropertyCriterion implements Criterion {
         RDB_LIKE
     }
 
-    private String propertyName;
+    private String propertyPath;
 
     private Restriction restriction;
 
@@ -48,8 +48,8 @@ public class PropertyCriterion implements Criterion {
 
     }
 
-    public PropertyCriterion(String propertyName, Restriction restriction, Serializable value) {
-        this.propertyName = propertyName;
+    public PropertyCriterion(String propertyPath, Restriction restriction, Serializable value) {
+        this.propertyPath = propertyPath;
         this.restriction = restriction;
         if (value instanceof IEntity) {
             this.value = ((IEntity) value).createIdentityStub();
@@ -58,14 +58,14 @@ public class PropertyCriterion implements Criterion {
         }
     }
 
-    public PropertyCriterion(String propertyName, Restriction restriction, IPrimitive<?> value) {
-        this.propertyName = propertyName;
+    public PropertyCriterion(String propertyPath, Restriction restriction, IPrimitive<?> value) {
+        this.propertyPath = propertyPath;
         this.restriction = restriction;
         this.value = (Serializable) value.getValue();
     }
 
-    public PropertyCriterion(String propertyName, Restriction restriction, Class<? extends IEntity> value) {
-        this.propertyName = propertyName;
+    public PropertyCriterion(String propertyPath, Restriction restriction, Class<? extends IEntity> value) {
+        this.propertyPath = propertyPath;
         this.restriction = restriction;
         this.value = EntityFactory.create(value);
     }
@@ -135,8 +135,8 @@ public class PropertyCriterion implements Criterion {
         return new PropertyCriterion(member.getPath().toString(), Restriction.LESS_THAN_OR_EQUAL, value);
     }
 
-    public String getPropertyName() {
-        return this.propertyName;
+    public String getPropertyPath() {
+        return this.propertyPath;
     }
 
     public Restriction getRestriction() {
@@ -155,19 +155,19 @@ public class PropertyCriterion implements Criterion {
         if ((this.restriction == null) || (!this.restriction.equals(((PropertyCriterion) o).restriction))) {
             return false;
         }
-        return EqualsHelper.equals(this.value, ((PropertyCriterion) o).value) && EqualsHelper.equals(this.propertyName, ((PropertyCriterion) o).propertyName);
+        return EqualsHelper.equals(this.value, ((PropertyCriterion) o).value) && EqualsHelper.equals(this.propertyPath, ((PropertyCriterion) o).propertyPath);
     }
 
     @Override
     public int hashCode() {
-        return this.restriction.hashCode() + ((this.propertyName != null) ? this.propertyName.hashCode() : -1)
+        return this.restriction.hashCode() + ((this.propertyPath != null) ? this.propertyPath.hashCode() : -1)
                 + ((this.value != null) ? this.value.hashCode() : -1);
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(propertyName).append(' ').append(restriction).append(' ').append(value);
+        builder.append(propertyPath).append(' ').append(restriction).append(' ').append(value);
         return builder.toString();
     }
 }

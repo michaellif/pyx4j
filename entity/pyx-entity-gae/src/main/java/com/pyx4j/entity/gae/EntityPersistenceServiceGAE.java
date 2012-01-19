@@ -1281,7 +1281,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private Query.FilterOperator addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
-        String propertyName = propertyCriterion.getPropertyName();
+        String propertyName = propertyCriterion.getPropertyPath();
         Object value;
         if (propertyName.equals(IEntity.PRIMARY_KEY)) {
             value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
@@ -1312,7 +1312,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
-                    if (GLOBAL_KEYWORD_PRROPERTY.equals(((PropertyCriterion) cr).getPropertyName())) {
+                    if (GLOBAL_KEYWORD_PRROPERTY.equals(((PropertyCriterion) cr).getPropertyPath())) {
                         if ((keyFilter >= 2) && allowSort && (criteria.getSorts() != null)) {
                             break;
                         }
@@ -1326,7 +1326,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         if (allowSort && (criteria.getSorts() != null)) {
             for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
-                query.addSort(sort.getPropertyName(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
+                query.addSort(sort.getPropertyPath(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
             }
             log.debug("sort by {}", query.getSortPredicates());
         }

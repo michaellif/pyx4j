@@ -28,14 +28,14 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.test.shared.InitializerTestCase;
+import com.pyx4j.entity.test.shared.InitializerTestBase;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.gwt.server.IOUtils;
 
-public class EntityJavaSerializationTest extends InitializerTestCase {
+public class EntityJavaSerializationTest extends InitializerTestBase {
 
     public void testObjectOperations() {
         Country country = EntityFactory.create(Country.class);

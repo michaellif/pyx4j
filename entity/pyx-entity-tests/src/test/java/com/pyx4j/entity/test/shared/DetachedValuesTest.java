@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
-public class DetachedValuesTest extends InitializerTestCase {
+public class DetachedValuesTest extends InitializerTestBase {
 
     private void assertException(String message, Runnable run) {
         boolean accessed = false;

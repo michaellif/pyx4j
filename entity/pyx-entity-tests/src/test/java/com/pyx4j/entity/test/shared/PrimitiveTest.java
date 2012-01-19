@@ -30,7 +30,7 @@ import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.rpc.ComplexPrimitive;
 
-public class PrimitiveTest extends InitializerTestCase {
+public class PrimitiveTest extends InitializerTestBase {
 
     public void testString() {
         Employee emp = EntityFactory.create(Employee.class);

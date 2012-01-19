@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 
-public class EntityDtoBinderTest extends InitializerTestCase {
+public class EntityDtoBinderTest extends InitializerTestBase {
 
     private class SimpleEntityDtoBinder extends EntityDtoBinder<Employee, Employee> {
 
