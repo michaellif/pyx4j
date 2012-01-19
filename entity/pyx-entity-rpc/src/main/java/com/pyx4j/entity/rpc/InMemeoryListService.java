@@ -1,0 +1,115 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2011 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on Jan 19, 2012
+ * @author vlads
+ * @version $Id$
+ */
+package com.pyx4j.entity.rpc;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Filter;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.criterion.EntityCriteriaFilter;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+
+public class InMemeoryListService<E extends IEntity> implements AbstractListService<E> {
+
+    private final Collection<E> values;
+
+    public InMemeoryListService(Collection<E> values) {
+        this.values = values;
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<E>> callback, EntityListCriteria<E> criteria) {
+        EntitySearchResult<E> r = new EntitySearchResult<E>();
+        List<E> sorted = new Vector<E>(values);
+
+        if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
+            ListIterator<Sort> sorts = criteria.getSorts().listIterator(criteria.getSorts().size() - 1);
+            while (sorts.hasPrevious()) {
+                Collections.sort(sorted, createComparator(sorts.previous()));
+            }
+        }
+
+        Filter<E> f = new EntityCriteriaFilter<E>(criteria);
+        int offset = 0;
+        if (criteria.getPageSize() > 0) {
+            offset = criteria.getPageSize() * criteria.getPageNumber();
+        }
+        int cnt = 0;
+        for (E dto : sorted) {
+            cnt++;
+            if (cnt < offset) {
+                continue;
+            }
+            if (f.accept(dto)) {
+                r.add(dto);
+                if ((criteria.getPageSize() > 0) && (r.getData().size() > criteria.getPageSize())) {
+                    break;
+                }
+            }
+        }
+        r.setTotalRows(sorted.size());
+
+        callback.onSuccess(r);
+
+    }
+
+    private Comparator<? super E> createComparator(final Sort sort) {
+        final Path path = new Path(sort.getPropertyName());
+
+        return new Comparator<E>() {
+
+            @Override
+            public int compare(E paramT1, E paramT2) {
+                if (sort.isDescending()) {
+                    return getValue(paramT1).compareTo(getValue(paramT2));
+                } else {
+                    return getValue(paramT2).compareTo(getValue(paramT1));
+                }
+            }
+
+            String getValue(E entity) {
+                IObject<?> valueMemeber = entity.getMember(path);
+                if (valueMemeber instanceof IEntity) {
+                    return valueMemeber.getStringView();
+                } else {
+                    return valueMemeber.getStringView();
+                }
+            }
+        };
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        callback.onFailure(new UnsupportedOperationException());
+    }
+
+}
