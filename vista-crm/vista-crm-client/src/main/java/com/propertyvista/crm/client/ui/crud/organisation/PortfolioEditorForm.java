@@ -34,9 +34,9 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.SelectEntityFromListDialog;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -146,7 +146,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
     }
 
-    private abstract class SelectBuildingBox extends SelectEntityFromListDialog<Building> {
+    private abstract class SelectBuildingBox extends EntitySelectorDialog<Building> {
 
         public SelectBuildingBox(List<Building> alreadySelected) {
             super(Building.class, true, alreadySelected, i18n.tr("Select Buildings"));

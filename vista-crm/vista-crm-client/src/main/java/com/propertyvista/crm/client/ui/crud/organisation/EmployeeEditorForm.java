@@ -39,9 +39,9 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.VistaTableFolder;
-import com.propertyvista.common.client.ui.components.SelectEntityFromListDialog;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -294,7 +294,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         }
     };
 
-    private abstract class SelectPortfolioBox extends SelectEntityFromListDialog<Portfolio> {
+    private abstract class SelectPortfolioBox extends EntitySelectorDialog<Portfolio> {
 
         public SelectPortfolioBox(List<Portfolio> alreadySelected) {
             super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
@@ -325,7 +325,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
     }
 
-    private abstract class SelectEmployeeBox extends SelectEntityFromListDialog<Employee> {
+    private abstract class SelectEmployeeBox extends EntitySelectorDialog<Employee> {
 
         public SelectEmployeeBox(List<Employee> alreadySelected) {
             super(Employee.class, true, alreadySelected, i18n.tr("Select Employee"));
