@@ -67,8 +67,12 @@ public class InMemeoryListService<E extends IEntity> implements AbstractListServ
             int cnt = 0;
             for (E dto : sorted) {
                 if (f.accept(dto)) {
-                    if ((cnt >= offset) && ((criteria.getPageSize() < 0) || (r.getData().size() < criteria.getPageSize()))) {
-                        r.add(dto);
+                    if (cnt >= offset) {
+                        if ((criteria.getPageSize() < 0) || (r.getData().size() < criteria.getPageSize())) {
+                            r.add(dto);
+                        } else {
+                            r.hasMoreData(true);
+                        }
                     }
                     cnt++;
                 }
