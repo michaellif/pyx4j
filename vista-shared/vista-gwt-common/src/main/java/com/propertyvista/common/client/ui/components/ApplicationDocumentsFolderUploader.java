@@ -62,7 +62,7 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
     static {
         ApplicationDocument proto = EntityFactory.getEntityPrototype(ApplicationDocument.class);
         COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
-        COLUMNS.add(new EntityFolderColumnDescriptor(proto.filename(), "25em"));
+        COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileName(), "25em"));
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.fileSize(), "5em"));
     }
 
@@ -98,7 +98,7 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().filename()) {
+            if (column.getObject() == proto().fileName()) {
                 CHyperlink link = new CHyperlink(new Command() {
                     @Override
                     public void execute() {
@@ -106,6 +106,11 @@ public class ApplicationDocumentsFolderUploader extends VistaTableFolder<Applica
                     }
                 });
                 return inject(column.getObject(), link);
+            } else if (column.getObject() == proto().fileSize()) {
+                CComponent<?, ?> comp = inject(column.getObject());
+                comp.inheritContainerAccessRules(false);
+                comp.setViewable(true);
+                return comp;
             } else {
                 return super.createCell(column);
             }

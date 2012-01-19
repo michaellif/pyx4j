@@ -201,12 +201,12 @@ public class PTGenerator {
             throw new Error("Could not find DocumentData [" + fileName + "] in classpath");
         }
         ApplicationDocument applicationDocument = EntityFactory.create(ApplicationDocument.class);
-        applicationDocument.filename().setValue(fileName);
+        applicationDocument.fileName().setValue(fileName);
         return applicationDocument;
     }
 
     public void attachDocumentData(ApplicationDocument applicationDocument) {
-        String fileName = applicationDocument.filename().getValue();
+        String fileName = applicationDocument.fileName().getValue();
         ApplicationDocumentBlob applicationDocumentData;
         try {
             byte[] data = IOUtils.getBinaryResource("pt-docs/" + fileName, PTGenerator.class);

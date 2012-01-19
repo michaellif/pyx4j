@@ -40,7 +40,7 @@ public class FileUploadHyperlink extends CAbstractHyperlink<File> {
                     @Override
                     protected void onUploadComplete(UploadResponse serverUploadResponse) {
                         getValue().blobKey().setValue(serverUploadResponse.uploadKey);
-                        getValue().filename().setValue(serverUploadResponse.fileName);
+                        getValue().fileName().setValue(serverUploadResponse.fileName);
                         getValue().fileSize().setValue(serverUploadResponse.fileSize);
                         getValue().timestamp().setValue(serverUploadResponse.timestamp);
                         getValue().contentMimeType().setValue(serverUploadResponse.fileContentType);
@@ -63,7 +63,7 @@ public class FileUploadHyperlink extends CAbstractHyperlink<File> {
                     if (value.blobKey().isNull()) {
                         return i18n.tr("Upload Image File");
                     } else {
-                        return i18n.tr("{0}; Upload new file", value.filename().getStringView());
+                        return i18n.tr("{0}; Upload new file", value.fileName().getStringView());
                     }
                 } else {
                     return null;

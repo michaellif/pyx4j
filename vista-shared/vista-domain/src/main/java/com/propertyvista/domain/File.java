@@ -37,11 +37,10 @@ public interface File extends IEntity {
     IPrimitive<Integer> cacheVersion();
 
     @ToString(index = 0)
-    IPrimitive<String> filename();
+    IPrimitive<String> fileName();
 
     @ToString(index = 1)
     IPrimitive<Integer> fileSize();
 
     IPrimitive<String> contentMimeType();
-
 }

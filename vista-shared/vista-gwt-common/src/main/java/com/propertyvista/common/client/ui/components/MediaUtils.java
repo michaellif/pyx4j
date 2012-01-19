@@ -37,6 +37,6 @@ public class MediaUtils {
 
     public static String createApplicationDocumentUrl(File file) {
         return ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
-                + file.filename().getStringView();
+                + file.fileName().getStringView();
     }
 }

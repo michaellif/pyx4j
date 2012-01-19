@@ -84,7 +84,7 @@ public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<Appl
 
         ApplicationDocument newDocument = EntityFactory.create(ApplicationDocument.class);
         newDocument.blobKey().setValue(applicationDocumentData.id().getValue());
-        newDocument.filename().setValue(response.fileName);
+        newDocument.fileName().setValue(response.fileName);
         newDocument.fileSize().setValue(response.fileSize);
         newDocument.timestamp().setValue(response.timestamp);
         newDocument.contentMimeType().setValue(response.fileContentType);
