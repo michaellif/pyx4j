@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.organisation;
+package com.propertyvista.crm.client.activity.crud.settings.role;
 
 import java.util.EnumSet;
 

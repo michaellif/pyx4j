@@ -30,7 +30,7 @@ public class VistaCrmBehaviorDTOCoverter {
             VistaCrmBehaviorDTO dto = EntityFactory.create(VistaCrmBehaviorDTO.class);
             dto.setPrimaryKey(new Key(b.ordinal() + 1));
             dto.behavior().setValue(b);
-            dto.permissions().setValue(b.toString());
+            dto.permission().setValue(b.toString());
             r.add(dto);
         }
         return r;

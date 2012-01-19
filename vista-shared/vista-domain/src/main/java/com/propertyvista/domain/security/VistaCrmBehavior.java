@@ -13,8 +13,11 @@
  */
 package com.propertyvista.domain.security;
 
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.security.shared.Behavior;
 
+@I18n
 public enum VistaCrmBehavior implements Behavior {
 
     /** This is preliminary list */
@@ -45,5 +48,10 @@ public enum VistaCrmBehavior implements Behavior {
 
     ServiceCatalog,
 
-    Billing
+    Billing;
+
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    }
 }

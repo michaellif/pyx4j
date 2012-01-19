@@ -17,9 +17,11 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface CrmUserBuildings extends IEntity {
 
     @Indexed

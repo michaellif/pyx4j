@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.security;
 
+import com.pyx4j.entity.annotations.Caption;
+
+@Caption(name = "User")
 public interface TenantUser extends AbstractUser {
 
 }

@@ -16,16 +16,18 @@ package com.propertyvista.domain.security;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 /**
  * Wrapper class to enabled Editing of CrmBehavior in Roles UI
  * 
  */
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface VistaCrmBehaviorDTO extends IEntity {
 
     IPrimitive<VistaCrmBehavior> behavior();
 
-    IPrimitive<String> permissions();
+    IPrimitive<String> permission();
 
 }

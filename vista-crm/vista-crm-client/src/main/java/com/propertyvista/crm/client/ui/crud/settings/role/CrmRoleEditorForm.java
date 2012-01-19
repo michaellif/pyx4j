@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.settings.role;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
@@ -28,8 +27,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleBehaviorDTOListServiceImpl;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.rpc.services.CrmRoleBehaviorDTOListService;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
@@ -55,6 +54,7 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
 
         public CrmRoleFolder() {
             super(VistaCrmBehaviorDTO.class);
+            setOrderable(false);
             setViewable(true);
         }
 
@@ -92,15 +92,15 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
 
                 @Override
                 protected List<ColumnDescriptor> defineColumnDescriptors() {
-                    return Arrays.asList(new MemberColumnDescriptor.Builder(proto().permissions()).build());
+                    return Arrays.asList(new MemberColumnDescriptor.Builder(proto().permission()).build());
                 }
 
                 @Override
                 protected AbstractListService<VistaCrmBehaviorDTO> getSelectService() {
-                    return GWT.<AbstractListService<VistaCrmBehaviorDTO>> create(CrmRoleBehaviorDTOListService.class);
+                    return new CrmRoleBehaviorDTOListServiceImpl();
                 }
 
-            };
+            }.show();
         }
     }
 
