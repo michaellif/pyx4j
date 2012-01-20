@@ -22,12 +22,14 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleBehaviorDTOListServiceImpl;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.security.CrmRole;
@@ -45,17 +47,17 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).componentWidth(20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).componentWidth(20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).labelWidth(10).componentWidth(20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(10).componentWidth(20).build());
         content.setH1(++row, 0, 1, proto().permissions().getMeta().getCaption());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().permissions(), new CrmRoleFolder())).componentWidth(30).build());
+        content.setWidget(++row, 0, inject(proto().permissions(), new CrmRolePermissionsFolder()));
 
         return content;
     }
 
-    private static class CrmRoleFolder extends VistaTableFolder<VistaCrmBehaviorDTO> {
+    private static class CrmRolePermissionsFolder extends VistaTableFolder<VistaCrmBehaviorDTO> {
 
-        public CrmRoleFolder() {
+        public CrmRolePermissionsFolder() {
             super(VistaCrmBehaviorDTO.class);
             setOrderable(false);
             setViewable(true);
@@ -64,6 +66,15 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(new EntityFolderColumnDescriptor(proto().behavior(), "20em"));
+        }
+
+        @Override
+        protected IFolderDecorator<VistaCrmBehaviorDTO> createDecorator() {
+            return new VistaTableFolderDecorator<VistaCrmBehaviorDTO>(this, this.isEditable()) {
+                {
+                    setShowHeader(false);
+                }
+            };
         }
 
         @Override
