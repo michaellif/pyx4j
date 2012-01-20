@@ -30,10 +30,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
@@ -47,8 +49,12 @@ import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
 
 public class RentRollAdaptor {
 
+    public static String inFile = "C:\\projects\\Starlight\\database_exports\\tenantRoster.csv";
+
+    public static String outFile = "C:\\projects\\Starlight\\database_exports\\example-output.xml";
+
     public enum RosterReaderState {
-        ExpectTenantRoster, ExpectAddress, ExpectHeader, ExpectData
+        ExpectAddress, ExpectHeader, ExpectData
     }
 
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01")); // add erroneous "apt numbers" here (lower case)
@@ -58,7 +64,7 @@ public class RentRollAdaptor {
     private static Map<String, BuildingIO> buildings = new HashMap<String, BuildingIO>();
 
     public static void main(String[] args) throws IOException {
-        String tenantRosterFile = "C:\\projects\\Starlight\\database_exports\\tenantRoster.csv";
+        String tenantRosterFile = inFile;
 
         readTenantRoster(tenantRosterFile);
 
@@ -74,7 +80,7 @@ public class RentRollAdaptor {
 
         }
 
-        File f = new File("C:\\projects\\Starlight\\database_exports\\example-output.xml");
+        File f = new File(outFile);
         FileWriter w = null;
         try {
             w = new FileWriter(f);
@@ -98,41 +104,21 @@ public class RentRollAdaptor {
      */
     public static void readTenantRoster(String fileName) throws IOException {
         List<String> lines = Files.readAllLines(new File(fileName).toPath(), Charset.defaultCharset());
-        RosterReaderState readerState = RosterReaderState.ExpectTenantRoster;
+        RosterReaderState readerState = RosterReaderState.ExpectHeader;
 
         int n = 0;
         boolean gotData = false;
+        boolean gotHeaders = false;
         String address = "uninitialized address";
         Map<String, Integer> keyToIndexMap = null;
-        BuildingIO building = null;
+        BuildingIO building = EntityFactory.create(BuildingIO.class);
+        Iterator<String> it = lines.iterator();
 
-        for (String line : lines) {
+        while (it.hasNext()) {
+            String line = it.next();
             ++n;
             switch (readerState) {
-            case ExpectTenantRoster:
-                if (line.toLowerCase().contains("tenant roster")) {
-                    readerState = RosterReaderState.ExpectAddress;
-                    building = null;
-                } else {
-                    //throw new Error("line " + n + ": expected tenant roster but got \"" + line + "\"");
-                }
-                break;
-            case ExpectAddress:
 
-                address = splitCSVRow(line)[1];
-                String externalId = propertyCodeFromAddress(address);
-
-                // find building where propertyCode.equals(building.propertyCode().getValue())
-                building = buildings.get(externalId);
-                if (building == null) {
-                    building = EntityFactory.create(BuildingIO.class);
-                    building.externalId().setValue(externalId);
-                    buildings.put(externalId, building);
-                    System.out.println("externalId = [" + externalId + "]");
-                }
-                readerState = RosterReaderState.ExpectHeader;
-
-                break;
             case ExpectHeader:
                 if (line.startsWith("\"Unit\"")) {
                     String[] keys = splitCSVRow(line);
@@ -140,7 +126,12 @@ public class RentRollAdaptor {
                     for (int i = 0; i < keys.length; ++i) {
                         keyToIndexMap.put(keys[i], i);
                     }
+
                     readerState = RosterReaderState.ExpectData;
+                    it.next();
+                    it.next(); // skip 2 lines w/ useless data:
+//                        ,," Sq Ft",,," Rent"," Rent"," Deposit"," Deposit",," Expiration",,
+//                        "Current/Notice/Vacant Residents",,,,,,,,,,,,
                 }
                 break;
 
@@ -152,29 +143,51 @@ public class RentRollAdaptor {
                     // TODO normalize unitID form
                     String unitNumber = values[keyToIndexMap.get("Unit")];
                     assert unitNumber != null : "line " + n + ": failed to fetch UNIT ID from the current line";
+                    if (CommonsStringUtils.isEmpty(unitNumber)) {
+                        // TODO verify for "Total"
+                        building.externalId().setValue("vv"); //TODO set value
 
-                    AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
-                    unit.number().setValue(unitNumber);
+                        // start new building
+                        building = EntityFactory.create(BuildingIO.class);
 
-                    unit = EntityFactory.create(AptUnitIO.class);
-                    unit.number().setValue(unitNumber);
+                    } else {
 
-                    String vacant = values[keyToIndexMap.get("Tenant_Name")];
-                    assert vacant != null : "line " + n + ": failed to fetch TENANT_NAME from the current line";
-                    if (vacant.toLowerCase().trim().equals("vacant")) {
-                        unit.availableForRent().setValue(new LogicalDate());
-                        String number = values[keyToIndexMap.get("Unit")];
+                        AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
+                        unit.number().setValue(unitNumber);
 
-                        if (!strings.contains(number.toLowerCase().trim())) {
-                            building.units().add(unit);
+                        String vacant = values[keyToIndexMap.get("Name")];
+                        assert vacant != null : "line " + n + ": failed to fetch TENANT_NAME from the current line";
+                        if (vacant.toLowerCase().trim().equals("vacant")) {
+                            unit.availableForRent().setValue(new LogicalDate());
+                            String number = values[keyToIndexMap.get("Unit")];
+
+                            if (!strings.contains(number.toLowerCase().trim())) {
+                                building.units().add(unit);
+                            }
                         }
                     }
                 } else {
                     if (gotData == true) {
                         gotData = false;
-                        readerState = RosterReaderState.ExpectTenantRoster;
+                        readerState = RosterReaderState.ExpectAddress;
                     }
                 }
+
+                break;
+
+            case ExpectAddress:
+
+                address = splitCSVRow(line)[1];
+                String externalId = propertyCodeFromAddress(address);
+                building = buildings.get(externalId);
+                if (building == null) {
+                    building = EntityFactory.create(BuildingIO.class);
+                    building.externalId().setValue(externalId);
+                    buildings.put(externalId, building);
+                    System.out.println("externalId = [" + externalId + "]");
+                }
+                readerState = RosterReaderState.ExpectData;
+
                 break;
             }
         }
@@ -245,7 +258,7 @@ public class RentRollAdaptor {
         boolean ignoreCommas = false;
         boolean startValue = true;
         StringBuffer value = new StringBuffer();
-        for (int i = 0; i < row.length(); ++i) {
+        for (int i = 0; i < row.length(); ++i) { // crude way to skip ",,,'Total',"
             char c = row.charAt(i);
 
             if (startValue) {
