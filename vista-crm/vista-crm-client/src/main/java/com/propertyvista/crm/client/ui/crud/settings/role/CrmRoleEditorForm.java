@@ -79,42 +79,48 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
 
         @Override
         protected void addItem() {
-
-            new EntitySelectorDialog<VistaCrmBehaviorDTO>(VistaCrmBehaviorDTO.class, true, getValue(), i18n.tr("Select Permissions")) {
+            new CrmBehaviorDTOSelectorDialog(getValue()) {
 
                 @Override
                 public boolean onClickOk() {
-                    if (!getSelectedItems().isEmpty()) {
+                    if (getSelectedItems().isEmpty()) {
+                        return false;
+                    } else {
                         for (VistaCrmBehaviorDTO item : getSelectedItems()) {
                             addItem(item);
                         }
                         return true;
-                    } else {
-                        return false;
                     }
-                }
 
-                @Override
-                protected String width() {
-                    return "500px";
                 }
-
-                @Override
-                protected String height() {
-                    return "400px";
-                }
-
-                @Override
-                protected List<ColumnDescriptor> defineColumnDescriptors() {
-                    return Arrays.asList(new MemberColumnDescriptor.Builder(proto().permission()).build());
-                }
-
-                @Override
-                protected AbstractListService<VistaCrmBehaviorDTO> getSelectService() {
-                    return new CrmRoleBehaviorDTOListServiceImpl();
-                }
-
             }.show();
+        }
+    }
+
+    private abstract static class CrmBehaviorDTOSelectorDialog extends EntitySelectorDialog<VistaCrmBehaviorDTO> {
+
+        public CrmBehaviorDTOSelectorDialog(List<VistaCrmBehaviorDTO> alreadySelected) {
+            super(VistaCrmBehaviorDTO.class, true, alreadySelected, i18n.tr("Select Permissions"));
+        }
+
+        @Override
+        protected String width() {
+            return "500px";
+        }
+
+        @Override
+        protected String height() {
+            return "400px";
+        }
+
+        @Override
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
+            return Arrays.asList(new MemberColumnDescriptor.Builder(proto().permission()).build());
+        }
+
+        @Override
+        protected AbstractListService<VistaCrmBehaviorDTO> getSelectService() {
+            return new CrmRoleBehaviorDTOListServiceImpl();
         }
     }
 

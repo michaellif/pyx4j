@@ -124,7 +124,7 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
             AnchorButton select = new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new SelectFloorplanDialog() {
+                    new FloorplanSelectorDialogDialog() {
                         @Override
                         public boolean onClickOk() {
                             if (!getSelectedItems().isEmpty()) {
@@ -168,9 +168,9 @@ public class LeadEditorForm extends CrmEntityForm<Lead> {
         return new HTML(); // just stub - not necessary for editing mode!..
     }
 
-    private class SelectFloorplanDialog extends EntitySelectorDialog<Floorplan> {
+    private class FloorplanSelectorDialogDialog extends EntitySelectorDialog<Floorplan> {
 
-        public SelectFloorplanDialog() {
+        public FloorplanSelectorDialogDialog() {
             super(Floorplan.class, false, new ArrayList<Floorplan>(1), i18n.tr("Building/Floorplan Selection"));
         }
 

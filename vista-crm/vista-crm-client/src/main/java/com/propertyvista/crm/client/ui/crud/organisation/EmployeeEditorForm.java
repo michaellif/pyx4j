@@ -202,7 +202,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         @Override
         protected void addItem() {
-            new SelectPortfolioBox(getValue()) {
+            new PortfolioSelectorDialog(getValue()) {
                 @Override
                 public boolean onClickOk() {
                     for (Portfolio portfolio : getSelectedItems()) {
@@ -274,7 +274,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         @Override
         protected void addItem() {
-            new SelectEmployeeBox(getValue()) {
+            new EmployeeSelectorDialog(getValue()) {
 
                 @Override
                 protected void setPreDefinedFilters(java.util.List<DataTableFilterData> preDefinedFilters) {
@@ -295,13 +295,12 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         }
     };
 
-    private abstract class SelectPortfolioBox extends EntitySelectorDialog<Portfolio> {
+    private abstract class PortfolioSelectorDialog extends EntitySelectorDialog<Portfolio> {
 
-        public SelectPortfolioBox(List<Portfolio> alreadySelected) {
+        public PortfolioSelectorDialog(List<Portfolio> alreadySelected) {
             super(Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
@@ -327,13 +326,12 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
     }
 
-    private abstract class SelectEmployeeBox extends EntitySelectorDialog<Employee> {
+    private abstract class EmployeeSelectorDialog extends EntitySelectorDialog<Employee> {
 
-        public SelectEmployeeBox(List<Employee> alreadySelected) {
+        public EmployeeSelectorDialog(List<Employee> alreadySelected) {
             super(Employee.class, true, alreadySelected, i18n.tr("Select Employee"));
         }
-
-        @SuppressWarnings("unchecked")
+        
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off                    

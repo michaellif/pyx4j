@@ -104,7 +104,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
         @Override
         protected void addItem() {
-            new SelectBuildingBox(getValue()) {
+            new BuildingSelectorDialog(getValue()) {
                 @Override
                 public boolean onClickOk() {
                     for (Building building : getSelectedItems()) {
@@ -117,9 +117,9 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
 
     }
 
-    private abstract class SelectBuildingBox extends EntitySelectorDialog<Building> {
+    private abstract class BuildingSelectorDialog extends EntitySelectorDialog<Building> {
 
-        public SelectBuildingBox(List<Building> alreadySelected) {
+        public BuildingSelectorDialog(List<Building> alreadySelected) {
             super(Building.class, true, alreadySelected, i18n.tr("Select Buildings"));
         }
 

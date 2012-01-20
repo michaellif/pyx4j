@@ -28,16 +28,16 @@ import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.propertyvista.crm.rpc.services.SelectUnitCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public abstract class SelectUnitDialog extends EntitySelectorDialog<AptUnit> {
+public abstract class UnitSelectorDialog extends EntitySelectorDialog<AptUnit> {
 
-    private static final I18n i18n = I18n.get(SelectUnitDialog.class);
+    private static final I18n i18n = I18n.get(UnitSelectorDialog.class);
 
-    public SelectUnitDialog() {
+    public UnitSelectorDialog() {
         this(false);
     }
 
     @SuppressWarnings("unchecked")
-    public SelectUnitDialog(boolean displayAvailableUnitsOnly) {
+    public UnitSelectorDialog(boolean displayAvailableUnitsOnly) {
         super(AptUnit.class, false, Collections.EMPTY_LIST, i18n.tr("Select Unit"));
     }
 

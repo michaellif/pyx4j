@@ -39,7 +39,7 @@ import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
-import com.propertyvista.crm.client.ui.components.boxes.SelectUnitDialog;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.ServiceItem;
@@ -118,7 +118,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             unitPanel.add(new AnchorButton(i18n.tr("Select..."), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new SelectUnitDialog(true) {
+                    new UnitSelectorDialog(true) {
                         @Override
                         protected void setPreDefinedFilters(java.util.List<DataTableFilterData> preDefinedFilters) {
                             if (!getValue().leaseFrom().isNull() & getValue().leaseTo().isNull() & preDefinedFilters != null) {
