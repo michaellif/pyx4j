@@ -51,7 +51,6 @@ public abstract class SelectUnitDialog extends EntitySelectorDialog<AptUnit> {
         return "400px";
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off

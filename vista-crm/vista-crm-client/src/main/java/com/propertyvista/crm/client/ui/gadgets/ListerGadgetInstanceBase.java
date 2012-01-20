@@ -22,14 +22,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -172,56 +170,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     protected void onItemSelect(E item) {
     }
 
-    /**
-     * Convenience method that allows to avoid a lot of unnecessary typing.
-     * 
-     * @param member
-     * @param title
-     *            use <code>null</code> to set default title.
-     * @param visible
-     * @return
-     */
-    // FIXME get rid of this
-    @Deprecated
-    protected final ColumnDescriptor col(IObject<?> member, String title, boolean visible) {
-        if (title == null) {
-            return ColumnDescriptorFactory.createColumnDescriptor(proto(), member, visible);
-        } else {
-            return ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), member, title, visible);
-        }
-    }
-
-    // FIXME get rid of this
-    @Deprecated
-    protected final ColumnDescriptor col(IObject<?> member, boolean visible) {
-        return col(member, null, visible);
-    }
-
-    // FIXME get rid of this
-    @Deprecated
-    protected final ColumnDescriptor colv(IObject<?> member) {
-        return col(member, true);
-    }
-
-    // FIXME get rid of this
-    @Deprecated
-    protected final ColumnDescriptor colv(IObject<?> member, String title) {
-        return col(member, title, true);
-    }
-
-    /** Create invisible (hidden) column */
-    // FIXME get rid of this
-    @Deprecated
-    protected final ColumnDescriptor colh(IObject<?> member) {
-        return col(member, false);
-    }
-
-    /** Create invisible (hidden) column */
-    protected final ColumnDescriptor colh(IObject<?> member, String title) {
-        return col(member, title, false);
-    }
-
-    @SuppressWarnings("unchecked")
     private List<ColumnDescriptor> fetchColumnDescriptorsFromSettings() {
         List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
         if (getMetadata().columnDescriptors().isEmpty()) {

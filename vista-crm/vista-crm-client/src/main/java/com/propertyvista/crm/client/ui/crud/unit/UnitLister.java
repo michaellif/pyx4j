@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
@@ -32,21 +28,21 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
         super(AptUnitDTO.class, CrmSiteMap.Properties.Unit.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
-        @SuppressWarnings("unchecked")
-        List<ColumnDescriptor> columnDescriptors = Arrays.asList(new ColumnDescriptor[] {
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().buildingCode(), true),
-                ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().name(), i18n.tr("Floorplan Name"), true),
-                ColumnDescriptorFactory.createTitledColumnDescriptor(proto(), proto().floorplan().marketingName(), i18n.tr("Floorplan Marketing Name"), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().economicStatus(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().floor(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().number(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().area(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info().areaUnits(), false),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bedrooms(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().info()._bathrooms(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._unitRent(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().financial()._marketRent(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().availableForRent(), true) });
-        setColumnDescriptors(columnDescriptors);
+        setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
+                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
+                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
+                new MemberColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
+                new MemberColumnDescriptor.Builder(proto().info().number()).build(),
+                new MemberColumnDescriptor.Builder(proto().info().area()).build(),
+                new MemberColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(),
+                new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
+                new MemberColumnDescriptor.Builder(proto().availableForRent()).build()
+       );//@formatter:on
+
     }
 }

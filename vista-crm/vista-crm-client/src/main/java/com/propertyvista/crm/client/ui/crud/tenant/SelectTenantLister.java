@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 
 import com.propertyvista.domain.tenant.Tenant;
@@ -28,13 +24,13 @@ public class SelectTenantLister extends BasicLister<Tenant> {
         super(Tenant.class);
         setHasCheckboxColumn(true);
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().name(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().birthDate(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().email(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().person().homePhone(), true));
-        setColumnDescriptors(columnDescriptors);
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().type()).build(),
+            new MemberColumnDescriptor.Builder(proto().person().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().person().email()).build(),
+            new MemberColumnDescriptor.Builder(proto().person().homePhone()).build()
+        );//@formatter:on
     }
 
 }

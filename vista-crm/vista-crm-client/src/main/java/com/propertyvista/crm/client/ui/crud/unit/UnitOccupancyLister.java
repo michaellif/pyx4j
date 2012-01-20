@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -29,13 +25,13 @@ public class UnitOccupancyLister extends ListerBase<AptUnitOccupancy> {
         super(AptUnitOccupancy.class, CrmSiteMap.Properties.UnitOccupancy.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dateFrom(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dateTo(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().offMarket(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().description(), true));
-        setColumnDescriptors(columnDescriptors);
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().dateFrom()).build(),
+            new MemberColumnDescriptor.Builder(proto().dateTo()).build(),
+            new MemberColumnDescriptor.Builder(proto().status()).build(),
+            new MemberColumnDescriptor.Builder(proto().offMarket()).build(),
+            new MemberColumnDescriptor.Builder(proto().description()).build()
+        );//@formatter:on
     }
 
 }

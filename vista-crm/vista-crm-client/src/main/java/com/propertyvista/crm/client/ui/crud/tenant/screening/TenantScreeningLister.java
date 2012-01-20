@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -29,16 +25,15 @@ public class TenantScreeningLister extends ListerBase<TenantScreening> {
         super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().createDate(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().driversLicense(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().secureIdentifier(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().notCanadianCitizen(), true));
-
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().equifaxApproval().percenrtageApproved(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().equifaxApproval().suggestedDecision(), true));
-
-        setColumnDescriptors(columnDescriptors);
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().createDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().driversLicense()).build(),
+            new MemberColumnDescriptor.Builder(proto().secureIdentifier()).build(),
+            new MemberColumnDescriptor.Builder(proto().notCanadianCitizen()).build(),
+    
+            new MemberColumnDescriptor.Builder(proto().equifaxApproval().percenrtageApproved()).build(),
+            new MemberColumnDescriptor.Builder(proto().equifaxApproval().suggestedDecision()).build()
+        );//@formatter:on
 
     }
 

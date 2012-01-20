@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.floorplan;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -29,18 +25,17 @@ public class SelectedFloorplanLister extends ListerBase<Floorplan> {
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(8);
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), false));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().marketingName(), true));
+        setColumnDescriptors(//@formatter:off
+        new MemberColumnDescriptor.Builder(proto().name()).visible(false).build(),
+        new MemberColumnDescriptor.Builder(proto().marketingName()).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().floorCount(), true));
+        new MemberColumnDescriptor.Builder(proto().floorCount()).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().bedrooms(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().dens(), false));
+        new MemberColumnDescriptor.Builder(proto().bedrooms()).build(),
+        new MemberColumnDescriptor.Builder(proto().dens()).visible(false).build(),
 
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().bathrooms(), true));
-        setColumnDescriptors(columnDescriptors);
+        new MemberColumnDescriptor.Builder(proto().bathrooms()).build()
+        );//@formatter:on
 
     }
-
 }

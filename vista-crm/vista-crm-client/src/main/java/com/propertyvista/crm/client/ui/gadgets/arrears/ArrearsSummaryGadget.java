@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,18 +55,17 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
             service = GWT.create(ArrearsReportService.class);
         }
 
-        //@formatter:off
         @Override
         public List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(
-                    colv(proto().thisMonth(), i18n.tr("Total this month")),
-                    colv(proto().monthAgo(), i18n.tr("Total 0-30")),
-                    colv(proto().twoMonthsAgo(), i18n.tr("Total 30-60")),
-                    colv(proto().threeMonthsAgo(), i18n.tr("Total 60-90")),
-                    colv(proto().overFourMonthsAgo(), i18n.tr("Total over 90")),
-                    colv(proto().arBalance(), i18n.tr("Total AR Balance")));
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().thisMonth()).title(i18n.tr("Total this month")).build(),
+                    new MemberColumnDescriptor.Builder(proto().monthAgo()).title(i18n.tr("Total 0-30")).build(),
+                    new MemberColumnDescriptor.Builder(proto().twoMonthsAgo()).title(i18n.tr("Total 30-60")).build(),
+                    new MemberColumnDescriptor.Builder(proto().threeMonthsAgo()).title(i18n.tr("Total 60-90")).build(),
+                    new MemberColumnDescriptor.Builder(proto().overFourMonthsAgo()).title(i18n.tr("Total over 90")).build(),
+                    new MemberColumnDescriptor.Builder(proto().arBalance()).title(i18n.tr("Total AR Balance")).build()
+           );//@formatter:on                   
         }
-        //@formatter:on
 
         @Override
         public void setFiltering(FilterData filterData) {

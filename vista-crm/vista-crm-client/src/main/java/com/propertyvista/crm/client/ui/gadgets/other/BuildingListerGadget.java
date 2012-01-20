@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -88,24 +89,22 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
             }
         }
 
-        //@formatter:off
-        @Override    
+        @Override
         public List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(
-                    colh(proto().complex()),
-                    colv(proto().propertyCode()),
-                    colv(proto().propertyManager()),
-                    colv(proto().marketing().name(), i18n.tr("Marketing Name")),
-                    colv(proto().info().name()),
-                    colv(proto().info().type()),
-                    colh(proto().info().shape()),
-                    colh(proto().info().address().streetName()),
-                    colv(proto().info().address().city()),
-                    colv(proto().info().address().province()),
-                    colv(proto().info().address().country())
-            );
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().complex()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().propertyManager()).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketing().name()).title(i18n.tr("Marketing Name")).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().shape()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().streetName()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().city()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().province()).build(),
+                    new MemberColumnDescriptor.Builder(proto().info().address().country()).build()
+            );//@formatter:on
         }
-        //@formatter:on
 
         @Override
         public Widget initContentPanel() {

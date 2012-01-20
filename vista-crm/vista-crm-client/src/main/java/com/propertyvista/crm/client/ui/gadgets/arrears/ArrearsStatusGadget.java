@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -95,42 +96,41 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
         }
 
         //@formatter:off    
-        @SuppressWarnings("unchecked")
         @Override
         public List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(
-                    colh(proto().propertyCode()),
-                    colh(proto().buildingName()),
-                    colh(proto().complexName()),
-                    colv(proto().unitNumber()),
-                    colh(proto().firstName()),
-                    colv(proto().lastName()),
+                    new MemberColumnDescriptor.Builder(proto().propertyCode()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().buildingName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().complexName()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().unitNumber()).build(),
+                    new MemberColumnDescriptor.Builder(proto().firstName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lastName()).build(),
                     
                     // arrears subclass specific stuff goes here here
-                    colv(arrearsProto().thisMonth()),
-                    colv(arrearsProto().monthAgo()),
-                    colv(arrearsProto().twoMonthsAgo()),
-                    colv(arrearsProto().threeMonthsAgo()),
-                    colv(arrearsProto().overFourMonthsAgo()),
-                    colv(arrearsProto().totalBalance()),
-                    colv(arrearsProto().prepayments()),
+                    new MemberColumnDescriptor.Builder(arrearsProto().thisMonth()).build(),
+                    new MemberColumnDescriptor.Builder(arrearsProto().monthAgo()).build(),
+                    new MemberColumnDescriptor.Builder(arrearsProto().twoMonthsAgo()).build(),
+                    new MemberColumnDescriptor.Builder(arrearsProto().threeMonthsAgo()).build(),
+                    new MemberColumnDescriptor.Builder(arrearsProto().overFourMonthsAgo()).build(),
+                    new MemberColumnDescriptor.Builder(arrearsProto().totalBalance()).build(),
+                    new MemberColumnDescriptor.Builder(arrearsProto().prepayments()).build(),
                                     
-                    colv(proto().legalStatus()),
-                    colv(proto().lmrUnitRentDifference()),
+                    new MemberColumnDescriptor.Builder(proto().legalStatus()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lmrUnitRentDifference()).build(),
                     
                     // address
-                    colh(proto().streetNumber()),
-                    colh(proto().streetName()),
-                    colh(proto().streetType()),
-                    colh(proto().city()),
-                    colh(proto().province(), i18n.tr("Province")),
-                    colh(proto().country().name(), i18n.tr("Country")),
+                    new MemberColumnDescriptor.Builder(proto().streetNumber()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().streetName()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().streetType()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().city()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().province()).title(i18n.tr("Province")).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().country().name()).title(i18n.tr("Country")).visible(false).build(),
                     
                     // common tabular gadget stuff
-                    colh(proto().common().propertyManger().name(), i18n.tr("Property Manager")),
-                    colh(proto().common().owner().company().name(), i18n.tr("Owner")),
-                    colh(proto().common().region()),
-                    colh(proto().common().portfolio().name(), i18n.tr("Portfolio"))
+                    new MemberColumnDescriptor.Builder(proto().common().propertyManger().name()).title(i18n.tr("Property Manager")).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().common().owner().company().name()).title(i18n.tr("Owner")).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().common().region()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().common().portfolio().name()).title(i18n.tr("Portfolio")).visible(false).build()
             );
         }                    
         //@formatter:on

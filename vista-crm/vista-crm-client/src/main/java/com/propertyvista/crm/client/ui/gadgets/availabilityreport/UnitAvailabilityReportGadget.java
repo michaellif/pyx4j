@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -238,33 +239,32 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         }
 
         @Override
-        //@formatter:off
         public List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(
-                    col(proto().propertyCode(), true),
-                    col(proto().buildingName(), false),
-                    col(proto().address(), false),
-                    col(proto().common().owner().company().name(), i18n.tr("Owner"), false),
-                    col(proto().common().propertyManger().name(), i18n.tr("Property Manager"), true),                
-                    col(proto().complexName(), false),
-                    col(proto().unitName(), true),
-                    col(proto().floorplanName(), false),
-                    col(proto().floorplanMarketingName(), false),
-                    col(proto().vacancyStatus(), true),
-                    col(proto().rentedStatus(), false),
-                    col(proto().isScoped(), false),
-                    col(proto().rentReadinessStatus(), false),
-                    col(proto().unitRent(), true),
-                    col(proto().marketRent(), true),
-                    col(proto().rentDeltaAbsolute(), false),
-                    col(proto().rentDeltaRelative(), false),
-                    col(proto().moveOutDay(), false),
-                    col(proto().moveInDay(), false),
-                    col(proto().rentedFromDate(), false),
-                    col(proto().daysVacant(), true),
-                    col(proto().revenueLost(), true));
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().propertyCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().buildingName()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().address()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().common().owner().company().name()).title(i18n.tr("Owner")).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().common().propertyManger().name()).title(i18n.tr("Property Manager")).build(),                
+                    new MemberColumnDescriptor.Builder(proto().complexName()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().unitName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().floorplanName()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().floorplanMarketingName()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().vacancyStatus()).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentedStatus()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().isScoped()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentReadinessStatus()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().unitRent()).build(),
+                    new MemberColumnDescriptor.Builder(proto().marketRent()).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentDeltaAbsolute()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentDeltaRelative()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().moveOutDay()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().moveInDay()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().rentedFromDate()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().daysVacant()).build(),
+                    new MemberColumnDescriptor.Builder(proto().revenueLost()).build()
+            );//@formatter:on
         }
-        //@formatter:on
 
         @Override
         public ISetup getSetup() {

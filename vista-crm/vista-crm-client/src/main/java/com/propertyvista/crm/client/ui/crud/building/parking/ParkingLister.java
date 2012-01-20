@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -29,13 +25,12 @@ public class ParkingLister extends ListerBase<ParkingDTO> {
         super(ParkingDTO.class, CrmSiteMap.Properties.Parking.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().name(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().levels(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().totalSpaces(), true));
-        setColumnDescriptors(columnDescriptors);
-
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().type()).build(),
+            new MemberColumnDescriptor.Builder(proto().levels()).build(),
+            new MemberColumnDescriptor.Builder(proto().totalSpaces()).build()
+        );//@formatter:on
     }
 
 }

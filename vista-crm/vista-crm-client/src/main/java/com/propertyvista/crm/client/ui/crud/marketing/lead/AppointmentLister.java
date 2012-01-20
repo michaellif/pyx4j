@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.marketing.lead;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -28,16 +24,15 @@ public class AppointmentLister extends ListerBase<Appointment> {
     public AppointmentLister() {
         super(Appointment.class, Marketing.Appointment.class, false, true);
 
-        @SuppressWarnings("unchecked")
-        List<ColumnDescriptor> columnDescriptors = Arrays.asList(new ColumnDescriptor[] {
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().date(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().time(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().agent(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().phone(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().email(), true),
-                ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true) });
+        setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().date()).build(),
+                new MemberColumnDescriptor.Builder(proto().time()).build(),
+                new MemberColumnDescriptor.Builder(proto().agent()).build(),
+                new MemberColumnDescriptor.Builder(proto().phone()).build(),
+                new MemberColumnDescriptor.Builder(proto().email()).build(),
+                new MemberColumnDescriptor.Builder(proto().status()).build()
+        );//@formatter:on
 
-        setColumnDescriptors(columnDescriptors);
     }
 
 }

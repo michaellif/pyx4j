@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.domain.financial.offering.Concession;
@@ -30,15 +26,16 @@ public class SelectConcessionLister extends ListerBase<Concession> {
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
         setMultiSelect(true);
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().term(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().value(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().condition(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().status(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().effectiveDate(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().expirationDate(), true));
-        setColumnDescriptors(columnDescriptors);
+        setColumnDescriptors(
+                //@formatter:off
+                new MemberColumnDescriptor.Builder(proto().type()).build(),
+                new MemberColumnDescriptor.Builder(proto().term()).build(),
+                new MemberColumnDescriptor.Builder(proto().value()).build(),
+                new MemberColumnDescriptor.Builder(proto().condition()).build(),
+                new MemberColumnDescriptor.Builder(proto().status()).build(),
+                new MemberColumnDescriptor.Builder(proto().effectiveDate()).build(),
+                new MemberColumnDescriptor.Builder(proto().expirationDate()).build()
+        );//@formatter:on
 
     }
 

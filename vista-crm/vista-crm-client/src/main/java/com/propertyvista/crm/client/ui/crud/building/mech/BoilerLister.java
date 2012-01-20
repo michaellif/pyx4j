@@ -13,11 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -29,12 +25,12 @@ public class BoilerLister extends ListerBase<BoilerDTO> {
         super(BoilerDTO.class, CrmSiteMap.Properties.Boiler.class, false, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().type(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().make(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().model(), true));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(proto(), proto().build(), true));
-        setColumnDescriptors(columnDescriptors);
+        setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().type()).build(),
+            new MemberColumnDescriptor.Builder(proto().make()).build(),
+            new MemberColumnDescriptor.Builder(proto().model()).build(),
+            new MemberColumnDescriptor.Builder(proto().build()).build()
+        );//@formatter:on
     }
 
 }
