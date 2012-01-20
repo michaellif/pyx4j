@@ -35,7 +35,7 @@ import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 
 public class CrmVeiwFactory extends ViewFactoryBase {
 
-    public static IsWidget instance(Class<?> type) {
+    public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
@@ -58,6 +58,12 @@ public class CrmVeiwFactory extends ViewFactoryBase {
                 map.put(type, new AccountViewImpl());
             }
         }
-        return map.get(type);
+
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }
