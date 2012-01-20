@@ -80,9 +80,6 @@ public class PtAppSite extends VistaSite {
                 com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
                 Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
                 StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
-
-                //TODO
-                ///StyleManger.installTheme(new VistaCrmTheme(), new VistaPalette(descriptor.palette()));
                 authenticateAndInit();
             }
         }, ClentNavigUtils.getCurrentLocale());

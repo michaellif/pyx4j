@@ -16,6 +16,8 @@ package com.propertyvista.portal.ptapp.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
+import com.propertyvista.portal.ptapp.client.ui.ApplicationStatusView;
+import com.propertyvista.portal.ptapp.client.ui.ApplicationStatusViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.CaptionView;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.FooterView;
@@ -43,7 +45,7 @@ import com.propertyvista.portal.ptapp.client.ui.UserMessageViewImpl;
 
 public class PtAppViewFactory extends ViewFactoryBase {
 
-    public static IsWidget instance(Class<?> type) {
+    public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (CaptionView.class.equals(type)) {
                 map.put(type, new CaptionViewImpl());
@@ -72,8 +74,16 @@ public class PtAppViewFactory extends ViewFactoryBase {
             } else if (RetrievePasswordView.class.equals(type)) {
                 map.put(type, new RetrievePasswordViewImpl());
 
+            } else if (ApplicationStatusView.class.equals(type)) {
+                map.put(type, new ApplicationStatusViewImpl());
             }
         }
-        return map.get(type);
+
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }

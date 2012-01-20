@@ -21,12 +21,13 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.portal.ptapp.client.activity.SecondNavigActivity;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.ptapp.WizardStepPlace;
 
 public class SecondNavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated() && !(place instanceof PtSiteMap.Completion)) {
+        if (ClientContext.isAuthenticated() && (place instanceof WizardStepPlace) && !(place instanceof PtSiteMap.Completion)) {
             return new SecondNavigActivity(place);
         } else {
             return null;

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.completion;
+package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -28,22 +28,20 @@ import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap.ApplicationStatus;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
-public class CompletionViewImpl extends FlowPanel implements CompletionView {
+public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationStatusView {
 
-    private static final I18n i18n = I18n.get(CompletionViewImpl.class);
+    private static final I18n i18n = I18n.get(ApplicationStatusViewImpl.class);
 
-    public CompletionViewImpl() {
+    public ApplicationStatusViewImpl() {
 
         VerticalPanel main = new VerticalPanel();
 
-        HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Congratulation! You have successfully completed your application!")));
+        HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Current status of Your Application")));
         main.add(titleHtml);
         main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
@@ -55,15 +53,15 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
         HorizontalPanel actions = new HorizontalPanel();
 
-        Button backAction = new Button(i18n.tr("View Status"));
-        backAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        backAction.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(ApplicationStatus.class));
-            }
-        });
-        actions.add(backAction);
+//        Button backAction = new Button(i18n.tr("View Status"));
+//        backAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+//        backAction.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(ApplicationStatus.class));
+//            }
+//        });
+//        actions.add(backAction);
 
         Button logoutAction = new Button(i18n.tr("Log Out"));
         logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());

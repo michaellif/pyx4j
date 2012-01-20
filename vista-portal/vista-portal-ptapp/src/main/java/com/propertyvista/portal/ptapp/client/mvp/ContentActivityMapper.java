@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.ptapp.client.activity.ApplicationStatusActivity;
 import com.propertyvista.portal.ptapp.client.activity.ChangePasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
@@ -66,6 +67,9 @@ public class ContentActivityMapper implements ActivityMapper {
             return new PaymentActivity((AppPlace) place);
         } else if (place instanceof PtSiteMap.Completion) {
             return new CompletionActivity((AppPlace) place);
+// other places:
+        } else if (place instanceof PtSiteMap.ApplicationStatus) {
+            return new ApplicationStatusActivity((AppPlace) place);
         }
         //TODO what to do on other place
         return null;

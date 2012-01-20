@@ -35,7 +35,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewImpl;
 
 public class WizardStepsViewFactory extends ViewFactoryBase {
 
-    public static IsWidget instance(Class<?> type) {
+    public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (ApartmentView.class.equals(type)) {
                 map.put(type, new ApartmentViewImpl());
@@ -55,6 +55,12 @@ public class WizardStepsViewFactory extends ViewFactoryBase {
                 map.put(type, new CompletionViewImpl());
             }
         }
-        return map.get(type);
+
+        @SuppressWarnings("unchecked")
+        T impl = (T) map.get(type);
+        if (impl == null) {
+            throw new Error("implementation of " + type.getName() + " not found");
+        }
+        return impl;
     }
 }
