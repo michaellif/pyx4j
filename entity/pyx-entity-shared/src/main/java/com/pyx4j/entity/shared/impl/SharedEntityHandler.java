@@ -274,19 +274,20 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         while (ent.getOwner() != null) {
             ent = ent.getOwner();
         }
-        removeValueFromGraph(ent, entity, new IdentityHashSet<IEntity>());
+        removeValueFromGraph(ent, entity, new IdentityHashSet<Object>());
     }
 
     @SuppressWarnings("unchecked")
-    public static void removeValueFromGraph(IEntity root, IEntity entity, Set<IEntity> processed) {
-        if (processed.contains(root)) {
+    public static void removeValueFromGraph(IEntity root, IEntity entity, Set<Object> processed) {
+        Map<String, Object> map = root.getValue();
+        if (processed.contains(root) || processed.contains(map)) {
             return;
         }
         processed.add(root);
-        Map<String, Object> map = root.getValue();
         if (map == null) {
             return;
         }
+        processed.add(map);
         root = root.cast();
         Iterator<Entry<String, Object>> it = map.entrySet().iterator();
         while (it.hasNext()) {
