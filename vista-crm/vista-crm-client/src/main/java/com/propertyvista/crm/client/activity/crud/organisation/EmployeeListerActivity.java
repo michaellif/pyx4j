@@ -22,7 +22,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.organisation.EmployeeListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.EmployeeCrudService;
+import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 
 public class EmployeeListerActivity extends ListerActivityBase<EmployeeDTO> {
 

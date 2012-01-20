@@ -7,15 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Jan 20, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.rpc.services.organization;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeCrudService extends AbstractCrudService<EmployeeDTO> {
+/**
+ * Self administration
+ * This is secure services, user need to be lodged in to do this actions.
+ */
+public interface CrmUserService extends AbstractCrudService<EmployeeDTO> {
+
+    public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
+
 }

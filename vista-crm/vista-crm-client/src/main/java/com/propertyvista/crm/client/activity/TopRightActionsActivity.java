@@ -35,7 +35,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
+import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {

@@ -25,7 +25,6 @@ import com.propertyvista.crm.rpc.services.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
-import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.rpc.services.FloorplanCrudService;
@@ -49,6 +48,7 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
+import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;

@@ -7,12 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-13
- * @author vlads
+ * Created on 2011-05-24
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.rpc.services.organization;
 
-public interface CrmAuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+
+/**
+ * Service used by managers to create new users/employees.
+ */
+public interface EmployeeCrudService extends AbstractCrudService<EmployeeDTO> {
 }

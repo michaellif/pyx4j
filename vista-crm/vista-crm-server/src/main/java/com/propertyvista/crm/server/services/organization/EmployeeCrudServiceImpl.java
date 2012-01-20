@@ -11,14 +11,14 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.organization;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.EmployeeCrudService;
+import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;

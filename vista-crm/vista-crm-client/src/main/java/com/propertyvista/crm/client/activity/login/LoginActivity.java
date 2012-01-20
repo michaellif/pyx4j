@@ -30,7 +30,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
+import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
 

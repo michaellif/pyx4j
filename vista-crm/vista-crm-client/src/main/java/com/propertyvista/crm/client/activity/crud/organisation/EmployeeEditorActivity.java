@@ -22,7 +22,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.organisation.EmployeeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.EmployeeCrudService;
+import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 
 public class EmployeeEditorActivity extends EditorActivityBase<EmployeeDTO> implements EmployeeEditorView.Presenter {
 

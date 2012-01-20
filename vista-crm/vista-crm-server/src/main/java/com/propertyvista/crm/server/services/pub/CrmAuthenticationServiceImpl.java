@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.pub;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,7 +20,7 @@ import java.util.Set;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.crm.rpc.services.CrmAuthenticationService;
+import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
