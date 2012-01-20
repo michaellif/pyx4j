@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.ImageButton;
 
 public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
-    private static I18n i18n = I18n.get(DataTableFilterPanel.class);
+    private static final I18n i18n = I18n.get(DataTableFilterPanel.class);
 
     private final DataTablePanel<E> dataTablePanel;
 

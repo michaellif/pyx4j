@@ -31,7 +31,7 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 public abstract class AbstractCrudServiceImpl<E extends IEntity> extends AbstractListServiceImpl<E> implements AbstractCrudService<E> {
 
-    private static I18n i18n = I18n.get(AbstractCrudServiceImpl.class);
+    private static final I18n i18n = I18n.get(AbstractCrudServiceImpl.class);
 
     protected AbstractCrudServiceImpl(Class<E> entityClass) {
         super(entityClass);

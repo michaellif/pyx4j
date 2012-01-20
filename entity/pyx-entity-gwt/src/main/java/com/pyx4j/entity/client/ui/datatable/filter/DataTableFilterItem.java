@@ -50,7 +50,7 @@ import com.pyx4j.widgets.client.ImageButton;
 
 public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
-    protected static I18n i18n = I18n.get(DataTableFilterItem.class);
+    private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
     protected final CComboBox<FieldData> fieldsList = new CComboBox<FieldData>(true);
 

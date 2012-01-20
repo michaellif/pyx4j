@@ -58,7 +58,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private static final Logger log = LoggerFactory.getLogger(CComponent.class);
 
-    private static I18n i18n = I18n.get(CComponent.class);
+    private static final I18n i18n = I18n.get(CComponent.class);
 
     private String title;
 

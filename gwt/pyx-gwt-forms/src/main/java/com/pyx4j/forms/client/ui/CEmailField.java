@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
 
-    private static I18n i18n = I18n.get(CEmailField.class);
+    private static final I18n i18n = I18n.get(CEmailField.class);
 
     /**
      * RFC 2822 complaint http://www.regular-expressions.info/email.html

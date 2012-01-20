@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CDoubleField extends CNumberField<Double> {
 
-    private static I18n i18n = I18n.get(CDoubleField.class);
+    private static final I18n i18n = I18n.get(CDoubleField.class);
 
     public CDoubleField() {
         this(null);

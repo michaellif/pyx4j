@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
 
-    protected static I18n i18n = I18n.get(CTimeField.class);
+    private static final I18n i18n = I18n.get(CTimeField.class);
 
     public static final String defaultTimeFormat = i18n.tr("h:mm a");
 

@@ -39,7 +39,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class UploadServiceImpl<U extends IEntity, R extends IEntity> implements UploadService<U, R>, UploadReciver<U, R> {
 
-    private static I18n i18n = I18n.get(UploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(UploadServiceImpl.class);
 
     protected void onpPepareUpload(U data, UploadId id) {
 

@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.dialog.Dialog.Type;
 
 public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHandler {
 
-    private static I18n i18n = I18n.get(UnrecoverableErrorHandlerDialog.class);
+    private static final I18n i18n = I18n.get(UnrecoverableErrorHandlerDialog.class);
 
     /**
      * Only one instance of Dialog is shown.

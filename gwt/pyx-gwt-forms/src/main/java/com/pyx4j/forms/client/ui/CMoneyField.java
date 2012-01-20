@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CMoneyField extends CTextFieldBase<Double, NTextBox<Double>> {
 
-    private static I18n i18n = I18n.get(CMoneyField.class);
+    private static final I18n i18n = I18n.get(CMoneyField.class);
 
     public CMoneyField() {
         super();

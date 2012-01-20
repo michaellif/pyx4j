@@ -37,7 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTextBox<GeoCriteria>> implements HasAsyncValue<GeoCriteria>, IAcceptText {
 
-    private static I18n i18n = I18n.get(CLocationCriteriaTextField.class);
+    private static final I18n i18n = I18n.get(CLocationCriteriaTextField.class);
 
     public CLocationCriteriaTextField() {
         this(null);

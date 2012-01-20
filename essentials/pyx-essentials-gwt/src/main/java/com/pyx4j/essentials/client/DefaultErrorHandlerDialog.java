@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
 public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
 
-    private static I18n i18n = I18n.get(DefaultErrorHandlerDialog.class);
+    private static final I18n i18n = I18n.get(DefaultErrorHandlerDialog.class);
 
     private final boolean includeErrorCodeInUserMessage;
 

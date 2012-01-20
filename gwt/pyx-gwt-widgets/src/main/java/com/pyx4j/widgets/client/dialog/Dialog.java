@@ -80,7 +80,7 @@ public class Dialog extends DialogPanel {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
-    private static I18n i18n = I18n.get(Dialog.class);
+    private static final I18n i18n = I18n.get(Dialog.class);
 
     public static enum Type {
         Error, Warning, Info, Confirm

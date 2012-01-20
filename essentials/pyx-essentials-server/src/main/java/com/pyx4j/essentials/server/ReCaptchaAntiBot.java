@@ -39,7 +39,7 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
 
     private final static Logger log = LoggerFactory.getLogger(ReCaptchaAntiBot.class);
 
-    private static I18n i18n = I18n.get(ReCaptchaAntiBot.class);
+    private static final I18n i18n = I18n.get(ReCaptchaAntiBot.class);
 
     @Override
     public void assertCaptcha(String challenge, String response) {

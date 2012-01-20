@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CCaptcha extends CComponent<Pair<String, String>, NativeCaptcha> {
 
-    protected static I18n i18n = I18n.get(CCaptcha.class);
+    private static final I18n i18n = I18n.get(CCaptcha.class);
 
     public CCaptcha() {
         setMandatoryValidationMessage(i18n.tr("Captcha code is required"));

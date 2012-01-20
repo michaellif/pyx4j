@@ -42,7 +42,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     private static final Logger log = LoggerFactory.getLogger(CContainer.class);
 
-    protected static I18n i18n = I18n.get(CContainer.class);
+    private static final I18n i18n = I18n.get(CContainer.class);
 
     private final IAccessAdapter aggregatingAccessAdapter;
 

@@ -53,7 +53,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
 
     private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
-    private static I18n i18n = I18n.get(AuthenticationServiceImpl.class);
+    private static final I18n i18n = I18n.get(AuthenticationServiceImpl.class);
 
     protected void assertClientSystemInfo(ClientSystemInfo clientSystemInfo) {
         String serverVersion = ApplicationVersion.getBuildLabel();

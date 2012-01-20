@@ -54,7 +54,7 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 
-    private static I18n i18n = I18n.get(UploadPanel.class);
+    private static final I18n i18n = I18n.get(UploadPanel.class);
 
     private final UploadService<U, R> service;
 

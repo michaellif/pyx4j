@@ -32,7 +32,7 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends IEntity> extends AbstractListServiceDtoImpl<E, DTO> implements
         AbstractCrudService<DTO> {
 
-    private static I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
+    private static final I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
 
     protected AbstractCrudServiceDtoImpl(Class<E> entityClass, Class<DTO> dtoClass) {
         super(entityClass, dtoClass);

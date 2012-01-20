@@ -38,7 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public abstract class ClientEntityMetaImpl implements EntityMeta {
 
-    protected static I18n i18n = I18n.get(ClientEntityMetaImpl.class);
+    private static final I18n i18n = I18n.get(ClientEntityMetaImpl.class);
 
     private final Class<? extends IEntity> entityClass;
 

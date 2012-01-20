@@ -27,7 +27,7 @@ import com.pyx4j.i18n.annotations.Translate;
 
 public class I18nEnum {
 
-    private static I18n i18n = I18n.get(I18nEnum.class);
+    private static final I18n i18n = I18n.get(I18nEnum.class);
 
     public static String toString(Enum<?> enumValue) {
         /**

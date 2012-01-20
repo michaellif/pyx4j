@@ -40,7 +40,7 @@ import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 
 public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
-    private static I18n i18n = I18n.get(EntityIFormWithoutLists.class);
+    private static final I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 
     public EntityIFormWithoutLists() {
         super(EntityI.class);

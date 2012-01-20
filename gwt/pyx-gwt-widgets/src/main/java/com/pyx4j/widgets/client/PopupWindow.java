@@ -33,7 +33,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class PopupWindow {
 
-    private static I18n i18n = I18n.get(PopupWindow.class);
+    private static final I18n i18n = I18n.get(PopupWindow.class);
 
     private static EventBus eventBus;
 

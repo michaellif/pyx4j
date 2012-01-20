@@ -34,7 +34,7 @@ public abstract class AbstractAntiBot {
 
     public static final String GENERIC_LOGIN_FAILED_MESSAGE = "Invalid login/password";
 
-    private static I18n i18n = I18n.get(AbstractAntiBot.class);
+    private static final I18n i18n = I18n.get(AbstractAntiBot.class);
 
     public abstract void assertCaptcha(String challenge, String response);
 

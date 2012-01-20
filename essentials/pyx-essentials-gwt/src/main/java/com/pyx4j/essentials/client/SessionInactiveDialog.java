@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 public class SessionInactiveDialog implements SessionInactiveHandler {
 
-    private static I18n i18n = I18n.get(SessionInactiveDialog.class);
+    private static final I18n i18n = I18n.get(SessionInactiveDialog.class);
 
     private static boolean shown;
 

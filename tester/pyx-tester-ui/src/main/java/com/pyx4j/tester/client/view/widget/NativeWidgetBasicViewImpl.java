@@ -40,7 +40,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidgetBasicView {
 
-    private static I18n i18n = I18n.get(NativeWidgetBasicViewImpl.class);
+    private static final I18n i18n = I18n.get(NativeWidgetBasicViewImpl.class);
 
     public NativeWidgetBasicViewImpl() {
         setSize("100%", "100%");

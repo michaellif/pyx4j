@@ -42,7 +42,7 @@ public class SystemMaintenance {
 
     private final static Logger log = LoggerFactory.getLogger(SystemMaintenance.class);
 
-    private static I18n i18n = I18n.get(SystemMaintenance.class);
+    private static final I18n i18n = I18n.get(SystemMaintenance.class);
 
     private static final String STATE_FILE_NAME = "systemMaintenance.state.xml";
 

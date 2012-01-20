@@ -57,7 +57,7 @@ import com.pyx4j.widgets.client.dashboard.images.DashboardImages;
 
 final class GadgetHolder extends SimplePanel {
 
-    private static I18n i18n = I18n.get(GadgetHolder.class);
+    private static final I18n i18n = I18n.get(GadgetHolder.class);
 
     private static DashboardImages images = (DashboardImages) GWT.create(DashboardImages.class);
 

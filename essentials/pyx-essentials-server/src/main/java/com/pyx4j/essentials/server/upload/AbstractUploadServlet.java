@@ -61,7 +61,7 @@ import com.pyx4j.server.contexts.Visit;
 @SuppressWarnings("serial")
 public abstract class AbstractUploadServlet extends HttpServlet {
 
-    private static I18n i18n = I18n.get(AbstractUploadServlet.class);
+    private static final I18n i18n = I18n.get(AbstractUploadServlet.class);
 
     private final static Logger log = LoggerFactory.getLogger(AbstractUploadServlet.class);
 

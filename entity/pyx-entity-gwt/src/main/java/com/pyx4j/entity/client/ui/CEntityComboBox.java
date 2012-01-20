@@ -60,7 +60,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
 
-    private static I18n i18n = I18n.get(CEntityComboBox.class);
+    private static final I18n i18n = I18n.get(CEntityComboBox.class);
 
     private static final Logger log = LoggerFactory.getLogger(CEntityComboBox.class);
 

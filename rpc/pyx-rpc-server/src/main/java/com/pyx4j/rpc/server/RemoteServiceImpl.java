@@ -54,7 +54,7 @@ public class RemoteServiceImpl implements RemoteService {
 
     private static final Logger log = LoggerFactory.getLogger(RemoteServiceImpl.class);
 
-    protected static I18n i18n = I18n.get(RemoteServiceImpl.class);
+    private static final I18n i18n = I18n.get(RemoteServiceImpl.class);
 
     private final IServiceFactory serviceFactory;
 

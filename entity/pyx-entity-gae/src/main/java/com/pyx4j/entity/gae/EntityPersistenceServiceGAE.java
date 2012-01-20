@@ -100,7 +100,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceGAE.class);
 
-    private static I18n i18n = I18n.get(EntityPersistenceServiceGAE.class);
+    private static final I18n i18n = I18n.get(EntityPersistenceServiceGAE.class);
 
     private final int ORDINARY_STRING_LENGTH_MAX = com.pyx4j.config.shared.ApplicationBackend.GAE_ORDINARY_STRING_LENGTH_MAX;
 

@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
-    protected static I18n i18n = I18n.get(DataTableFilterItem.class);
+    private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
     private final E entityPrototype;
 

@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
-    private static I18n i18n = I18n.get(CRadioGroupBoolean.class);
+    private static final I18n i18n = I18n.get(CRadioGroupBoolean.class);
 
     private String trueText = defaultYesText();
 

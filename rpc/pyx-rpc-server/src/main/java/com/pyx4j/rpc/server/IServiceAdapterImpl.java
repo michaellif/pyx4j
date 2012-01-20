@@ -53,7 +53,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(IServiceAdapterImpl.class);
 
-    protected static I18n i18n = I18n.get(IServiceAdapterImpl.class);
+    private static final I18n i18n = I18n.get(IServiceAdapterImpl.class);
 
     @Override
     public Serializable execute(IServiceRequest request) {

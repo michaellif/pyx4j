@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CComboBoxBoolean extends CComboBox<Boolean> {
 
-    private static I18n i18n = I18n.get(CComboBoxBoolean.class);
+    private static final I18n i18n = I18n.get(CComboBoxBoolean.class);
 
     private String trueText = defaultYesText();
 

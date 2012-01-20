@@ -48,7 +48,7 @@ public class CaptchaComposite extends SimplePanel {
 
     private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
 
-    private static I18n i18n = I18n.get(CaptchaComposite.class);
+    private static final I18n i18n = I18n.get(CaptchaComposite.class);
 
     private static int instanceId = 0;
 

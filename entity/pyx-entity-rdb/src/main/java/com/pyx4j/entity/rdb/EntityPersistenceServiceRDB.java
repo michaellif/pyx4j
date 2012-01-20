@@ -82,7 +82,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceRDB.class);
 
-    private static I18n i18n = I18n.get(EntityPersistenceServiceRDB.class);
+    private static final I18n i18n = I18n.get(EntityPersistenceServiceRDB.class);
 
     private final ConnectionProvider connectionProvider;
 

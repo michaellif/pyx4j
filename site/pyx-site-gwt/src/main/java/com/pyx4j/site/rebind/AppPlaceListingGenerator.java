@@ -121,7 +121,7 @@ public class AppPlaceListingGenerator extends Generator {
     private void writeImpl(SourceWriter writer, List<JClassType> placeClasses) {
         writer.println();
 
-        writer.println("private static I18n i18n = I18n.get(AppPlace.class);");
+        writer.println("private static final I18n i18n = I18n.get(AppPlace.class);");
 
         //getPlace()
         writer.println("@Override");

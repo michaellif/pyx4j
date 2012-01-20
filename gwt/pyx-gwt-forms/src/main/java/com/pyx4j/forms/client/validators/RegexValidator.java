@@ -16,7 +16,7 @@ import com.pyx4j.i18n.shared.I18n;
  */
 public class RegexValidator<E> implements EditableValueValidator<E> {
 
-    private static I18n i18n = I18n.get(RegexValidator.class);
+    private static final I18n i18n = I18n.get(RegexValidator.class);
 
     public static final String DIGITS_ONLY_REGEX = "^\\d*$";
 

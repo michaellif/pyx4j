@@ -42,7 +42,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class EditorActivityBase<E extends IEntity> extends AbstractActivity implements IEditorView.Presenter {
 
-    private static I18n i18n = I18n.get(EditorActivityBase.class);
+    private static final I18n i18n = I18n.get(EditorActivityBase.class);
 
     protected final IEditorView<E> view;
 

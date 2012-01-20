@@ -34,7 +34,7 @@ import com.pyx4j.tester.client.view.form.EntityIFormWithoutLists;
 
 public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
 
-    private static I18n i18n = I18n.get(EntityIFormWithoutLists.class);
+    private static final I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 
     private CComponent component;
 

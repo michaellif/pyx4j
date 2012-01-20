@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class CBooleanLabel extends CAbstractLabel<Boolean> {
 
-    private static I18n i18n = I18n.get(CBooleanLabel.class);
+    private static final I18n i18n = I18n.get(CBooleanLabel.class);
 
     private String trueText = defaultYesText();
 

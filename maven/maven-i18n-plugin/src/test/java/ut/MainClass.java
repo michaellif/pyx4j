@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class MainClass {
 
-    private static I18n i18n = I18n.get(MainClass.class);
+    private static final I18n i18n = I18n.get(MainClass.class);
 
     private static final String A_CONST = "A Constantant.";
 

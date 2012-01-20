@@ -44,7 +44,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public class PageNavigBar extends Toolbar {
 
-    private static I18n i18n = I18n.get(PageNavigBar.class);
+    private static final I18n i18n = I18n.get(PageNavigBar.class);
 
     private final Label countLabel;
 

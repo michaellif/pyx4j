@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class MessageDialog extends Dialog {
 
-    private static I18n i18n = I18n.get(MessageDialog.class);
+    private static final I18n i18n = I18n.get(MessageDialog.class);
 
     public MessageDialog(String caption, String message, Type type, DialogOptions options) {
         super(caption, options, new MessagePanel(message, type));

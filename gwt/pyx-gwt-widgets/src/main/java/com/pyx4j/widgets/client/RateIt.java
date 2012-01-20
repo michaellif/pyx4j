@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme.StyleName;
 
 public class RateIt extends FocusPanel implements HasValueChangeHandlers<Integer> {
 
-    private static I18n i18n = I18n.get(RateIt.class);
+    private static final I18n i18n = I18n.get(RateIt.class);
 
     private int rating;
 

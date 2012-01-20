@@ -50,7 +50,7 @@ import com.pyx4j.tester.client.view.form.EntityIIFormWithVisibilityChange;
 
 public class EntityIForm extends CEntityEditor<EntityI> {
 
-    private static I18n i18n = I18n.get(EntityIForm.class);
+    private static final I18n i18n = I18n.get(EntityIForm.class);
 
     public EntityIForm() {
         super(EntityI.class);
