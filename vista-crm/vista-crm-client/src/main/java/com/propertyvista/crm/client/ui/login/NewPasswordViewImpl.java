@@ -24,7 +24,7 @@ import com.propertyvista.common.client.ui.components.login.NewPasswordForm.Conve
 
 public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
-    private static I18n i18n = I18n.get(NewPasswordViewImpl.class);
+    private static final I18n i18n = I18n.get(NewPasswordViewImpl.class);
 
     private Presenter presenter;
 

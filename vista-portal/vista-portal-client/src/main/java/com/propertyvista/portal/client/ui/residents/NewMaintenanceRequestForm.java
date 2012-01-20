@@ -35,7 +35,7 @@ import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
 public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<MaintenanceRequestDTO> {
 
-    private static I18n i18n = I18n.get(NewMaintenanceRequestForm.class);
+    private static final I18n i18n = I18n.get(NewMaintenanceRequestForm.class);
 
     private static String defaultChoice = i18n.tr("Select");
 

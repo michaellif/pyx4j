@@ -50,7 +50,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
     private final static Logger log = LoggerFactory.getLogger(MediaConverter.class);
 
-    private static I18n i18n = I18n.get(MediaConverter.class);
+    private static final I18n i18n = I18n.get(MediaConverter.class);
 
     private final MediaConfig mediaConfig;
 

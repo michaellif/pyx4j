@@ -21,7 +21,7 @@ import com.propertyvista.domain.contact.Email;
 
 public class CEmail extends CFocusComponent<Email, NativeEmail> {
 
-    protected static I18n i18n = I18n.get(CEmail.class);
+    private static final I18n i18n = I18n.get(CEmail.class);
 
     private IFormat<Email> format;
 

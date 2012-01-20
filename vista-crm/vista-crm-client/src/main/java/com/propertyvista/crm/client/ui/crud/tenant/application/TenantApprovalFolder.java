@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -27,6 +28,8 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.misc.EquifaxResult;
 
 public class TenantApprovalFolder extends VistaTableFolder<TenantFinancialDTO> {
+
+    private static final I18n i18n = I18n.get(TenantApprovalFolder.class);
 
     public TenantApprovalFolder(boolean modifyable) {
         super(TenantFinancialDTO.class, modifyable);

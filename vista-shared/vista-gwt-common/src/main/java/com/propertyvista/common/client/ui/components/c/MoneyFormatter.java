@@ -26,7 +26,7 @@ import com.propertyvista.domain.util.DomainUtil;
 
 public class MoneyFormatter implements IFormat<Money> {
 
-    private static I18n i18n = I18n.get(MoneyFormatter.class);
+    private static final I18n i18n = I18n.get(MoneyFormatter.class);
 
     public static enum ShowCurrency {
         hide, show, use$

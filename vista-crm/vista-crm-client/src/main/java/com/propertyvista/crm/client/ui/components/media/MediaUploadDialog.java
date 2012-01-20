@@ -34,7 +34,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public abstract class MediaUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
-    private static I18n i18n = I18n.get(MediaUploadDialog.class);
+    private static final I18n i18n = I18n.get(MediaUploadDialog.class);
 
     private final UploadPanel<MediaUploadDTO, File> uploadPanel;
 

@@ -37,7 +37,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class DashboardPanel extends BoardBase implements DashboardView {
 
-    private static I18n i18n = I18n.get(DashboardPanel.class);
+    private static final I18n i18n = I18n.get(DashboardPanel.class);
 
     private ActionsWidget actionsWidget;
 

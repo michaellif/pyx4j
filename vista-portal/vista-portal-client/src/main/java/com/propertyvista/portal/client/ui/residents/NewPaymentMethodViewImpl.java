@@ -34,7 +34,7 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
 
     private Presenter presenter;
 
-    private static I18n i18n = I18n.get(NewPaymentMethodViewImpl.class);
+    private static final I18n i18n = I18n.get(NewPaymentMethodViewImpl.class);
 
     public NewPaymentMethodViewImpl() {
         add(new UserMessagePanel());

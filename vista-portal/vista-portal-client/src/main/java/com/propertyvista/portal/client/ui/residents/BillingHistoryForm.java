@@ -33,7 +33,7 @@ import com.propertyvista.portal.domain.dto.BillListDTO;
 
 public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements BillingHistoryView {
 
-    protected static I18n i18n = I18n.get(BillingHistoryForm.class);
+    private static final I18n i18n = I18n.get(BillingHistoryForm.class);
 
     private BillingHistoryView.Presenter presenter;
 

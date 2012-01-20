@@ -38,7 +38,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         Gainsboro, VillageGreen
     }
 
-    private static I18n i18n = I18n.get(TopRightActionsViewImpl.class);
+    private static final I18n i18n = I18n.get(TopRightActionsViewImpl.class);
 
     private final HorizontalPanel topLinksPanel;
 

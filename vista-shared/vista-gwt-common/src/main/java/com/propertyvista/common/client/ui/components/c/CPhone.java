@@ -21,7 +21,7 @@ import com.propertyvista.domain.contact.Phone;
 
 public class CPhone extends CFocusComponent<Phone, NativePhone> {
 
-    protected static I18n i18n = I18n.get(CPhone.class);
+    private static final I18n i18n = I18n.get(CPhone.class);
 
     private IFormat<Phone> format;
 

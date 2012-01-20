@@ -37,7 +37,7 @@ import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
 
-    private static I18n i18n = I18n.get(LoginViewImpl.class);
+    private static final I18n i18n = I18n.get(LoginViewImpl.class);
 
     private Presenter presenter;
 

@@ -23,7 +23,7 @@ import com.propertyvista.domain.util.ValidationUtils;
 
 public class CanadianSinValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18n.get(CanadianSinValidator.class);
+    private static final I18n i18n = I18n.get(CanadianSinValidator.class);
 
     @Override
     public ValidationFailure isValid(CComponent<String, ?> component, String value) {

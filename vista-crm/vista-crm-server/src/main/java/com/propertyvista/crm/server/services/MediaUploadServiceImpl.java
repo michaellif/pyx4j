@@ -34,7 +34,7 @@ import com.propertyvista.server.common.blob.ThumbnailService;
 
 public class MediaUploadServiceImpl extends UploadServiceImpl<MediaUploadDTO, File> implements MediaUploadService {
 
-    private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
     @Override
     public long getMaxSize() {

@@ -33,7 +33,7 @@ public class CrmAppContext extends VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(CrmAppContext.class);
 
-    private static I18n i18n = I18n.get(CrmAppContext.class);
+    private static final I18n i18n = I18n.get(CrmAppContext.class);
 
     public static CrmUser getCurrentUser() {
         Visit v = Context.getVisit();

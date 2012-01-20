@@ -25,7 +25,7 @@ import com.propertyvista.domain.contact.Email;
 
 public class EmailFormatter implements IFormat<Email> {
 
-    private static I18n i18n = I18n.get(EmailFormatter.class);
+    private static final I18n i18n = I18n.get(EmailFormatter.class);
 
     public EmailFormatter() {
     }

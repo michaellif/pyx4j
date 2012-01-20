@@ -28,7 +28,7 @@ import com.propertyvista.dto.LeaseDTO;
 
 class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
-    private static I18n i18n = I18n.get(ChargeItemFolder.class);
+    private static final I18n i18n = I18n.get(ChargeItemFolder.class);
 
     final CrmEntityForm<LeaseDTO> parent;
 

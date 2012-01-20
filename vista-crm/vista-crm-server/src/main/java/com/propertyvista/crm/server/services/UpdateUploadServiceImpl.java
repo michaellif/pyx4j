@@ -43,7 +43,7 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 
 public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO, IEntity> implements UpdateUploadService {
 
-    private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
     private final static Logger log = LoggerFactory.getLogger(UpdateUploadServiceImpl.class);
 

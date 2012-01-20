@@ -39,7 +39,7 @@ import com.propertyvista.server.domain.ApplicationDocumentBlob;
 public class ApplicationDocumentUploadServiceImpl extends UploadServiceImpl<ApplicationDocumentUploadDTO, ApplicationDocument> implements
         ApplicationDocumentUploadService {
 
-    private static I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
 
     @Override
     public long getMaxSize() {

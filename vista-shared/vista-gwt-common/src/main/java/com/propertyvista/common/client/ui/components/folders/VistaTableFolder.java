@@ -23,13 +23,11 @@ import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 
 public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<E> {
-    protected static I18n i18n = I18n.get(VistaTableFolder.class);
 
     private final String itemName;
 

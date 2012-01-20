@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class PastDateValidation {
 
-    private static I18n i18n = I18n.get(PastDateValidation.class);
+    private static final I18n i18n = I18n.get(PastDateValidation.class);
 
     public PastDateValidation(CComponent<LogicalDate, ?> value) {
         value.addValueValidator(new EditableValueValidator<Date>() {

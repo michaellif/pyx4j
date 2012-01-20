@@ -17,6 +17,8 @@ import java.util.EnumSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -24,6 +26,8 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> implements LeaseEditorView {
+
+    private static final I18n i18n = I18n.get(LeaseEditorViewImpl.class);
 
     public LeaseEditorViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);

@@ -32,7 +32,7 @@ import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
 public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
-    private static I18n i18n = I18n.get(MaintenanceList.class);
+    private static final I18n i18n = I18n.get(MaintenanceList.class);
 
     public static final String NoRecordsFound = i18n.tr("No Records Found");
 

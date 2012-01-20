@@ -32,7 +32,7 @@ import com.propertyvista.crm.rpc.ActivationServices;
 
 public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
 
-    private static I18n i18n = I18n.get(RetrievePasswordActivity.class);
+    private static final I18n i18n = I18n.get(RetrievePasswordActivity.class);
 
     private final RetrievePasswordView view;
 

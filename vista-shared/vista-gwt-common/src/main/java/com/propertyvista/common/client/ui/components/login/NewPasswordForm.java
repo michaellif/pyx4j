@@ -32,7 +32,7 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
 public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
 
-    private static I18n i18n = I18n.get(NewPasswordForm.class);
+    private static final I18n i18n = I18n.get(NewPasswordForm.class);
 
     public enum ConversationType {
         RESET, CHANGE

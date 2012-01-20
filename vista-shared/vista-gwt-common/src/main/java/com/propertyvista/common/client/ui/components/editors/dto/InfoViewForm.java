@@ -53,7 +53,7 @@ import com.propertyvista.misc.BusinessRules;
 
 public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
-    private static I18n i18n = I18n.get(InfoViewForm.class);
+    private static final I18n i18n = I18n.get(InfoViewForm.class);
 
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
         @Override

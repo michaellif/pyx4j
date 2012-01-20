@@ -37,7 +37,7 @@ import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
-    private static I18n i18n = I18n.get(ComplexEditorForm.class);
+    private static final I18n i18n = I18n.get(ComplexEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel;
 

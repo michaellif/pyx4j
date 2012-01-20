@@ -21,7 +21,7 @@ import com.propertyvista.portal.domain.dto.PropertyDTO;
 
 public class MapDialog extends Dialog {
 
-    private static I18n i18n = I18n.get(MapDialog.class);
+    private static final I18n i18n = I18n.get(MapDialog.class);
 
     public MapDialog(PropertyDTO property) {
         super(i18n.tr("Location"));

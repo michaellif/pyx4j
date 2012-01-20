@@ -24,7 +24,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class BoardViewImpl extends DockLayoutPanel implements BoardView {
 
-    protected static I18n i18n = I18n.get(BoardViewImpl.class);
+    private static final I18n i18n = I18n.get(BoardViewImpl.class);
 
     protected BoardBase board = null;
 

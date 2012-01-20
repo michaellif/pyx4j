@@ -49,7 +49,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
 
-    private static I18n i18n = I18n.get(VistaAuthenticationServicesImpl.class);
+    private static final I18n i18n = I18n.get(VistaAuthenticationServicesImpl.class);
 
     protected final Class<U> userClass;
 

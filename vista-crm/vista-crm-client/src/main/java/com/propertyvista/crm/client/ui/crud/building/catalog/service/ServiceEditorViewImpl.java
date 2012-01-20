@@ -17,6 +17,7 @@ import java.util.EnumSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
@@ -28,6 +29,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implements ServiceEditorView {
+
+    private static final I18n i18n = I18n.get(ServiceEditorViewImpl.class);
 
     private final IListerView<Feature> featureLister;
 

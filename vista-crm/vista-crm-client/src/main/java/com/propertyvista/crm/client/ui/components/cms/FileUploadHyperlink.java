@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class FileUploadHyperlink extends CAbstractHyperlink<File> {
 
-    protected static I18n i18n = I18n.get(FileUploadHyperlink.class);
+    private static final I18n i18n = I18n.get(FileUploadHyperlink.class);
 
     public FileUploadHyperlink(final boolean editable, final ImageTarget imageTarget) {
         super((String) null);

@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
@@ -25,6 +26,9 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements SiteViewer {
+
+    private static final I18n i18n = I18n.get(SiteViewerImpl.class);
+
     public SiteViewerImpl() {
         super(CrmSiteMap.Settings.Content.class, new SiteEditorForm(new CrmViewersComponentFactory()));
 

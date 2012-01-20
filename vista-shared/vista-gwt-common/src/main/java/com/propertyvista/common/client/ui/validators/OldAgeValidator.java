@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class OldAgeValidator implements EditableValueValidator<Date> {
 
-    private static I18n i18n = I18n.get(EditableValueValidator.class);
+    private static final I18n i18n = I18n.get(EditableValueValidator.class);
 
     @SuppressWarnings("deprecation")
     @Override

@@ -32,7 +32,7 @@ import com.propertyvista.domain.GeoLocation;
 
 public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
 
-    private static I18n i18n = I18n.get(GeoLocationEditor.class);
+    private static final I18n i18n = I18n.get(GeoLocationEditor.class);
 
     public GeoLocationEditor() {
         super(GeoLocation.class);

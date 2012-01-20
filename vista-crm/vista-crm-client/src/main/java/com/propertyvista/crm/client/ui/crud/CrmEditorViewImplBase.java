@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
@@ -32,6 +33,8 @@ import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.decorations.CrmTitleBar;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
+
+    private static final I18n i18n = I18n.get(CrmEditorViewImplBase.class);
 
     protected String defaultCaption;
 

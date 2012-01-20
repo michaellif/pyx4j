@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -26,6 +27,8 @@ import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.admin.client.ui.decorations.AdminHeaderDecorator;
 
 public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
+
+    private static final I18n i18n = I18n.get(AdminViewerViewImplBase.class);
 
     protected final String defaultCaption;
 

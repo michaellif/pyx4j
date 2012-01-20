@@ -32,7 +32,7 @@ import com.propertyvista.common.client.events.UserMessageEvent;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {
 
-    private static I18n i18n = I18n.get(WizardStepViewImpl.class);
+    private static final I18n i18n = I18n.get(WizardStepViewImpl.class);
 
     private T presenter;
 

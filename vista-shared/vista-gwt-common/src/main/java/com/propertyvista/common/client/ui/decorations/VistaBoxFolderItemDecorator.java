@@ -21,7 +21,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 
 public class VistaBoxFolderItemDecorator<E extends IEntity> extends BoxFolderItemDecorator<E> {
-    protected static I18n i18n = I18n.get(VistaBoxFolderItemDecorator.class);
+    private static final I18n i18n = I18n.get(VistaBoxFolderItemDecorator.class);
 
     public VistaBoxFolderItemDecorator() {
         super(VistaImages.INSTANCE);

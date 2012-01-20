@@ -23,7 +23,7 @@ import com.propertyvista.domain.util.ValidationUtils;
 
 public class CreditCardNumberValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18n.get(CreditCardNumberValidator.class);
+    private static final I18n i18n = I18n.get(CreditCardNumberValidator.class);
 
     @Override
     public ValidationFailure isValid(CComponent<String, ?> component, String value) {

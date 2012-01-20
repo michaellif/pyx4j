@@ -28,7 +28,7 @@ import com.propertyvista.portal.domain.dto.ResidentDTO;
 
 public class PersonalInfoForm extends CEntityDecoratableEditor<ResidentDTO> {
 
-    private static I18n i18n = I18n.get(PersonalInfoForm.class);
+    private static final I18n i18n = I18n.get(PersonalInfoForm.class);
 
     public PersonalInfoForm() {
         super(ResidentDTO.class, new VistaEditorsComponentFactory());

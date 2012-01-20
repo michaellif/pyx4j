@@ -30,7 +30,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public abstract class SelectUnitDialog extends EntitySelectorDialog<AptUnit> {
 
-    private static I18n i18n = I18n.get(SelectUnitDialog.class);
+    private static final I18n i18n = I18n.get(SelectUnitDialog.class);
 
     public SelectUnitDialog() {
         this(false);

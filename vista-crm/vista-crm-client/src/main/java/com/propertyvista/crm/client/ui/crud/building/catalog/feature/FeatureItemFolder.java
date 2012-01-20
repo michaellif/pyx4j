@@ -26,6 +26,7 @@ import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -34,6 +35,8 @@ import com.propertyvista.domain.financial.offering.ServiceItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
+
+    private static final I18n i18n = I18n.get(FeatureItemFolder.class);
 
     private final CEntityEditor<Feature> parent;
 
@@ -88,8 +91,7 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
                         public void onValueChange(ValueChangeEvent<ServiceItemType> event) {
                             for (ServiceItemType item : parent.getValue().catalog().includedUtilities()) {
                                 if (item.equals(event.getValue())) {
-                                    MessageDialog.warn(VistaTableFolder.i18n.tr("Note"),
-                                            VistaTableFolder.i18n.tr("The Selected Utility Type Is Included In The Price"));
+                                    MessageDialog.warn(i18n.tr("Note"), i18n.tr("The Selected Utility Type Is Included In The Price"));
                                 }
                             }
 

@@ -27,7 +27,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         Gainsboro, VillageGreen, BlueCold, BrownWarm
     }
 
-    private static I18n i18n = I18n.get(TopRightActionsViewImpl.class);
+    private static final I18n i18n = I18n.get(TopRightActionsViewImpl.class);
 
     private Presenter presenter;
 

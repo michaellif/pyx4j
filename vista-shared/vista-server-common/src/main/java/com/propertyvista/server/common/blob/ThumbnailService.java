@@ -50,7 +50,7 @@ public class ThumbnailService {
 
     private final static Logger log = LoggerFactory.getLogger(ThumbnailService.class);
 
-    private static I18n i18n = I18n.get(ThumbnailService.class);
+    private static final I18n i18n = I18n.get(ThumbnailService.class);
 
     public static ResampleParams getDefaultResampleParams(ImageTarget imageTarget) {
         ResampleParams params = new ResampleParams();

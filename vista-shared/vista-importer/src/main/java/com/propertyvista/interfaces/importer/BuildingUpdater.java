@@ -41,7 +41,7 @@ public class BuildingUpdater extends ImportPersister {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingUpdater.class);
 
-    private static I18n i18n = I18n.get(BuildingUpdater.class);
+    private static final I18n i18n = I18n.get(BuildingUpdater.class);
 
     public ImportCounters updateUnitAvailability(BuildingIO buildingIO, MediaConfig mediaConfig) {
         ImportCounters counters = new ImportCounters();

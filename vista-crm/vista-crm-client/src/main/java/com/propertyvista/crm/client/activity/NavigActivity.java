@@ -43,7 +43,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
 
-    private static I18n i18n = I18n.get(NavigActivity.class);
+    private static final I18n i18n = I18n.get(NavigActivity.class);
 
     private final NavigView view;
 

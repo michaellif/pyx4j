@@ -39,7 +39,7 @@ import com.propertyvista.domain.DemoData;
 
 public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
-    private static I18n i18n = I18n.get(LoginForm.class);
+    private static final I18n i18n = I18n.get(LoginForm.class);
 
     private final String caption;
 

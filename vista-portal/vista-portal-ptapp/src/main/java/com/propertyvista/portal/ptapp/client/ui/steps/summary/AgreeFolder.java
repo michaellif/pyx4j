@@ -36,7 +36,7 @@ import com.propertyvista.portal.domain.ptapp.IAgree;
 
 public class AgreeFolder extends VistaTableFolder<IAgree> {
 
-    private static I18n i18n = I18n.get(AgreeFolder.class);
+    private static final I18n i18n = I18n.get(AgreeFolder.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "AgreeFolder";
 

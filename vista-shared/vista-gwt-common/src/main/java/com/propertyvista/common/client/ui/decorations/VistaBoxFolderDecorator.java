@@ -21,7 +21,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 
 public class VistaBoxFolderDecorator<E extends IEntity> extends BoxFolderDecorator<E> {
-    protected static I18n i18n = I18n.get(VistaBoxFolderDecorator.class);
+    private static final I18n i18n = I18n.get(VistaBoxFolderDecorator.class);
 
     public VistaBoxFolderDecorator(String removeLabel, boolean editable) {
         super(VistaImages.INSTANCE, removeLabel, editable);

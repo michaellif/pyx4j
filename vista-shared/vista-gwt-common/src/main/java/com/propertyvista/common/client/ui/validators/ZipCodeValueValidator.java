@@ -25,7 +25,7 @@ import com.propertyvista.domain.ref.Country;
 
 public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18n.get(ZipCodeValueValidator.class);
+    private static final I18n i18n = I18n.get(ZipCodeValueValidator.class);
 
     private final CEntityEditor<?> editor;
 

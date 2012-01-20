@@ -23,7 +23,7 @@ public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
 
     private final CurrentBillForm billForm;
 
-    private static I18n i18n = I18n.get(PaymentMethodsForm.class);
+    private static final I18n i18n = I18n.get(PaymentMethodsForm.class);
 
     public CurrentBillViewImpl() {
         billForm = new CurrentBillForm();

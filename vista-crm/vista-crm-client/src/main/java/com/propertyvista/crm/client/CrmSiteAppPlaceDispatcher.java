@@ -29,7 +29,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
 
-    protected static I18n i18n = I18n.get(CrmSiteAppPlaceDispatcher.class);
+    private static final I18n i18n = I18n.get(CrmSiteAppPlaceDispatcher.class);
 
     private AppPlace targetPlace = AppPlace.NOWHERE;
 

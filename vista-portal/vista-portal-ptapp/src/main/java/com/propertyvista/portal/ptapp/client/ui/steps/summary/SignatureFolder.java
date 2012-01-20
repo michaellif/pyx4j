@@ -36,7 +36,7 @@ import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
 
 public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
-    private static I18n i18n = I18n.get(SignatureFolder.class);
+    private static final I18n i18n = I18n.get(SignatureFolder.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "SignatureFolder";
 

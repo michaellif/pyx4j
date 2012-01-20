@@ -36,7 +36,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class ReportPanel extends BoardBase implements ReportView {
 
-    private static I18n i18n = I18n.get(ReportPanel.class);
+    private static final I18n i18n = I18n.get(ReportPanel.class);
 
     public ReportPanel() {
     }

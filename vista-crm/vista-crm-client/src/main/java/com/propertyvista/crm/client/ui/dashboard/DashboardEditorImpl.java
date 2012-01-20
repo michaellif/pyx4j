@@ -17,6 +17,8 @@ import java.util.EnumSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -24,6 +26,9 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
 public class DashboardEditorImpl extends CrmEditorViewImplBase<DashboardMetadata> implements DashboardEditor {
+
+    private static final I18n i18n = I18n.get(DashboardEditorImpl.class);
+
     public DashboardEditorImpl() {
         super(CrmSiteMap.Dashboard.Edit.class, new DashboardEditorForm());
     }

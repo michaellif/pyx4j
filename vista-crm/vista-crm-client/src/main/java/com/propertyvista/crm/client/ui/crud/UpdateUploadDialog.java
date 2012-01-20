@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
-    private static I18n i18n = I18n.get(UpdateUploadDialog.class);
+    private static final I18n i18n = I18n.get(UpdateUploadDialog.class);
 
     private final UploadPanel<UpdateUploadDTO, IEntity> uploadPanel;
 

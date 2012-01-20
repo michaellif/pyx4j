@@ -32,7 +32,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 
 public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
-    private static I18n i18n = I18n.get(LeaseTemsFolder.class);
+    private static final I18n i18n = I18n.get(LeaseTemsFolder.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "LeaseTemsFolder";
 

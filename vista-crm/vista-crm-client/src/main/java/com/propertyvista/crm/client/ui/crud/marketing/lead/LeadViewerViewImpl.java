@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.marketing.lead;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -29,6 +30,8 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements LeadViewerView {
+
+    private static final I18n i18n = I18n.get(LeadViewerViewImpl.class);
 
     private final Button btnconvert;
 

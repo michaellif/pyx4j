@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class MessageTemplates {
 
-    private static I18n i18n = I18n.get(MessageTemplates.class);
+    private static final I18n i18n = I18n.get(MessageTemplates.class);
 
     private static final Logger log = LoggerFactory.getLogger(MessageTemplates.class);
 

@@ -56,7 +56,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
-    private static I18n i18n = I18n.get(BuildingEditorForm.class);
+    private static final I18n i18n = I18n.get(BuildingEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 

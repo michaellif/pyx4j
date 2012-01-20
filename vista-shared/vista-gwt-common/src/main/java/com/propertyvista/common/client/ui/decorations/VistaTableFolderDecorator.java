@@ -24,7 +24,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 
 public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDecorator<E> {
-    protected static I18n i18n = I18n.get(VistaTableFolderDecorator.class);
+    private static final I18n i18n = I18n.get(VistaTableFolderDecorator.class);
 
     public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns) {
         super(columns, VistaImages.INSTANCE);

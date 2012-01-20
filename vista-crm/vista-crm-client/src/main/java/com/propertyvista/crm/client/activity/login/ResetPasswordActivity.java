@@ -39,7 +39,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
-    private static I18n i18n = I18n.get(ResetPasswordActivity.class);
+    private static final I18n i18n = I18n.get(ResetPasswordActivity.class);
 
     private final NewPasswordView view;
 

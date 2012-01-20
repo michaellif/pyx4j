@@ -25,7 +25,7 @@ import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class UserAccessUtils {
 
-    protected static I18n i18n = I18n.get(UserAccessUtils.class);
+    private static final I18n i18n = I18n.get(UserAccessUtils.class);
 
     public static String createAccessToken(CrmUser user, int ttlDays) {
         CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());

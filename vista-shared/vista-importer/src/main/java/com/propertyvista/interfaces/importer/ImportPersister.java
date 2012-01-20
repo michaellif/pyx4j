@@ -50,7 +50,7 @@ import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 class ImportPersister {
 
-    private static I18n i18n = I18n.get(ImportPersister.class);
+    private static final I18n i18n = I18n.get(ImportPersister.class);
 
     private final static Logger log = LoggerFactory.getLogger(ImportPersister.class);
 

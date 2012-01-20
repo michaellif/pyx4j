@@ -50,7 +50,7 @@ import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 
 public class CrmSite extends VistaSite {
 
-    private static I18n i18n = I18n.get(CrmSite.class);
+    private static final I18n i18n = I18n.get(CrmSite.class);
 
     private boolean initialized = false;
 

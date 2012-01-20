@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
 abstract class SelectFeatureBox extends SelectDialog<ServiceItem> {
 
-    private static I18n i18n = I18n.get(OkCancelDialog.class);
+    private static final I18n i18n = I18n.get(OkCancelDialog.class);
 
     public SelectFeatureBox(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
         super(i18n.tr("Select {0}(s)", type), true, getAvailableList(type, apartmentInfo));

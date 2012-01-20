@@ -28,7 +28,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 
 class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
 
-    private static I18n i18n = I18n.get(ServiceFeatureFolder.class);
+    private static final I18n i18n = I18n.get(ServiceFeatureFolder.class);
 
     private final IListerView<Feature> featureListerVeiw;
 

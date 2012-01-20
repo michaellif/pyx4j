@@ -22,7 +22,7 @@ import com.propertyvista.domain.media.Media;
 
 public class MediaItemValidator implements EditableValueValidator<Media> {
 
-    private static I18n i18n = I18n.get(MediaItemValidator.class);
+    private static final I18n i18n = I18n.get(MediaItemValidator.class);
 
     @Override
     public ValidationFailure isValid(CComponent<Media, ?> component, Media value) {

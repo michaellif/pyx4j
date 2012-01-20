@@ -46,7 +46,7 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 
 public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncome> {
 
-    private static I18n i18n = I18n.get(PersonalIncomeEditor.class);
+    private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
     private ApplicationDocumentUploaderFolder fileUpload;
 

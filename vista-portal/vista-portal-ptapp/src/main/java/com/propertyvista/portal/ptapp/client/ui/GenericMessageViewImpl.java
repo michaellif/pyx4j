@@ -28,7 +28,7 @@ import com.propertyvista.common.client.Message;
 
 public class GenericMessageViewImpl extends FlowPanel implements GenericMessageView {
 
-    private static I18n i18n = I18n.get(GenericMessageViewImpl.class);
+    private static final I18n i18n = I18n.get(GenericMessageViewImpl.class);
 
     private Presenter presenter;
 

@@ -49,7 +49,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
-    protected static I18n i18n = I18n.get(CrmMediaFolder.class);
+    private static final I18n i18n = I18n.get(CrmMediaFolder.class);
 
     private final ImageTarget imageTarget;
 

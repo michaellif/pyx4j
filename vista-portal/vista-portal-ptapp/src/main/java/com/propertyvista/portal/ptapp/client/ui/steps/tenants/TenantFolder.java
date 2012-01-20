@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -44,6 +45,8 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
+
+    private static final I18n i18n = I18n.get(TenantFolder.class);
 
     public TenantFolder(boolean modifyable) {
         super(TenantInLeaseDTO.class, modifyable);

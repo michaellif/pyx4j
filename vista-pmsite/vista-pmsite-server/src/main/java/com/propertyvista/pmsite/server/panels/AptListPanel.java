@@ -52,7 +52,7 @@ import com.propertyvista.portal.server.portal.PropertyFinder;
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;
 
-    private static I18n i18n = I18n.get(AptListPanel.class);
+    private static final I18n i18n = I18n.get(AptListPanel.class);
 
     public AptListPanel(String id, CompoundPropertyModel<List<Building>> model, AptListPage.ViewMode viewMode) {
         super(id, model);

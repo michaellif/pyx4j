@@ -38,7 +38,7 @@ import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
-    private static I18n i18n = I18n.get(ChargeSplitListFolder.class);
+    private static final I18n i18n = I18n.get(ChargeSplitListFolder.class);
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
 

@@ -25,7 +25,7 @@ import com.propertyvista.common.client.ui.components.login.RetrievePasswordForm;
 
 public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
 
-    private static I18n i18n = I18n.get(RetrievePasswordViewImpl.class);
+    private static final I18n i18n = I18n.get(RetrievePasswordViewImpl.class);
 
     private Presenter presenter;
 

@@ -36,7 +36,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     public static String BACK_TO_CRM = "vista_Back2CRM";
 
-    private static I18n i18n = I18n.get(TopRightActionsViewImpl.class);
+    private static final I18n i18n = I18n.get(TopRightActionsViewImpl.class);
 
     private Presenter presenter;
 

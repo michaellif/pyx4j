@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class FutureDateValidation {
 
-    private static I18n i18n = I18n.get(FutureDateValidation.class);
+    private static final I18n i18n = I18n.get(FutureDateValidation.class);
 
     public FutureDateValidation(CComponent<LogicalDate, ?> value) {
         value.addValueValidator(new EditableValueValidator<Date>() {

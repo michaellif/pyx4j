@@ -25,11 +25,14 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 
 public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
+
+    private static final I18n i18n = I18n.get(PersonalAssetFolder.class);
 
     public PersonalAssetFolder(boolean modifyable) {
         super(PersonalAsset.class, modifyable);

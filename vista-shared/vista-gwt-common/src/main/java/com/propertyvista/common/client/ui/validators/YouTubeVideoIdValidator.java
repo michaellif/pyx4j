@@ -20,7 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
 
-    private static I18n i18n = I18n.get(YouTubeVideoIdValidator.class);
+    private static final I18n i18n = I18n.get(YouTubeVideoIdValidator.class);
 
     @Override
     public ValidationFailure isValid(CComponent<String, ?> component, String value) {

@@ -28,7 +28,7 @@ import com.propertyvista.portal.domain.dto.ResidentDTO;
 
 public class PersonalInfoViewImpl extends FlowPanel implements PersonalInfoView {
 
-    private static I18n i18n = I18n.get(PersonalInfoViewImpl.class);
+    private static final I18n i18n = I18n.get(PersonalInfoViewImpl.class);
 
     private final UserMessagePanel errorPanel = new UserMessagePanel();
 

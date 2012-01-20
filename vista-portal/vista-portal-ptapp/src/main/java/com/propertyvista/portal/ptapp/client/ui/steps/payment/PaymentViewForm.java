@@ -42,7 +42,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
 public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformationDTO> {
 
-    private static I18n i18n = I18n.get(PaymentViewForm.class);
+    private static final I18n i18n = I18n.get(PaymentViewForm.class);
 
     public static String DEFAULT_STYLE_PREFIX = "PaymentViewForm";
 

@@ -23,7 +23,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class NewPasswordBox extends OkCancelDialog {
 
-    private static I18n i18n = I18n.get(NewPasswordBox.class);
+    private static final I18n i18n = I18n.get(NewPasswordBox.class);
 
     private final CPasswordTextField oldPassword = new CPasswordTextField();
 

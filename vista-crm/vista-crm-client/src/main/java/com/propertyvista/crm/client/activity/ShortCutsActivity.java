@@ -31,7 +31,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class ShortCutsActivity extends AbstractActivity implements ShortCutsPresenter {
 
-    private static I18n i18n = I18n.get(ShortCutsActivity.class);
+    private static final I18n i18n = I18n.get(ShortCutsActivity.class);
 
     private final ShortCutsView view;
 

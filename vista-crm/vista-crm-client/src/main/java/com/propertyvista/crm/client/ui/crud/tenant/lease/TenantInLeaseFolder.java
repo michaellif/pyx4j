@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -49,6 +50,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
 
 class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
+
+    private static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
     private final CEntityEditor<? extends Lease> parent;
 

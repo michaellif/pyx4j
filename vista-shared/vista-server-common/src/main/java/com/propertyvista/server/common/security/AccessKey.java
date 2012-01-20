@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 public class AccessKey {
 
-    private static I18n i18n = I18n.get(AccessKey.class);
+    private static final I18n i18n = I18n.get(AccessKey.class);
 
     public static final int ACCESS_KEY_LEN = 16;
 

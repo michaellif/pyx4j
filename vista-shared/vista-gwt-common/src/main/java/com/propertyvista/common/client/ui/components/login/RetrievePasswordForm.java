@@ -31,7 +31,7 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
 public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest> {
 
-    private static I18n i18n = I18n.get(RetrievePasswordForm.class);
+    private static final I18n i18n = I18n.get(RetrievePasswordForm.class);
 
     private final String caption;
 

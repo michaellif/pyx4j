@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
@@ -25,6 +26,9 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements PageViewer {
+
+    private static final I18n i18n = I18n.get(PageViewerImpl.class);
+
     public PageViewerImpl() {
         super(CrmSiteMap.Settings.Page.class, new PageEditorForm(new CrmViewersComponentFactory()));
 

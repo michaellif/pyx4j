@@ -39,7 +39,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class ImportUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
-    private static I18n i18n = I18n.get(ImportUploadDialog.class);
+    private static final I18n i18n = I18n.get(ImportUploadDialog.class);
 
     private final CEntityEditor<PmcImportDTO> form;
 

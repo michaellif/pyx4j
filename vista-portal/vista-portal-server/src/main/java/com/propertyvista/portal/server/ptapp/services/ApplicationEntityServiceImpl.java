@@ -27,7 +27,7 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class ApplicationEntityServiceImpl {
 
-    protected static I18n i18n = I18n.get(ApplicationEntityServiceImpl.class);
+    private static final I18n i18n = I18n.get(ApplicationEntityServiceImpl.class);
 
     public static <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff

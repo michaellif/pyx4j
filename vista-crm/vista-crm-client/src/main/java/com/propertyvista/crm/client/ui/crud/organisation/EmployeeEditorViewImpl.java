@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.organisation;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 
@@ -25,6 +26,8 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
 public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> implements EmployeeEditorView {
+
+    private static final I18n i18n = I18n.get(EmployeeEditorViewImpl.class);
 
     private final Button passwordAction;
 

@@ -43,7 +43,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingImporter extends ImportPersister {
 
-    private static I18n i18n = I18n.get(BuildingImporter.class);
+    private static final I18n i18n = I18n.get(BuildingImporter.class);
 
     private final static Logger log = LoggerFactory.getLogger(BuildingImporter.class);
 

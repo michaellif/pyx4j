@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
@@ -24,6 +25,8 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
+
+    private static final I18n i18n = I18n.get(BuildingListerViewImpl.class);
 
     private final Button upload;
 

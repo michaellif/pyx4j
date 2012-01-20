@@ -61,7 +61,7 @@ import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 
 public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
-    private static I18n i18n = I18n.get(SummaryViewForm.class);
+    private static final I18n i18n = I18n.get(SummaryViewForm.class);
 
     private SummaryViewPresenter presenter;
 

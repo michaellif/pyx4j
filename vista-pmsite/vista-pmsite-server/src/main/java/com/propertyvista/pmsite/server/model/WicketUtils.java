@@ -59,7 +59,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 
 public class WicketUtils {
-    private static I18n i18n = I18n.get(WicketUtils.class);
+    private static final I18n i18n = I18n.get(WicketUtils.class);
 
     /*
      * add/remove single class from component class attribute

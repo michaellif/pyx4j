@@ -40,7 +40,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class PtAppWizardManager {
 
-    private static I18n i18n = I18n.get(PtAppWizardManager.class);
+    private static final I18n i18n = I18n.get(PtAppWizardManager.class);
 
     private final static Logger log = LoggerFactory.getLogger(PtAppWizardManager.class);
 

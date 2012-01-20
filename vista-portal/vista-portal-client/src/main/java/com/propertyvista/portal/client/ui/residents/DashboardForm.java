@@ -49,7 +49,7 @@ import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
 
 public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> implements DashboardView {
 
-    private static I18n i18n = I18n.get(DashboardForm.class);
+    private static final I18n i18n = I18n.get(DashboardForm.class);
 
     public static final String NoRecordsFound = i18n.tr("No Records Found");
 

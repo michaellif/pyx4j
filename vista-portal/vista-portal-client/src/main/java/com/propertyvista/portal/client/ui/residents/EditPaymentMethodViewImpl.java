@@ -33,7 +33,7 @@ public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentM
 
     private Presenter presenter;
 
-    private static I18n i18n = I18n.get(EditPaymentMethodViewImpl.class);
+    private static final I18n i18n = I18n.get(EditPaymentMethodViewImpl.class);
 
     private final EditPaymentMethodForm form;
 

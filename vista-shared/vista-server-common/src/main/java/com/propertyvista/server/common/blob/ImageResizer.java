@@ -45,7 +45,7 @@ public class ImageResizer {
 
     public static final Collection<String> imageExtensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
 
-    private static I18n i18n = I18n.get(ImageResizer.class);
+    private static final I18n i18n = I18n.get(ImageResizer.class);
 
     private final static Logger log = LoggerFactory.getLogger(ImageResizer.class);
 

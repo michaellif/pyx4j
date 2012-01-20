@@ -32,7 +32,7 @@ import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
 public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> implements PaymentMethodsView {
 
-    private static I18n i18n = I18n.get(PaymentMethodsForm.class);
+    private static final I18n i18n = I18n.get(PaymentMethodsForm.class);
 
     private PaymentMethodsView.Presenter presenter;
 

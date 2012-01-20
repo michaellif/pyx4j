@@ -50,7 +50,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
         filtersPanel, actionsPanel, filtersDescription
     }
 
-    private static I18n i18n = I18n.get(BoardBase.class);
+    private static final I18n i18n = I18n.get(BoardBase.class);
 
     private final HorizontalPanel actionsPanel;
 

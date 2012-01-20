@@ -37,7 +37,7 @@ public class TenantAppContext extends VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(TenantAppContext.class);
 
-    private static I18n i18n = I18n.get(TenantAppContext.class);
+    private static final I18n i18n = I18n.get(TenantAppContext.class);
 
     public static TenantUser getCurrentUser() {
         Visit v = Context.getVisit();

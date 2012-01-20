@@ -48,7 +48,7 @@ import com.propertyvista.domain.media.ApplicationDocument;
 
 public class ApplicationDocumentUploaderFolder extends VistaTableFolder<ApplicationDocument> {
 
-    private static I18n i18n = I18n.get(ApplicationDocumentUploaderFolder.class);
+    private static final I18n i18n = I18n.get(ApplicationDocumentUploaderFolder.class);
 
     private Key tenantId;
 

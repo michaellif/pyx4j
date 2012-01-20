@@ -32,7 +32,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class ChangePasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
-    private static I18n i18n = I18n.get(ChangePasswordActivity.class);
+    private static final I18n i18n = I18n.get(ChangePasswordActivity.class);
 
     private final NewPasswordView view;
 

@@ -40,7 +40,7 @@ import com.propertyvista.server.common.ptapp.ApplicationMgr;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
 
-    private static I18n i18n = I18n.get(ApplicationServiceImpl.class);
+    private static final I18n i18n = I18n.get(ApplicationServiceImpl.class);
 
     private final static Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
 

@@ -44,7 +44,7 @@ import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
 
-    private static I18n i18n = I18n.get(LeaseCrudServiceImpl.class);
+    private static final I18n i18n = I18n.get(LeaseCrudServiceImpl.class);
 
     public LeaseCrudServiceImpl() {
         super(Lease.class, LeaseDTO.class);

@@ -17,12 +17,16 @@ import java.util.EnumSet;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.common.client.ui.components.dialogs.SelectTypeDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implements FeatureEditorView {
+
+    private static final I18n i18n = I18n.get(FeatureEditorViewImpl.class);
 
     public FeatureEditorViewImpl() {
         super(CrmSiteMap.Properties.Feature.class, new FeatureEditorForm());
@@ -37,12 +41,16 @@ public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implem
                 callback.onSuccess(getSelectedType());
                 return true;
             }
-            
+
             @Override
-            public String defineWidth() {return "250px";}
-            
+            public String defineWidth() {
+                return "250px";
+            }
+
             @Override
-            public String defineHeight() {return "100px";}
+            public String defineHeight() {
+                return "100px";
+            }
         }.show();
     }
 }

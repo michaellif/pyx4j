@@ -21,7 +21,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
 public class PaymentViewImpl extends WizardStepViewImpl<PaymentInformationDTO, PaymentPresenter> implements PaymentView {
 
-    private static I18n i18n = I18n.get(PaymentViewImpl.class);
+    private static final I18n i18n = I18n.get(PaymentViewImpl.class);
 
     public PaymentViewImpl() {
         super(new PaymentViewForm());

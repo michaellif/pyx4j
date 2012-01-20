@@ -38,7 +38,7 @@ import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
-    private static I18n i18n = I18n.get(RetrievePasswordViewImpl.class);
+    private static final I18n i18n = I18n.get(RetrievePasswordViewImpl.class);
 
     public CompletionViewImpl() {
 

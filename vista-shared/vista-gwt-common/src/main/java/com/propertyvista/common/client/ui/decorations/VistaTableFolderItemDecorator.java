@@ -21,7 +21,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 
 public class VistaTableFolderItemDecorator<E extends IEntity> extends TableFolderItemDecorator<E> {
-    protected static I18n i18n = I18n.get(VistaTableFolderItemDecorator.class);
+    private static final I18n i18n = I18n.get(VistaTableFolderItemDecorator.class);
 
     public VistaTableFolderItemDecorator(String removeLabel) {
         super(VistaImages.INSTANCE, removeLabel);

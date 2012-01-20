@@ -26,7 +26,7 @@ public class VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(VistaContext.class);
 
-    private static I18n i18n = I18n.get(VistaContext.class);
+    private static final I18n i18n = I18n.get(VistaContext.class);
 
     public static Key getCurrentUserPrimaryKey() {
         Visit v = Context.getVisit();

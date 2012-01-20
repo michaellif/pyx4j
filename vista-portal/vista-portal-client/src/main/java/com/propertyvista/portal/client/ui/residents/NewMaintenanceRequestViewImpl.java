@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
 public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaintenanceRequestView {
 
-    private static I18n i18n = I18n.get(NewMaintenanceRequestViewImpl.class);
+    private static final I18n i18n = I18n.get(NewMaintenanceRequestViewImpl.class);
 
     private final UserMessagePanel errorPanel = new UserMessagePanel();
 

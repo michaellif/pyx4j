@@ -52,7 +52,7 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertyMarker extends Marker {
 
-    private static I18n i18n = I18n.get(PropertyMarker.class);
+    private static final I18n i18n = I18n.get(PropertyMarker.class);
 
     private final PropertyDTO property;
 

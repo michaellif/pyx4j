@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class FileUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
-    private static I18n i18n = I18n.get(FileUploadDialog.class);
+    private static final I18n i18n = I18n.get(FileUploadDialog.class);
 
     private final UploadPanel<IEntity, IEntity> uploadPanel;
 

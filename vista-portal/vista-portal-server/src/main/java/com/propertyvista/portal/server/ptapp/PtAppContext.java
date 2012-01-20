@@ -38,7 +38,7 @@ public class PtAppContext extends VistaContext {
 
     private final static Logger log = LoggerFactory.getLogger(PtAppContext.class);
 
-    private static I18n i18n = I18n.get(PtAppContext.class);
+    private static final I18n i18n = I18n.get(PtAppContext.class);
 
     public static PtVisitAttributes getVisitAttributes() {
         Visit v = Context.getVisit();

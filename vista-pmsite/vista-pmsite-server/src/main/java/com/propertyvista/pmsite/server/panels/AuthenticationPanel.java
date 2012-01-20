@@ -27,7 +27,7 @@ public class AuthenticationPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    private static I18n i18n = I18n.get(AuthenticationPanel.class);
+    private static final I18n i18n = I18n.get(AuthenticationPanel.class);
 
     public AuthenticationPanel(String id) {
         super(id);

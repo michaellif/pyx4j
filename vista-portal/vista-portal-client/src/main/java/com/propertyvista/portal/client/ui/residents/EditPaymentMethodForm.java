@@ -25,7 +25,7 @@ import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
 public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
 
-    private static I18n i18n = I18n.get(EditPaymentMethodForm.class);
+    private static final I18n i18n = I18n.get(EditPaymentMethodForm.class);
 
     public static final String SUBTITLE_STYLE_PREFIX = "EditPaymentMethodFormSubtitle";
 

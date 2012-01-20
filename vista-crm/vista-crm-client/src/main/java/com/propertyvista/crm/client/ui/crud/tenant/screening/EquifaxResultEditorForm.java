@@ -31,7 +31,7 @@ import com.propertyvista.misc.EquifaxResult;
 
 public class EquifaxResultEditorForm extends CrmEntityForm<EquifaxResult> {
 
-    private static I18n i18n = I18n.get(EquifaxResultEditorForm.class);
+    private static final I18n i18n = I18n.get(EquifaxResultEditorForm.class);
 
     static String resultApprovePath = "mockup/equifax/approve.html";
 

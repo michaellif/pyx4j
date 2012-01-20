@@ -24,6 +24,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -33,6 +34,8 @@ import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
 public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
+
+    private static final I18n i18n = I18n.get(CrmRoleEditorForm.class);
 
     public CrmRoleEditorForm(IEditableComponentFactory factory) {
         super(CrmRole.class, factory);

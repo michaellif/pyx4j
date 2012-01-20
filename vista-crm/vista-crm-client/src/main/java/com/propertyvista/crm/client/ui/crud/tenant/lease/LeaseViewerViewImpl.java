@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
@@ -25,6 +26,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
+
+    private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
     private final Button createApplicationAction;
 

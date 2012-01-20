@@ -28,7 +28,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 
 class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
-    private static I18n i18n = I18n.get(ServiceConcessionFolder.class);
+    private static final I18n i18n = I18n.get(ServiceConcessionFolder.class);
 
     private final IListerView<Concession> concessionListerVeiw;
 

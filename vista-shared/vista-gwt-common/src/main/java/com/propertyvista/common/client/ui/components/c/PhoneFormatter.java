@@ -24,7 +24,7 @@ import com.propertyvista.domain.contact.Phone;
 
 public class PhoneFormatter implements IFormat<Phone> {
 
-    private static I18n i18n = I18n.get(PhoneFormatter.class);
+    private static final I18n i18n = I18n.get(PhoneFormatter.class);
 
     private final static String regex = "^\\s*(\\+?1\\s?)?(\\(?\\d{3}\\)?\\s?[\\s-]?){1,2}(\\d{4})$";
 

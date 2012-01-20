@@ -36,7 +36,7 @@ import com.propertyvista.server.common.blob.BlobService;
  */
 public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity, IEntity> implements SiteResourcesUploadService {
 
-    private static I18n i18n = I18n.get(MediaUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
     @Override
     public long getMaxSize() {

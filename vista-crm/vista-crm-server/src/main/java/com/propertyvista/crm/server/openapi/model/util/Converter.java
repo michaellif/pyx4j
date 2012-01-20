@@ -54,7 +54,7 @@ import com.propertyvista.server.common.reference.SharedData;
 
 public class Converter {
 
-    private static I18n i18n = I18n.get(Converter.class);
+    private static final I18n i18n = I18n.get(Converter.class);
 
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 
