@@ -14,33 +14,28 @@
 package com.propertyvista.crm.client.ui.crud.tenant.lease;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.DataTable.CheckSelectionHandler;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
-import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.ui.crud.tenant.SelectTenantLister;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -82,33 +77,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
 
     @Override
     protected void addItem() {
-        new SelectTenantBox(getValue()) {
-            @Override
-            public boolean onClickOk() {
-                for (Tenant tenant : getSelectedItem()) {
-                    TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
-
-                    newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
-                    newTenantInLease.tenant().set(tenant);
-                    if (!isApplicantPresent()) {
-                        newTenantInLease.role().setValue(Role.Applicant);
-                        newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
-                    }
-                    boolean isNewAlreadySelected = false;
-                    for (TenantInLease alreadySelected : getValue()) {
-                        if (alreadySelected.tenant().equals(tenant)) {
-                            isNewAlreadySelected = true;
-                            break;
-                        }
-                    }
-                    if (!isNewAlreadySelected) {
-                        addItem(newTenantInLease);
-                    }
-                }
-
-                return true;
-            }
-        }.show();
+        new TenantSelectorDialog().show();
     }
 
     private boolean isApplicantPresent() {
@@ -181,58 +150,75 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
         }
     }
 
-    private abstract class SelectTenantBox extends OkCancelDialog {
+    private static List<Tenant> extractTenantFromTenantInLeaseList(List<TenantInLease> list) {
+        List<Tenant> tenants = new ArrayList<Tenant>(list.size());
+        for (TenantInLease wrapper : list) {
+            tenants.add(wrapper.tenant());
+        }
+        return tenants;
+    }
 
-        private final SelectTenantLister tenantLister;
+    private class TenantSelectorDialog extends EntitySelectorDialog<Tenant> {
 
-        @SuppressWarnings("unchecked")
-        public SelectTenantBox(IList<TenantInLease> currentTenants) {
-            super(i18n.tr("Select Tenant"));
-
-            tenantLister = new SelectTenantLister();
-
-            ListerDataSource<Tenant> listerDataSource = new ListerDataSource<Tenant>(Tenant.class,
-                    (AbstractListService<Tenant>) GWT.create(SelectTenantCrudService.class));
-
-            filterOutAlreadySelectedTenants(listerDataSource, currentTenants);
-
-            tenantLister.setDataSource(listerDataSource);
-            tenantLister.obtain(0);
-
-            setBody(createBody());
-            setSize("700px", "400px");
+        public TenantSelectorDialog() {
+            super(Tenant.class, true, extractTenantFromTenantInLeaseList(getValue()), i18n.tr("Select Tenant"));
         }
 
-        protected Widget createBody() {
-            getOkButton().setEnabled(!tenantLister.getCheckedItems().isEmpty());
-            tenantLister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+        @Override
+        public boolean onClickOk() {
+            if (getSelectedItems().isEmpty()) {
+                return false;
+            } else {
+                for (Tenant tenant : getSelectedItems()) {
+                    TenantInLease newTenantInLease = EntityFactory.create(TenantInLease.class);
 
-                @Override
-                public void onCheck(boolean isAnyChecked) {
-                    getOkButton().setEnabled(isAnyChecked);
+                    newTenantInLease.lease().setPrimaryKey(parent.getValue().getPrimaryKey());
+                    newTenantInLease.tenant().set(tenant);
+                    if (!isApplicantPresent()) {
+                        newTenantInLease.role().setValue(Role.Applicant);
+                        newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
+                    }
+                    boolean isNewAlreadySelected = false;
+                    for (TenantInLease alreadySelected : getValue()) {
+                        if (alreadySelected.tenant().equals(tenant)) {
+                            isNewAlreadySelected = true;
+                            break;
+                        }
+                    }
+                    if (!isNewAlreadySelected) {
+                        addItem(newTenantInLease);
+                    }
                 }
-            });
 
-            VerticalPanel vPanel = new VerticalPanel();
-            vPanel.add(tenantLister.asWidget());
-            vPanel.setWidth("100%");
-            return vPanel;
-        }
-
-        protected List<Tenant> getSelectedItem() {
-            return tenantLister.getCheckedItems();
-        }
-
-        private void filterOutAlreadySelectedTenants(ListerDataSource<Tenant> listerDataSource, IList<TenantInLease> currentTenants) {
-
-            List<DataTableFilterData> restrictAlreadySelectedTenants = new ArrayList<DataTableFilterData>(getValue().size());
-            Tenant tenantProto = EntityFactory.getEntityPrototype(Tenant.class);
-            for (TenantInLease alreadySelected : currentTenants) {
-                restrictAlreadySelectedTenants.add(new DataTableFilterData(tenantProto.id().getPath(), Operators.isNot, alreadySelected.tenant().id()
-                        .getValue()));
+                return true;
             }
-
-            listerDataSource.setPreDefinedFilters(restrictAlreadySelectedTenants);
         }
+
+        @Override
+        protected String width() {
+            return "700px";
+        }
+
+        @Override
+        protected String height() {
+            return "400px";
+        }
+
+        @Override
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto().person().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().person().birthDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().person().email()).build(),
+                    new MemberColumnDescriptor.Builder(proto().person().homePhone()).build()
+            );//@formatter:on
+        }
+
+        @Override
+        protected AbstractListService<Tenant> getSelectService() {
+            return GWT.<AbstractListService<Tenant>> create(SelectTenantCrudService.class);
+        }
+
     }
 }
