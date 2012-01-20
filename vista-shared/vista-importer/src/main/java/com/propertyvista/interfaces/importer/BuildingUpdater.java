@@ -119,9 +119,9 @@ public class BuildingUpdater extends ImportPersister {
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            if (buildingIO.propertyCode().isNull()){
+            if (buildingIO.propertyCode().isNull()) {
                 criteria.add(PropertyCriterion.eq(criteria.proto().externalId(), buildingIO.externalId().getValue()));
-            } else{
+            } else {
                 criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
             }
 
@@ -161,8 +161,7 @@ public class BuildingUpdater extends ImportPersister {
             }
             boolean floorplanIsNew = false;
             Floorplan floorplan = null;
-            // This is because we have a bad data in XML
-            if (true || !buildingIsNew) {
+            if (!buildingIsNew) {
                 EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
                 criteria.add(PropertyCriterion.eq(criteria.proto().name(), floorplanIO.name().getValue()));

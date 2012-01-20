@@ -963,7 +963,7 @@
       <aptUnit><number>911</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>912</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>1 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen3.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom6.jpeg</uri></media>
@@ -1149,7 +1149,7 @@
       <aptUnit><number>911</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>912</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>2 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
+<floorplan><name>2 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen5.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom8.jpeg</uri></media>
@@ -1281,7 +1281,7 @@
       <aptUnit><number>34</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>37</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>1 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen3.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom7.jpeg</uri></media>
@@ -1328,7 +1328,7 @@
       <aptUnit><number>36</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>37</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>2 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
+<floorplan><name>2 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen5.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom9.jpeg</uri></media>
@@ -1382,7 +1382,7 @@
       <aptUnit><number>8</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>9</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>1 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen8.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom3.jpeg</uri></media>
@@ -1430,7 +1430,7 @@
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/wrooms/wroom2.jpeg</uri></media>
 </medias>
 <floorplans>
-<floorplan><name>1 Bedroom</name><bedrooms>1</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom</name><bedrooms>1</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen1.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom6.jpeg</uri></media>
@@ -1456,7 +1456,7 @@
       <aptUnit><number>504</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>507</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>1 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen2.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom7.jpeg</uri></media>
@@ -1467,7 +1467,7 @@
 <units>
       <aptUnit><number>507</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>2 Bedroom</name><bedrooms>2</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
+<floorplan><name>2 bedroom</name><bedrooms>2</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen3.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom8.jpeg</uri></media>
@@ -1507,7 +1507,7 @@
       <aptUnit><number>506</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>507</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>2 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
+<floorplan><name>2 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen4.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom9.jpeg</uri></media>
@@ -1541,7 +1541,7 @@
       <aptUnit><number>105</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>106</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>3 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>3 Bedroom</marketingName>
+<floorplan><name>3 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>3 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen6.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom2.jpeg</uri></media>
@@ -1580,7 +1580,7 @@
       <aptUnit><number>506</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>507</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>bachelor</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
+<floorplan><name>Bachelor +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen8.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom4.jpeg</uri></media>
@@ -1687,7 +1687,7 @@
       <aptUnit><number>607</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>610</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>2 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
+<floorplan><name>2 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen2.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom8.jpeg</uri></media>
@@ -1740,7 +1740,7 @@
       <aptUnit><number>609</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>610</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>3 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>3 Bedroom</marketingName>
+<floorplan><name>3 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>3 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen4.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom1.jpeg</uri></media>
@@ -1938,7 +1938,7 @@
       <aptUnit><number>8</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>9</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>1 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom + </name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen6.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom4.jpeg</uri></media>
@@ -2060,7 +2060,7 @@
       <aptUnit><number>911</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>912</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>1 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom + </name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen1.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom9.jpeg</uri></media>
@@ -2170,7 +2170,7 @@
       <aptUnit><number>911</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>912</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>2 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
+<floorplan><name>2 bedroom +</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen3.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom2.jpeg</uri></media>
@@ -2613,7 +2613,7 @@
       <aptUnit><number>7</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>8</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>bachelor</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
+<floorplan><name>bachelor+</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen6.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom6.jpeg</uri></media>
@@ -2975,7 +2975,7 @@
       <aptUnit><number>407</number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>409</number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>bachelor</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
+<floorplan><name>bachelor+</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen1.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom3.jpeg</uri></media>
@@ -3422,7 +3422,7 @@
       <aptUnit><number>16-706 </number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>16-707 </number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>1 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
+<floorplan><name>1 bedroom+</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>1 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen8.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom2.jpeg</uri></media>
@@ -3561,7 +3561,7 @@
       <aptUnit><number>16-707 </number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>16-708 </number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>2 bedroom</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
+<floorplan><name>2 bedroom+</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>2 Bedroom</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen10.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom4.jpeg</uri></media>
@@ -3612,7 +3612,7 @@
       <aptUnit><number>16-702 </number><area></area><marketRent>1250</marketRent></aptUnit>
       <aptUnit><number>16-708 </number><area></area><marketRent>1250</marketRent></aptUnit>
 </units></floorplan>
-<floorplan><name>bachelor</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
+<floorplan><name>bachelor+</name><bedrooms>0</bedrooms><bathrooms>1</bathrooms><dens>0</dens><halfBath>0</halfBath><marketingName>Bachelor</marketingName>
 <medias>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/kitchens/kitchen2.jpeg</uri></media>
 		<media><mediaType>file</mediaType><visibility>global</visibility><uri>building-demo/lrooms/lroom6.jpeg</uri></media>
