@@ -117,7 +117,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         add(getContainer());
 
         if (isAddable()) {
-            add(getActionsPanel());
+            add(getAddButton());
         }
 
     }

@@ -120,6 +120,7 @@ public class Button extends FocusPanel implements IFocusWidget {
                 textLabel.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
                 textLabel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat scroll left center");
                 textLabel.setHeight(image.getHeight() + "px");
+                textLabel.getElement().getStyle().setProperty("lineHeight", image.getHeight() + "px");
             } else {
                 textLabel.getElement().getStyle().setProperty("paddingLeft", "0px");
                 textLabel.getElement().getStyle().setProperty("background", "none");

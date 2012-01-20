@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColors;
 public abstract class DefaultEntityFolderTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        EntityFolder, EntityFolderActionsBar, EntityFolderAddButton, EntityFolderAddButtonImage, EntityFolderAddButtonLabel,
+        EntityFolder, EntityFolderActionsBar, EntityFolderAddButton,
 
         EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton,
 
@@ -110,18 +110,10 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style = new Style(".", StyleName.EntityFolderAddButton);
         style.addProperty("display", "inline-block");
         style.addProperty("margin", "6px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.EntityFolderAddButtonImage);
-        style.addProperty("float", "left");
-        addStyle(style);
-
-        style = new Style(".", StyleName.EntityFolderAddButtonLabel);
-        style.addProperty("padding-left", "3px");
+        style.addProperty("color", ThemeColors.object1, 0.8);
         style.addProperty("font-weight", "normal");
         style.addProperty("font-style", "italic");
-        style.addProperty("float", "left");
-        style.addProperty("color", ThemeColors.object1, 0.8);
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderRemoveButton);

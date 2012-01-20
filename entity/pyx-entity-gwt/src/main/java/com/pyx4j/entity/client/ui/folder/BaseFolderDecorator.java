@@ -21,31 +21,24 @@
 package com.pyx4j.entity.client.ui.folder;
 
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderAddButton;
-import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderAddButtonImage;
-import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderAddButtonLabel;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
-import com.pyx4j.widgets.client.ImageButton;
+import com.pyx4j.widgets.client.Button;
 
 public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel implements IFolderDecorator<E> {
 
     private final SimplePanel container = new SimplePanel();
 
-    private FlowPanel actionsPanel = null;
-
-    private Image addImage = null;
-
-    private Label addButtonLabel;
+    private Button addButton = null;
 
     private boolean addable;
 
@@ -54,16 +47,9 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
         if (images.add() != null) {
 
-            actionsPanel = new FlowPanel();
-            actionsPanel.setStyleName(EntityFolderAddButton.name());
+            addButton = new Button(new Image(images.add()), title);
+            addButton.setStyleName(EntityFolderAddButton.name());
 
-            addImage = new ImageButton(images.add(), images.addHover(), title);
-            addImage.setStyleName(EntityFolderAddButtonImage.name());
-            actionsPanel.add(addImage);
-
-            addButtonLabel = new Label(title);
-            addButtonLabel.setStyleName(EntityFolderAddButtonLabel.name());
-            actionsPanel.add(addButtonLabel);
         }
     }
 
@@ -71,12 +57,8 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         return container;
     }
 
-    protected FlowPanel getActionsPanel() {
-        return actionsPanel;
-    }
-
-    protected Image getAddImage() {
-        return addImage;
+    protected Button getAddButton() {
+        return addButton;
     }
 
     protected boolean isAddable() {
@@ -91,8 +73,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
         if (isAddable()) {
             HandlerRegistrationGC h = new HandlerRegistrationGC();
-            h.add(addImage.addClickHandler(handler));
-            h.add(addButtonLabel.addClickHandler(handler));
+            h.add(addButton.addClickHandler(handler));
             return h;
         }
         return null;
@@ -112,14 +93,12 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
             if (baseID.endsWith(IFolderDecorator.DEBUGID_SUFIX)) {
                 baseID = baseID.substring(0, baseID.length() - IFolderDecorator.DEBUGID_SUFIX.length());
             }
-            addImage.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId());
-            addButtonLabel.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId() + "-label");
+            addButton.ensureDebugId(baseID + "-" + FormNavigationDebugId.Form_Add.debugId());
         }
     }
 
     @Override
     public void setAddButtonVisible(boolean visible) {
-        addImage.setVisible(visible);
-        addButtonLabel.setVisible(visible);
+        addButton.setVisible(visible);
     }
 }

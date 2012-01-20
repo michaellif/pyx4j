@@ -46,7 +46,7 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
         add(getContainer());
 
         if (isAddable()) {
-            add(getActionsPanel());
+            add(getAddButton());
         }
     }
 
