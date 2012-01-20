@@ -33,6 +33,15 @@ public interface IncomeInfoSelfEmployed extends IEmploymentInfo {
     @Caption(name = "Years In Business")
     IPrimitive<Double> employedForYears();
 
+    @Override
+    @Caption(name = "Supervisor/Manager Name")
+    IPrimitive<String> supervisorName();
+
+    @Override
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Supervisor/Manager Phone")
+    IPrimitive<String> supervisorPhone();
+
     @Caption(name = "Is Fully Owned")
     IPrimitive<Boolean> fullyOwned();
 

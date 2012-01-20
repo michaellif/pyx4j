@@ -299,6 +299,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
 
                 int row = -1;
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().employedForYears()), 4).build());
 
                 row = -1;
                 main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().supervisorName()), 20).build());
