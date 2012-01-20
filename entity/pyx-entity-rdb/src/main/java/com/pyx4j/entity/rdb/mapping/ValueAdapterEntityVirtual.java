@@ -160,4 +160,9 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
             return this;
         }
     }
+
+    @Override
+    public Object ensureType(Object value) {
+        return value;
+    }
 }

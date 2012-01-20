@@ -83,6 +83,10 @@ public class EntityOperationsMeta {
 
     private final Mappings mappings;
 
+    private MemberOperationsMeta updatedTimestampMember;
+
+    private MemberOperationsMeta createdTimestampMember;
+
     EntityOperationsMeta(Dialect dialect, Mappings mappings, EntityMeta entityMeta) {
         mainEntityMeta = entityMeta;
         String path = GWTJava5Helper.getSimpleName(entityMeta.getEntityClass());
@@ -268,6 +272,13 @@ public class EntityOperationsMeta {
                     columnMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
                     allMembers.add(member);
+
+                    if ((updatedTimestampMember == null) && (memberName.equals(mainEntityMeta.getUpdatedTimestampMember()))) {
+                        updatedTimestampMember = member;
+                    }
+                    if ((createdTimestampMember == null) && (memberName.equals(mainEntityMeta.getCreatedTimestampMember()))) {
+                        createdTimestampMember = member;
+                    }
                 }
 
                 Indexed index = memberMeta.getAnnotation(Indexed.class);
@@ -451,6 +462,14 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getCascadeDeleteMembers() {
         return cascadeDeleteMembers;
+    }
+
+    public MemberOperationsMeta getCreatedTimestampMember() {
+        return createdTimestampMember;
+    }
+
+    public MemberOperationsMeta getUpdatedTimestampMember() {
+        return updatedTimestampMember;
     }
 
     public List<MemberOperationsMeta> getCascadeRetrieveMembers() {

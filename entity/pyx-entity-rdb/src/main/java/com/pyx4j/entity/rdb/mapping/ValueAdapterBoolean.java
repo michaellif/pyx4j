@@ -51,4 +51,5 @@ class ValueAdapterBoolean extends ValueAdapterPrimitive {
             return value;
         }
     }
+
 }

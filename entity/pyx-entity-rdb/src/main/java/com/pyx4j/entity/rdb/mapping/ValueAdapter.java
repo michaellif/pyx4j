@@ -35,4 +35,6 @@ interface ValueAdapter extends ValueBindAdapter {
     Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
 
     ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value);
+
+    Object ensureType(Object value);
 }

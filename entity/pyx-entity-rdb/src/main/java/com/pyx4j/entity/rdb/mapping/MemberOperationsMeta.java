@@ -104,7 +104,7 @@ public class MemberOperationsMeta implements EntityMemberAccess {
 
     @Override
     public void setMemberValue(IEntity entity, Object value) {
-        memberAccess.setMemberValue(entity, value);
+        memberAccess.setMemberValue(entity, valueAdapter.ensureType(value));
     }
 
     @Override

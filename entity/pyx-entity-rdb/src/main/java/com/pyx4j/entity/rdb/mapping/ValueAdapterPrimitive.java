@@ -28,9 +28,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 abstract class ValueAdapterPrimitive implements ValueAdapter {
 
+    private final Class<?> valueClass;
+
     protected int sqlType;
 
     protected ValueAdapterPrimitive(Dialect dialect, Class<?> valueClass) {
+        this.valueClass = valueClass;
         sqlType = dialect.getTargetSqlType(valueClass);
     }
 
@@ -55,4 +58,12 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
         return this;
     }
+
+    @Override
+    public Object ensureType(Object value) {
+        assert (value == null) || valueClass.isAssignableFrom(value.getClass()) : "Trying to set value of a wrong type '" + value.getClass() + "', expected "
+                + valueClass;
+        return value;
+    }
+
 }

@@ -118,4 +118,9 @@ class ValueAdapterEntity implements ValueAdapter {
             };
         }
     }
+
+    @Override
+    public Object ensureType(Object value) {
+        return value;
+    }
 }

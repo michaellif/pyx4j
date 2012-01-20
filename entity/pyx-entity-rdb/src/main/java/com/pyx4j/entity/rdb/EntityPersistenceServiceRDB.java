@@ -209,9 +209,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
         }
-        String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
+        MemberOperationsMeta updatedTs = tm.operationsMeta().getUpdatedTimestampMember();
         if (updatedTs != null) {
-            entity.setMemberValue(updatedTs, now);
+            updatedTs.setMemberValue(entity, now);
         }
         if (entity.getPrimaryKey() == null) {
             insert(connection, tm, entity, now);
@@ -231,9 +231,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (trace) {
             log.info(Trace.enter() + "insert {}", tm.getTableName());
         }
-        String createdTs = tm.entityMeta().getCreatedTimestampMember();
-        if (createdTs != null) {
-            entity.setMemberValue(createdTs, now);
+        MemberOperationsMeta createdTs = tm.operationsMeta().getCreatedTimestampMember();
+        if ((createdTs != null) && (createdTs.getMemberValue(entity) == null)) {
+            createdTs.setMemberValue(entity, now);
         }
         try {
             tm.insert(connection, entity);
@@ -400,10 +400,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
          * (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
          * mergeReference(connection, memberMeta, childEntity, now); } } }
          */
-        String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
-        for (T entity : entityIterable) {
-            if (updatedTs != null) {
-                entity.setMemberValue(updatedTs, now);
+        MemberOperationsMeta updatedTs = tm.operationsMeta().getUpdatedTimestampMember();
+        if (updatedTs != null) {
+            for (T entity : entityIterable) {
+                if (updatedTs != null) {
+                    updatedTs.setMemberValue(entity, now);
+                }
             }
         }
 
@@ -616,7 +618,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
         final IEntity baseEntity = EntityFactory.create(tm.entityMeta().getEntityClass());
-        String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
         boolean updated;
         if (entity.getPrimaryKey() != null) {
             updated = retrieveAndApplyModifications(connection, tm, baseEntity, entity);
@@ -647,8 +648,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
         }
         if (updated) {
+            MemberOperationsMeta updatedTs = tm.operationsMeta().getUpdatedTimestampMember();
             if (updatedTs != null) {
-                entity.setMemberValue(updatedTs, now);
+                updatedTs.setMemberValue(entity, now);
             }
             if (entity.getPrimaryKey() == null) {
                 insert(connection, tm, entity, now);

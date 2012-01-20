@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
@@ -63,4 +64,12 @@ class ValueAdapterLogicalDate extends ValueAdapterPrimitive {
         }
     }
 
+    @Override
+    public Object ensureType(Object value) {
+        if ((value != null) && (!(value instanceof LogicalDate))) {
+            return new LogicalDate((Date) value);
+        } else {
+            return super.ensureType(value);
+        }
+    }
 }
