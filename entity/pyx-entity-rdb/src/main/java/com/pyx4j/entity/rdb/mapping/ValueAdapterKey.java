@@ -30,7 +30,7 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 class ValueAdapterKey extends ValueAdapterPrimitive {
 
     protected ValueAdapterKey(Dialect dialect) {
-        super(dialect, Long.class);
+        super(dialect, Key.class);
     }
 
     @Override

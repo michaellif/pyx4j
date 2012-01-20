@@ -129,6 +129,8 @@ public abstract class Dialect {
             return Types.FLOAT;
         } else if (valueClass.equals(Long.class)) {
             return Types.BIGINT;
+        } else if (valueClass.equals(Key.class)) {
+            return Types.BIGINT;
         } else if (valueClass.equals(Integer.class)) {
             return Types.INTEGER;
         } else if (valueClass.equals(java.sql.Date.class)) {
