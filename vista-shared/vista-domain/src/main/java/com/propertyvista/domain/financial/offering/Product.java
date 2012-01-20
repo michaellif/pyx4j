@@ -15,12 +15,15 @@ package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Inheritance
@@ -35,5 +38,11 @@ public interface Product extends IEntity {
 
     @Owned
     @Detached
-    IList<ServiceItem> items();
+    IList<ProductItem> items();
+
+    @ToString(index = 1)
+    IPrimitive<String> name();
+
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> description();
 }

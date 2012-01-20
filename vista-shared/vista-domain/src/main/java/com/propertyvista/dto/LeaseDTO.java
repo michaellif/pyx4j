@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -32,11 +32,11 @@ public interface LeaseDTO extends Lease {
     // -----------------------------------------------------
     // temporary runtime data:
 
-    IList<ServiceItem> selectedServiceItems();
+    IList<ProductItem> selectedServiceItems();
 
-    IList<ServiceItem> selectedFeatureItems();
+    IList<ProductItem> selectedFeatureItems();
 
-    IList<ServiceItem> selectedUtilityItems();
+    IList<ProductItem> selectedUtilityItems();
 
     IList<Concession> selectedConcessions();
 

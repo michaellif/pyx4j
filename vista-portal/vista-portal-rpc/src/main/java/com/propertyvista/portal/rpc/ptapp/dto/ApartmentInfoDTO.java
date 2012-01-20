@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.media.Media;
 
@@ -67,23 +67,23 @@ public interface ApartmentInfoDTO extends IEntity {
 
     IList<ChargeItem> agreedUtilities();
 
-    IList<ServiceItem> availableUtilities();
+    IList<ProductItem> availableUtilities();
 
     IList<ChargeItem> agreedPets();
 
-    IList<ServiceItem> availablePets();
+    IList<ProductItem> availablePets();
 
     IList<ChargeItem> agreedParking();
 
-    IList<ServiceItem> availableParking();
+    IList<ProductItem> availableParking();
 
     IList<ChargeItem> agreedStorage();
 
-    IList<ServiceItem> availableStorage();
+    IList<ProductItem> availableStorage();
 
     IList<ChargeItem> agreedOther();
 
-    IList<ServiceItem> availableOther();
+    IList<ProductItem> availableOther();
 
     IList<Concession> concessions();
 

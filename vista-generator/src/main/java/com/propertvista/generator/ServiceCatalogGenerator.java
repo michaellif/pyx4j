@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.Type;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -123,7 +123,7 @@ public class ServiceCatalogGenerator {
         return item;
     }
 
-    private List<ServiceItem> createServiceItems(Service.Type type) {
+    private List<ProductItem> createServiceItems(Service.Type type) {
 
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getServiceItemTypes()) {
@@ -137,7 +137,7 @@ public class ServiceCatalogGenerator {
         case residentialUnit:
         case residentialShortTermUnit:
         case commercialUnit:
-            return new ArrayList<ServiceItem>();
+            return new ArrayList<ProductItem>();
         case roof:
         case garage:
         case storage:
@@ -146,10 +146,10 @@ public class ServiceCatalogGenerator {
             break;
         }
 
-        List<ServiceItem> items = new ArrayList<ServiceItem>(count);
+        List<ProductItem> items = new ArrayList<ProductItem>(count);
         if (!allowedItemTypes.isEmpty()) {
             for (int i = 0; i < count; ++i) {
-                ServiceItem item = EntityFactory.create(ServiceItem.class);
+                ProductItem item = EntityFactory.create(ProductItem.class);
                 ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
                 item.type().set(selectedItem);
@@ -185,7 +185,7 @@ public class ServiceCatalogGenerator {
         return item;
     }
 
-    private List<ServiceItem> createFeatureItems(Feature.Type type) {
+    private List<ProductItem> createFeatureItems(Feature.Type type) {
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getFeatureItemTypes()) {
             if (type.equals(itemType.featureType().getValue())) {
@@ -194,10 +194,10 @@ public class ServiceCatalogGenerator {
         }
 
         int count = Math.min(3, allowedItemTypes.size());
-        List<ServiceItem> items = new ArrayList<ServiceItem>(count);
+        List<ProductItem> items = new ArrayList<ProductItem>(count);
         if (!allowedItemTypes.isEmpty()) {
             for (int i = 0; i < count; ++i) {
-                ServiceItem item = EntityFactory.create(ServiceItem.class);
+                ProductItem item = EntityFactory.create(ProductItem.class);
 
                 item.type().set(RandomUtil.random(allowedItemTypes));
                 item.type().name().setValue(item.type().getStringView());
@@ -328,22 +328,22 @@ public class ServiceCatalogGenerator {
         return base + RandomUtil.randomInt(200);
     }
 
-    public List<ServiceItem> createAptUnitServices(ServiceCatalog catalog, AptUnit unit) {
+    public List<ProductItem> createAptUnitServices(ServiceCatalog catalog, AptUnit unit) {
         Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
-        List<ServiceItem> serviceItems = createBuildingElementServices(catalog, unit, type);
+        List<ProductItem> serviceItems = createBuildingElementServices(catalog, unit, type);
         serviceItems.get(0).price().setValue(createUnitMarketRent(unit));
         unit.financial()._marketRent().set(serviceItems.get(0).price());
         return serviceItems;
 
     }
 
-    public List<ServiceItem> createBuildingElementServices(ServiceCatalog catalog, BuildingElement buildingElement, Service.Type type) {
+    public List<ProductItem> createBuildingElementServices(ServiceCatalog catalog, BuildingElement buildingElement, Service.Type type) {
         Service service = getService(catalog, type);
         List<ServiceItemType> allowedItemTypes = getServiceItemTypes(catalog, type);
 
-        List<ServiceItem> items = new ArrayList<ServiceItem>();
+        List<ProductItem> items = new ArrayList<ProductItem>();
 
-        ServiceItem item = EntityFactory.create(ServiceItem.class);
+        ProductItem item = EntityFactory.create(ProductItem.class);
         ServiceItemType selectedItem = RandomUtil.random(allowedItemTypes);
 
         item.type().set(selectedItem);

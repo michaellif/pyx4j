@@ -23,7 +23,7 @@ import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.dto.LeaseDTO;
 
 class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
@@ -42,10 +42,10 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
         if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
-            new SelectDialog<ServiceItem>(i18n.tr("Select Features"), true, parent.getValue().selectedFeatureItems()) {
+            new SelectDialog<ProductItem>(i18n.tr("Select Features"), true, parent.getValue().selectedFeatureItems()) {
                 @Override
                 public boolean onClickOk() {
-                    for (ServiceItem item : getSelectedItems()) {
+                    for (ProductItem item : getSelectedItems()) {
                         ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());

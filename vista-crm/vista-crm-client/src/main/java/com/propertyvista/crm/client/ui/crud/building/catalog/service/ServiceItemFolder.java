@@ -25,14 +25,14 @@ import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 
-class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
+class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
     private final CEntityEditor<Service> parent;
 
     public ServiceItemFolder(CEntityEditor<Service> parent) {
-        super(ServiceItem.class, parent.isEditable());
+        super(ProductItem.class, parent.isEditable());
         this.parent = parent;
     }
 
@@ -48,16 +48,16 @@ class ServiceItemFolder extends VistaTableFolder<ServiceItem> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ServiceItem) {
+        if (member instanceof ProductItem) {
             return new ServiceItemEditor();
         }
         return super.create(member);
     }
 
-    private class ServiceItemEditor extends CEntityFolderRowEditor<ServiceItem> {
+    private class ServiceItemEditor extends CEntityFolderRowEditor<ProductItem> {
 
         public ServiceItemEditor() {
-            super(ServiceItem.class, columns());
+            super(ProductItem.class, columns());
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })

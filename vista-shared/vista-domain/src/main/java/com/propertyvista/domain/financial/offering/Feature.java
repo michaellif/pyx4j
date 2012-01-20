@@ -16,7 +16,6 @@ package com.propertyvista.domain.financial.offering;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -77,12 +76,6 @@ public interface Feature extends Product {
     @ToString(index = 0)
     @MemberColumn(name = "featureType")
     IPrimitive<Type> type();
-
-    @ToString(index = 1)
-    IPrimitive<String> name();
-
-    @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> description();
 
     IPrimitive<PriceType> priceType();
 

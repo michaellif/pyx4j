@@ -32,7 +32,7 @@ import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -267,7 +267,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         for (Service service : building.serviceCatalog().services()) {
             if (service.type().equals(lease.type())) {
                 for (Feature feature : service.features()) {
-                    for (ServiceItem item : feature.items()) {
+                    for (ProductItem item : feature.items()) {
                         switch (item.type().featureType().getValue()) {
                         case utility:
                             if (!entity.includedUtilities().contains(item.type()) && !entity.externalUtilities().contains(item.type())) {

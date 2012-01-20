@@ -27,7 +27,7 @@ public interface ChargeItem extends IEntity {
 
     @ToString(index = 0)
     @Caption(name = "Service Item")
-    ServiceItem item();
+    ProductItem item();
 
     // base price: originally - comes from item
     @ToString(index = 1)

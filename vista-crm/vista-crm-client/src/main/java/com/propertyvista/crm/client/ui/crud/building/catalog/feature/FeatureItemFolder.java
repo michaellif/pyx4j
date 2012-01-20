@@ -31,17 +31,17 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
+class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
     private static final I18n i18n = I18n.get(FeatureItemFolder.class);
 
     private final CEntityEditor<Feature> parent;
 
     public FeatureItemFolder(CEntityEditor<Feature> parent) {
-        super(ServiceItem.class, parent.isEditable());
+        super(ProductItem.class, parent.isEditable());
         this.parent = parent;
     }
 
@@ -57,16 +57,16 @@ class FeatureItemFolder extends VistaTableFolder<ServiceItem> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ServiceItem) {
+        if (member instanceof ProductItem) {
             return new ServiceItemEditor();
         }
         return super.create(member);
     }
 
-    private class ServiceItemEditor extends CEntityFolderRowEditor<ServiceItem> {
+    private class ServiceItemEditor extends CEntityFolderRowEditor<ProductItem> {
 
         public ServiceItemEditor() {
-            super(ServiceItem.class, columns());
+            super(ProductItem.class, columns());
         }
 
         @Override

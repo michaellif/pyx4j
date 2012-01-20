@@ -19,7 +19,7 @@ import com.propertyvista.crm.rpc.services.ServiceCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 
 public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> implements ServiceCrudService {
 
@@ -38,7 +38,7 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
             Persistence.service().retrieve(entity.concessions());
 
             // next level:
-            for (ServiceItem item : entity.items()) {
+            for (ProductItem item : entity.items()) {
                 Persistence.service().retrieve(item.element());
             }
             for (Feature feature : entity.features()) {

@@ -21,10 +21,10 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-abstract class SelectFeatureBox extends SelectDialog<ServiceItem> {
+abstract class SelectFeatureBox extends SelectDialog<ProductItem> {
 
     private static final I18n i18n = I18n.get(OkCancelDialog.class);
 
@@ -42,9 +42,9 @@ abstract class SelectFeatureBox extends SelectDialog<ServiceItem> {
         return "100px";
     }
 
-    private static List<ServiceItem> getAvailableList(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
+    private static List<ProductItem> getAvailableList(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
         // TODO in the previous version there was a commented out part of code that restricted addition of already selected items (from apartmentInfo.agreed*())
-        List<ServiceItem> available = null;
+        List<ProductItem> available = null;
         switch (type) {
         case utility:
             available = apartmentInfo.availableUtilities();
@@ -62,8 +62,8 @@ abstract class SelectFeatureBox extends SelectDialog<ServiceItem> {
             available = apartmentInfo.availableOther();
             break;
         }
-        List<ServiceItem> result = new ArrayList<ServiceItem>(available.size());
-        for (ServiceItem item : available) {
+        List<ProductItem> result = new ArrayList<ProductItem>(available.size());
+        for (ProductItem item : available) {
             if (isCompatible(item, type)) {
                 result.add(item);
             }
@@ -71,7 +71,7 @@ abstract class SelectFeatureBox extends SelectDialog<ServiceItem> {
         return result;
     }
 
-    private static boolean isCompatible(ServiceItem item, Feature.Type type) {
+    private static boolean isCompatible(ProductItem item, Feature.Type type) {
 
         if (type.equals(Feature.Type.addOn)) {
             switch (item.type().featureType().getValue()) {

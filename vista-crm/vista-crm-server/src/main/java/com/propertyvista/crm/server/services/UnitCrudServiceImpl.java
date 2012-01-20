@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -60,9 +60,9 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         dto.financial()._unitRent().setValue(null);
         dto.financial()._marketRent().setValue(null);
 
-        EntityQueryCriteria<ServiceItem> serviceItemCriteria = new EntityQueryCriteria<ServiceItem>(ServiceItem.class);
+        EntityQueryCriteria<ProductItem> serviceItemCriteria = new EntityQueryCriteria<ProductItem>(ProductItem.class);
         serviceItemCriteria.add(PropertyCriterion.eq(serviceItemCriteria.proto().element(), in));
-        ServiceItem item = Persistence.service().retrieve(serviceItemCriteria);
+        ProductItem item = Persistence.service().retrieve(serviceItemCriteria);
         if (item != null) {
             dto.financial()._marketRent().setValue(item.price().getValue());
         }

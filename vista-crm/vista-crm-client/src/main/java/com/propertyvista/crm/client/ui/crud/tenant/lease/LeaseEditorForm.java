@@ -42,7 +42,7 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -201,10 +201,10 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
                     if (getValue().selectedBuilding() == null || getValue().selectedBuilding().isNull()) {
                         MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Building/Unit First"));
                     } else {
-                        new SelectDialog<ServiceItem>(i18n.tr("Service Item Selection"), false, getValue().selectedServiceItems()) {
+                        new SelectDialog<ProductItem>(i18n.tr("Service Item Selection"), false, getValue().selectedServiceItems()) {
                             @Override
                             public boolean onClickOk() {
-                                List<ServiceItem> selectedItems = getSelectedItems();
+                                List<ProductItem> selectedItems = getSelectedItems();
                                 if (!selectedItems.isEmpty()) {
                                     ((LeaseEditorView.Presenter) ((LeaseEditorView) getParentView()).getPresenter()).setSelectedService(selectedItems.get(0));
                                     return true;

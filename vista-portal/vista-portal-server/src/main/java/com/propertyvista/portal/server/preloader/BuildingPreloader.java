@@ -42,7 +42,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
@@ -275,7 +275,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             unitCount += units.size();
             for (AptUnitGDO unitData : units) {
 
-                List<ServiceItem> serviceItems = serviceCatalogGenerator.createAptUnitServices(catalog, unitData.unit());
+                List<ProductItem> serviceItems = serviceCatalogGenerator.createAptUnitServices(catalog, unitData.unit());
 
                 // persist plain internal lists:
 
@@ -307,19 +307,19 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             for (Service service : catalog.services()) {
                 switch (service.type().getValue()) {
                 case garage:
-                    for (ServiceItem item : service.items()) {
+                    for (ProductItem item : service.items()) {
                         item.element().set(RandomUtil.random(buildingParkings));
                         Persistence.service().persist(item);
                     }
                     break;
                 case storage:
-                    for (ServiceItem item : service.items()) {
+                    for (ProductItem item : service.items()) {
                         item.element().set(RandomUtil.random(buildingockers));
                         Persistence.service().persist(item);
                     }
                     break;
                 case roof:
-                    for (ServiceItem item : service.items()) {
+                    for (ProductItem item : service.items()) {
                         item.element().set(RandomUtil.random(buildingRoofs));
                         Persistence.service().persist(item);
                     }

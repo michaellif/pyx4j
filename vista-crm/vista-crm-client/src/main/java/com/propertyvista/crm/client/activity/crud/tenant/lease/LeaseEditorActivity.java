@@ -34,7 +34,7 @@ import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
@@ -101,7 +101,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void setSelectedService(ServiceItem serviceItem) {
+    public void setSelectedService(ProductItem serviceItem) {
         LeaseDTO currentValue = view.getValue().duplicate();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
 
@@ -112,7 +112,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             currentValue.serviceAgreement().serviceItem().set(createChargeItem(serviceItem));
 
             // pre-populate utilities for the new service:
-            for (ServiceItem item : currentValue.selectedUtilityItems()) {
+            for (ProductItem item : currentValue.selectedUtilityItems()) {
                 currentValue.serviceAgreement().featureItems().add(createChargeItem(item));
             }
 
@@ -147,7 +147,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         currentValue.selectedServiceItems().clear();
         for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
             if (service.type().equals(currentValue.type())) {
-                for (ServiceItem item : service.items()) {
+                for (ProductItem item : service.items()) {
                     if (currentValue.unit().equals(item.element())) {
                         currentValue.selectedServiceItems().add(item);
                     }
@@ -156,7 +156,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         }
     }
 
-    private boolean fillServiceEligibilityData(LeaseDTO currentValue, ServiceItem serviceItem) {
+    private boolean fillServiceEligibilityData(LeaseDTO currentValue, ProductItem serviceItem) {
         if (serviceItem == null) {
             return false;
         }
@@ -164,7 +164,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         // find the service by Service item:
         Service selectedService = null;
         for (Service service : currentValue.selectedBuilding().serviceCatalog().services()) {
-            for (ServiceItem item : service.items()) {
+            for (ProductItem item : service.items()) {
                 if (item.equals(serviceItem)) {
                     selectedService = service;
                     break;
@@ -187,7 +187,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
             for (Feature feature : selectedService.features()) {
-                for (ServiceItem item : feature.items()) {
+                for (ProductItem item : feature.items()) {
                     switch (feature.type().getValue()) {
                     case utility:
                         // filter out utilities included in price for selected building:
@@ -207,7 +207,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         return (selectedService != null);
     }
 
-    private ChargeItem createChargeItem(ServiceItem serviceItem) {
+    private ChargeItem createChargeItem(ProductItem serviceItem) {
         ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
         chargeItem.item().set(serviceItem);
         chargeItem.originalPrice().setValue(serviceItem.price().getValue());

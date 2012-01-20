@@ -17,16 +17,16 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.ServiceItemCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 
-public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ServiceItem> implements ServiceItemCrudService {
+public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ProductItem> implements ServiceItemCrudService {
 
     public ServiceItemCrudServiceImpl() {
-        super(ServiceItem.class);
+        super(ProductItem.class);
     }
 
     @Override
-    protected void enhanceRetrieve(ServiceItem entity, boolean fromList) {
+    protected void enhanceRetrieve(ProductItem entity, boolean fromList) {
         if (!fromList) {
             // Load detached data:
             if (entity.element().isValueDetached()) {
@@ -36,7 +36,7 @@ public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ServiceIt
     }
 
     @Override
-    protected void enhanceSave(ServiceItem entity) {
+    protected void enhanceSave(ProductItem entity) {
         if (entity.element().isValueDetached()) {
             Persistence.service().merge(entity.element());
         }

@@ -28,7 +28,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 
 public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
@@ -80,7 +80,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                 new SelectFeatureBox(type, apartmentViewForm.getValue()) {
                     @Override
                     public boolean onClickOk() {
-                        for (ServiceItem item : getSelectedItems()) {
+                        for (ProductItem item : getSelectedItems()) {
                             if (getValue().size() < getMaxCount()) {
                                 ChargeItem newItem = EntityFactory.create(ChargeItem.class);
                                 newItem.item().set(item);

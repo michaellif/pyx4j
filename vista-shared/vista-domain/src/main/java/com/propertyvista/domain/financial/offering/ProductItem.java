@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.property.asset.BuildingElement;
 
 @ToStringFormat("{0}, Price: {1}")
-public interface ServiceItem extends IEntity {
+public interface ProductItem extends IEntity {
 
     @Owner
     @Detached

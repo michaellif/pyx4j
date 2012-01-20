@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -59,12 +58,6 @@ public interface Service extends Product {
     @ToString(index = 0)
     @MemberColumn(name = "serviceType")
     IPrimitive<Type> type();
-
-    @ToString(index = 1)
-    IPrimitive<String> name();
-
-    @Editor(type = Editor.EditorType.textarea)
-    IPrimitive<String> description();
 
     IPrimitive<DepositType> depositType();
 

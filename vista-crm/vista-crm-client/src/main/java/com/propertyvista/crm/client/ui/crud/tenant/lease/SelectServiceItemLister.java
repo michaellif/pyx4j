@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.ui.crud.tenant.lease;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 
-public class SelectServiceItemLister extends ListerBase<ServiceItem> {
+public class SelectServiceItemLister extends ListerBase<ProductItem> {
 
     public SelectServiceItemLister() {
-        super(ServiceItem.class);
+        super(ProductItem.class);
         getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(5);
 

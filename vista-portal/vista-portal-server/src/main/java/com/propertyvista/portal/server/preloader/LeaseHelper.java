@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItem;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -57,7 +57,7 @@ class LeaseHelper {
 
             for (Service service : services) {
                 Persistence.service().retrieve(service.items());
-                for (ServiceItem item : service.items()) {
+                for (ProductItem item : service.items()) {
                     if (lease.unit().equals(item.element())) {
                         lease.serviceAgreement().serviceItem().set(createChargeItem(item));
                         selectedService = service;
@@ -75,7 +75,7 @@ class LeaseHelper {
             for (Feature feature : selectedService.features()) {
                 if (Feature.Type.utility.equals(feature.type().getValue())) {
                     Persistence.service().retrieve(feature.items());
-                    for (ServiceItem item : feature.items()) {
+                    for (ProductItem item : feature.items()) {
                         if (!building.serviceCatalog().includedUtilities().contains(item.type())
                                 && !building.serviceCatalog().externalUtilities().contains(item.type())) {
                             lease.serviceAgreement().featureItems().add(createChargeItem(item));
@@ -93,7 +93,7 @@ class LeaseHelper {
         }
     }
 
-    private static ChargeItem createChargeItem(ServiceItem serviceItem) {
+    private static ChargeItem createChargeItem(ProductItem serviceItem) {
         ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
         chargeItem.item().set(serviceItem);
         chargeItem.originalPrice().setValue(serviceItem.price().getValue());
