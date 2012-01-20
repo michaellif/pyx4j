@@ -118,6 +118,9 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().preauthoriseAgree()), 5).build());
         }
 
+        // tune up:
+        get(proto().depositAgree()).setMandatory(false);
+
         return main;
     }
 
