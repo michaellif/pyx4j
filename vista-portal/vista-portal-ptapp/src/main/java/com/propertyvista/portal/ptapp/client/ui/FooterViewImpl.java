@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class FooterViewImpl extends SimplePanel implements FooterView {
 
     public FooterViewImpl() {
-        HTML labael = new HTML("&copy;2011- All Rights Reserved.");
+        HTML labael = new HTML("&copy;2012-All Rights Reserved.");
         setWidget(labael);
         labael.getElement().getStyle().setProperty("borderTop", "dotted 1px #A7A8AA");
         getElement().getStyle().setPaddingTop(10, Unit.PX);
