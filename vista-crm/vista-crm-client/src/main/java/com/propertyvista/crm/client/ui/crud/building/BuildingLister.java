@@ -29,9 +29,9 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
 
         setColumnDescriptors(
 
-        new MemberColumnDescriptor.Builder(proto().complex()).build(),
-
         new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),
+
+        new MemberColumnDescriptor.Builder(proto().complex()).build(),
 
         new MemberColumnDescriptor.Builder(proto().externalId(), false).build(),
 
