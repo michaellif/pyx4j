@@ -11,12 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation;
+package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeListerView extends IListerView<EmployeeDTO> {
+public class EmployeeListerViewImpl extends CrmListerViewImplBase<EmployeeDTO> implements EmployeeListerView {
 
+    public EmployeeListerViewImpl() {
+        super(CrmSiteMap.Organization.Employee.class);
+        setLister(new EmployeeLister());
+    }
 }

@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation;
+package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface PortfolioListerView extends IListerView<Portfolio> {
+public interface EmployeeEditorView extends IEditorView<EmployeeDTO> {
 
+    interface Presenter extends IEditorView.Presenter {
+
+        void changePassword(String old, String newOne);
+    }
 }

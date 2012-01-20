@@ -11,15 +11,15 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation;
+package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.domain.company.Portfolio;
 
-public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
+public class PortfolioViewerViewImpl extends CrmViewerViewImplBase<Portfolio> implements PortfolioViewerView {
 
-    public EmployeeViewerViewImpl() {
-        super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm(true));
+    public PortfolioViewerViewImpl() {
+        super(CrmSiteMap.Organization.Portfolio.class, new PortfolioEditorForm(true));
     }
 }

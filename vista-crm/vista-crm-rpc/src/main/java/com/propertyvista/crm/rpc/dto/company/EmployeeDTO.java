@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
@@ -33,7 +33,7 @@ public interface EmployeeDTO extends Employee {
 
     IPrimitive<Boolean> accessAllBuildings();
 
-    ISet<CrmRole> roles();
+    IList<CrmRole> roles();
 
     /* password is used for new entity creation only */
     @NotNull

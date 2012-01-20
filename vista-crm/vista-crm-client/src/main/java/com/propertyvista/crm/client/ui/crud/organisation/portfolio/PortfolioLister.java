@@ -7,20 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-06-16
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation;
+package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Portfolio;
 
-public class PortfolioListerViewImpl extends CrmListerViewImplBase<Portfolio> implements PortfolioListerView {
+public class PortfolioLister extends ListerBase<Portfolio> {
 
-    public PortfolioListerViewImpl() {
-        super(CrmSiteMap.Organization.Portfolio.class);
-        setLister(new PortfolioLister());
+    public PortfolioLister() {
+        super(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, false, true);
+
+        setColumnDescriptors(
+
+        new MemberColumnDescriptor.Builder(proto().name()).build(),
+
+        new MemberColumnDescriptor.Builder(proto().description()).build()
+
+        );
+
     }
+
 }

@@ -11,12 +11,15 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation;
+package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-import com.propertyvista.domain.company.Portfolio;
+public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
 
-public interface PortfolioViewerView extends IViewerView<Portfolio> {
-
+    public EmployeeViewerViewImpl() {
+        super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm(true));
+    }
 }

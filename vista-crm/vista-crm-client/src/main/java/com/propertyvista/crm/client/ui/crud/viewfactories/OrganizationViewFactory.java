@@ -16,18 +16,18 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.organisation.EmployeeEditorView;
-import com.propertyvista.crm.client.ui.crud.organisation.EmployeeEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.organisation.EmployeeListerView;
-import com.propertyvista.crm.client.ui.crud.organisation.EmployeeListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.organisation.EmployeeViewerView;
-import com.propertyvista.crm.client.ui.crud.organisation.EmployeeViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.organisation.PortfolioEditorView;
-import com.propertyvista.crm.client.ui.crud.organisation.PortfolioEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.organisation.PortfolioListerView;
-import com.propertyvista.crm.client.ui.crud.organisation.PortfolioListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.organisation.PortfolioViewerView;
-import com.propertyvista.crm.client.ui.crud.organisation.PortfolioViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeEditorView;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeListerView;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioEditorView;
+import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioListerView;
+import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioViewerView;
+import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioViewerViewImpl;
 
 public class OrganizationViewFactory extends ViewFactoryBase {
 

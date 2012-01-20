@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Jan 20, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.company.Portfolio;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-public class PortfolioViewerViewImpl extends CrmViewerViewImplBase<Portfolio> implements PortfolioViewerView {
+import com.propertyvista.domain.security.CrmRole;
 
-    public PortfolioViewerViewImpl() {
-        super(CrmSiteMap.Organization.Portfolio.class, new PortfolioEditorForm(true));
-    }
+public interface SelectCrmRoleListService extends AbstractListService<CrmRole> {
+
 }
