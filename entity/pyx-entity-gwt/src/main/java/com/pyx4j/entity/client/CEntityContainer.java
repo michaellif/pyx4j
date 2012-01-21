@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
@@ -28,19 +30,27 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory {
-
-    private static final I18n i18n = I18n.get(CEntityContainer.class);
 
     private IDecorator decorator;
 
     private ImageResource icon;
 
+    @SuppressWarnings("rawtypes")
+    private final ValueChangeHandler valuePropagationHandler;
+
+    public CEntityContainer() {
+        this.valuePropagationHandler = new ValuePropagationHandler();
+    }
+
     public abstract IsWidget createContent();
 
-    protected IDecorator<?> createDecorator() {
+    protected abstract void onChildComponentValueChange(ValueChangeEvent<?> event);
+
+    protected abstract void setComponentsValue(E value, boolean fireEvent, boolean populate);
+
+    protected IDecorator<? extends CEntityContainer<?>> createDecorator() {
         return null;
     }
 
@@ -66,7 +76,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         addValidations();
     }
 
-    public IDecorator<?> getDecorator() {
+    public IDecorator getDecorator() {
         return decorator;
     }
 
@@ -90,13 +100,35 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     @Override
+    public void adopt(CComponent<?, ?> component) {
+        component.addValueChangeHandler(valuePropagationHandler);
+        super.adopt(component);
+    }
+
+    @Override
     public void onAdopt(CContainer<?, ?> parent) {
         super.onAdopt(parent);
         initContent();
         addValidations();
     }
 
+    @Override
+    public void setValue(E value, boolean fireEvent, boolean populate) {
+        setComponentsValue(value, fireEvent, populate);
+        super.setValue(value, fireEvent, populate);
+    }
+
     public void addValidations() {
+
+    }
+
+    @SuppressWarnings("rawtypes")
+    private class ValuePropagationHandler implements ValueChangeHandler {
+
+        @Override
+        public void onValueChange(ValueChangeEvent event) {
+            onChildComponentValueChange(event);
+        }
 
     }
 }

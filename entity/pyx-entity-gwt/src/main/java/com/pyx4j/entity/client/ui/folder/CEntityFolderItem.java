@@ -236,9 +236,13 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void setValue(E value, boolean fireEvent, boolean populate) {
-        super.setValue(value, fireEvent, populate);
-        editor.setValue(value, fireEvent, populate);
+    protected void setComponentsValue(E entity, boolean fireEvent, boolean populate) {
+        editor.setValue(entity, fireEvent, populate);
+    }
+
+    @Override
+    public void onChildComponentValueChange(ValueChangeEvent event) {
+        setValue(editor.getValue());
     }
 
     @Override

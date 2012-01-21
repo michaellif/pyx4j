@@ -22,9 +22,8 @@ package com.pyx4j.entity.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IDecorator<E extends CEntityContainer> extends IsWidget {
+public interface IDecorator<E extends CEntityContainer<?>> extends IsWidget {
 
-    //TODO rename to setComponent
     void setComponent(E component);
 
 }

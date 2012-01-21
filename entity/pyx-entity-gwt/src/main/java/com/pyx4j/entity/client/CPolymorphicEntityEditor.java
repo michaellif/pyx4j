@@ -127,7 +127,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     }
 
     @Override
-    protected abstract IPolymorphicEditorDecorator<E> createDecorator();
+    protected abstract IPolymorphicEditorDecorator createDecorator();
 
     public void setDecorator(IPolymorphicEditorDecorator<E> decorator) {
         this.decorator = decorator;
@@ -208,6 +208,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         setComponentsValue(value, fireEvent, populate);
     }
 
+    @Override
     protected void setComponentsValue(E value, boolean fireEvent, boolean populate) {
         for (IDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {

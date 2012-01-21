@@ -282,13 +282,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void setValue(IList<E> value, boolean fireEvent, boolean populate) {
-        setComponentsValue(value, fireEvent, populate);
-        super.setValue(value, fireEvent, populate);
-    }
-
     @SuppressWarnings("unchecked")
-    private void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
+    protected void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
         ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
 
         for (CEntityFolderItem<E> item : previousList) {
@@ -329,7 +324,15 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    protected abstract IFolderDecorator<E> createDecorator();
+    public void onChildComponentValueChange(ValueChangeEvent event) {
+        int index = itemsList.indexOf(event.getSource());
+        getValue().remove(index);
+        getValue().add(index, (E) event.getValue());
+
+    }
+
+    @Override
+    protected abstract IFolderDecorator createDecorator();
 
     @Override
     public void adopt(final CComponent<?, ?> component) {
@@ -365,11 +368,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return itemsList.size();
     }
 
-    public int getItemIndex(CEntityFolderItem item) {
+    public int getItemIndex(CEntityFolderItem<E> item) {
         return itemsList.indexOf(item);
     }
 
-    public CEntityFolderItem getItem(int index) {
+    public CEntityFolderItem<E> getItem(int index) {
         if (itemsList.size() > 0 && index > -1 && index < itemsList.size()) {
             return itemsList.get(index);
         } else {

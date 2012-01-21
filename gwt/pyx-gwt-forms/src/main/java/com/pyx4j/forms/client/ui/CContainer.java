@@ -62,7 +62,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public abstract Collection<? extends CComponent<?, ?>> getComponents();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void adopt(CComponent<?, ?> component) {
+    public void adopt(final CComponent<?, ?> component) {
 
         propertyChangeHandlerRegistrations.put(component, component.addPropertyChangeHandler(new PropertyChangeHandler() {
             boolean sheduled = false;

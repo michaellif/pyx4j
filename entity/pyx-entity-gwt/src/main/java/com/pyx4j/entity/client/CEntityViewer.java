@@ -22,6 +22,7 @@ package com.pyx4j.entity.client;
 
 import java.util.Collection;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
@@ -61,6 +62,15 @@ public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContain
     @Override
     public ValidationResults getValidationResults() {
         return null;
+    }
+
+    @Override
+    protected void setComponentsValue(E value, boolean fireEvent, boolean populate) {
+    }
+
+    @Override
+    protected void onChildComponentValueChange(ValueChangeEvent<?> event) {
+
     }
 
 }
