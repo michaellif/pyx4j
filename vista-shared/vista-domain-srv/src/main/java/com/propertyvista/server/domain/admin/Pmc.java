@@ -16,6 +16,8 @@ package com.propertyvista.server.domain.admin;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -36,6 +38,8 @@ public interface Pmc extends IEntity {
 
     @NotNull
     @ReadOnly
+    @Length(63)
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> dnsName();
 
     @Timestamp(Timestamp.Update.Created)
