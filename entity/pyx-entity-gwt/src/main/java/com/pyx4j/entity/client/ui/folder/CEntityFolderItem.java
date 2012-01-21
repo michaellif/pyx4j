@@ -242,7 +242,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     public void onChildComponentValueChange(ValueChangeEvent event) {
-        setValue(editor.getValue());
+        //   setValue(editor.getValue());
     }
 
     @Override

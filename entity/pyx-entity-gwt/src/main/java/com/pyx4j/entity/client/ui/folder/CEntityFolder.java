@@ -328,7 +328,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         int index = itemsList.indexOf(event.getSource());
         getValue().remove(index);
         getValue().add(index, (E) event.getValue());
-
     }
 
     @Override
