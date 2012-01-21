@@ -27,6 +27,9 @@ public class CrmSiteMap implements SiteMap {
     public static class Login extends AppPlace implements PublicPlace {
     }
 
+    public static class SigningOut extends AppPlace {
+    }
+
     @PlaceProperties(caption = "Retrieve Password")
     public static class RetrievePassword extends AppPlace implements PublicPlace {
     }

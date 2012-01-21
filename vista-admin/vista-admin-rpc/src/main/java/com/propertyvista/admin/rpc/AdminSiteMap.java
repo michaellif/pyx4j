@@ -25,6 +25,9 @@ public class AdminSiteMap implements SiteMap {
     public static class Login extends AppPlace {
     }
 
+    public static class SigningOut extends AppPlace {
+    }
+
     @PlaceProperties(caption = "Retrieve Password")
     public static class RetrievePassword extends AppPlace {
     }

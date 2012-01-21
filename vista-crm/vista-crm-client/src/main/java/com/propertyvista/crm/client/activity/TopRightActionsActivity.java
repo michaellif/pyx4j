@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
@@ -27,7 +26,6 @@ import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClentNavigUtils;
@@ -35,7 +33,6 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
@@ -43,7 +40,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private final TopRightActionsView view;
 
     public TopRightActionsActivity(Place place) {
-        view = (TopRightActionsView) CrmVeiwFactory.instance(TopRightActionsView.class);
+        view = CrmVeiwFactory.instance(TopRightActionsView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -91,7 +88,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void logout() {
-        ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), null);
+        AppSite.getPlaceController().goTo(new CrmSiteMap.SigningOut());
     }
 
     @Override

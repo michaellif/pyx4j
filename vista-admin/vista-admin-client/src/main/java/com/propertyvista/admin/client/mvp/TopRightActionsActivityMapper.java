@@ -17,7 +17,9 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.propertyvista.admin.client.activity.SigningOutActivity;
 import com.propertyvista.admin.client.activity.TopRightActionsActivity;
+import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class TopRightActionsActivityMapper implements ActivityMapper {
 
@@ -26,6 +28,10 @@ public class TopRightActionsActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new TopRightActionsActivity(place);
+        if (place instanceof AdminSiteMap.Login) {
+            return new SigningOutActivity(place);
+        } else {
+            return new TopRightActionsActivity(place);
+        }
     }
 }
