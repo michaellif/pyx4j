@@ -94,36 +94,38 @@ public class DomainFactory {
     private static EntityI createEntityI(int pos) {
         EntityI retVal = EntityFactory.create(EntityI.class);
 
-        retVal.optionalTextI().setValue(optstrvalues[pos]);
-        retVal.mandatoryTextI().setValue(mndstrvalues[pos]);
-        retVal.optionalIntegerI().setValue(intvalues[pos]);
+        retVal.textBox().setValue(optstrvalues[pos]);
+//        retVal.mandatoryTextI().setValue(mndstrvalues[pos]);
+        retVal.integerBox().setValue(intvalues[pos]);
 //        retVal.mandatoryIntegerI().setValue(intvalues[pos]);
-        retVal.optionalEnumI().setValue(enumvalues[pos]);
+        retVal.enumBox().setValue(enumvalues[pos]);
 //        retVal.mandatoryEnumI().setValue(enumvalues[pos]);
+
+        retVal.textArea().setValue(opttxtvalues[pos]);
 
 //        retVal.optionalTextAreaII().setValue(opttxtvalues[pos]);
 //        retVal.mandatoryTextAreaII().setValue(mndtxtvalues[pos]);
 
-//        retVal.optionalSuggest().setValue(suggestvalues[pos]);
-        retVal.mandatorySuggest().setValue(suggestvalues[pos]);
+        retVal.suggest().setValue(suggestvalues[pos]);
+//        retVal.mandatorySuggest().setValue(suggestvalues[pos]);
 
-        retVal.optionalDatePicker().setValue(datevalues[pos]);
+        retVal.datePicker().setValue(datevalues[pos]);
 //        retVal.mandatoryDatePicker().setValue(datevalues[pos]);
 
-//        retVal.optionalTimePicker().setValue(timevalues[pos]);
-        retVal.mandatoryTimePicker().setValue(timevalues[pos]);
+        retVal.optionalTimePicker().setValue(timevalues[pos]);
+//        retVal.mandatoryTimePicker().setValue(timevalues[pos]);
 
-//        retVal.optionalSingleMonthDatePicker().setValue(datevalues[pos]);
-        retVal.mandatorySingleMonthDatePicker().setValue(datevalues[pos]);
+        retVal.singleMonthdatePicker().setValue(datevalues[pos]);
+//        retVal.mandatorySingleMonthDatePicker().setValue(datevalues[pos]);
 
-        retVal.optionalPhone().setValue(phonevalues[pos]);
+        retVal.phone().setValue(phonevalues[pos]);
 //        retVal.mandatoryPhone().setValue(phonevalues[pos]);
 
-//        retVal.optionalEmail().setValue(emailvalues[pos]);
-        retVal.mandatoryEmail().setValue(emailvalues[pos]);
+        retVal.email().setValue(emailvalues[pos]);
+//        retVal.mandatoryEmail().setValue(emailvalues[pos]);
 
-//        retVal.optionalMoney().setValue(moneyvalues[pos]);
-        retVal.mandatoryMoney().setValue(moneyvalues[pos]);
+        retVal.money().setValue(moneyvalues[pos]);
+//        retVal.mandatoryMoney().setValue(moneyvalues[pos]);
 
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());

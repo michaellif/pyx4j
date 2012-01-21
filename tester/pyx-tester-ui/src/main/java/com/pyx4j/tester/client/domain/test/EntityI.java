@@ -48,13 +48,13 @@ public interface EntityI extends IEntity {
     }
 
     @Caption(description = "Description for optionalStringMemberI")
-    IPrimitive<String> optionalTextI();
+    IPrimitive<String> textBox();
 
-    @NotNull
-    IPrimitive<String> mandatoryTextI();
+//    @NotNull
+//    IPrimitive<String> mandatoryTextI();
 
     @Editor(type = EditorType.textarea)
-    IPrimitive<String> optionalTextAreaI();
+    IPrimitive<String> textArea();
 
 //    @Editor(type = EditorType.textarea)
 //    IPrimitive<String> optionalTextAreaII();
@@ -67,60 +67,60 @@ public interface EntityI extends IEntity {
 //    @NotNull
 //    IPrimitive<String> mandatoryTextAreaII();
 
-    IPrimitive<Integer> optionalIntegerI();
+    IPrimitive<Integer> integerBox();
 
     IPrimitive<Boolean> checkBox();
 
     @Editor(type = EditorType.password)
     @NotNull
-    IPrimitive<String> mandatoryPasswordI();
+    IPrimitive<String> enterPassword();
 
     @Editor(type = EditorType.password)
     @NotNull
-    IPrimitive<String> mandatoryPasswordII();
+    IPrimitive<String> confirmPassword();
 
-    IPrimitive<Enum1> optionalEnumI();
+    IPrimitive<Enum1> enumBox();
 
 //    @NotNull
 //    IPrimitive<Enum1> mandatoryEnumI();
 
-//    @Editor(type = EditorType.suggest)
-//    IPrimitive<String> optionalSuggest();
-
-    @NotNull
     @Editor(type = EditorType.suggest)
-    IPrimitive<String> mandatorySuggest();
+    IPrimitive<String> suggest();
 
-    IPrimitive<Date> optionalDatePicker();
+//    @NotNull
+//    @Editor(type = EditorType.suggest)
+//    IPrimitive<String> mandatorySuggest();
+
+    IPrimitive<Date> datePicker();
 
 //    @NotNull
 //    IPrimitive<Date> mandatoryDatePicker();
 
-//    @Editor(type = EditorType.timepicker)
-//    IPrimitive<Time> optionalTimePicker();
-
-    @NotNull
     @Editor(type = EditorType.timepicker)
-    IPrimitive<Time> mandatoryTimePicker();
+    IPrimitive<Time> optionalTimePicker();
 
-//    IPrimitive<Date> optionalSingleMonthDatePicker();
+//    @NotNull
+//    @Editor(type = EditorType.timepicker)
+//    IPrimitive<Time> mandatoryTimePicker();
 
-    @NotNull
-    IPrimitive<Date> mandatorySingleMonthDatePicker();
+    IPrimitive<Date> singleMonthdatePicker();
+
+//    @NotNull
+//    IPrimitive<Date> mandatorySingleMonthDatePicker();
 
     @Editor(type = EditorType.phone)
-    IPrimitive<String> optionalPhone();
+    IPrimitive<String> phone();
 
 //    @Editor(type = EditorType.phone)
 //    @NotNull
 //    IPrimitive<String> mandatoryPhone();
 
-//    @Editor(type = EditorType.money)
-//    IPrimitive<Double> optionalMoney();
-
     @Editor(type = EditorType.money)
-    @NotNull
-    IPrimitive<Double> mandatoryMoney();
+    IPrimitive<Double> money();
+
+//    @Editor(type = EditorType.money)
+//    @NotNull
+//    IPrimitive<Double> mandatoryMoney();
 
     @Owned
     IList<EntityII> entityIIList();
@@ -130,11 +130,23 @@ public interface EntityI extends IEntity {
 
     IList<EntityIV> entityIVListNotOwned();
 
-//    @Editor(type = EditorType.email)
-//    IPrimitive<String> optionalEmail();
-
     @Editor(type = EditorType.email)
-    @NotNull
-    IPrimitive<String> mandatoryEmail();
+    IPrimitive<String> email();
+
+//    @Editor(type = EditorType.email)
+//    @NotNull
+//    IPrimitive<String> mandatoryEmail();
+
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<Boolean> booleanRadioGroup();
+
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<Enum1> enumRadioGroup();
+
+    @Editor(type = EditorType.richtextarea)
+    IPrimitive<String> richTextArea();
+
+    @Editor(type = EditorType.combo)
+    IPrimitive<Boolean> booleanComboBox();
 
 }
