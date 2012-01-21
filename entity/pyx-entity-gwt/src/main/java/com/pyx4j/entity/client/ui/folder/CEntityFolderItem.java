@@ -241,11 +241,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void onChildComponentValueChange(ValueChangeEvent event) {
-        //   setValue(editor.getValue());
-    }
-
-    @Override
     public Collection<CComponent<?, ?>> getComponents() {
         if (editor == null) {
             return null;

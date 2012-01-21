@@ -20,8 +20,6 @@
  */
 package com.pyx4j.entity.client;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
@@ -37,16 +35,10 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     private ImageResource icon;
 
-    @SuppressWarnings("rawtypes")
-    private final ValueChangeHandler valuePropagationHandler;
-
     public CEntityContainer() {
-        this.valuePropagationHandler = new ValuePropagationHandler();
     }
 
     public abstract IsWidget createContent();
-
-    protected abstract void onChildComponentValueChange(ValueChangeEvent<?> event);
 
     protected abstract void setComponentsValue(E value, boolean fireEvent, boolean populate);
 
@@ -100,12 +92,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     @Override
-    public void adopt(CComponent<?, ?> component) {
-        component.addValueChangeHandler(valuePropagationHandler);
-        super.adopt(component);
-    }
-
-    @Override
     public void onAdopt(CContainer<?, ?> parent) {
         super.onAdopt(parent);
         initContent();
@@ -122,13 +108,4 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     }
 
-    @SuppressWarnings("rawtypes")
-    private class ValuePropagationHandler implements ValueChangeHandler {
-
-        @Override
-        public void onValueChange(ValueChangeEvent event) {
-            onChildComponentValueChange(event);
-        }
-
-    }
 }

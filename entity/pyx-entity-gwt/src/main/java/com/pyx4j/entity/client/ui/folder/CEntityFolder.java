@@ -324,13 +324,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void onChildComponentValueChange(ValueChangeEvent event) {
-        int index = itemsList.indexOf(event.getSource());
-        getValue().remove(index);
-        getValue().add(index, (E) event.getValue());
-    }
-
-    @Override
     protected abstract IFolderDecorator createDecorator();
 
     @Override

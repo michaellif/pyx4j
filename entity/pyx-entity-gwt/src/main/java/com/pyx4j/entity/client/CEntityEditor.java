@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.EqualsHelper;
@@ -65,6 +66,9 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     private final HashMap<CComponent<?, ?>, Path> binding;
 
+    @SuppressWarnings("rawtypes")
+    private final ValueChangeHandler valuePropagationHandler;
+
     public CEntityEditor(Class<E> clazz) {
         this(clazz, new EntityFormComponentFactory());
     }
@@ -74,6 +78,9 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
         this.factory = factory;
+
+        this.valuePropagationHandler = new ValuePropagationHandler();
+
     }
 
     public E proto() {
@@ -142,6 +149,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         assert (proto().getMember(member.getPath()) != null);
         applyAttributes(component, member);
         binding.put(component, member.getPath());
+
+        component.addValueChangeHandler(valuePropagationHandler);
 
         adopt(component);
     }
@@ -373,30 +382,29 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         return super.toString() + "; dirty=" + isDirty();
     }
 
-    @Override
-    public void onChildComponentValueChange(ValueChangeEvent event) {
-        Path memberPath = binding.get(event.getSource());
-        if ((memberPath != null) && (getValue() != null)) {
-            Object value = event.getValue();
-            if (value instanceof IEntity) {
-                ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).duplicate());
-                log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
-                return;
-            }
+    @SuppressWarnings("rawtypes")
+    private class ValuePropagationHandler implements ValueChangeHandler {
 
-            if (value instanceof ICollection) {
-                value = ((ICollection) value).getValue();
-            } else if ((value instanceof Date)) {
-                Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
-                if (cls.equals(LogicalDate.class)) {
-                    value = new LogicalDate((Date) value);
-                } else if (cls.equals(java.sql.Date.class)) {
-                    value = new java.sql.Date(((Date) value).getTime());
+        @Override
+        public void onValueChange(ValueChangeEvent event) {
+            if (!(event.getSource() instanceof CEntityContainer)) {
+                Path memberPath = binding.get(event.getSource());
+                if ((memberPath != null) && (getValue() != null)) {
+                    Object value = event.getValue();
+                    if ((value instanceof Date)) {
+                        Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                        if (cls.equals(LogicalDate.class)) {
+                            value = new LogicalDate((Date) value);
+                        } else if (cls.equals(java.sql.Date.class)) {
+                            value = new java.sql.Date(((Date) value).getTime());
+                        }
+                    }
+                    getValue().setValue(memberPath, value);
+                    log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
                 }
             }
-            getValue().setValue(memberPath, value);
-            log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
         }
+
     }
 
 }
