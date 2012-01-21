@@ -28,7 +28,7 @@ public class TopRightActionsActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof AdminSiteMap.Login) {
+        if (place instanceof AdminSiteMap.SigningOut) {
             return new SigningOutActivity(place);
         } else {
             return new TopRightActionsActivity(place);
