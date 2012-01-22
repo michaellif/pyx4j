@@ -30,6 +30,7 @@ import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 
 public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
@@ -256,4 +257,44 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         assertTrue("contains(3)", task2.notes().contains("Note3"));
     }
 
+    public void testPrimitiveSetEnum() {
+        Task task = EntityFactory.create(Task.class);
+        task.oldStatus().add(Status.ACTIVE);
+        task.oldStatus().add(Status.DEACTIVATED);
+
+        srv.persist(task);
+        Task task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+
+        assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
+        assertTrue("contains(2)", task2.oldStatus().contains(Status.DEACTIVATED));
+
+        Iterator<Status> it = task2.oldStatus().iterator();
+        assertEquals("iterator.hasNext() first", true, it.hasNext());
+        Status el1 = it.next();
+        assertEquals("iterator.hasNext() second", true, it.hasNext());
+        Status el2 = it.next();
+        assertEquals("iterator.hasNext()", false, it.hasNext());
+        if (el1.equals(Status.ACTIVE)) {
+            assertEquals("iterator. second()", Status.DEACTIVATED, el2);
+        } else {
+            assertEquals("iterator. first()", Status.DEACTIVATED, el1);
+            assertEquals("iterator. second()", Status.ACTIVE, el2);
+        }
+
+        // Test update/remove
+        task.oldStatus().remove(Status.DEACTIVATED);
+        srv.persist(task);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("removed size", 1, task2.oldStatus().size());
+        assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
+        assertFalse("not contains(2)", task2.oldStatus().contains(Status.DEACTIVATED));
+
+        // Test update/add
+        task.oldStatus().add(Status.SUSPENDED);
+        srv.persist(task);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("added size", 2, task2.oldStatus().size());
+        assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
+        assertTrue("contains(3)", task2.oldStatus().contains(Status.SUSPENDED));
+    }
 }
