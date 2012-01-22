@@ -42,6 +42,11 @@ public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration
             public int maxPoolSize() {
                 return 100;
             }
+
+            @Override
+            public int tablesItentityOffset() {
+                return 997;
+            }
         };
     }
 

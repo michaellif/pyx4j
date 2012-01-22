@@ -64,6 +64,11 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
+    public int tablesItentityOffset() {
+        return 997;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionModern();
     }

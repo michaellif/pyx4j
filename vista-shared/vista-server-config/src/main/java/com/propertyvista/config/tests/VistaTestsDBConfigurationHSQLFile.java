@@ -37,4 +37,9 @@ public class VistaTestsDBConfigurationHSQLFile extends ConfigurationHSQL {
         return 1;
     }
 
+    @Override
+    public int tablesItentityOffset() {
+        return 1000;
+    }
+
 }

@@ -36,4 +36,9 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
     public int maxPoolPreparedStatements() {
         return 2000;
     }
+
+    @Override
+    public int tablesItentityOffset() {
+        return 1000;
+    }
 }
