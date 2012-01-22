@@ -15,6 +15,7 @@ package com.propertyvista.admin.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -35,6 +36,15 @@ public class SigningOutActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                logoutDeferred();
+            }
+        });
+    }
+
+    private void logoutDeferred() {
         ClientContext.logout((AuthenticationService) GWT.create(AdminAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
 
             @Override
