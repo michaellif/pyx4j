@@ -14,6 +14,7 @@
 package com.propertyvista.pmsite.server.pages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import js.JSResources;
@@ -108,6 +109,9 @@ public abstract class BasePage extends WebPage {
                 title = " - " + title;
             } else {
                 title = "";
+            }
+            if (ApplicationMode.isDevelopment()) {
+                title = " === " + new Date() + " === " + title;
             }
             PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
             add(new Label(pageTitleId, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
