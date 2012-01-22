@@ -34,6 +34,7 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 public final class AppPlaceContorller extends PlaceController {
@@ -76,7 +77,7 @@ public final class AppPlaceContorller extends PlaceController {
     public void goTo(final Place newPlace) {
         log.debug("requested to go to: " + newPlace);
 
-        AsyncCallback<AppPlace> callback = new AsyncCallback<AppPlace>() {
+        AsyncCallback<AppPlace> callback = new DefaultAsyncCallback<AppPlace>() {
 
             @Override
             public void onSuccess(AppPlace result) {
@@ -101,10 +102,6 @@ public final class AppPlaceContorller extends PlaceController {
                 }
             }
 
-            @Override
-            public void onFailure(Throwable caught) {
-                // TODO Auto-generated method stub
-            }
         };
 
         dispatcher.forwardTo((AppPlace) newPlace, callback);
