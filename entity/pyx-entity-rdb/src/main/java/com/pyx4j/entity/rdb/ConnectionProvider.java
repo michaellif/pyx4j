@@ -114,7 +114,8 @@ public class ConnectionProvider {
         default:
             throw new Error("Unsupported driver Dialect " + cfg.driverClass());
         }
-
+        // Development support configuration
+        dialect.setTablesItentityOffset(cfg.tablesItentityOffset());
     }
 
     public void dispose() {

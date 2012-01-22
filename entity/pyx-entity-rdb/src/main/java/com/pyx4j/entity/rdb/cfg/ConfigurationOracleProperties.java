@@ -44,6 +44,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     protected int unreturnedConnectionTimeout = 60;
 
+    private int tablesItentityOffset;
+
     @Override
     public String dbHost() {
         return host;
@@ -89,6 +91,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
         return unreturnedConnectionTimeout;
     }
 
+    @Override
+    public int tablesItentityOffset() {
+        return tablesItentityOffset;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
         this.host = c.getValue("host", this.host);
@@ -102,6 +109,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
         this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
         this.maxPoolPreparedStatement = c.getIntegerValue("maxPoolPreparedStatement", this.maxPoolPreparedStatement);
         this.unreturnedConnectionTimeout = c.getIntegerValue("unreturnedConnectionTimeout", this.unreturnedConnectionTimeout);
+
+        this.tablesItentityOffset = c.getIntegerValue("tablesItentityOffset", this.tablesItentityOffset);
     }
 
 }

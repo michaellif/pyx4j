@@ -39,6 +39,8 @@ public abstract class Dialect {
 
     private final boolean multitenant;
 
+    private int tablesItentityOffset;
+
     protected Dialect(DatabaseType databaseType, NamingConvention namingConvention, boolean multitenant) {
         this.databaseType = databaseType;
         this.namingConvention = namingConvention;
@@ -86,6 +88,18 @@ public abstract class Dialect {
 
     public String getGeneratedIdColumnString() {
         return "";
+    }
+
+    public String sqlAlterIdentityColumn(String tableName, int itentityOffset) {
+        return null;
+    }
+
+    public int getTablesItentityOffset() {
+        return tablesItentityOffset;
+    }
+
+    public void setTablesItentityOffset(int tablesItentityOffset) {
+        this.tablesItentityOffset = tablesItentityOffset;
     }
 
     public Class<?> getType(Class<?> klass) {

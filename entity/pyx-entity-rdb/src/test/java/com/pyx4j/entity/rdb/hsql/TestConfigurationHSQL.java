@@ -50,6 +50,11 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
     }
 
     @Override
+    public int tablesItentityOffset() {
+        return 997;
+    }
+
+    @Override
     public int unreturnedConnectionTimeout() {
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             return 0;

@@ -33,6 +33,7 @@ public class ConfigurationToString {
         b.append("minPoolSize                  : ").append(conf.minPoolSize()).append("\n");
         b.append("maxPoolSize                  : ").append(conf.maxPoolSize()).append("\n");
         b.append("unreturnedConnectionTimeout  : ").append(conf.unreturnedConnectionTimeout()).append("\n");
+        b.append("tablesItentityOffset         : ").append(conf.tablesItentityOffset()).append("\n");
         return b.toString();
     }
 }

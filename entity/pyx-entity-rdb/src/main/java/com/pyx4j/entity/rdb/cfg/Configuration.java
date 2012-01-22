@@ -49,6 +49,13 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public boolean isMultitenant();
 
+    /**
+     * Used in development to create sparse identity values for every table, to ensure pseudo-unique value of every key.
+     * 
+     * @return 0 if all id starts with the same value 0
+     */
+    public int tablesItentityOffset();
+
     public String connectionValidationQuery();
 
     public String connectionAutomaticTestTable();

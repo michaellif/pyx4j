@@ -90,6 +90,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public int tablesItentityOffset() {
+        return 0;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionOracle(32, null);
     }

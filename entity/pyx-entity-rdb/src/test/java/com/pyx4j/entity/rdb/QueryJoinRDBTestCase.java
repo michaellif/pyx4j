@@ -245,7 +245,7 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             Assert.assertTrue("Inserted value present", principal1r1.subjects().contains(subject1));
         }
         {
-            AccPrincipal principal1r2 = srv.retrieve(AccPrincipal.class, subject1.getPrimaryKey());
+            AccPrincipal principal1r2 = srv.retrieve(AccPrincipal.class, principal1.getPrimaryKey());
             Assert.assertEquals("Data retrieved using JoinTable", 1, principal1r2.subjects().size());
             Assert.assertTrue("Inserted value present", principal1r2.subjects().contains(subject1));
         }

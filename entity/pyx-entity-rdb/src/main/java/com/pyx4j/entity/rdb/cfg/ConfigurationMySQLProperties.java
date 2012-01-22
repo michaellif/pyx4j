@@ -48,6 +48,8 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
     protected int unreturnedConnectionTimeout = 60;
 
+    private int tablesItentityOffset;
+
     @Override
     public String dbHost() {
         return host;
@@ -103,6 +105,11 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
         return unreturnedConnectionTimeout;
     }
 
+    @Override
+    public int tablesItentityOffset() {
+        return tablesItentityOffset;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
         this.host = c.getValue("host", this.host);
@@ -119,5 +126,8 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
         this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
         this.maxPoolPreparedStatement = c.getIntegerValue("maxPoolPreparedStatement", this.maxPoolPreparedStatement);
         this.unreturnedConnectionTimeout = c.getIntegerValue("unreturnedConnectionTimeout", this.unreturnedConnectionTimeout);
+
+        this.tablesItentityOffset = c.getIntegerValue("tablesItentityOffset", this.tablesItentityOffset);
     }
+
 }

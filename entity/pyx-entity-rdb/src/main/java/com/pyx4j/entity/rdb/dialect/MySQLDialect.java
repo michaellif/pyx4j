@@ -53,6 +53,11 @@ public class MySQLDialect extends Dialect {
     }
 
     @Override
+    public String sqlAlterIdentityColumn(String tableName, int itentityOffset) {
+        return "ALTER TABLE  " + tableName + "  AUTO_INCREMENT = " + itentityOffset;
+    }
+
+    @Override
     public String applyLimitCriteria(String sql) {
         return sql + " LIMIT ? OFFSET ?";
     }

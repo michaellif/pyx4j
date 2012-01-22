@@ -52,6 +52,8 @@ class TableDDL {
 
     }
 
+    protected static int itentityOffset = 0;
+
     static List<String> sqlCreate(Dialect dialect, TableModel tableModel) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
@@ -102,6 +104,9 @@ class TableDDL {
             sqls.add(createIndexSql(dialect, tableModel.tableName, indexDef));
         }
 
+        if (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
+            sqls.add(sqlAlterIdentity(dialect, tableModel.tableName));
+        }
         return sqls;
     }
 
@@ -283,6 +288,8 @@ class TableDDL {
 
         sqls.add(sqlIdx.toString());
 
+        sqls.add(sqlAlterIdentity(dialect, tableName));
+
         return sqls;
     }
 
@@ -331,4 +338,14 @@ class TableDDL {
             return null;
         }
     }
+
+    private static String sqlAlterIdentity(Dialect dialect, String tableName) {
+        if (dialect.getTablesItentityOffset() == 0) {
+            return null;
+        } else {
+            itentityOffset += dialect.getTablesItentityOffset();
+            return dialect.sqlAlterIdentityColumn(tableName, itentityOffset);
+        }
+    }
+
 }

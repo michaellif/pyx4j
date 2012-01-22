@@ -60,6 +60,11 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
     }
 
     @Override
+    public int tablesItentityOffset() {
+        return 937;
+    }
+
+    @Override
     public boolean showSql() {
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             return true;

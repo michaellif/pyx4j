@@ -58,6 +58,11 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
+    public int tablesItentityOffset() {
+        return 569;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         ShortWords shortWords = new ShortWords();
         shortWords.add("TEST", "T");

@@ -100,6 +100,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public int tablesItentityOffset() {
+        return 0;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return null;
     }
