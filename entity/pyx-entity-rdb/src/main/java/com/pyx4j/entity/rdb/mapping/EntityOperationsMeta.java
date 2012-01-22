@@ -255,6 +255,7 @@ public class EntityOperationsMeta {
                             + Path.PATH_SEPARATOR + memberName + Path.PATH_SEPARATOR, "owner", ownerValueAdapter, "value", null);
                     collectionMembers.add(member);
                     membersByPath.put(member.getMemberPath(), member);
+                    allMembers.add(member);
                 } else {
                     String sqlName;
                     if (namesPath != null) {

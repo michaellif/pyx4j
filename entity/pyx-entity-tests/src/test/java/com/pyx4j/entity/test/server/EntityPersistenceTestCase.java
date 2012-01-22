@@ -216,7 +216,15 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
     }
 
-    public void testPrimitiveSet() {
+    public void testPrimitiveSetPersist() {
+        testPrimitiveSet(TestCaseMethod.Persist);
+    }
+
+    public void testPrimitiveSetMerge() {
+        testPrimitiveSet(TestCaseMethod.Merge);
+    }
+
+    public void testPrimitiveSet(TestCaseMethod testCaseMethod) {
         Task task = EntityFactory.create(Task.class);
         task.notes().add("Note1");
         task.notes().add("Note2");
@@ -242,7 +250,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
         // Test update/remove
         task.notes().remove("Note2");
-        srv.persist(task);
+        srvSave(task, testCaseMethod);
         task2 = srv.retrieve(Task.class, task.getPrimaryKey());
         assertEquals("removed size", 1, task2.notes().size());
         assertTrue("contains(1)", task2.notes().contains("Note1"));
@@ -250,14 +258,22 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
         // Test update/add
         task.notes().add("Note3");
-        srv.persist(task);
+        srvSave(task, testCaseMethod);
         task2 = srv.retrieve(Task.class, task.getPrimaryKey());
         assertEquals("added size", 2, task2.notes().size());
         assertTrue("contains(1)", task2.notes().contains("Note1"));
         assertTrue("contains(3)", task2.notes().contains("Note3"));
     }
 
-    public void testPrimitiveSetEnum() {
+    public void testPrimitiveSetEnumPersist() {
+        testPrimitiveSetEnum(TestCaseMethod.Persist);
+    }
+
+    public void testPrimitiveSetEnumMerge() {
+        testPrimitiveSetEnum(TestCaseMethod.Merge);
+    }
+
+    public void testPrimitiveSetEnum(TestCaseMethod testCaseMethod) {
         Task task = EntityFactory.create(Task.class);
         task.oldStatus().add(Status.ACTIVE);
         task.oldStatus().add(Status.DEACTIVATED);
@@ -283,7 +299,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
         // Test update/remove
         task.oldStatus().remove(Status.DEACTIVATED);
-        srv.persist(task);
+        srvSave(task, testCaseMethod);
         task2 = srv.retrieve(Task.class, task.getPrimaryKey());
         assertEquals("removed size", 1, task2.oldStatus().size());
         assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
@@ -291,7 +307,7 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
 
         // Test update/add
         task.oldStatus().add(Status.SUSPENDED);
-        srv.persist(task);
+        srvSave(task, testCaseMethod);
         task2 = srv.retrieve(Task.class, task.getPrimaryKey());
         assertEquals("added size", 2, task2.oldStatus().size());
         assertTrue("contains(1)", task2.oldStatus().contains(Status.ACTIVE));
