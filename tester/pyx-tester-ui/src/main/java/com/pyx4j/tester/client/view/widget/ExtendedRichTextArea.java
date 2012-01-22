@@ -18,90 +18,71 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.tester.client.view.widget;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ToggleButton;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.ui.DomDebug;
 import com.pyx4j.widgets.client.RichTextArea;
 
-public class ExtendedRichTextArea extends DockPanel implements INativeRichTextComponent<String> {
+public class ExtendedRichTextArea extends DockPanel {
 
     private final RichTextArea richTextArea;
 
-    private final CRichTextArea textArea;
-
-//    private final BasikRichTextToolbar toolbar;
     private final ExtendedRichTextToolbar toolbar;
 
-    public ExtendedRichTextArea(CRichTextArea textArea) {
+    public ExtendedRichTextArea() {
         super();
-        this.textArea = textArea;
 
         richTextArea = new RichTextArea();
         richTextArea.setWidth("100%");
         richTextArea.setHeight("100%");
 
-        textArea.setWidth("100%");
-
-//        toolbar = new BasikRichTextToolbar(richTextArea, true);
         toolbar = new ExtendedRichTextToolbar(richTextArea);
         toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
 
-        add(toolbar, NORTH);
+        HorizontalPanel toolPanel = new HorizontalPanel();
+        toolPanel.add(toolbar);
+        ToggleButton textHtmlSwitch = new ToggleButton("HTML", "RichText");
+        textHtmlSwitch.setTitle("Toggle HTML or Text mode");
+        textHtmlSwitch.setWidth("60px");
+        textHtmlSwitch.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (((ToggleButton) event.getSource()).isDown()) {
+                    richTextArea.setText(richTextArea.getHTML());
+                    toolbar.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+                } else {
+                    richTextArea.setHTML(richTextArea.getText());
+                    toolbar.getElement().getStyle().setVisibility(Visibility.VISIBLE);
+                }
+            }
+        });
+        toolPanel.setVerticalAlignment(ALIGN_BOTTOM);
+        toolPanel.setHorizontalAlignment(ALIGN_RIGHT);
+        toolPanel.add(textHtmlSwitch);
+        toolPanel.setWidth("100%");
+
+        add(toolPanel, NORTH);
         add(richTextArea, CENTER);
         setCellHeight(richTextArea, "100%");
         setCellWidth(richTextArea, "100%");
 
         getElement().getStyle().setProperty("resize", "none");
 
-        setTabIndex(textArea.getTabIndex());
-
         toolbar.getElement().getStyle().setOpacity(0.3);
 
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
 
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        richTextArea.setEnabled(enabled);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return richTextArea.isEnabled();
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        richTextArea.setEnabled(editable);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return richTextArea.isEnabled();
-    }
-
-    @Override
-    public void setViewable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isViewable() {
-        // TODO Auto-generated method stub
-        return false;
     }
 
     public void scrollToBottom() {
@@ -146,24 +127,6 @@ public class ExtendedRichTextArea extends DockPanel implements INativeRichTextCo
     }
 
     @Override
-    public void setNativeValue(String value) {
-        String newValue = value == null ? "" : value;
-        if (!newValue.equals(richTextArea.getHTML())) {
-            richTextArea.setHTML(newValue);
-        }
-    }
-
-    @Override
-    public String getNativeValue() {
-        return trimHtml(richTextArea.getHTML());
-    }
-
-    @Override
-    public CRichTextArea getCComponent() {
-        return textArea;
-    }
-
-    @Override
     protected void onLoad() {
         super.onLoad();
         DomDebug.attachedWidget();
@@ -173,18 +136,6 @@ public class ExtendedRichTextArea extends DockPanel implements INativeRichTextCo
     protected void onUnload() {
         super.onUnload();
         DomDebug.detachWidget();
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setTabIndex(int tabIndex) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -199,48 +150,4 @@ public class ExtendedRichTextArea extends DockPanel implements INativeRichTextCo
             break;
         }
     }
-
-    @Override
-    public void setWatermark(String watermark) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-    }
-
-    @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        return richTextArea.addFocusHandler(focusHandler);
-    }
-
-    @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        return richTextArea.addBlurHandler(blurHandler);
-    }
-
-    @Override
-    public int getTabIndex() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setAccessKey(char key) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

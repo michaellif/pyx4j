@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.tester.client.view.widget;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -24,16 +24,21 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
@@ -91,15 +96,22 @@ public class ExtendedRichTextToolbar extends Composite {
             } else if (sender == justifyRight) {
                 formatter.setJustification(RichTextArea.Justification.RIGHT);
             } else if (sender == insertImage) {
-                String url = Window.prompt("Enter an image URL:", "http://");
-                if (url != null) {
-                    formatter.insertImage(url);
-                }
+                new InsertImageDialog().show();
+/*
+ * String url = Window.prompt("Enter an image URL:", "http://");
+ * if (url != null) {
+ * formatter.insertImage(url);
+ * }
+ */
             } else if (sender == createLink) {
-                String url = Window.prompt("Enter a link URL:", "http://");
-                if (url != null) {
-                    formatter.createLink(url);
-                }
+                new CreateLinkDialog() {
+                    @Override
+                    public boolean onClickOk() {
+                        Window.alert(url.getText());
+                        formatter.createLink(url.getText());
+                        return true;
+                    }
+                }.show();
             } else if (sender == removeLink) {
                 formatter.removeLink();
             } else if (sender == hr) {
@@ -115,12 +127,6 @@ public class ExtendedRichTextToolbar extends Composite {
                 // This will catch any cases where the user moves the cursur using the
                 // keyboard, or uses one of the browser's built-in keyboard shortcuts.
                 updateStatus();
-            } else if (sender == textHtml) {
-                if (((ToggleButton) sender).isDown()) {
-                    richText.setText(richText.getHTML());
-                } else {
-                    richText.setHTML(richText.getText());
-                }
             }
         }
 
@@ -132,6 +138,38 @@ public class ExtendedRichTextToolbar extends Composite {
                 // keyboard, or uses one of the browser's built-in keyboard shortcuts.
                 updateStatus();
             }
+        }
+    }
+
+    private abstract class CreateLinkDialog extends OkCancelDialog {
+
+        protected final TextBox url = new TextBox();
+
+        public CreateLinkDialog() {
+            super("Create Internet Link");
+            FlexTable body = new FlexTable();
+
+            CLabel label = new CLabel();
+            label.setValue("Enter Link Url - http://");
+            body.setWidget(0, 0, label);
+
+            url.setWidth("300px");
+            body.setWidget(0, 1, url);
+
+            setBody(body);
+        }
+    }
+
+    private class InsertImageDialog extends OkCancelDialog {
+
+        public InsertImageDialog() {
+            super("Insert Image");
+            setBody(new CTextField().asWidget());
+        }
+
+        @Override
+        public boolean onClickOk() {
+            return false;
         }
     }
 
@@ -147,11 +185,11 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private final RichTextArea.Formatter formatter;
 
-    private final VerticalPanel outer = new VerticalPanel();
+    private final VerticalPanel toolBar = new VerticalPanel();
 
-    private final HorizontalPanel topPanel = new HorizontalPanel();
+    private final HorizontalPanel buttonBarTop = new HorizontalPanel();
 
-    private final HorizontalPanel bottomPanel = new HorizontalPanel();
+    private final HorizontalPanel buttonBarBottom = new HorizontalPanel();
 
     private ToggleButton bold;
 
@@ -197,8 +235,6 @@ public class ExtendedRichTextToolbar extends Composite {
 
     private ListBox fontSizes;
 
-    private final ToggleButton textHtml;
-
     /**
      * Creates a new toolbar that drives the given rich text area.
      * 
@@ -209,17 +245,16 @@ public class ExtendedRichTextToolbar extends Composite {
         this.richText = richText;
         this.formatter = richText.getFormatter();
 
-        outer.add(topPanel);
-        outer.add(bottomPanel);
-        topPanel.setWidth("100%");
-        bottomPanel.setWidth("100%");
+        toolBar.add(buttonBarTop);
+        toolBar.add(buttonBarBottom);
 
-        initWidget(outer);
-        setStyleName("gwt-RichTextToolbar");
+        initWidget(toolBar);
+        final String toolbarStyleName = "gwt-ExtRichTextToolbar";
+        setStyleName(toolbarStyleName);
 
-        topPanel.add(bold = createToggleButton(images.bold(), "bold"));
-        topPanel.add(italic = createToggleButton(images.italic(), "italic"));
-        topPanel.add(underline = createToggleButton(images.underline(), "underline"));
+        buttonBarTop.add(bold = createToggleButton(images.bold(), "bold"));
+        buttonBarTop.add(italic = createToggleButton(images.italic(), "italic"));
+        buttonBarTop.add(underline = createToggleButton(images.underline(), "underline"));
 
         subscript = createToggleButton(images.subscript(), "subscript");
         //        topPanel.add(subscript);
@@ -227,33 +262,27 @@ public class ExtendedRichTextToolbar extends Composite {
         superscript = createToggleButton(images.superscript(), "superscript");
         //        topPanel.add(superscript);
 
-        topPanel.add(justifyLeft = createPushButton(images.justifyLeft(), "justifyLeft"));
-        topPanel.add(justifyCenter = createPushButton(images.justifyCenter(), "justifyCenter"));
-        topPanel.add(justifyRight = createPushButton(images.justifyRight(), "justifyRight"));
+        buttonBarTop.add(justifyLeft = createPushButton(images.justifyLeft(), "justifyLeft"));
+        buttonBarTop.add(justifyCenter = createPushButton(images.justifyCenter(), "justifyCenter"));
+        buttonBarTop.add(justifyRight = createPushButton(images.justifyRight(), "justifyRight"));
 
         strikethrough = createToggleButton(images.strikeThrough(), "strikeThrough");
         //topPanel.add(strikethrough);
-        topPanel.add(indent = createPushButton(images.indent(), "indent"));
-        topPanel.add(outdent = createPushButton(images.outdent(), "outdent"));
-        topPanel.add(hr = createPushButton(images.hr(), "hr"));
-        topPanel.add(ol = createPushButton(images.ol(), "ol"));
-        topPanel.add(ul = createPushButton(images.ul(), "ul"));
+        buttonBarTop.add(indent = createPushButton(images.indent(), "indent"));
+        buttonBarTop.add(outdent = createPushButton(images.outdent(), "outdent"));
+        buttonBarTop.add(hr = createPushButton(images.hr(), "hr"));
+        buttonBarTop.add(ol = createPushButton(images.ol(), "ol"));
+        buttonBarTop.add(ul = createPushButton(images.ul(), "ul"));
 
-        insertImage = createPushButton(images.insertImage(), "insertImage");
-        //        topPanel.add(insertImage);
-        topPanel.add(createLink = createPushButton(images.createLink(), "createLink"));
-        topPanel.add(removeLink = createPushButton(images.removeLink(), "removeLink"));
-        topPanel.add(removeFormat = createPushButton(images.removeFormat(), "removeFormat"));
+        buttonBarTop.add(insertImage = createPushButton(images.insertImage(), "insertImage"));
+        buttonBarTop.add(createLink = createPushButton(images.createLink(), "createLink"));
+        buttonBarTop.add(removeLink = createPushButton(images.removeLink(), "removeLink"));
+        buttonBarTop.add(removeFormat = createPushButton(images.removeFormat(), "removeFormat"));
 
-        textHtml = new ToggleButton("HTML", "Text");
-        textHtml.addClickHandler(handler);
-        textHtml.setTitle("Toggle HTML or Text view");
-        topPanel.add(textHtml);
-
-        bottomPanel.add(backColors = createColorList("Background"));
-        bottomPanel.add(foreColors = createColorList("Foreground"));
-        bottomPanel.add(fonts = createFontList());
-        bottomPanel.add(fontSizes = createFontSizes());
+        buttonBarBottom.add(backColors = createColorList("Background"));
+        buttonBarBottom.add(foreColors = createColorList("Foreground"));
+        buttonBarBottom.add(fonts = createFontList());
+        buttonBarBottom.add(fontSizes = createFontSizes());
 
         // We only use these listeners for updating status, so don't hook them up
         // unless at least basic editing is supported.

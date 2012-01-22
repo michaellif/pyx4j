@@ -34,6 +34,7 @@ import com.pyx4j.tester.client.activity.FormBasicActivity;
 import com.pyx4j.tester.client.activity.FormTesterActivity;
 import com.pyx4j.tester.client.activity.FormVisibilityActivity;
 import com.pyx4j.tester.client.activity.NativeWidgetBasicActivity;
+import com.pyx4j.tester.client.activity.RichTextEditorActivity;
 
 public class MainActivityMapper implements AppActivityMapper {
 
@@ -57,6 +58,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new FormVisibilityActivity(place);
                 } else if (place instanceof TesterSiteMap.NativeWidget.NativeWidgetBasic) {
                     activity = new NativeWidgetBasicActivity(place);
+                } else if (place instanceof TesterSiteMap.NativeWidget.RichTextEditor) {
+                    activity = new RichTextEditorActivity(place);
                 } else if (place instanceof TesterSiteMap.FormTester) {
                     activity = new FormTesterActivity(place);
                 }

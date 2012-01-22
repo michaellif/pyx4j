@@ -447,6 +447,69 @@ public class TesterTheme extends Theme {
         style = new Style(gwtButton + "[disabled]:hover");
         style.addProperty("border", "1px outset #555");
         addStyle(style);
+
+        // Toggle Button
+        gwtButton = ".gwt-ToggleButton";
+        style = new Style(gwtButton);
+        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "black");
+        style.addProperty("margin", "0.2em 0.2em");
+        style.addProperty("padding", "0.2em 0.5em");
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(gwtButton + "-up");
+        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
+        style.addProperty("border-style", "outset");
+        addStyle(style);
+
+        style = new Style(gwtButton + "-up-hovering");
+        style.addGradient(ThemeColors.foreground, 0.0, ThemeColors.foreground, 0.2);
+        style.addProperty("border-style", "outset");
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(gwtButton + "-down");
+        style.addGradient(ThemeColors.foreground, 0.3, ThemeColors.foreground, 0.1);
+        style.addProperty("border-style", "inset");
+        addStyle(style);
+
+        style = new Style(gwtButton + "-down-hovering");
+        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.1);
+        style.addProperty("cursor", "pointer");
+        style.addProperty("border-style", "inset");
+        addStyle(style);
+
+        // Push Button
+        gwtButton = ".gwt-PushButton";
+        style = new Style(gwtButton);
+        style.addProperty("color", ThemeColors.background);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColors.background);
+        style.addProperty("margin", "0.2em 0.2em");
+        style.addProperty("padding", "0.2em 0.5em");
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(gwtButton + "-up-hovering");
+        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(gwtButton + "-down");
+        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(gwtButton + "-down-hovering");
+        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
     }
 
     protected void initTooltipStyle() {

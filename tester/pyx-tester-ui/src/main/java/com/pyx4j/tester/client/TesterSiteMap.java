@@ -63,5 +63,9 @@ public class TesterSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "NativeWidgetBasic")
         public static class NativeWidgetBasic extends AppPlace {
         }
+
+        @NavigationItem(navigLabel = "RichTextEditor")
+        public static class RichTextEditor extends AppPlace {
+        }
     }
 }
