@@ -11,31 +11,31 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.admin;
+
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
 import com.propertyvista.crm.rpc.VistaCrmBehaviorDTOCoverter;
-import com.propertyvista.crm.rpc.services.CrmRoleCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
+import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.domain.security.CrmRole;
 
-public class CrmRoleCrudServiceImpl extends GenericCrudServiceImpl<CrmRole> implements CrmRoleCrudService {
+public class CrmRoleCrudServiceImpl extends AbstractCrudServiceImpl<CrmRole> implements CrmRoleCrudService {
 
     public CrmRoleCrudServiceImpl() {
         super(CrmRole.class);
     }
 
     @Override
-    protected void enhanceSave(CrmRole entity) {
+    protected void persist(CrmRole entity) {
         entity.behaviors().clear();
         VistaCrmBehaviorDTOCoverter.toDBO(entity.permissions(), entity.behaviors());
+        super.persist(entity);
     }
 
     @Override
-    protected void enhanceRetrieve(CrmRole entity, boolean fromList) {
-        if (!fromList) {
-            entity.permissions().clear();
-            entity.permissions().addAll(VistaCrmBehaviorDTOCoverter.toDTO(entity.behaviors()));
-        }
+    protected void enhanceRetrieved(CrmRole entity) {
+        entity.permissions().clear();
+        entity.permissions().addAll(VistaCrmBehaviorDTOCoverter.toDTO(entity.behaviors()));
     }
 
 }

@@ -28,7 +28,7 @@ import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
-import com.propertyvista.crm.rpc.services.SelectCrmRoleListService;
+import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleFolder extends VistaTableFolder<CrmRole> {

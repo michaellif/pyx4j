@@ -11,12 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.server.services.organization;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.server.AbstractListServiceImpl;
 
+import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
 import com.propertyvista.domain.security.CrmRole;
 
-public interface SelectCrmRoleListService extends AbstractListService<CrmRole> {
+public class SelectCrmRoleListServiceImpl extends AbstractListServiceImpl<CrmRole> implements SelectCrmRoleListService {
+
+    public SelectCrmRoleListServiceImpl() {
+        super(CrmRole.class);
+    }
 
 }

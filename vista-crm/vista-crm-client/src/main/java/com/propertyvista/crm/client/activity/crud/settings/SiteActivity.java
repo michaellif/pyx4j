@@ -26,7 +26,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.rpc.services.SiteDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
 
 public class SiteActivity extends AbstractActivity {
 

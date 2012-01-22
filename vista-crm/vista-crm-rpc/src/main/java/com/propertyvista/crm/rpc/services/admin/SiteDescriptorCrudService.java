@@ -7,21 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 20, 2012
- * @author ArtyomB
+ * Created on 2011-06-06
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.rpc.services.admin;
 
-import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.crm.rpc.services.SelectCrmRoleListService;
-import com.propertyvista.domain.security.CrmRole;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public class SelectCrmRoleListServiceImpl extends AbstractListServiceImpl<CrmRole> implements SelectCrmRoleListService {
+import com.propertyvista.dto.SiteDescriptorDTO;
 
-    public SelectCrmRoleListServiceImpl() {
-        super(CrmRole.class);
-    }
+public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptorDTO> {
 
+    void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
 }

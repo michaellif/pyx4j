@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.CrmRoleCrudService;
+import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleViewerActivity extends ViewerActivityBase<CrmRole> {
