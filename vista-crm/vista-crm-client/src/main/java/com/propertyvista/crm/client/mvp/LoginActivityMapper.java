@@ -30,7 +30,7 @@ public class LoginActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
         if (place instanceof CrmSiteMap.Login) {
             return new LoginActivity(place);
-        } else if (place instanceof CrmSiteMap.RetrievePassword) {
+        } else if (place instanceof CrmSiteMap.LoginWithToken) {
             return new RetrievePasswordActivity(place);
         }
         return null;

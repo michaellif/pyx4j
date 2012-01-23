@@ -34,6 +34,12 @@ public class CrmSiteMap implements SiteMap {
     public static class RetrievePassword extends AppPlace implements PublicPlace {
     }
 
+    /**
+     * Used while user is waiting for authentication for password reset authentication.
+     */
+    public static class LoginWithToken extends AppPlace implements PublicPlace {
+    }
+
     @PlaceProperties(caption = "Reset Password")
     public static class ResetPassword extends AppPlace {
     }

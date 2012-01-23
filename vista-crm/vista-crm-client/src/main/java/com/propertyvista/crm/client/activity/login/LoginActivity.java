@@ -73,6 +73,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     @Override
     public void gotoRetrievePassword() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.RetrievePassword());
+        AppSite.getPlaceController().goTo(new CrmSiteMap.LoginWithToken());
     }
 }

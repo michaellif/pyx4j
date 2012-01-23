@@ -61,6 +61,6 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
             }
         };
         AuthenticationService authService = GWT.<AuthenticationService> create(CrmAuthenticationService.class);
-        authService.passwordReminder(callback, request);
+        authService.requestPasswordReset(callback, request);
     }
 }
