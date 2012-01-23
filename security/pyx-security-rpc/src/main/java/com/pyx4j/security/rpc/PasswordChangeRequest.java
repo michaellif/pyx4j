@@ -39,6 +39,7 @@ public interface PasswordChangeRequest extends IEntity {
     IPrimitive<Key> userPk();
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    @Deprecated
     IPrimitive<String> token();
 
     @NotNull

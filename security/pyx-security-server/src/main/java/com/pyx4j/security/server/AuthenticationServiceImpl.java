@@ -143,7 +143,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
     }
 
     @Override
-    public void passwordReminder(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
+    public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
         // TODO Auto-generated method stub
 
     }

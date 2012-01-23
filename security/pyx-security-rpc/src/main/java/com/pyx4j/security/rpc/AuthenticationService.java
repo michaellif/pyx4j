@@ -48,8 +48,16 @@ public interface AuthenticationService extends IService {
      * 
      * E-mail is sent if no exception thrown.
      */
-    public void passwordReminder(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request);
+    public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request);
 
+    /**
+     * Login with temporary token that identifies the user and gives him privileges for resetting his password.
+     * 
+     * @param callback
+     * @param clientSystemInfo
+     * @param accessToken
+     *            temporary token used to give the user limited access that allows only to reset his password.
+     */
     public void authenticateWithToken(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String accessToken);
 
 }
