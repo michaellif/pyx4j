@@ -65,22 +65,32 @@ public abstract class NFocusComponent<DATA, WIDGET extends IFocusWidget, CCOMP e
 
     @Override
     public void setTabIndex(int index) {
-        getEditor().setTabIndex(index);
+        if (getEditor() != null) {
+            getEditor().setTabIndex(index);
+        }
     }
 
     @Override
     public int getTabIndex() {
-        return getEditor().getTabIndex();
+        if (getEditor() != null) {
+            return getEditor().getTabIndex();
+        } else {
+            return -1;
+        }
     }
 
     @Override
     public void setFocus(boolean focused) {
-        getEditor().setFocus(focused);
+        if (getEditor() != null) {
+            getEditor().setFocus(focused);
+        }
     }
 
     @Override
     public void setAccessKey(char key) {
-        getEditor().setAccessKey(key);
+        if (getEditor() != null) {
+            getEditor().setAccessKey(key);
+        }
     }
 
     @Override
