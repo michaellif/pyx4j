@@ -26,5 +26,5 @@ import com.pyx4j.rpc.shared.IService;
 
 public interface PasswordResetService extends IService {
 
-    public void passwordReset(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request);
+    public void resetPassword(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request);
 }
