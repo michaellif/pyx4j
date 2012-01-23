@@ -22,7 +22,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
@@ -75,10 +77,8 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
     public IsWidget createContent() {
 
         tabPanel.add(createInfoTab(), i18n.tr("Personal Information"));
-        if (isEditable()) {
-            tabPanel.add(createPasswordTab(), i18n.tr("Password"));
-        }
-        tabPanel.add(createPriviligesTab(), i18n.tr("Priviliges"));
+        tabPanel.add(createPrivilegesTab(), i18n.tr("Privileges"));
+        tabPanel.add(createPasswordTab(), i18n.tr("Password"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -132,14 +132,20 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public IsWidget createPasswordTab() {
-        FormFlexPanel main = new FormFlexPanel();
-        main.setWidget(0, 0, new Button(i18n.tr("Change Password"), new ClickHandler() {
+        VerticalPanel main = new VerticalPanel();
+        main.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+
+        main.add(new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).labelWidth(25).build());
+        Button passwordButton = new Button(i18n.tr("Change Password") + "...", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
 
             }
-        }));
-        return main;
+        });
+        main.add(passwordButton);
+        passwordButton.getElement().getStyle().setMarginTop(1, Unit.EM);
+
+        return new CrmScrollPanel(main);
     }
 
     @Override
@@ -152,7 +158,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         return tabPanel.getSelectedIndex();
     }
 
-    public IsWidget createPriviligesTab() {
+    public IsWidget createPrivilegesTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
