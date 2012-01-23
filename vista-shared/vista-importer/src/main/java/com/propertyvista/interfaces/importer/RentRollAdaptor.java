@@ -21,8 +21,10 @@
 package com.propertyvista.interfaces.importer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -38,6 +40,8 @@ import java.util.Set;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.csv.CSVLoad;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
@@ -105,6 +109,21 @@ public class RentRollAdaptor {
     public static void readTenantRoster(String fileName) throws IOException {
         List<String> lines = Files.readAllLines(new File(fileName).toPath(), Charset.defaultCharset());
         RosterReaderState readerState = RosterReaderState.ExpectHeader;
+
+        EntityCSVReciver<RentRollCSV> csv = EntityCSVReciver.create(RentRollCSV.class);
+        csv.setHeaderLinesCount(2);
+        csv.setHeadersMatchMinimum(EntityFactory.getEntityMeta(RentRollCSV.class).getMemberNames().size());
+        InputStream is = new FileInputStream(fileName);
+        try {
+            CSVLoad.loadFile(is, csv);
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+
+        //TODO use this loop
+        for (RentRollCSV line : csv.getEntities()) {
+            System.out.println(line);
+        }
 
         int n = 0;
         boolean gotData = false;
