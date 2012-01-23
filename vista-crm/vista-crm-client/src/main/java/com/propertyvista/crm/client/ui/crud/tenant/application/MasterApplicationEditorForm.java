@@ -33,6 +33,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
+import com.propertyvista.common.client.ui.components.folders.ApplicationStatusFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;

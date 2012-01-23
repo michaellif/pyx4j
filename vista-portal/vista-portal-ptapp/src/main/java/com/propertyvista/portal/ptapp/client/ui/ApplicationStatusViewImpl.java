@@ -55,6 +55,19 @@ public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationS
 
         VerticalPanel main = new VerticalPanel();
 
+//        private Widget createAppStatustab() {
+//            FormFlexPanel main = new FormFlexPanel();
+//
+//            int row = -1;
+//            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).labelWidth(20).build());
+//            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().masterApplicationStatus().progress()), 5).labelWidth(20).build());
+//
+//            main.setBR(++row, 0, 1);
+//            main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
+//
+//            return new CrmScrollPanel(main);
+//        }
+
         HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Current status of Your Application")));
         main.add(titleHtml);
         main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);

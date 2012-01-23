@@ -33,10 +33,12 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
+import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
+import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
@@ -44,7 +46,6 @@ import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
-import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -125,9 +126,11 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(SummaryService.class));
+        grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ChargesService.class));
 
-        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(ApplicationStatusSummaryDTO.class, EntityPermission.READ));
-        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(SummaryDTO.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(MasterApplication.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(Summary.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(Charges.class, EntityPermission.READ));
 
         // -------------
 

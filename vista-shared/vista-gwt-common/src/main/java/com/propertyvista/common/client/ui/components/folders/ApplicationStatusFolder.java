@@ -11,14 +11,13 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.application;
+package com.propertyvista.common.client.ui.components.folders;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.dto.ApplicationStatusDTO;
 
 public class ApplicationStatusFolder extends VistaTableFolder<ApplicationStatusDTO> {
