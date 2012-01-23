@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.login;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -21,14 +22,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
-import com.propertyvista.crm.rpc.ActivationServices;
+import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
 public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
 
@@ -37,7 +38,7 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
     private final RetrievePasswordView view;
 
     public RetrievePasswordActivity(Place place) {
-        this.view = (RetrievePasswordView) LoginVeiwFactory.instance(RetrievePasswordView.class);
+        this.view = LoginVeiwFactory.instance(RetrievePasswordView.class);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -59,6 +60,7 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
                 CrmSite.instance().showMessageDialog(i18n.tr("Please check your email"), "", null, null);
             }
         };
-        RPCManager.execute(ActivationServices.PasswordReminder.class, request, callback);
+        AuthenticationService authService = GWT.<AuthenticationService> create(CrmAuthenticationService.class);
+        authService.passwordReminder(callback, request);
     }
 }
