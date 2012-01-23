@@ -50,7 +50,7 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
-import com.propertyvista.server.common.ptapp.ApplicationMgr;
+import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class PtPreloader extends BaseVistaDevDataPreloader {
@@ -154,7 +154,7 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         // Create working appl. only for first half 
         if (cnt <= DemoData.UserType.PTENANT.getDefaultMax() / 2) {
-            MasterApplication ma = ApplicationMgr.createMasterApplication(summary.lease());
+            MasterApplication ma = ApplicationManager.createMasterApplication(summary.lease());
             if (PTGenerator.equifaxDemo) {
                 ma.equifaxApproval().percenrtageApproved().setValue(overalPercentageApproval);
 

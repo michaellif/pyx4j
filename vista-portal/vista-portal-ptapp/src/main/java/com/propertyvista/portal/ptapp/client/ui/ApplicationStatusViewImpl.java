@@ -31,13 +31,27 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
+import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationStatusView {
 
     private static final I18n i18n = I18n.get(ApplicationStatusViewImpl.class);
 
+    private static final String showSummary = i18n.tr("Show Summary");
+
+    private static final String hideSummary = i18n.tr("Hide Summary");
+
+    private Presenter presenter;
+
+    private final SummaryViewForm summaryForm;
+
     public ApplicationStatusViewImpl() {
+
+        summaryForm = new SummaryViewForm();
+        summaryForm.initContent();
+        summaryForm.setVisible(false);
 
         VerticalPanel main = new VerticalPanel();
 
@@ -53,15 +67,16 @@ public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationS
 
         HorizontalPanel actions = new HorizontalPanel();
 
-//        Button backAction = new Button(i18n.tr("View Status"));
-//        backAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-//        backAction.addClickHandler(new ClickHandler() {
-//            @Override
-//            public void onClick(ClickEvent event) {
-//                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(ApplicationStatus.class));
-//            }
-//        });
-//        actions.add(backAction);
+        final Button summaryAction = new Button(showSummary);
+        summaryAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        summaryAction.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                summaryForm.setVisible(!summaryForm.isVisible());
+                summaryAction.setTextLabel(summaryForm.isVisible() ? hideSummary : showSummary);
+            }
+        });
+        actions.add(summaryAction);
 
         Button logoutAction = new Button(i18n.tr("Log Out"));
         logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
@@ -78,10 +93,24 @@ public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationS
         main.add(actions);
         main.setCellHorizontalAlignment(actions, HasHorizontalAlignment.ALIGN_CENTER);
 
+        main.add(summaryForm.asWidget());
+
         main.setWidth("100%");
         add(main);
 
         getElement().getStyle().setMarginBottom(1, Unit.EM);
         setWidth("100%");
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void populate(ApplicationStatusSummaryDTO entity) {
+        // TODO
+
+        summaryForm.populate(entity.summary());
     }
 }

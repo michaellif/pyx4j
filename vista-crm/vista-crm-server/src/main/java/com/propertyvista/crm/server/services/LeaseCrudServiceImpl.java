@@ -39,7 +39,7 @@ import com.propertyvista.domain.tenant.lease.ServiceAgreement;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
-import com.propertyvista.server.common.ptapp.ApplicationMgr;
+import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
 public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, LeaseDTO> implements LeaseCrudService {
@@ -183,7 +183,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     public void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
         Persistence.service().retrieve(lease.tenants());
-        MasterApplication ma = ApplicationMgr.createMasterApplication(lease);
+        MasterApplication ma = ApplicationManager.createMasterApplication(lease);
 
         //TODO Move sendmail to separate function
 //        if ((false) && (user != null)) {

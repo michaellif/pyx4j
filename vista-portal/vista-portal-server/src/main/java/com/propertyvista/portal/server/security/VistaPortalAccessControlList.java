@@ -51,6 +51,7 @@ import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
@@ -119,6 +120,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.ProspectiveCoApplicant, VistaTenantBehavior.Prospective);
 
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationService.class));
+        grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(SummaryService.class));
 
         // -------------

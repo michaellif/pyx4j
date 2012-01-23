@@ -17,11 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
@@ -30,18 +26,14 @@ import com.propertyvista.crm.server.util.GenericConverter;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
-import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
-import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
-import com.propertyvista.dto.MasterApplicationStatusDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
+import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 
@@ -82,7 +74,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         if (!fromList) {
-            calculateStatus(in, dto);
+            dto.masterApplicationStatus().set(ApplicationManager.calculateStatus(in));
         }
 
         calculatePrices(in, dto);
@@ -128,51 +120,6 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         }
 
         dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
-    }
-
-    private void calculateStatus(MasterApplication in, MasterApplicationDTO dto) {
-        dto.masterApplicationStatus().set(EntityFactory.create(MasterApplicationStatusDTO.class));
-
-        Double masterApplicationProgress = 1.0;
-
-        for (Application app : dto.applications()) {
-            if (app.isValueDetached()) {
-                Persistence.service().retrieve(app);
-            }
-            ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
-
-            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
-            status.person().set(Persistence.service().retrieve(criteria).person().name());
-            status.type().setValue("Tenant");
-            if (status.person().isEmpty()) {
-                EntityQueryCriteria<TenantGuarantor> criteria1 = EntityQueryCriteria.create(TenantGuarantor.class);
-                criteria1.add(PropertyCriterion.eq(criteria1.proto().user(), app.user()));
-                status.person().set(Persistence.service().retrieve(criteria1).name());
-                status.type().setValue("Guarantor");
-            }
-
-            if (!status.person().isEmpty()) {
-                int complete = 0;
-                for (int i = 0; i < app.steps().size(); ++i) {
-                    switch (app.steps().get(i).status().getValue()) {
-                    case complete:
-                        ++complete;
-                    case latest:
-                        break;
-                    }
-                }
-
-                status.progress().setValue(app.steps().isEmpty() ? 0.0 : complete / app.steps().size() * 100.0);
-                status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
-
-                dto.masterApplicationStatus().individualApplications().add(status);
-            }
-
-            masterApplicationProgress *= status.progress().getValue();
-        }
-
-        dto.masterApplicationStatus().progress().setValue(masterApplicationProgress);
     }
 
     @Override

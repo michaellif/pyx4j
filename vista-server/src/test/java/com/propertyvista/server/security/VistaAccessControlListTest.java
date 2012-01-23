@@ -50,6 +50,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
@@ -102,6 +103,9 @@ public class VistaAccessControlListTest {
         assertPermission(false, ChargesService.class);
         assertPermission(false, SummaryService.class);
         assertPermission(false, PaymentService.class);
+
+        assertPermission(false, ApplicationStatusService.class);
+
         TestLifecycle.endRequest();
     }
 
@@ -120,6 +124,8 @@ public class VistaAccessControlListTest {
         assertPermission(true, ChargesService.class);
         assertPermission(true, SummaryService.class);
         assertPermission(true, PaymentService.class);
+
+        assertPermission(true, ApplicationStatusService.class);
 
         TestLifecycle.endRequest();
     }

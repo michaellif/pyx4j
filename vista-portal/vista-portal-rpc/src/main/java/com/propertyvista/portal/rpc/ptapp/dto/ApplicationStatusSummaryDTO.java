@@ -7,22 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-04
- * @author Vlad
+ * Created on Jan 23, 2012
+ * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui;
+package com.propertyvista.portal.rpc.ptapp.dto;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
+import com.propertyvista.dto.MasterApplicationStatusDTO;
 
-public interface ApplicationStatusView extends IsWidget {
+public interface ApplicationStatusSummaryDTO extends IEntity {
 
-    public interface Presenter {
-    }
+    MasterApplicationStatusDTO status();
 
-    public void setPresenter(Presenter presenter);
-
-    public void populate(ApplicationStatusSummaryDTO entity);
+    SummaryDTO summary();
 }

@@ -16,8 +16,11 @@ package com.propertyvista.server.common.ptapp;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.site.rpc.AppPlace;
@@ -27,16 +30,19 @@ import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
+import com.propertyvista.dto.ApplicationStatusDTO;
+import com.propertyvista.dto.MasterApplicationStatusDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
-public class ApplicationMgr {
+public class ApplicationManager {
 
     private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
         ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
@@ -94,7 +100,7 @@ public class ApplicationMgr {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
                 a.status().setValue(MasterApplication.Status.Invited);
-                a.steps().addAll(ApplicationMgr.createApplicationProgress());
+                a.steps().addAll(ApplicationManager.createApplicationProgress());
                 a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveApplicant));
                 a.lease().set(ma.lease());
                 Persistence.service().persist(a);
@@ -136,7 +142,7 @@ public class ApplicationMgr {
                     Application a = EntityFactory.create(Application.class);
                     a.belongsTo().set(ma);
                     a.status().setValue(MasterApplication.Status.Invited);
-                    a.steps().addAll(ApplicationMgr.createApplicationProgress());
+                    a.steps().addAll(ApplicationManager.createApplicationProgress());
                     a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveCoApplicant));
                     a.lease().set(ma.lease());
                     Persistence.service().persist(a);
@@ -173,4 +179,49 @@ public class ApplicationMgr {
         }
     }
 
+    public static MasterApplicationStatusDTO calculateStatus(MasterApplication ma) {
+        MasterApplicationStatusDTO maStatus = EntityFactory.create(MasterApplicationStatusDTO.class);
+
+        Double masterApplicationProgress = 1.0;
+
+        for (Application app : ma.applications()) {
+            if (app.isValueDetached()) {
+                Persistence.service().retrieve(app);
+            }
+            ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
+
+            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
+            status.person().set(Persistence.service().retrieve(criteria).person().name());
+            status.type().setValue("Tenant");
+            if (status.person().isEmpty()) {
+                EntityQueryCriteria<TenantGuarantor> criteria1 = EntityQueryCriteria.create(TenantGuarantor.class);
+                criteria1.add(PropertyCriterion.eq(criteria1.proto().user(), app.user()));
+                status.person().set(Persistence.service().retrieve(criteria1).name());
+                status.type().setValue("Guarantor");
+            }
+
+            if (!status.person().isEmpty()) {
+                int complete = 0;
+                for (int i = 0; i < app.steps().size(); ++i) {
+                    switch (app.steps().get(i).status().getValue()) {
+                    case complete:
+                        ++complete;
+                    case latest:
+                        break;
+                    }
+                }
+
+                status.progress().setValue(app.steps().isEmpty() ? 0.0 : complete / app.steps().size() * 100.0);
+                status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
+
+                maStatus.individualApplications().add(status);
+            }
+
+            masterApplicationProgress *= status.progress().getValue();
+        }
+
+        maStatus.progress().setValue(masterApplicationProgress);
+        return maStatus;
+    }
 }

@@ -36,7 +36,7 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
-import com.propertyvista.server.common.ptapp.ApplicationMgr;
+import com.propertyvista.server.common.ptapp.ApplicationManager;
 
 public class ApplicationServiceImpl extends ApplicationEntityServiceImpl implements ApplicationService {
 
@@ -164,7 +164,7 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
     private void onStepCompleted(Application application, ApplicationWizardStep currentStep) {
         if (currentStep.placeId().getValue().equals(AppPlaceInfo.getPlaceId(PtSiteMap.Payment.class))) {
-            ApplicationMgr.makeApplicationCompleted(application);
+            ApplicationManager.makeApplicationCompleted(application);
         }
 
     }

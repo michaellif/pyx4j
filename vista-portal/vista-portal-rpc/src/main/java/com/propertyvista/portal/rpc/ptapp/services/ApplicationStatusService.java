@@ -7,22 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-04
- * @author Vlad
+ * Created on Jan 23, 2012
+ * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui;
+package com.propertyvista.portal.rpc.ptapp.services;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
 
-public interface ApplicationStatusView extends IsWidget {
+public interface ApplicationStatusService extends IService {
 
-    public interface Presenter {
-    }
+    public void retrieveStatus(AsyncCallback<ApplicationStatusSummaryDTO> callback);
 
-    public void setPresenter(Presenter presenter);
-
-    public void populate(ApplicationStatusSummaryDTO entity);
 }

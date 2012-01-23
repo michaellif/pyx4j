@@ -110,7 +110,9 @@ public class PtAppSite extends VistaSite {
         AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                if (!ClientContext.isAuthenticated()) {
+                if (ClientContext.isAuthenticated()) {
+                    getWizardManager().onLogin();
+                } else {
                     getWizardManager().onLogout();
                 }
 
