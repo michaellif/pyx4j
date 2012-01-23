@@ -16,16 +16,33 @@ package com.propertyvista.server.security.openId;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Consts;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.server.dev.DevSession;
 
 @SuppressWarnings("serial")
 public class VistaDevSessionServlet extends HttpServlet {
+
+    private static long openStart;
+
+    private static Timer closeTimer;
+
+    @Override
+    public void destroy() {
+        if (closeTimer != null) {
+            closeTimer.cancel();
+            closeTimer = null;
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,6 +57,27 @@ public class VistaDevSessionServlet extends HttpServlet {
         }
         devSession.setAttribute(OpenIdFilter.ACCESS_GRANTED_ATTRIBUTE, Boolean.TRUE);
         devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, "tester-a@" + OpenIdServlet.DOMAIN);
+
+        if (ApplicationMode.isDevelopment()) {
+            String tp = request.getParameter("long");
+            if (CommonsStringUtils.isStringSet(tp)) {
+                openStart = System.currentTimeMillis();
+                if (OpenIdFilter.enabled) {
+                    OpenIdFilter.enabled = false;
+                    if (closeTimer == null) {
+                        closeTimer = new Timer("OpenIdCloseTimer", true);
+                        closeTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if ((System.currentTimeMillis() - openStart) > 5 * Consts.MIN2MSEC) {
+                                    OpenIdFilter.enabled = true;
+                                }
+                            }
+                        }, 2000, 2000);
+                    }
+                }
+            }
+        }
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
