@@ -18,6 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.login.LoginViewImpl;
+import com.propertyvista.crm.client.ui.login.LoginWithTokenView;
+import com.propertyvista.crm.client.ui.login.LoginWithTokenViewImpl;
 import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
 import com.propertyvista.crm.client.ui.login.PasswordResetRequestViewImpl;
 import com.propertyvista.crm.client.ui.security.NewPasswordView;
@@ -29,6 +31,9 @@ public class LoginVeiwFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (LoginView.class.equals(type)) {
                 map.put(type, new LoginViewImpl());
+            }
+            if (LoginWithTokenView.class.equals(type)) {
+                map.put(type, new LoginWithTokenViewImpl());
             } else if (NewPasswordView.class.equals(type)) {
                 map.put(type, new NewPasswordViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {
