@@ -22,7 +22,10 @@ package com.pyx4j.essentials.server.csv;
 
 public interface CSVReciver {
 
-    void onHeader(String[] headers);
+    /**
+     * @return true when header is loaded completely.
+     */
+    boolean onHeader(String[] headers);
 
     void onRow(String[] values);
 
