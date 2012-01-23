@@ -65,7 +65,7 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
         main.add(new HTML());
         main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
 
-        Button retrievePasswordButton = new Button(i18n.tr("Retrieve Password"));
+        Button retrievePasswordButton = new Button(i18n.tr("Reset Password"));
         // retrievePasswordButton.ensureDebugId(VistaFormsDebugId.Auth_RetrivePassword.toString());
         retrievePasswordButton.addClickHandler(new ClickHandler() {
 

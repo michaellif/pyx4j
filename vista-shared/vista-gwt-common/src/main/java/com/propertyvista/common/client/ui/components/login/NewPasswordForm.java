@@ -18,19 +18,19 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 
-public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
+public class NewPasswordForm extends CEntityDecoratableEditor<PasswordChangeRequest> {
 
     private static final I18n i18n = I18n.get(NewPasswordForm.class);
 
@@ -40,13 +40,20 @@ public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
 
     private HTML header;
 
-    private final String caption;
-
     private final Command retreiveCommand;
 
+    @Deprecated
+    /**
+     * Deprecated: no need for the "caption" arg.
+     */
     public NewPasswordForm(String caption, Command retreiveCommand) {
         super(PasswordChangeRequest.class);
-        this.caption = caption;
+        this.retreiveCommand = retreiveCommand;
+        setWidth("30em");
+    }
+
+    public NewPasswordForm(Command retreiveCommand) {
+        super(PasswordChangeRequest.class);
         this.retreiveCommand = retreiveCommand;
         setWidth("30em");
     }
@@ -62,20 +69,14 @@ public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
 
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
-        header = new HTML();
-        header.getElement().getStyle().setMarginBottom(3, Unit.EM);
-        header.getElement().getStyle().setProperty("textAlign", "center");
+        FormFlexPanel main = new FormFlexPanel();
+        main.setWidth("100%");
+        int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
 
-        main.add(header);
-        main.add(new HTML());
-        main.add(new LoginPanelWidgetDecorator(inject(proto().currentPassword())));
-        main.add(new HTML());
-        main.add(new LoginPanelWidgetDecorator(inject(proto().newPassword())));
-        main.add(new HTML());
-        main.add(new LoginPanelWidgetDecorator(inject(proto().newPasswordConfirm())));
-
-        Button newPasswordButton = new Button(caption);
+        Button newPasswordButton = new Button(i18n.tr("Submit"));
         newPasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         newPasswordButton.addClickHandler(new ClickHandler() {
 
@@ -86,13 +87,8 @@ public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
 
         });
 
-        newPasswordButton.getElement().getStyle().setMarginLeft(9, Unit.EM);
-        newPasswordButton.getElement().getStyle().setMarginRight(1, Unit.EM);
-        newPasswordButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        main.add(newPasswordButton);
-
-        main.getElement().getStyle().setMarginTop(1, Unit.EM);
-        main.getElement().getStyle().setMarginBottom(1, Unit.EM);
+        main.setWidget(++row, 0, newPasswordButton);
+        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         return main;
     }
@@ -101,11 +97,9 @@ public class NewPasswordForm extends CEntityEditor<PasswordChangeRequest> {
 
         switch (type) {
         case CHANGE:
-            header.setHTML(HtmlUtils.h2(i18n.tr("Change Password")));
             get(proto().currentPassword()).setVisible(true);
             break;
         case RESET:
-            header.setHTML(HtmlUtils.h2(i18n.tr("Create Password")));
             get(proto().currentPassword()).setVisible(false);
             break;
         }

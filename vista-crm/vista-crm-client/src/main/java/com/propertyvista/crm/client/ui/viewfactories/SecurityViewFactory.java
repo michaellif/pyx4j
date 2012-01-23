@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-10
- * @author Vlad
+ * Created on Jan 23, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.viewfactories;
@@ -18,21 +18,21 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.login.LoginViewImpl;
-import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
-import com.propertyvista.crm.client.ui.login.PasswordResetRequestViewImpl;
 import com.propertyvista.crm.client.ui.security.NewPasswordView;
 import com.propertyvista.crm.client.ui.security.NewPasswordViewImpl;
+import com.propertyvista.crm.client.ui.security.PasswordResetRequestSuccessView;
+import com.propertyvista.crm.client.ui.security.PasswordResetRequestSuccessViewImpl;
 
-public class LoginVeiwFactory extends ViewFactoryBase {
+public class SecurityViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (LoginView.class.equals(type)) {
                 map.put(type, new LoginViewImpl());
+            } else if (PasswordResetRequestSuccessView.class.equals(type)) {
+                map.put(type, new PasswordResetRequestSuccessViewImpl());
             } else if (NewPasswordView.class.equals(type)) {
                 map.put(type, new NewPasswordViewImpl());
-            } else if (PasswordResetRequestView.class.equals(type)) {
-                map.put(type, new PasswordResetRequestViewImpl());
             }
         }
 
@@ -43,4 +43,5 @@ public class LoginVeiwFactory extends ViewFactoryBase {
         }
         return impl;
     }
+
 }

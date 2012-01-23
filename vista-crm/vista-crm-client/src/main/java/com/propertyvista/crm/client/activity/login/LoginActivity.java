@@ -37,7 +37,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     private final LoginView view;
 
     public LoginActivity(Place place) {
-        this.view = (LoginView) LoginVeiwFactory.instance(LoginView.class);
+        this.view = LoginVeiwFactory.instance(LoginView.class);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -72,7 +72,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     }
 
     @Override
-    public void gotoRetrievePassword() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.LoginWithToken());
+    public void gotoResetPassword() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordResetRequest());
     }
 }

@@ -45,13 +45,13 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
     private final Command loginCommand;
 
-    private final Command retreivePasswordCommand;
+    private final Command resetPasswordCommand;
 
-    public LoginForm(String caption, Command loginCommand, Command retreivePasswordCommand) {
+    public LoginForm(String caption, Command loginCommand, Command resetPasswordCommand) {
         super(AuthenticationRequest.class);
         this.caption = caption;
         this.loginCommand = loginCommand;
-        this.retreivePasswordCommand = retreivePasswordCommand;
+        this.resetPasswordCommand = resetPasswordCommand;
         setWidth("30em");
 
     }
@@ -93,9 +93,9 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         loginButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         main.add(loginButton);
 
-        if (retreivePasswordCommand != null) {
-            CHyperlink forgotPassword = new CHyperlink(null, retreivePasswordCommand);
-            forgotPassword.setValue(i18n.tr("Retrieve Password"));
+        if (resetPasswordCommand != null) {
+            CHyperlink forgotPassword = new CHyperlink(null, resetPasswordCommand);
+            forgotPassword.setValue(i18n.tr("Reset Password"));
             main.add(forgotPassword);
         }
 

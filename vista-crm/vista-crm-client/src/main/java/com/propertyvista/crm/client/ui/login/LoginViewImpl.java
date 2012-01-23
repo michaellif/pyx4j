@@ -58,7 +58,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
             @Override
             public void execute() {
-                presenter.gotoRetrievePassword();
+                presenter.gotoResetPassword();
             }
         }) {
             @Override

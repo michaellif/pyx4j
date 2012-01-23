@@ -7,28 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Jan 23, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.login;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.i18n.shared.I18n;
 
-public interface LoginView extends IsWidget {
+public class LoginWithTokenViewImpl implements LoginWithTokenView {
 
-    public void setPresenter(Presenter presenter);
+    private static final I18n i18n = I18n.get(LoginWithTokenViewImpl.class);
 
-    public interface Presenter {
-
-        void login(AuthenticationRequest value);
-
-        public void gotoResetPassword();
-
+    @Override
+    public Widget asWidget() {
+        VerticalPanel panel = new VerticalPanel();
+        panel.add(new Label(i18n.tr("Please Wait, authenticating...")));
+        return panel;
     }
-
-    public void challengeVerificationRequired();
 
 }

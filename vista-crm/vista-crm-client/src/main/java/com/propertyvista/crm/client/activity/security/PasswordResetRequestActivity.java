@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.login;
+package com.propertyvista.crm.client.activity.security;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -20,45 +20,45 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.login.RetrievePasswordView;
+import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
-public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
+public class PasswordResetRequestActivity extends AbstractActivity implements PasswordResetRequestView.Presenter {
 
-    private static final I18n i18n = I18n.get(RetrievePasswordActivity.class);
+    private final PasswordResetRequestView view;
 
-    private final RetrievePasswordView view;
-
-    public RetrievePasswordActivity(Place place) {
-        this.view = LoginVeiwFactory.instance(RetrievePasswordView.class);
+    public PasswordResetRequestActivity(Place place) {
+        this.view = LoginVeiwFactory.instance(PasswordResetRequestView.class);
         view.setPresenter(this);
         withPlace(place);
     }
 
-    public RetrievePasswordActivity withPlace(Place place) {
+    public PasswordResetRequestActivity withPlace(Place place) {
         return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        view.getForm().populateNew();
     }
 
     @Override
-    public void retrievePassword(PasswordRetrievalRequest request) {
+    public void requestPasswordReset(PasswordRetrievalRequest request) {
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                CrmSite.instance().showMessageDialog(i18n.tr("Please check your email"), "", null, null);
+                AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordResetRequestSuccess());
             }
+
         };
         AuthenticationService authService = GWT.<AuthenticationService> create(CrmAuthenticationService.class);
         authService.requestPasswordReset(callback, request);

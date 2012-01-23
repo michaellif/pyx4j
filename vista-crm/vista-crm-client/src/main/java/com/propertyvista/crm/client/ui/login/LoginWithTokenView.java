@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author Vlad
+ * Created on Jan 23, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.login;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+public interface LoginWithTokenView extends IsWidget {
 
-public interface RetrievePasswordView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        void retrievePassword(PasswordRetrievalRequest value);
-    }
 }

@@ -11,78 +11,73 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.login;
+package com.propertyvista.crm.client.activity.security;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordResetService;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.login.NewPasswordView;
+import com.propertyvista.crm.client.ui.security.NewPasswordView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
-import com.propertyvista.crm.rpc.ActivationServices;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 
-public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
+public class PasswordResetActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
-    private static final I18n i18n = I18n.get(ResetPasswordActivity.class);
+    private static final I18n i18n = I18n.get(PasswordResetActivity.class);
 
     private final NewPasswordView view;
 
-    private String token;
-
-    public ResetPasswordActivity(Place place) {
-        this.view = (NewPasswordView) LoginVeiwFactory.instance(NewPasswordView.class);
+    public PasswordResetActivity(Place place) {
+        this.view = LoginVeiwFactory.instance(NewPasswordView.class);
         view.setConversationType(ConversationType.RESET);
         view.setPresenter(this);
         withPlace(place);
     }
 
-    public ResetPasswordActivity withPlace(Place place) {
+    public PasswordResetActivity withPlace(Place place) {
         return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        token = Window.Location.getParameter(ActivationServices.PASSWORD_TOKEN);
-        if (CommonsStringUtils.isEmpty(token)) {
-            CrmSite.instance().showMessageDialog(i18n.tr("The URL You Tried To Use Is Either Incorrect Or No Longer Valid"), i18n.tr("Error"),
-                    i18n.tr("Log In"), new Command() {
-                        @Override
-                        public void execute() {
-                            AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-                        }
-                    });
-        }
 
         panel.setWidget(view);
+
     }
 
     @Override
     public void passwordReset(PasswordChangeRequest request) {
-        request.token().setValue(token);
         AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticated(result);
+                // ClientContext.authenticated(result);
+                CrmSite.instance().showMessageDialog(i18n.tr("Your password has been reset successfully!"), i18n.tr("Success!"), i18n.tr("Log In"),
+                        new Command() {
+                            @Override
+                            public void execute() {
+                                // FIXME logout before going to login screen?
+                                AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+                            }
+                        });
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
             }
         };
 
-        RPCManager.execute(ActivationServices.PasswordReset.class, request, callback);
+        GWT.<PasswordResetService> create(CrmPasswordResetService.class).resetPassword(callback, request);
 
     }
 

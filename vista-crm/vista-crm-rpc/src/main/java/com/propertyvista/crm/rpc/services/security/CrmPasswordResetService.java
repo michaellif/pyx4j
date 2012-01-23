@@ -7,28 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Jan 23, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.login;
+package com.propertyvista.crm.rpc.services.security;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.security.rpc.PasswordResetService;
 
-import com.pyx4j.security.rpc.AuthenticationRequest;
-
-public interface LoginView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        void login(AuthenticationRequest value);
-
-        public void gotoResetPassword();
-
-    }
-
-    public void challengeVerificationRequired();
+public interface CrmPasswordResetService extends PasswordResetService {
 
 }

@@ -23,32 +23,37 @@ import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.common.client.ui.components.login.RetrievePasswordForm;
 
-public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
+public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordResetRequestView {
 
-    private static final I18n i18n = I18n.get(RetrievePasswordViewImpl.class);
+    private static final I18n i18n = I18n.get(PasswordResetRequestViewImpl.class);
 
     private Presenter presenter;
 
     private final CEntityEditor<PasswordRetrievalRequest> form;
 
-    public RetrievePasswordViewImpl() {
-        form = new RetrievePasswordForm(i18n.tr("Retrieve Password"), new Command() {
+    public PasswordResetRequestViewImpl() {
+        form = new RetrievePasswordForm(i18n.tr("Reset Password"), new Command() {
             @Override
             public void execute() {
                 form.setVisited(true);
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
-                presenter.retrievePassword(form.getValue());
+                presenter.requestPasswordReset(form.getValue());
             }
         });
         form.initContent();
-        form.populate(null);
+        form.populateNew();
         add(form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public CEntityEditor<PasswordRetrievalRequest> getForm() {
+        return form;
     }
 }

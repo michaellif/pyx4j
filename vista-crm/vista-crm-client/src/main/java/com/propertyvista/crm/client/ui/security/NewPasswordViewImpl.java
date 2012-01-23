@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.login;
+package com.propertyvista.crm.client.ui.security;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -44,7 +44,7 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
             }
         });
         form.initContent();
-        form.populate(null);
+        form.populateNew();
         add(form);
 
     }

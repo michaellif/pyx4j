@@ -30,22 +30,30 @@ public class CrmSiteMap implements SiteMap {
     public static class SigningOut extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Retrieve Password")
-    public static class RetrievePassword extends AppPlace implements PublicPlace {
+    /**
+     * A place where a unfortunate user can perform request to reset his password.
+     */
+    public static class PasswordResetRequest extends AppPlace implements PublicPlace {
     }
 
     /**
-     * Used while user is waiting for authentication for password reset authentication.
+     * Represents a place where the user is redirected after a successful "reset password request".
+     */
+    public static class PasswordResetRequestSuccess extends AppPlace implements PublicPlace {
+    }
+
+    /**
+     * Used while user is waiting for authentication required for password reset.
      */
     public static class LoginWithToken extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Reset Password")
-    public static class ResetPassword extends AppPlace {
+    public static class PasswordReset extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Change Password")
-    public static class ChangePassword extends AppPlace {
+    public static class PasswordChange extends AppPlace {
     }
 
     public static class Properties extends AppPlace {

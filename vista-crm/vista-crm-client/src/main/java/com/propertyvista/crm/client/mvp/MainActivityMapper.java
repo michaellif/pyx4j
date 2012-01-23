@@ -114,7 +114,6 @@ import com.propertyvista.crm.client.activity.crud.unit.UnitViewerActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
-import com.propertyvista.crm.client.activity.login.ResetPasswordActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
@@ -130,6 +129,7 @@ import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivit
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
+import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -191,8 +191,8 @@ public class MainActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof CrmSiteMap.ResetPassword) {
-                    activity = new ResetPasswordActivity(place);
+                if (place instanceof CrmSiteMap.PasswordReset) {
+                    activity = new PasswordResetActivity(place);
 
 // - Building-related:
                 } else if (place instanceof CrmSiteMap.Properties.Building) {

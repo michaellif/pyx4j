@@ -17,7 +17,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
@@ -68,4 +72,17 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
         }
     }
 
+    @Override
+    public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
+
+        // TODO implement this method
+
+        if (request.email().getValue().startsWith("jerry")) {
+            callback.onSuccess(new VoidSerializable());
+        } else if (request.email().getValue().startsWith("george")) {
+            callback.onFailure(new Error("no soup for you!"));
+        } else {
+
+        }
+    }
 }
