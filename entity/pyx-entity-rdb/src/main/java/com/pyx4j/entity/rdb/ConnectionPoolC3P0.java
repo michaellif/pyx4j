@@ -53,7 +53,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         dataSource.setAutomaticTestTable(cfg.connectionAutomaticTestTable()); // If provided, c3p0 will create an empty table of the specified name, and use queries against that table to test the Connection
         dataSource.setIdleConnectionTestPeriod(5 * Consts.MIN2SEC); //If this is a number greater than 0, c3p0 will test all idle, pooled but unchecked-out connections, every this number of seconds.
 
-        //dataSource.setMaxStatements(cfg.maxPoolPreparedStatements());
+        dataSource.setMaxStatements(cfg.maxPoolPreparedStatements());
 
         dataSource.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionTimeout());
         dataSource.setDebugUnreturnedConnectionStackTraces(true);
