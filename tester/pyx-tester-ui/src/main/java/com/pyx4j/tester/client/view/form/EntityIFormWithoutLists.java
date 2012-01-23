@@ -21,13 +21,17 @@
 package com.pyx4j.tester.client.view.form;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -36,6 +40,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
+import com.pyx4j.tester.client.domain.test.EntityV;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 
 public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
@@ -133,9 +138,26 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroup())));
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().checkBox())));
+        CEntityComboBox<EntityV> cmbEntity = new CEntityComboBox<EntityV>(EntityV.class);
+        Collection<EntityV> entityoptions = new ArrayList<EntityV>();
+        EntityV retVal;
+        for (int i = 0; i < 10; i++) {
+            retVal = EntityFactory.create(EntityV.class);
 
-        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().booleanComboBox())));
+            retVal.name().setValue("Name" + i);
+            retVal.stringValue().setValue("Value" + i);
+            entityoptions.add(retVal);
+        }
+
+        cmbEntity.setOptions(entityoptions);
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entityComboBox(), cmbEntity)));
+
+        CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
+        cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().booleanComboBox(), cmbBoolean)));
+
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().checkBox())));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().enterPassword())));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);

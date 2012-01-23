@@ -50,22 +50,8 @@ public interface EntityI extends IEntity {
     @Caption(description = "Description for optionalStringMemberI")
     IPrimitive<String> textBox();
 
-//    @NotNull
-//    IPrimitive<String> mandatoryTextI();
-
     @Editor(type = EditorType.textarea)
     IPrimitive<String> textArea();
-
-//    @Editor(type = EditorType.textarea)
-//    IPrimitive<String> optionalTextAreaII();
-
-//    @Editor(type = EditorType.textarea)
-//    @NotNull
-//    IPrimitive<String> mandatoryTextAreaI();
-
-//    @Editor(type = EditorType.textarea)
-//    @NotNull
-//    IPrimitive<String> mandatoryTextAreaII();
 
     IPrimitive<Integer> integerBox();
 
@@ -81,46 +67,23 @@ public interface EntityI extends IEntity {
 
     IPrimitive<Enum1> enumBox();
 
-//    @NotNull
-//    IPrimitive<Enum1> mandatoryEnumI();
-
     @Editor(type = EditorType.suggest)
     IPrimitive<String> suggest();
 
-//    @NotNull
-//    @Editor(type = EditorType.suggest)
-//    IPrimitive<String> mandatorySuggest();
-
     IPrimitive<Date> datePicker();
-
-//    @NotNull
-//    IPrimitive<Date> mandatoryDatePicker();
 
     @Editor(type = EditorType.timepicker)
     IPrimitive<Time> optionalTimePicker();
 
-//    @NotNull
-//    @Editor(type = EditorType.timepicker)
-//    IPrimitive<Time> mandatoryTimePicker();
-
     IPrimitive<Date> singleMonthdatePicker();
-
-//    @NotNull
-//    IPrimitive<Date> mandatorySingleMonthDatePicker();
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
-//    @Editor(type = EditorType.phone)
-//    @NotNull
-//    IPrimitive<String> mandatoryPhone();
-
     @Editor(type = EditorType.money)
     IPrimitive<Double> money();
 
-//    @Editor(type = EditorType.money)
-//    @NotNull
-//    IPrimitive<Double> mandatoryMoney();
+    IPrimitive<Double> mandatoryMoney();
 
     @Owned
     IList<EntityII> entityIIList();
@@ -133,10 +96,6 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
 
-//    @Editor(type = EditorType.email)
-//    @NotNull
-//    IPrimitive<String> mandatoryEmail();
-
     @Editor(type = EditorType.radiogroup)
     IPrimitive<Boolean> booleanRadioGroup();
 
@@ -148,5 +107,8 @@ public interface EntityI extends IEntity {
 
     @Editor(type = EditorType.combo)
     IPrimitive<Boolean> booleanComboBox();
+
+    @Editor(type = EditorType.combo)
+    EntityV entityComboBox();
 
 }

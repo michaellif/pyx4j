@@ -14,28 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Nov 2, 2011
- * @author michaellif
+ * Created on Jan 22, 2012
+ * @author igor
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.form;
+package com.pyx4j.tester.client.domain.test;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.pyx4j.tester.client.domain.test.DomainFactory;
+public interface EntityV extends IEntity {
+    IPrimitive<String> name();
 
-public class FormBasicViewImpl extends ScrollPanel implements FormBasicView {
-
-    public FormBasicViewImpl() {
-        setSize("100%", "100%");
-
-        EntityIFormWithoutLists mainForm = new EntityIFormWithoutLists();
-        mainForm.initContent();
-
-        setWidget(mainForm);
-
-        mainForm.populate(DomainFactory.createEntityI());
-
-    }
-
+    @Indexed
+    IPrimitive<String> stringValue();
 }

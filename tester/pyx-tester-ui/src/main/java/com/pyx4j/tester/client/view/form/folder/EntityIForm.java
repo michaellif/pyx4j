@@ -58,10 +58,10 @@ public class EntityIForm extends CEntityEditor<EntityI> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof EntityII) {
-            return new EntityIIFormWithVisibilityChange();
-        } else if (member instanceof EntityIII) {
+        if (member instanceof EntityIII) {
             return new EntityIIIEditor();
+        } else if (member instanceof EntityII) {
+            return new EntityIIFormWithVisibilityChange();
         } else if (member instanceof EntityIV) {
             return new EntityIVEditor();
         } else {

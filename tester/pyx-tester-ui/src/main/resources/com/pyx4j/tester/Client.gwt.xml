@@ -9,6 +9,8 @@
     <inherits name='com.pyx4j.tester.Shared'/>
 
     <inherits name="com.google.gwt.i18n.I18N"/>
+    
+    <inherits name="com.google.gwt.user.Debug"/>
 
     <extend-property name="locale" values="en_US"/>
     <set-property-fallback name="locale" value="en_US"/>

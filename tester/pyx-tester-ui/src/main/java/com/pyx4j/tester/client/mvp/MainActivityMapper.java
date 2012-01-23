@@ -30,9 +30,7 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.tester.client.TesterSiteMap;
 import com.pyx4j.tester.client.activity.FolderLayoutActivity;
 import com.pyx4j.tester.client.activity.FolderValidationActivity;
-import com.pyx4j.tester.client.activity.FormBasicActivity;
 import com.pyx4j.tester.client.activity.FormTesterActivity;
-import com.pyx4j.tester.client.activity.FormVisibilityActivity;
 import com.pyx4j.tester.client.activity.NativeWidgetBasicActivity;
 import com.pyx4j.tester.client.activity.RichTextEditorActivity;
 
@@ -53,10 +51,6 @@ public class MainActivityMapper implements AppActivityMapper {
                 } else if (place instanceof TesterSiteMap.Folder.FolderValidation) {
                     activity = new FolderValidationActivity(place);
                 } else if (place instanceof TesterSiteMap.Form.FormBasic) {
-                    activity = new FormBasicActivity(place);
-                } else if (place instanceof TesterSiteMap.Form.FormVisibility) {
-                    activity = new FormVisibilityActivity(place);
-                } else if (place instanceof TesterSiteMap.NativeWidget.NativeWidgetBasic) {
                     activity = new NativeWidgetBasicActivity(place);
                 } else if (place instanceof TesterSiteMap.NativeWidget.RichTextEditor) {
                     activity = new RichTextEditorActivity(place);

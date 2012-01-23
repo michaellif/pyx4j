@@ -95,37 +95,24 @@ public class DomainFactory {
         EntityI retVal = EntityFactory.create(EntityI.class);
 
         retVal.textBox().setValue(optstrvalues[pos]);
-//        retVal.mandatoryTextI().setValue(mndstrvalues[pos]);
         retVal.integerBox().setValue(intvalues[pos]);
-//        retVal.mandatoryIntegerI().setValue(intvalues[pos]);
         retVal.enumBox().setValue(enumvalues[pos]);
-//        retVal.mandatoryEnumI().setValue(enumvalues[pos]);
 
         retVal.textArea().setValue(opttxtvalues[pos]);
 
-//        retVal.optionalTextAreaII().setValue(opttxtvalues[pos]);
-//        retVal.mandatoryTextAreaII().setValue(mndtxtvalues[pos]);
-
         retVal.suggest().setValue(suggestvalues[pos]);
-//        retVal.mandatorySuggest().setValue(suggestvalues[pos]);
 
         retVal.datePicker().setValue(datevalues[pos]);
-//        retVal.mandatoryDatePicker().setValue(datevalues[pos]);
 
         retVal.optionalTimePicker().setValue(timevalues[pos]);
-//        retVal.mandatoryTimePicker().setValue(timevalues[pos]);
 
         retVal.singleMonthdatePicker().setValue(datevalues[pos]);
-//        retVal.mandatorySingleMonthDatePicker().setValue(datevalues[pos]);
 
         retVal.phone().setValue(phonevalues[pos]);
-//        retVal.mandatoryPhone().setValue(phonevalues[pos]);
 
         retVal.email().setValue(emailvalues[pos]);
-//        retVal.mandatoryEmail().setValue(emailvalues[pos]);
 
         retVal.money().setValue(moneyvalues[pos]);
-//        retVal.mandatoryMoney().setValue(moneyvalues[pos]);
 
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());

@@ -23,6 +23,7 @@ package com.pyx4j.tester.client.ui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.tester.client.TesterSite;
@@ -32,6 +33,7 @@ public class TesterWidgetDecorator extends WidgetDecorator {
 
     public TesterWidgetDecorator(final CComponent<?, ?> component) {
         super(component);
+
         getLabel().addClickHandler(new ClickHandler() {
 
             @Override
@@ -39,5 +41,7 @@ public class TesterWidgetDecorator extends WidgetDecorator {
                 TesterSite.getEventBus().fireEvent(new CComponentBrowserEvent(component));
             }
         });
+
+        getComnponent().setDebugId(new StringDebugId(getComnponent().getTitle().replaceAll(" ", "-")));
     }
 }

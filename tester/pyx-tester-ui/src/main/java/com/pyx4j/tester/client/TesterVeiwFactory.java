@@ -28,12 +28,8 @@ import com.pyx4j.tester.client.view.CComponentView;
 import com.pyx4j.tester.client.view.CComponentViewImpl;
 import com.pyx4j.tester.client.view.NavigView;
 import com.pyx4j.tester.client.view.NavigViewImpl;
-import com.pyx4j.tester.client.view.form.FormBasicView;
-import com.pyx4j.tester.client.view.form.FormBasicViewImpl;
 import com.pyx4j.tester.client.view.form.FormTesterView;
 import com.pyx4j.tester.client.view.form.FormTesterViewImpl;
-import com.pyx4j.tester.client.view.form.FormVisibilityView;
-import com.pyx4j.tester.client.view.form.FormVisibilityViewImpl;
 import com.pyx4j.tester.client.view.form.folder.FolderLayoutView;
 import com.pyx4j.tester.client.view.form.folder.FolderLayoutViewImpl;
 import com.pyx4j.tester.client.view.form.folder.FolderValidationView;
@@ -55,10 +51,6 @@ public class TesterVeiwFactory {
                 map.put(type, new FolderValidationViewImpl());
             } else if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
-            } else if (FormBasicView.class.equals(type)) {
-                map.put(type, new FormBasicViewImpl());
-            } else if (FormVisibilityView.class.equals(type)) {
-                map.put(type, new FormVisibilityViewImpl());
             } else if (CComponentView.class.equals(type)) {
                 map.put(type, new CComponentViewImpl());
             } else if (NativeWidgetBasicView.class.equals(type)) {

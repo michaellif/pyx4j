@@ -63,10 +63,8 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
         container.add(lbl, DockPanel.NORTH);
 
         HorizontalPanel buttonPanel = new HorizontalPanel();
-        //buttonPanel.setSize("100%", "100%");
 
         populateButton = new Button("Populate");
-//        //container.add(populateButton, DockPanel.SOUTH);
         populateButton.addClickHandler(new ClickHandler() {
 
             @Override
@@ -125,14 +123,13 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
                 EntityIFormWithoutLists form = new EntityIFormWithoutLists();
                 form.initContent();
                 currentForm = form;
+                form.populateNew();
                 map.put(formType, form);
-            } else if (TestFormType.FormVisibility == formType) {
-                EntityIIFormWithVisibilityChange form = new EntityIIFormWithVisibilityChange();
-                form.initContent();
-                //map.put(formType, form);
             } else if (TestFormType.FolderLayout == formType) {
                 EntityIForm form = new EntityIForm();
                 form.initContent();
+                currentForm = form;
+                form.populateNew();
                 map.put(formType, form);
             }
         }
