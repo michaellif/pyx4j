@@ -36,6 +36,7 @@ import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class ResetPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
@@ -43,10 +44,8 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
     private final NewPasswordView view;
 
-    private String token;
-
     public ResetPasswordActivity(Place place) {
-        view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
+        view = PtAppViewFactory.instance(NewPasswordView.class);
         assert (view != null);
         view.setConversationType(ConversationType.RESET);
         view.setPresenter(this);
@@ -59,8 +58,8 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        token = Window.Location.getParameter(ActivationService.PASSWORD_TOKEN);
-        if (CommonsStringUtils.isEmpty(token)) {
+        String authToken = Window.Location.getParameter(ActivationService.PASSWORD_TOKEN);
+        if (CommonsStringUtils.isEmpty(authToken)) {
             PtAppSite.instance().showMessageDialog(i18n.tr("The URL You Tried To Use Is Either Incorrect Or No Longer Valid"), i18n.tr("Error"),
                     i18n.tr("Log In"), new Command() {
                         @Override
@@ -69,13 +68,41 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
                         }
                     });
         }
-
         panel.setWidget(view);
+        authenticateWithPasswordResetToken(authToken);
+    }
+
+    private void authenticateWithPasswordResetToken(String authToken) {
+        GWT.<PtAuthenticationService> create(PtAuthenticationService.class).authenticateWithToken(new DefaultAsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                PtAppSite.instance().showMessageDialog(
+
+                i18n.tr("Authentication failed, probably the URL you tried is either incorrect or no longer valid"),
+
+                i18n.tr("Error"),
+
+                i18n.tr("Log In"),
+
+                new Command() {
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(new PtSiteMap.Login());
+                    }
+                });
+                super.onFailure(caught);
+            }
+        }, ClientContext.getClientSystemInfo(), authToken);
     }
 
     @Override
     public void passwordReset(PasswordChangeRequest request) {
-        request.token().setValue(token);
         AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
@@ -83,12 +110,12 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
             }
         };
 
-        ((ActivationService) GWT.create(ActivationService.class)).passwordReset(callback, request);
+        GWT.<ActivationService> create(ActivationService.class).passwordReset(callback, request);
     }
 
     @Override
     public void passwordChange(PasswordChangeRequest request) {
-        // TODO later
+        // never supposed to happen during reset password activity
     }
 
 }

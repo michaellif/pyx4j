@@ -17,18 +17,18 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.services.UserService;
 
 public class ChangePasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
@@ -36,10 +36,8 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
 
     private final NewPasswordView view;
 
-    private String token;
-
     public ChangePasswordActivity(Place place) {
-        view = (NewPasswordView) PtAppViewFactory.instance(NewPasswordView.class);
+        view = PtAppViewFactory.instance(NewPasswordView.class);
         assert (view != null);
         view.setConversationType(ConversationType.CHANGE);
         view.setPresenter(this);
@@ -52,28 +50,22 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        //TODO
         panel.setWidget(view);
     }
 
     @Override
     public void passwordReset(PasswordChangeRequest request) {
-        request.token().setValue(token);
-        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
-
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                // TODO Auto-generated method stub
-
-            }
-        };
-
-        ((ActivationService) GWT.create(ActivationService.class)).passwordReset(callback, request);
+        // never supposed to happen in the context of change password activity
     }
 
     @Override
     public void passwordChange(PasswordChangeRequest request) {
-        // TODO later
+        GWT.<UserService> create(UserService.class).passwordReset(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                MessageDialog.info(i18n.tr("The password was changed successfully"));
+            }
+        }, request);
     }
 
     public void setConversationType(ConversationType type) {

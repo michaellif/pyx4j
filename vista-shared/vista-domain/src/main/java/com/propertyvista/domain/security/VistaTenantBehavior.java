@@ -17,6 +17,8 @@ import com.pyx4j.security.shared.Behavior;
 
 public enum VistaTenantBehavior implements Behavior {
 
+    PasswordChangeRequired,
+
     Prospective,
 
     ProspectiveApplicant,

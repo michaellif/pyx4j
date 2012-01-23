@@ -21,6 +21,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
+@Deprecated
 public interface ActivationService extends IService {
 
     /**
