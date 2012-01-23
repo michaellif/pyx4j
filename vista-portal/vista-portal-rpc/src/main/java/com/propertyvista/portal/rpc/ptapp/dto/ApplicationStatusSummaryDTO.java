@@ -17,6 +17,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.dto.MasterApplicationStatusDTO;
 
+@Transient
 public interface ApplicationStatusSummaryDTO extends IEntity {
 
     MasterApplicationStatusDTO status();

@@ -44,6 +44,7 @@ import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
+import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -82,6 +83,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(SiteThemeServices.class));
 
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
+        grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
+
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApartmentService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(TenantService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(TenantInfoService.class));
@@ -90,7 +93,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ChargesService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(SummaryService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(PaymentService.class));
-        grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
         // Old TODO remove
         grant(VistaTenantBehavior.Prospective, new ServiceExecutePermission(EntityServices.Query.class));
@@ -119,9 +121,13 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.ProspectiveApplicant, VistaTenantBehavior.Prospective);
         grant(VistaTenantBehavior.ProspectiveCoApplicant, VistaTenantBehavior.Prospective);
 
+        // Submitted prospective:
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(VistaTenantBehavior.ProspectiveSubmited, new IServiceExecutePermission(SummaryService.class));
+
+        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(ApplicationStatusSummaryDTO.class, EntityPermission.READ));
+        grant(VistaTenantBehavior.ProspectiveSubmited, new EntityPermission(SummaryDTO.class, EntityPermission.READ));
 
         // -------------
 
