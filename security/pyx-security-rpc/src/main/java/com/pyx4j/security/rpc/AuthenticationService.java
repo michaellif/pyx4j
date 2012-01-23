@@ -24,6 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AuthenticationService extends IService {
 
@@ -41,5 +42,14 @@ public interface AuthenticationService extends IService {
     public void getLoginUrl(AsyncCallback<String> callback, final String destinationURLComponent);
 
     public void getLogoutUrl(AsyncCallback<String> callback, final String destinationURLComponent);
+
+    /**
+     * Request E-mail to be sent to customer with 'token' for PasswordReset.
+     * 
+     * E-mail is sent if no exception thrown.
+     */
+    public void passwordReminder(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request);
+
+    public void authenticateWithToken(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String accessToken);
 
 }

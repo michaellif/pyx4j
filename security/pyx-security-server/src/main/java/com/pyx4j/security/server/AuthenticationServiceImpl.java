@@ -36,8 +36,10 @@ import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
@@ -140,4 +142,15 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         callback.onSuccess(ContainerHelper.getContainerHelper().createLogoutURL(destinationURLComponent));
     }
 
+    @Override
+    public void passwordReminder(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void authenticateWithToken(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String accessToken) {
+        // TODO Auto-generated method stub
+
+    }
 }
