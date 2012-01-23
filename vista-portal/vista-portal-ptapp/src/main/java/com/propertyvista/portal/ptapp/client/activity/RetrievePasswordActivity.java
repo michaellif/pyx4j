@@ -22,19 +22,20 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
+import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
 
     private final RetrievePasswordView view;
 
     public RetrievePasswordActivity(Place place) {
-        view = (RetrievePasswordView) PtAppViewFactory.instance(RetrievePasswordView.class);
+        view = PtAppViewFactory.instance(RetrievePasswordView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -57,6 +58,7 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
                 PtAppSite.instance().showMessageDialog("Please check your email", "", null, null);
             }
         };
-        ((ActivationService) GWT.create(ActivationService.class)).passwordReminder(callback, request);
+        AuthenticationService authService = GWT.<AuthenticationService> create(PtAuthenticationService.class);
+        authService.passwordReminder(callback, request);
     }
 }

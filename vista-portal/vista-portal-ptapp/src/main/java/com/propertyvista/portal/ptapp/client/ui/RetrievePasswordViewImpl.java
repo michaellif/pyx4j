@@ -44,7 +44,7 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
             }
         });
         form.initContent();
-        form.populate(null);
+        form.populateNew();
         add(form);
     }
 
