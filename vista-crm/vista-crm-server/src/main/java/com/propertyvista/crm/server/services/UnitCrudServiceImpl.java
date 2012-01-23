@@ -41,7 +41,11 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
 
         if (!fromList) {
             // load detached entities:
-            Persistence.service().retrieve(dto.marketing().adBlurbs());
+
+            if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
+                Persistence.service().retrieve(dto.marketing().adBlurbs());
+            }
+
             Persistence.service().retrieve(dto.floorplan());
             Persistence.service().retrieve(dto.belongsTo());
         } else {
@@ -52,7 +56,9 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
             //Persistence.service().retrieve(dto.floorplan().marketingName());
 
             // just clear unnecessary data before serialization: 
-            dto.marketing().description().setValue(null);
+            if (!dto.marketing().isValueDetached()) {
+                dto.marketing().description().setValue(null);
+            }
             dto.info().economicStatusDescription().setValue(null);
         }
 

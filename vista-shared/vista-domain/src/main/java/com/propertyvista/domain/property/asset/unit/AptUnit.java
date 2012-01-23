@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -60,6 +61,12 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @EmbeddedEntity
     AptUnitFinancial financial();
 
-    @EmbeddedEntity
+    //WAS @EmbeddedEntity
+    // VladS: This is not used, remains just in case. @Detached and  @Owned added to change the way we retrieve it,
+    // By removing it improved portal performance by 15% in profiler. This should not affect the real life application.
+    // Check perfomace metrics before enabling it again!
+    @Deprecated
+    @Detached
+    @Owned
     Marketing marketing();
 }
