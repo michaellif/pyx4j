@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -175,6 +176,10 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     }
 
     private Widget createEditLink(final AppPlace link) {
+        if (isViewable()) {
+            return new HTML();
+        }
+
         Anchor edit = new Anchor(i18n.tr("Edit"));
         edit.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         edit.getElement().getStyle().setProperty("lineHeight", "2em");

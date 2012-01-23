@@ -13,27 +13,19 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationService;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewForm;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationStatusView {
 
@@ -45,74 +37,37 @@ public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationS
 
     private Presenter presenter;
 
+    private final ApplicationStatusViewForm statusForm;
+
     private final SummaryViewForm summaryForm;
+
+    private final Anchor summaryAction;
 
     public ApplicationStatusViewImpl() {
 
+        statusForm = new ApplicationStatusViewForm();
+        statusForm.setViewable(true);
+        statusForm.initContent();
+
         summaryForm = new SummaryViewForm();
-        summaryForm.initContent();
+        summaryForm.setViewable(true);
         summaryForm.setVisible(false);
+        summaryForm.initContent();
 
-        VerticalPanel main = new VerticalPanel();
-
-//        private Widget createAppStatustab() {
-//            FormFlexPanel main = new FormFlexPanel();
-//
-//            int row = -1;
-//            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).labelWidth(20).build());
-//            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().masterApplicationStatus().progress()), 5).labelWidth(20).build());
-//
-//            main.setBR(++row, 0, 1);
-//            main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder(isEditable())));
-//
-//            return new CrmScrollPanel(main);
-//        }
-
-        HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Current status of Your Application")));
-        main.add(titleHtml);
-        main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);
-
-        HTML messageHtml = new HTML(PortalResources.INSTANCE.completionMessage().getText());
-        messageHtml.setWidth("50em");
-        messageHtml.getElement().getStyle().setMarginTop(1, Unit.EM);
-        main.add(messageHtml);
-        main.setCellHorizontalAlignment(messageHtml, HasHorizontalAlignment.ALIGN_CENTER);
-
-        HorizontalPanel actions = new HorizontalPanel();
-
-        final Button summaryAction = new Button(showSummary);
-        summaryAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        summaryAction = new Anchor(i18n.tr(showSummary));
+        summaryAction.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        summaryAction.getElement().getStyle().setProperty("lineHeight", "2em");
+        summaryAction.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         summaryAction.addClickHandler(new ClickHandler() {
+
             @Override
             public void onClick(ClickEvent event) {
                 summaryForm.setVisible(!summaryForm.isVisible());
-                summaryAction.setTextLabel(summaryForm.isVisible() ? hideSummary : showSummary);
+                summaryAction.setText(summaryForm.isVisible() ? hideSummary : showSummary);
             }
         });
-        actions.add(summaryAction);
 
-        Button logoutAction = new Button(i18n.tr("Log Out"));
-        logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        logoutAction.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                ClientContext.logout((AuthenticationService) GWT.create(PtAuthenticationService.class), null);
-            }
-        });
-        actions.add(logoutAction);
-
-        actions.setSpacing(15);
-        actions.getElement().getStyle().setMarginTop(2, Unit.EM);
-        main.add(actions);
-        main.setCellHorizontalAlignment(actions, HasHorizontalAlignment.ALIGN_CENTER);
-
-        main.add(summaryForm.asWidget());
-
-        main.setWidth("100%");
-        add(main);
-
-        getElement().getStyle().setMarginBottom(1, Unit.EM);
-        setWidth("100%");
+        add(createContent());
     }
 
     @Override
@@ -120,10 +75,20 @@ public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationS
         this.presenter = presenter;
     }
 
+    public IsWidget createContent() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        int row = -1;
+        main.setH1(++row, 0, 1, i18n.tr("Current status of Your Application"), summaryAction);
+        main.setWidget(++row, 0, statusForm.asWidget());
+        main.setWidget(++row, 0, summaryForm.asWidget());
+
+        return main;
+    }
+
     @Override
     public void populate(ApplicationStatusSummaryDTO entity) {
-        // TODO
-
+        statusForm.populate(entity.status());
         summaryForm.populate(entity.summary());
     }
 }
