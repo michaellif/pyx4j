@@ -42,6 +42,8 @@ import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
@@ -85,7 +87,12 @@ public class RentRollAdaptor {
         try {
             w = new FileWriter(f);
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName());
+            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName()) {
+                @Override
+                protected boolean emitMemeber(IEntity entity, String memberName, IObject<?> member) {
+                    return "availableForRent".equals(memberName) || super.emitMemeber(entity, memberName, member);
+                }
+            };
             xmlWriter.setEmitId(false);
             xmlWriter.write(importIO);
             w.write(xml.toString());
