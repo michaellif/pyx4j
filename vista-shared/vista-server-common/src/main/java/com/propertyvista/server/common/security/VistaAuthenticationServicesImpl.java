@@ -157,8 +157,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     @Override
     public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
+        final String GENERIC_FAILED_MESSAGE = "Invalid User Account";
+
         if (!validEmailAddress(request.email().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Invalid Email"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
         AbstractAntiBot.assertCaptcha(request.captcha().getValue());
 
@@ -169,15 +171,15 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         List<U> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid PasswordReset {} rs {}", email, users.size());
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
         AbstractUser user = users.get(0);
         E credential = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
         if (credential == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
         if (!credential.enabled().isBooleanTrue()) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
 
         credential.accessKey().setValue(AccessKey.createAccessKey());
