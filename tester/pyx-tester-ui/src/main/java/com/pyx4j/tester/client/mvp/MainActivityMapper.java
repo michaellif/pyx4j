@@ -50,7 +50,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new FolderLayoutActivity(place);
                 } else if (place instanceof TesterSiteMap.Folder.FolderValidation) {
                     activity = new FolderValidationActivity(place);
-                } else if (place instanceof TesterSiteMap.Form.FormBasic) {
+                } else if (place instanceof TesterSiteMap.NativeWidget.NativeWidgetBasic) {
                     activity = new NativeWidgetBasicActivity(place);
                 } else if (place instanceof TesterSiteMap.NativeWidget.RichTextEditor) {
                     activity = new RichTextEditorActivity(place);
