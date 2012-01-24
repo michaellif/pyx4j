@@ -84,9 +84,17 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 
     private final FormFlexPanel addonsPanel = new FormFlexPanel();
 
+    private final boolean viewMode;
+
     public SummaryViewForm() {
+        this(true);
+    }
+
+    public SummaryViewForm(boolean viewMode) {
         super(SummaryDTO.class, new VistaEditorsComponentFactory());
         setViewable(true);
+
+        this.viewMode = viewMode;
     }
 
     public SummaryViewPresenter getPresenter() {
@@ -176,7 +184,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     }
 
     private Widget createEditLink(final AppPlace link) {
-        if (!isEditable()) {
+        if (viewMode) {
             return new HTML();
         }
 

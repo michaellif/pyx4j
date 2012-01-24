@@ -49,7 +49,7 @@ public class ApplicationStatusViewImpl extends FlowPanel implements ApplicationS
         statusForm.setEditable(false);
         statusForm.initContent();
 
-        summaryForm = new SummaryViewForm();
+        summaryForm = new SummaryViewForm(true);
         summaryForm.setEditable(false);
         summaryForm.setVisible(false);
         summaryForm.initContent();
