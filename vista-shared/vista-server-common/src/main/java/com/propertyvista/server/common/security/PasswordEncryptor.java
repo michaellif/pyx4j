@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.common.security;
 
+import java.util.Locale;
+
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
@@ -34,5 +36,9 @@ public class PasswordEncryptor {
 
     public static boolean checkPassword(String inputPassword, String encryptedPassword) {
         return getPasswordEncryptor().checkPassword(inputPassword, encryptedPassword);
+    }
+
+    public static String normalizeEmailAddress(String email) {
+        return email.toLowerCase(Locale.ENGLISH).trim();
     }
 }

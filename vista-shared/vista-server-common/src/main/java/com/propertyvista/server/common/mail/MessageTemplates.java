@@ -21,8 +21,11 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
@@ -47,14 +50,24 @@ public class MessageTemplates {
         }
     }
 
-    public static String createPasswordResetEmail(String name, String token) {
+    public static String createPasswordResetEmail(VistaBasicBehavior application, String name, String token) {
+        String url;
+        switch (application) {
+        case CRM:
+            url = ServerSideConfiguration.instance().getMainApplicationURL()
+                    + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        case ProspectiveApp:
+            url = ServerSideConfiguration.instance().getMainApplicationURL()
+                    + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.ResetPassword.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+            break;
+        default:
+            throw new Error("TODO");
+        }
+
         return wrapHtml(i18n.tr("Dear {0},<br/>\n"
                 + "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n"
                 + "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n"
-                + "    <a style=\"color:#929733\" href=\"{1}{2}\">Change Your Password</a>", name,
-
-        ServerSideConfiguration.instance().getMainApplicationURL(),
-                AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.ResetPassword.class, ActivationService.PASSWORD_TOKEN, token)));
+                + "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>", name, url));
     }
 
     public static String createMasterApplicationInvitationEmail(String name, String token) {

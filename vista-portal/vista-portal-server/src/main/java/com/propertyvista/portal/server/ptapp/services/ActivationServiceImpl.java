@@ -13,9 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,20 +33,15 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.server.AuthenticationServiceImpl;
-import com.pyx4j.server.mail.Mail;
-import com.pyx4j.server.mail.MailDeliveryStatus;
-import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.TenantUserCredential;
@@ -88,45 +81,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
      */
     @Override
     public void passwordReminder(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
-        // validate email
-        if (!validEmailAddress(request.email().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Invalid Email"));
-        }
-        AbstractAntiBot.assertCaptcha(request.captcha().getValue());
 
-        // find user(s) with the same email
-        EntityQueryCriteria<TenantUser> criteria = EntityQueryCriteria.create(TenantUser.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue().toLowerCase()));
-        List<TenantUser> users = Persistence.service().query(criteria);
-        if (users.size() == 0) {
-            throw new UserRuntimeException(i18n.tr("Email Not Registered"));
-        }
-        TenantUser user = users.get(0);
-
-        TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, user.getPrimaryKey());
-        if (credential == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid Login Or Password")); // TODO is this a correct message?
-        }
-        credential.accessKey().setValue(AccessKey.createAccessKey());
-        Calendar expire = new GregorianCalendar();
-        expire.add(Calendar.DATE, 1);
-        credential.accessKeyExpire().setValue(expire.getTime());
-        Persistence.service().persist(credential);
-
-        String token = AccessKey.compressToken(user.email().getValue(), credential.accessKey().getValue());
-
-        MailMessage m = new MailMessage();
-        m.setTo(user.email().getValue());
-        m.setSender(MessageTemplates.getSender());
-        m.setSubject(i18n.tr("Property Vista Password Reset"));
-        m.setHtmlBody(MessageTemplates.createPasswordResetEmail(user.name().getValue(), token));
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-        log.debug("pwd change token {} is sent to {}", token, user.email().getValue());
-
-        callback.onSuccess(new VoidSerializable());
     }
 
     /**

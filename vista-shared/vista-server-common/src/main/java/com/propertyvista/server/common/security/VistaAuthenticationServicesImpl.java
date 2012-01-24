@@ -13,9 +13,10 @@
  */
 package com.propertyvista.server.common.security;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -33,15 +34,21 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailDeliveryStatus;
+import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.server.common.mail.MessageTemplates;
 import com.propertyvista.server.domain.security.AbstractUserCredential;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
@@ -90,10 +97,11 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
         }
 
-        if (CommonsStringUtils.isEmpty(request.email().getValue()) || CommonsStringUtils.isEmpty(request.password().getValue())) {
+        if (CommonsStringUtils.isEmpty(request.email().getValue()) || !validEmailAddress(request.email().getValue())
+                || CommonsStringUtils.isEmpty(request.password().getValue())) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        String email = request.email().getValue().toLowerCase(Locale.ENGLISH).trim();
+        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
         AbstractAntiBot.assertLogin(email, request.captcha().getValue());
 
         EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
@@ -147,4 +155,50 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         callback.onSuccess(createAuthenticationResponse(null));
     }
 
+    @Override
+    public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
+        if (!validEmailAddress(request.email().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Invalid Email"));
+        }
+        AbstractAntiBot.assertCaptcha(request.captcha().getValue());
+
+        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+
+        EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
+        criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
+        List<U> users = Persistence.service().query(criteria);
+        if (users.size() != 1) {
+            log.debug("Invalid PasswordReset {} rs {}", email, users.size());
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+        AbstractUser user = users.get(0);
+        E credential = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
+        if (credential == null) {
+            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+        }
+        if (!credential.enabled().isBooleanTrue()) {
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+
+        credential.accessKey().setValue(AccessKey.createAccessKey());
+        Calendar expire = new GregorianCalendar();
+        expire.add(Calendar.DATE, 1);
+        credential.accessKeyExpire().setValue(expire.getTime());
+        Persistence.service().persist(credential);
+
+        String token = AccessKey.compressToken(user.email().getValue(), credential.accessKey().getValue());
+
+        MailMessage m = new MailMessage();
+        m.setTo(user.email().getValue());
+        m.setSender(MessageTemplates.getSender());
+        m.setSubject(i18n.tr("Property Vista Password Reset"));
+        m.setHtmlBody(MessageTemplates.createPasswordResetEmail(getApplicationBehavior(), user.name().getValue(), token));
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+
+        log.debug("pwd change token {} is sent to {}", token, user.email().getValue());
+        callback.onSuccess(new VoidSerializable());
+    }
 }

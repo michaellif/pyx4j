@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.annotations.I18nComment;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.NavigationItem;
@@ -54,7 +55,8 @@ public class CrmSiteMap implements SiteMap {
      */
     public static class LoginWithToken extends AppPlace implements PublicPlace {
 
-        public static final String AUTH_TOKEN_ARG = "authToken";
+        @Deprecated
+        public static final String AUTH_TOKEN_ARG = AuthenticationService.AUTH_TOKEN_ARG;
     }
 
     @PlaceProperties(caption = "Reset Password")
