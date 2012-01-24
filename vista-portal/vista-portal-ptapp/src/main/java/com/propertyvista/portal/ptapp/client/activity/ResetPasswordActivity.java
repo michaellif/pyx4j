@@ -30,7 +30,6 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
@@ -47,7 +46,6 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
     public ResetPasswordActivity(Place place) {
         view = PtAppViewFactory.instance(NewPasswordView.class);
         assert (view != null);
-        view.setConversationType(ConversationType.RESET);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -112,10 +110,4 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
         GWT.<ActivationService> create(ActivationService.class).passwordReset(callback, request);
     }
-
-    @Override
-    public void passwordChange(PasswordChangeRequest request) {
-        // never supposed to happen during reset password activity
-    }
-
 }

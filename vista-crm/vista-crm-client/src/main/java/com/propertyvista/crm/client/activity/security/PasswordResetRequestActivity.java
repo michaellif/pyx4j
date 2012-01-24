@@ -28,7 +28,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
-import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
+import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
@@ -37,7 +37,7 @@ public class PasswordResetRequestActivity extends AbstractActivity implements Pa
     private final PasswordResetRequestView view;
 
     public PasswordResetRequestActivity(Place place) {
-        this.view = LoginVeiwFactory.instance(PasswordResetRequestView.class);
+        this.view = LoginViewFactory.instance(PasswordResetRequestView.class);
         view.setPresenter(this);
         withPlace(place);
     }

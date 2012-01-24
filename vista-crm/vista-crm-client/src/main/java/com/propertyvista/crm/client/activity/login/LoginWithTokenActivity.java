@@ -29,7 +29,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.login.LoginWithTokenView;
-import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
+import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
@@ -44,7 +44,7 @@ public class LoginWithTokenActivity extends AbstractActivity {
     public LoginWithTokenActivity(Place place) {
         assert (place instanceof AppPlace);
         authToken = ((AppPlace) place).getFirstArg(CrmSiteMap.LoginWithToken.AUTH_TOKEN_ARG);
-        view = LoginVeiwFactory.instance(LoginWithTokenView.class);
+        view = LoginViewFactory.instance(LoginWithTokenView.class);
     }
 
     @Override

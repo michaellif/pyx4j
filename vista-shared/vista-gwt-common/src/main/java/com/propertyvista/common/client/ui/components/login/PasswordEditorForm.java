@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components.login;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -29,31 +28,27 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 
-public class NewPasswordForm extends CEntityDecoratableEditor<PasswordChangeRequest> {
+public abstract class PasswordEditorForm extends CEntityDecoratableEditor<PasswordChangeRequest> {
 
-    private static final I18n i18n = I18n.get(NewPasswordForm.class);
+    private static final I18n i18n = I18n.get(PasswordEditorForm.class);
 
-    public enum ConversationType {
-        RESET, CHANGE
+    public enum Type {
+        CHANGE, RESET
     }
 
-    private final Command retreiveCommand;
+    private final Type type;
 
-    @Deprecated
-    /**
-     * Deprecated: no need for the "caption" arg.
-     */
-    public NewPasswordForm(String caption, Command retreiveCommand) {
+    private IsWidget selfAdministrationDecorator;
+
+    private IsWidget otherAdministrationDecorator;
+
+    public PasswordEditorForm(Type type) {
         super(PasswordChangeRequest.class);
-        this.retreiveCommand = retreiveCommand;
         setWidth("30em");
+        this.type = type;
     }
 
-    public NewPasswordForm(Command retreiveCommand) {
-        super(PasswordChangeRequest.class);
-        this.retreiveCommand = retreiveCommand;
-        setWidth("30em");
-    }
+    protected abstract void onConfirmPasswordChange();
 
     @Override
     protected void onWidgetCreated() {
@@ -69,37 +64,47 @@ public class NewPasswordForm extends CEntityDecoratableEditor<PasswordChangeRequ
         FormFlexPanel main = new FormFlexPanel();
         main.setWidth("100%");
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
+        if (type.equals(Type.CHANGE)) {
+            main.setWidget(++row, 0, selfAdministrationDecorator = new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15)
+                    .build());
+            main.setWidget(++row, 0, otherAdministrationDecorator = new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15)
+                    .customLabel(i18n.tr("Administrator Password")).build());
+        }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
 
-        Button newPasswordButton = new Button(i18n.tr("Submit"));
-        newPasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        newPasswordButton.addClickHandler(new ClickHandler() {
+        Button confirmButton = new Button(i18n.tr("Submit"));
+        confirmButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        confirmButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                retreiveCommand.execute();
+                onConfirmPasswordChange();
             }
 
         });
 
-        main.setWidget(++row, 0, newPasswordButton);
+        main.setWidget(++row, 0, confirmButton);
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(1, Unit.EM);
 
         return main;
     }
 
-    public void setConversationType(ConversationType type) {
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
 
-        switch (type) {
-        case CHANGE:
-            get(proto().currentPassword()).setVisible(true);
-            break;
-        case RESET:
-            get(proto().currentPassword()).setVisible(false);
-            break;
+        // TODO find a way to determine if this is self administration (i.e. user tries to change his own password) 
+        boolean isSelfAdministrated = false;
+        if (isSelfAdministrated & type.equals(Type.CHANGE)) {
+            selfAdministrationDecorator.asWidget().setVisible(true);
+            otherAdministrationDecorator.asWidget().setVisible(false);
+        } else {
+            selfAdministrationDecorator.asWidget().setVisible(false);
+            otherAdministrationDecorator.asWidget().setVisible(true);
         }
+
     }
+
 }

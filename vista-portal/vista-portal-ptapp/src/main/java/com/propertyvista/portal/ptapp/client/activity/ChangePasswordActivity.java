@@ -25,7 +25,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 import com.propertyvista.portal.ptapp.client.ui.NewPasswordView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.services.UserService;
@@ -39,7 +38,6 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
     public ChangePasswordActivity(Place place) {
         view = PtAppViewFactory.instance(NewPasswordView.class);
         assert (view != null);
-        view.setConversationType(ConversationType.CHANGE);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -58,17 +56,13 @@ public class ChangePasswordActivity extends AbstractActivity implements NewPassw
         // never supposed to happen in the context of change password activity
     }
 
-    @Override
     public void passwordChange(PasswordChangeRequest request) {
+        // TODO fix this later
         GWT.<UserService> create(UserService.class).passwordReset(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 MessageDialog.info(i18n.tr("The password was changed successfully"));
             }
         }, request);
-    }
-
-    public void setConversationType(ConversationType type) {
-        view.setConversationType(type);
     }
 }

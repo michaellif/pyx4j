@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -62,6 +63,33 @@ public class CrmSiteMap implements SiteMap {
 
     @PlaceProperties(caption = "Change Password")
     public static class PasswordChange extends AppPlace {
+
+        public static final String USER_ID_ARG = "id";
+
+        @Deprecated
+        public PasswordChange() {
+        }
+
+        public PasswordChange(Key userId) {
+            if (userId != null) {
+                arg(USER_ID_ARG, userId.toString());
+            }
+        }
+
+        public Key getUserId() {
+            Key id = null;
+            String idStr = getFirstArg(USER_ID_ARG);
+            if (idStr != null) {
+                try {
+                    id = new Key(idStr);
+                    id.asLong();
+                } catch (NumberFormatException x) {
+                    id = null;
+                }
+            }
+            return id;
+        }
+
     }
 
     public static class Properties extends AppPlace {

@@ -17,20 +17,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
-
-public interface NewPasswordView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    void setConversationType(ConversationType type);
-
-    void discard();
+public interface PasswordResetView extends IsWidget {
 
     public interface Presenter {
 
         void passwordReset(PasswordChangeRequest request);
 
-        void passwordChange(PasswordChangeRequest request);
     }
+
+    public void setPresenter(Presenter presenter);
+
+    void discard();
+
 }

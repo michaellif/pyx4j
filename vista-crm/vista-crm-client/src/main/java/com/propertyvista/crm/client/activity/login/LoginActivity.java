@@ -28,7 +28,7 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.ui.login.LoginView;
-import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
+import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
@@ -37,7 +37,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     private final LoginView view;
 
     public LoginActivity(Place place) {
-        this.view = LoginVeiwFactory.instance(LoginView.class);
+        this.view = LoginViewFactory.instance(LoginView.class);
         view.setPresenter(this);
         withPlace(place);
     }

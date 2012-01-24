@@ -7,44 +7,42 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author Vlad
+ * Created on Jan 24, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui;
+package com.propertyvista.crm.client.ui.security;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.i18n.shared.I18n;
-
 import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
 
-public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
-
-    private static final I18n i18n = I18n.get(NewPasswordViewImpl.class);
+public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeView {
 
     private Presenter presenter;
 
     private final PasswordEditorForm form;
 
-    public NewPasswordViewImpl() {
-
-        form = new PasswordEditorForm(PasswordEditorForm.Type.RESET) {
-
+    public PasswordChangeViewImpl() {
+        form = new PasswordEditorForm(PasswordEditorForm.Type.CHANGE) {
             @Override
             protected void onConfirmPasswordChange() {
-                presenter.passwordReset(form.getValue());
+                presenter.passwordChange(form.getValue());
             }
         };
         form.initContent();
         form.populateNew();
         add(form);
-
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void discard() {
+        form.populateNew();
     }
 
 }

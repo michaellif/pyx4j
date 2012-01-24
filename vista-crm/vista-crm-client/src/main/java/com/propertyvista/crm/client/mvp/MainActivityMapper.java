@@ -129,6 +129,7 @@ import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivit
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
+import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -490,6 +491,8 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new PortfolioListerActivity(place);
                         break;
                     }
+                } else if (place instanceof CrmSiteMap.PasswordChange) {
+                    activity = new PasswordChangeActivity(place);
 // Reports:
                 } else if (place instanceof CrmSiteMap.Report) {
                     activity = new ReportViewActivity(place);

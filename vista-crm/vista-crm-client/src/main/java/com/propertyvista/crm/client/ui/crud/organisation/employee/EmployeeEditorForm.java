@@ -19,12 +19,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
@@ -43,7 +39,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -78,7 +73,6 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         tabPanel.add(createInfoTab(), i18n.tr("Personal Information"));
         tabPanel.add(createPrivilegesTab(), i18n.tr("Privileges"));
-        tabPanel.add(createPasswordTab(), i18n.tr("Password"));
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -127,23 +121,6 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             get(proto().email()).setViewable(isViewable);
             get(proto().description()).setViewable(isViewable);
         }
-
-        return new CrmScrollPanel(main);
-    }
-
-    public IsWidget createPasswordTab() {
-        VerticalPanel main = new VerticalPanel();
-        main.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-
-        main.add(new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).labelWidth(25).build());
-        Button passwordButton = new Button(i18n.tr("Change Password") + "...", new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-
-            }
-        });
-        main.add(passwordButton);
-        passwordButton.getElement().getStyle().setMarginTop(1, Unit.EM);
 
         return new CrmScrollPanel(main);
     }

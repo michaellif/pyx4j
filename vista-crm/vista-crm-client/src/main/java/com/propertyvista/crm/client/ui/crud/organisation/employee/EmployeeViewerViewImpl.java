@@ -13,13 +13,44 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.widgets.client.Button;
+
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
 
+    private static final I18n i18n = I18n.get(EmployeeViewerViewImpl.class);
+
+    private final Button passwordAction;
+
     public EmployeeViewerViewImpl() {
         super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm(true));
+
+        // Add actions:        
+        passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((EmployeeViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().user().getPrimaryKey());
+            }
+        });
+        addToolbarItem(passwordAction.asWidget());
     }
+
+    @Override
+    public void populate(EmployeeDTO value) {
+        boolean isUserAllowedToChangePassword = !value.isNull() && (value.user().getPrimaryKey().equals(ClientContext.getUserVisit().getPrincipalPrimaryKey()))
+                | SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        passwordAction.setVisible(isUserAllowedToChangePassword);
+        super.populate(value);
+    }
+
 }

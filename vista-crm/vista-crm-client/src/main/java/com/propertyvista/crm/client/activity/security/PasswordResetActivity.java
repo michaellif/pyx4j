@@ -28,22 +28,20 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetService;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.security.NewPasswordView;
-import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
+import com.propertyvista.crm.client.ui.security.PasswordResetView;
+import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 
-public class PasswordResetActivity extends AbstractActivity implements NewPasswordView.Presenter {
+public class PasswordResetActivity extends AbstractActivity implements PasswordResetView.Presenter {
 
     private static final I18n i18n = I18n.get(PasswordResetActivity.class);
 
-    private final NewPasswordView view;
+    private final PasswordResetView view;
 
     public PasswordResetActivity(Place place) {
-        this.view = LoginVeiwFactory.instance(NewPasswordView.class);
-        view.setConversationType(ConversationType.RESET);
+        this.view = LoginViewFactory.instance(PasswordResetView.class);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -78,11 +76,6 @@ public class PasswordResetActivity extends AbstractActivity implements NewPasswo
 
         GWT.<PasswordResetService> create(CrmPasswordResetService.class).resetPassword(callback, request);
 
-    }
-
-    @Override
-    public void passwordChange(PasswordChangeRequest request) {
-        // TODO later
     }
 
 }

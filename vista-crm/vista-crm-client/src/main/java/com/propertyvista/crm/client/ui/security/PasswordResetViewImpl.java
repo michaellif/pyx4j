@@ -13,50 +13,31 @@
  */
 package com.propertyvista.crm.client.ui.security;
 
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
 
-import com.propertyvista.common.client.ui.components.login.NewPasswordForm;
-import com.propertyvista.common.client.ui.components.login.NewPasswordForm.ConversationType;
-
-public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
-
-    private static final I18n i18n = I18n.get(NewPasswordViewImpl.class);
+public class PasswordResetViewImpl extends FlowPanel implements PasswordResetView {
 
     private Presenter presenter;
 
-    private final NewPasswordForm form;
+    private final PasswordEditorForm form;
 
-    public NewPasswordViewImpl() {
-
-        form = new NewPasswordForm(i18n.tr("New Password"), new Command() {
-
+    public PasswordResetViewImpl() {
+        form = new PasswordEditorForm(PasswordEditorForm.Type.RESET) {
             @Override
-            public void execute() {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
+            protected void onConfirmPasswordChange() {
                 presenter.passwordReset(form.getValue());
             }
-        });
+        };
         form.initContent();
         form.populateNew();
         add(form);
-
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Override
-    public void setConversationType(ConversationType type) {
-        form.setConversationType(type);
     }
 
     @Override
