@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.GroupFocusHandler;
 
 public class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandlers {
 

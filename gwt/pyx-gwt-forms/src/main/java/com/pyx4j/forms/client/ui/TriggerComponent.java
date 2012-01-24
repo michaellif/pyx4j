@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.widgets.client.GroupFocusHandler;
 
 public abstract class TriggerComponent<E> extends HorizontalPanel implements Focusable, HasDoubleClickHandlers, INativeFocusComponent<E> {
 

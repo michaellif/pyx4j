@@ -24,7 +24,7 @@ import java.util.Date;
 
 import com.google.gwt.view.client.Range;
 
-public class CMonthYearPicker extends CFocusComponent<Date, NativeMonthYearPicker> {
+public class CMonthYearPicker extends CFocusComponent<Date, NMonthYearPicker> {
 
     private final boolean yearOnly;
 
@@ -36,8 +36,8 @@ public class CMonthYearPicker extends CFocusComponent<Date, NativeMonthYearPicke
     }
 
     @Override
-    protected NativeMonthYearPicker createWidget() {
-        return new NativeMonthYearPicker(this);
+    protected NMonthYearPicker createWidget() {
+        return new NMonthYearPicker(this);
     }
 
     public boolean isYearOnly() {

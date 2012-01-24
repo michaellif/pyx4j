@@ -23,6 +23,7 @@ package com.pyx4j.tester.client.domain.test;
 import java.sql.Time;
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -72,10 +73,13 @@ public interface EntityI extends IEntity {
 
     IPrimitive<Date> datePicker();
 
+    @Editor(type = EditorType.monthyearpicker)
+    IPrimitive<LogicalDate> monthPicker();
+
     @Editor(type = EditorType.timepicker)
     IPrimitive<Time> optionalTimePicker();
 
-    IPrimitive<Date> singleMonthdatePicker();
+    IPrimitive<Date> singleMonthDatePicker();
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();

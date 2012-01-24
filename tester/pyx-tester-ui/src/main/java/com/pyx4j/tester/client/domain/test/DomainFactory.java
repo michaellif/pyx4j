@@ -106,7 +106,7 @@ public class DomainFactory {
 
         retVal.optionalTimePicker().setValue(timevalues[pos]);
 
-        retVal.singleMonthdatePicker().setValue(datevalues[pos]);
+        retVal.singleMonthDatePicker().setValue(datevalues[pos]);
 
         retVal.phone().setValue(phonevalues[pos]);
 

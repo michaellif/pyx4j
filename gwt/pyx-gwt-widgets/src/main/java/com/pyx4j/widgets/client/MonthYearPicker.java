@@ -23,15 +23,21 @@ package com.pyx4j.widgets.client;
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.view.client.Range;
 
-public class MonthYearPicker extends HorizontalPanel implements HasChangeHandlers {
+public class MonthYearPicker extends HorizontalPanel implements HasChangeHandlers, IFocusWidget {
 
     protected final ListBox monthSelector;
 
@@ -41,11 +47,18 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     private final boolean showYearOnly;
 
+    private boolean enabled = true;
+
+    private boolean editable = true;
+
+    private final GroupFocusHandler focusHandlerManager;
+
     public MonthYearPicker() {
         this(new Range(1900, new Date().getYear() + 7 - 1900), true);
     }
 
     public MonthYearPicker(Range yearRange, boolean showYearOnly) {
+
         this.showYearOnly = showYearOnly;
         this.yearRange = yearRange;
         ChangeHandler changeHandler = new ChangeHandler() {
@@ -81,6 +94,16 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             yearSelector.getElement().getStyle().setMarginLeft(5, Unit.PX);
         }
         yearSelector.addChangeHandler(changeHandler);
+
+        focusHandlerManager = new GroupFocusHandler(this);
+
+        yearSelector.addFocusHandler(focusHandlerManager);
+        yearSelector.addBlurHandler(focusHandlerManager);
+
+        if (!showYearOnly) {
+            monthSelector.addFocusHandler(focusHandlerManager);
+            monthSelector.addBlurHandler(focusHandlerManager);
+        }
 
     }
 
@@ -119,13 +142,16 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         return addDomHandler(handler, ChangeEvent.getType());
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
         if (!showYearOnly) {
             monthSelector.setEnabled(enabled);
         }
         yearSelector.setEnabled(enabled);
     }
 
+    @Override
     public void setFocus(boolean focused) {
         if (showYearOnly) {
             yearSelector.setFocus(focused);
@@ -144,5 +170,67 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         if (monthSelector != null) {
             monthSelector.ensureDebugId(debugID + "_mm");
         }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+        if (!showYearOnly) {
+            monthSelector.setEditable(editable);
+        }
+        yearSelector.setEditable(editable);
+    }
+
+    @Override
+    public boolean isEditable() {
+        return editable;
+    }
+
+    @Override
+    public int getTabIndex() {
+        return yearSelector.getTabIndex();
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        yearSelector.setAccessKey(key);
+    }
+
+    @Override
+    public void setTabIndex(int index) {
+        yearSelector.setTabIndex(index);
+    }
+
+    public ListBox getMonthSelector() {
+        return monthSelector;
+    }
+
+    public ListBox getYearSelector() {
+        return yearSelector;
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        return focusHandlerManager.addHandler(FocusEvent.getType(), focusHandler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        return focusHandlerManager.addHandler(BlurEvent.getType(), blurHandler);
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return null;
     }
 }

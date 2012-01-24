@@ -42,6 +42,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.RadioButton;
 
 public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComponent<E> {
