@@ -145,10 +145,15 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        AvailableLocale en = EntityFactory.create(AvailableLocale.class);
-        en.displayOrder().setValue(10);
-        en.lang().setValue(CompiledLocale.en);
-        Persistence.service().merge(en);
+        // Find Local if exists
+        EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lang(), CompiledLocale.en));
+        AvailableLocale en = Persistence.service().retrieve(criteria);
+        if (en == null) {
+            en = EntityFactory.create(AvailableLocale.class);
+            en.lang().setValue(CompiledLocale.en);
+            Persistence.service().persist(en);
+        }
 
         String caption = i18n.tr("Mockup Summary Terms");
         policy.summaryTerms().add(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));

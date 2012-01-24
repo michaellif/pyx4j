@@ -28,6 +28,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.server.ServerI18nFactory;
@@ -95,9 +97,14 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         for (CompiledLocale cl : getLocale()) {
             LocaleInfo li = new LocaleInfo();
             li.i18n = getI18n(cl);
-            li.aLocale = EntityFactory.create(AvailableLocale.class);
-            li.aLocale.lang().setValue(cl);
-            Persistence.service().persist(li.aLocale);
+            EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lang(), cl));
+            li.aLocale = Persistence.service().retrieve(criteria);
+            if (li.aLocale == null) {
+                li.aLocale = EntityFactory.create(AvailableLocale.class);
+                li.aLocale.lang().setValue(cl);
+                Persistence.service().persist(li.aLocale);
+            }
             siteLocale.add(li);
         }
 
