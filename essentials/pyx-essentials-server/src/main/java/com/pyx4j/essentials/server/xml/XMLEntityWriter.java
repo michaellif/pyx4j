@@ -192,26 +192,27 @@ public class XMLEntityWriter {
 
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
-            if (entity.getMember(memberName).isNull()) {
-                continue;
-            }
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.getAnnotation(XmlTransient.class) != null) {
                 continue;
             }
+            IObject<?> member = entity.getMember(memberName);
+            if (!emitMemeber(entity, memberName, member)) {
+                continue;
+            }
             switch (memberMeta.getObjectClassType()) {
             case Entity:
-                IEntity member = (IEntity) entity.getMember(memberName);
-                if (!member.isObjectClassSameAsDef()) {
-                    member = member.cast();
+                IEntity entityMember = (IEntity) member;
+                if (!entityMember.isObjectClassSameAsDef()) {
+                    entityMember = entityMember.cast();
                 }
-                write(member, memberName, null, memberMeta.getObjectClass(), new VerticalGraph(graph));
+                write(entityMember, memberName, null, memberMeta.getObjectClass(), new VerticalGraph(graph));
                 break;
             case EntitySet:
             case EntityList:
-                if (!((ICollection<?, ?>) entity.getMember(memberName)).isEmpty()) {
+                if (!((ICollection<?, ?>) member).isEmpty()) {
                     xml.startIdented(memberName);
-                    for (Object item : (ICollection<?, ?>) entity.getMember(memberName)) {
+                    for (Object item : (ICollection<?, ?>) member) {
                         write((IEntity) item, entityName.getXMLName(((IEntity) item).getObjectClass()), null, memberMeta.getObjectClass(), new VerticalGraph(
                                 graph));
                     }
@@ -242,6 +243,10 @@ public class XMLEntityWriter {
             }
         }
         xml.endIdented(name);
+    }
+
+    protected boolean emitMemeber(IEntity entity, String memberName, IObject<?> member) {
+        return !member.isNull();
     }
 
     protected String getValueAsString(Object value) {
