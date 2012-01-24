@@ -40,6 +40,8 @@ public class DevSession {
 
     public static String DEV_SESSION_REQUEST_ATTRIBUTE = "com.pyx.pyx_dev_access";
 
+    private static DevSession singleSession;
+
     private static Map<String, DevSession> sessions = new Hashtable<String, DevSession>();
 
     private static int sessionDuration = Consts.DAY2HOURS * Consts.HOURS2SEC;
@@ -57,6 +59,9 @@ public class DevSession {
     public static DevSession getSession() {
         DevSession session = (DevSession) Context.getRequest().getAttribute(DEV_SESSION_REQUEST_ATTRIBUTE);
         if (session == null) {
+            session = singleSession;
+        }
+        if (session == null) {
             Cookie sessionCookie = Util.getCookie(Context.getRequest(), DEV_SESSION_COOKIE_NAME, true);
             if (sessionCookie != null) {
                 session = sessions.get(sessionCookie.getValue());
@@ -72,6 +77,14 @@ public class DevSession {
         }
 
         return session;
+    }
+
+    public static void forceSingleSession(boolean force) {
+        if (force) {
+            singleSession = DevSession.getSession();
+        } else {
+            singleSession = null;
+        }
     }
 
     public static DevSession getSession(boolean create) {
