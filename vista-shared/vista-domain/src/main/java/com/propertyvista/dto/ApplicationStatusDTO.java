@@ -17,6 +17,7 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -57,6 +58,7 @@ public interface ApplicationStatusDTO extends IEntity {
      * Completed steps/total steps in %
      */
     @Format("#0.00")
+    @Caption(name = "Progress (%)")
     IPrimitive<Double> progress();
 
     IPrimitive<String> description();

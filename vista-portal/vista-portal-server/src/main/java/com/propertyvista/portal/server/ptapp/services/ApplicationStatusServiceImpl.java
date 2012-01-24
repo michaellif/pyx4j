@@ -53,8 +53,5 @@ public class ApplicationStatusServiceImpl extends ApplicationEntityServiceImpl i
         // fill summary data:
         applicationStatusSummary.summary().set(new SummaryServiceImpl().retrieveData());
         callback.onSuccess(applicationStatusSummary);
-
-        // filter out data for current tenant according it's role in application:
-        // TODO !!!
     }
 }

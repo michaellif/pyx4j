@@ -206,7 +206,7 @@ public class ApplicationManager {
 
             // calculate progress:
             if (!status.person().isEmpty()) {
-                double complete = 0;
+                int complete = 0;
                 for (int i = 0; i < app.steps().size(); ++i) {
                     switch (app.steps().get(i).status().getValue()) {
                     case complete:
@@ -219,7 +219,7 @@ public class ApplicationManager {
                     }
                 }
 
-                status.progress().setValue(complete / app.steps().size() * 100.0);
+                status.progress().setValue(1.0 * complete / app.steps().size() * 100.0);
                 status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
 
                 maStatus.individualApplications().add(status);
