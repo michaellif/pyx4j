@@ -61,8 +61,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private boolean modifiable = true;
 
-    private boolean itemContentEditable = true;
-
     private int currentRowDebugId = 0;
 
     private final List<CEntityFolderItem<E>> itemsList;
@@ -91,14 +89,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
                 }
             }
         });
-    }
-
-    public void setItemContentEditable(boolean editable) {
-        itemContentEditable = editable;
-    }
-
-    public boolean isItemContentEditable() {
-        return itemContentEditable;
     }
 
     public boolean isOrderable() {
