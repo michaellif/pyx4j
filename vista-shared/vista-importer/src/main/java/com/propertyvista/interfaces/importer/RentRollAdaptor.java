@@ -66,7 +66,7 @@ public class RentRollAdaptor {
     }
 
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01",
-            "current/notice/vacant residents")); // add erroneous "apt numbers" here (lower case)
+            "current/notice/vacant residents", "nrp-02")); // add erroneous "apt numbers" here (lower case)
 
     private static List<BuildingIO> buildings = new LinkedList<BuildingIO>();
 
@@ -141,12 +141,12 @@ public class RentRollAdaptor {
                 if (line.name().getStringView().toLowerCase().trim().equals("vacant")) {
                     marketRent = parseMoney(line.marketRent().getStringView());
                     unit.availableForRent().setValue(availableForRent);
+                    unit.marketRent().setValue(marketRent);
                 } else {
-                    marketRent = parseMoney(line.actualRent().getStringView());
+//                    marketRent = parseMoney(line.actualRent().getStringView());
 //                    unit.availableForRent().setValue(null); TODO delete previous value for availableForRent if not vacant
                 }
 
-                unit.marketRent().setValue(marketRent);
                 building.units().add(unit);
             } else if (line.resident().getStringView().equals("Total")) { //building address is in this line
                 String externalId = line.name().getValue();
