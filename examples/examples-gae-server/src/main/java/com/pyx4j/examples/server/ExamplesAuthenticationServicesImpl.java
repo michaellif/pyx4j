@@ -24,9 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,15 +49,6 @@ import com.pyx4j.server.contexts.Lifecycle;
 public class ExamplesAuthenticationServicesImpl extends AuthenticationServiceImpl {
 
     private final static Logger log = LoggerFactory.getLogger(ExamplesAuthenticationServicesImpl.class);
-
-    public static boolean validEmailAddress(String address) {
-        try {
-            new InternetAddress(address);
-            return true;
-        } catch (AddressException e) {
-            return false;
-        }
-    }
 
     @Override
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, AuthenticationRequest request) {

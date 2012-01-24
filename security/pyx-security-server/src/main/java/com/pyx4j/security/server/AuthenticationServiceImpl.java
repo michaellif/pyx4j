@@ -22,6 +22,11 @@ package com.pyx4j.security.server;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +70,27 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
         if (((clientSystemInfo.isScript()) && (!serverVersion.equals("n/a")) && (!serverVersion.equals(clientSystemInfo.getBuildLabel())))) {
             throw new ClientVersionMismatchError(i18n.tr("Client version {0} does not match server version {1}", clientSystemInfo.getBuildLabel(),
                     serverVersion));
+        }
+    }
+
+    public static boolean validEmailAddress(String email) {
+        // check email using regular expressions
+        Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+
+        // Match the given string with the pattern
+        Matcher m = p.matcher(email);
+
+        // check whether match is found
+        boolean matchFound = m.matches();
+        if (!matchFound) {
+            return false;
+        }
+
+        try {
+            new InternetAddress(email);
+            return true;
+        } catch (AddressException e) {
+            return false;
         }
     }
 
@@ -144,13 +170,11 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
 
     @Override
     public void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
-        // TODO Auto-generated method stub
-
+        throw new Error("Not implemented");
     }
 
     @Override
     public void authenticateWithToken(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String accessToken) {
-        // TODO Auto-generated method stub
-
+        throw new Error("Not implemented");
     }
 }

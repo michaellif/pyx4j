@@ -43,6 +43,8 @@ public interface AuthenticationService extends IService {
 
     public void getLogoutUrl(AsyncCallback<String> callback, final String destinationURLComponent);
 
+    public static final String AUTH_TOKEN_ARG = "atoken";
+
     /**
      * Request E-mail to be sent to customer with 'token' for PasswordReset.
      * 
