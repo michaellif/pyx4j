@@ -36,6 +36,7 @@ import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.ApplicationStatusDTO;
+import com.propertyvista.dto.ApplicationStatusDTO.Role;
 import com.propertyvista.dto.MasterApplicationStatusDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -182,37 +183,43 @@ public class ApplicationManager {
     public static MasterApplicationStatusDTO calculateStatus(MasterApplication ma) {
         MasterApplicationStatusDTO maStatus = EntityFactory.create(MasterApplicationStatusDTO.class);
 
-        Double masterApplicationProgress = 1.0;
+        double masterApplicationProgress = 1.0;
 
         for (Application app : ma.applications()) {
             if (app.isValueDetached()) {
                 Persistence.service().retrieve(app);
             }
+
             ApplicationStatusDTO status = EntityFactory.create(ApplicationStatusDTO.class);
 
             EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
             status.person().set(Persistence.service().retrieve(criteria).person().name());
-            status.type().setValue("Tenant");
+            status.role().setValue(Role.Tenant);
+
             if (status.person().isEmpty()) {
                 EntityQueryCriteria<TenantGuarantor> criteria1 = EntityQueryCriteria.create(TenantGuarantor.class);
                 criteria1.add(PropertyCriterion.eq(criteria1.proto().user(), app.user()));
                 status.person().set(Persistence.service().retrieve(criteria1).name());
-                status.type().setValue("Guarantor");
+                status.role().setValue(Role.Guarantor);
             }
 
+            // calculate progress:
             if (!status.person().isEmpty()) {
-                int complete = 0;
+                double complete = 0;
                 for (int i = 0; i < app.steps().size(); ++i) {
                     switch (app.steps().get(i).status().getValue()) {
                     case complete:
                         ++complete;
                     case latest:
+                        if (i + 1 == app.steps().size()) {
+                            ++complete; // count last 'Completion' step...
+                        }
                         break;
                     }
                 }
 
-                status.progress().setValue(app.steps().isEmpty() ? 0.0 : complete / app.steps().size() * 100.0);
+                status.progress().setValue(complete / app.steps().size() * 100.0);
                 status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
 
                 maStatus.individualApplications().add(status);

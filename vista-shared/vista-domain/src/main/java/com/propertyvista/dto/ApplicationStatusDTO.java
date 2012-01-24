@@ -13,15 +13,35 @@
  */
 package com.propertyvista.dto;
 
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.person.Name;
 
 @Transient
 public interface ApplicationStatusDTO extends IEntity {
+
+    @I18n
+    @XmlType(name = "PersonRole")
+    public static enum Role implements Serializable {
+
+        Tenant,
+
+        Guarantor;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     /**
      * Tenant/Guarantor
@@ -29,9 +49,9 @@ public interface ApplicationStatusDTO extends IEntity {
     Name person();
 
     /**
-     * Primary Tenant, Co-signer or Guarantor
+     * Applicant, Co-Applicant or Guarantor
      */
-    IPrimitive<String> type();
+    IPrimitive<Role> role();
 
     /**
      * Completed steps/total steps in %
