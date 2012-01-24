@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.Task;
 
 public abstract class QueryTestCase extends DatastoreTestBase {
 
@@ -180,5 +181,37 @@ public abstract class QueryTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr Keys List size", 1, departmentsIds.size());
         Assert.assertEquals("Retr All department.id", department.getPrimaryKey(), departmentsIds.get(0));
 
+    }
+
+    public void testQueryByPrimitiveSet() {
+        String testId = uniqueString();
+
+        Task task1 = EntityFactory.create(Task.class);
+        task1.description().setValue(testId);
+        task1.notes().add("Note1");
+        task1.notes().add("Note2");
+        srv.persist(task1);
+
+        Task task2 = EntityFactory.create(Task.class);
+        task2.description().setValue(testId);
+        task2.notes().add("Note2");
+        task2.notes().add("Note3");
+        srv.persist(task2);
+
+        {
+            EntityQueryCriteria<Task> criteria = EntityQueryCriteria.create(Task.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().description(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().notes(), "Note1"));
+            List<Task> list1 = srv.query(criteria);
+            Assert.assertEquals("Retr All List size", 1, list1.size());
+        }
+
+        {
+            EntityQueryCriteria<Task> criteria = EntityQueryCriteria.create(Task.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().description(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().notes(), "Note2"));
+            List<Task> list1 = srv.query(criteria);
+            Assert.assertEquals("Retr All List size", 2, list1.size());
+        }
     }
 }

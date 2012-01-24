@@ -197,6 +197,7 @@ public class QueryBuilder<T extends IEntity> {
             switch (objectClassType) {
             case EntityList:
             case EntitySet:
+            case PrimitiveSet:
                 String memberJoinAlias = getJoin(memeberWithAlias.memberOper, memeberWithAlias.alias, false);
                 memberSqlNameBase = memberJoinAlias + "." + ((MemberCollectionOperationsMeta) (memeberWithAlias.memberOper)).sqlValueName();
                 break;
