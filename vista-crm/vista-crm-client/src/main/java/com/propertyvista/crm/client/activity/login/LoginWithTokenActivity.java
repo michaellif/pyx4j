@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -26,6 +25,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.login.LoginWithTokenView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
@@ -36,14 +37,13 @@ public class LoginWithTokenActivity extends AbstractActivity {
 
     private static final I18n i18n = I18n.get(LoginWithTokenActivity.class);
 
-    private static final String AUTH_TOKEN_TOKEN = "auth_token";
-
     private final LoginWithTokenView view;
 
     private final String authToken;
 
     public LoginWithTokenActivity(Place place) {
-        authToken = "jerry";//Window.Location.getParameter(AUTH_TOKEN_TOKEN);
+        assert (place instanceof AppPlace);
+        authToken = ((AppPlace) place).getFirstArg(CrmSiteMap.LoginWithToken.AUTH_TOKEN_ARG);
         view = LoginVeiwFactory.instance(LoginWithTokenView.class);
     }
 
@@ -60,22 +60,8 @@ public class LoginWithTokenActivity extends AbstractActivity {
 
             @Override
             public void onFailure(Throwable caught) {
-                // TODO fix this (login with token failure) 
-                Window.alert(caught.getMessage());
-//                CrmSite.instance().showMessageDialog(
-//
-//                i18n.tr("Authentication failed, probably the URL you tried is either incorrect or expired"),
-//
-//                i18n.tr("Error"),
-//
-//                i18n.tr("Log In"),
-//
-//                new Command() {
-//                    @Override
-//                    public void execute() {
-//                        AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-//                    }
-//                });
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+                MessageDialog.error(i18n.tr("Authentication failed"), i18n.tr("The URL you have used is either incorrect or expired."));
             }
         }, ClientContext.getClientSystemInfo(), authToken);
     }

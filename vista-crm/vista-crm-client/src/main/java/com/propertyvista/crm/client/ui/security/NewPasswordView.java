@@ -25,6 +25,8 @@ public interface NewPasswordView extends IsWidget {
 
     void setConversationType(ConversationType type);
 
+    void discard();
+
     public interface Presenter {
 
         void passwordReset(PasswordChangeRequest request);

@@ -13,7 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.login;
 
-import com.google.gwt.user.client.ui.Label;
+import static com.pyx4j.commons.HtmlUtils.h2;
+
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -25,9 +30,16 @@ public class LoginWithTokenViewImpl implements LoginWithTokenView {
 
     @Override
     public Widget asWidget() {
-        VerticalPanel panel = new VerticalPanel();
-        panel.add(new Label(i18n.tr("Please Wait, authenticating...")));
-        return panel;
+        VerticalPanel main = new VerticalPanel();
+        main.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        main.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        main.setWidth("100%");
+
+        HTML header = new HTML(h2(i18n.tr("Authenticating...")));
+        header.getElement().getStyle().setMargin(3, Unit.EM);
+        header.getElement().getStyle().setProperty("textAlign", "center");
+        main.add(header);
+        return main;
     }
 
 }

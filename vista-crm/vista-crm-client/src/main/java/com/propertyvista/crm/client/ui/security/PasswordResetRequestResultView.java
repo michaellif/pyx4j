@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.security;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface PasswordResetRequestSuccessView extends IsWidget {
+public interface PasswordResetRequestResultView extends IsWidget {
 
     interface Presenter {
 
@@ -25,4 +25,5 @@ public interface PasswordResetRequestSuccessView extends IsWidget {
 
     public void setPresetner(Presenter presenter);
 
+    public void populate(boolean resetSuccess);
 }

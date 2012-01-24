@@ -54,9 +54,8 @@ public class PasswordResetActivity extends AbstractActivity implements NewPasswo
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
+        view.discard();
         panel.setWidget(view);
-
     }
 
     @Override
@@ -69,7 +68,7 @@ public class PasswordResetActivity extends AbstractActivity implements NewPasswo
                         new Command() {
                             @Override
                             public void execute() {
-                                // FIXME logout before going to login screen?
+                                // FIXME logout before going to  login screen?
                                 AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
                             }
                         });

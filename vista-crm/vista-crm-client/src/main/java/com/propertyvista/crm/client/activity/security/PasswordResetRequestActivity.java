@@ -25,6 +25,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginVeiwFactory;
@@ -56,7 +57,16 @@ public class PasswordResetRequestActivity extends AbstractActivity implements Pa
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordResetRequestSuccess());
+                AppPlace happyPlace = new CrmSiteMap.PasswordResetRequestResult();
+                happyPlace.arg(CrmSiteMap.PasswordResetRequestResult.RESULT_TYPE_ARG, CrmSiteMap.PasswordResetRequestResult.SUCCESS);
+                AppSite.getPlaceController().goTo(happyPlace);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                AppPlace sadPlace = new CrmSiteMap.PasswordResetRequestResult();
+                sadPlace.arg(CrmSiteMap.PasswordResetRequestResult.RESULT_TYPE_ARG, CrmSiteMap.PasswordResetRequestResult.FAILURE);
+                AppSite.getPlaceController().goTo(sadPlace);
             }
 
         };

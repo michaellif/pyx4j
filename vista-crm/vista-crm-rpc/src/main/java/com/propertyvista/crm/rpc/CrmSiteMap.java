@@ -37,15 +37,23 @@ public class CrmSiteMap implements SiteMap {
     }
 
     /**
-     * Represents a place where the user is redirected after a successful "reset password request".
+     * Represents a place where the user is informed about the outcome of a "reset password request".
      */
-    public static class PasswordResetRequestSuccess extends AppPlace implements PublicPlace {
+    public static class PasswordResetRequestResult extends AppPlace implements PublicPlace {
+
+        public static final String RESULT_TYPE_ARG = "result";
+
+        public static final String FAILURE = "failure";
+
+        public static final String SUCCESS = "success";
     }
 
     /**
      * Used while user is waiting for authentication required for password reset.
      */
     public static class LoginWithToken extends AppPlace implements PublicPlace {
+
+        public static final String AUTH_TOKEN_ARG = "authToken";
     }
 
     @PlaceProperties(caption = "Reset Password")

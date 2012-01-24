@@ -20,8 +20,8 @@ import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.login.LoginViewImpl;
 import com.propertyvista.crm.client.ui.security.NewPasswordView;
 import com.propertyvista.crm.client.ui.security.NewPasswordViewImpl;
-import com.propertyvista.crm.client.ui.security.PasswordResetRequestSuccessView;
-import com.propertyvista.crm.client.ui.security.PasswordResetRequestSuccessViewImpl;
+import com.propertyvista.crm.client.ui.security.PasswordResetRequestResultView;
+import com.propertyvista.crm.client.ui.security.PasswordResetRequestResultViewImpl;
 
 public class SecurityViewFactory extends ViewFactoryBase {
 
@@ -29,8 +29,8 @@ public class SecurityViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (LoginView.class.equals(type)) {
                 map.put(type, new LoginViewImpl());
-            } else if (PasswordResetRequestSuccessView.class.equals(type)) {
-                map.put(type, new PasswordResetRequestSuccessViewImpl());
+            } else if (PasswordResetRequestResultView.class.equals(type)) {
+                map.put(type, new PasswordResetRequestResultViewImpl());
             } else if (NewPasswordView.class.equals(type)) {
                 map.put(type, new NewPasswordViewImpl());
             }

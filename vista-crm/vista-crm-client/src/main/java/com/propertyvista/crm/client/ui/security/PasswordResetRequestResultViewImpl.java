@@ -28,20 +28,23 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 
-public class PasswordResetRequestSuccessViewImpl implements PasswordResetRequestSuccessView {
+public class PasswordResetRequestResultViewImpl implements PasswordResetRequestResultView {
 
-    private static final I18n i18n = I18n.get(PasswordResetRequestSuccessViewImpl.class);
+    private static final I18n i18n = I18n.get(PasswordResetRequestResultViewImpl.class);
 
     private Presenter presenter = null;
 
-    @Override
-    public Widget asWidget() {
+    private final HTML header;
+
+    Widget viewWidget;
+
+    public PasswordResetRequestResultViewImpl() {
         VerticalPanel main = new VerticalPanel();
         main.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         main.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         main.setWidth("100%");
 
-        HTML header = new HTML(h2(i18n.tr("A password reset link was sent to your e-mail address")));
+        header = new HTML(h2(i18n.tr("A password reset link was sent to your e-mail address")));
         header.getElement().getStyle().setMargin(3, Unit.EM);
         header.getElement().getStyle().setProperty("textAlign", "center");
         main.add(header);
@@ -49,17 +52,29 @@ public class PasswordResetRequestSuccessViewImpl implements PasswordResetRequest
         AnchorButton loginButton = new AnchorButton(i18n.tr("return to log in screen"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                PasswordResetRequestSuccessViewImpl.this.presenter.goToLoginScreen();
+                PasswordResetRequestResultViewImpl.this.presenter.goToLoginScreen();
             }
         });
         main.add(loginButton);
 
-        return main;
+        viewWidget = main;
+    }
+
+    @Override
+    public Widget asWidget() {
+        return viewWidget;
     }
 
     @Override
     public void setPresetner(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void populate(boolean resetSuccess) {
+        String message = resetSuccess ? i18n.tr("A password reset link was sent to your e-mail address.") : i18n
+                .tr("Failed to reset the password, make sure the email address you provided is correct.");
+        header.setHTML(h2(message));
     }
 
 }

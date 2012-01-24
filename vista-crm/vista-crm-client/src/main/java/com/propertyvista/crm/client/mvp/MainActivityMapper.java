@@ -129,7 +129,6 @@ import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivit
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
-import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -191,11 +190,8 @@ public class MainActivityMapper implements AppActivityMapper {
             @Override
             public void onSuccess() {
                 Activity activity = null;
-                if (place instanceof CrmSiteMap.PasswordReset) {
-                    activity = new PasswordResetActivity(place);
-
 // - Building-related:
-                } else if (place instanceof CrmSiteMap.Properties.Building) {
+                if (place instanceof CrmSiteMap.Properties.Building) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new BuildingEditorActivity(place);

@@ -18,7 +18,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -37,8 +36,6 @@ public class NewPasswordForm extends CEntityDecoratableEditor<PasswordChangeRequ
     public enum ConversationType {
         RESET, CHANGE
     }
-
-    private HTML header;
 
     private final Command retreiveCommand;
 
@@ -89,6 +86,7 @@ public class NewPasswordForm extends CEntityDecoratableEditor<PasswordChangeRequ
 
         main.setWidget(++row, 0, newPasswordButton);
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(1, Unit.EM);
 
         return main;
     }

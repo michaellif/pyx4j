@@ -58,4 +58,9 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
     public void setConversationType(ConversationType type) {
         form.setConversationType(type);
     }
+
+    @Override
+    public void discard() {
+        form.populateNew();
+    }
 }
