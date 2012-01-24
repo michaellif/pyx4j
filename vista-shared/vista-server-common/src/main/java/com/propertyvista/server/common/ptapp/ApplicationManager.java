@@ -183,7 +183,7 @@ public class ApplicationManager {
     public static MasterApplicationStatusDTO calculateStatus(MasterApplication ma) {
         MasterApplicationStatusDTO maStatus = EntityFactory.create(MasterApplicationStatusDTO.class);
 
-        double masterApplicationProgress = 1.0;
+        double progressSum = 0.0;
 
         for (Application app : ma.applications()) {
             if (app.isValueDetached()) {
@@ -225,10 +225,10 @@ public class ApplicationManager {
                 maStatus.individualApplications().add(status);
             }
 
-            masterApplicationProgress *= status.progress().getValue();
+            progressSum += status.progress().getValue();
         }
 
-        maStatus.progress().setValue(masterApplicationProgress);
+        maStatus.progress().setValue(progressSum / ma.applications().size());
         return maStatus;
     }
 }
