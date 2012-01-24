@@ -106,6 +106,15 @@ public class EntityIForm extends CEntityEditor<EntityI> {
             return decorator;
         }
 
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof EntityII) {
+                return new EntityIIEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
     }
 
     static class EntityIIEditor extends CEntityEditor<EntityII> {
