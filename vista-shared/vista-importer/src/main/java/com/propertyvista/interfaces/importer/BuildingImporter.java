@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -54,8 +54,8 @@ public class BuildingImporter extends ImportPersister {
             buildingIO.type().setValue(BuildingInfo.Type.residential);
         }
 
-        if (buildingIO.propertyCode().isNull()) {
-            messages.add("propertyCode can't be empty");
+        if (buildingIO.propertyCode().isNull() && buildingIO.externalId().isNull()) {
+            messages.add("Both propertyCode and externalId are empty");
         }
 
         // Media
@@ -104,15 +104,20 @@ public class BuildingImporter extends ImportPersister {
         ImportCounters counters = new ImportCounters();
         counters.buildings++;
 
-        if (buildingIO.propertyCode().isNull()) {
-            throw new UserRuntimeException("propertyCode can't be empty");
+        if (buildingIO.propertyCode().isNull() && buildingIO.externalId().isNull()) {
+            throw new UserRuntimeException("Both propertyCode and externalId are empty");
         }
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            if (buildingIO.propertyCode().isNull()) {
+                criteria.add(PropertyCriterion.eq(criteria.proto().externalId(), buildingIO.externalId().getValue()));
+            } else {
+                criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            }
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() != 0) {
-                throw new UserRuntimeException("Building '" + buildingIO.propertyCode().getValue() + "' already exists");
+                throw new UserRuntimeException("Building '" + buildingIO.propertyCode().getValue() + "' with externalId '" + buildingIO.externalId().getValue()
+                        + "' already exists");
             }
         }
 

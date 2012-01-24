@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -48,12 +48,18 @@ public class BuildingUpdater extends ImportPersister {
         Building building;
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            if (buildingIO.propertyCode().isNull()) {
+                criteria.add(PropertyCriterion.eq(criteria.proto().externalId(), buildingIO.externalId().getValue()));
+            } else {
+                criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
+            }
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
-                throw new UserRuntimeException("Building '" + buildingIO.propertyCode().getValue() + "' not found");
+                throw new UserRuntimeException("Building '" + buildingIO.propertyCode().getValue() + "' with externalId '" + buildingIO.externalId().getValue()
+                        + "' not found");
             } else if (buildings.size() > 1) {
-                throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
+                throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' with externalId '"
+                        + buildingIO.externalId().getValue() + "' found");
             } else {
                 building = buildings.get(0);
             }
@@ -112,7 +118,7 @@ public class BuildingUpdater extends ImportPersister {
 
     public ImportCounters updateData(BuildingIO buildingIO, MediaConfig mediaConfig) {
         if (buildingIO.propertyCode().isNull() && buildingIO.externalId().isNull()) {
-            throw new UserRuntimeException("propertyCode can't be empty");
+            throw new UserRuntimeException("both propertyCode and externalId are empty");
         }
         ImportCounters counters = new ImportCounters();
         boolean buildingIsNew = false;
