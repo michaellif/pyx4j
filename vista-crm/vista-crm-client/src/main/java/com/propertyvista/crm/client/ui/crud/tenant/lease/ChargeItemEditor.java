@@ -104,6 +104,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
 
             CEntityEditor editor = null;
             ChargeItemExtraData extraData = getValue().extraData();
+
             // add extraData editor if necessary:
             switch (getValue().item().type().type().getValue()) {
             case feature:

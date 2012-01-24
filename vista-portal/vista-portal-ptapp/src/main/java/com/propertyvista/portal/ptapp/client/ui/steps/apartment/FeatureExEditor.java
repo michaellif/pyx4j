@@ -18,17 +18,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
@@ -83,33 +78,21 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
             // add extraData editor if necessary:
             switch (getValue().item().type().type().getValue()) {
             case feature:
-                IEditableComponentFactory factory = (isEditable() ? new VistaEditorsComponentFactory() : new VistaViewersComponentFactory());
                 switch (getValue().item().type().featureType().getValue()) {
                 case parking:
-                    editor = new VehicleDataEditor(factory) {
-                        @Override
-                        public CComponent<?, ?> create(IObject<?> member) {
-                            return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
-                        }
-                    };
-
+                    editor = new VehicleDataEditor();
                     if (extraData.isNull()) {
                         extraData.set(EntityFactory.create(Vehicle.class));
                     }
                     break;
                 case pet:
-                    editor = new PetDataEditor(factory) {
-                        @Override
-                        public CComponent<?, ?> create(IObject<?> member) {
-                            return factory.create(member); // use own (editor) factory instead of parent (viewer) one!..
-                        }
-                    };
-
+                    editor = new PetDataEditor();
                     if (extraData.isNull()) {
                         extraData.set(EntityFactory.create(Pet.class));
                     }
                     break;
                 }
+                break;
             }
 
             if (editor != null) {
