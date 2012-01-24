@@ -26,18 +26,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
@@ -58,27 +60,21 @@ public class RentRollAdaptor {
     public static String outFile = "C:\\projects\\Starlight\\database_exports\\example-output.xml";
 
     public enum RosterReaderState {
-        ExpectAddress, ExpectHeader, ExpectData
+        ExpectAddress, ExpectData
     }
 
-    public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01")); // add erroneous "apt numbers" here (lower case)
+    public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01",
+            "current/notice/vacant residents")); // add erroneous "apt numbers" here (lower case)
 
-    private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy");
-
-    private static Map<String, BuildingIO> buildings = new HashMap<String, BuildingIO>();
+    private static List<BuildingIO> buildings = new LinkedList<BuildingIO>();
 
     public static void main(String[] args) throws IOException {
-        String tenantRosterFile = inFile;
 
-        readTenantRoster(tenantRosterFile);
+        readTenantRoster(inFile); // populate buildings
 
         ImportIO importIO = EntityFactory.create(ImportIO.class);
-        for (BuildingIO building : buildings.values()) {
+        for (BuildingIO building : buildings) {
             if (!building.units().isNull()) {
-                System.out.println(building.externalId().getStringView());
-                for (AptUnitIO unit : building.units()) {
-                    System.out.println("\t\t\t\t" + unit.number().getStringView() + ": " + unit.availableForRent().getStringView());
-                }
                 importIO.buildings().add(building);
             }
 
@@ -95,9 +91,10 @@ public class RentRollAdaptor {
             w.write(xml.toString());
             w.flush();
         } catch (IOException e) {
-            //TODO error stuff
+            throw new Error(e);
         } finally {
             IOUtils.closeQuietly(w);
+            System.out.println("\nXLS file created successfully");
         }
 
     }
@@ -107,8 +104,6 @@ public class RentRollAdaptor {
      * @throws IOException
      */
     public static void readTenantRoster(String fileName) throws IOException {
-        List<String> lines = Files.readAllLines(new File(fileName).toPath(), Charset.defaultCharset());
-        RosterReaderState readerState = RosterReaderState.ExpectHeader;
 
         EntityCSVReciver<RentRollCSV> csv = EntityCSVReciver.create(RentRollCSV.class);
         csv.setHeaderLinesCount(2);
@@ -120,116 +115,51 @@ public class RentRollAdaptor {
             IOUtils.closeQuietly(is);
         }
 
-        //TODO use this loop
+        BuildingIO building = EntityFactory.create(BuildingIO.class); //create initial building
+
         for (RentRollCSV line : csv.getEntities()) {
-            System.out.println(line);
-        }
+            if (line.resident().getStringView().equals("Total") && line.name().getStringView().equals("All Properties")) { // check if the end of file
+                return;
+            }
 
-        int n = 0;
-        boolean gotData = false;
-        boolean gotHeaders = false;
-        String address = "uninitialized address";
-        Map<String, Integer> keyToIndexMap = null;
-        BuildingIO building = EntityFactory.create(BuildingIO.class);
-        Iterator<String> it = lines.iterator();
+            AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
+            String unitNumber = line.unit().getValue();
 
-        while (it.hasNext()) {
-            String line = it.next();
-            ++n;
-            switch (readerState) {
+            if (unitNumber != null && !strings.contains(unitNumber.toLowerCase().trim()) && !line.resident().getStringView().equals("Total")) {
 
-            case ExpectHeader:
-                if (line.startsWith("\"Unit\"")) {
-                    String[] keys = splitCSVRow(line);
-                    keyToIndexMap = new HashMap<String, Integer>();
-                    for (int i = 0; i < keys.length; ++i) {
-                        keyToIndexMap.put(keys[i], i);
-                    }
+                unit.number().setValue(unitNumber);
+                double marketRent;
+                LogicalDate availableForRent = new LogicalDate();
 
-                    readerState = RosterReaderState.ExpectData;
-                    it.next();
-                    it.next(); // skip 2 lines w/ useless data:
-//                        ,," Sq Ft",,," Rent"," Rent"," Deposit"," Deposit",," Expiration",,
-//                        "Current/Notice/Vacant Residents",,,,,,,,,,,,
-                }
-                break;
-
-            case ExpectData:
-                String[] values = splitCSVRow(line);
-                if (!isEmpty(values)) {
-
-                    gotData = true;
-                    // TODO normalize unitID form
-                    String unitNumber = values[keyToIndexMap.get("Unit")];
-                    assert unitNumber != null : "line " + n + ": failed to fetch UNIT ID from the current line";
-                    if (CommonsStringUtils.isEmpty(unitNumber)) {
-                        // TODO verify for "Total"
-                        building.externalId().setValue("vv"); //TODO set value
-
-                        // start new building
-                        building = EntityFactory.create(BuildingIO.class);
-
-                    } else {
-
-                        AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
-                        unit.number().setValue(unitNumber);
-
-                        String vacant = values[keyToIndexMap.get("Name")];
-                        assert vacant != null : "line " + n + ": failed to fetch TENANT_NAME from the current line";
-                        if (vacant.toLowerCase().trim().equals("vacant")) {
-                            unit.availableForRent().setValue(new LogicalDate());
-                            String number = values[keyToIndexMap.get("Unit")];
-
-                            if (!strings.contains(number.toLowerCase().trim())) {
-                                building.units().add(unit);
-                            }
-                        }
-                    }
+                if (line.name().getStringView().toLowerCase().trim().equals("vacant")) {
+                    marketRent = parseMoney(line.marketRent().getStringView());
+                    unit.availableForRent().setValue(availableForRent);
                 } else {
-                    if (gotData == true) {
-                        gotData = false;
-                        readerState = RosterReaderState.ExpectAddress;
-                    }
+                    marketRent = parseMoney(line.actualRent().getStringView());
+//                    unit.availableForRent().setValue(null); TODO delete previous value for availableForRent if not vacant
                 }
 
-                break;
-
-            case ExpectAddress:
-
-                address = splitCSVRow(line)[1];
-                String externalId = propertyCodeFromAddress(address);
-                building = buildings.get(externalId);
-                if (building == null) {
-                    building = EntityFactory.create(BuildingIO.class);
-                    building.externalId().setValue(externalId);
-                    buildings.put(externalId, building);
-                    System.out.println("externalId = [" + externalId + "]");
-                }
-                readerState = RosterReaderState.ExpectData;
-
-                break;
+                unit.marketRent().setValue(marketRent);
+                building.units().add(unit);
+            } else if (line.resident().getStringView().equals("Total")) { //building address is in this line
+                String externalId = line.name().getValue();
+                Collection<BuildingIO> verifiedBuildings = new LinkedList<BuildingIO>();
+                building.externalId().setValue(externalId);
+                verifiedBuildings = splitComplexes(building);
+                verifiedBuildings = trimUnitNumbers(verifiedBuildings);
+                buildings.addAll(verifiedBuildings);
+                building = EntityFactory.create(BuildingIO.class);
+// assume document is properly formatted, if unit number == null the line does not contain valid  data
             }
         }
     }
 
-    public interface Row {
-        String get(String key);
-    }
-
-    public class RowImpl implements Row {
-
-        String[] values;
-
-        Map<String, Integer> keyToIndexMap;
-
-        public RowImpl(String[] values, Map<String, Integer> keyToIndexMap) {
-            this.values = values;
-            this.keyToIndexMap = keyToIndexMap;
-        }
-
-        @Override
-        public String get(String key) {
-            return values[keyToIndexMap.get(key)];
+    private static double parseMoney(String money) {
+        NumberFormat nf = new DecimalFormat("#,###.##");
+        try {
+            return nf.parse(money).doubleValue();
+        } catch (ParseException e) {
+            throw new Error(e);
         }
 
     }
@@ -243,21 +173,74 @@ public class RentRollAdaptor {
         return true;
     }
 
-    public static class Building {
+    private static Map<String, BuildingIO> buildingList = new HashMap<String, BuildingIO>();
 
-        public Map<String, AptUnitIO> units = new HashMap<String, AptUnitIO>();
-
-        final public String propertyCode;
-
-        public Building(String propertyCode) {
-            this.propertyCode = propertyCode;
+    public static Collection<BuildingIO> splitComplexes(BuildingIO building) { //sorts complexes that contain multiple buildings under the same externalId. Assumes either all units are with hyphen or none.
+        Iterator<AptUnitIO> it = building.units().iterator();
+        AptUnitIO tempUnit = EntityFactory.create(AptUnitIO.class);
+        buildingList = new HashMap<String, BuildingIO>();
+        while (it.hasNext()) {
+            AptUnitIO unit = it.next();
+            tempUnit = unit;
+            BuildingIO b = getBuildingForUnitNumber(building.externalId().getValue(), unit.number().getValue());
+            if (b != null) {
+                it.remove();
+                b.units().add(unit);
+            }
         }
 
+        BuildingIO b = getBuildingForUnitNumber(building.externalId().getValue(), tempUnit.number().getValue());
+        if (b != null) {
+            b.units().add(tempUnit);
+        }
+
+        if (building.units().size() > 0) {
+            buildingList.put(building.externalId().getValue(), building);
+        }
+        return buildingList.values();
     }
 
-    public static String propertyCodeFromAddress(String address) {
-        // TODO
-        return address;
+    private static BuildingIO getBuildingForUnitNumber(String externalId, String unitNumber) {
+        if (unitNumber.contains("-")) {
+            String[] t = unitNumber.split("-");
+
+            try {
+                Integer.parseInt(t[0]);
+            } catch (NumberFormatException e) {
+                throw new Error("Illegal building number: " + e);
+            }
+
+            String newexternalId = externalId + "(b" + t[0] + ")";
+            BuildingIO b = buildingList.get(newexternalId);
+            if (b == null) {
+                b = EntityFactory.create(BuildingIO.class);
+                b.externalId().setValue(newexternalId);
+                buildingList.put(b.externalId().getValue(), b);
+            }
+            return b;
+        } else {
+            return null;
+        }
+    }
+
+    private static Collection<BuildingIO> trimUnitNumbers(Collection<BuildingIO> verifiedBuildings) {
+        Iterator<BuildingIO> it = verifiedBuildings.iterator();
+        while (it.hasNext()) {
+            for (AptUnitIO u : it.next().units()) {
+                if (u.number().getValue().contains("-")) {
+                    String[] t = u.number().getValue().split("-");
+
+                    try {
+                        Integer.parseInt(t[1]);
+                    } catch (NumberFormatException e) {
+                        throw new Error("Illegal apartment number: " + e);
+                    }
+
+                    u.number().setValue(t[1]); // sets proper unit number, removes t[0] (building number) from it
+                }
+            }
+        }
+        return verifiedBuildings;
     }
 
     public static String removeQuotes(String str) {
@@ -277,7 +260,7 @@ public class RentRollAdaptor {
         boolean ignoreCommas = false;
         boolean startValue = true;
         StringBuffer value = new StringBuffer();
-        for (int i = 0; i < row.length(); ++i) { // crude way to skip ",,,'Total',"
+        for (int i = 0; i < row.length(); ++i) {
             char c = row.charAt(i);
 
             if (startValue) {
