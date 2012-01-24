@@ -56,6 +56,7 @@ public class MessageTemplates {
         case CRM:
             url = ServerSideConfiguration.instance().getMainApplicationURL()
                     + AppPlaceInfo.absoluteUrl(DeploymentConsts.CRM_URL, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+            break;
         case ProspectiveApp:
             url = ServerSideConfiguration.instance().getMainApplicationURL()
                     + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.ResetPassword.class, AuthenticationService.AUTH_TOKEN_ARG, token);
