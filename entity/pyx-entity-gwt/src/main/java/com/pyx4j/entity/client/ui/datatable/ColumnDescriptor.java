@@ -52,6 +52,14 @@ public class ColumnDescriptor {
         return builder.columnName;
     }
 
+    public boolean isSearchable() {
+        return builder.searchable;
+    }
+
+    public void setSearchable(boolean searchable) {
+        builder.searchable = searchable;
+    }
+
     public boolean isSortable() {
         return builder.sortable;
     }
@@ -132,6 +140,8 @@ public class ColumnDescriptor {
 
         private boolean sortable = true;
 
+        private boolean searchable = true;
+
         private String width;
 
         private boolean wordWrap = true;
@@ -163,6 +173,11 @@ public class ColumnDescriptor {
 
         public Builder sortable(boolean sortable) {
             this.sortable = sortable;
+            return this;
+        }
+
+        public Builder searchable(boolean searchable) {
+            this.searchable = searchable;
             return this;
         }
 

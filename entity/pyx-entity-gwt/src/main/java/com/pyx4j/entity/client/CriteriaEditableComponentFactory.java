@@ -28,11 +28,13 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPhoneField;
@@ -47,6 +49,8 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
         CComponent<?, ?> comp;
         if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+        } else if ((mm.getObjectClassType() == ObjectClassType.EntityList) || (mm.getObjectClassType() == ObjectClassType.EntitySet)) {
+            comp = new CEntityComboBox(mm.getCaption(), mm.getValueClass());
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
             ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
@@ -58,6 +62,8 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
             comp = new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
             comp = new CDoubleField();
+        } else if (mm.getValueClass().equals(Boolean.class)) {
+            comp = new CComboBoxBoolean();
         } else {
             if (EditorType.phone.equals(mm.getEditorType())) {
                 comp = new CPhoneField();

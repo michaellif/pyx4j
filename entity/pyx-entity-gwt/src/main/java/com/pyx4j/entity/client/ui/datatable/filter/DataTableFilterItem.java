@@ -41,6 +41,7 @@ import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -63,6 +64,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
     private final IEditableComponentFactory compFactory = new CriteriaEditableComponentFactory();
 
     private class FieldData {
+
         private final ColumnDescriptor cd;
 
         public FieldData(ColumnDescriptor cd) {
@@ -94,8 +96,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         Collection<FieldData> fds = new ArrayList<FieldData>();
         for (ColumnDescriptor cd : parent.getDataTablePanel().getDataTableModel().getColumnDescriptors()) {
-            //only sortable columns can be searchable 
-            if (cd.isSortable()) {
+            if (cd.isSearchable()) {
                 fds.add(new FieldData(cd));
             }
         }
@@ -176,22 +177,20 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         comp.setValue(value);
         valueHolder.setWidget(comp);
 
-        operandsList.setOptions(EnumSet.allOf(Operators.class));
-        operandsList.setValue(Operators.is);
-
+        Collection<Operators> options;
         // correct operands list:
         Class<?> valueClass = member.getValueClass();
         if (member.getMeta().isEntity() || valueClass.isEnum() || valueClass.equals(Boolean.class)) {
-
-            operandsList.removeOption(Operators.like);
-            operandsList.removeOption(Operators.greaterThan);
-            operandsList.removeOption(Operators.lessThan);
-
+            options = EnumSet.of(Operators.is, Operators.isNot);
         } else if (valueClass.equals(String.class)) {
-
-            operandsList.removeOption(Operators.greaterThan);
-            operandsList.removeOption(Operators.lessThan);
-
+            options = EnumSet.of(Operators.is, Operators.isNot, Operators.like);
+        } else if ((member.getMeta().getObjectClassType() == ObjectClassType.EntityList)
+                || (member.getMeta().getObjectClassType() == ObjectClassType.EntitySet)) {
+            options = EnumSet.of(Operators.is, Operators.isNot);
+        } else {
+            options = EnumSet.allOf(Operators.class);
         }
+        operandsList.setOptions(options);
+        operandsList.setValue(Operators.is);
     }
 }
