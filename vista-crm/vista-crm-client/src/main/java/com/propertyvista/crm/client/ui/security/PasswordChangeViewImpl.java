@@ -15,9 +15,14 @@ package com.propertyvista.crm.client.ui.security;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+
 import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
 
 public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeView {
+
+    private static final I18n i18n = I18n.get(PasswordChangeViewImpl.class);
 
     private Presenter presenter;
 
@@ -27,7 +32,9 @@ public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeV
         form = new PasswordEditorForm(PasswordEditorForm.Type.CHANGE) {
             @Override
             protected void onConfirmPasswordChange() {
-                presenter.passwordChange(form.getValue());
+                if (form.isValid()) {
+                    presenter.passwordChange(form.getValue());
+                }
             }
         };
         form.initContent();
@@ -38,6 +45,16 @@ public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeV
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void populate(PasswordChangeRequest request) {
+        form.populate(request);
+    }
+
+    @Override
+    public PasswordChangeRequest getValue() {
+        return form.getValue();
     }
 
     @Override

@@ -19,12 +19,17 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.crm.client.ui.security.PasswordChangeView;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 
@@ -32,32 +37,42 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     private final PasswordChangeView view;
 
+    private final Key userPk;
+
     public PasswordChangeActivity(Place place) {
+        assert place instanceof CrmSiteMap.PasswordChange;
+        userPk = ((CrmSiteMap.PasswordChange) place).getUserPk();
+
         view = SecurityViewFactory.instance(PasswordChangeView.class);
         view.setPresenter(this);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.discard();
+        PasswordChangeRequest newRequest = EntityFactory.create(PasswordChangeRequest.class);
+        newRequest.userPk().setValue(userPk);
+        view.populate(newRequest);
         panel.setWidget(view);
     }
 
     @Override
     public void passwordChange(PasswordChangeRequest request) {
-        // TODO find a way to determine if this is self administration (i.e. user tries to change his own password) to set the following var
-        boolean isSelfAdminstrated = true;
         DefaultAsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 // TODO Auto-generated method stub
-
             }
         };
-        if (isSelfAdminstrated) {
+        if (isSelfAdmin()) {
             GWT.<CrmUserService> create(CrmUserService.class).changePassword(callback, request);
         } else {
             GWT.<ManagedCrmUserService> create(ManagedCrmUserService.class).changePassword(callback, request);
         }
     }
+
+    private boolean isSelfAdmin() {
+        return view.getValue().userPk().isNull()
+                || EqualsHelper.equals(view.getValue().userPk().getValue(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
+    }
+
 }

@@ -29,11 +29,8 @@ import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 
 public class EmployeeViewerActivity extends ViewerActivityBase<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
-    private final EmployeeViewerView view;
-
     public EmployeeViewerActivity(Place place) {
         super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
-        view = (EmployeeViewerView) super.view;
     }
 
     @Override

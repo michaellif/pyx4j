@@ -20,9 +20,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
@@ -37,10 +39,6 @@ public abstract class PasswordEditorForm extends CEntityDecoratableEditor<Passwo
     }
 
     private final Type type;
-
-    private IsWidget selfAdministrationDecorator;
-
-    private IsWidget otherAdministrationDecorator;
 
     public PasswordEditorForm(Type type) {
         super(PasswordChangeRequest.class);
@@ -65,13 +63,13 @@ public abstract class PasswordEditorForm extends CEntityDecoratableEditor<Passwo
         main.setWidth("100%");
         int row = -1;
         if (type.equals(Type.CHANGE)) {
-            main.setWidget(++row, 0, selfAdministrationDecorator = new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15)
-                    .build());
-            main.setWidget(++row, 0, otherAdministrationDecorator = new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15)
-                    .customLabel(i18n.tr("Administrator Password")).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
         }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
+        if (type.equals(Type.CHANGE)) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15).build());
+        }
 
         Button confirmButton = new Button(i18n.tr("Submit"));
         confirmButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
@@ -94,17 +92,15 @@ public abstract class PasswordEditorForm extends CEntityDecoratableEditor<Passwo
     @Override
     protected void onPopulate() {
         super.onPopulate();
-
-        // TODO find a way to determine if this is self administration (i.e. user tries to change his own password) 
-        boolean isSelfAdministrated = false;
-        if (isSelfAdministrated & type.equals(Type.CHANGE)) {
-            selfAdministrationDecorator.asWidget().setVisible(true);
-            otherAdministrationDecorator.asWidget().setVisible(false);
-        } else {
-            selfAdministrationDecorator.asWidget().setVisible(false);
-            otherAdministrationDecorator.asWidget().setVisible(true);
+        if (type.equals(Type.CHANGE)) {
+            get(proto().currentPassword()).setVisible(isSelfAdmin());
+            get(proto().requireChangePasswordOnNextSignIn()).setVisible(!isSelfAdmin());
         }
 
+    }
+
+    private boolean isSelfAdmin() {
+        return getValue().userPk().isNull() || EqualsHelper.equals(getValue().userPk().getValue(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

@@ -36,7 +36,6 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
@@ -52,7 +51,6 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.SelectPortfolioListService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -87,7 +85,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         main.setBR(++row, 0, 1);
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) & isEditable()) {
+        if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().namePrefix()), 5).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().firstName()), 15).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName()), 10).build());
@@ -111,17 +109,6 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
 
-        boolean isViewable = !SecurityController.checkBehavior(VistaCrmBehavior.Organization);
-        if (isEditable()) {
-            get(proto().sex()).setViewable(isViewable);
-            get(proto().birthDate()).setViewable(isViewable);
-            get(proto().homePhone()).setViewable(isViewable);
-            get(proto().mobilePhone()).setViewable(isViewable);
-            get(proto().workPhone()).setViewable(isViewable);
-            get(proto().email()).setViewable(isViewable);
-            get(proto().description()).setViewable(isViewable);
-        }
-
         return new CrmScrollPanel(main);
     }
 
@@ -136,11 +123,13 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public IsWidget createPrivilegesTab() {
+
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn()), 5).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Roles"));
         main.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));

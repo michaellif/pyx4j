@@ -76,7 +76,7 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
-        public Key getUserId() {
+        public Key getUserPk() {
             Key id = null;
             String idStr = getFirstArg(USER_ID_ARG);
             if (idStr != null) {
@@ -307,7 +307,7 @@ public class CrmSiteMap implements SiteMap {
     }
 
     @NavigationItem(navigLabel = "User Account")
-    public static class Account extends AppPlace {
+    public static class Account extends CrudAppPlace {
     }
 
     @NavigationItem(navigLabel = "Administration")

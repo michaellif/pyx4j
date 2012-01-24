@@ -24,7 +24,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.AccountActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
@@ -509,7 +508,14 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new DashboardManagementActivity(place);
 // - Other:
                 } else if (place instanceof CrmSiteMap.Account) {
-                    activity = new AccountActivity(place);
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new EmployeeEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new EmployeeViewerActivity(place);
+                        break;
+                    }
                 } else if (place instanceof CrmSiteMap.Alert) {
                     activity = new AlertActivity(place);
                 } else if (place instanceof CrmSiteMap.Message) {

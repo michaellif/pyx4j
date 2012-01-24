@@ -17,14 +17,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
 
@@ -43,14 +40,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
             }
         });
         addToolbarItem(passwordAction.asWidget());
-    }
-
-    @Override
-    public void populate(EmployeeDTO value) {
-        boolean isUserAllowedToChangePassword = !value.isNull() && (value.user().getPrimaryKey().equals(ClientContext.getUserVisit().getPrincipalPrimaryKey()))
-                | SecurityController.checkBehavior(VistaCrmBehavior.Organization);
-        passwordAction.setVisible(isUserAllowedToChangePassword);
-        super.populate(value);
     }
 
 }

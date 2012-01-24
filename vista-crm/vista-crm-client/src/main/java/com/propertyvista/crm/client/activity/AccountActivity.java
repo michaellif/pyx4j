@@ -13,32 +13,29 @@
  */
 package com.propertyvista.crm.client.activity;
 
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.crm.client.ui.AccountView;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
-public class AccountActivity extends AbstractActivity {
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
+import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 
-    private final AccountView view;
+public class AccountActivity extends ViewerActivityBase<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
     public AccountActivity(Place place) {
-        view = (AccountView) CrmVeiwFactory.instance(AccountView.class);
-        assert (view != null);
-        withPlace(place);
+        super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
     }
 
     @Override
-    public void start(AcceptsOneWidget container, EventBus eventBus) {
-        container.setWidget(view);
-
-    }
-
-    public AccountActivity withPlace(Place place) {
-        return this;
+    public void goToChangePassword(Key userId) {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordChange(userId));
     }
 
 }
