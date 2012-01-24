@@ -41,7 +41,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
@@ -85,8 +85,8 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     private final FormFlexPanel addonsPanel = new FormFlexPanel();
 
     public SummaryViewForm() {
-        super(SummaryDTO.class, new VistaViewersComponentFactory());
-        setEditable(false);
+        super(SummaryDTO.class, new VistaEditorsComponentFactory());
+        setViewable(true);
     }
 
     public SummaryViewPresenter getPresenter() {
@@ -118,7 +118,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
         main.setH1(++row, 0, 1, i18n.tr("Financial"), createEditLink(new PtSiteMap.Financial()));
         main.setWidget(++row, 0, inject(proto().tenantFinancials(), createFinancialView()));
 
-        main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(false)));
+        main.setWidget(++row, 0, inject(proto().charges(), new ChargesViewForm(true)));
 
         main.setBR(++row, 0, 1);
 
@@ -176,7 +176,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     }
 
     private Widget createEditLink(final AppPlace link) {
-        if (isViewable()) {
+        if (!isEditable()) {
             return new HTML();
         }
 
@@ -204,7 +204,6 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
     private class ApartmentView extends VistaTableFolder<ApartmentInfoSummaryDTO> {
         public ApartmentView() {
             super(ApartmentInfoSummaryDTO.class, false);
-            setWidth("100%");
         }
 
         @Override
@@ -283,7 +282,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantInfoDTO) {
-                    return new InfoViewForm(new VistaViewersComponentFactory());
+                    return new InfoViewForm();
                 }
                 return super.create(member);
             }
@@ -307,7 +306,7 @@ public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantFinancialDTO) {
-                    return new FinancialViewForm(new VistaViewersComponentFactory());
+                    return new FinancialViewForm();
                 }
                 return super.create(member);
             }

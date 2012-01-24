@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -42,12 +41,7 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
     static I18n i18n = I18n.get(FinancialViewForm.class);
 
     public FinancialViewForm() {
-        this(new VistaEditorsComponentFactory());
-    }
-
-    public FinancialViewForm(IEditableComponentFactory factory) {
-        super(TenantFinancialDTO.class, factory);
-        setEditable(factory instanceof VistaEditorsComponentFactory);
+        super(TenantFinancialDTO.class, new VistaEditorsComponentFactory());
     }
 
     @Override

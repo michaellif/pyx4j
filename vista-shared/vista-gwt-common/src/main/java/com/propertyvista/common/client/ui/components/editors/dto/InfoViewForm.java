@@ -26,7 +26,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -55,23 +54,20 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 
-    private final FormFlexPanel previousAddress = new FormFlexPanel() {
-        @Override
-        public void setVisible(boolean visible) {
-            get(proto().previousAddress()).setVisible(visible);
-            super.setVisible(visible);
-        }
-    };
+    private final FormFlexPanel previousAddress;
 
     private ApplicationDocumentUploaderFolder fileUpload;
 
     public InfoViewForm() {
-        this(new VistaEditorsComponentFactory());
-    }
+        super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
 
-    public InfoViewForm(IEditableComponentFactory factory) {
-        super(TenantInfoDTO.class, factory);
-        setEditable(factory instanceof VistaEditorsComponentFactory);
+        previousAddress = new FormFlexPanel() {
+            @Override
+            public void setVisible(boolean visible) {
+                get(proto().previousAddress()).setVisible(visible);
+                super.setVisible(visible);
+            }
+        };
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ApplicationStatusViewForm extends CEntityDecoratableEditor<MasterAp
 
     public ApplicationStatusViewForm() {
         super(MasterApplicationStatusDTO.class);
-        setEditable(false);
+        setViewable(true);
     }
 
     @Override

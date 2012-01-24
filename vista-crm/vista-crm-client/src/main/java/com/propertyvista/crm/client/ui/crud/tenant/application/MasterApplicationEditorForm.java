@@ -30,7 +30,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.components.folders.ApplicationStatusFolder;
@@ -174,7 +173,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantInfoDTO) {
-                    return new InfoViewForm(new VistaViewersComponentFactory());
+                    return new InfoViewForm();
                 }
                 return super.create(member);
             }
@@ -187,7 +186,7 @@ public class MasterApplicationEditorForm extends CrmEntityForm<MasterApplication
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof TenantFinancialDTO) {
-                    return new FinancialViewForm(new VistaViewersComponentFactory());
+                    return new FinancialViewForm();
                 }
                 return super.create(member);
             }

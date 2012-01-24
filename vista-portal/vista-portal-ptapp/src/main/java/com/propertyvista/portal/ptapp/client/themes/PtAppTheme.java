@@ -278,14 +278,10 @@ public class PtAppTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Content));
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-color", "#bbb");
-
         style.addProperty("font-weight", "normal");
 
-        style.addProperty("background-color", "white");
         style.addProperty("color", "black");
+        style.addProperty("background-color", "white"); // synch with LeaseTemsFolder.StyleSuffix.Scroll!
 
         style.addProperty("padding-left", "0.5em");
         style.addProperty("padding-right", "0.5em");
@@ -296,6 +292,12 @@ public class PtAppTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, LeaseTemsFolder.StyleSuffix.Scroll));
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-color", "#bbb");
+
+        style.addProperty("background-color", "white"); // synch with LeaseTemsFolder.StyleSuffix.Content!
+
         style.addProperty("height", "20em");
         addStyle(style);
 

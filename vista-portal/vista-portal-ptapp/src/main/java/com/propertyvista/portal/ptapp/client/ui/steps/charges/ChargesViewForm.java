@@ -48,21 +48,24 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         this(true);
     }
 
-    public ChargesViewForm(boolean editable) {
+    public ChargesViewForm(boolean viewMode) {
         super(Charges.class);
-        this.editable = editable;
         setViewable(true);
-        addValueChangeHandler(new ValueChangeHandler<Charges>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Charges> event) {
-                revalidate();
-                log.trace("calculateCharges");
-                Charges current = getValue();
-                if (isValid() && ChargesSharedCalculation.calculateCharges(current)) {
-                    setValue(current, false, false);
+
+        this.editable = !viewMode;
+        if (editable) {
+            addValueChangeHandler(new ValueChangeHandler<Charges>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Charges> event) {
+                    revalidate();
+                    log.trace("calculateCharges");
+                    Charges current = getValue();
+                    if (isValid() && ChargesSharedCalculation.calculateCharges(current)) {
+                        setValue(current, false, false);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
