@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.tester.client.view.widget;
+package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 
-import com.pyx4j.forms.client.ui.DomDebug;
 import com.pyx4j.widgets.client.RichTextArea;
 
 public class ExtendedRichTextArea extends DockPanel {
@@ -124,18 +123,6 @@ public class ExtendedRichTextArea extends DockPanel {
         }
         html = b.toString();
         return html.replaceAll("<br>", "<br />");
-    }
-
-    @Override
-    protected void onLoad() {
-        super.onLoad();
-        DomDebug.attachedWidget();
-    }
-
-    @Override
-    protected void onUnload() {
-        super.onUnload();
-        DomDebug.detachWidget();
     }
 
     @Override

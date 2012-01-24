@@ -22,6 +22,8 @@ package com.pyx4j.tester.client.view.widget;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
+
 
 public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEditorView {
 

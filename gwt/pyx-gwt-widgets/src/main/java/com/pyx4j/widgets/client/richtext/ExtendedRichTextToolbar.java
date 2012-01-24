@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.pyx4j.tester.client.view.widget;
+package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -23,22 +23,18 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
@@ -96,22 +92,29 @@ public class ExtendedRichTextToolbar extends Composite {
             } else if (sender == justifyRight) {
                 formatter.setJustification(RichTextArea.Justification.RIGHT);
             } else if (sender == insertImage) {
-                new InsertImageDialog().show();
-/*
- * String url = Window.prompt("Enter an image URL:", "http://");
- * if (url != null) {
- * formatter.insertImage(url);
- * }
- */
+                if (provider != null) {
+                    provider.selectImage(new AsyncCallback<String>() {
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            // TODO Auto-generated method stub
+
+                        }
+
+                        @Override
+                        public void onSuccess(String result) {
+                            formatter.insertImage(result);
+                        }
+
+                    });
+                } else {
+                    formatter.insertImage(Window.prompt("Enter an image URL:", "http://"));
+                }
             } else if (sender == createLink) {
-                new CreateLinkDialog() {
-                    @Override
-                    public boolean onClickOk() {
-                        Window.alert(url.getText());
-                        formatter.createLink(url.getText());
-                        return true;
-                    }
-                }.show();
+                String url = getLinkUrl();
+                if (url != null) {
+                    formatter.createLink(url);
+                }
             } else if (sender == removeLink) {
                 formatter.removeLink();
             } else if (sender == hr) {
@@ -138,38 +141,6 @@ public class ExtendedRichTextToolbar extends Composite {
                 // keyboard, or uses one of the browser's built-in keyboard shortcuts.
                 updateStatus();
             }
-        }
-    }
-
-    private abstract class CreateLinkDialog extends OkCancelDialog {
-
-        protected final TextBox url = new TextBox();
-
-        public CreateLinkDialog() {
-            super("Create Internet Link");
-            FlexTable body = new FlexTable();
-
-            CLabel label = new CLabel();
-            label.setValue("Enter Link Url - http://");
-            body.setWidget(0, 0, label);
-
-            url.setWidth("300px");
-            body.setWidget(0, 1, url);
-
-            setBody(body);
-        }
-    }
-
-    private class InsertImageDialog extends OkCancelDialog {
-
-        public InsertImageDialog() {
-            super("Insert Image");
-            setBody(new CTextField().asWidget());
-        }
-
-        @Override
-        public boolean onClickOk() {
-            return false;
         }
     }
 
@@ -234,6 +205,8 @@ public class ExtendedRichTextToolbar extends Composite {
     private ListBox fonts;
 
     private ListBox fontSizes;
+
+    private RichTextImageProvider provider;
 
     /**
      * Creates a new toolbar that drives the given rich text area.
@@ -361,5 +334,13 @@ public class ExtendedRichTextToolbar extends Composite {
         subscript.setDown(formatter.isSubscript());
         superscript.setDown(formatter.isSuperscript());
         strikethrough.setDown(formatter.isStrikethrough());
+    }
+
+    public String getLinkUrl() {
+        return Window.prompt("Enter an link URL:", "http://");
+    }
+
+    public void setImageProvider(RichTextImageProvider provider) {
+        this.provider = provider;
     }
 }
