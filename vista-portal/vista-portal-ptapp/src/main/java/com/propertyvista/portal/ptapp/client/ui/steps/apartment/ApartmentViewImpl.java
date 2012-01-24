@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
+import com.pyx4j.security.shared.SecurityController;
+
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -20,5 +23,10 @@ public class ApartmentViewImpl extends WizardStepViewImpl<ApartmentInfoDTO, Apar
 
     public ApartmentViewImpl() {
         super(new ApartmentViewForm());
+    }
+
+    @Override
+    protected String actionName() {
+        return (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant) ? super.actionName() : i18n.tr("Continue"));
     }
 }
