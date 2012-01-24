@@ -61,36 +61,9 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().textBox())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextII())));
-//        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextII())));
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().integerBox())));
 
-        //main.setHR(++row, 0, 1);
-
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextAreaII())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaI())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextAreaII())));
-
-        //main.setHR(++row, 0, 1);
-
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerI())));
-
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalIntegerII())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryIntegerII())));
-
-        //main.setHR(++row, 0, 1);
-
-        //main.setHR(++row, 0, 1);
-
-        //main.setHR(++row, 0, 1);
-
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().enumBox())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumI())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnumII())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEnumII())));
-
-        //main.setHR(++row, 0, 1);
 
         Collection<String> options = new ArrayList<String>();
         for (int i = 0; i < 10; i++) {
@@ -103,36 +76,18 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         box = new CSuggestStringBox();
         box.setOptions(options);
-//        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatorySuggest(), box)));
-
-        //main.setHR(++row, 0, 1);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().datePicker())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryDatePicker())));
 
-        //main.setHR(++row, 0, 1);
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().singleMonthdatePicker())));
-//      main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatorySingleMonthDatePicker())));
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTimePicker())));
-//        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatoryTimePicker())));
-
-        //main.setHR(++row, 0, 1);
-
-        //main.setHR(++row, 0, 1);
 
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().phone())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPhone())));
-
-//        main.setHR(++row, 0, 1);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().email())));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryEmail())));
-
-//        main.setHR(++row, 0, 1);
 
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().money())));
-//        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().mandatoryMoney())));
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().booleanRadioGroup())));
 
@@ -170,10 +125,6 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().richTextArea())));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        //main.setHR(++row, 0, 1);
-
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().entityIVListNotOwned(), new CEntityListBox<EntityIV>())));
 
         return main;
     }
