@@ -28,11 +28,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.charges.ChargeLineList;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
@@ -45,14 +47,14 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
     private final boolean editable;
 
     public ChargesViewForm() {
-        this(true);
+        this(false);
     }
 
     public ChargesViewForm(boolean viewMode) {
         super(Charges.class);
         setViewable(true);
 
-        this.editable = !viewMode;
+        this.editable = !viewMode && SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant);
         if (editable) {
             addValueChangeHandler(new ValueChangeHandler<Charges>() {
                 @Override

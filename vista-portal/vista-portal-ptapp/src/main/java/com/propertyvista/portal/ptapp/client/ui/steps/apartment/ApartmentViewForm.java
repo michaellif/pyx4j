@@ -23,10 +23,12 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
@@ -68,6 +70,8 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
 
     @Override
     public IsWidget createContent() {
+        boolean modifiable = SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant);
+
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
@@ -137,19 +141,19 @@ public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO
         main.setH1(++row, 0, 1, i18n.tr("Add-Ons"));
 
         petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
-        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), petFolder = new FeatureExFolder(Feature.Type.pet, this, true)));
+        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), petFolder = new FeatureExFolder(Feature.Type.pet, this, modifiable)));
         main.setWidget(++row, 0, petsPanel);
 
         parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
-        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), parkingFolder = new FeatureExFolder(Feature.Type.parking, this, true)));
+        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), parkingFolder = new FeatureExFolder(Feature.Type.parking, this, modifiable)));
         main.setWidget(++row, 0, parkingPanel);
 
         storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
-        storagePanel.setWidget(1, 0, inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, true)));
+        storagePanel.setWidget(1, 0, inject(proto().agreedStorage(), new FeatureFolder(Feature.Type.locker, this, modifiable)));
         main.setWidget(++row, 0, storagePanel);
 
         otherPanel.setH2(0, 0, 1, i18n.tr("Other"));
-        otherPanel.setWidget(1, 0, inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, true)));
+        otherPanel.setWidget(1, 0, inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, modifiable)));
         main.setWidget(++row, 0, otherPanel);
 
         return main;

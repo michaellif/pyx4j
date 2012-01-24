@@ -86,4 +86,8 @@ public class PtAppViewFactory extends ViewFactoryBase {
         }
         return impl;
     }
+
+    public static void clear() {
+        map.clear();
+    }
 }

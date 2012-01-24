@@ -42,7 +42,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
 
-    private final boolean readOnly;
+    private final boolean editable;
 
     static {
         TenantCharge proto = EntityFactory.getEntityPrototype(TenantCharge.class);
@@ -58,7 +58,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
     ChargeSplitListFolder(boolean modifiable) {
         super(TenantCharge.class, false);
-        this.readOnly = !modifiable;
+        this.editable = modifiable;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject() == proto().percentage() && !readOnly) {
+            if (column.getObject() == proto().percentage() && editable) {
                 CComponent<?, ?> prc = inject(column.getObject());
                 prc.inheritContainerAccessRules(false);
                 return prc;

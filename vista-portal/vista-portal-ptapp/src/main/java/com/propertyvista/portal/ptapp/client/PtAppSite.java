@@ -38,6 +38,7 @@ import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
 import com.propertyvista.portal.ptapp.client.ui.PtAppSitePanel;
+import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -110,10 +111,9 @@ public class PtAppSite extends VistaSite {
         AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                if (ClientContext.isAuthenticated()) {
-                    getWizardManager().onLogin();
-                } else {
+                if (!ClientContext.isAuthenticated()) {
                     getWizardManager().onLogout();
+                    PtAppViewFactory.clear();
                 }
 
                 getPlaceController().goTo(getPlaceController().getWhere());

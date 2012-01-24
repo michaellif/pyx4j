@@ -21,15 +21,18 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 
 public class ApplicationProgressMgr extends ApplicationManager {
@@ -42,14 +45,19 @@ public class ApplicationProgressMgr extends ApplicationManager {
             return false;
         }
 
-        //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
-        if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
-            return true;
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
+            //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
+            if (tenant.role().getValue() == TenantInLease.Role.Applicant) {
+                return true;
+            }
+            if (!tenant.takeOwnership().isBooleanTrue()) {
+                return false;
+            }
+            return (TimeUtils.isOlderThan(tenant.tenant().person().birthDate().getValue(), 18));
+        } else if (tenant.tenant().equals(PtAppContext.getCurrentUserTenant())) {
+            return true; // allow just his/her data...
         }
-        if (!tenant.takeOwnership().isBooleanTrue()) {
-            return false;
-        }
-        return (TimeUtils.isOlderThan(tenant.tenant().person().birthDate().getValue(), 18));
+        return false;
     }
 
     public static void syncroizeApplicationProgress(Application application, List<TenantInLeaseDTO> tenants) {

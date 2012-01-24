@@ -22,8 +22,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
 public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
@@ -36,11 +38,14 @@ public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
 
     @Override
     public IsWidget createContent() {
+        boolean modifiable = SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant);
+
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Tenants & Occupants"));
-        main.setWidget(++row, 0, inject(proto().tenants(), new TenantFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().tenants(), new TenantFolder(modifiable)));
+        get(proto().tenants()).setViewable(!modifiable);
 
         return main;
     }

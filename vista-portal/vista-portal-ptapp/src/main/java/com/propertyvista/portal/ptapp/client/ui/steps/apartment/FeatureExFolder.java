@@ -42,8 +42,6 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
     public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(ChargeItem.class, modifiable);
-        inheritContainerAccessRules(false);
-        setEditable(modifiable);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
@@ -67,7 +65,12 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ChargeItem) {
-            return new FeatureExEditor();
+            CComponent<?, ?> comp = new FeatureExEditor();
+            if (isModifiable()) {
+                comp.inheritContainerAccessRules(false); // allow editing behavior (default) if folder modifiable...
+            }
+            return comp;
+
         } else {
             return super.create(member);
         }

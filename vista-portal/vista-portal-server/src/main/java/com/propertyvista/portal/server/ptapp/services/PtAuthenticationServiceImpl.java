@@ -15,11 +15,17 @@ package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.Set;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.Behavior;
 
+import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
+import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
@@ -37,6 +43,18 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     @Override
     protected void addBehaviors(TenantUserCredential userCredential, Set<Behavior> behaviors) {
         behaviors.addAll(userCredential.behaviors());
+
     }
 
+    @Override
+    public String beginSession(AbstractUser user, TenantUserCredential userCredential) {
+        String res = super.beginSession(user, userCredential);
+
+        // set application in context here:
+        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtAppContext.getCurrentUser()));
+        PtAppContext.setCurrentUserApplication(Persistence.service().retrieve(criteria));
+
+        return res;
+    }
 }

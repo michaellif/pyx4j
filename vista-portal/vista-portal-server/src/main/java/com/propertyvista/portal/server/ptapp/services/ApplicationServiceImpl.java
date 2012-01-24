@@ -74,28 +74,24 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
             }
         }
 
-        Application application;
-        {
-            // TODO verify application status
-            EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-            application = Persistence.service().retrieve(criteria);
-            if (application == null) {
-                throw new UserRuntimeException(i18n.tr("You have no applications assigned"));
-            }
-
-            if (application.status().getValue() == MasterApplication.Status.Invited) {
-                application.status().setValue(MasterApplication.Status.Incomplete);
-                Persistence.service().persist(application);
-                Persistence.service().retrieve(application.belongsTo());
-                if (application.belongsTo().status().getValue() == MasterApplication.Status.Invited) {
-                    application.belongsTo().status().setValue(MasterApplication.Status.Incomplete);
-                    Persistence.service().persist(application.belongsTo());
-                }
-            }
+        Application application = PtAppContext.getCurrentUserApplication();
+        if (application == null) {
+            throw new UserRuntimeException(i18n.tr("You have no applications assigned"));
         }
 
-        PtAppContext.setCurrentUserApplication(application);
+        // TODO : some corrections?! 
+        // now application set into  PtAppContext in @link PtAuthenticationServiceImpl.beginSession() 
+        // but this stuff I live here
+        //
+        if (application.status().getValue() == MasterApplication.Status.Invited) {
+            application.status().setValue(MasterApplication.Status.Incomplete);
+            Persistence.service().persist(application);
+            Persistence.service().retrieve(application.belongsTo());
+            if (application.belongsTo().status().getValue() == MasterApplication.Status.Invited) {
+                application.belongsTo().status().setValue(MasterApplication.Status.Incomplete);
+                Persistence.service().persist(application.belongsTo());
+            }
+        }
 
         log.debug("Application {}", application);
         callback.onSuccess(application);

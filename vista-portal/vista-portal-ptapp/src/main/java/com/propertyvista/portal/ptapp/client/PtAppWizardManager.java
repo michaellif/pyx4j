@@ -120,15 +120,6 @@ public class PtAppWizardManager {
         }
     }
 
-    public void onLogin() {
-        ((ApplicationService) GWT.create(ApplicationService.class)).getApplication(new DefaultAsyncCallback<Application>() {
-            @Override
-            public void onSuccess(Application result) {
-                application = result;
-            }
-        });
-    }
-
     public void onLogout() {
         application = null;
     }
