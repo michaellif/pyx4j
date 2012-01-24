@@ -62,19 +62,17 @@ public class VistaDevSessionServlet extends HttpServlet {
             String tp = request.getParameter("long");
             if (CommonsStringUtils.isStringSet(tp)) {
                 openStart = System.currentTimeMillis();
-                if (OpenIdFilter.enabled) {
-                    OpenIdFilter.enabled = false;
-                    if (closeTimer == null) {
-                        closeTimer = new Timer("OpenIdCloseTimer", true);
-                        closeTimer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                if ((System.currentTimeMillis() - openStart) > 5 * Consts.MIN2MSEC) {
-                                    OpenIdFilter.enabled = true;
-                                }
+                DevSession.forceSingleSession(true);
+                if (closeTimer == null) {
+                    closeTimer = new Timer("OpenIdCloseTimer", true);
+                    closeTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if ((System.currentTimeMillis() - openStart) > 5 * Consts.MIN2MSEC) {
+                                DevSession.forceSingleSession(false);
                             }
-                        }, 2000, 2000);
-                    }
+                        }
+                    }, 2000, 2000);
                 }
             }
         }

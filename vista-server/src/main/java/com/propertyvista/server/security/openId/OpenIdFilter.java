@@ -45,7 +45,7 @@ public class OpenIdFilter implements Filter {
 
     static String REQUESTED_URL_ATTRIBUTE = "access-requested";
 
-    static boolean enabled;
+    private static boolean enabled;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
