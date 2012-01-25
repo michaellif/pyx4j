@@ -50,7 +50,7 @@ public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("CComponent Properties"));
+        main.setH1(++row, 0, 2, i18n.tr("CComponent Properties"));
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().title())));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
