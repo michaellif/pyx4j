@@ -51,7 +51,6 @@ public class PasswordResetRequestActivity extends AbstractActivity implements Pa
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.discard();
         panel.setWidget(view);
     }
 

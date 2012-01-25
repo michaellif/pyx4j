@@ -52,7 +52,6 @@ public class PasswordResetActivity extends AbstractActivity implements PasswordR
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.discard();
         panel.setWidget(view);
     }
 

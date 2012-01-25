@@ -38,13 +38,13 @@ public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeV
             }
         };
         form.initContent();
-        form.populateNew();
         add(form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        form.populateNew();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeV
 
     @Override
     public void discard() {
-        form.populateNew();
+        form.discard();
     }
 
 }

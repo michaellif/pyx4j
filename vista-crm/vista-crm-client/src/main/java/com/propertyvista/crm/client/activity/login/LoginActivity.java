@@ -51,7 +51,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.discard();
         panel.setWidget(view);
     }
 

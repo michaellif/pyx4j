@@ -71,9 +71,6 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         };
 
         form.initContent();
-        form.get(form.proto().captcha()).setVisible(false);
-        form.populateNew();
-
         add(form);
 
     }
@@ -86,12 +83,13 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        form.populateNew();
+        form.disableCaptcha();
     }
 
     @Override
     public void discard() {
-        form.populateNew();
-        form.disableCaptcha();
+        form.discard();
     }
 
     private void submit() {

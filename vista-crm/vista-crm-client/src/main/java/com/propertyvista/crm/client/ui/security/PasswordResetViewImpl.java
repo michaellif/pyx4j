@@ -31,17 +31,17 @@ public class PasswordResetViewImpl extends FlowPanel implements PasswordResetVie
             }
         };
         form.initContent();
-        form.populateNew();
         add(form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        form.populateNew();
     }
 
     @Override
     public void discard() {
-        form.populateNew();
+        form.discard();
     }
 }

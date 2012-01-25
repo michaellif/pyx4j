@@ -38,21 +38,21 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
             }
         });
         form.initContent();
-        form.populateNew();
         add(form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        form.populateNew();
+        form.displayResetPasswordMessage(false);
+        createNewCaptchaChallenge();
+
     }
 
     @Override
     public void discard() {
         form.discard();
-        form.populateNew();
-        form.displayResetPasswordMessage(false);
-        createNewCaptchaChallenge();
     }
 
     @Override
