@@ -66,7 +66,7 @@ public class RentRollAdaptor {
     }
 
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01", "nrp02", "nrp03", "nrp04",
-            "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2")); // add erroneous "apt numbers" here (lower case)
+            "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2", "roof3", "roof4")); // add erroneous "apt numbers" here (lower case)
 
     private static List<BuildingIO> buildings = new LinkedList<BuildingIO>();
 
@@ -74,13 +74,17 @@ public class RentRollAdaptor {
 
         readTenantRoster(inFile); // populate buildings
 
+        int unitCount = 0;
         ImportIO importIO = EntityFactory.create(ImportIO.class);
         for (BuildingIO building : buildings) {
             if (!building.units().isNull()) {
                 importIO.buildings().add(building);
+                unitCount += building.units().size();
             }
-
         }
+
+        System.out.println("Exported " + importIO.buildings().size() + " buildings");
+        System.out.println("Exported " + unitCount + " units");
 
         File f = new File(outFile);
         FileWriter w = null;
