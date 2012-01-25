@@ -30,7 +30,7 @@ import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 
-@ToStringFormat("{0} - {1}, {2}")
+@ToStringFormat("{0},  {1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface GuarantorInLease extends IBoundToApplication {
 
@@ -53,14 +53,13 @@ public interface GuarantorInLease extends IBoundToApplication {
     @ToString(index = 0)
     Guarantor guarantor();
 
+    @NotNull
+    @ToString(index = 1)
+    IPrimitive<PersonRelationship> relationship();
+
     @Override
     @NotNull
     @Indexed
     @Detached
     Application application();
-
-    @ToString(index = 2)
-    @NotNull
-    IPrimitive<PersonRelationship> relationship();
-
 }
