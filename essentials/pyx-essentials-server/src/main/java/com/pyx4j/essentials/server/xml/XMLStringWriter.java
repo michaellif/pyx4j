@@ -117,9 +117,6 @@ public class XMLStringWriter {
     }
 
     public void write(String name, Map<String, String> attributes, Object value) {
-        if (value == null && (attributes == null || attributes.size() == 0)) {
-            return;
-        }
         idented();
         start(name, attributes);
         if (value != null) {
