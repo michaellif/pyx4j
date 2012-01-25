@@ -18,6 +18,8 @@ import java.util.Collection;
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
@@ -27,14 +29,15 @@ import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.SiteResourcesUploadService;
+import com.propertyvista.crm.rpc.services.SiteImageResourcesUploadService;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.server.common.blob.BlobService;
 
 /**
  * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
  * 
  */
-public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity, IEntity> implements SiteResourcesUploadService {
+public class SiteImageResourcesUploadServiceImpl extends UploadServiceImpl<IEntity, SiteImageResource> implements SiteImageResourcesUploadService {
 
     private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
@@ -54,10 +57,22 @@ public class SiteResourcesUploadServiceImpl extends UploadServiceImpl<IEntity, I
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<IEntity, IEntity> process, final UploadResponse<IEntity> response) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<IEntity, SiteImageResource> process,
+            final UploadResponse<SiteImageResource> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
         response.uploadKey = blobKey;
+
+        SiteImageResource newDocument = EntityFactory.create(SiteImageResource.class);
+        newDocument.fileInfo().blobKey().setValue(blobKey);
+        newDocument.fileInfo().fileName().setValue(response.fileName);
+        newDocument.fileInfo().fileSize().setValue(response.fileSize);
+        newDocument.fileInfo().timestamp().setValue(response.timestamp);
+        newDocument.fileInfo().contentMimeType().setValue(response.fileContentType);
+        Persistence.service().persist(newDocument);
+
+        response.data = newDocument;
+
         return ProcessingStatus.completed;
     }
 }

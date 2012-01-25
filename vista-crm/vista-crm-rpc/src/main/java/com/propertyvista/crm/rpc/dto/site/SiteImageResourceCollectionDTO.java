@@ -7,22 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 30, 2011
- * @author michaellif
+ * Created on Jan 23, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
-
-import java.util.Collection;
-import java.util.EnumSet;
+package com.propertyvista.crm.rpc.dto.site;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.report.DownloadFormat;
-import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.entity.shared.IList;
 
-public interface SiteResourcesUploadService extends UploadService<IEntity, IEntity> {
+import com.propertyvista.domain.site.SiteImageResource;
 
-    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
-            DownloadFormat.BMP);
+public interface SiteImageResourceCollectionDTO extends IEntity {
+
+    IList<SiteImageResource> images();
 
 }
