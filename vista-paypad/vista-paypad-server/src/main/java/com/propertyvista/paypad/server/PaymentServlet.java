@@ -77,31 +77,41 @@ public class PaymentServlet extends HttpServlet {
             return;
         } catch (Throwable e) {
             log.error("Error", e);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            replyWithStatusCode(response, ResponseMessage.StatusCode.SystemDown);
             return;
         } finally {
             IOUtils.closeQuietly(is);
         }
 
+        PaymentProcessor pp;
         try {
-            PaymentProcessor pp = new PaymentProcessor();
+            pp = new PaymentProcessor();
             log.info("processing message {}", message.getMessageId());
-            if (pp.isValid(message)) {
-                if (PaymentSecurity.enter(message)) {
-                    ResponseMessage rm = pp.execute(message);
-                    log.info("reply {}", MarshallUtil.marshall(rm));
-                    response.setContentType("text/xml");
-                    MarshallUtil.marshal(rm, response.getOutputStream());
-                } else {
-                    replyWithStatusCode(response, ResponseMessage.StatusCode.AuthenticationFailed);
-                }
-            } else {
+            if (!pp.isValid(message)) {
                 replyWithStatusCode(response, ResponseMessage.StatusCode.MessageFormatError);
+                return;
+            }
+
+            if (!PaymentSecurity.enter(message)) {
+                replyWithStatusCode(response, ResponseMessage.StatusCode.AuthenticationFailed);
+                return;
             }
         } catch (Throwable e) {
             log.error("Error", e);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            replyWithStatusCode(response, ResponseMessage.StatusCode.SystemDown);
+            return;
         }
+
+        try {
+            ResponseMessage rm = pp.execute(message);
+            log.info("reply {}", MarshallUtil.marshall(rm));
+            response.setContentType("text/xml");
+            MarshallUtil.marshal(rm, response.getOutputStream());
+        } catch (Throwable e) {
+            log.error("Error", e);
+            replyWithStatusCode(response, ResponseMessage.StatusCode.SystemError);
+        }
+
     }
 
     private void replyWithStatusCode(HttpServletResponse response, StatusCode statusCode) {

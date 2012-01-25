@@ -35,7 +35,9 @@ public class ResponseMessage {
 
         ReadOnly,
 
-        SystemDown
+        SystemDown,
+
+        SystemError
 
     }
 
