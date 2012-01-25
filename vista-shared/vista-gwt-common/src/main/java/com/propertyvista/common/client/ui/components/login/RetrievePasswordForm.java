@@ -41,7 +41,7 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
     public RetrievePasswordForm(Command onSubmitCommand) {
         super(PasswordRetrievalRequest.class);
         this.onSubmitCommand = onSubmitCommand;
-        this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password, check that you entered the correct email address"));
+        this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password. Check that you entered the email and chaptcha you provided are correct."));
         setWidth("30em");
 
     }
@@ -67,6 +67,7 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
         main.add(new HTML());
         main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
         main.add(passwordResetFailedMessage);
+        passwordResetFailedMessage.getElement().getStyle().setMarginTop(1, Unit.EM);
         passwordResetFailedMessage.setVisible(false);
 
         Button retrievePasswordButton = new Button(i18n.tr("Reset"));

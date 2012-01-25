@@ -68,7 +68,6 @@ public class PasswordResetRequestActivity extends AbstractActivity implements Pa
             public void onFailure(Throwable caught) {
                 view.createNewCaptchaChallenge();
                 view.displayPasswordResetFailedMessage();
-                MessageDialog.error(i18n.tr("Password Reset Request Failed"), caught);
             }
 
         };
