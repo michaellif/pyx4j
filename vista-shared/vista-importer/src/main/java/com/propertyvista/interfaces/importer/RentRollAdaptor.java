@@ -65,8 +65,8 @@ public class RentRollAdaptor {
         ExpectAddress, ExpectData
     }
 
-    public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01",
-            "current/notice/vacant residents", "nrp-02", "roof1", "roof2")); // add erroneous "apt numbers" here (lower case)
+    public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01", "nrp02", "nrp03", "nrp04",
+            "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2")); // add erroneous "apt numbers" here (lower case)
 
     private static List<BuildingIO> buildings = new LinkedList<BuildingIO>();
 
