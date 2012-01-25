@@ -136,6 +136,8 @@ public class ValueAdapterEntityVirtual implements ValueAdapter {
 
     @Override
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
+        assert ((value == null) || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class " + value.getClass();
+
         if ((value != null) && (((IEntity) value).getPrimaryKey() == null)) {
             return new ValueBindAdapter() {
 
