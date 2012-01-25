@@ -28,7 +28,7 @@ import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -67,7 +67,7 @@ public class BuildingCrudServiceImpl extends GenericCrudServiceDtoImpl<Building,
             amenitysCriteria.add(PropertyCriterion.eq(amenitysCriteria.proto().belongsTo(), in));
             dto.amenities().addAll(Persistence.service().query(amenitysCriteria));
 
-            EntityQueryCriteria<ServiceItemType> serviceItemCriteria = EntityQueryCriteria.create(ServiceItemType.class);
+            EntityQueryCriteria<ProductItemType> serviceItemCriteria = EntityQueryCriteria.create(ProductItemType.class);
             serviceItemCriteria.add(PropertyCriterion.in(serviceItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
             dto.availableUtilities().addAll(Persistence.service().query(serviceItemCriteria));
 

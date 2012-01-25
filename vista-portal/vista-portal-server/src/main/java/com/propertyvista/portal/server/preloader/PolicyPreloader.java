@@ -28,7 +28,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
@@ -115,9 +115,9 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
     private PetPolicy createDefaultPetPolicy() {
         PetPolicy petPolicy = EntityFactory.create(PetPolicy.class);
 
-        EntityQueryCriteria<ServiceItemType> criteria = new EntityQueryCriteria<ServiceItemType>(ServiceItemType.class);
+        EntityQueryCriteria<ProductItemType> criteria = new EntityQueryCriteria<ProductItemType>(ProductItemType.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().featureType(), Feature.Type.pet));
-        for (ServiceItemType pet : Persistence.service().query(criteria)) {
+        for (ProductItemType pet : Persistence.service().query(criteria)) {
             PetConstraints constraints = EntityFactory.create(PetConstraints.class);
             if (i18n.tr("Cat").equals(pet.name().getValue())) {
                 constraints.maxNumber().setValue(10);

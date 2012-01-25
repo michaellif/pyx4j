@@ -21,14 +21,14 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceDictionaryViewForm extends CrmEntityForm<ServiceItemType> {
+public class ServiceDictionaryViewForm extends CrmEntityForm<ProductItemType> {
 
     private static final I18n i18n = I18n.get(ServiceDictionaryViewForm.class);
 
     public ServiceDictionaryViewForm() {
-        super(ServiceItemType.class, new CrmViewersComponentFactory());
+        super(ProductItemType.class, new CrmViewersComponentFactory());
     }
 
     @Override

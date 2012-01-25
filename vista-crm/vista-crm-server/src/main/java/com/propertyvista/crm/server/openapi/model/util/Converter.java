@@ -37,7 +37,7 @@ import com.propertyvista.crm.server.openapi.model.UtilityRS;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
@@ -248,7 +248,7 @@ public class Converter {
         return to;
     }
 
-    public static UtilityRS convertBuildingIncludedUtility(ServiceItemType from) {
+    public static UtilityRS convertBuildingIncludedUtility(ProductItemType from) {
         UtilityRS to = new UtilityRS();
 
         to.name = from.name().getStringView();

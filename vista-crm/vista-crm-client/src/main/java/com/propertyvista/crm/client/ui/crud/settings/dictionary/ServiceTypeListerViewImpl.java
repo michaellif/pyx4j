@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceTypeListerViewImpl extends CrmListerViewImplBase<ServiceItemType> implements ServiceTypeListerView {
+public class ServiceTypeListerViewImpl extends CrmListerViewImplBase<ProductItemType> implements ServiceTypeListerView {
 
     public ServiceTypeListerViewImpl() {
         super(CrmSiteMap.Settings.ServiceDictionary.class);

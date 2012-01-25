@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering;
+package com.propertyvista.domain.tenant.lease;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
 
-public interface ChargeItemAdjustment extends IEntity {
+public interface AgreedItemAdjustment extends IEntity {
 
     @I18n
     @XmlType(name = "ChargeAdjustmentType")

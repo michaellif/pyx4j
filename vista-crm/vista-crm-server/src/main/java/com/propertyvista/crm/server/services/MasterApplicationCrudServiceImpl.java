@@ -24,10 +24,10 @@ import com.propertyvista.crm.rpc.services.MasterApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericConverter;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -105,7 +105,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
         dto.otherPrice().setValue(0.);
         dto.deposit().setValue(0.);
 
-        for (ChargeItem item : dto.lease().serviceAgreement().featureItems()) {
+        for (AgreedItem item : dto.lease().serviceAgreement().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
             if (item.item().product() instanceof Feature) {
                 switch (((Feature) item.item().product()).type().getValue()) {

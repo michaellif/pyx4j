@@ -26,11 +26,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 
-public class FeatureFolder extends VistaTableFolder<ChargeItem> {
+public class FeatureFolder extends VistaTableFolder<AgreedItem> {
 
     private static final I18n i18n = I18n.get(FeatureFolder.class);
 
@@ -39,15 +39,15 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
     private final ApartmentViewForm apartmentViewForm;
 
     public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
-        super(ChargeItem.class, modifiable);
+        super(AgreedItem.class, modifiable);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
     }
 
     @Override
-    protected IFolderDecorator<ChargeItem> createDecorator() {
-        IFolderDecorator<ChargeItem> decor = super.createDecorator();
+    protected IFolderDecorator<AgreedItem> createDecorator() {
+        IFolderDecorator<AgreedItem> decor = super.createDecorator();
         return decor;
     }
 
@@ -68,7 +68,7 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
                 @Override
                 public boolean onClickOk() {
                     for (ProductItem item : getSelectedItems()) {
-                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                        AgreedItem newItem = EntityFactory.create(AgreedItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());
                         newItem.agreedPrice().setValue(item.price().getValue());
@@ -80,12 +80,12 @@ public class FeatureFolder extends VistaTableFolder<ChargeItem> {
         }
     }
 
-    protected void unconditionalRemoveItem(CEntityFolderItem<ChargeItem> item) {
+    protected void unconditionalRemoveItem(CEntityFolderItem<AgreedItem> item) {
         super.removeItem(item);
     }
 
     @Override
-    protected void removeItem(final CEntityFolderItem<ChargeItem> item) {
+    protected void removeItem(final CEntityFolderItem<AgreedItem> item) {
         if (!item.getValue().adjustments().isEmpty()) {
             MessageDialog.confirm(i18n.tr("Warning!"),
                     i18n.tr("By removing the selected item you will lose the agreed price and adjustment(s)! Are you sure you want to remove it?"),

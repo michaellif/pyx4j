@@ -59,8 +59,8 @@ public interface ServiceCatalog extends IEntity {
     // ----------------------------------------------------
 
     // Utilities included in price and should be EXCLUDED from Lease Service Agreement 
-    IList<ServiceItemType> includedUtilities();
+    IList<ProductItemType> includedUtilities();
 
     // Utilities provided by 3-d party and should be EXCLUDED from Lease Service Agreement 
-    IList<ServiceItemType> externalUtilities();
+    IList<ProductItemType> externalUtilities();
 }

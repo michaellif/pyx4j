@@ -26,23 +26,23 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class UtilityFolder extends VistaTableFolder<ServiceItemType> {
+public class UtilityFolder extends VistaTableFolder<ProductItemType> {
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {
-        ServiceItemType proto = EntityFactory.getEntityPrototype(ServiceItemType.class);
+        ProductItemType proto = EntityFactory.getEntityPrototype(ProductItemType.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "30em"));
     }
 
     public UtilityFolder() {
-        super(ServiceItemType.class, false);
+        super(ProductItemType.class, false);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ServiceItemType) {
+        if (member instanceof ProductItemType) {
             return new UtilityEditor();
         } else {
             return super.create(member);
@@ -56,9 +56,9 @@ public class UtilityFolder extends VistaTableFolder<ServiceItemType> {
         return columns;
     }
 
-    private class UtilityEditor extends CEntityFolderRowEditor<ServiceItemType> {
+    private class UtilityEditor extends CEntityFolderRowEditor<ProductItemType> {
         public UtilityEditor() {
-            super(ServiceItemType.class, UtilityFolder.COLUMNS);
+            super(ProductItemType.class, UtilityFolder.COLUMNS);
         }
 
         @Override
@@ -71,8 +71,8 @@ public class UtilityFolder extends VistaTableFolder<ServiceItemType> {
     }
 
     @Override
-    protected IFolderDecorator<ServiceItemType> createDecorator() {
-        TableFolderDecorator<ServiceItemType> decotator = (TableFolderDecorator<ServiceItemType>) super.createDecorator();
+    protected IFolderDecorator<ProductItemType> createDecorator() {
+        TableFolderDecorator<ProductItemType> decotator = (TableFolderDecorator<ProductItemType>) super.createDecorator();
         decotator.setShowHeader(false);
         return decotator;
     }

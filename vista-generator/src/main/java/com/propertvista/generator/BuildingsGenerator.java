@@ -31,9 +31,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.charges.ChargeType;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.PropertyManager;
@@ -57,7 +55,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
-import com.propertyvista.portal.domain.ptapp.PropertyProfile;
 
 public class BuildingsGenerator {
 
@@ -92,10 +89,6 @@ public class BuildingsGenerator {
         // organization contacts - not many fields there at the moment, will do
         // this later
         String propertyCode = "B" + String.valueOf(counter);
-
-        // property profile TODO - nobody is using this property profile right
-        // now
-        PropertyProfile propertyProfile = createPropertyProfile(counter);
 
         Building building = createBuilding(propertyCode, buildingType, website, address, email);
         // log.info("Created: " + building);
@@ -551,29 +544,6 @@ public class BuildingsGenerator {
     }
 
 // Property
-    public static PropertyProfile createPropertyProfile(int index) {
-        PropertyProfile propertyProfile = EntityFactory.create(PropertyProfile.class);
-
-        PetChargeRule petCharge;
-        if (index == 0) {
-            petCharge = createPetCharge(ChargeType.deposit, 100);
-        } else if (index == 1) {
-            petCharge = createPetCharge(ChargeType.oneTime, 50);
-        } else {
-            petCharge = createPetCharge(ChargeType.monthly, 200);
-        }
-        propertyProfile.petCharge().set(petCharge);
-
-        return propertyProfile;
-    }
-
-    public static PetChargeRule createPetCharge(ChargeType mode, int value) {
-        PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
-        petCharge.chargeType().setValue(mode);
-        petCharge.value().setValue(value);
-        return petCharge;
-    }
-
     public Complex createComplex(String name) {
         Complex complex = EntityFactory.create(Complex.class);
         complex.name().setValue(name);

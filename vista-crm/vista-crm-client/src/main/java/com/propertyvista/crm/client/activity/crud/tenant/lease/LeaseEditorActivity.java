@@ -30,14 +30,14 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -131,7 +131,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item) {
+    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, AgreedItem item) {
         ((LeaseCrudService) service).calculateChargeItemAdjustments(callback, item);
     }
 
@@ -182,7 +182,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
 
         if (selectedService != null) {
             ServiceCatalog catalog = currentValue.selectedBuilding().serviceCatalog();
-            List<ServiceItemType> utilitiesToExclude = new ArrayList<ServiceItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
+            List<ProductItemType> utilitiesToExclude = new ArrayList<ProductItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
@@ -207,8 +207,8 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         return (selectedService != null);
     }
 
-    private ChargeItem createChargeItem(ProductItem serviceItem) {
-        ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
+    private AgreedItem createChargeItem(ProductItem serviceItem) {
+        AgreedItem chargeItem = EntityFactory.create(AgreedItem.class);
         chargeItem.item().set(serviceItem);
         chargeItem.originalPrice().setValue(serviceItem.price().getValue());
         chargeItem.agreedPrice().setValue(serviceItem.price().getValue());

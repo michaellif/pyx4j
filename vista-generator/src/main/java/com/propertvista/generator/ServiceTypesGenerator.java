@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public class ServiceTypesGenerator extends ServiceItemTypes {
 
@@ -57,26 +57,26 @@ public class ServiceTypesGenerator extends ServiceItemTypes {
         featureItemTypes.add(createChargeItemType("Booking", Feature.Type.booking));
     }
 
-    public List<ServiceItemType> getServiceItemTypes() {
+    public List<ProductItemType> getServiceItemTypes() {
         return serviceItemTypes;
     }
 
-    public List<ServiceItemType> getFeatureItemTypes() {
+    public List<ProductItemType> getFeatureItemTypes() {
         return featureItemTypes;
     }
 
-    private ServiceItemType createChargeItemType(String name, Service.Type serviceType) {
-        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
+    private ProductItemType createChargeItemType(String name, Service.Type serviceType) {
+        ProductItemType type = EntityFactory.create(ProductItemType.class);
         type.name().setValue(name);
-        type.type().setValue(ServiceItemType.Type.service);
+        type.type().setValue(ProductItemType.Type.service);
         type.serviceType().setValue(serviceType);
         return type;
     }
 
-    private ServiceItemType createChargeItemType(String name, Feature.Type featureType) {
-        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
+    private ProductItemType createChargeItemType(String name, Feature.Type featureType) {
+        ProductItemType type = EntityFactory.create(ProductItemType.class);
         type.name().setValue(name);
-        type.type().setValue(ServiceItemType.Type.feature);
+        type.type().setValue(ProductItemType.Type.feature);
         type.featureType().setValue(featureType);
         return type;
     }

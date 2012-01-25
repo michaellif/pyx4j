@@ -43,7 +43,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -93,13 +93,13 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         ServiceItemTypes serviceItemTypes = new ServiceItemTypes();
         {
-            EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.Type.service));
+            EntityQueryCriteria<ProductItemType> criteria = EntityQueryCriteria.create(ProductItemType.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.service));
             serviceItemTypes.serviceItemTypes.addAll(Persistence.service().query(criteria));
         }
         {
-            EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.Type.feature));
+            EntityQueryCriteria<ProductItemType> criteria = EntityQueryCriteria.create(ProductItemType.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.feature));
             serviceItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
         }
 

@@ -36,14 +36,14 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
-import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.AgreedItemAdjustment;
+import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
+import com.propertyvista.domain.tenant.lease.extradata.Pet;
+import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
-class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
+class ChargeItemEditor extends CEntityDecoratableEditor<AgreedItem> {
 
     private static final I18n i18n = I18n.get(ChargeItemEditor.class);
 
@@ -52,7 +52,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
     public ChargeItemEditor() {
-        super(ChargeItem.class);
+        super(AgreedItem.class);
     }
 
     @Override
@@ -93,7 +93,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
             if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
                 // correct folder item:
                 if (getParent() instanceof CEntityFolderItem) {
-                    CEntityFolderItem<ChargeItem> item = (CEntityFolderItem<ChargeItem>) getParent();
+                    CEntityFolderItem<AgreedItem> item = (CEntityFolderItem<AgreedItem>) getParent();
                     item.setRemovable(false);
                 }
             }
@@ -103,7 +103,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
             }
 
             CEntityEditor editor = null;
-            ChargeItemExtraData extraData = getValue().extraData();
+            AgreedItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:
             switch (getValue().item().type().type().getValue()) {
@@ -150,10 +150,10 @@ class ChargeItemEditor extends CEntityDecoratableEditor<ChargeItem> {
         super.addValidations();
     }
 
-    private class ChargeItemAdjustmentFolder extends VistaTableFolder<ChargeItemAdjustment> {
+    private class ChargeItemAdjustmentFolder extends VistaTableFolder<AgreedItemAdjustment> {
 
         public ChargeItemAdjustmentFolder() {
-            super(ChargeItemAdjustment.class, ChargeItemEditor.this.isEditable());
+            super(AgreedItemAdjustment.class, ChargeItemEditor.this.isEditable());
         }
 
         @Override

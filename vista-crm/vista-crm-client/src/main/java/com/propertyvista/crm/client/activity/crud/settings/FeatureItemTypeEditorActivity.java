@@ -25,20 +25,20 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureItemTypeCrudService;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class FeatureItemTypeEditorActivity extends EditorActivityBase<ServiceItemType> {
+public class FeatureItemTypeEditorActivity extends EditorActivityBase<ProductItemType> {
 
     @SuppressWarnings("unchecked")
     public FeatureItemTypeEditorActivity(Place place) {
-        super(place, SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ServiceItemType>) GWT
-                .create(FeatureItemTypeCrudService.class), ServiceItemType.class);
+        super(place, SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ProductItemType>) GWT
+                .create(FeatureItemTypeCrudService.class), ProductItemType.class);
     }
 
     @Override
-    protected void createNewEntity(AsyncCallback<ServiceItemType> callback) {
-        ServiceItemType entity = EntityFactory.create(entityClass);
-        entity.type().setValue(ServiceItemType.Type.feature);
+    protected void createNewEntity(AsyncCallback<ProductItemType> callback) {
+        ProductItemType entity = EntityFactory.create(entityClass);
+        entity.type().setValue(ProductItemType.Type.feature);
         callback.onSuccess(entity);
     }
 }

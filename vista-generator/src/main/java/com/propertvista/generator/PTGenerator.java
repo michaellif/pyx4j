@@ -39,15 +39,11 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -65,8 +61,10 @@ import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.extradata.Pet;
+import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
+import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.domain.tenant.ptapp.Application;
-import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.misc.EquifaxResult;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -253,9 +251,6 @@ public class PTGenerator {
             }
 
             pet.birthDate().setValue(RandomUtil.randomLogicalDate(1985, 2011));
-
-            // charge line
-            pet.chargeLine().set(DomainUtil.createChargeLine(ChargeType.petCharge, 20d + RandomUtil.randomInt(100)));
 
             pets.add(pet);
         }

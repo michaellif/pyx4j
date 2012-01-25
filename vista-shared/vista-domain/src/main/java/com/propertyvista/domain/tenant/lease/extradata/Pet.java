@@ -11,13 +11,12 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering.extradata;
+package com.propertyvista.domain.tenant.lease.extradata;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,11 +24,10 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
+import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
 
 @DiscriminatorValue("Pet_ChargeItemExtraData")
-public interface Pet extends ChargeItemExtraData {
+public interface Pet extends AgreedItemExtraData {
 
     @I18nComment("Weight unit")
     public enum WeightUnit {
@@ -66,9 +64,4 @@ public interface Pet extends ChargeItemExtraData {
     @Format("MM/dd/yyyy")
     @BusinessEqualValue
     public IPrimitive<LogicalDate> birthDate();
-
-    @EmbeddedEntity
-    @Caption(name = "Charge")
-    public ChargeLine chargeLine();
-
 }

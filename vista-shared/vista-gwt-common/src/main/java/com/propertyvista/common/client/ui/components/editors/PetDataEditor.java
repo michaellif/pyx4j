@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.domain.financial.offering.extradata.Pet;
+import com.propertyvista.domain.tenant.lease.extradata.Pet;
 
 public class PetDataEditor extends CEntityDecoratableEditor<Pet> {
 

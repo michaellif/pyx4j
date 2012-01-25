@@ -21,17 +21,17 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.ServiceItemTypeCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceItemTypeCrudServiceImpl extends GenericCrudServiceImpl<ServiceItemType> implements ServiceItemTypeCrudService {
+public class ServiceItemTypeCrudServiceImpl extends GenericCrudServiceImpl<ProductItemType> implements ServiceItemTypeCrudService {
 
     public ServiceItemTypeCrudServiceImpl() {
-        super(ServiceItemType.class);
+        super(ProductItemType.class);
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<ServiceItemType>> callback, EntityListCriteria<ServiceItemType> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.Type.service));
+    public void list(AsyncCallback<EntitySearchResult<ProductItemType>> callback, EntityListCriteria<ProductItemType> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.service));
         super.list(callback, criteria);
     }
 }

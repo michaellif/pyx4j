@@ -37,10 +37,6 @@ public interface ChargeLine extends Charge {
 
         firstMonthRent,
 
-        petDeposit,
-
-        petCharge,
-
         prorated;
 
         @Override

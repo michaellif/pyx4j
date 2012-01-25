@@ -17,10 +17,10 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
 /**
- * Constraints for a specific type of pet ({@link ServiceItemType}) .
+ * Constraints for a specific type of pet ({@link ProductItemType}) .
  * 
  * @author ArtyomB
  * 
@@ -33,5 +33,5 @@ public interface PetConstraints extends IEntity {
     @Caption(description = "Maximum allowed weight per pet")
     IPrimitive<Double> maxWeight();
 
-    ServiceItemType pet();
+    ProductItemType pet();
 }

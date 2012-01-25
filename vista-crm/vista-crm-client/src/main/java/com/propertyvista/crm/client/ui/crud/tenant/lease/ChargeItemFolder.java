@@ -22,18 +22,18 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 import com.propertyvista.dto.LeaseDTO;
 
-class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
+class ChargeItemFolder extends VistaBoxFolder<AgreedItem> {
 
     private static final I18n i18n = I18n.get(ChargeItemFolder.class);
 
     final CrmEntityForm<LeaseDTO> parent;
 
     public ChargeItemFolder(boolean modifyable, CrmEntityForm<LeaseDTO> parent) {
-        super(ChargeItem.class, modifyable);
+        super(AgreedItem.class, modifyable);
         this.parent = parent;
     }
 
@@ -46,7 +46,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
                 @Override
                 public boolean onClickOk() {
                     for (ProductItem item : getSelectedItems()) {
-                        ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                        AgreedItem newItem = EntityFactory.create(AgreedItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());
                         newItem.agreedPrice().setValue(item.price().getValue());
@@ -70,7 +70,7 @@ class ChargeItemFolder extends VistaBoxFolder<ChargeItem> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ChargeItem) {
+        if (member instanceof AgreedItem) {
             return new ChargeItemEditor();
         }
         return super.create(member);

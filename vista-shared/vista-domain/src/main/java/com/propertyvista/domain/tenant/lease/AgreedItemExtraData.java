@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering;
+package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -21,6 +21,6 @@ import com.pyx4j.i18n.annotations.I18n;
 @Inheritance
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ChargeItemExtraData extends IEntity {
+public interface AgreedItemExtraData extends IEntity {
 
 }

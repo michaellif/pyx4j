@@ -22,7 +22,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public class ServiceCatalogPreloader extends AbstractDataPreloader {
 
@@ -34,7 +34,7 @@ public class ServiceCatalogPreloader extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(ServiceItemType.class, Service.class, Feature.class, Concession.class);
+            return deleteAll(ProductItemType.class, Service.class, Feature.class, Concession.class);
         } else {
             return "This is production";
         }

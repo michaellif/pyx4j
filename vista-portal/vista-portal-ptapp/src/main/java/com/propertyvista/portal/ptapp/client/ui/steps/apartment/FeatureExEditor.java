@@ -27,19 +27,19 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
-import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
-import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
+import com.propertyvista.domain.tenant.lease.extradata.Pet;
+import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
-class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
+class FeatureExEditor extends CEntityDecoratableEditor<AgreedItem> {
 
     private static final I18n i18n = I18n.get(FeatureExEditor.class);
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
     public FeatureExEditor() {
-        super(ChargeItem.class);
+        super(AgreedItem.class);
     }
 
     @Override
@@ -73,7 +73,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<ChargeItem> {
 
         if (!getValue().item().isEmpty()) {
             CEntityEditor editor = null;
-            ChargeItemExtraData extraData = getValue().extraData();
+            AgreedItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:
             switch (getValue().item().type().type().getValue()) {

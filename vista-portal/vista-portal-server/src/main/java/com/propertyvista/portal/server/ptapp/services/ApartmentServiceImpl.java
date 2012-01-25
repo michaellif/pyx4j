@@ -28,16 +28,16 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
@@ -64,9 +64,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO entity) {
         // update agreed items:
         Lease lease = PtAppContext.getCurrentUserLease();
-        for (Iterator<ChargeItem> iter = lease.serviceAgreement().featureItems().iterator(); iter.hasNext();) {
-            ChargeItem item = iter.next();
-            if (item.item().type().type().getValue().equals(ServiceItemType.Type.feature)) {
+        for (Iterator<AgreedItem> iter = lease.serviceAgreement().featureItems().iterator(); iter.hasNext();) {
+            AgreedItem item = iter.next();
+            if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
                 switch (item.item().type().featureType().getValue()) {
                 case utility:
                     break;
@@ -86,7 +86,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         lease.serviceAgreement().featureItems().addAll(entity.agreedOther());
 
         // save changes:
-        for (ChargeItem item : lease.serviceAgreement().featureItems()) {
+        for (AgreedItem item : lease.serviceAgreement().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
@@ -241,8 +241,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         entity.externalUtilities().addAll(building.serviceCatalog().externalUtilities());
 
         // fill agreed items:
-        for (ChargeItem item : lease.serviceAgreement().featureItems()) {
-            if (item.item().type().type().getValue().equals(ServiceItemType.Type.feature)) {
+        for (AgreedItem item : lease.serviceAgreement().featureItems()) {
+            if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
                 PriceCalculationHelpers.calculateChargeItemAdjustments(item);
                 switch (item.item().type().featureType().getValue()) {
                 case utility:

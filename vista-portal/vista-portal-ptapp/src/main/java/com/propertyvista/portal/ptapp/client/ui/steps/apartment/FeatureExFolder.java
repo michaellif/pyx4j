@@ -26,11 +26,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 
-public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
+public class FeatureExFolder extends VistaBoxFolder<AgreedItem> {
 
     private static final I18n i18n = I18n.get(FeatureExFolder.class);
 
@@ -41,7 +41,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     private int maxCount;
 
     public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
-        super(ChargeItem.class, modifiable);
+        super(AgreedItem.class, modifiable);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
@@ -56,15 +56,15 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
     }
 
     @Override
-    public IFolderItemDecorator<ChargeItem> createItemDecorator() {
-        BoxFolderItemDecorator<ChargeItem> decor = (BoxFolderItemDecorator<ChargeItem>) super.createItemDecorator();
+    public IFolderItemDecorator<AgreedItem> createItemDecorator() {
+        BoxFolderItemDecorator<AgreedItem> decor = (BoxFolderItemDecorator<AgreedItem>) super.createItemDecorator();
         decor.setExpended(apartmentViewForm != null);
         return decor;
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ChargeItem) {
+        if (member instanceof AgreedItem) {
             CComponent<?, ?> comp = new FeatureExEditor();
             if (isModifiable()) {
                 comp.inheritContainerAccessRules(false); // allow editing behavior (default) if folder modifiable...
@@ -85,7 +85,7 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
                     public boolean onClickOk() {
                         for (ProductItem item : getSelectedItems()) {
                             if (getValue().size() < getMaxCount()) {
-                                ChargeItem newItem = EntityFactory.create(ChargeItem.class);
+                                AgreedItem newItem = EntityFactory.create(AgreedItem.class);
                                 newItem.item().set(item);
                                 newItem.originalPrice().setValue(item.price().getValue());
                                 newItem.agreedPrice().setValue(item.price().getValue());
@@ -103,9 +103,9 @@ public class FeatureExFolder extends VistaBoxFolder<ChargeItem> {
 
     @Override
     public void addValidations() {
-        addValueValidator(new EditableValueValidator<List<ChargeItem>>() {
+        addValueValidator(new EditableValueValidator<List<AgreedItem>>() {
             @Override
-            public ValidationFailure isValid(CComponent<List<ChargeItem>, ?> component, List<ChargeItem> value) {
+            public ValidationFailure isValid(CComponent<List<AgreedItem>, ?> component, List<AgreedItem> value) {
                 if (value == null) {
                     return null;
                 }

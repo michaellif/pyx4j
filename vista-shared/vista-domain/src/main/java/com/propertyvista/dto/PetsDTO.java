@@ -20,8 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
+import com.propertyvista.domain.tenant.lease.extradata.Pet;
 
 @Transient
 public interface PetsDTO extends IEntity {
@@ -29,9 +28,6 @@ public interface PetsDTO extends IEntity {
     @Owned
     @MemberColumn(name = "petsList")
     IList<Pet> list();
-
-    @Transient
-    PetChargeRule chargeRule();
 
     @Transient
     IPrimitive<Integer> maxTotal();

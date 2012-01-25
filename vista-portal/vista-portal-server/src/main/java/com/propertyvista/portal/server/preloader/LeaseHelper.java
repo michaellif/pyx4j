@@ -22,11 +22,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 class LeaseHelper {
@@ -93,8 +93,8 @@ class LeaseHelper {
         }
     }
 
-    private static ChargeItem createChargeItem(ProductItem serviceItem) {
-        ChargeItem chargeItem = EntityFactory.create(ChargeItem.class);
+    private static AgreedItem createChargeItem(ProductItem serviceItem) {
+        AgreedItem chargeItem = EntityFactory.create(AgreedItem.class);
         chargeItem.item().set(serviceItem);
         chargeItem.originalPrice().setValue(serviceItem.price().getValue());
         chargeItem.agreedPrice().setValue(serviceItem.price().getValue());

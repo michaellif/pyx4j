@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public interface ServiceTypeViewerView extends IViewerView<ServiceItemType> {
+public interface ServiceTypeViewerView extends IViewerView<ProductItemType> {
 
 }

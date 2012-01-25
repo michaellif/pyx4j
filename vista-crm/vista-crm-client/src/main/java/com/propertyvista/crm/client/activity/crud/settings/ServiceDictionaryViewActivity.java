@@ -28,7 +28,7 @@ import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionar
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureItemTypeCrudService;
 import com.propertyvista.crm.rpc.services.ServiceItemTypeCrudService;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public class ServiceDictionaryViewActivity extends AbstractActivity implements ServiceDictionaryView.Presenter {
 
@@ -42,10 +42,10 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
     public ServiceDictionaryViewActivity(Place place) {
         this.view = SettingsViewFactory.instance(ServiceDictionaryView.class);
 
-        serviceLister = new ListerActivityBase<ServiceItemType>(place, view.getServiceListerView(),
-                (AbstractCrudService<ServiceItemType>) GWT.create(ServiceItemTypeCrudService.class), ServiceItemType.class);
-        featureLister = new ListerActivityBase<ServiceItemType>(place, view.getFeatureListerView(),
-                (AbstractCrudService<ServiceItemType>) GWT.create(FeatureItemTypeCrudService.class), ServiceItemType.class);
+        serviceLister = new ListerActivityBase<ProductItemType>(place, view.getServiceListerView(),
+                (AbstractCrudService<ProductItemType>) GWT.create(ServiceItemTypeCrudService.class), ProductItemType.class);
+        featureLister = new ListerActivityBase<ProductItemType>(place, view.getFeatureListerView(),
+                (AbstractCrudService<ProductItemType>) GWT.create(FeatureItemTypeCrudService.class), ProductItemType.class);
 
     }
 

@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering.extradata;
+package com.propertyvista.domain.tenant.lease.extradata;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
@@ -26,14 +26,14 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ChargeItemExtraData;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
 
 @Table(name = "pt_vehicle")
 @DiscriminatorValue("Vehicle_ChargeItemExtraData")
-public interface Vehicle extends ChargeItemExtraData {
+public interface Vehicle extends AgreedItemExtraData {
 
     @NotNull
     @BusinessEqualValue

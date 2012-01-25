@@ -27,13 +27,13 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.ChargeItemAdjustment;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.AgreedItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.ServiceAgreement;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -70,7 +70,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
             // calculate price adjustments:
             PriceCalculationHelpers.calculateChargeItemAdjustments(dto.serviceAgreement().serviceItem());
-            for (ChargeItem item : dto.serviceAgreement().featureItems()) {
+            for (AgreedItem item : dto.serviceAgreement().featureItems()) {
                 PriceCalculationHelpers.calculateChargeItemAdjustments(item);
             }
 
@@ -83,7 +83,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     protected void persistDBO(Lease dbo, LeaseDTO in) {
         // persist non-owned lists items:
-        for (ChargeItem item : dbo.serviceAgreement().featureItems()) {
+        for (AgreedItem item : dbo.serviceAgreement().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
@@ -101,13 +101,13 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     private void updateAdjustments(ServiceAgreement serviceAgreement) {
         updateAdjustments(serviceAgreement.serviceItem());
-        for (ChargeItem ci : serviceAgreement.featureItems()) {
+        for (AgreedItem ci : serviceAgreement.featureItems()) {
             updateAdjustments(ci);
         }
     }
 
-    private void updateAdjustments(ChargeItem chargeItem) {
-        for (ChargeItemAdjustment cia : chargeItem.adjustments()) {
+    private void updateAdjustments(AgreedItem chargeItem) {
+        for (AgreedItemAdjustment cia : chargeItem.adjustments()) {
             if (cia.createdWhen().isNull()) {
                 cia.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
@@ -175,7 +175,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, ChargeItem item) {
+    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, AgreedItem item) {
         callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
     }
 

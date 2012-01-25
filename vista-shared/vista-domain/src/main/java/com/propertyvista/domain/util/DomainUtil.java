@@ -20,8 +20,8 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.financial.Currency;
 import com.propertyvista.domain.financial.Money;
-import com.propertyvista.domain.financial.offering.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
+import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 
 public class DomainUtil {
 

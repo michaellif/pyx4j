@@ -22,8 +22,6 @@ import com.propertyvista.domain.charges.Charge;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.charges.ChargeLineList;
-import com.propertyvista.domain.financial.offering.extradata.Pet;
-import com.propertyvista.domain.financial.offering.extradata.PetChargeRule;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -33,27 +31,6 @@ public class ChargesSharedCalculation {
 
     public static boolean calculateCharges(Charges charges) {
         return (calculateMonthlyAndProrateCharges(charges) && calculateOneTimeCharges(charges) && calculateApplicationCharges(charges) && calculatePaymentSplitCharges(charges));
-    }
-
-    public static boolean calculatePetCharges(PetChargeRule petChargeRule, Pet pet) {
-        if ((petChargeRule == null) || petChargeRule.chargeType().isNull()) {
-            pet.chargeLine().set(null);
-            return true;
-        }
-
-        switch (petChargeRule.chargeType().getValue()) {
-        case monthly:
-            pet.chargeLine().label().setValue("Monthly");
-            break;
-        case deposit:
-            pet.chargeLine().label().setValue("Deposit");
-            break;
-        case oneTime:
-            pet.chargeLine().label().setValue("One time");
-            break;
-        }
-        pet.chargeLine().amount().setValue(petChargeRule.value().getValue().doubleValue());
-        return true;
     }
 
     public static boolean calculateMonthlyAndProrateCharges(Charges charges) {

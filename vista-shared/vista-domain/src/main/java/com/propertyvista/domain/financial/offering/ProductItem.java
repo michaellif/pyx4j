@@ -39,7 +39,7 @@ public interface ProductItem extends IEntity {
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "itemType")
-    ServiceItemType type();
+    ProductItemType type();
 
     @ToString(index = 1)
     @Format("#0.00")

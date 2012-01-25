@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
 class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
@@ -75,10 +75,10 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().type()) {
                 if (comp instanceof CEntityComboBox<?>) {
                     @SuppressWarnings("unchecked")
-                    CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
-                    combo.setOptionsFilter(new OptionsFilter<ServiceItemType>() {
+                    CEntityComboBox<ProductItemType> combo = (CEntityComboBox<ProductItemType>) comp;
+                    combo.setOptionsFilter(new OptionsFilter<ProductItemType>() {
                         @Override
-                        public boolean acceptOption(ServiceItemType entity) {
+                        public boolean acceptOption(ProductItemType entity) {
                             Feature value = parent.getValue();
                             if (value != null && !value.isNull()) {
                                 return entity.featureType().equals(value.type());
@@ -86,10 +86,10 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                             return false;
                         }
                     });
-                    combo.addValueChangeHandler(new ValueChangeHandler<ServiceItemType>() {
+                    combo.addValueChangeHandler(new ValueChangeHandler<ProductItemType>() {
                         @Override
-                        public void onValueChange(ValueChangeEvent<ServiceItemType> event) {
-                            for (ServiceItemType item : parent.getValue().catalog().includedUtilities()) {
+                        public void onValueChange(ValueChangeEvent<ProductItemType> event) {
+                            for (ProductItemType item : parent.getValue().catalog().includedUtilities()) {
                                 if (item.equals(event.getValue())) {
                                     MessageDialog.warn(i18n.tr("Note"), i18n.tr("The Selected Utility Type Is Included In The Price"));
                                 }

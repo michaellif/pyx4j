@@ -22,20 +22,20 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceTypeEditorForm extends CrmEntityForm<ServiceItemType> {
+public class ServiceTypeEditorForm extends CrmEntityForm<ProductItemType> {
 
     private Widget serviceType;
 
     private Widget featureType;
 
     public ServiceTypeEditorForm() {
-        super(ServiceItemType.class, new CrmEditorsComponentFactory());
+        super(ProductItemType.class, new CrmEditorsComponentFactory());
     }
 
     public ServiceTypeEditorForm(IEditableComponentFactory factory) {
-        super(ServiceItemType.class, factory);
+        super(ProductItemType.class, factory);
     }
 
     @Override

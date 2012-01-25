@@ -11,8 +11,9 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.financial.offering;
+package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
@@ -22,8 +23,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.offering.ProductItem;
+
 @ToStringFormat("{0}")
-public interface ChargeItem extends IEntity {
+public interface AgreedItem extends IEntity {
 
     @ToString(index = 0)
     @Caption(name = "Service Item")
@@ -43,7 +46,14 @@ public interface ChargeItem extends IEntity {
     IPrimitive<Double> agreedPrice();
 
     @Owned
-    IList<ChargeItemAdjustment> adjustments();
+    IList<AgreedItemAdjustment> adjustments();
 
-    ChargeItemExtraData extraData();
+    AgreedItemExtraData extraData();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> effectiveDate();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> expirationDate();
+
 }

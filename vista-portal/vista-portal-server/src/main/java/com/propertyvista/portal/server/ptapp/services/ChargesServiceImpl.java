@@ -23,9 +23,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.financial.offering.ChargeItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -81,7 +81,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             throw new Error("There is no MiscPolicy for the Unit!?.");
         }
 
-        ChargeItem serviceItem = lease.serviceAgreement().serviceItem();
+        AgreedItem serviceItem = lease.serviceAgreement().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
 
@@ -103,8 +103,8 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, 24.99)); // get value from policy ! 
 
             // fill agreed items:
-            for (ChargeItem item : lease.serviceAgreement().featureItems()) {
-                if (item.item().type().type().getValue().equals(ServiceItemType.Type.feature)) {
+            for (AgreedItem item : lease.serviceAgreement().featureItems()) {
+                if (item.item().type().type().getValue().equals(ProductItemType.Type.feature)) {
                     PriceCalculationHelpers.calculateChargeItemAdjustments(item);
 
                     switch (item.item().type().featureType().getValue()) {

@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.settings.dictionary;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceTypeViewerViewImpl extends CrmViewerViewImplBase<ServiceItemType> implements ServiceTypeViewerView {
+public class ServiceTypeViewerViewImpl extends CrmViewerViewImplBase<ProductItemType> implements ServiceTypeViewerView {
 
     public ServiceTypeViewerViewImpl() {
         super(CrmSiteMap.Settings.ServiceItemType.class, new ServiceTypeEditorForm(new CrmViewersComponentFactory()));

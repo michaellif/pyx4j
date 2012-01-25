@@ -24,11 +24,11 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.financial.offering.ChargeItem;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.tenant.lease.AgreedItem;
 
 /**
  * For primary - Unit for lease info + price + term
@@ -61,27 +61,27 @@ public interface ApartmentInfoDTO extends IEntity {
     Media picture();
 
     // Service Catalog stuff:
-    IList<ServiceItemType> includedUtilities();
+    IList<ProductItemType> includedUtilities();
 
-    IList<ServiceItemType> externalUtilities();
+    IList<ProductItemType> externalUtilities();
 
-    IList<ChargeItem> agreedUtilities();
+    IList<AgreedItem> agreedUtilities();
 
     IList<ProductItem> availableUtilities();
 
-    IList<ChargeItem> agreedPets();
+    IList<AgreedItem> agreedPets();
 
     IList<ProductItem> availablePets();
 
-    IList<ChargeItem> agreedParking();
+    IList<AgreedItem> agreedParking();
 
     IList<ProductItem> availableParking();
 
-    IList<ChargeItem> agreedStorage();
+    IList<AgreedItem> agreedStorage();
 
     IList<ProductItem> availableStorage();
 
-    IList<ChargeItem> agreedOther();
+    IList<AgreedItem> agreedOther();
 
     IList<ProductItem> availableOther();
 

@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-public interface ServiceItemType extends IEntity {
+public interface ProductItemType extends IEntity {
 
     @I18n
     @XmlType(name = "ServiceItemTypeType")

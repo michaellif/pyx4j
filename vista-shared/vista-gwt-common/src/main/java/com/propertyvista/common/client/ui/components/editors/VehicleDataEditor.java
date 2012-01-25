@@ -24,9 +24,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.domain.financial.offering.extradata.Vehicle;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
 public class VehicleDataEditor extends CEntityDecoratableEditor<Vehicle> {
 

@@ -50,7 +50,6 @@ import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudServi
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-import com.propertyvista.portal.rpc.ptapp.services.AddonsService;
 import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
@@ -95,7 +94,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(TenantService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(TenantInfoService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(TenantFinancialService.class));
-        grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(AddonsService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ChargesService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(SummaryService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(PaymentService.class));
