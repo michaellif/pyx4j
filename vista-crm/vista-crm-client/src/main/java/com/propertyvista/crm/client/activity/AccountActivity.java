@@ -20,13 +20,19 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
+import com.propertyvista.crm.client.ui.security.PasswordChangeView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 
+@Deprecated
+/**
+ * This one should use separate service (just for self management) 
+ */
 public class AccountActivity extends ViewerActivityBase<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
     public AccountActivity(Place place) {
@@ -34,8 +40,10 @@ public class AccountActivity extends ViewerActivityBase<EmployeeDTO> implements 
     }
 
     @Override
-    public void goToChangePassword(Key userId) {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordChange(userId));
+    public void goToChangePassword(Key userId, String userName) {
+        AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
+        passwordChangePlace.arg(PasswordChangeView.Presenter.USER_PK_ARG, userId.toString());
+        AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 
 }

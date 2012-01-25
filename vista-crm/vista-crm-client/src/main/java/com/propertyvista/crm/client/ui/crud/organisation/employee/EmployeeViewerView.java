@@ -22,7 +22,7 @@ public interface EmployeeViewerView extends IViewerView<EmployeeDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        void goToChangePassword(Key userId);
+        void goToChangePassword(Key userId, String userName);
 
     }
 

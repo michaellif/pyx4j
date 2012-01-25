@@ -13,14 +13,28 @@
  */
 package com.propertyvista.crm.client.ui.security;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.HtmlUtils;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 
-public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeView {
+public class PasswordChangeViewImpl implements PasswordChangeView {
 
     private static final I18n i18n = I18n.get(PasswordChangeViewImpl.class);
 
@@ -28,17 +42,38 @@ public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeV
 
     private final PasswordEditorForm form;
 
+    private final HTML userNameLabel;
+
+    private final Panel panel;
+
     public PasswordChangeViewImpl() {
-        form = new PasswordEditorForm(PasswordEditorForm.Type.CHANGE) {
-            @Override
-            protected void onSubmitPasswordChange() {
-                if (form.isValid()) {
-                    presenter.passwordChange(form.getValue());
-                }
-            }
-        };
+        FormFlexPanel content = new FormFlexPanel();
+        content.getElement().getStyle().setPaddingTop(1, Unit.EM);
+        int row = -1;
+        userNameLabel = new HTML();
+        content.setWidget(++row, 0, userNameLabel);
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        form = new PasswordEditorForm(PasswordEditorForm.Type.CHANGE);
         form.initContent();
-        add(form);
+        form.setWidth("100%");
+        content.setWidget(++row, 0, form);
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.changePassword(form.getValue());
+            }
+        });
+        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString()); // TODO why we need this???
+        content.setWidget(++row, 0, submitButton);
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        panel = new CrmScrollPanel(content);
+    }
+
+    @Override
+    public Widget asWidget() {
+        return panel;
     }
 
     @Override
@@ -48,8 +83,17 @@ public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeV
     }
 
     @Override
-    public void populate(PasswordChangeRequest request) {
-        form.populate(request);
+    public void initialize(Key userPk, String userName) {
+        PasswordChangeRequest newRequest = EntityFactory.create(PasswordChangeRequest.class);
+        newRequest.userPk().setValue(userPk);
+        form.populate(newRequest);
+
+        if (userName != null) {
+            userNameLabel.setVisible(true);
+            userNameLabel.setHTML(HtmlUtils.h2(i18n.tr("Change password for {0}", new SafeHtmlBuilder().appendEscaped(userName).toSafeHtml().asString())));
+        } else {
+            userNameLabel.setVisible(false);
+        }
     }
 
     @Override

@@ -31,9 +31,4 @@ public class EmployeeEditorActivity extends EditorActivityBase<EmployeeDTO> impl
         super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
                 EmployeeDTO.class);
     }
-
-    @Override
-    public void changePassword(String old, String newOne) {
-        // TODO Auto-generated method stub
-    }
 }

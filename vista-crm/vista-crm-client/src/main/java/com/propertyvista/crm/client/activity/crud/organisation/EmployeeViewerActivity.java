@@ -20,9 +20,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
+import com.propertyvista.crm.client.ui.security.PasswordChangeView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
@@ -34,8 +36,10 @@ public class EmployeeViewerActivity extends ViewerActivityBase<EmployeeDTO> impl
     }
 
     @Override
-    public void goToChangePassword(Key userId) {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordChange(userId));
+    public void goToChangePassword(Key userId, String userName) {
+        AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
+        passwordChangePlace.arg(PasswordChangeView.Presenter.USER_PK_ARG, userId.toString());
+        passwordChangePlace.arg(PasswordChangeView.Presenter.USER_NAME_ARG, userName);
+        AppSite.getPlaceController().goTo(passwordChangePlace);
     }
-
 }

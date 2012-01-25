@@ -43,7 +43,7 @@ public class LoginWithTokenActivity extends AbstractActivity {
 
     public LoginWithTokenActivity(Place place) {
         assert (place instanceof AppPlace);
-        authToken = ((AppPlace) place).getFirstArg(CrmSiteMap.LoginWithToken.AUTH_TOKEN_ARG);
+        authToken = ((AppPlace) place).getFirstArg(AuthenticationService.AUTH_TOKEN_ARG);
         view = LoginViewFactory.instance(LoginWithTokenView.class);
     }
 

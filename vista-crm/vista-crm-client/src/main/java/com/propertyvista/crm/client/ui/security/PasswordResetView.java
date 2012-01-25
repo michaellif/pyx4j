@@ -21,7 +21,7 @@ public interface PasswordResetView extends IsWidget {
 
     public interface Presenter {
 
-        void passwordReset(PasswordChangeRequest request);
+        void resetPassword(PasswordChangeRequest request);
 
     }
 

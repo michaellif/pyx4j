@@ -13,25 +13,54 @@
  */
 package com.propertyvista.crm.client.ui.security;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
 
-public class PasswordResetViewImpl extends FlowPanel implements PasswordResetView {
+public class PasswordResetViewImpl extends VerticalPanel implements PasswordResetView {
+
+    private final static I18n i18n = I18n.get(PasswordResetViewImpl.class);
 
     private Presenter presenter;
 
     private final PasswordEditorForm form;
 
     public PasswordResetViewImpl() {
-        form = new PasswordEditorForm(PasswordEditorForm.Type.RESET) {
-            @Override
-            protected void onSubmitPasswordChange() {
-                presenter.passwordReset(form.getValue());
-            }
-        };
+        setWidth("100%");
+        setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        form = new PasswordEditorForm(PasswordEditorForm.Type.RESET);
         form.initContent();
         add(form);
+
+        final Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (form.isValid()) {
+                    presenter.resetPassword(form.getValue());
+                } else {
+                    // TODO show something about the form being invalid...
+                }
+            }
+        });
+        form.addValueChangeHandler(new ValueChangeHandler<PasswordChangeRequest>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PasswordChangeRequest> event) {
+                submitButton.setEnabled(form.isValid());
+            }
+        });
+        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString()); // TODO why we need this???
+        add(submitButton);
+
     }
 
     @Override

@@ -20,7 +20,5 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 public interface EmployeeEditorView extends IEditorView<EmployeeDTO> {
 
     interface Presenter extends IEditorView.Presenter {
-
-        void changePassword(String old, String newOne);
     }
 }

@@ -15,13 +15,18 @@ package com.propertyvista.crm.client.ui.security;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 public interface PasswordChangeView extends IsWidget {
 
     public interface Presenter {
 
-        void passwordChange(PasswordChangeRequest request);
+        public static final String USER_NAME_ARG = "username";
+
+        public static final String USER_PK_ARG = "id";
+
+        void changePassword(PasswordChangeRequest request);
 
     }
 
@@ -29,7 +34,11 @@ public interface PasswordChangeView extends IsWidget {
 
     void discard();
 
-    public void populate(PasswordChangeRequest request);
+    /**
+     * @param userName
+     *            can be <code>null</code>, if it has to become invisible
+     */
+    public void initialize(Key userPk, String userName);
 
     public PasswordChangeRequest getValue();
 }

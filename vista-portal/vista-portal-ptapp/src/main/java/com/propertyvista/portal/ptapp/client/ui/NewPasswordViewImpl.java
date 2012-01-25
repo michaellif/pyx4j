@@ -29,15 +29,9 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
     public NewPasswordViewImpl() {
 
-        form = new PasswordEditorForm(PasswordEditorForm.Type.RESET) {
-
-            @Override
-            protected void onSubmitPasswordChange() {
-                presenter.passwordReset(form.getValue());
-            }
-        };
+        form = new PasswordEditorForm(PasswordEditorForm.Type.RESET);
+        // FIXME add submit button
         form.initContent();
-        form.populateNew();
         add(form);
 
     }
@@ -45,6 +39,7 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        form.populateNew();
     }
 
 }

@@ -22,12 +22,12 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.security.PasswordChangeView;
@@ -42,31 +42,43 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     private final PasswordChangeView view;
 
-    private final Key userPk;
-
     public PasswordChangeActivity(Place place) {
-        assert place instanceof CrmSiteMap.PasswordChange;
-        userPk = ((CrmSiteMap.PasswordChange) place).getUserPk();
 
         view = SecurityViewFactory.instance(PasswordChangeView.class);
         view.setPresenter(this);
+
+        assert place instanceof CrmSiteMap.PasswordChange;
+        Key userPk = null;
+        String userPkStr = ((AppPlace) place).getFirstArg(USER_PK_ARG);
+        try {
+            userPk = new Key(userPkStr);
+            userPk.asLong();
+        } catch (Throwable ex) {
+            History.back();
+            throw new Error("Failed to parse user id", ex);
+        }
+        String userName = isSelfAdmin() ? null : ((AppPlace) place).getFirstArg(USER_NAME_ARG);
+        view.initialize(userPk, userName);
+
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        PasswordChangeRequest newRequest = EntityFactory.create(PasswordChangeRequest.class);
-        newRequest.userPk().setValue(userPk);
-        view.populate(newRequest);
         panel.setWidget(view);
     }
 
     @Override
-    public void passwordChange(PasswordChangeRequest request) {
+    public void changePassword(PasswordChangeRequest request) {
         DefaultAsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 MessageDialog.info(i18n.tr("Password was changed successfully"));
                 History.back();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                MessageDialog.error(i18n.tr("Failed to change the password"), caught);
             }
         };
         if (isSelfAdmin()) {
@@ -77,8 +89,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     }
 
     private boolean isSelfAdmin() {
-        return view.getValue().userPk().isNull()
-                || EqualsHelper.equals(view.getValue().userPk().getValue(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
+        return EqualsHelper.equals(view.getValue().userPk().getValue(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

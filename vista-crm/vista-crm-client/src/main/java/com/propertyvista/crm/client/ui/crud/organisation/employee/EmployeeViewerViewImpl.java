@@ -36,7 +36,8 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((EmployeeViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().user().getPrimaryKey());
+                ((EmployeeViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().user().getPrimaryKey(), getForm().getValue().name()
+                        .getStringView());
             }
         });
         addToolbarItem(passwordAction.asWidget());

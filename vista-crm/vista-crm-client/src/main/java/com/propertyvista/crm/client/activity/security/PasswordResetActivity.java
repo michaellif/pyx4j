@@ -56,7 +56,7 @@ public class PasswordResetActivity extends AbstractActivity implements PasswordR
     }
 
     @Override
-    public void passwordReset(PasswordChangeRequest request) {
+    public void resetPassword(PasswordChangeRequest request) {
         AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
