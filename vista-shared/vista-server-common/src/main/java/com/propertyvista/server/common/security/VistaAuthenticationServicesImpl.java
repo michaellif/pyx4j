@@ -13,8 +13,7 @@
  */
 package com.propertyvista.server.common.security;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,6 +68,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     protected abstract VistaBasicBehavior getApplicationBehavior();
 
+    protected abstract Behavior getPasswordChangeRequiredBehavior();
+
+    protected abstract void addBehaviors(E userCredential, Set<Behavior> behaviors);
+
     @Override
     @IgnoreSessionToken
     public void authenticate(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String sessionToken) {
@@ -89,6 +92,57 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         callback.onSuccess(createAuthenticationResponse(sessionToken));
+    }
+
+    @Override
+    public void authenticateWithToken(AsyncCallback<AuthenticationResponse> callback, ClientSystemInfo clientSystemInfo, String accessToken) {
+        switch (SystemMaintenance.getState()) {
+        case Unavailable:
+        case ReadOnly:
+            throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+        }
+        AccessKey.TokenParser token = new AccessKey.TokenParser(accessToken);
+        if (!validEmailAddress(token.email)) {
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+        String email = PasswordEncryptor.normalizeEmailAddress(token.email);
+        AbstractAntiBot.assertLogin(email, null);
+
+        EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
+        criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
+        List<U> users = Persistence.service().query(criteria);
+        if (users.size() != 1) {
+            log.debug("Invalid log-in attempt {} rs {}", email, users.size());
+            if (AbstractAntiBot.authenticationFailed(email)) {
+                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+            } else {
+                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
+        }
+        U user = users.get(0);
+
+        E cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
+        if (cr == null) {
+            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+        }
+        if (!cr.enabled().isBooleanTrue()) {
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+
+        if (!token.accessKey.equals(cr.accessKey().getValue())) {
+            AbstractAntiBot.authenticationFailed(token.email);
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+
+        if ((new Date().after(cr.accessKeyExpire().getValue()))) {
+            throw new UserRuntimeException(i18n.tr("Token Has Expired"));
+        }
+
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.add(getPasswordChangeRequiredBehavior());
+        UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
+        visit.setEmail(user.email().getValue());
+        callback.onSuccess(createAuthenticationResponse(VistaLifecycle.beginSession(visit, behaviors)));
     }
 
     public String beginSession(AuthenticationRequest request) {
@@ -115,7 +169,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
-        AbstractUser user = users.get(0);
+        U user = users.get(0);
 
         E cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
         if (cr == null) {
@@ -132,6 +186,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
+        if (!cr.accessKey().isNull()) {
+            cr.accessKey().setValue(null);
+            Persistence.service().persist(cr);
+        }
         return beginSession(user, cr);
     }
 
@@ -145,8 +203,6 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         visit.setEmail(user.email().getValue());
         return VistaLifecycle.beginSession(visit, behaviors);
     }
-
-    protected abstract void addBehaviors(E userCredential, Set<Behavior> behaviors);
 
     @Override
     @IgnoreSessionToken
@@ -173,22 +229,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             log.debug("Invalid PasswordReset {} rs {}", email, users.size());
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
-        AbstractUser user = users.get(0);
-        E credential = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
-        if (credential == null) {
+        U user = users.get(0);
+
+        String token = AccessKey.createAccessToken(user, credentialClass, 1);
+        if (token == null) {
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
-        if (!credential.enabled().isBooleanTrue()) {
-            throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
-        }
-
-        credential.accessKey().setValue(AccessKey.createAccessKey());
-        Calendar expire = new GregorianCalendar();
-        expire.add(Calendar.DATE, 1);
-        credential.accessKeyExpire().setValue(expire.getTime());
-        Persistence.service().persist(credential);
-
-        String token = AccessKey.compressToken(user.email().getValue(), credential.accessKey().getValue());
 
         MailMessage m = new MailMessage();
         m.setTo(user.email().getValue());

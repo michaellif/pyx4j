@@ -14,13 +14,19 @@
 package com.propertyvista.server.common.security;
 
 import java.nio.charset.Charset;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Base64;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.server.domain.security.AbstractUserCredential;
 
 public class AccessKey {
 
@@ -78,5 +84,23 @@ public class AccessKey {
 
     public static String compressToken(String email, String accessKey) {
         return Base64.encodeBase64URLSafeString((email + "|" + accessKey).getBytes(Charset.forName("ISO-8859-1")));
+    }
+
+    public static <U extends AbstractUser, E extends AbstractUserCredential<U>> String createAccessToken(U user, Class<E> credentialClass, int keyExpireDays) {
+        E credential = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
+        if (credential == null) {
+            return null;
+        }
+        if (!credential.enabled().isBooleanTrue()) {
+            return null;
+        }
+
+        credential.accessKey().setValue(AccessKey.createAccessKey());
+        Calendar expire = new GregorianCalendar();
+        expire.add(Calendar.DATE, keyExpireDays);
+        credential.accessKeyExpire().setValue(expire.getTime());
+        Persistence.service().persist(credential);
+
+        return compressToken(user.email().getValue(), credential.accessKey().getValue());
     }
 }

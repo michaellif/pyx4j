@@ -19,6 +19,7 @@ import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.TenantUserCredential;
@@ -32,6 +33,11 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
         return VistaBasicBehavior.TenantPortal;
+    }
+
+    @Override
+    protected Behavior getPasswordChangeRequiredBehavior() {
+        return VistaTenantBehavior.PasswordChangeRequired;
     }
 
     @Override
