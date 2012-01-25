@@ -26,13 +26,13 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.AgreedItem;
 import com.propertyvista.dto.LeaseDTO;
 
-class ChargeItemFolder extends VistaBoxFolder<AgreedItem> {
+class AgreedItemFolder extends VistaBoxFolder<AgreedItem> {
 
-    private static final I18n i18n = I18n.get(ChargeItemFolder.class);
+    private static final I18n i18n = I18n.get(AgreedItemFolder.class);
 
     final CrmEntityForm<LeaseDTO> parent;
 
-    public ChargeItemFolder(boolean modifyable, CrmEntityForm<LeaseDTO> parent) {
+    public AgreedItemFolder(boolean modifyable, CrmEntityForm<LeaseDTO> parent) {
         super(AgreedItem.class, modifyable);
         this.parent = parent;
     }
@@ -71,7 +71,7 @@ class ChargeItemFolder extends VistaBoxFolder<AgreedItem> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof AgreedItem) {
-            return new ChargeItemEditor();
+            return new AgreedItemEditor();
         }
         return super.create(member);
     }

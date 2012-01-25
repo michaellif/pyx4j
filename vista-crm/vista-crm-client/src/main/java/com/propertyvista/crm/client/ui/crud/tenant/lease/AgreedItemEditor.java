@@ -43,15 +43,15 @@ import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
-class ChargeItemEditor extends CEntityDecoratableEditor<AgreedItem> {
+class AgreedItemEditor extends CEntityDecoratableEditor<AgreedItem> {
 
-    private static final I18n i18n = I18n.get(ChargeItemEditor.class);
+    private static final I18n i18n = I18n.get(AgreedItemEditor.class);
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    public ChargeItemEditor() {
+    public AgreedItemEditor() {
         super(AgreedItem.class);
     }
 
@@ -153,7 +153,7 @@ class ChargeItemEditor extends CEntityDecoratableEditor<AgreedItem> {
     private class ChargeItemAdjustmentFolder extends VistaTableFolder<AgreedItemAdjustment> {
 
         public ChargeItemAdjustmentFolder() {
-            super(AgreedItemAdjustment.class, ChargeItemEditor.this.isEditable());
+            super(AgreedItemAdjustment.class, AgreedItemEditor.this.isEditable());
         }
 
         @Override
