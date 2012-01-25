@@ -105,7 +105,7 @@ public class RentRollAdaptor {
             throw new Error(e);
         } finally {
             IOUtils.closeQuietly(w);
-            System.out.println("\nXLS file created successfully");
+            System.out.println("\nXML file created successfully");
         }
 
     }

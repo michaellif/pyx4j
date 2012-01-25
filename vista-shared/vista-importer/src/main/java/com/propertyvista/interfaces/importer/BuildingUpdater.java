@@ -133,10 +133,13 @@ public class BuildingUpdater extends ImportPersister {
 
             List<Building> buildings = Persistence.service().query(criteria);
             if (buildings.size() == 0) {
-                buildingIsNew = true;
-                building = createBuilding(buildingIO, mediaConfig);
-                counters.buildings += 1;
-                log.debug("created building {}", buildingIO.propertyCode().getValue());
+                throw new UserRuntimeException("Building '" + buildingIO.propertyCode().getValue() + "' with externalId '" + buildingIO.externalId().getValue()
+                        + "' not found");
+
+//                buildingIsNew = true;
+//                building = createBuilding(buildingIO, mediaConfig);
+//                counters.buildings += 1;
+//                log.debug("created building {}", buildingIO.propertyCode().getValue());
             } else if (buildings.size() > 1) {
                 throw new UserRuntimeException("More then one building '" + buildingIO.propertyCode().getValue() + "' found");
             } else {
@@ -203,16 +206,7 @@ public class BuildingUpdater extends ImportPersister {
             for (AptUnitIO aptUnitIO : floorplanIO.units()) {
                 AptUnit unit = null;
                 if (!floorplanIsNew) {
-                    EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                    criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
-                    List<AptUnit> units = Persistence.service().query(criteria);
-                    if (units.size() == 1) {
-                        unit = units.get(0);
-                    } else if (units.size() > 1) {
-                        throw new UserRuntimeException("More then one AptUnit '" + aptUnitIO.number().getValue() + "' in '" + floorplanIO.name().getValue()
-                                + "' in '" + buildingIO.propertyCode().getValue() + "' found");
-                    }
+                    unit = requestUnit(aptUnitIO, building, floorplan);
                 }
                 boolean unitIsNew = false;
                 boolean unitUpdated = false;
@@ -245,21 +239,17 @@ public class BuildingUpdater extends ImportPersister {
         }
 
         for (AptUnitIO aptUnitIO : buildingIO.units()) {
-            AptUnit unit = null;
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-            criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
-            List<AptUnit> units = Persistence.service().query(criteria);
-            if (units.size() == 1) {
-                unit = units.get(0);
-            } else if (units.size() == 0) {
-                throw new UserRuntimeException("AptUnit '" + aptUnitIO.number().getValue() + "' in '" + buildingIO.propertyCode().getValue() + "' not found");
-            } else if (units.size() > 1) {
-                throw new UserRuntimeException("More then one AptUnit '" + aptUnitIO.number().getValue() + "' in '" + buildingIO.propertyCode().getValue()
-                        + "' found");
-            }
+            AptUnit unit = requestUnit(aptUnitIO, building, null);
             boolean unitUpdated = false;
             unitUpdated = new AptUnitConverter().updateDBO(aptUnitIO, unit);
+
+            // Temporary Hack for null values
+            if (aptUnitIO.containsMemberValue(aptUnitIO.availableForRent().getFieldName()) && aptUnitIO.availableForRent().isNull()) {
+                if (!unit.availableForRent().isNull()) {
+                    unit.availableForRent().setValue(null);
+                    unitUpdated = true;
+                }
+            }
 
             if (unitUpdated) {
                 Persistence.service().merge(unit);
@@ -272,5 +262,51 @@ public class BuildingUpdater extends ImportPersister {
         }
 
         return counters;
+    }
+
+    public AptUnit requestUnit(AptUnitIO aptUnitIO, Building building, Floorplan floorplan) {
+        AptUnit unit = null;
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+        criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
+        if (floorplan != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+        }
+        List<AptUnit> units = Persistence.service().query(criteria);
+
+        if (units.size() == 0) {
+            criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), trimLeadingZeroes(aptUnitIO.number().getValue())));
+            if (floorplan != null) {
+                criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+            }
+            units = Persistence.service().query(criteria);
+        }
+
+        if (units.size() == 1) {
+            unit = units.get(0);
+        } else if (units.size() == 0) {
+            throw new UserRuntimeException(i18n.tr("AptUnit ''{0}'' in building ''{1}'' not found", aptUnitIO.number().getValue(), buildingDebugId(building)));
+        } else if (units.size() > 1) {
+            throw new UserRuntimeException(i18n.tr("More then one AptUnit ''{0}'' in building ''{1}''", aptUnitIO.number().getValue(),
+                    buildingDebugId(building)));
+        }
+
+        return unit;
+    }
+
+    public String buildingDebugId(Building building) {
+        if (!building.propertyCode().isNull()) {
+            return building.propertyCode().getValue();
+        } else if (!building.externalId().isNull()) {
+            return building.externalId().getValue();
+        } else {
+            return building.getPrimaryKey().toString();
+        }
+    }
+
+    public String trimLeadingZeroes(String string) {
+        return string.replaceFirst("^0+(?!$)", "");
     }
 }
