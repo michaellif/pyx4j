@@ -31,7 +31,7 @@ public class PasswordChangeViewImpl extends FlowPanel implements PasswordChangeV
     public PasswordChangeViewImpl() {
         form = new PasswordEditorForm(PasswordEditorForm.Type.CHANGE) {
             @Override
-            protected void onConfirmPasswordChange() {
+            protected void onSubmitPasswordChange() {
                 if (form.isValid()) {
                     presenter.passwordChange(form.getValue());
                 }

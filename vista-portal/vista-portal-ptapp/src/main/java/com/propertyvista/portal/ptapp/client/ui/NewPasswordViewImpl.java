@@ -32,7 +32,7 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
         form = new PasswordEditorForm(PasswordEditorForm.Type.RESET) {
 
             @Override
-            protected void onConfirmPasswordChange() {
+            protected void onSubmitPasswordChange() {
                 presenter.passwordReset(form.getValue());
             }
         };

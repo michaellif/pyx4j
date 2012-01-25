@@ -70,7 +70,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
@@ -99,7 +98,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         }
 
         grant(new IServiceExecutePermission(CrmAuthenticationService.class));
-        grant(VistaCrmBehavior.PasswordChangeRequired, new IServiceExecutePermission(CrmPasswordResetService.class));
+        grant(VistaBasicBehavior.CRMPasswordChangeRequired, new IServiceExecutePermission(CrmPasswordResetService.class));
 
 // - Dashboard:
         InstanceAccess sharedUserEntityAccess = new SharedUserEntityInstanceAccess();

@@ -26,7 +26,7 @@ public class PasswordResetViewImpl extends FlowPanel implements PasswordResetVie
     public PasswordResetViewImpl() {
         form = new PasswordEditorForm(PasswordEditorForm.Type.RESET) {
             @Override
-            protected void onConfirmPasswordChange() {
+            protected void onSubmitPasswordChange() {
                 presenter.passwordReset(form.getValue());
             }
         };

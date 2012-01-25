@@ -23,7 +23,6 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
@@ -43,7 +42,7 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
 
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
-        return VistaTenantBehavior.PasswordChangeRequired;
+        return VistaBasicBehavior.ProspectiveAppPasswordChangeRequired;
     }
 
     @Override

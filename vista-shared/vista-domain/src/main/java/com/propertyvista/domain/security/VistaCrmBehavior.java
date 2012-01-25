@@ -20,8 +20,6 @@ import com.pyx4j.security.shared.Behavior;
 @I18n
 public enum VistaCrmBehavior implements Behavior {
 
-    PasswordChangeRequired,
-
     /** This is preliminary list */
 
     PropertyManagement,

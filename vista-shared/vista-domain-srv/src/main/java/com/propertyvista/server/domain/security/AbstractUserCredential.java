@@ -36,6 +36,8 @@ public interface AbstractUserCredential<E extends AbstractUser> extends IEntity 
 
     IPrimitive<Boolean> enabled();
 
+    IPrimitive<Boolean> requiredPasswordChangeOnNextLogIn();
+
     @RpcTransient
     IPrimitive<String> credential();
 

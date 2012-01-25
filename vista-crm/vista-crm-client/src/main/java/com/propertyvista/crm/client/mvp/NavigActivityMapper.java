@@ -17,11 +17,12 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.client.activity.NavigActivity;
 import com.propertyvista.crm.client.activity.NavigSettingsActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class NavigActivityMapper implements ActivityMapper {
 
@@ -30,7 +31,7 @@ public class NavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated()) {
+        if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Settings.class.getName())) {
                 return new NavigSettingsActivity(place);
             } else {

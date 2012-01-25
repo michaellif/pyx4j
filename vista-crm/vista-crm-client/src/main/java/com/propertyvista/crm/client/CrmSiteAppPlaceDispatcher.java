@@ -48,6 +48,8 @@ public class CrmSiteAppPlaceDispatcher extends AppPlaceDispatcher {
                 callback.onSuccess(newPlace);
             }
             targetPlace = AppPlace.NOWHERE;
+        } else if (SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequired)) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordReset());
         } else {
             targetPlace = newPlace;
             AppSite.getPlaceController().goTo(getDefaulPublicPlacePlace());

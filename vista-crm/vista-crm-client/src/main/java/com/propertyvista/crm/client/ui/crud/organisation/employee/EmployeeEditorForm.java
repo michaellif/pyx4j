@@ -129,7 +129,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         int row = -1;
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn()), 5).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Roles"));
         main.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));

@@ -19,10 +19,18 @@ public enum VistaBasicBehavior implements Behavior {
 
     CRM,
 
+    CRMPasswordChangeRequired,
+
     ProspectiveApp,
+
+    ProspectiveAppPasswordChangeRequired,
 
     TenantPortal,
 
-    Admin
+    TenantPortalPasswordChangeRequired,
+
+    Admin,
+
+    AdminPasswordChangeRequired,
 
 }

@@ -25,7 +25,6 @@ import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -43,7 +42,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
 
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
-        return VistaCrmBehavior.PasswordChangeRequired;
+        return VistaBasicBehavior.CRMPasswordChangeRequired;
     }
 
     @Override

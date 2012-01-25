@@ -47,6 +47,6 @@ public interface EmployeeDTO extends Employee {
     IPrimitive<String> passwordConfirm();
 
     @Caption(name = "Require to change password on next sign in")
-    IPrimitive<Boolean> requireChangePasswordOnNextSignIn();
+    IPrimitive<Boolean> requireChangePasswordOnNextLogIn();
 
 }

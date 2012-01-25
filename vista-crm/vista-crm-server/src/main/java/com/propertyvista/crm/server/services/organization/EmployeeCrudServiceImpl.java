@@ -43,6 +43,7 @@ public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee,
                 CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
                 dto.enabled().set(crs.enabled());
                 dto.accessAllBuildings().set(crs.accessAllBuildings());
+                dto.requireChangePasswordOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
             }
         }
     }
@@ -64,6 +65,7 @@ public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee,
                 CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
                 crs.enabled().set(in.enabled());
                 crs.accessAllBuildings().set(in.accessAllBuildings());
+                crs.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
                 Persistence.service().persist(crs);
             }
         }

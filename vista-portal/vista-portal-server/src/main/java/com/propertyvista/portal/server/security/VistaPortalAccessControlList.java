@@ -30,6 +30,7 @@ import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -84,8 +85,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(new IServiceExecutePermission(SiteThemeServices.class));
 
-        grant(VistaTenantBehavior.PasswordChangeRequired, new IServiceExecutePermission(PtPasswordResetService.class));
-        grant(VistaTenantBehavior.PasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
+        grant(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired, new IServiceExecutePermission(PtPasswordResetService.class));
+        grant(VistaBasicBehavior.TenantPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
 
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));

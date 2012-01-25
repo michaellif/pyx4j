@@ -87,7 +87,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         assertClientSystemInfo(clientSystemInfo);
         // Try to begin Session
         String sessionToken = beginSession(request);
-        if (!SecurityController.checkBehavior(getApplicationBehavior())) {
+        if (!SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior())) {
             VistaLifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
@@ -190,7 +190,15 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             cr.accessKey().setValue(null);
             Persistence.service().persist(cr);
         }
-        return beginSession(user, cr);
+        if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
+            Set<Behavior> behaviors = new HashSet<Behavior>();
+            behaviors.add(getPasswordChangeRequiredBehavior());
+            UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
+            visit.setEmail(user.email().getValue());
+            return VistaLifecycle.beginSession(visit, behaviors);
+        } else {
+            return beginSession(user, cr);
+        }
     }
 
     public String beginSession(AbstractUser user, E userCredential) {

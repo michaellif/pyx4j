@@ -16,7 +16,9 @@ package com.propertyvista.common.client.ui.components.login;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -40,13 +42,16 @@ public abstract class PasswordEditorForm extends CEntityDecoratableEditor<Passwo
 
     private final Type type;
 
+    private final HTML userNameLabel;
+
     public PasswordEditorForm(Type type) {
         super(PasswordChangeRequest.class);
         setWidth("30em");
         this.type = type;
+        this.userNameLabel = new HTML();
     }
 
-    protected abstract void onConfirmPasswordChange();
+    protected abstract void onSubmitPasswordChange();
 
     @Override
     protected void onWidgetCreated() {
@@ -62,7 +67,9 @@ public abstract class PasswordEditorForm extends CEntityDecoratableEditor<Passwo
         FormFlexPanel main = new FormFlexPanel();
         main.setWidth("100%");
         int row = -1;
+
         if (type.equals(Type.CHANGE)) {
+            main.setWidget(++row, 0, userNameLabel);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
         }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).build());
@@ -71,22 +78,24 @@ public abstract class PasswordEditorForm extends CEntityDecoratableEditor<Passwo
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15).build());
         }
 
-        Button confirmButton = new Button(i18n.tr("Submit"));
-        confirmButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        confirmButton.addClickHandler(new ClickHandler() {
-
+        Button submitButton = new Button(i18n.tr("Submit"));
+        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                onConfirmPasswordChange();
+                onSubmitPasswordChange();
             }
-
         });
 
-        main.setWidget(++row, 0, confirmButton);
+        main.setWidget(++row, 0, submitButton);
         main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(1, Unit.EM);
 
         return main;
+    }
+
+    public void setUserName(String userName) {
+        userNameLabel.setHTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("Change password for {0}", userName)).toSafeHtml());
     }
 
     @Override
@@ -95,6 +104,7 @@ public abstract class PasswordEditorForm extends CEntityDecoratableEditor<Passwo
         if (type.equals(Type.CHANGE)) {
             get(proto().currentPassword()).setVisible(isSelfAdmin());
             get(proto().requireChangePasswordOnNextSignIn()).setVisible(!isSelfAdmin());
+            userNameLabel.setVisible(!isSelfAdmin());
         }
 
     }
