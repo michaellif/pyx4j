@@ -125,6 +125,10 @@ public class ExtendedRichTextArea extends DockPanel {
         return html.replaceAll("<br>", "<br />");
     }
 
+    public void setImageProvider(RichTextImageProvider provider) {
+        toolbar.setImageProvider(provider);
+    }
+
     @Override
     public void onBrowserEvent(Event event) {
         super.onBrowserEvent(event);
