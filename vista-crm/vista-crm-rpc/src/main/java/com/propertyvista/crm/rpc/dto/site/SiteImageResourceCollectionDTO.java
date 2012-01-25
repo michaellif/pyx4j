@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.rpc.dto.site;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.site.SiteImageResource;
 
+@Transient
 public interface SiteImageResourceCollectionDTO extends IEntity {
 
     IList<SiteImageResource> images();
