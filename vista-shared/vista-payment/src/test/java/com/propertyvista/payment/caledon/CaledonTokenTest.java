@@ -51,7 +51,7 @@ public class CaledonTokenTest extends CaledonTestBase {
         assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
 
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
-        request.paymentInstrument().setValue(token);
+        request.paymentInstrument().set(token);
         request.amount().setValue(10f);
         request.referenceNumber().setValue("Test212");
         try {

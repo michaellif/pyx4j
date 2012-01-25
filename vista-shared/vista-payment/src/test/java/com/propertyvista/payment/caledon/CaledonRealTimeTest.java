@@ -29,7 +29,7 @@ public class CaledonRealTimeTest extends CaledonTestBase {
         request.referenceNumber().setValue("Test1");
         request.amount().setValue((float) amount);
         CCInformation ccInfo = createCCInformation(creditCardNumber, exp);
-        request.paymentInstrument().setValue(ccInfo);
+        request.paymentInstrument().set(ccInfo);
         return request;
     }
 

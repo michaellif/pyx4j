@@ -23,7 +23,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PaymentRequest extends IEntity {
 
-    IPrimitive<PaymentInstrument> paymentInstrument();
+    PaymentInstrument paymentInstrument();
 
     @Deprecated
     IPrimitive<String> creditCardNumber();

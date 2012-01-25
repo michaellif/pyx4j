@@ -46,7 +46,7 @@ public class CaledonHttpClient {
 
     private final boolean debug = true;
 
-    private final boolean useTestServer = true;
+    private final boolean useTestServer = false;
 
     private final boolean easySSLEnabled = true;
 

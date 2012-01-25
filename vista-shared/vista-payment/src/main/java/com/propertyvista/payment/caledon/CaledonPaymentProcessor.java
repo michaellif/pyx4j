@@ -35,7 +35,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     @Override
     public PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request) throws PaymentProcessingException {
         CaledonRequest crequest = null;
-        PaymentInstrument pinstrument = request.paymentInstrument().getValue();
+        PaymentInstrument pinstrument = request.paymentInstrument().cast();
         if (pinstrument instanceof CCInformation) {
             crequest = new CaledonRequest();
             crequest.terminalID = merchant.terminalID().getValue();
@@ -45,7 +45,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
             crequest.setAmount(request.amount().getValue());
             crequest.creditCardNumber = ((CCInformation) pinstrument).creditCardNumber().getValue();
             //crequest.creditCardNumber = request.creditCardNumber().getValue();
-            crequest.setExpiryDate(((CCInformation) (request.paymentInstrument().getValue())).creditCardExpiryDate().getValue());
+            crequest.setExpiryDate(((CCInformation) pinstrument).creditCardExpiryDate().getValue());
             //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
         } else if (pinstrument instanceof Token) {
             crequest = new CaledonRequestToken();
@@ -54,8 +54,9 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
             ((CaledonRequestToken) crequest).token = ((Token) pinstrument).code().getValue();
             crequest.referenceNumber = request.referenceNumber().getValue();
             crequest.setAmount(request.amount().getValue());
-        } else
-            throw new PaymentProcessingException("Unknown Payment Instrument.");
+        } else {
+            throw new PaymentProcessingException("Unknown Payment Instrument " + pinstrument.getClass());
+        }
 
         CaledonResponse cresponse = client.transaction(crequest);
 
