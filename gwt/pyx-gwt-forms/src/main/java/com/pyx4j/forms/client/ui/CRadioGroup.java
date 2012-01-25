@@ -22,27 +22,24 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Collection;
 
+import com.pyx4j.widgets.client.RadioGroup;
 
-public abstract class CRadioGroup<E> extends CComponent<E, NativeRadioGroup<E>> {
+public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> {
 
-    public enum Layout {
-        VERTICAL, HORISONTAL;
-    }
-
-    private final Layout layout;
+    private final RadioGroup.Layout layout;
 
     private IFormat<E> format;
 
-    public CRadioGroup(Layout layout) {
+    public CRadioGroup(RadioGroup.Layout layout) {
         this(null, layout);
     }
 
-    public CRadioGroup(String title, Layout layout) {
+    public CRadioGroup(String title, RadioGroup.Layout layout) {
         super(title);
         this.layout = layout;
     }
 
-    public Layout getLayout() {
+    public RadioGroup.Layout getLayout() {
         return layout;
     }
 
@@ -59,8 +56,8 @@ public abstract class CRadioGroup<E> extends CComponent<E, NativeRadioGroup<E>> 
     }
 
     @Override
-    protected NativeRadioGroup<E> createWidget() {
-        return new NativeRadioGroup<E>(this);
+    protected NRadioGroup<E> createWidget() {
+        return new NRadioGroup<E>(this);
     }
 
 }

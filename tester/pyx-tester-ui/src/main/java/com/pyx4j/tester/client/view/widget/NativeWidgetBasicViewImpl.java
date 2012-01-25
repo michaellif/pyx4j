@@ -21,6 +21,7 @@
 package com.pyx4j.tester.client.view.widget;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -229,6 +231,14 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
             main.setWidget(++row, 0, photoAlbum);
 
         }
+
+        {
+            main.setHR(++row, 0, 1);
+
+            RadioGroup rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL, Arrays.asList("String1", "String2", "String3"));
+            main.setWidget(++row, 0, rg);
+        }
+
         add(main);
     }
 

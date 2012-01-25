@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.RadioGroup;
 
 public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
@@ -44,7 +45,7 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
         return i18n.tr("Yes");
     }
 
-    public CRadioGroupBoolean(CRadioGroup.Layout layout) {
+    public CRadioGroupBoolean(RadioGroup.Layout layout) {
         super(layout);
         setFormat(new IFormat<Boolean>() {
 

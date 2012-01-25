@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,12 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-04-22
- * @author vlads
+ * Created on Jan 24, 2012
+ * @author igor
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.widgets.client;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -41,11 +42,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.widgets.client.GroupFocusHandler;
-import com.pyx4j.widgets.client.RadioButton;
 
-public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComponent<E> {
+public class RadioGroup<E> extends SimplePanel implements IFocusWidget {
+
+    public enum Layout {
+        VERTICAL, HORISONTAL;
+    }
 
     public static enum StyleName implements IStyleName {
         RadioGroup, RadioGroupItem
@@ -57,8 +59,6 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
 
     private static int uniqueGroupId = 0;
 
-    private final CRadioGroup<E> cComponent;
-
     private boolean enabled = true;
 
     private boolean editable = true;
@@ -67,32 +67,33 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
 
     private final GroupFocusHandler focusHandlerManager;
 
-    public NativeRadioGroup(CRadioGroup<E> cComponent) {
-        this.cComponent = cComponent;
+    public RadioGroup(Layout layout, Collection<E> options) {
         Panel panel;
-        if (cComponent.getLayout() == CRadioGroup.Layout.HORISONTAL) {
+        if (layout == Layout.HORISONTAL) {
             panel = new HorizontalPanel();
         } else {
             panel = new VerticalPanel();
         }
+
         this.setWidget(panel);
 
         String groupName = "rb" + (uniqueGroupId++);
 
         focusHandlerManager = new GroupFocusHandler(this);
 
-        for (final E option : cComponent.getOptions()) {
-            RadioButton button = new RadioButton(groupName, cComponent.getFormat().format(option));
+        for (final E option : options) {
+            RadioButton button = new RadioButton(groupName, format(option));
             buttons.put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue()) {
                         applyDependentStyles();
-                        NativeRadioGroup.this.cComponent.onEditingStop();
                     }
                 }
             });
+
             button.addFocusHandler(focusHandlerManager);
             button.addBlurHandler(focusHandlerManager);
             panel.add(button);
@@ -136,20 +137,7 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
         }
     }
 
-    @Override
-    public void setViewable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isViewable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setNativeValue(E value) {
+    public void setValue(E value) {
         RadioButton selectedButton = buttons.get(value);
         if (selectedButton != null) {
             selectedButton.setValue(Boolean.TRUE);
@@ -158,6 +146,7 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
                 button.setValue(Boolean.FALSE);
             }
         }
+
         applyDependentStyles();
     }
 
@@ -172,8 +161,7 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
         }
     }
 
-    @Override
-    public E getNativeValue() {
+    public E getValue() {
         for (E value : buttons.keySet()) {
             if (buttons.get(value).getValue()) {
                 return value;
@@ -193,27 +181,19 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
         }
     }
 
-    @Override
-    protected void onEnsureDebugId(String baseID) {
-        super.onEnsureDebugId(baseID);
-        for (Map.Entry<E, RadioButton> me : buttons.entrySet()) {
-            me.getValue().ensureDebugId(baseID + "_" + cComponent.getOptionDebugId(me.getKey()));
-        }
-    }
+//    @Override
+//    protected void onEnsureDebugId(String baseID) {
+//        super.onEnsureDebugId(baseID);
+//
+//        for (Map.Entry<E, RadioButton> me : buttons.entrySet()) {
+//            me.getValue().ensureDebugId(baseID + "_" + cComponent.getOptionDebugId(me.getKey()));
+//        }
+//    }
 
     @Override
     public void setTabIndex(int tabIndex) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public CComponent<?, ?> getCComponent() {
-        return cComponent;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
     @Override
@@ -248,6 +228,10 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeFocusComp
     public void setAccessKey(char key) {
         // TODO Auto-generated method stub
 
+    }
+
+    protected String format(E value) {
+        return value.toString();
     }
 
 }
