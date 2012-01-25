@@ -23,6 +23,7 @@ package com.pyx4j.tester.client.view.form;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -33,6 +34,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -40,8 +44,10 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
+import com.pyx4j.tester.client.domain.test.EntityI.Enum1;
 import com.pyx4j.tester.client.domain.test.EntityV;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
+import com.pyx4j.widgets.client.RadioGroup.Layout;
 
 public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
@@ -74,8 +80,8 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
         box.setOptions(options);
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().suggest(), box)));
 
-        box = new CSuggestStringBox();
-        box.setOptions(options);
+//        box = new CSuggestStringBox();
+//        box.setOptions(options);
 
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().datePicker())));
 
@@ -89,9 +95,27 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
 
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().money())));
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().booleanRadioGroup())));
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().booleanRadioGroupHorizontal())));
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroupHorizontal())));
 
-        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroup())));
+        CRadioGroupBoolean rgb = new CRadioGroupBoolean(Layout.VERTICAL);
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().booleanRadioGroupVertical(), rgb)));
+
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroupHorizontal())));
+
+        CRadioGroupEnum<Enum1> rge = new CRadioGroupEnum<Enum1>(Enum1.class, Layout.VERTICAL);
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().enumRadioGroupVertical(), rge)));
+
+        HashMap<Integer, String> rbgoptions = new HashMap<Integer, String>();
+        for (int i = 0; i < 4; i++) {
+            rbgoptions.put(i, "Value" + i);
+        }
+
+        CRadioGroupInteger rgi = new CRadioGroupInteger(Layout.HORISONTAL, rbgoptions);
+        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().intRadioGroupHorizontal(), rgi)));
+
+        rgi = new CRadioGroupInteger(Layout.VERTICAL, rbgoptions);
+        main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().intRadioGroupVertical(), rgi)));
 
         CEntityComboBox<EntityV> cmbEntity = new CEntityComboBox<EntityV>(EntityV.class);
         Collection<EntityV> entityoptions = new ArrayList<EntityV>();

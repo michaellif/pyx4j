@@ -57,6 +57,10 @@ public class DomainFactory {
 
     private static Double moneyvalues[] = { 20.33, 0.00, 77.00, 8.00 };
 
+    private static Boolean boolradiovalues[] = { true, false, true, false };
+
+    private static Integer intradiovalues[] = { 0, 1, 2, 3 };
+
     public static EntityI createEntityI() {
         poscounter = 0;
         return createEntityI(0);
@@ -113,6 +117,15 @@ public class DomainFactory {
         retVal.email().setValue(emailvalues[pos]);
 
         retVal.money().setValue(moneyvalues[pos]);
+
+        retVal.booleanRadioGroupHorizontal().setValue(boolradiovalues[pos]);
+        retVal.booleanRadioGroupVertical().setValue(boolradiovalues[pos]);
+
+        retVal.enumRadioGroupHorizontal().setValue(enumvalues[pos]);
+        retVal.enumRadioGroupVertical().setValue(enumvalues[pos]);
+
+        retVal.intRadioGroupHorizontal().setValue(intradiovalues[pos]);
+        retVal.intRadioGroupVertical().setValue(intvalues[pos]);
 
         retVal.entityIIList().add(createEntityII());
         retVal.entityIIList().add(createEntityII());

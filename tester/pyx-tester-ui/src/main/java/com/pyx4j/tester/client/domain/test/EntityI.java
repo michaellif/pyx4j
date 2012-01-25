@@ -101,10 +101,22 @@ public interface EntityI extends IEntity {
     IPrimitive<String> email();
 
     @Editor(type = EditorType.radiogroup)
-    IPrimitive<Boolean> booleanRadioGroup();
+    IPrimitive<Boolean> booleanRadioGroupHorizontal();
 
     @Editor(type = EditorType.radiogroup)
-    IPrimitive<Enum1> enumRadioGroup();
+    IPrimitive<Boolean> booleanRadioGroupVertical();
+
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<Enum1> enumRadioGroupHorizontal();
+
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<Enum1> enumRadioGroupVertical();
+
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<Integer> intRadioGroupHorizontal();
+
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<Integer> intRadioGroupVertical();
 
     @Editor(type = EditorType.richtextarea)
     IPrimitive<String> richTextArea();
