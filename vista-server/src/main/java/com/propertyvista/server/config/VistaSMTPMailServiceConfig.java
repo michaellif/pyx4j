@@ -11,11 +11,18 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.config;
+package com.propertyvista.server.config;
 
+import java.io.File;
+import java.util.Map;
+
+import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
+
+import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
@@ -27,9 +34,21 @@ public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         config.port = 465;
         config.starttls = true;
 
-        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/" + prefix + "mail-credentials.properties");
+        File credentialsFile = new File(System.getProperty("user.dir", "."), prefix + "mail-credentials.properties");
+
+        Map<String, String> configProperties = PropertiesConfiguration.loadProperties(credentialsFile);
+        config.readProperties("mail", configProperties);
+
+        Credentials credentials = J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());
         config.user = credentials.email;
         config.password = credentials.password;
+
+        DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
+        if (developmentUser != null) {
+            if (developmentUser.forwardAll().isBooleanTrue()) {
+                config.forwardAllTo = developmentUser.email().getValue();
+            }
+        }
 
         return config;
     }

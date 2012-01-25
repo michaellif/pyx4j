@@ -1,13 +1,13 @@
-First Name,Last Name,E-mail,Home Phone,Mobile Phone,Business Phone,Host 1,Host 2,Host 3,Test Calls On Hosts
-Alexander,Mondshain,alexmond@birchwoodsoftwaregroup.com,14166654648,14168764528,,,,,TRUE
-Anya,Vassilieva,anya.vassilieva@birchwoodsoftwaregroup.com,14164219896,16472910400,14166429881,,,,TRUE
-Artur,Roytburg,aroytbur@birchwoodsoftwaregroup.com,,16477045299,,,,,TRUE
-Dmitry,Tumanov,dmitryt@birchwoodsoftwaregroup.com,19052372555,14168033050,,,,,FALSE
-Leonard,Drimmer,leonard@birchwoodsoftwaregroup.com,,14168218471,,,,,TRUE
-Mark,Levitin,markl@birchwoodsoftwaregroup.com,,14167275409,,,,,TRUE
-Misha,Lifshits,michaellif@birchwoodsoftwaregroup.com,19057636762,14167224482,14163554125,michaellif01,,,FALSE
-Pinchuk,Vadym,vadymp@birchwoodsoftwaregroup.com,15143326318,15145778891,,,,,TRUE
-Sergei,Goshko,sergeig@birchwoodsoftwaregroup.com,19058478798,14167226848,12892916530,quad,,,FALSE
-Vlad,Loukiantchenko,vladlouk@birchwoodsoftwaregroup.com,,14165126515,,,,,FALSE
-Vlad,Skarzhevskyy,vlads@birchwoodsoftwaregroup.com,,14166028523,14163554149,vlads-i7,vladlnv,,FALSE
-Elia,Kanaki,elia.kanaki@birchwoodsoftwaregroup.com,14169297775,16474049992,,,,,TRUE
+First Name,Last Name,E-mail,Home Phone,Mobile Phone,Business Phone,Host 1,Host 2,Host 3,Test Calls On Hosts,Forward All
+Anya,Vassilieva,anya.vassilieva@propertyvista.com,14164219896,16472910400,14166429881,,,,TRUE,FALSE
+Artur,Roytburg,aroytbur@propertyvista.com,,16477045299,,,,,TRUE,TRUE
+Dmitry,Tumanov,dmitryt@propertyvista.com,19052372555,14168033050,,,,,FALSE,TRUE
+Leonard,Drimmer,leonard@propertyvista.com,,14168218471,,,,,TRUE,TRUE
+Misha,Lifshits,michaellif@propertyvista.com,19057636762,14167224482,14163554125,michaellif01,,,FALSE,TRUE
+Vlad,Loukiantchenko,vladlouk@propertyvista.com,,14165126515,,,,,FALSE,TRUE
+Vlad,Skarzhevskyy,vlads@propertyvista.com,,14166028523,14163554149,vlads-i7,vladlnv,,FALSE,TRUE
+Artyom,Bondarev,artyom@propertyvista.com,,,,,,,FALSE,TRUE
+Elia,Kanaki,elia.kanaki@propertyvista,14169297775,16474049992,,,,,TRUE,TRUE
+Yuriy,Levandovskyy,yuriyl@propertyvista.com,,,,,,,FALSE,TRUE
+Victor,Vassiliev,vvassiliev@propertyvista.com,,,,,,,FALSE,TRUE
+Stan,Porter,stanp@propertyvista.com,,,,,,,FALSE,TRUE

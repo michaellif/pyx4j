@@ -42,4 +42,9 @@ public interface DevelopmentUser extends IEntity {
 
     IPrimitive<String> host3();
 
+    /**
+     * Forward All email to developer email
+     */
+    IPrimitive<Boolean> forwardAll();
+
 }

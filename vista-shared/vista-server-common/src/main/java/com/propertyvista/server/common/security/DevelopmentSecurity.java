@@ -54,7 +54,7 @@ public class DevelopmentSecurity {
         }
     }
 
-    private static DevelopmentUser findDevelopmentUser() {
+    public static DevelopmentUser findDevelopmentUser() {
         DevelopmentUser developmentUser = findByHost();
         if (developmentUser != null) {
             return developmentUser;
