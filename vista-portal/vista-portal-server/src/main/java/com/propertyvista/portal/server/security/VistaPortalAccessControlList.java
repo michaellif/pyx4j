@@ -41,6 +41,7 @@ import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
@@ -57,6 +58,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
+import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
@@ -82,6 +84,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(PortalSiteServices.class));
 
         grant(new IServiceExecutePermission(SiteThemeServices.class));
+
+        grant(VistaTenantBehavior.PasswordChangeRequired, new IServiceExecutePermission(PtPasswordResetService.class));
+        grant(VistaTenantBehavior.PasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
 
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
