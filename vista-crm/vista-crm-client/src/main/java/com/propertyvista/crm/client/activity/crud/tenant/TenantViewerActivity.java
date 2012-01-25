@@ -26,7 +26,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
-import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
+import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.TenantDTO;
@@ -40,7 +40,7 @@ public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implemen
         super(place, TenantViewFactory.instance(TenantViewerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
 
         screeningLister = new ListerActivityBase<PersonScreening>(place, ((TenantViewerView) view).getScreeningListerView(),
-                (AbstractCrudService<PersonScreening>) GWT.create(TenantScreeningCrudService.class), PersonScreening.class);
+                (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);
 
     }
 

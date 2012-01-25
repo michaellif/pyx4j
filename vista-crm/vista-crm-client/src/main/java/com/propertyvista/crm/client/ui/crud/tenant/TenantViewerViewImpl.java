@@ -18,7 +18,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningLister;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.TenantDTO;
@@ -30,7 +30,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     public TenantViewerViewImpl() {
         super(CrmSiteMap.Tenants.Tenant.class);
 
-        screeningLister = new ListerInternalViewImplBase<PersonScreening>(new TenantScreeningLister());
+        screeningLister = new ListerInternalViewImplBase<PersonScreening>(new PersonScreeningLister());
 
         //set main form here: 
         setForm(new TenantEditorForm(new CrmViewersComponentFactory()));

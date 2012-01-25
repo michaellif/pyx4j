@@ -19,9 +19,9 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public class TenantScreeningLister extends ListerBase<PersonScreening> {
+public class PersonScreeningLister extends ListerBase<PersonScreening> {
 
-    public TenantScreeningLister() {
+    public PersonScreeningLister() {
         super(PersonScreening.class, CrmSiteMap.Tenants.TenantScreening.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 

@@ -39,7 +39,7 @@ import com.propertyvista.crm.rpc.services.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.ShowingCrudService;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
-import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
+import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
@@ -165,7 +165,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantInLeaseCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(PersonScreening.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantScreeningCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PersonScreeningCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseCrudService.class));

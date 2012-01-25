@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public interface TenantScreeningEditorView extends IEditorView<PersonScreening> {
+public interface PersonScreeningViewerView extends IViewerView<PersonScreening> {
 
 }

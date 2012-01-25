@@ -49,6 +49,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant.Type;
@@ -503,6 +504,15 @@ public class PTGenerator {
             ts.guarantors_OLD().add(guarantor);
         }
 
+        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+            Guarantor guarantor = EntityFactory.create(Guarantor.class);
+            guarantor.person().name().firstName().setValue(DataGenerator.randomFirstName());
+            guarantor.person().name().lastName().setValue(DataGenerator.randomLastName());
+            guarantor.person().birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
+            guarantor.person().sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
+            guarantor.person().email().setValue(CommonsGenerator.createEmail(guarantor.person().name()));
+            ts.guarantors().add(guarantor);
+        }
     }
 
     private void createEquifaxApproival(PersonScreening ts) {

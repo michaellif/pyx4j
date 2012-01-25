@@ -7,15 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-29
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public interface TenantScreeningCrudService extends AbstractCrudService<PersonScreening> {
+public class PersonScreeningEditorViewImpl extends CrmEditorViewImplBase<PersonScreening> implements PersonScreeningEditorView {
+    public PersonScreeningEditorViewImpl() {
+        super(CrmSiteMap.Tenants.TenantScreening.class, new PersonScreeningEditorForm());
+    }
+
 }

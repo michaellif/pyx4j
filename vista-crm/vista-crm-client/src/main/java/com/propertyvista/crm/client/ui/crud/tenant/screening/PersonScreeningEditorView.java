@@ -13,13 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
+
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public class TenantScreeningEditorViewImpl extends CrmEditorViewImplBase<PersonScreening> implements TenantScreeningEditorView {
-    public TenantScreeningEditorViewImpl() {
-        super(CrmSiteMap.Tenants.TenantScreening.class, new TenantScreeningEditorForm());
-    }
+public interface PersonScreeningEditorView extends IEditorView<PersonScreening> {
 
 }

@@ -107,7 +107,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         combinedtab.add(new CrmSectionSeparator(i18n.tr("Concessions") + ":"));
         combinedtab.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
-        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Service Catalog"));
+        tabPanel.addDisable(new ScrollPanel(combinedtab), i18n.tr("Product Catalog"));
 
         tabPanel.add(createContactTab(), i18n.tr("Contacts"));
         tabPanel.addDisable(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));

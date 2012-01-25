@@ -15,9 +15,9 @@ package com.propertyvista.server.common.util;
 
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -84,6 +84,7 @@ public class TenantConverter {
 //            bind(dtoProto.incomes2(), dboProto.incomes2());
             bind(dtoProto.assets(), dboProto.assets());
             bind(dtoProto.guarantors_OLD(), dboProto.guarantors_OLD());
+            bind(dtoProto.guarantors(), dboProto.guarantors());
             bind(dtoProto.equifaxApproval(), dboProto.equifaxApproval());
         }
     }

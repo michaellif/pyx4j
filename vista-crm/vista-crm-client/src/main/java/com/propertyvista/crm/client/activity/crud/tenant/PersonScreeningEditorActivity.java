@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
+import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.PersonScreening;
 
-public class TenantScreeningEditorActivity extends EditorActivityBase<PersonScreening> {
+public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScreening> {
 
     @SuppressWarnings("unchecked")
-    public TenantScreeningEditorActivity(Place place) {
-        super(place, TenantViewFactory.instance(TenantScreeningEditorView.class), (AbstractCrudService<PersonScreening>) GWT
-                .create(TenantScreeningCrudService.class), PersonScreening.class);
+    public PersonScreeningEditorActivity(Place place) {
+        super(place, TenantViewFactory.instance(PersonScreeningEditorView.class), (AbstractCrudService<PersonScreening>) GWT
+                .create(PersonScreeningCrudService.class), PersonScreening.class);
     }
 }

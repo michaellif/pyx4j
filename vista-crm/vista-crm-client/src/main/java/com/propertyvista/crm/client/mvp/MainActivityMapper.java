@@ -91,8 +91,8 @@ import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerAct
 import com.propertyvista.crm.client.activity.crud.tenant.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.TenantScreeningViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.PersonScreeningEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.PersonScreeningViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationListerActivity;
@@ -411,10 +411,10 @@ public class MainActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.Tenants.TenantScreening) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
-                        activity = new TenantScreeningEditorActivity(place);
+                        activity = new PersonScreeningEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new TenantScreeningViewerActivity(place);
+                        activity = new PersonScreeningViewerActivity(place);
                         break;
                     }
 

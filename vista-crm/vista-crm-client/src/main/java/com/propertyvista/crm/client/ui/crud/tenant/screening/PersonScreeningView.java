@@ -19,7 +19,7 @@ import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 
-public interface TenantScreeningView {
+public interface PersonScreeningView {
 
     interface Presenter {
 

@@ -15,15 +15,15 @@ package com.propertyvista.crm.server.services;
 
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
+import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
-public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<PersonScreening> implements TenantScreeningCrudService {
+public class PersonScreeningCrudServiceImpl extends GenericCrudServiceImpl<PersonScreening> implements PersonScreeningCrudService {
 
-    public TenantScreeningCrudServiceImpl() {
+    public PersonScreeningCrudServiceImpl() {
         super(PersonScreening.class);
     }
 
@@ -35,6 +35,7 @@ public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<Perso
             Persistence.service().retrieve(entity.incomes());
             Persistence.service().retrieve(entity.assets());
             Persistence.service().retrieve(entity.guarantors_OLD());
+            Persistence.service().retrieve(entity.guarantors());
         }
     }
 

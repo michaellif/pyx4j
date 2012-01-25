@@ -37,5 +37,4 @@ public interface Guarantor extends IEntity, PersonScreeningHolder {
     @ToString(index = 0)
     @EmbeddedEntity
     Person person();
-
 }

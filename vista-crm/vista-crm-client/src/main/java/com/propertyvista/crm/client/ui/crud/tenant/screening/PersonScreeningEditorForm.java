@@ -52,9 +52,9 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.misc.BusinessRules;
 
-public class TenantScreeningEditorForm extends CrmEntityForm<PersonScreening> {
+public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
 
-    private static final I18n i18n = I18n.get(TenantScreeningEditorForm.class);
+    private static final I18n i18n = I18n.get(PersonScreeningEditorForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
@@ -68,11 +68,11 @@ public class TenantScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         }
     };
 
-    public TenantScreeningEditorForm() {
+    public PersonScreeningEditorForm() {
         super(PersonScreening.class, new CrmEditorsComponentFactory());
     }
 
-    public TenantScreeningEditorForm(IEditableComponentFactory factory) {
+    public PersonScreeningEditorForm(IEditableComponentFactory factory) {
         super(PersonScreening.class, factory);
     }
 

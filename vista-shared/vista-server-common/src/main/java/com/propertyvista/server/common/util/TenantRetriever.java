@@ -22,8 +22,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 
 public class TenantRetriever {
 
@@ -72,6 +72,7 @@ public class TenantRetriever {
                     Persistence.service().retrieve(tenantScreening.incomes());
                     Persistence.service().retrieve(tenantScreening.assets());
                     Persistence.service().retrieve(tenantScreening.guarantors_OLD());
+                    Persistence.service().retrieve(tenantScreening.guarantors());
                     Persistence.service().retrieve(tenantScreening.equifaxApproval());
                 }
             } else {
@@ -104,6 +105,7 @@ public class TenantRetriever {
             Persistence.service().merge(tenantScreening.incomes());
             Persistence.service().merge(tenantScreening.assets());
             Persistence.service().merge(tenantScreening.guarantors_OLD());
+            Persistence.service().merge(tenantScreening.guarantors());
         }
     }
 }
