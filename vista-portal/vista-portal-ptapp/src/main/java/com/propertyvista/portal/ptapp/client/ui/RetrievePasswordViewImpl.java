@@ -33,7 +33,7 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
 
     public RetrievePasswordViewImpl() {
 
-        form = new RetrievePasswordForm(i18n.tr("Retrieve Password"), new Command() {
+        form = new RetrievePasswordForm(new Command() {
             @Override
             public void execute() {
                 form.setVisited(true);
