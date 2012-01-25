@@ -69,7 +69,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             TenantInLeaseRetriever tr = new TenantInLeaseRetriever(tenantInLease.getPrimaryKey(), true);
             dto.tenantInfo().add(createTenantInfoDTO(tr));
             TenantFinancialDTO tf = createTenantFinancialDTO(tr);
-            dto.numberOfGuarantors().setValue(dto.numberOfGuarantors().getValue() + tf.guarantors().size());
+            dto.numberOfGuarantors().setValue(dto.numberOfGuarantors().getValue() + tf.guarantors_OLD().size());
             dto.tenantFinancials().add(tf);
         }
 

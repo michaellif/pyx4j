@@ -29,6 +29,10 @@ public enum VistaTenantBehavior implements Behavior {
 
     ProspectiveSubmited,
 
+    ProspectiveApplicantSubmited,
+
+    ProspectiveCoApplicantSubmited,
+
     Tenant,
 
     TenantPrimary,

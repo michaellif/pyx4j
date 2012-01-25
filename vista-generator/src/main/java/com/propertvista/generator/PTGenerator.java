@@ -53,9 +53,10 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant.Type;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantScreening;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -341,6 +342,7 @@ public class PTGenerator {
 
         address.phone().setValue(CommonsGenerator.createPhone());
         address.rented().setValue(RandomUtil.randomEnum(PriorAddress.OwnedRented.class));
+        address.propertyCompany().setValue(DataGenerator.randomLastName() + " Inc.");
         address.managerName().setValue("Mr. " + DataGenerator.randomLastName());
         address.managerPhone().setValue(CommonsGenerator.createPhone());
         address.managerEmail().setValue(DataGenerator.randomFirstName().toLowerCase() + "@" + DataGenerator.random(PreloadData.EMAIL_DOMAINS)
@@ -370,7 +372,7 @@ public class PTGenerator {
 
         // Join the objects
         tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
-        tenantSummary.tenantScreening().tenant().set(tenantSummary.tenant());
+        tenantSummary.tenantScreening().screene().set(tenantSummary.tenant());
 
         // first tenant must always be an applicant
         if (index == 0) {
@@ -386,15 +388,15 @@ public class PTGenerator {
 
         if (index == 0) {
             // TODO set null when UI is fixed
-            tenantSummary.tenantInLease().relationship().setValue(TenantInLease.Relationship.Other);
+            tenantSummary.tenantInLease().relationship().setValue(PersonRelationship.Other);
         } else {
-            tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(TenantInLease.Relationship.class));
+            tenantSummary.tenantInLease().relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         }
 
 // TODO check %-ge correctness bettween tenants here:
         tenantSummary.tenantInLease().percentage().setValue(RandomUtil.randomInt(100));
 
-        if (EnumSet.of(TenantInLease.Relationship.Daughter, TenantInLease.Relationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {
+        if (EnumSet.of(PersonRelationship.Daughter, PersonRelationship.Son).contains(tenantSummary.tenantInLease().relationship().getValue())) {
             tenantSummary.tenantInLease().role().setValue(TenantInLease.Role.Dependent);
         }
         tenantSummary.tenantInLease().takeOwnership().setValue(RandomUtil.randomBoolean());
@@ -463,7 +465,7 @@ public class PTGenerator {
         return tenantSummary;
     }
 
-    private void createFinancialInfo(TenantScreening ts, Application application) {
+    private void createFinancialInfo(PersonScreening ts, Application application) {
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
@@ -499,16 +501,16 @@ public class PTGenerator {
             TenantGuarantor guarantor = EntityFactory.create(TenantGuarantor.class);
             guarantor.name().firstName().setValue(DataGenerator.randomFirstName());
             guarantor.name().lastName().setValue(DataGenerator.randomLastName());
-            guarantor.relationship().setValue(RandomUtil.random(TenantGuarantor.Relationship.values()));
+            guarantor.relationship().setValue(RandomUtil.random(PersonRelationship.values()));
             guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
             guarantor.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
             guarantor.email().setValue(CommonsGenerator.createEmail(guarantor.name()));
-            ts.guarantors().add(guarantor);
+            ts.guarantors_OLD().add(guarantor);
         }
 
     }
 
-    private void createEquifaxApproival(TenantScreening ts) {
+    private void createEquifaxApproival(PersonScreening ts) {
         // TODO: currently - just some mockup stuff:
         ts.equifaxApproval().suggestedDecision().setValue(RandomUtil.randomEnum(Decision.class));
         switch (ts.equifaxApproval().suggestedDecision().getValue()) {

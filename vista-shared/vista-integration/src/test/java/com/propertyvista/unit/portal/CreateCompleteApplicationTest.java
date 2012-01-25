@@ -319,9 +319,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         }
 
         num = 0;
-        for (TenantGuarantor guarantor : tenantFin.guarantors()) {
-            selenium.click(D.id(tenantFin.guarantors(), FormNavigationDebugId.Form_Add));
-            enterGuarantorRow(D.id(tenantFin.guarantors(), num), detach(guarantor));
+        for (TenantGuarantor guarantor : tenantFin.guarantors_OLD()) {
+            selenium.click(D.id(tenantFin.guarantors_OLD(), FormNavigationDebugId.Form_Add));
+            enterGuarantorRow(D.id(tenantFin.guarantors_OLD(), num), detach(guarantor));
             num++;
         }
 

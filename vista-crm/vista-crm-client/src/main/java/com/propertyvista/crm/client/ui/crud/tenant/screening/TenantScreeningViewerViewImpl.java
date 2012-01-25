@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.tenant.screening;
 import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 
-public class TenantScreeningViewerViewImpl extends CrmViewerViewImplBase<TenantScreening> implements TenantScreeningViewerView {
+public class TenantScreeningViewerViewImpl extends CrmViewerViewImplBase<PersonScreening> implements TenantScreeningViewerView {
 
     public TenantScreeningViewerViewImpl() {
         super(CrmSiteMap.Tenants.TenantScreening.class, new TenantScreeningEditorForm(new CrmViewersComponentFactory()));

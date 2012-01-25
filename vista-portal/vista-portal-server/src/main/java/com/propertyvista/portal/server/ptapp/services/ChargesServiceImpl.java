@@ -31,7 +31,6 @@ import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
-import com.propertyvista.portal.rpc.ptapp.VistaDataPrinter;
 import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
@@ -46,13 +45,13 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
     @Override
     public void retrieve(AsyncCallback<Charges> callback, Key tenantId) {
-        log.info("Retrieving charges for tenant {}", tenantId);
+        log.debug("Retrieving charges for tenant {}", tenantId);
         callback.onSuccess(retrieveData());
     }
 
     @Override
     public void save(AsyncCallback<Charges> callback, Charges entity) {
-        log.info("Saving charges\n{}", VistaDataPrinter.print(entity));
+        log.debug("Saving charges\n{}", entity);
 
         saveApplicationEntity(entity);
 

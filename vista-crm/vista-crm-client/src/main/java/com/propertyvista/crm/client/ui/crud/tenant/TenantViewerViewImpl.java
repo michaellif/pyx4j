@@ -20,24 +20,24 @@ import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> implements TenantViewerView {
 
-    private final IListerView<TenantScreening> screeningLister;
+    private final IListerView<PersonScreening> screeningLister;
 
     public TenantViewerViewImpl() {
         super(CrmSiteMap.Tenants.Tenant.class);
 
-        screeningLister = new ListerInternalViewImplBase<TenantScreening>(new TenantScreeningLister());
+        screeningLister = new ListerInternalViewImplBase<PersonScreening>(new TenantScreeningLister());
 
         //set main form here: 
         setForm(new TenantEditorForm(new CrmViewersComponentFactory()));
     }
 
     @Override
-    public IListerView<TenantScreening> getScreeningListerView() {
+    public IListerView<PersonScreening> getScreeningListerView() {
         return screeningLister;
     }
 }

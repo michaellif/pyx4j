@@ -49,10 +49,10 @@ import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.misc.BusinessRules;
 
-public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
+public class TenantScreeningEditorForm extends CrmEntityForm<PersonScreening> {
 
     private static final I18n i18n = I18n.get(TenantScreeningEditorForm.class);
 
@@ -69,11 +69,11 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     };
 
     public TenantScreeningEditorForm() {
-        super(TenantScreening.class, new CrmEditorsComponentFactory());
+        super(PersonScreening.class, new CrmEditorsComponentFactory());
     }
 
     public TenantScreeningEditorForm(IEditableComponentFactory factory) {
-        super(TenantScreening.class, factory);
+        super(PersonScreening.class, factory);
     }
 
     @Override
@@ -269,7 +269,7 @@ public class TenantScreeningEditorForm extends CrmEntityForm<TenantScreening> {
     private Widget createGuarantorsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().guarantors(), new TenantGuarantorFolder(isEditable())));
+        main.setWidget(0, 0, inject(proto().guarantors_OLD(), new TenantGuarantorFolder(isEditable())));
 
         return new ScrollPanel(main);
     }

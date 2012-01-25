@@ -18,28 +18,28 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
-public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<TenantScreening> implements TenantScreeningCrudService {
+public class TenantScreeningCrudServiceImpl extends GenericCrudServiceImpl<PersonScreening> implements TenantScreeningCrudService {
 
     public TenantScreeningCrudServiceImpl() {
-        super(TenantScreening.class);
+        super(PersonScreening.class);
     }
 
     @Override
-    protected void enhanceRetrieve(TenantScreening entity, boolean fromList) {
+    protected void enhanceRetrieve(PersonScreening entity, boolean fromList) {
         if (!fromList) {
             // load detached entities:
             Persistence.service().retrieve(entity.documents());
             Persistence.service().retrieve(entity.incomes());
             Persistence.service().retrieve(entity.assets());
-            Persistence.service().retrieve(entity.guarantors());
+            Persistence.service().retrieve(entity.guarantors_OLD());
         }
     }
 
     @Override
-    protected void persistDBO(TenantScreening dbo) {
+    protected void persistDBO(PersonScreening dbo) {
         super.persistDBO(dbo);
 
         int no = 0;

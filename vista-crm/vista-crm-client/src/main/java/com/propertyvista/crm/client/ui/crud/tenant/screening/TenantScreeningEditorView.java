@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 
-public interface TenantScreeningEditorView extends IEditorView<TenantScreening> {
+public interface TenantScreeningEditorView extends IEditorView<PersonScreening> {
 
 }

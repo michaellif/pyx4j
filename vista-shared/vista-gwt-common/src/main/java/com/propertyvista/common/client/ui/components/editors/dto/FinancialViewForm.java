@@ -69,8 +69,8 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
         main.setWidget(++row, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
-        main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), adjust);
-        main.setWidget(++row, 0, inject(proto().guarantors(), new TenantGuarantorFolder(isEditable())));
+        main.setH1(++row, 0, 1, proto().guarantors_OLD().getMeta().getCaption(), adjust);
+        main.setWidget(++row, 0, inject(proto().guarantors_OLD(), new TenantGuarantorFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
         return main;

@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -52,10 +52,10 @@ public class TenantConverter {
         }
     }
 
-    public static class TenantScreening2TenantInfo extends EntityDtoBinder<TenantScreening, TenantInfoDTO> {
+    public static class TenantScreening2TenantInfo extends EntityDtoBinder<PersonScreening, TenantInfoDTO> {
 
         public TenantScreening2TenantInfo() {
-            super(TenantScreening.class, TenantInfoDTO.class);
+            super(PersonScreening.class, TenantInfoDTO.class);
         }
 
         @Override
@@ -72,10 +72,10 @@ public class TenantConverter {
         }
     }
 
-    public static class TenantFinancialEditorConverter extends EntityDtoBinder<TenantScreening, TenantFinancialDTO> {
+    public static class TenantFinancialEditorConverter extends EntityDtoBinder<PersonScreening, TenantFinancialDTO> {
 
         public TenantFinancialEditorConverter() {
-            super(TenantScreening.class, TenantFinancialDTO.class);
+            super(PersonScreening.class, TenantFinancialDTO.class);
         }
 
         @Override
@@ -83,7 +83,7 @@ public class TenantConverter {
             bind(dtoProto.incomes(), dboProto.incomes());
 //            bind(dtoProto.incomes2(), dboProto.incomes2());
             bind(dtoProto.assets(), dboProto.assets());
-            bind(dtoProto.guarantors(), dboProto.guarantors());
+            bind(dtoProto.guarantors_OLD(), dboProto.guarantors_OLD());
             bind(dtoProto.equifaxApproval(), dboProto.equifaxApproval());
         }
     }

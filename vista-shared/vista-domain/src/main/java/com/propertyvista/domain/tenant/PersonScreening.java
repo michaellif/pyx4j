@@ -44,13 +44,13 @@ import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.misc.EquifaxApproval;
 
-@DiscriminatorValue("TenantScreening")
-public interface TenantScreening extends IEntity, ApplicationDocumentHolder {
+@DiscriminatorValue("PersonScreening")
+public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
 
     @Owner
     @Detached
     @ReadOnly
-    Tenant tenant();
+    PersonScreeningHolder screene();
 
     @Format("MM/dd/yyyy")
     @Timestamp(Update.Created)
@@ -103,7 +103,13 @@ public interface TenantScreening extends IEntity, ApplicationDocumentHolder {
     @Owned
     @Detached
     @Length(2)
-    IList<TenantGuarantor> guarantors();
+    @Deprecated
+    IList<TenantGuarantor> guarantors_OLD();
+
+    @Owned
+    @Detached
+    @Length(2)
+    IList<Guarantor> guarantors();
 
     //=============== Security Info =============//
 

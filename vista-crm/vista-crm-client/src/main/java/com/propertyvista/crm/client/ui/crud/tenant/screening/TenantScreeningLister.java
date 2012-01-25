@@ -17,12 +17,12 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 
-public class TenantScreeningLister extends ListerBase<TenantScreening> {
+public class TenantScreeningLister extends ListerBase<PersonScreening> {
 
     public TenantScreeningLister() {
-        super(TenantScreening.class, CrmSiteMap.Tenants.TenantScreening.class, false, true);
+        super(PersonScreening.class, CrmSiteMap.Tenants.TenantScreening.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

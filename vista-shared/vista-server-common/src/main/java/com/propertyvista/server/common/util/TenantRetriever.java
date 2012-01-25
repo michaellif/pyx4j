@@ -23,15 +23,15 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 
 public class TenantRetriever {
 
     public Tenant tenant;
 
-    public TenantScreening tenantScreening;
+    public PersonScreening tenantScreening;
 
-    public List<TenantScreening> tenantScreenings;
+    public List<PersonScreening> tenantScreenings;
 
     private final boolean financial;
 
@@ -57,13 +57,13 @@ public class TenantRetriever {
     public void retrieve(Key tenantId) {
         tenant = Persistence.service().retrieve(Tenant.class, tenantId);
         if (tenant != null) {
-            EntityQueryCriteria<TenantScreening> criteria = EntityQueryCriteria.create(TenantScreening.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
+            EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), tenant));
             tenantScreenings = Persistence.service().query(criteria);
             if (tenantScreenings != null && !tenantScreenings.isEmpty()) {
                 tenantScreening = tenantScreenings.get(tenantScreenings.size() - 1); // use last screenings
             } else {
-                tenantScreening = EntityFactory.create(TenantScreening.class);
+                tenantScreening = EntityFactory.create(PersonScreening.class);
             }
 
             if (!tenantScreening.isEmpty()) {
@@ -71,12 +71,12 @@ public class TenantRetriever {
                 if (financial) {
                     Persistence.service().retrieve(tenantScreening.incomes());
                     Persistence.service().retrieve(tenantScreening.assets());
-                    Persistence.service().retrieve(tenantScreening.guarantors());
+                    Persistence.service().retrieve(tenantScreening.guarantors_OLD());
                     Persistence.service().retrieve(tenantScreening.equifaxApproval());
                 }
             } else {
                 // newly created - set belonging to tenant:
-                tenantScreening.tenant().set(tenant);
+                tenantScreening.screene().set(tenant);
             }
 
             Persistence.service().retrieve(tenant.emergencyContacts());
@@ -103,7 +103,7 @@ public class TenantRetriever {
         if (financial) {
             Persistence.service().merge(tenantScreening.incomes());
             Persistence.service().merge(tenantScreening.assets());
-            Persistence.service().merge(tenantScreening.guarantors());
+            Persistence.service().merge(tenantScreening.guarantors_OLD());
         }
     }
 }

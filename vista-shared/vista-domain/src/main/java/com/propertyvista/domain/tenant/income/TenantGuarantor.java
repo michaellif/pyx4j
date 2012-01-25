@@ -25,32 +25,21 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.PersonRelationship;
 
 @ToStringFormat("{0}, {1}")
 @DiscriminatorValue("TenantGuarantor")
+@Deprecated
 public interface TenantGuarantor extends IUserEntity, Person, ApplicationDocumentHolder {
-
-    @I18n
-    public enum Relationship {
-
-        Mother, Father, Grandfather, Grandmother, Uncle, Aunt, Friend, Other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     @ToString(index = 10)
     @NotNull
-    IPrimitive<Relationship> relationship();
+    IPrimitive<PersonRelationship> relationship();
 
     @Override
     @Caption(name = "Birth Date")

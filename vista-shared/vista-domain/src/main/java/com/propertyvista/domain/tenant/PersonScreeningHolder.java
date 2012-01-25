@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Jan 24, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.screening;
+package com.propertyvista.domain.tenant;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.PersonScreening;
-
-public interface TenantScreeningViewerView extends IViewerView<PersonScreening> {
+@AbstractEntity
+@Inheritance
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface PersonScreeningHolder extends IEntity {
 
 }

@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 
-public interface TenantScreeningCrudService extends AbstractCrudService<TenantScreening> {
+public interface TenantScreeningCrudService extends AbstractCrudService<PersonScreening> {
 }

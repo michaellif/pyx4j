@@ -277,12 +277,12 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertFalse(selenium.isElementPresent(D.id(proto(TenantFinancialDTO.class).assets(), row, proto(PersonalAsset.class).assetType())));
 
         row = 0;
-        for (TenantGuarantor guarantor : financial.guarantors()) {
-            debugID = D.id(financial.guarantors(), row);
+        for (TenantGuarantor guarantor : financial.guarantors_OLD()) {
+            debugID = D.id(financial.guarantors_OLD(), row);
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName()));
+        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors_OLD(), row, proto(TenantGuarantor.class).name().firstName()));
     }
 
     private void verifyIncome(IDebugId formDebugId, PersonalIncome income) {

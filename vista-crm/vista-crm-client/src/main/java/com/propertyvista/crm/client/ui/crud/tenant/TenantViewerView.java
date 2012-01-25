@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.tenant;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.TenantDTO;
 
 public interface TenantViewerView extends IViewerView<TenantDTO> {
@@ -26,5 +26,5 @@ public interface TenantViewerView extends IViewerView<TenantDTO> {
         IListerView.Presenter getScreeningPresenter();
     }
 
-    IListerView<TenantScreening> getScreeningListerView();
+    IListerView<PersonScreening> getScreeningListerView();
 }

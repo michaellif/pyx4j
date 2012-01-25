@@ -7,16 +7,44 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on Jan 24, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.screening;
+package com.propertyvista.domain.tenant;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import java.io.Serializable;
 
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-public interface TenantScreeningViewerView extends IViewerView<PersonScreening> {
+@I18n
+public enum PersonRelationship implements Serializable {
 
+    Spouse,
+
+    Son,
+
+    Daughter,
+
+    Mother,
+
+    Father,
+
+    Grandmother,
+
+    Grandfather,
+
+    Uncle,
+
+    Aunt,
+
+    Friend,
+
+    Other;
+
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    }
 }

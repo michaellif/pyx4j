@@ -22,13 +22,13 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.TenantScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.TenantScreeningCrudService;
-import com.propertyvista.domain.tenant.TenantScreening;
+import com.propertyvista.domain.tenant.PersonScreening;
 
-public class TenantScreeningViewerActivity extends ViewerActivityBase<TenantScreening> {
+public class TenantScreeningViewerActivity extends ViewerActivityBase<PersonScreening> {
 
     @SuppressWarnings("unchecked")
     public TenantScreeningViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(TenantScreeningViewerView.class), (AbstractCrudService<TenantScreening>) GWT
+        super(place, TenantViewFactory.instance(TenantScreeningViewerView.class), (AbstractCrudService<PersonScreening>) GWT
                 .create(TenantScreeningCrudService.class));
     }
 }

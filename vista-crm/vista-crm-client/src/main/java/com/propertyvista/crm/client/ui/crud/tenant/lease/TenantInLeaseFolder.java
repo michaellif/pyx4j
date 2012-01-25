@@ -37,9 +37,9 @@ import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.services.SelectTenantCrudService;
+import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.TenantInLease.Relationship;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.ValidationUtils;
@@ -176,7 +176,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                     newTenantInLease.tenant().set(tenant);
                     if (!isApplicantPresent()) {
                         newTenantInLease.role().setValue(Role.Applicant);
-                        newTenantInLease.relationship().setValue(Relationship.Other); // just not leave it empty - it's mandatory field!
+                        newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
                     }
                     boolean isNewAlreadySelected = false;
                     for (TenantInLease alreadySelected : getValue()) {

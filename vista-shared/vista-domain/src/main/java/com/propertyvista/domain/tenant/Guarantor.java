@@ -7,36 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-07
+ * Created on Jan 24, 2012
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.tenant;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.EmergencyContact;
-import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.TenantUser;
 
-@DiscriminatorValue("Tenant")
-public interface Tenant extends IEntity, PersonScreeningHolder {
+@DiscriminatorValue("Guarantor")
+public interface Guarantor extends IEntity, PersonScreeningHolder {
 
     @NotNull
     @ReadOnly
@@ -44,35 +34,8 @@ public interface Tenant extends IEntity, PersonScreeningHolder {
     @MemberColumn(name = "user_id")
     TenantUser user();
 
-    @I18n
-    @XmlType(name = "TenantType")
-    public enum Type {
-
-        person,
-
-        company;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @NotNull
-    @MemberColumn(name = "tenantType")
-    IPrimitive<Type> type();
-
     @ToString(index = 0)
     @EmbeddedEntity
     Person person();
 
-    @ToString(index = 1)
-    @EmbeddedEntity
-    Company company();
-
-    @Owned
-// TODO : commented because of strange behavior of with @Owned - entities duplicated on loading/saving...  
-//    @Detached
-    @Length(3)
-    IList<EmergencyContact> emergencyContacts();
 }

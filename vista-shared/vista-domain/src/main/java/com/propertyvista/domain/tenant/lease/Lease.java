@@ -35,6 +35,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.GuarantorInLease;
 import com.propertyvista.domain.tenant.TenantInLease;
 
 public interface Lease extends IEntity {
@@ -86,6 +87,10 @@ public interface Lease extends IEntity {
     @Detached
     @JoinTable(value = TenantInLease.class, orderColumn = TenantInLease.OrderInLeaseId.class, cascade = false)
     IList<TenantInLease> tenants();
+
+    @Detached
+    @JoinTable(value = GuarantorInLease.class, orderColumn = GuarantorInLease.OrderInLeaseId.class, cascade = false)
+    IList<GuarantorInLease> guarantors();
 
     // Dates:
     @Format("MM/dd/yyyy")
