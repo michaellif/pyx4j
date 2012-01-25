@@ -88,6 +88,10 @@ public class AppPlaceInfo {
         if (appUrl != null) {
             b.append(appUrl);
         }
+        if (placeClass != null) {
+            b.append("#");
+            b.append(getPlaceId(placeClass));
+        }
         if (encodedComponentsNameValue != null) {
             boolean first = true;
             boolean name = true;
@@ -103,10 +107,6 @@ public class AppPlaceInfo {
                 name = !name;
                 b.append(encodedComponent);
             }
-        }
-        if (placeClass != null) {
-            b.append("#");
-            b.append(getPlaceId(placeClass));
         }
         return b.toString();
     }
