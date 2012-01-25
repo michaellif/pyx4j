@@ -48,7 +48,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     Contacts,
 
-    ServiceCatalog,
+    ProductCatalog,
 
     Billing;
 

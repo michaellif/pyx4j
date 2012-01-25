@@ -19,9 +19,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 
 public interface FeatureCrudService extends AbstractCrudService<Feature> {
 
-    public void retrieveCatalog(AsyncCallback<ServiceCatalog> callback, Key entityId);
+    public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId);
 }

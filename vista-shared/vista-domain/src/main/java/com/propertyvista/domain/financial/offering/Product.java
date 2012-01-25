@@ -34,7 +34,7 @@ public interface Product extends IEntity {
     @Owner
     @Detached
     @ReadOnly
-    ServiceCatalog catalog();
+    ProductCatalog catalog();
 
     @Owned
     @Detached

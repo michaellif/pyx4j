@@ -24,9 +24,9 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
-public class ServiceCatalogPreloader extends AbstractDataPreloader {
+public class ProductCatalogPreloader extends AbstractDataPreloader {
 
-    public ServiceCatalogPreloader() {
+    public ProductCatalogPreloader() {
 
     }
 

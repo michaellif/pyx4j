@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.policy.PolicyNode;
@@ -90,7 +90,7 @@ public interface Building extends PolicyNode {
     IList<Media> media();
 
     @Detached
-    ServiceCatalog serviceCatalog();
+    ProductCatalog serviceCatalog();
 
     @Detached
     DashboardMetadata dashboard();

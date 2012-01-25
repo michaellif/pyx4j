@@ -34,7 +34,7 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -82,7 +82,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
                     LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class,
-                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ServiceCatalog.class);
+                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
         } else {
             return "This is production";
         }

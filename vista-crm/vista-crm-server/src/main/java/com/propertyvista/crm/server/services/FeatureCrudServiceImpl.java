@@ -21,7 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 
 public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> implements FeatureCrudService {
 
@@ -39,7 +39,7 @@ public class FeatureCrudServiceImpl extends GenericCrudServiceImpl<Feature> impl
     }
 
     @Override
-    public void retrieveCatalog(AsyncCallback<ServiceCatalog> callback, Key entityId) {
-        callback.onSuccess(Persistence.service().retrieve(ServiceCatalog.class, entityId));
+    public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId) {
+        callback.onSuccess(Persistence.service().retrieve(ProductCatalog.class, entityId));
     }
 }

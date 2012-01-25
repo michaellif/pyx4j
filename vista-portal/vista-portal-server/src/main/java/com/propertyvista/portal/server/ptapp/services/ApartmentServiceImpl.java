@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
@@ -177,7 +177,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         return aptInfo;
     }
 
-    private ServiceCatalog syncBuildingServiceCatalog(Building building) {
+    private ProductCatalog syncBuildingProductCatalog(Building building) {
 
         // load detached entities:
         Persistence.service().retrieve(building.serviceCatalog());
@@ -235,7 +235,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         entity.concessions().clear();
 
-        syncBuildingServiceCatalog(lease.unit().belongsTo());
+        syncBuildingProductCatalog(lease.unit().belongsTo());
 
         entity.includedUtilities().addAll(building.serviceCatalog().includedUtilities());
         entity.externalUtilities().addAll(building.serviceCatalog().externalUtilities());

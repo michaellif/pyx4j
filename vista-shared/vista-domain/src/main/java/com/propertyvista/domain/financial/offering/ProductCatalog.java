@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 /**
  * Defines Services on a given Building
  */
-public interface ServiceCatalog extends IEntity {
+public interface ProductCatalog extends IEntity {
 
     /**
      * This is small hack for no column table SQL update. Do not use.
@@ -45,7 +45,7 @@ public interface ServiceCatalog extends IEntity {
      * Double links - main dependency in appropriate entity:\
      * 
      * Note: Is not maintained! Should be synchronised if necessary in service!!!
-     * (see @link LeaseCrudServiceImpl.syncBuildingServiceCatalog(Building building)).
+     * (see @link LeaseCrudServiceImpl.syncBuildingProductCatalog(Building building)).
      */
     @Transient
     IList<Service> services();

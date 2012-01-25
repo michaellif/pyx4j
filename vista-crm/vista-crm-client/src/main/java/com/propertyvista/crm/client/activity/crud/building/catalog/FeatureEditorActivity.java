@@ -25,7 +25,7 @@ import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEdit
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 
 public class FeatureEditorActivity extends EditorActivityBase<Feature> {
 
@@ -39,9 +39,9 @@ public class FeatureEditorActivity extends EditorActivityBase<Feature> {
         ((FeatureEditorView) view).showSelectTypePopUp(new AsyncCallback<Feature.Type>() {
             @Override
             public void onSuccess(final Feature.Type type) {
-                ((FeatureCrudService) service).retrieveCatalog(new AsyncCallback<ServiceCatalog>() {
+                ((FeatureCrudService) service).retrieveCatalog(new AsyncCallback<ProductCatalog>() {
                     @Override
-                    public void onSuccess(ServiceCatalog catalog) {
+                    public void onSuccess(ProductCatalog catalog) {
                         Feature entity = EntityFactory.create(entityClass);
                         entity.type().setValue(type);
                         entity.catalog().set(catalog);

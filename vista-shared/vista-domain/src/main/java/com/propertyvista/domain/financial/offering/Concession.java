@@ -90,7 +90,7 @@ public interface Concession extends IEntity {
     @Owner
     @Detached
     @ReadOnly
-    ServiceCatalog catalog();
+    ProductCatalog catalog();
 
 // ----------------------------------------------
 

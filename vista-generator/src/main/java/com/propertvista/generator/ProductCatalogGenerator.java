@@ -29,19 +29,19 @@ import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.Type;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-public class ServiceCatalogGenerator {
+public class ProductCatalogGenerator {
 
-    private static final I18n i18n = I18n.get(ServiceCatalogGenerator.class);
+    private static final I18n i18n = I18n.get(ProductCatalogGenerator.class);
 
     private final ServiceItemTypes serviceItemTypes;
 
-    public ServiceCatalogGenerator(ServiceItemTypes serviceItemTypes) {
+    public ProductCatalogGenerator(ServiceItemTypes serviceItemTypes) {
         this.serviceItemTypes = serviceItemTypes;
     }
 
@@ -53,7 +53,7 @@ public class ServiceCatalogGenerator {
         return this.serviceItemTypes.featureItemTypes;
     }
 
-    public void createServiceCatalog(ServiceCatalog catalog) {
+    public void createProductCatalog(ProductCatalog catalog) {
         DataGenerator.setRandomSeed(RandomUtil.randomInt(1024));
 
         catalog.services().addAll(createServices(catalog));
@@ -65,7 +65,7 @@ public class ServiceCatalogGenerator {
         buildEligibilityMatrix(catalog);
     }
 
-    public List<Service> createServices(ServiceCatalog catalog) {
+    public List<Service> createServices(ProductCatalog catalog) {
         List<Service> items = new ArrayList<Service>(Service.Type.values().length);
         for (Service.Type type : EnumSet.allOf(Service.Type.class)) {
             items.add(createService(catalog, type));
@@ -73,7 +73,7 @@ public class ServiceCatalogGenerator {
         return items;
     }
 
-    public List<Feature> createFeatures(ServiceCatalog catalog) {
+    public List<Feature> createFeatures(ProductCatalog catalog) {
         List<Feature> items = new ArrayList<Feature>(Feature.Type.values().length);
         for (Feature.Type type : EnumSet.allOf(Feature.Type.class)) {
             items.add(createFeature(catalog, type));
@@ -81,7 +81,7 @@ public class ServiceCatalogGenerator {
         return items;
     }
 
-    public List<Concession> createConcessions(ServiceCatalog catalog) {
+    public List<Concession> createConcessions(ProductCatalog catalog) {
         List<Concession> items = new ArrayList<Concession>(3);
         for (int i = 0; i < 3; ++i) {
             items.add(createConcession(catalog));
@@ -89,7 +89,7 @@ public class ServiceCatalogGenerator {
         return items;
     }
 
-    public void buildEligibilityMatrix(ServiceCatalog catalog) {
+    public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service srv : catalog.services()) {
             if (srv.type().getValue().equals(Service.Type.residentialUnit) || srv.type().getValue().equals(Service.Type.residentialShortTermUnit)
                     || srv.type().getValue().equals(Service.Type.commercialUnit)) {
@@ -108,7 +108,7 @@ public class ServiceCatalogGenerator {
     }
 
 // internals:
-    private Service createService(ServiceCatalog catalog, Service.Type type) {
+    private Service createService(ProductCatalog catalog, Service.Type type) {
         Service item = EntityFactory.create(Service.class);
         item.catalog().set(catalog);
 
@@ -166,7 +166,7 @@ public class ServiceCatalogGenerator {
         return items;
     }
 
-    private Feature createFeature(ServiceCatalog catalog, Feature.Type type) {
+    private Feature createFeature(ProductCatalog catalog, Feature.Type type) {
         Feature item = EntityFactory.create(Feature.class);
         item.catalog().set(catalog);
 
@@ -231,7 +231,7 @@ public class ServiceCatalogGenerator {
         return items;
     }
 
-    private Concession createConcession(ServiceCatalog catalog) {
+    private Concession createConcession(ProductCatalog catalog) {
         Concession concession = EntityFactory.create(Concession.class);
         concession.catalog().set(catalog);
 
@@ -302,7 +302,7 @@ public class ServiceCatalogGenerator {
         return items;
     }
 
-    private Service getService(ServiceCatalog catalog, Service.Type type) {
+    private Service getService(ProductCatalog catalog, Service.Type type) {
         for (Service service : catalog.services()) {
             if (service.type().getValue().equals(type)) {
                 return service;
@@ -311,7 +311,7 @@ public class ServiceCatalogGenerator {
         throw new Error("Service of type " + type + " not found");
     }
 
-    private List<ProductItemType> getServiceItemTypes(ServiceCatalog catalog, Service.Type type) {
+    private List<ProductItemType> getServiceItemTypes(ProductCatalog catalog, Service.Type type) {
         List<ProductItemType> allowedItemTypes = new ArrayList<ProductItemType>();
         for (ProductItemType itemType : getServiceItemTypes()) {
             if (type.equals(itemType.serviceType().getValue())) {
@@ -328,7 +328,7 @@ public class ServiceCatalogGenerator {
         return base + RandomUtil.randomInt(200);
     }
 
-    public List<ProductItem> createAptUnitServices(ServiceCatalog catalog, AptUnit unit) {
+    public List<ProductItem> createAptUnitServices(ProductCatalog catalog, AptUnit unit) {
         Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
         List<ProductItem> serviceItems = createBuildingElementServices(catalog, unit, type);
         serviceItems.get(0).price().setValue(createUnitMarketRent(unit));
@@ -337,7 +337,7 @@ public class ServiceCatalogGenerator {
 
     }
 
-    public List<ProductItem> createBuildingElementServices(ServiceCatalog catalog, BuildingElement buildingElement, Service.Type type) {
+    public List<ProductItem> createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, Service.Type type) {
         Service service = getService(catalog, type);
         List<ProductItemType> allowedItemTypes = getServiceItemTypes(catalog, type);
 

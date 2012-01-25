@@ -62,7 +62,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             if (!dto.unit().isNull()) {
                 // fill selected building by unit:
                 dto.selectedBuilding().set(dto.unit().belongsTo());
-                syncBuildingServiceCatalog(dto.selectedBuilding());
+                syncBuildingProductCatalog(dto.selectedBuilding());
             }
 
             // update Tenants double links:
@@ -117,7 +117,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     public void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
-        syncBuildingServiceCatalog(unit.belongsTo());
+        syncBuildingProductCatalog(unit.belongsTo());
         callback.onSuccess(unit);
     }
 
@@ -128,7 +128,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         callback.onSuccess(true);
     }
 
-    private Building syncBuildingServiceCatalog(Building building) {
+    private Building syncBuildingProductCatalog(Building building) {
         if (building == null || building.isNull()) {
             return null;
         }

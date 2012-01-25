@@ -22,7 +22,7 @@ import com.propertvista.generator.BuildingsGenerator;
 import com.propertvista.generator.Dashboards;
 import com.propertvista.generator.MediaGenerator;
 import com.propertvista.generator.PreloadData;
-import com.propertvista.generator.ServiceCatalogGenerator;
+import com.propertvista.generator.ProductCatalogGenerator;
 import com.propertvista.generator.gdo.AptUnitGDO;
 import com.propertvista.generator.gdo.ServiceItemTypes;
 import com.propertvista.generator.util.RandomUtil;
@@ -41,7 +41,7 @@ import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceCatalog;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.yield.Amenity;
@@ -82,7 +82,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Email.class, Phone.class, Amenity.class,
                     LeaseTerms.class, Vendor.class, Elevator.class, Boiler.class, Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class,
-                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ServiceCatalog.class);
+                    Media.class, ThumbnailBlob.class, FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
         } else {
             return "This is production";
         }
@@ -103,7 +103,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             serviceItemTypes.featureItemTypes.addAll(Persistence.service().query(criteria));
         }
 
-        ServiceCatalogGenerator serviceCatalogGenerator = new ServiceCatalogGenerator(serviceItemTypes);
+        ProductCatalogGenerator serviceCatalogGenerator = new ProductCatalogGenerator(serviceItemTypes);
 
         LeaseTerms leaseTerms = generator.createLeaseTerms();
         Persistence.service().persist(leaseTerms);
@@ -175,11 +175,11 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             building.propertyManager().set(DataGenerator.random(managements)); // temporary for Starlight!..
 
             // Service Catalog:
-            ServiceCatalog catalog = EntityFactory.create(ServiceCatalog.class);
+            ProductCatalog catalog = EntityFactory.create(ProductCatalog.class);
             catalog.belongsTo().set(building);
             Persistence.service().persist(catalog);
 
-            serviceCatalogGenerator.createServiceCatalog(catalog);
+            serviceCatalogGenerator.createProductCatalog(catalog);
 
             Persistence.service().persist(catalog.features());
             Persistence.service().persist(catalog.concessions());
