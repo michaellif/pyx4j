@@ -18,7 +18,7 @@ import java.util.Date;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.charges.Charge;
+import com.propertyvista.domain.charges.Charge_OLD;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.charges.ChargeLineList;
@@ -136,7 +136,7 @@ public class ChargesSharedCalculation {
 
     public static void calculateTotal(ChargeLineList charges) {
         double total = 0d;
-        for (Charge charge : charges.charges()) {
+        for (Charge_OLD charge : charges.charges()) {
             total += charge.amount().getValue();
         }
         charges.total().setValue(total);
@@ -144,7 +144,7 @@ public class ChargesSharedCalculation {
 
     public static void calculateTotal(TenantChargeList charges) {
         double total = 0d;
-        for (Charge charge : charges.charges()) {
+        for (Charge_OLD charge : charges.charges()) {
             total += charge.amount().getValue();
         }
         charges.total().setValue(total);

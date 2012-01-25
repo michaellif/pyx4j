@@ -15,13 +15,13 @@ package com.propertyvista.domain.charges;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Charge extends IEntity {
+@Deprecated
+public interface Charge_OLD extends IEntity {
 
     @ToString(index = 0)
     @Format("#0.00")

@@ -24,7 +24,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("{0} {1}")
-public interface ChargeLine extends Charge {
+public interface ChargeLine extends Charge_OLD {
 
     @I18n
     public enum ChargeType {
