@@ -42,13 +42,14 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     private final PasswordChangeView view;
 
+    private final Key userPk;
+
     public PasswordChangeActivity(Place place) {
 
         view = SecurityViewFactory.instance(PasswordChangeView.class);
         view.setPresenter(this);
 
         assert place instanceof CrmSiteMap.PasswordChange;
-        Key userPk = null;
         String userPkStr = ((AppPlace) place).getFirstArg(USER_PK_ARG);
         try {
             userPk = new Key(userPkStr);
@@ -89,7 +90,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     }
 
     private boolean isSelfAdmin() {
-        return EqualsHelper.equals(view.getValue().userPk().getValue(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
+        return EqualsHelper.equals(userPk, ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
 }
