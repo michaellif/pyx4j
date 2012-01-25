@@ -66,7 +66,7 @@ public class RentRollAdaptor {
     }
 
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01",
-            "current/notice/vacant residents", "nrp-02")); // add erroneous "apt numbers" here (lower case)
+            "current/notice/vacant residents", "nrp-02", "roof1", "roof2")); // add erroneous "apt numbers" here (lower case)
 
     private static List<BuildingIO> buildings = new LinkedList<BuildingIO>();
 
@@ -194,11 +194,6 @@ public class RentRollAdaptor {
                 it.remove();
                 b.units().add(unit);
             }
-        }
-
-        BuildingIO b = getBuildingForUnitNumber(building.externalId().getValue(), tempUnit.number().getValue());
-        if (b != null) {
-            b.units().add(tempUnit);
         }
 
         if (building.units().size() > 0) {
