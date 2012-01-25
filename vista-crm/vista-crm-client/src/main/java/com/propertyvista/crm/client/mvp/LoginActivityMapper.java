@@ -21,7 +21,6 @@ import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
-import com.propertyvista.crm.client.activity.security.PasswordResetRequestResultActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class LoginActivityMapper implements ActivityMapper {
@@ -35,8 +34,6 @@ public class LoginActivityMapper implements ActivityMapper {
             return new LoginActivity(place);
         } else if (place instanceof CrmSiteMap.PasswordResetRequest) {
             return new PasswordResetRequestActivity(place);
-        } else if (place instanceof CrmSiteMap.PasswordResetRequestResult) {
-            return new PasswordResetRequestResultActivity(place);
         } else if (place instanceof CrmSiteMap.PasswordReset) {
             return new PasswordResetActivity(place);
         } else if (place instanceof CrmSiteMap.LoginWithToken) {

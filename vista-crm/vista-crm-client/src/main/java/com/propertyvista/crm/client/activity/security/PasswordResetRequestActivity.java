@@ -20,24 +20,27 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
-import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
+import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
 public class PasswordResetRequestActivity extends AbstractActivity implements PasswordResetRequestView.Presenter {
 
+    private final static I18n i18n = I18n.get(PasswordResetRequestActivity.class);
+
     private final PasswordResetRequestView view;
 
     public PasswordResetRequestActivity(Place place) {
-        this.view = LoginViewFactory.instance(PasswordResetRequestView.class);
+        this.view = SecurityViewFactory.instance(PasswordResetRequestView.class);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -48,8 +51,8 @@ public class PasswordResetRequestActivity extends AbstractActivity implements Pa
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.discard();
         panel.setWidget(view);
-        view.getForm().populateNew();
     }
 
     @Override
@@ -57,16 +60,15 @@ public class PasswordResetRequestActivity extends AbstractActivity implements Pa
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                AppPlace happyPlace = new CrmSiteMap.PasswordResetRequestResult();
-                happyPlace.arg(CrmSiteMap.PasswordResetRequestResult.RESULT_TYPE_ARG, CrmSiteMap.PasswordResetRequestResult.SUCCESS);
-                AppSite.getPlaceController().goTo(happyPlace);
+                MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email"));
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
             }
 
             @Override
             public void onFailure(Throwable caught) {
-                AppPlace sadPlace = new CrmSiteMap.PasswordResetRequestResult();
-                sadPlace.arg(CrmSiteMap.PasswordResetRequestResult.RESULT_TYPE_ARG, CrmSiteMap.PasswordResetRequestResult.FAILURE);
-                AppSite.getPlaceController().goTo(sadPlace);
+                view.createNewCaptchaChallenge();
+                view.displayPasswordResetFailedMessage();
+                MessageDialog.error(i18n.tr("Password Reset Request Failed"), caught);
             }
 
         };

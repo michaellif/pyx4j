@@ -29,7 +29,7 @@ public interface LoginView extends IsWidget {
 
     void setPresenter(Presenter presenter);
 
-    void challengeVerificationRequired();
+    void enableHumanVerification();
 
     void discard();
 

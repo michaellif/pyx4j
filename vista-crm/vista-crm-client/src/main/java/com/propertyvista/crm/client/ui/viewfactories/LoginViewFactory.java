@@ -20,10 +20,6 @@ import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.login.LoginViewImpl;
 import com.propertyvista.crm.client.ui.login.LoginWithTokenView;
 import com.propertyvista.crm.client.ui.login.LoginWithTokenViewImpl;
-import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
-import com.propertyvista.crm.client.ui.login.PasswordResetRequestViewImpl;
-import com.propertyvista.crm.client.ui.security.PasswordResetView;
-import com.propertyvista.crm.client.ui.security.PasswordResetViewImpl;
 
 public class LoginViewFactory extends ViewFactoryBase {
 
@@ -34,10 +30,6 @@ public class LoginViewFactory extends ViewFactoryBase {
             }
             if (LoginWithTokenView.class.equals(type)) {
                 map.put(type, new LoginWithTokenViewImpl());
-            } else if (PasswordResetView.class.equals(type)) {
-                map.put(type, new PasswordResetViewImpl());
-            } else if (PasswordResetRequestView.class.equals(type)) {
-                map.put(type, new PasswordResetRequestViewImpl());
             }
         }
 

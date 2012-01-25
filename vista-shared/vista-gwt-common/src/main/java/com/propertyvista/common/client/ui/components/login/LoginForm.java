@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -122,6 +123,23 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         }
 
         return main;
+    }
+
+    /**
+     * Creates new challenge and makes captcha visible.
+     */
+    public void reEnableCaptcha() {
+        CCaptcha captcha = (CCaptcha) get(proto().captcha());
+        captcha.createNewChallenge();
+        captcha.setVisible(true);
+    }
+
+    /**
+     * Renders captcha invisible.
+     */
+    public void disableCaptcha() {
+        CCaptcha captcha = (CCaptcha) get(proto().captcha());
+        captcha.setVisible(false);
     }
 
     protected String[][] devLogins() {

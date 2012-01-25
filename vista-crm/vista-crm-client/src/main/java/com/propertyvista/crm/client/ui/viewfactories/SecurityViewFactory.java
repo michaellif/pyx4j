@@ -16,12 +16,10 @@ package com.propertyvista.crm.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.crm.client.ui.login.LoginView;
-import com.propertyvista.crm.client.ui.login.LoginViewImpl;
+import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
+import com.propertyvista.crm.client.ui.login.PasswordResetRequestViewImpl;
 import com.propertyvista.crm.client.ui.security.PasswordChangeView;
 import com.propertyvista.crm.client.ui.security.PasswordChangeViewImpl;
-import com.propertyvista.crm.client.ui.security.PasswordResetRequestResultView;
-import com.propertyvista.crm.client.ui.security.PasswordResetRequestResultViewImpl;
 import com.propertyvista.crm.client.ui.security.PasswordResetView;
 import com.propertyvista.crm.client.ui.security.PasswordResetViewImpl;
 
@@ -29,14 +27,14 @@ public class SecurityViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (LoginView.class.equals(type)) {
-                map.put(type, new LoginViewImpl());
-            } else if (PasswordResetRequestResultView.class.equals(type)) {
-                map.put(type, new PasswordResetRequestResultViewImpl());
-            } else if (PasswordResetView.class.equals(type)) {
+            if (PasswordResetView.class.equals(type)) {
                 map.put(type, new PasswordResetViewImpl());
             } else if (PasswordChangeView.class.equals(type)) {
                 map.put(type, new PasswordChangeViewImpl());
+            } else if (PasswordResetView.class.equals(type)) {
+                map.put(type, new PasswordResetViewImpl());
+            } else if (PasswordResetRequestView.class.equals(type)) {
+                map.put(type, new PasswordResetRequestViewImpl());
             }
         }
 

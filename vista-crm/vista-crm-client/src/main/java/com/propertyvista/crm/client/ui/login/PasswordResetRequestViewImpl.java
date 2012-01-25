@@ -16,23 +16,18 @@ package com.propertyvista.crm.client.ui.login;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.common.client.ui.components.login.RetrievePasswordForm;
 
 public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordResetRequestView {
 
-    private static final I18n i18n = I18n.get(PasswordResetRequestViewImpl.class);
-
     private Presenter presenter;
 
-    private final CEntityEditor<PasswordRetrievalRequest> form;
+    private final RetrievePasswordForm form;
 
     public PasswordResetRequestViewImpl() {
-        form = new RetrievePasswordForm(i18n.tr("Reset Password"), new Command() {
+        form = new RetrievePasswordForm(new Command() {
             @Override
             public void execute() {
                 form.setVisited(true);
@@ -53,7 +48,20 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
     }
 
     @Override
-    public CEntityEditor<PasswordRetrievalRequest> getForm() {
-        return form;
+    public void discard() {
+        form.discard();
+        form.populateNew();
+        form.displayResetPasswordMessage(false);
+        createNewCaptchaChallenge();
+    }
+
+    @Override
+    public void createNewCaptchaChallenge() {
+        form.createNewCaptchaChallenge();
+    }
+
+    @Override
+    public void displayPasswordResetFailedMessage() {
+        form.displayResetPasswordMessage(true);
     }
 }

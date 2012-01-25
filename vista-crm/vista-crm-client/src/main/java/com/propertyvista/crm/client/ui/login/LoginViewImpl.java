@@ -23,10 +23,8 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.ui.components.login.LoginForm;
 import com.propertyvista.domain.DemoData;
@@ -37,7 +35,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     private Presenter presenter;
 
-    private final CEntityEditor<AuthenticationRequest> form;
+    private final LoginForm form;
 
     private int devCount = 1;
 
@@ -81,8 +79,8 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
     }
 
     @Override
-    public void challengeVerificationRequired() {
-        form.get(form.proto().captcha()).setVisible(true);
+    public void enableHumanVerification() {
+        form.reEnableCaptcha();
     }
 
     @Override
@@ -92,7 +90,8 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     @Override
     public void discard() {
-        form.discard();
+        form.populateNew();
+        form.disableCaptcha();
     }
 
     private void submit() {

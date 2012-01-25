@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
@@ -33,15 +34,16 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
 
     private static final I18n i18n = I18n.get(RetrievePasswordForm.class);
 
-    private final String caption;
+    private final Command onSubmitCommand;
 
-    private final Command newCommand;
+    private final HTML passwordResetFailedMessage;
 
-    public RetrievePasswordForm(String caption, Command newCommand) {
+    public RetrievePasswordForm(Command onSubmitCommand) {
         super(PasswordRetrievalRequest.class);
-        this.caption = caption;
-        this.newCommand = newCommand;
+        this.onSubmitCommand = onSubmitCommand;
+        this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password, check that you entered the correct email address"));
         setWidth("30em");
+
     }
 
     @Override
@@ -56,7 +58,7 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        HTML header = new HTML(HtmlUtils.h2(caption));
+        HTML header = new HTML(HtmlUtils.h2(i18n.tr("Reset Password")));
         header.getElement().getStyle().setMarginBottom(3, Unit.EM);
         header.getElement().getStyle().setProperty("textAlign", "center");
 
@@ -64,16 +66,16 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
         main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
         main.add(new HTML());
         main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
+        main.add(passwordResetFailedMessage);
+        passwordResetFailedMessage.setVisible(false);
 
-        Button retrievePasswordButton = new Button(i18n.tr("Reset Password"));
+        Button retrievePasswordButton = new Button(i18n.tr("Reset"));
         // retrievePasswordButton.ensureDebugId(VistaFormsDebugId.Auth_RetrivePassword.toString());
         retrievePasswordButton.addClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
-                newCommand.execute();
+                onSubmitCommand.execute();
             }
-
         });
 
         retrievePasswordButton.getElement().getStyle().setMarginLeft(9, Unit.EM);
@@ -85,5 +87,20 @@ public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest
         main.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
         return main;
+    }
+
+    public void createNewCaptchaChallenge() {
+        CCaptcha captcha = (CCaptcha) get(proto().captcha());
+        captcha.createNewChallenge();
+    }
+
+    public void displayResetPasswordMessage(boolean display) {
+        passwordResetFailedMessage.setVisible(display);
+    }
+
+    @Override
+    public void populateNew() {
+        displayResetPasswordMessage(false);
+        super.populateNew();
     }
 }

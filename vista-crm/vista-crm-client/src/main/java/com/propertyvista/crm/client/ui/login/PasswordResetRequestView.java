@@ -15,17 +15,21 @@ package com.propertyvista.crm.client.ui.login;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 public interface PasswordResetRequestView extends IsWidget {
-
-    void setPresenter(Presenter presenter);
 
     interface Presenter {
 
         void requestPasswordReset(PasswordRetrievalRequest value);
     }
 
-    CEntityEditor<PasswordRetrievalRequest> getForm();
+    void setPresenter(Presenter presenter);
+
+    void createNewCaptchaChallenge();
+
+    void displayPasswordResetFailedMessage();
+
+    void discard();
+
 }

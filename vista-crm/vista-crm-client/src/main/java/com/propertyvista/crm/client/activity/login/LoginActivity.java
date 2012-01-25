@@ -20,12 +20,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.login.LoginView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
@@ -33,6 +34,8 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
+
+    private final static I18n i18n = I18n.get(LoginActivity.class);
 
     private final LoginView view;
 
@@ -63,9 +66,10 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof ChallengeVerificationRequired) {
-                    view.challengeVerificationRequired();
+                    view.enableHumanVerification();
+                } else {
+                    MessageDialog.error(i18n.tr("Login Failed"), caught);
                 }
-                throw new UnrecoverableClientError(caught);
             }
 
         };
