@@ -23,6 +23,7 @@ package com.pyx4j.server.mail;
 import static com.pyx4j.server.mail.SMTPMailUtils.email;
 import static com.pyx4j.server.mail.SMTPMailUtils.emails;
 import static com.pyx4j.server.mail.SMTPMailUtils.filterDestinations;
+import static com.pyx4j.server.mail.SMTPMailUtils.forwardEmails;
 import static com.pyx4j.server.mail.SMTPMailUtils.isEmptyList;
 
 import java.util.Date;
@@ -100,15 +101,21 @@ class SMTPMailServiceImpl implements IMailService {
             List<InternetAddress> recipientsCc;
             List<InternetAddress> recipientsBcc;
 
-            String emailFilter = config.getAllowSendToEmailSufix();
-            if (!CommonsStringUtils.isStringSet(emailFilter)) {
-                address = emails(mailMessage.getTo());
-                recipientsCc = emails(mailMessage.getCc());
-                recipientsBcc = emails(mailMessage.getBcc());
+            if (CommonsStringUtils.isStringSet(config.getForwardAllTo())) {
+                address = forwardEmails(mailMessage.getTo(), config.getForwardAllTo());
+                recipientsCc = forwardEmails(mailMessage.getCc(), config.getForwardAllTo());
+                recipientsBcc = forwardEmails(mailMessage.getBcc(), config.getForwardAllTo());
             } else {
-                address = filterDestinations(emailFilter, emails(mailMessage.getTo()));
-                recipientsCc = filterDestinations(emailFilter, emails(mailMessage.getCc()));
-                recipientsBcc = filterDestinations(emailFilter, emails(mailMessage.getBcc()));
+                String emailFilter = config.getAllowSendToEmailSufix();
+                if (!CommonsStringUtils.isStringSet(emailFilter)) {
+                    address = emails(mailMessage.getTo());
+                    recipientsCc = emails(mailMessage.getCc());
+                    recipientsBcc = emails(mailMessage.getBcc());
+                } else {
+                    address = filterDestinations(emailFilter, emails(mailMessage.getTo()));
+                    recipientsCc = filterDestinations(emailFilter, emails(mailMessage.getCc()));
+                    recipientsBcc = filterDestinations(emailFilter, emails(mailMessage.getBcc()));
+                }
             }
 
             if (isEmptyList(address) && SMTPMailUtils.isEmptyList(recipientsCc) && isEmptyList(recipientsBcc)) {

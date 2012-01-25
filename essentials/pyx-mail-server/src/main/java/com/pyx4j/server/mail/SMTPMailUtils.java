@@ -20,6 +20,7 @@
  */
 package com.pyx4j.server.mail;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -54,6 +55,21 @@ class SMTPMailUtils {
         } else {
             return list.isEmpty();
         }
+    }
+
+    static List<InternetAddress> forwardEmails(Collection<String> emails, String forwardAllTo) throws AddressException {
+        if ((emails == null) || (emails.size() == 0)) {
+            return null;
+        }
+        List<InternetAddress> addreses = new Vector<InternetAddress>();
+        for (String email : emails) {
+            try {
+                addreses.add(new InternetAddress(forwardAllTo, email.trim(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e);
+            }
+        }
+        return addreses;
     }
 
     static boolean filterDestinations(String emailFilter, String email) {
