@@ -90,6 +90,11 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         this.presenter = presenter;
     }
 
+    @Override
+    public void discard() {
+        form.discard();
+    }
+
     private void submit() {
         form.setVisited(true);
         if (!form.isValid()) {

@@ -19,16 +19,18 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 
 public interface LoginView extends IsWidget {
 
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
+    interface Presenter {
 
         void login(AuthenticationRequest value);
 
-        public void gotoResetPassword();
+        void gotoResetPassword();
 
     }
 
-    public void challengeVerificationRequired();
+    void setPresenter(Presenter presenter);
+
+    void challengeVerificationRequired();
+
+    void discard();
 
 }
