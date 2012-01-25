@@ -48,6 +48,8 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private Key parentID;
 
+    private Class<? extends IEntity> parentClass;
+
     public ListerActivityBase(Place place, IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
@@ -84,13 +86,21 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
     @Override
     public void setParent(Key parentID) {
         this.parentID = parentID; // save parent id for newItem creation...
+        this.parentClass = null;
+        setFilterByParent(true);
+    }
+
+    @Override
+    public void setParent(Key parentID, Class<? extends IEntity> parentClass) {
+        this.parentID = parentID; // save parent id for newItem creation...
+        this.parentClass = parentClass; // save parent class for polymorphic queries...
         setFilterByParent(true);
     }
 
     @Override
     public void setFilterByParent(boolean flag) {
         if (flag) {
-            dataSource.setParentFiltering(parentID);
+            dataSource.setParentFiltering(parentID, parentClass);
         } else {
             dataSource.clearParentFiltering();
         }

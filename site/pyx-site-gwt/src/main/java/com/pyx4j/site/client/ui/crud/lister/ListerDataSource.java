@@ -13,6 +13,7 @@
  */
 package com.pyx4j.site.client.ui.crud.lister;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,10 +61,19 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
 
     // filtering mechanics:
 
-    public void setParentFiltering(Key parentID) {
+    public void setParentFiltering(Key parentID, Class<? extends IEntity> parentClass) {
         String ownerMemberName = EntityFactory.getEntityMeta(entityClass).getOwnerMemberName();
         assert (ownerMemberName != null) : "No @Owner in " + entityClass;
-        parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, parentID);
+
+        Serializable serchBy;
+        if (parentClass != null) {
+            serchBy = EntityFactory.create(parentClass);
+            ((IEntity) serchBy).setPrimaryKey(parentID);
+        } else {
+            serchBy = parentID;
+        }
+
+        parentFiltering = new DataTableFilterData(new Path(entityClass, ownerMemberName), Operators.is, serchBy);
     }
 
     public void clearParentFiltering() {
