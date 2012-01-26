@@ -33,6 +33,7 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
@@ -65,6 +66,20 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
+    public void retrieve(AsyncCallback<EmployeeDTO> callback, Key entityId) {
+        // Enforce access only to current user
+        super.retrieve(callback, CrmAppContext.getCurrentUserEmployee().getPrimaryKey());
+    }
+
+    @Override
+    public void save(AsyncCallback<EmployeeDTO> callback, EmployeeDTO dto) {
+        // Enforce access only to current user
+        dto.setPrimaryKey(CrmAppContext.getCurrentUserEmployee().getPrimaryKey());
+        dto.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
+        super.save(callback, dto);
+    }
+
+    @Override
     public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
         CrmUserCredential cr = Persistence.service().retrieve(CrmUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
         if (!cr.enabled().isBooleanTrue()) {
@@ -94,4 +109,10 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new IllegalArgumentException();
     }
+
+    @Override
+    public void create(AsyncCallback<EmployeeDTO> callback, EmployeeDTO dto) {
+        throw new IllegalArgumentException();
+    }
+
 }
