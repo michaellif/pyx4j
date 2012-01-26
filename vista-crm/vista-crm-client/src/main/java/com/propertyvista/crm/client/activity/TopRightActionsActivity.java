@@ -14,18 +14,13 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
@@ -33,15 +28,12 @@ import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.shared.CompiledLocale;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
@@ -123,30 +115,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showAccount() {
-
-        EntityListCriteria<EmployeeDTO> criteria = new EntityListCriteria<EmployeeDTO>(EmployeeDTO.class);
-
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), ClientContext.getUserVisit().getPrincipalPrimaryKey()));
-
-        GWT.<EmployeeCrudService> create(EmployeeCrudService.class).list(new AsyncCallback<EntitySearchResult<EmployeeDTO>>() {
-
-            @Override
-            public void onSuccess(EntitySearchResult<EmployeeDTO> result) {
-                if (result.getTotalRows() == 1) {
-                    CrmSiteMap.Account accountPlace = new CrmSiteMap.Account();
-                    accountPlace.formViewerPlace(result.getData().get(0).getPrimaryKey());
-                    AppSite.getPlaceController().goTo(accountPlace);
-                } else {
-                    MessageDialog.error(i18n.tr("Error"), i18n.tr("Too many or no results (one one needed)"));
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                MessageDialog.error(i18n.tr("Error"), caught);
-            }
-        }, criteria);
-
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Account());
     }
 
     @Override

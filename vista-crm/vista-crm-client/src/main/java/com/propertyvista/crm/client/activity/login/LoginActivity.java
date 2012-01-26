@@ -28,7 +28,7 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.crm.client.ui.login.LoginView;
+import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;

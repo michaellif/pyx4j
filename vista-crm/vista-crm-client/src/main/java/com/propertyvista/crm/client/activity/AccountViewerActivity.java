@@ -27,16 +27,15 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactor
 import com.propertyvista.crm.client.ui.security.PasswordChangeView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 
-@Deprecated
 /**
- * This one should use separate service (just for self management) 
+ * This one should use separate service (just for self management)
  */
-public class AccountActivity extends ViewerActivityBase<EmployeeDTO> implements EmployeeViewerView.Presenter {
+public class AccountViewerActivity extends ViewerActivityBase<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
-    public AccountActivity(Place place) {
-        super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
+    public AccountViewerActivity(Place place) {
+        super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));
     }
 
     @Override

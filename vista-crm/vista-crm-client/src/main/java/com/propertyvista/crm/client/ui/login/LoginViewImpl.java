@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.common.client.ui.components.login.LoginForm;
+import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.domain.DemoData;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {

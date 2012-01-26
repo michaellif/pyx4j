@@ -19,11 +19,14 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.AccountEditorActivity;
+import com.propertyvista.crm.client.activity.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
@@ -89,10 +92,10 @@ import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorAct
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.EquifaxResultViewerActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
-import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.PersonScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.PersonScreeningViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.TenantEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.TenantViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.application.ApplicationListerActivity;
@@ -508,12 +511,17 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new DashboardManagementActivity(place);
 // - Other:
                 } else if (place instanceof CrmSiteMap.Account) {
+                    // the service that the Account related activites use doesn't care about the 'id' arg,
+                    // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy                    
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
-                        activity = new EmployeeEditorActivity(place);
+                        ((CrmSiteMap.Account) place).formEditorPlace(new Key(1));
+                        activity = new AccountEditorActivity(place);
                         break;
                     case viewer:
-                        activity = new EmployeeViewerActivity(place);
+                    case lister: /* this is required hack, don't remove!!! */
+                        ((CrmSiteMap.Account) place).formViewerPlace(new Key(1));
+                        activity = new AccountViewerActivity(place);
                         break;
                     }
                 } else if (place instanceof CrmSiteMap.Alert) {
