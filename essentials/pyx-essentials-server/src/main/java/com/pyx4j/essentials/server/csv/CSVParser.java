@@ -25,6 +25,8 @@ import java.util.Vector;
 
 public class CSVParser implements TextParser {
 
+    public static boolean allowEscapeBackslash = false;
+
     @Override
     public String[] parse(String line) {
         if (line.startsWith("#") || (line.length() == 0)) {
@@ -35,7 +37,7 @@ public class CSVParser implements TextParser {
         StringBuilder col = new StringBuilder();
         boolean escape = false;
         boolean quoted = false;
-        boolean doubleQuote = false;
+        boolean expectDoubleQuote = false;
         for (char c : line.toCharArray()) {
             if (escape) {
                 col.append(c);
@@ -44,11 +46,11 @@ public class CSVParser implements TextParser {
                 switch (c) {
                 case '"':
                     if (quoted) {
-                        if (doubleQuote) {
+                        if (expectDoubleQuote) {
                             col.append(c);
-                            doubleQuote = false;
+                            expectDoubleQuote = false;
                         } else {
-                            quoted = false;
+                            expectDoubleQuote = true;
                         }
                     } else {
                         if (col.length() == 0) {
@@ -60,7 +62,7 @@ public class CSVParser implements TextParser {
                     }
                     break;
                 case ',':
-                    if (quoted) {
+                    if ((quoted) && (!expectDoubleQuote)) {
                         col.append(c);
                     } else {
                         columns.add(col.toString());
@@ -69,11 +71,18 @@ public class CSVParser implements TextParser {
                     }
                     break;
                 case '\\':
-                    escape = true;
+                    if (allowEscapeBackslash) {
+                        escape = true;
+                    } else {
+                        col.append(c);
+                    }
                     break;
                 default:
+                    if (expectDoubleQuote) {
+                        expectDoubleQuote = false;
+                        quoted = false;
+                    }
                     col.append(c);
-                    doubleQuote = false;
                     break;
                 }
             }
