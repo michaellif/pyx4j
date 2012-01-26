@@ -68,6 +68,7 @@ public class CSVParser implements TextParser {
                         columns.add(col.toString());
                         col = new StringBuilder();
                         quoted = false;
+                        expectDoubleQuote = false;
                     }
                     break;
                 case '\\':
@@ -87,7 +88,7 @@ public class CSVParser implements TextParser {
                 }
             }
         }
-        if (col.length() > 0) {
+        if ((col.length() > 0) || expectDoubleQuote) {
             columns.add(col.toString());
         }
 

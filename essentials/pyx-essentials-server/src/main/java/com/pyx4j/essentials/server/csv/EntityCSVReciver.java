@@ -226,8 +226,12 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
                 return DateUtils.detectDateformat(value);
             }
         } else if (Number.class.isAssignableFrom(primitive.getValueClass())) {
-            // Is Local English?
-            return primitive.parse(value.replaceAll(",", ""));
+            if ("".equals(value)) {
+                return null;
+            } else {
+                // Is Local English?
+                return primitive.parse(value.replaceAll(",", ""));
+            }
         } else {
             return primitive.parse(value);
         }

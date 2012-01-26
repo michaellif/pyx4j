@@ -46,6 +46,10 @@ public class CSVParserTest extends TestCase {
      * We simulate behavior of MS Excel, see file "sample.csv"
      */
     public void testEmbeddedDoubleQuote() {
+        assertLine("A,\"\",D", "A", "", "D");
+        assertLine("A,\"\"", "A", "");
+        assertLine("A,\"\",\"\"", "A", "", "");
+
         assertLine("A,\"B\"C,D", "A", "BC", "D");
         assertLine("A,\"B\"C\",D", "A", "BC\"", "D");
         assertLine("A,\"B\"\"C\",D", "A", "B\"C", "D");
