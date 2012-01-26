@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -24,6 +25,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -32,6 +35,7 @@ import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -54,7 +58,27 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
+
         return tabPanel;
+    }
+
+    public void enforceBehaviour() {
+        boolean isManager = SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+
+        get(proto().title()).setViewable(isSelfEditor());
+
+        get(proto().enabled()).setVisible(isManager);
+        get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
+
+        get(proto().accessAllBuildings()).setViewable(!isManager);
+        get(proto().roles()).setViewable(!isManager);
+        get(proto().roles()).setEditable(isManager);
+
+        get(proto().portfolios()).setViewable(!isManager);
+        get(proto().portfolios()).setEditable(isManager);
+
+        get(proto().employees()).setEditable(!isManager);
+        get(proto().employees()).setEditable(isManager);
     }
 
     @Override
@@ -63,10 +87,20 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
 
         get(proto().password()).setVisible(isNewEmployee());
         get(proto().passwordConfirm()).setVisible(isNewEmployee());
+
+        enforceBehaviour();
     }
 
     private boolean isNewEmployee() {
         return getValue().id().isNull();
+    }
+
+    /**
+     * @return <code>true</code> if the current user is editing his own information
+     */
+    private boolean isSelfEditor() {
+        return (getValue() != null) && !isNewEmployee() && !getValue().user().isNull()
+                && EqualsHelper.equals(getValue().user().getPrimaryKey(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
     private IsWidget createInfoTab() {
