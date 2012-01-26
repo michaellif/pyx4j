@@ -29,7 +29,9 @@ public enum DownloadFormat {
 
     RTF("rtf", "MS Word (RTF)"),
 
-    XLS("xls", "MS Excel"),
+    XLS("xls", "MS Excel 97-2003"),
+
+    XLSX("xlsx", "MS Excel"),
 
     PDF("pdf", "Adobe PDF"),
 
