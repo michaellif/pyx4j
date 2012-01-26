@@ -13,6 +13,7 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -24,11 +25,28 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
 
+import com.propertyvista.dto.ImportAdapterType;
+import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 
 public class ImportUtils {
+
+    public static ImportIO parse(ImportAdapterType importAdapterType, byte[] data, DownloadFormat format) {
+        switch (format) {
+        case XML:
+            return ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data)));
+        case CSV:
+        case XLS:
+        case XLSX:
+            // TODO
+            return null;
+        default:
+            throw new Error("Unsupported file format");
+        }
+    }
 
     public static <T extends IEntity> T parse(Class<T> entityClass, InputSource input) {
         XMLEntityParser parser = new XMLEntityParser(new ImportXMLEntityFactory());

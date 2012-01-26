@@ -7,21 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 25, 2011
+ * Created on Jan 26, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto;
+package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.dto.ImportAdapterType;
+@I18n
+public enum ImportAdapterType {
 
-@Transient
-public interface UpdateUploadDTO extends IEntity {
+    vista,
 
-    IPrimitive<ImportAdapterType> adapterType();
+    rentRoll;
+
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    }
 
 }

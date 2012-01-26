@@ -13,14 +13,13 @@
  */
 package com.propertyvista.admin.server.services;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -67,7 +66,8 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess process, final UploadResponse response) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<PmcImportDTO, IEntity> process,
+            final UploadResponse<IEntity> response) {
 
         Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
             @Override
@@ -81,9 +81,9 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
         return ProcessingStatus.processWillContinue;
     }
 
-    private static void runImport(UploadData data, UploadDeferredProcess process, UploadResponse response) {
+    private static void runImport(UploadData data, UploadDeferredProcess<PmcImportDTO, IEntity> process, UploadResponse<IEntity> response) {
         try {
-            PmcImportDTO importDTO = (PmcImportDTO) process.getData();
+            PmcImportDTO importDTO = process.getData();
             if (importDTO.id().isNull()) {
                 throw new Error();
             }
@@ -97,7 +97,8 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             MediaConfig mediaConfig = new MediaConfig();
             mediaConfig.baseFolder = "data";
 
-            ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
+            ImportIO importIO = ImportUtils.parse(importDTO.adapterType().getValue(), data.data,
+                    DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
             process.status().setProgress(0);
             process.status().setProgressMaximum(importIO.buildings().size());
 
@@ -158,5 +159,4 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             NamespaceManager.remove();
         }
     }
-
 }

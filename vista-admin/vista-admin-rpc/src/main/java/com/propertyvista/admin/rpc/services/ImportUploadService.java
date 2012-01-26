@@ -24,6 +24,7 @@ import com.propertyvista.admin.rpc.PmcImportDTO;
 
 public interface ImportUploadService extends UploadService<PmcImportDTO, IEntity> {
 
-    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML);
+    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML, DownloadFormat.CSV, DownloadFormat.XLS,
+            DownloadFormat.XLSX);
 
 }

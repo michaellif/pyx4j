@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.server.services;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collection;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
@@ -82,7 +81,9 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO, 
 
     private static void runImport(UploadData data, UploadDeferredProcess<UpdateUploadDTO, IEntity> process, UploadResponse<IEntity> response) {
 
-        ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data.data)));
+        ImportIO importIO = ImportUtils.parse(process.getData().adapterType().getValue(), data.data,
+                DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
+
         process.status().setProgress(0);
         process.status().setProgressMaximum(importIO.buildings().size());
 

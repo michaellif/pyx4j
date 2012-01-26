@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.dto.ImportAdapterType;
+
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface PmcImportDTO extends IEntity {
@@ -42,6 +44,8 @@ public interface PmcImportDTO extends IEntity {
 
     @NotNull
     IPrimitive<ImportType> type();
+
+    IPrimitive<ImportAdapterType> adapterType();
 
     IPrimitive<Boolean> ignoreMissingMedia();
 }

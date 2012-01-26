@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.dialog.OkOptionText;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
+import com.propertyvista.dto.ImportAdapterType;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class ImportUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
@@ -90,6 +91,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);
                 main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().type())).componentWidth(10).build());
+                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().adapterType())).componentWidth(10).build());
                 main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().ignoreMissingMedia())).componentWidth(10).build());
                 return main;
             }
@@ -97,6 +99,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
         PmcImportDTO defaultSettings = EntityFactory.create(PmcImportDTO.class);
         defaultSettings.setPrimaryKey(pmc.getPrimaryKey());
         defaultSettings.type().setValue(PmcImportDTO.ImportType.newData);
+        defaultSettings.adapterType().setValue(ImportAdapterType.vista);
 
         form.populate(defaultSettings);
         form.initContent();
