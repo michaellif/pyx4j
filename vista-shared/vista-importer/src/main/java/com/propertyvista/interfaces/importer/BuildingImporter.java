@@ -16,9 +16,6 @@ package com.propertyvista.interfaces.importer;
 import java.util.List;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -44,8 +41,6 @@ import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 public class BuildingImporter extends ImportPersister {
 
     private static final I18n i18n = I18n.get(BuildingImporter.class);
-
-    private final static Logger log = LoggerFactory.getLogger(BuildingImporter.class);
 
     public List<String> verify(BuildingIO buildingIO, MediaConfig mediaConfig) {
         List<String> messages = new Vector<String>();

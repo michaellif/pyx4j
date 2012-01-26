@@ -45,6 +45,7 @@ public interface PmcImportDTO extends IEntity {
     @NotNull
     IPrimitive<ImportType> type();
 
+    @NotNull
     IPrimitive<ImportAdapterType> adapterType();
 
     IPrimitive<Boolean> ignoreMissingMedia();

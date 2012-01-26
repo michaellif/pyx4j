@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,7 +13,6 @@
  */
 package com.propertyvista.interfaces.importer;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,16 +34,13 @@ import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 public class ImportUtils {
 
     public static ImportIO parse(ImportAdapterType importAdapterType, byte[] data, DownloadFormat format) {
-        switch (format) {
-        case XML:
-            return ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data)));
-        case CSV:
-        case XLS:
-        case XLSX:
-            // TODO
-            return null;
+        switch (importAdapterType) {
+        case vista:
+            return new VistaXMLImportAdapter().parse(data, format);
+        case rentRoll:
+            return new RentRollAdaptor().parse(data, format);
         default:
-            throw new Error("Unsupported file format");
+            throw new Error("Unsupported adapter type");
         }
     }
 

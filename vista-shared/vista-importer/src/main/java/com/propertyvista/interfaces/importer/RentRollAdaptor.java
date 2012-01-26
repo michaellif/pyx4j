@@ -20,12 +20,9 @@
  */
 package com.propertyvista.interfaces.importer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -41,37 +38,59 @@ import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
-import com.pyx4j.essentials.server.xml.XMLEntityWriter;
-import com.pyx4j.essentials.server.xml.XMLStringWriter;
+import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityName;
 
-public class RentRollAdaptor {
-
-    public static String inFile = "C:\\projects\\Starlight\\database_exports\\tenantRoster.csv";
-
-    public static String outFile = "C:\\projects\\Starlight\\database_exports\\example-output.xml";
-
-    public enum RosterReaderState {
-        ExpectAddress, ExpectData
-    }
+public class RentRollAdaptor implements ImportAdapter {
 
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01", "nrp02", "nrp03", "nrp04",
             "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2", "roof3", "roof4")); // add erroneous "apt numbers" here (lower case)
 
     private static List<BuildingIO> buildings = new LinkedList<BuildingIO>();
 
-    public static void main(String[] args) throws IOException {
+    @Override
+    public ImportIO parse(byte[] data, DownloadFormat format) {
+        switch (format) { //TODO remove redundant functions (one of the parse ones)
+        case XML:
+            throw new Error("Please use Vista adapter type for XML files");
+        case CSV:
+            try {
+                return parse(data, "csv");
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                throw new Error(e);
+            }
+        case XLS:
 
-        readTenantRoster(inFile); // populate buildings
+            try {
+                return parse(data, "xls");
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                throw new Error(e);
+            }
+        case XLSX:
+            try {
+                return parse(data, "xlsx");
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                throw new Error(e);
+            }
+            // TODO
+        default:
+            throw new Error("Unsupported file format");
+        }
+    }
+
+    public static ImportIO parse(byte[] inFile, String type) throws IOException {
+
+        readTenantRoster(inFile, type); // populate buildings
 
         int unitCount = 0;
         ImportIO importIO = EntityFactory.create(ImportIO.class);
@@ -84,28 +103,7 @@ public class RentRollAdaptor {
 
         System.out.println("Exported " + importIO.buildings().size() + " buildings");
         System.out.println("Exported " + unitCount + " units");
-
-        File f = new File(outFile);
-        FileWriter w = null;
-        try {
-            w = new FileWriter(f);
-            XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
-            XMLEntityWriter xmlWriter = new XMLEntityWriter(xml, new ImportXMLEntityName()) {
-                @Override
-                protected boolean emitMemeber(IEntity entity, String memberName, IObject<?> member) {
-                    return "availableForRent".equals(memberName) || super.emitMemeber(entity, memberName, member);
-                }
-            };
-            xmlWriter.setEmitId(false);
-            xmlWriter.write(importIO);
-            w.write(xml.toString());
-            w.flush();
-        } catch (IOException e) {
-            throw new Error(e);
-        } finally {
-            IOUtils.closeQuietly(w);
-            System.out.println("\nXML file created successfully");
-        }
+        return importIO;
 
     }
 
@@ -113,16 +111,25 @@ public class RentRollAdaptor {
      * @param args
      * @throws IOException
      */
-    public static void readTenantRoster(String fileName) throws IOException {
+    public static void readTenantRoster(byte[] fileName, String type) throws IOException {
 
         EntityCSVReciver<RentRollCSV> csv = EntityCSVReciver.create(RentRollCSV.class);
         csv.setHeaderLinesCount(2);
         csv.setHeadersMatchMinimum(EntityFactory.getEntityMeta(RentRollCSV.class).getMemberNames().size());
-        InputStream is = new FileInputStream(fileName);
-        try {
-            CSVLoad.loadFile(is, csv);
-        } finally {
-            IOUtils.closeQuietly(is);
+        InputStream is = new ByteArrayInputStream(fileName);
+
+        if (type.equals("csv")) {
+            try {
+                CSVLoad.loadFile(is, csv);
+            } finally {
+                IOUtils.closeQuietly(is);
+            }
+        } else {
+            try {
+                XLSLoad.loadFile(is, csv);
+            } finally {
+                IOUtils.closeQuietly(is);
+            }
         }
 
         BuildingIO building = EntityFactory.create(BuildingIO.class); //create initial building
@@ -145,9 +152,6 @@ public class RentRollAdaptor {
                     marketRent = parseMoney(line.marketRent().getStringView());
                     unit.availableForRent().setValue(availableForRent);
                     unit.marketRent().setValue(marketRent);
-                } else {
-//                    marketRent = parseMoney(line.actualRent().getStringView());
-//                    unit.availableForRent().setValue(null); TODO delete previous value for availableForRent if not vacant
                 }
 
                 building.units().add(unit);
@@ -244,16 +248,5 @@ public class RentRollAdaptor {
             }
         }
         return verifiedBuildings;
-    }
-
-    public static String removeQuotes(String str) {
-        if (str.startsWith("\"")) {
-            str = str.substring(1);
-        }
-        if (str.endsWith("\"")) {
-            str = str.substring(0, str.length() - 1);
-        }
-
-        return str;
     }
 }
