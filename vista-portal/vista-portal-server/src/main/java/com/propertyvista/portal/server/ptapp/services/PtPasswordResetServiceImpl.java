@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 23, 2012
- * @author ArtyomB
+ * Created on Jan 26, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.security;
+package com.propertyvista.portal.server.ptapp.services;
 
-import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
+import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
-import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.domain.security.TenantUserCredential;
 
-public class CrmPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<CrmUserCredential> implements CrmPasswordResetService {
+public class PtPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<TenantUserCredential> implements PtPasswordResetService {
 
-    public CrmPasswordResetServiceImpl() {
-        super(CrmUserCredential.class);
+    public PtPasswordResetServiceImpl() {
+        super(TenantUserCredential.class);
     }
 
 }

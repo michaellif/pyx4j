@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetService;
@@ -60,16 +61,14 @@ public class PasswordResetActivity extends AbstractActivity implements PasswordR
         AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                // ClientContext.authenticated(result);
+                ClientContext.authenticated(result);
                 CrmSite.instance().showMessageDialog(i18n.tr("Your password has been reset successfully!"), i18n.tr("Success!"), i18n.tr("Log In"),
                         new Command() {
                             @Override
                             public void execute() {
-                                // FIXME logout before going to  login screen?
                                 AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
                             }
                         });
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
             }
         };
 
