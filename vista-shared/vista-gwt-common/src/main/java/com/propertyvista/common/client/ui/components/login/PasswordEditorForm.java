@@ -71,7 +71,7 @@ public class PasswordEditorForm extends CEntityDecoratableEditor<PasswordChangeR
             @Override
             public ValidationFailure isValid(CComponent<String, ?> component, String value) {
                 if (value == null || !value.equals(get(proto().newPassword()).getValue())) {
-                    return new ValidationFailure(i18n.tr("passwords don't match"));
+                    return new ValidationFailure(i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }

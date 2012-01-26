@@ -61,7 +61,11 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
         Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.changePassword(form.getValue());
+                if (form.isValid()) {
+                    presenter.changePassword(form.getValue());
+                } else {
+                    // hope that from tells the user what's wrong.
+                }
             }
         });
         submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString()); // TODO why we need this???

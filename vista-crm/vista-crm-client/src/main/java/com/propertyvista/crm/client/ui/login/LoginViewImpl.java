@@ -13,142 +13,34 @@
  */
 package com.propertyvista.crm.client.ui.login;
 
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
+import java.util.Arrays;
+import java.util.List;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.common.client.ui.components.login.LoginForm;
+import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl;
 import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.domain.DemoData;
 
-public class LoginViewImpl extends FlowPanel implements LoginView {
+public class LoginViewImpl extends AbstractLoginViewImpl implements LoginView {
 
     private static final I18n i18n = I18n.get(LoginViewImpl.class);
 
-    private Presenter presenter;
-
-    private final LoginForm form;
-
-    private int devCount = 1;
-
-    private int devKey = 0;
-
-    private HandlerRegistration handlerRegistration;
-
     public LoginViewImpl() {
-
-        form = new LoginForm(i18n.tr("Login to Your Account"), new Command() {
-
-            @Override
-            public void execute() {
-                submit();
-            }
-
-        }, new Command() {
-
-            @Override
-            public void execute() {
-                presenter.gotoResetPassword();
-            }
-        }) {
-            @Override
-            protected void onDevLogin(NativeEvent event, int nativeKeyCode) {
-                setDevLoginValues(event, nativeKeyCode);
-            }
-
-            @Override
-            protected String[][] devLogins() {
-                return new String[][] { { "Press 'Ctrl+Q' to login as PM", "Q" }, { "Press 'Ctrl+E' to login as Employee", "E" } };
-            }
-        };
-
-        form.initContent();
-        add(form);
-
+        super(i18n.tr("Login to your account"));
     }
 
     @Override
-    public void enableHumanVerification() {
-        form.reEnableCaptcha();
+    protected void createContent() {
+        int row = -1;
+        setWidget(++row, 0, form);
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-        form.populateNew();
-        form.disableCaptcha();
+    protected List<DevLoginData> devLoginValues() {
+        return Arrays.asList(//@formatter:off
+                new DevLoginData(DemoData.UserType.PM, 'Q'),
+                new DevLoginData(DemoData.UserType.EMP, 'E')
+        );//@formatter:on
     }
-
-    @Override
-    public void discard() {
-        form.discard();
-    }
-
-    private void submit() {
-        form.setVisited(true);
-        if (!form.isValid()) {
-            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-        }
-        presenter.login(form.getValue());
-    }
-
-    @Override
-    protected void onLoad() {
-        super.onLoad();
-        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-            @Override
-            public void onPreviewNativeEvent(NativePreviewEvent event) {
-                if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
-                    setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
-                }
-                if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
-                    submit();
-                }
-            }
-        });
-    }
-
-    private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
-        DemoData.UserType type = null;
-        switch (nativeKeyCode) {
-        case 'Q':
-            type = DemoData.UserType.PM;
-            break;
-        case 'E':
-            type = DemoData.UserType.EMP;
-            break;
-        }
-        if (type != null) {
-            if (devKey != nativeKeyCode) {
-                devCount = 1;
-            } else {
-                devCount++;
-                if (devCount > type.getDefaultMax()) {
-                    devCount = 1;
-                }
-            }
-            devKey = nativeKeyCode;
-            String devLogin = type.getEmail(devCount);
-            event.preventDefault();
-            form.get(form.proto().email()).setValue(devLogin);
-            form.get(form.proto().password()).setValue(devLogin);
-        }
-    }
-
-    @Override
-    protected void onUnload() {
-        super.onUnload();
-        handlerRegistration.removeHandler();
-        devCount = 1;
-    }
-
 }

@@ -15,18 +15,28 @@ package com.propertyvista.common.client.ui.components.login;
 
 import static com.pyx4j.commons.HtmlUtils.h2;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
@@ -36,6 +46,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
 import com.propertyvista.domain.DemoData;
 
 public class LoginForm extends CEntityEditor<AuthenticationRequest> {
@@ -48,13 +59,27 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
     private final Command resetPasswordCommand;
 
+    private final List<DevLoginData> devLoginValues;
+
+    private int devCount = 0;
+
+    private int prevDevKey = -1;
+
     public LoginForm(String caption, Command loginCommand, Command resetPasswordCommand) {
+        this(caption, loginCommand, resetPasswordCommand, null);
+    }
+
+    public LoginForm(String caption, Command loginCommand, Command resetPasswordCommand, List<DevLoginData> devLoginValues) {
         super(AuthenticationRequest.class);
         this.caption = caption;
         this.loginCommand = loginCommand;
         this.resetPasswordCommand = resetPasswordCommand;
+        if (ApplicationMode.isDevelopment()) {
+            this.devLoginValues = devLoginValues;
+        } else {
+            this.devLoginValues = null;
+        }
         setWidth("30em");
-
     }
 
     @Override
@@ -100,29 +125,61 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
             main.add(forgotPassword);
         }
 
-        if (ApplicationMode.isDevelopment()) {
-            FlowPanel devMessagePanel = new FlowPanel();
-            devMessagePanel.add(new HTML("This application is running in <B>" + DemoData.applicationModeName() + "</B> mode."));
-
-            for (final String[] message : devLogins()) {
-                Anchor touchAnchor = new Anchor(message[0]);
-                touchAnchor.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        onDevLogin(event.getNativeEvent(), message[1].charAt(0));
-                    }
-                });
-                touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
-                touchAnchor.getElement().getStyle().setDisplay(Display.BLOCK);
-
-                devMessagePanel.add(touchAnchor);
-            }
-            devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
-            devMessagePanel.getElement().getStyle().setMarginTop(3, Unit.EM);
-            main.add(devMessagePanel);
+        if (ApplicationMode.isDevelopment() & devLoginValues != null) {
+            main.add(createDevMessagePanel());
         }
 
+        main.addAttachHandler(new AttachEvent.Handler() {
+            private HandlerRegistration handlerRegistration;
+
+            @Override
+            public void onAttachOrDetach(AttachEvent event) {
+                if (event.isAttached()) {
+                    handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+                        @Override
+                        public void onPreviewNativeEvent(NativePreviewEvent event) {
+                            if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
+                                if (onDevLogin(event.getNativeEvent().getKeyCode())) {
+                                    event.getNativeEvent().preventDefault();
+                                }
+                            }
+                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                                loginCommand.execute();
+                            }
+                        }
+                    });
+                } else {
+                    handlerRegistration.removeHandler();
+                }
+            }
+        });
         return main;
+    }
+
+    private Widget createDevMessagePanel() {
+        FlowPanel devMessagePanel = new FlowPanel();
+
+        devMessagePanel.add(new HTML("This application is running in <B>" + DemoData.applicationModeName() + "</B> mode."));
+
+        for (final DevLoginData loginVal : devLoginValues) {
+            Anchor touchAnchor = new Anchor(SimpleMessageFormat.format("Press Ctrl+{0} to login as {1}", loginVal.shortcut, loginVal.user.toString()));
+            touchAnchor.addClickHandler(new ClickHandler() {
+                private final int shortcut = loginVal.shortcut;
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    if (onDevLogin(shortcut)) {
+                        event.getNativeEvent().preventDefault();
+                    }
+                }
+            });
+            touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
+            touchAnchor.getElement().getStyle().setDisplay(Display.BLOCK);
+            devMessagePanel.add(touchAnchor);
+        }
+        devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
+        devMessagePanel.getElement().getStyle().setMarginTop(3, Unit.EM);
+        return devMessagePanel;
     }
 
     /**
@@ -142,11 +199,33 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         captcha.setVisible(false);
     }
 
+    /**
+     * should be passed as callback to handle clicks
+     */
+    protected boolean onDevLogin(int shortcut) {
+        if (prevDevKey != shortcut) {
+            devCount = 0;
+        }
+        prevDevKey = shortcut;
+
+        for (DevLoginData val : devLoginValues) {
+            if (shortcut == val.shortcut) {
+                devCount = (devCount % val.user.getDefaultMax()) + 1;
+                get(proto().email()).setValue(val.user.getEmail(devCount));
+                get(proto().password()).setValue(val.user.getEmail(devCount));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Deprecated
     protected String[][] devLogins() {
         return new String[][] { { "Press 'Ctrl+Q' to login", "Q" } };
     }
 
-    protected void onDevLogin(NativeEvent event, int nativeKeyCode) {
+    @Deprecated
+    protected void onDevLogin(NativeEvent event, int foo) {
     }
 
 }

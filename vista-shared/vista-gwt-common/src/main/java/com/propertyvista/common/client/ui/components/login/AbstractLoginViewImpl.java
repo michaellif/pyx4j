@@ -13,65 +13,86 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.List;
 
-public abstract class AbstractLoginViewImpl implements LoginView {
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+
+import com.propertyvista.domain.DemoData;
+
+public abstract class AbstractLoginViewImpl extends FormFlexPanel implements LoginView {
 
     private LoginView.Presenter presenter;
 
-    private final LoginForm form;
-
-    private final Widget viewAsWidget;
+    /**
+     * This is the login form for user's credentials.
+     */
+    protected final LoginForm form;
 
     public AbstractLoginViewImpl(String caption) {
         form = new LoginForm(caption, new Command() {
             @Override
             public void execute() {
-                // TODO Auto-generated method stub
-
+                submit();
             }
-        },
-
-        new Command() {
-
+        }, new Command() {
             @Override
             public void execute() {
-                // TODO Auto-generated method stub
-
+                resetPassword();
             }
+        }, devLoginValues());
 
-        });
-
-        viewAsWidget = createContent();
+        form.initContent();
+        createContent();
     }
 
-    protected abstract Widget createContent();
+    /**
+     * Override this function to initialize the view components, and don't forget to add the {@link #form} :).
+     */
+    protected abstract void createContent();
 
-    @Override
-    public Widget asWidget() {
-        return viewAsWidget;
-    }
+    protected abstract List<DevLoginData> devLoginValues();
 
     @Override
     public void setPresenter(Presenter presenter) {
-
         this.presenter = presenter;
-
         form.populateNew();
-        //
         form.disableCaptcha();
     }
 
     @Override
     public void enableHumanVerification() {
-        // TODO Auto-generated method stub        
+        form.reEnableCaptcha();
     }
 
     @Override
     public void discard() {
-        // TODO Auto-generated method stub
-
+        form.discard();
     }
 
+    private void submit() {
+        form.setVisited(true);
+        if (!form.isValid()) {
+            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+        }
+        presenter.login(form.getValue());
+    }
+
+    private void resetPassword() {
+        presenter.gotoResetPassword();
+    }
+
+    public static class DevLoginData {
+
+        public final char shortcut;
+
+        public final DemoData.UserType user;
+
+        public DevLoginData(DemoData.UserType user, char shortcut) {
+            this.user = user;
+            this.shortcut = shortcut;
+        }
+    }
 }
