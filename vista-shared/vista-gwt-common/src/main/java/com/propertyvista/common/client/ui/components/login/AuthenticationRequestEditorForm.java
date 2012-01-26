@@ -21,6 +21,8 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 
+@Deprecated
+// TODO replaces LoginForm with this component,  and all the buttons etc, should be created in the view
 public class AuthenticationRequestEditorForm extends CEntityDecoratableEditor<AuthenticationRequest> {
 
     public AuthenticationRequestEditorForm() {

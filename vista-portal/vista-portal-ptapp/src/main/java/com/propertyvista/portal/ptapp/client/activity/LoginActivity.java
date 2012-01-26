@@ -28,7 +28,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.ptapp.client.ui.LoginView;
+import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
@@ -38,7 +38,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     private final LoginView view;
 
     public LoginActivity(Place place) {
-        view = (LoginView) PtAppViewFactory.instance(LoginView.class);
+        view = PtAppViewFactory.instance(LoginView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -65,7 +65,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof ChallengeVerificationRequired) {
-                    view.challengeVerificationRequired();
+                    view.enableHumanVerification();
                 }
                 throw new UnrecoverableClientError(caught);
             }
@@ -77,7 +77,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     }
 
     @Override
-    public void gotoRetrievePassword() {
+    public void gotoResetPassword() {
         AppSite.getPlaceController().goTo(new PtSiteMap.RetrievePassword());
     }
 }
