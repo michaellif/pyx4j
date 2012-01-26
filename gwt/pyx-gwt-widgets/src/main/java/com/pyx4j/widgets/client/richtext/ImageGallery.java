@@ -43,12 +43,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.dialog.CancelOption;
-import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class ImageGallery extends Dialog implements CancelOption, RichTextImageProvider {
+public abstract class ImageGallery {
 
     private static final Logger log = LoggerFactory.getLogger(ImageGallery.class);
+
+    private final ScrollPanel contentPanel;
 
     private final FlowPanel mainPanel;
 
@@ -61,19 +61,15 @@ public class ImageGallery extends Dialog implements CancelOption, RichTextImageP
     }
 
     public ImageGallery(boolean editable) {
-        super("Image Picker");
-        setDialogOptions(this);
 
         this.editable = editable;
 
         mainPanel = new FlowPanel();
         mainPanel.getElement().getStyle().setPadding(4, Unit.PX);
 
-        ScrollPanel scroller = new ScrollPanel();
-        scroller.setSize("700px", "500px");
-        scroller.setWidget(mainPanel);
-
-        setBody(scroller);
+        contentPanel = new ScrollPanel();
+        contentPanel.setSize("700px", "500px");
+        contentPanel.setWidget(mainPanel);
     }
 
     public void setImages(List<Image> list) {
@@ -110,8 +106,7 @@ public class ImageGallery extends Dialog implements CancelOption, RichTextImageP
             image.addDomHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    selectionCallback.onSuccess(image.getUrl());
-                    ImageGallery.this.hide();
+                    onImageSelected(image);
                 }
             }, ClickEvent.getType());
 
@@ -172,14 +167,9 @@ public class ImageGallery extends Dialog implements CancelOption, RichTextImageP
         mainPanel.remove(index);
     }
 
-    @Override
-    public void selectImage(AsyncCallback<String> callback) {
-        selectionCallback = callback;
-        center();
+    public ScrollPanel getContent() {
+        return contentPanel;
     }
 
-    @Override
-    public boolean onClickCancel() {
-        return true;
-    }
+    public abstract void onImageSelected(Image image);
 }

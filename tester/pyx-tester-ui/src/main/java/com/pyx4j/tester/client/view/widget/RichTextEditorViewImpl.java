@@ -23,13 +23,54 @@ package com.pyx4j.tester.client.view.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.widgets.client.dialog.CancelOption;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
 import com.pyx4j.widgets.client.richtext.ImageGallery;
+import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
 public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEditorView {
+
+    class RichTextImageDialog extends Dialog implements CancelOption, RichTextImageProvider {
+
+        private final ImageGallery gallery;
+
+        private AsyncCallback<String> selectionHandler;
+
+        public RichTextImageDialog() {
+            super("Image Picker");
+            this.setDialogOptions(this);
+
+            gallery = new ImageGallery() {
+                @Override
+                public void onImageSelected(Image image) {
+                    selectionHandler.onSuccess(image.getUrl());
+                    RichTextImageDialog.this.hide();
+                }
+            };
+
+            setBody(gallery.getContent());
+        }
+
+        @Override
+        public void selectImage(AsyncCallback<String> callback) {
+            selectionHandler = callback;
+            center();
+        }
+
+        public void setImages(List<Image> list) {
+            gallery.setImages(list);
+        }
+
+        @Override
+        public boolean onClickCancel() {
+            return true;
+        }
+    }
 
     public RichTextEditorViewImpl() {
         setSize("100%", "100%");
@@ -56,7 +97,7 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
         image.setTitle("Self-Portrait");
         images.add(image);
 
-        ImageGallery imageProvider = new ImageGallery();
+        RichTextImageDialog imageProvider = new RichTextImageDialog();
         imageProvider.setImages(images);
 
         editor.setImageProvider(imageProvider);
