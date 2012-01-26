@@ -29,7 +29,6 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -188,11 +187,9 @@ public class RentRollAdaptor {
 
     public static Collection<BuildingIO> splitComplexes(BuildingIO building) { //sorts complexes that contain multiple buildings under the same externalId. Assumes either all units are with hyphen or none.
         Iterator<AptUnitIO> it = building.units().iterator();
-        AptUnitIO tempUnit = EntityFactory.create(AptUnitIO.class);
         buildingList = new HashMap<String, BuildingIO>();
         while (it.hasNext()) {
             AptUnitIO unit = it.next();
-            tempUnit = unit;
             BuildingIO b = getBuildingForUnitNumber(building.externalId().getValue(), unit.number().getValue());
             if (b != null) {
                 it.remove();
@@ -258,36 +255,5 @@ public class RentRollAdaptor {
         }
 
         return str;
-    }
-
-    public static String[] splitCSVRow(String row) {
-        ArrayList<String> splitted = new ArrayList<String>(50);
-
-        boolean ignoreCommas = false;
-        boolean startValue = true;
-        StringBuffer value = new StringBuffer();
-        for (int i = 0; i < row.length(); ++i) {
-            char c = row.charAt(i);
-
-            if (startValue) {
-                startValue = false;
-                splitted.add(value.toString());
-                value = new StringBuffer();
-            }
-            if (!ignoreCommas & c == '"') {
-                ignoreCommas = true;
-            } else if (ignoreCommas & c == '"') {
-                ignoreCommas = false;
-            } else {
-                if (!ignoreCommas & c == ',') {
-                    startValue = true;
-                } else {
-                    value.append(c);
-                }
-            }
-        }
-        splitted.add(value.toString());
-
-        return splitted.toArray(new String[splitted.size()]);
     }
 }

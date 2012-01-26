@@ -43,6 +43,7 @@ public class BuildingUpdater extends ImportPersister {
 
     private static final I18n i18n = I18n.get(BuildingUpdater.class);
 
+    //@SuppressWarnings("deprecation")
     public ImportCounters updateUnitAvailability(BuildingIO buildingIO, MediaConfig mediaConfig) {
         ImportCounters counters = new ImportCounters();
         Building building;
