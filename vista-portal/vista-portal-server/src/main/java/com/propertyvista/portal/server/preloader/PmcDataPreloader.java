@@ -51,7 +51,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
-import com.propertyvista.interfaces.importer.BuildingUpdater;
+import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
@@ -115,9 +115,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new StringReader(data)));
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
-                //counters.add(new BuildingImporter().persist(building, imagesBaseFolder, true));
-                counters.add(new BuildingUpdater().updateData(building, mediaConfig));
-
+                counters.add(new BuildingImporter().persist(building, mediaConfig));
                 if ((config().minimizePreloadTime) && (counters.buildings > config().numResidentialBuildings)) {
                     break;
                 }
