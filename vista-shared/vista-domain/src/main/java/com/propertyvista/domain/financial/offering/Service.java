@@ -59,8 +59,6 @@ public interface Service extends Product {
     @MemberColumn(name = "serviceType")
     IPrimitive<Type> type();
 
-    IPrimitive<DepositType> depositType();
-
     @Detached
     IList<Feature> features();
 

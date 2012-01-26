@@ -79,8 +79,6 @@ public interface Feature extends Product {
 
     IPrimitive<PriceType> priceType();
 
-    IPrimitive<DepositType> depositType();
-
     IPrimitive<Boolean> isRecurring();
 
     IPrimitive<Boolean> isMandatory();
