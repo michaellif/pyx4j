@@ -77,9 +77,9 @@ public class CommonsStringUtils {
     }
 
     public static String nvl_concat(String value1, String value2, String sep) {
-        if (value1 == null) {
+        if (isEmpty(value1)) {
             return nvl(value2);
-        } else if (value2 == null) {
+        } else if (isEmpty(value2)) {
             return nvl(value1);
         } else {
             return value1 + sep + value2;

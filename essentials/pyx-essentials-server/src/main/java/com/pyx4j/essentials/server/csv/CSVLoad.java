@@ -57,10 +57,10 @@ public class CSVLoad {
         return -1;
     }
 
-    public static void loadFile(String fileName, CSVReciver reciver) {
-        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+    public static void loadFile(String resourceName, CSVReciver reciver) {
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
-            throw new RuntimeException("Resouce [" + fileName + "] not found");
+            throw new RuntimeException("Resouce [" + resourceName + "] not found");
         }
         loadFile(is, reciver);
     }
@@ -83,8 +83,9 @@ public class CSVLoad {
                     continue;
                 }
                 if (header) {
-                    header = false;
-                    reciver.onHeader(values);
+                    if (reciver.onHeader(values)) {
+                        header = false;
+                    }
                 } else {
                     reciver.onRow(values);
                 }
@@ -105,9 +106,9 @@ public class CSVLoad {
         }
     }
 
-    public static String[] loadFile(String fileName, final String columName) {
+    public static String[] loadFile(String resourceName, final String columName) {
         final List<String> data = new Vector<String>();
-        loadFile(fileName, new CSVReciver() {
+        loadFile(resourceName, new CSVReciver() {
 
             int columnIndex = 0;
 
@@ -117,8 +118,9 @@ public class CSVLoad {
             }
 
             @Override
-            public void onHeader(String[] header) {
+            public boolean onHeader(String[] header) {
                 columnIndex = findHeaderColumn(header, columName);
+                return (columnIndex != -1);
             }
 
             @Override
