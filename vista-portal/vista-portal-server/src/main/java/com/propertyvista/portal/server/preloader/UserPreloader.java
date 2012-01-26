@@ -14,15 +14,12 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -32,9 +29,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.TenantUser;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -74,7 +71,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         return user;
     }
 
-    public static CrmUser createUser(String name, String email, String password, Collection<VistaCrmBehavior> behaviors) {
+    public static CrmUser createCrmUser(String name, String email, String password, CrmRole role) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -98,7 +95,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
-        credential.behaviors().addAll(behaviors);
+        credential.roles().add(role);
 
         Persistence.service().persist(credential);
 
@@ -108,6 +105,9 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         int userCount = 0;
+
+        CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
+
         for (int i = 1; i <= config().maxPropertyManagers; i++) {
             String email = DemoData.UserType.PM.getEmail(i);
 
@@ -115,7 +115,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue("Executive");
             emp.email().setValue(email);
 
-            emp.user().set(createUser(emp.name().getStringView(), email, email, EnumSet.allOf(VistaCrmBehavior.class)));
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole));
 
             Persistence.service().persist(emp);
 
@@ -129,7 +129,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
             emp.email().setValue(email);
 
-            emp.user().set(createUser(emp.name().getStringView(), email, email, EnumSet.of(RandomUtil.randomEnum(VistaCrmBehavior.class))));
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole));
 
             Persistence.service().persist(emp);
             userCount++;

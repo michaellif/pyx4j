@@ -22,11 +22,15 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
+
+    public static final String DEFAULT_ACCESS_ALL_ROLE_NAME = "All";
 
     private final static Logger log = LoggerFactory.getLogger(CrmRolesPreloader.class);
 
@@ -41,9 +45,15 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         return role;
     }
 
+    public static CrmRole getDefaultRole() {
+        EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_ACCESS_ALL_ROLE_NAME));
+        return Persistence.service().retrieve(criteria);
+    }
+
     @Override
     public String create() {
-        createRole("All", VistaCrmBehavior.values());
+        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, VistaCrmBehavior.values());
         if (ApplicationMode.isDevelopment()) {
             for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
                 createRole("Test-" + behavior.name(), behavior);

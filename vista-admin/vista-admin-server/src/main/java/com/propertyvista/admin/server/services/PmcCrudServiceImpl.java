@@ -13,7 +13,6 @@
  */
 package com.propertyvista.admin.server.services;
 
-import java.util.EnumSet;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -32,9 +31,10 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
+import com.propertyvista.portal.server.preloader.CrmRolesPreloader;
 import com.propertyvista.portal.server.preloader.UserPreloader;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.domain.admin.Pmc;
@@ -77,17 +77,19 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     private static void preloadPmc(PmcDTO pmc) {
         NamespaceManager.setNamespace(pmc.dnsName().getValue());
 
-        UserPreloader.createUser(pmc.email().getValue(), pmc.email().getValue(), pmc.password().getValue(), EnumSet.allOf(VistaCrmBehavior.class));
-
-        if (ApplicationMode.isDevelopment()) {
-            for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
-                String email = DemoData.UserType.PM.getEmail(i);
-                UserPreloader.createUser(email, email, email, EnumSet.allOf(VistaCrmBehavior.class));
-            }
-        }
         AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
         preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
         log.info("Preload {}", preloader.create());
+
+        CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
+        UserPreloader.createCrmUser(pmc.email().getValue(), pmc.email().getValue(), pmc.password().getValue(), defaultRole);
+        if (ApplicationMode.isDevelopment()) {
+            for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
+                String email = DemoData.UserType.PM.getEmail(i);
+                UserPreloader.createCrmUser(email, email, email, defaultRole);
+            }
+        }
+
     }
 
     @Override

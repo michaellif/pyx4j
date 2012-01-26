@@ -18,13 +18,11 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @RpcBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = CrmUser.class)
@@ -37,9 +35,6 @@ public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
     CrmUser user();
 
     IPrimitive<Boolean> accessAllBuildings();
-
-    @Deprecated
-    IPrimitiveSet<VistaCrmBehavior> behaviors();
 
     @MemberColumn(name = "rls")
     ISet<CrmRole> roles();

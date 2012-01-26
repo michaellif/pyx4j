@@ -44,6 +44,7 @@ public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee,
                 dto.enabled().set(crs.enabled());
                 dto.accessAllBuildings().set(crs.accessAllBuildings());
                 dto.requireChangePasswordOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
+                dto.roles().addAll(crs.roles());
             }
         }
     }
@@ -57,13 +58,14 @@ public class EmployeeCrudServiceImpl extends GenericCrudServiceDtoImpl<Employee,
             if (Context.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(dbo.user().getPrimaryKey())) {
                 Context.getVisit().getUserVisit().setName(dbo.name().getStringView());
             }
-
             user.name().setValue(dbo.name().getStringView());
             user.email().setValue(dbo.email().getStringView());
             Persistence.service().persist(user);
             if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
                 CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
                 crs.enabled().set(in.enabled());
+                crs.roles().clear();
+                crs.roles().addAll(in.roles());
                 crs.accessAllBuildings().set(in.accessAllBuildings());
                 crs.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
                 Persistence.service().persist(crs);

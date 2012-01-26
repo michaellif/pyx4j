@@ -48,9 +48,6 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     @Override
     protected void addBehaviors(CrmUserCredential userCredential, Set<Behavior> behaviors) {
 
-        //TODO remove when switched to roles
-        behaviors.addAll(userCredential.behaviors());
-
         addAllBehaviors(behaviors, userCredential.roles(), new HashSet<CrmRole>());
 
         if (userCredential.accessAllBuildings().isBooleanTrue()) {
