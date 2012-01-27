@@ -23,7 +23,7 @@ public interface GadgetDockingMeta extends IEntity {
      * Define in which column this gadget is docked.<br/>
      * Valid values: <br/>
      * <li>Dashboard: 0, 1, 2</li> <br/>
-     * <li>Report : -1, 0, 1</li>
+     * <li>Report : -1 (left column), 0 (both columns), 1 (right column)</li>
      */
     @MemberColumn(name = "dockingColumn")
     IPrimitive<Integer> column();
