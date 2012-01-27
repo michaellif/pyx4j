@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
@@ -38,5 +39,10 @@ public class MediaUtils {
     public static String createApplicationDocumentUrl(File file) {
         return ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
                 + file.fileName().getStringView();
+    }
+
+    public static String createSiteImageResourceUrl(SiteImageResource resource) {
+        return ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.siteImageResourceServletMapping + resource.id().getStringView() + "/"
+                + resource.fileInfo().fileName().getStringView();
     }
 }

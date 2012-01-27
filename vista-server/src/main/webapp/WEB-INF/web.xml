@@ -318,6 +318,16 @@
         <url-pattern>/application_document/*</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>SiteImageResourceServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.upload.SiteImageResourceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SiteImageResourceServlet</servlet-name>
+        <url-pattern>/resource_siteimage/*</url-pattern>
+    </servlet-mapping>
+    
     <!--  need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->
     <servlet-mapping>
         <servlet-name>ApplicationDocumentServlet</servlet-name>

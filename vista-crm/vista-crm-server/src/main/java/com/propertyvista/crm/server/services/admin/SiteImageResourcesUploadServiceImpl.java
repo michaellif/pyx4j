@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.admin;
 
 import java.util.Collection;
 
@@ -29,7 +29,7 @@ import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.SiteImageResourcesUploadService;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourcesUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.server.common.blob.BlobService;
 
@@ -39,7 +39,7 @@ import com.propertyvista.server.common.blob.BlobService;
  */
 public class SiteImageResourcesUploadServiceImpl extends UploadServiceImpl<IEntity, SiteImageResource> implements SiteImageResourcesUploadService {
 
-    private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(SiteImageResourcesUploadServiceImpl.class);
 
     @Override
     public long getMaxSize() {

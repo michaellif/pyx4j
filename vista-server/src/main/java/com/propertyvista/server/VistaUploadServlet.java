@@ -17,8 +17,8 @@ import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
 import com.propertyvista.admin.server.services.ImportUploadServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadServiceImpl;
-import com.propertyvista.crm.server.services.SiteImageResourcesUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
+import com.propertyvista.crm.server.services.admin.SiteImageResourcesUploadServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDocumentUploadServiceImpl;
 
 @SuppressWarnings("serial")

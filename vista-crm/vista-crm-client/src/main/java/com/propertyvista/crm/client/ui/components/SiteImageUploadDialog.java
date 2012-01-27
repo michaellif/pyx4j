@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.components.cms;
+package com.propertyvista.crm.client.ui.components;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;
-import com.propertyvista.crm.rpc.services.SiteImageResourcesUploadService;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourcesUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 

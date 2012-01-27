@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
@@ -90,7 +91,9 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._caption().secondaryCaption()), 20).build());
 
             if (isEditable()) {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content()), 60).build());
+                CRichTextArea editor = new CRichTextArea();
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
+                editor.setImageProvider(new PageContentImageProvider());
             } else {
                 CLabel content = new CLabel();
                 content.setAllowHtml(true);
