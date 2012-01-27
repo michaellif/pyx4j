@@ -22,7 +22,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 public class PersonScreeningLister extends ListerBase<PersonScreening> {
 
     public PersonScreeningLister() {
-        super(PersonScreening.class, CrmSiteMap.Tenants.TenantScreening.class, false, true);
+        super(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

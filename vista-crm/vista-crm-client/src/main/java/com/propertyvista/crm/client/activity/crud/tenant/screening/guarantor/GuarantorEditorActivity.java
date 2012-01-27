@@ -7,29 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant.guarantor;
+package com.propertyvista.crm.client.activity.crud.tenant.screening.guarantor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.GuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
+public class GuarantorEditorActivity extends EditorActivityBase<GuarantorDTO> implements GuarantorEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public GuarantorListerActivity(Place place) {
-        super(place, TenantViewFactory.instance(GuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
+    public GuarantorEditorActivity(Place place) {
+        super(place, TenantViewFactory.instance(GuarantorEditorView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
                 GuarantorDTO.class);
     }
-
 }

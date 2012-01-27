@@ -37,6 +37,7 @@ import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.TenantDTO;
@@ -143,11 +144,11 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         tabPanel.clear();
         switch (getValue().type().getValue()) {
         case person:
-            tabPanel.add(person, i18n.tr("Details"));
+            tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
             tabPanel.addDisable(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
             break;
         case company:
-            tabPanel.add(company, proto().company().getMeta().getCaption());
+            tabPanel.add(new CrmScrollPanel(company), proto().company().getMeta().getCaption());
             break;
         }
 

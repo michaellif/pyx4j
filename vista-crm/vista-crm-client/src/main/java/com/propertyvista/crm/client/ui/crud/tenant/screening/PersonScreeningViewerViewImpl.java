@@ -20,6 +20,6 @@ import com.propertyvista.domain.tenant.PersonScreening;
 public class PersonScreeningViewerViewImpl extends CrmViewerViewImplBase<PersonScreening> implements PersonScreeningViewerView {
 
     public PersonScreeningViewerViewImpl() {
-        super(CrmSiteMap.Tenants.TenantScreening.class, new PersonScreeningEditorForm(true));
+        super(CrmSiteMap.Tenants.Screening.class, new PersonScreeningEditorForm(true));
     }
 }

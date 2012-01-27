@@ -106,6 +106,9 @@ import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivi
 import com.propertyvista.crm.client.activity.crud.tenant.screening.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.PersonScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.PersonScreeningViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.screening.guarantor.GuarantorEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.screening.guarantor.GuarantorListerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.screening.guarantor.GuarantorViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemViewerActivity;
@@ -173,17 +176,16 @@ public class MainActivityMapper implements AppActivityMapper {
         } else if (entityClass.equals(MaintenanceRequest.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Properties.MaintenanceRequest.class);
 
+        } else if (entityClass.equals(Tenant.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Tenant.class);
+        } else if (entityClass.equals(Guarantor.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Guarantor.class);
         } else if (entityClass.equals(Lease.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Lease.class);
         } else if (entityClass.equals(MasterApplication.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
         } else if (entityClass.equals(EquifaxResult.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
-
-        } else if (entityClass.equals(Tenant.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Tenant.class);
-        } else if (entityClass.equals(Guarantor.class)) {
-            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Guarantor.class);
         }
 
         return null;
@@ -414,7 +416,20 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
-                } else if (place instanceof CrmSiteMap.Tenants.TenantScreening) {
+                } else if (place instanceof CrmSiteMap.Tenants.Guarantor) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new GuarantorEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new GuarantorViewerActivity(place);
+                        break;
+                    case lister:
+                        activity = new GuarantorListerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Tenants.Screening) {
                     switch (((CrudAppPlace) place).getType()) {
                     case editor:
                         activity = new PersonScreeningEditorActivity(place);
