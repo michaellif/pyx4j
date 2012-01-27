@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -35,13 +36,36 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class XLSLoad {
 
+    private final HSSFDataFormatter formatter;
+
     public static void loadFile(InputStream is, CSVReciver reciver) {
-        int lineNumber = 0;
         try {
             POIFSFileSystem fs = new POIFSFileSystem(is);
             HSSFWorkbook wb = new HSSFWorkbook(fs);
             HSSFSheet sheet = wb.getSheetAt(0);
 
+            new XLSLoad().loadSheet(sheet, reciver);
+
+        } catch (IOException ioe) {
+            throw new RuntimeException("Load file error", ioe);
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException ignore) {
+                is = null;
+            }
+        }
+    }
+
+    public XLSLoad() {
+        formatter = new HSSFDataFormatter();
+    }
+
+    public void loadSheet(HSSFSheet sheet, CSVReciver reciver) {
+        int lineNumber = 0;
+        try {
             boolean header = true;
             for (Row row : sheet) {
                 lineNumber++;
@@ -57,22 +81,12 @@ public class XLSLoad {
                     reciver.onRow(values.toArray(new String[values.size()]));
                 }
             }
-        } catch (IOException ioe) {
-            throw new RuntimeException("Load file error", ioe);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new RuntimeException("Load file error, Line# " + lineNumber, e);
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (IOException ignore) {
-                is = null;
-            }
         }
     }
 
-    private static String getCellStringValue(Cell cell) {
+    protected String getCellStringValue(Cell cell) {
         switch (cell.getCellType()) {
         case Cell.CELL_TYPE_BLANK:
             return "";
@@ -82,7 +96,7 @@ public class XLSLoad {
             if (DateUtil.isCellDateFormatted(cell)) {
                 return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(cell.getDateCellValue());
             } else {
-                return Double.toString(cell.getNumericCellValue());
+                return formatter.formatCellValue(cell);
             }
         case Cell.CELL_TYPE_BOOLEAN:
             return Boolean.toString(cell.getBooleanCellValue());
