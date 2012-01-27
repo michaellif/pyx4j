@@ -13,17 +13,11 @@
  */
 package com.propertyvista.crm.rpc.services.organization;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.propertyvista.crm.rpc.services.security.PasswordChangeService;
 
 /**
  * Service used by managers to administer their subordinate users.
  */
-public interface ManagedCrmUserService extends IService {
-
-    void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
+public interface ManagedCrmUserService extends PasswordChangeService {
 
 }

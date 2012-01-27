@@ -41,7 +41,8 @@ public class AccountViewerActivity extends ViewerActivityBase<EmployeeDTO> imple
     @Override
     public void goToChangePassword(Key userId, String userName) {
         AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
-        passwordChangePlace.arg(PasswordChangeView.Presenter.USER_PK_ARG, userId.toString());
+        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
+        passwordChangePlace.arg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.EMPLOYEE.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 

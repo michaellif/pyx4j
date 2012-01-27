@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -35,6 +36,7 @@ import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
+import com.propertyvista.crm.rpc.services.security.PasswordChangeService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
 
@@ -44,21 +46,29 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     private final Key userPk;
 
+    private final PasswordChangeView.Presenter.PrincipalClass principalClass;
+
     public PasswordChangeActivity(Place place) {
 
         view = SecurityViewFactory.instance(PasswordChangeView.class);
         view.setPresenter(this);
 
-        assert place instanceof CrmSiteMap.PasswordChange;
-        String userPkStr = ((AppPlace) place).getFirstArg(USER_PK_ARG);
         try {
+            assert place instanceof CrmSiteMap.PasswordChange;
+            String userPkStr = ((AppPlace) place).getFirstArg(PRINCIPAL_PK_ARG);
             userPk = new Key(userPkStr);
             userPk.asLong();
+
+            principalClass = PrincipalClass.valueOf(((AppPlace) place).getFirstArg(PRINCIPAL_CLASS)); // warning! may throw IllegalArgumentException
+            if (principalClass == null) {
+                throw new Error("principal class was not specified");
+            }
+
         } catch (Throwable ex) {
             History.back();
-            throw new Error("Failed to parse user id", ex);
+            throw new Error("wrong principal information", ex);
         }
-        String userName = isSelfAdmin() ? null : ((AppPlace) place).getFirstArg(USER_NAME_ARG);
+        String userName = isSelfAdmin() ? null : ((AppPlace) place).getFirstArg(PRINCIPAL_NAME_ARG);
         view.initialize(userPk, userName);
 
     }
@@ -70,7 +80,20 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     @Override
     public void changePassword(PasswordChangeRequest request) {
-        DefaultAsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
+        PasswordChangeService service = null;
+
+        if (principalClass.equals(PrincipalClass.EMPLOYEE)) {
+            if (isSelfAdmin()) {
+                service = GWT.<CrmUserService> create(CrmUserService.class);
+            } else {
+                service = GWT.<ManagedCrmUserService> create(ManagedCrmUserService.class);
+            }
+        } else if (principalClass.equals(PrincipalClass.TENANT)) {
+            service = GWT.<ManagedCrmUserService> create(ManagedCrmUserService.class);
+        } else {
+            throw new UnrecoverableClientError("Got unknown principal class or changing password for this principal has not yet been implemented");
+        }
+        service.changePassword(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 MessageDialog.info(i18n.tr("Password was changed successfully"));
@@ -81,12 +104,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
             public void onFailure(Throwable caught) {
                 MessageDialog.error(i18n.tr("Failed to change the password"), caught);
             }
-        };
-        if (isSelfAdmin()) {
-            GWT.<CrmUserService> create(CrmUserService.class).changePassword(callback, request);
-        } else {
-            GWT.<ManagedCrmUserService> create(ManagedCrmUserService.class).changePassword(callback, request);
-        }
+        }, request);
     }
 
     private boolean isSelfAdmin() {

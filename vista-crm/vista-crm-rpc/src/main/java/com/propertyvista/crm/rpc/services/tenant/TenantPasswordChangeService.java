@@ -7,21 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 20, 2012
+ * Created on Jan 27, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.organization;
+package com.propertyvista.crm.rpc.services.tenant;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
-import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.security.PasswordChangeService;
 
-/**
- * Self administration
- * This is secure services, user need to be lodged in to do this actions.
- */
-public interface CrmUserService extends AbstractCrudService<EmployeeDTO>, PasswordChangeService {
+public interface TenantPasswordChangeService extends PasswordChangeService {
 
 }

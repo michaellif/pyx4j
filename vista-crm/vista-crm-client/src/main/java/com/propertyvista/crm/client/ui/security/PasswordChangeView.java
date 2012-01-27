@@ -22,9 +22,15 @@ public interface PasswordChangeView extends IsWidget {
 
     public interface Presenter {
 
-        public static final String USER_NAME_ARG = "username";
+        public static final String PRINCIPAL_PK_ARG = "id";
 
-        public static final String USER_PK_ARG = "id";
+        public static final String PRINCIPAL_NAME_ARG = "username";
+
+        public static final String PRINCIPAL_CLASS = "class";
+
+        enum PrincipalClass {
+            TENANT, EMPLOYEE
+        }
 
         void changePassword(PasswordChangeRequest request);
 

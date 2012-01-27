@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
@@ -24,6 +25,8 @@ public interface TenantViewerView extends IViewerView<TenantDTO> {
     interface Presenter extends IViewerView.Presenter {
 
         IListerView.Presenter getScreeningPresenter();
+
+        void goToChangePassword(Key tenantPrincipalPk, String tenantName);
     }
 
     IListerView<PersonScreening> getScreeningListerView();
