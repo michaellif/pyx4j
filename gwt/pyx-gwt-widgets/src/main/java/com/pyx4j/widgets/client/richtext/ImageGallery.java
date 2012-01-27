@@ -34,17 +34,18 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.ImageFactory;
 
-public abstract class ImageGallery {
+public abstract class ImageGallery implements IsWidget {
 
     private static final Logger log = LoggerFactory.getLogger(ImageGallery.class);
 
@@ -53,8 +54,6 @@ public abstract class ImageGallery {
     private final FlowPanel mainPanel;
 
     private final boolean editable;
-
-    private AsyncCallback<String> selectionCallback;
 
     public ImageGallery() {
         this(true);
@@ -96,6 +95,7 @@ public abstract class ImageGallery {
             setStyleName("ImageGallery-ImageFrame");
             getElement().getStyle().setMargin(2, Unit.PX);
             getElement().getStyle().setFloat(Style.Float.LEFT);
+            getElement().getStyle().setProperty("border", "1px solid #ccc");
 
             if (1.0 * image.getWidth() / image.getHeight() > 1) {
                 image.setWidth(imgSize + "px");
@@ -118,10 +118,10 @@ public abstract class ImageGallery {
             caption.setStyleName("ImageGallery-ImageFrameCaption");
             caption.setHeight(captionHeight + "px");
             caption.setWidth(captionWidth + "px");
-            caption.getElement().getStyle().setProperty("textAlign", "center");
             caption.getElement().getStyle().setProperty("overflow", "hidden");
             caption.setTitle(image.getTitle());
             add(caption, SOUTH);
+            setCellHorizontalAlignment(caption, HorizontalPanel.ALIGN_CENTER);
 
             if (editable) {
                 final FlowPanel controls = new FlowPanel();
@@ -137,6 +137,7 @@ public abstract class ImageGallery {
                     @Override
                     public void onClick(ClickEvent event) {
                         ImageGallery.this.removeImage(mainPanel.getWidgetIndex(ImageFrame.this));
+                        onImageRemoved(image);
                     }
                 }, ClickEvent.getType());
 
@@ -163,13 +164,16 @@ public abstract class ImageGallery {
         mainPanel.add(new ImageFrame(image));
     }
 
-    public void removeImage(int index) {
+    private void removeImage(int index) {
         mainPanel.remove(index);
     }
 
-    public ScrollPanel getContent() {
+    @Override
+    public Widget asWidget() {
         return contentPanel;
     }
 
-    public abstract void onImageSelected(Image image);
+    protected abstract void onImageSelected(Image image);
+
+    protected abstract void onImageRemoved(Image image);
 }

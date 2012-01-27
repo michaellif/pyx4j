@@ -55,6 +55,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -116,7 +117,7 @@ public class Dialog extends DialogPanel {
 
     private DialogOptions options;
 
-    private Widget body;
+    private IsWidget body;
 
     private final ContentPanel content;
 
@@ -137,7 +138,7 @@ public class Dialog extends DialogPanel {
         this(caption, null, null);
     }
 
-    public Dialog(String caption, DialogOptions options, Widget body) {
+    public Dialog(String caption, DialogOptions options, IsWidget body) {
         super(false, true);
         setGlassEnabled(true);
         setCaption(caption);
@@ -150,7 +151,7 @@ public class Dialog extends DialogPanel {
         setBody(body);
     }
 
-    public void setBody(Widget body) {
+    public void setBody(IsWidget body) {
         if (this.body != null) {
             content.remove(this.body);
         }

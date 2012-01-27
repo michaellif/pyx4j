@@ -22,17 +22,24 @@ package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 
+import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.RichTextArea;
 
-public class ExtendedRichTextArea extends DockPanel {
+public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     private final RichTextArea richTextArea;
 
@@ -140,5 +147,96 @@ public class ExtendedRichTextArea extends DockPanel {
             toolbar.getElement().getStyle().setOpacity(1);
             break;
         }
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int getTabIndex() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setFocus(boolean focused) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setTabIndex(int index) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getText() {
+        // TODO Auto-generated method stub
+        // Html only
+        return null;
+    }
+
+    @Override
+    public void setText(String html) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

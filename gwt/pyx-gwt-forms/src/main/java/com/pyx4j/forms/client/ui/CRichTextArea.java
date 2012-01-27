@@ -20,17 +20,32 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
+import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
+
+public class CRichTextArea extends CRichTextAreaBase<NRichTextArea> {
+
+    private RichTextImageProvider imageProvider;
 
     @Override
-    protected NativeRichTextArea createWidget() {
-        return new NativeRichTextArea(this);
+    protected NRichTextArea createWidget() {
+        return new NRichTextArea(this);
     }
 
     public void scrollToBottom() {
         if (isWidgetCreated()) {
             getWidget().scrollToBottom();
         }
+    }
+
+    public void setImageProvider(RichTextImageProvider imageProvider) {
+        this.imageProvider = imageProvider;
+        if (getWidget() != null) {
+            getWidget().setImageProvider(imageProvider);
+        }
+    }
+
+    public RichTextImageProvider getImageProvider() {
+        return imageProvider;
     }
 
 }

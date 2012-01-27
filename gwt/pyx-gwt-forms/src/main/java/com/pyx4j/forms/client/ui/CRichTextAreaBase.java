@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.HtmlUtils;
 
 //TODO add support to NativeRichTextArea
-public abstract class CRichTextAreaBase<WIDGET_TYPE extends Widget & INativeRichTextComponent<String>> extends CTextComponent<String, WIDGET_TYPE> {
+public abstract class CRichTextAreaBase<WIDGET_TYPE extends Widget & INativeTextComponent<String>> extends CTextComponent<String, WIDGET_TYPE> {
 
     private final int rows = 10;
 

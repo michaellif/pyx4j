@@ -51,9 +51,14 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
                     selectionHandler.onSuccess(image.getUrl());
                     RichTextImageDialog.this.hide();
                 }
+
+                @Override
+                public void onImageRemoved(Image image) {
+                    // TODO Auto-generated method stub
+                }
             };
 
-            setBody(gallery.getContent());
+            setBody(gallery);
         }
 
         @Override
