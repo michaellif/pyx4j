@@ -44,7 +44,7 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     // TODO move to activity use and call ListerActivityBase.constructSearchCriteria()
                     HashMap<String, Serializable> params = new HashMap<String, Serializable>();
                     params.put(PmcDataReportService.LoadImagesParameter, Boolean.TRUE);
-                    ReportDialog.start((ReportService<?>) GWT.create(PmcDataReportService.class), criteria, params);
+                    ReportDialog.start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria, params);
                 }
             });
             addActionButton(downloadFull);
@@ -56,7 +56,7 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                 public void onClick(ClickEvent event) {
                     EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
                     // TODO move to activity use and call ListerActivityBase.constructSearchCriteria()
-                    ReportDialog.start((ReportService<?>) GWT.create(PmcDataReportService.class), criteria);
+                    ReportDialog.start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria);
                 }
             });
             addActionButton(downloadFull);
