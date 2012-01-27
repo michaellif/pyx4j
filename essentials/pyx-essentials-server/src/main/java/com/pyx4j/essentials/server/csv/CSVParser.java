@@ -25,11 +25,33 @@ import java.util.Vector;
 
 public class CSVParser implements TextParser {
 
-    public static boolean allowEscapeBackslash = false;
+    private boolean allowEscapeBackslash = false;
+
+    private boolean allowComments = true;
+
+    public CSVParser() {
+
+    }
+
+    public boolean isAllowComments() {
+        return allowComments;
+    }
+
+    public void setAllowComments(boolean allowComments) {
+        this.allowComments = allowComments;
+    }
+
+    public boolean isAllowEscapeBackslash() {
+        return allowEscapeBackslash;
+    }
+
+    public void setAllowEscapeBackslash(boolean allowEscapeBackslash) {
+        this.allowEscapeBackslash = allowEscapeBackslash;
+    }
 
     @Override
     public String[] parse(String line) {
-        if (line.startsWith("#") || (line.length() == 0)) {
+        if ((isAllowComments() && line.startsWith("#")) || (line.length() == 0)) {
             return null;
         }
         List<String> columns = new Vector<String>();
