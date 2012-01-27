@@ -40,6 +40,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.csv.CSVLoad;
+import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.server.IOUtils;
@@ -120,7 +121,9 @@ public class RentRollAdaptor implements ImportAdapter {
 
         if (type.equals("csv")) {
             try {
-                CSVLoad.loadFile(is, csv);
+                CSVParser parser = new CSVParser();
+                parser.setAllowComments(false);
+                CSVLoad.loadFile(is, parser, csv);
             } finally {
                 IOUtils.closeQuietly(is);
             }
