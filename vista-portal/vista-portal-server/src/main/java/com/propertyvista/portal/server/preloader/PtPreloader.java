@@ -41,8 +41,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication.Status;
@@ -62,8 +62,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, Pet.class,
-                    EmergencyContact.class, Summary.class, PriorAddress.class, ApplicationDocumentBlob.class);
+            return deleteAll(Charges.class, ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class,
+                    EmergencyContact.class, Summary.class, PriorAddress.class, ApplicationDocumentBlob.class, Guarantor.class, PersonScreening.class);
         } else {
             return "This is production";
         }
@@ -122,10 +122,10 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(tenantSummary.tenantInLease());
             summary.lease().tenants().add(tenantSummary.tenantInLease());
 
-            for (Guarantor guarantor : tenantSummary.tenantScreening().guarantors()) {
-                Persistence.service().persist(guarantor);
-            }
+            Persistence.service().persist(tenantSummary.tenantScreening().guarantors());
             Persistence.service().persist(tenantSummary.tenantScreening());
+
+            Persistence.service().persist(tenantSummary.guarantorScreening());
 
             int no = 0;
             for (ApplicationDocument applicationDocument : tenantSummary.tenantScreening().documents()) {

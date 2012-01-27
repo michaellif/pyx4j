@@ -170,8 +170,8 @@ public class CrmSiteMap implements SiteMap {
         public static class Guarantor extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Tenant Screening")
-        @NavigationItem(navigLabel = "Tenant Screenings")
+        @PlaceProperties(caption = "Screening")
+        @NavigationItem(navigLabel = "Screenings")
         public static class Screening extends CrudAppPlace {
         }
 

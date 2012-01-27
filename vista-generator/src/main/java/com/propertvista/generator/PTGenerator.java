@@ -45,13 +45,13 @@ import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.ApplicationDocument;
-import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.PersonScreeningHolder;
 import com.propertyvista.domain.tenant.Tenant.Type;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
@@ -347,7 +347,6 @@ public class PTGenerator {
 
         // Join the objects
         tenantSummary.tenantInLease().tenant().set(tenantSummary.tenant());
-        tenantSummary.tenantScreening().screene().set(tenantSummary.tenant());
 
         // first tenant must always be an applicant
         if (index == 0) {
@@ -394,25 +393,37 @@ public class PTGenerator {
         tenantSummary.tenant().emergencyContacts().add(ec2);
 
         // Screening
-        tenantSummary.tenantScreening().createDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
-        tenantSummary.tenantScreening().updateDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
+        tenantSummary.tenantScreening().set(createScreening(tenantSummary.tenant(), tenantSummary.tenantInLease().application(), tenantSummary));
+        if (equifaxDemo) {
+            createEquifaxApproival(tenantSummary.tenantScreening());
+        }
+
+        return tenantSummary;
+    }
+
+    private PersonScreening createScreening(PersonScreeningHolder screene, Application application, TenantSummaryGDO tenantSummary) {
+        PersonScreening screening = EntityFactory.create(PersonScreening.class);
+        screening.screene().set(screene);
+
+        screening.createDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
+        screening.updateDate().setValue(RandomUtil.randomLogicalDate(2012, 2013));
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
 
-        tenantSummary.tenantScreening().driversLicense().setValue(driversLicense);
-        tenantSummary.tenantScreening().driversLicenseState().set(RandomUtil.random(SharedData.getProvinces()));
+        screening.driversLicense().setValue(driversLicense);
+        screening.driversLicenseState().set(RandomUtil.random(SharedData.getProvinces()));
 
-        tenantSummary.tenantScreening().notCanadianCitizen().setValue(RandomUtil.randomBoolean());
-        if (tenantSummary.tenantScreening().notCanadianCitizen().isBooleanTrue()) {
+        screening.notCanadianCitizen().setValue(RandomUtil.randomBoolean());
+        if (screening.notCanadianCitizen().isBooleanTrue()) {
             String fileName = "doc-security" + RandomUtil.randomInt(3) + ".jpg";
-            tenantSummary.tenantScreening().documents().add(createApplicationDocument(tenantSummary.tenantInLease().application(), fileName));
+            screening.documents().add(createApplicationDocument(application, fileName));
         } else {
-            tenantSummary.tenantScreening().secureIdentifier().setValue("649 951 282");
+            screening.secureIdentifier().setValue("649 951 282");
         }
 
         PriorAddress currentAddress = createAddress();
         currentAddress.moveOutDate().setValue(RandomUtil.randomLogicalDate(2013, 2014)); // this has to be in the future
-        tenantSummary.tenantScreening().currentAddress().set(currentAddress);
+        screening.currentAddress().set(currentAddress);
 
         PriorAddress previousAddress = createAddress();
         // moveOut date for previous address is 1 day before the moveIn date for current address
@@ -426,21 +437,17 @@ public class PTGenerator {
         log.debug("Moving from {} to {}", moveOut, moveIn);
         previousAddress.moveOutDate().setValue(new LogicalDate(moveOut.getTime()));
         previousAddress.moveInDate().setValue(new LogicalDate(moveIn.getTime()));
-        tenantSummary.tenantScreening().previousAddress().set(previousAddress);
+        screening.previousAddress().set(previousAddress);
 
         LegalQuestions legalQuestions = createLegalQuestions();
-        tenantSummary.tenantScreening().legalQuestions().set(legalQuestions);
+        screening.legalQuestions().set(legalQuestions);
 
-        createFinancialInfo(tenantSummary.tenantScreening(), tenantSummary.tenantInLease().application());
+        createFinancialInfo(screening, application, tenantSummary);
 
-        if (equifaxDemo) {
-            createEquifaxApproival(tenantSummary.tenantScreening());
-        }
-
-        return tenantSummary;
+        return screening;
     }
 
-    private void createFinancialInfo(PersonScreening screening, Application application) {
+    private void createFinancialInfo(PersonScreening screening, Application application, TenantSummaryGDO tenantSummary) {
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
@@ -472,13 +479,14 @@ public class PTGenerator {
             screening.assets().add(asset);
         }
 
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            Guarantor guarantor = EntityFactory.create(Guarantor.class);
-            guarantor.person().name().set(CommonsGenerator.createName());
-            guarantor.person().birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
-            guarantor.person().sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
-            guarantor.person().email().setValue(CommonsGenerator.createEmail(guarantor.person().name()));
-            screening.guarantors().add(guarantor);
+        if (tenantSummary != null) {
+            for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+                Guarantor guarantor = EntityFactory.create(Guarantor.class);
+                guarantor.person().set(CommonsGenerator.createPerson());
+                screening.guarantors().add(guarantor);
+
+                tenantSummary.guarantorScreening().add(createScreening(guarantor, application, null));
+            }
         }
     }
 

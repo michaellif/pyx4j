@@ -22,6 +22,7 @@ import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -51,17 +52,14 @@ public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
     public PersonGuarantorFolder(boolean modifyable) {
         super(Guarantor.class, modifyable);
         inheritContainerAccessRules(false);
+        setEditable(modifyable);
         setViewable(true);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Name) {
-            if (isEditable()) {
-                return new CEntityLabel<Name>();
-            } else {
-                return new CEntityCrudHyperlink<Name>(MainActivityMapper.getCrudAppPlace(Guarantor.class));
-            }
+        if (member instanceof Guarantor) {
+            return new GuarantorEditor();
         }
         return super.create(member);
     }
@@ -69,6 +67,26 @@ public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
     @Override
     protected void addItem() {
         new TenantSelectorDialog().show();
+    }
+
+    private class GuarantorEditor extends CEntityFolderRowEditor<Guarantor> {
+
+        public GuarantorEditor() {
+            super(Guarantor.class, columns());
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Name) {
+                if (isEditable()) {
+                    return new CEntityLabel<Name>();
+                } else {
+                    return new CEntityCrudHyperlink<Guarantor>(MainActivityMapper.getCrudAppPlace(Guarantor.class));
+                }
+            }
+
+            return super.create(member);
+        }
     }
 
     private class TenantSelectorDialog extends EntitySelectorDialog<Guarantor> {
