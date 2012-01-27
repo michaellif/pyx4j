@@ -26,7 +26,7 @@ import com.google.gwt.user.client.DOM;
 
 import com.pyx4j.widgets.client.TextArea;
 
-public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<String, ?>> implements INativeTextComponent<String> {
+public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<String, ?>> {
 
     private Integer visibleLines;
 
