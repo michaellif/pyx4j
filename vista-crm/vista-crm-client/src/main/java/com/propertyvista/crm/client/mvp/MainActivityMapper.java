@@ -142,6 +142,7 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -178,9 +179,11 @@ public class MainActivityMapper implements AppActivityMapper {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.MasterApplication.class);
         } else if (entityClass.equals(EquifaxResult.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.EquifaxResult.class);
+
         } else if (entityClass.equals(Tenant.class)) {
             return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Tenant.class);
-
+        } else if (entityClass.equals(Guarantor.class)) {
+            return AppSite.getHistoryMapper().createPlace(CrmSiteMap.Tenants.Guarantor.class);
         }
 
         return null;

@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityEditor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -44,7 +43,6 @@ import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
@@ -71,11 +69,11 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
     };
 
     public PersonScreeningEditorForm() {
-        super(PersonScreening.class, new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public PersonScreeningEditorForm(IEditableComponentFactory factory) {
-        super(PersonScreening.class, factory);
+    public PersonScreeningEditorForm(boolean viewMode) {
+        super(PersonScreening.class, viewMode);
     }
 
     @Override

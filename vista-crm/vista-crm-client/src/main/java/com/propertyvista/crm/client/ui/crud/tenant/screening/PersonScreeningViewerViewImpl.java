@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
-import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.PersonScreening;
@@ -21,6 +20,6 @@ import com.propertyvista.domain.tenant.PersonScreening;
 public class PersonScreeningViewerViewImpl extends CrmViewerViewImplBase<PersonScreening> implements PersonScreeningViewerView {
 
     public PersonScreeningViewerViewImpl() {
-        super(CrmSiteMap.Tenants.TenantScreening.class, new PersonScreeningEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Tenants.TenantScreening.class, new PersonScreeningEditorForm(true));
     }
 }

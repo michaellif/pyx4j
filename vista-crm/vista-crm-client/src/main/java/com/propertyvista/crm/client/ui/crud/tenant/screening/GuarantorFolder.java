@@ -27,8 +27,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.rpc.services.SelectGuarantorCrudService;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -48,13 +50,18 @@ public class GuarantorFolder extends VistaTableFolder<Guarantor> {
 
     public GuarantorFolder(boolean modifyable) {
         super(Guarantor.class, modifyable);
+        inheritContainerAccessRules(false);
+        setViewable(true);
     }
 
-    // TODO Remove when switch to new Viewability form approach!  
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Name) {
-            return new CEntityLabel<Name>();
+            if (isEditable()) {
+                return new CEntityLabel<Name>();
+            } else {
+                return new CEntityCrudHyperlink<Name>(MainActivityMapper.getCrudAppPlace(Guarantor.class));
+            }
         }
         return super.create(member);
     }
