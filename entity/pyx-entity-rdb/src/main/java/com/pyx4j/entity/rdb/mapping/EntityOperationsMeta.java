@@ -501,6 +501,22 @@ public class EntityOperationsMeta {
         };
     }
 
+    public Iterable<MemberCollectionOperationsMeta> getJoinTablesCollectionMembers() {
+        return new Iterable<MemberCollectionOperationsMeta>() {
+
+            @Override
+            public Iterator<MemberCollectionOperationsMeta> iterator() {
+                return new FilterIterator<MemberCollectionOperationsMeta>(collectionMembers.iterator(), new Filter<MemberCollectionOperationsMeta>() {
+
+                    @Override
+                    public boolean accept(MemberCollectionOperationsMeta input) {
+                        return (input.getMemberMeta().getAnnotation(JoinTable.class) != null);
+                    }
+                });
+            }
+        };
+    }
+
     public List<MemberOperationsMeta> getIndexMembers() {
         return indexMembers;
     }

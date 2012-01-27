@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
@@ -97,6 +98,7 @@ public class Mappings {
             log.trace(Trace.enter() + "ensureTable {} lock {}", entityMeta.getPersistenceName(), System.identityHashCode(entityTypeLock));
         }
 
+        boolean initRefferencedTables = false;
         synchronized (entityTypeLock) {
             if (traceInit) {
                 log.trace(Trace.id() + "ensureTable {} obtained lock {}", entityMeta.getPersistenceName(), System.identityHashCode(entityTypeLock));
@@ -106,6 +108,7 @@ public class Mappings {
             model = tables.get(entityMeta.getEntityClass());
             if (model == null) {
                 model = new TableModel(dialect, this, entityMeta);
+                initRefferencedTables = true;
                 if (usedTableNames.contains(model.getTableName().toLowerCase(Locale.ENGLISH))) {
                     log.warn("redefining/extending table {} for class {}", model.getTableName(), entityMeta.getEntityClass());
                 }
@@ -137,9 +140,14 @@ public class Mappings {
                 log.trace(Trace.id() + "ensureTable {} TableModel already created", entityMeta.getPersistenceName());
             }
         }
-
         if (traceInit) {
             log.trace(Trace.returns() + "ensureTable {}", entityMeta.getPersistenceName());
+        }
+
+        if (initRefferencedTables) {
+            for (MemberCollectionOperationsMeta member : model.operationsMeta().getJoinTablesCollectionMembers()) {
+                this.getTableModel(connection, member.getMemberMeta().getAnnotation(JoinTable.class).value());
+            }
         }
 
         return model;
