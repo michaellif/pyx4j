@@ -69,6 +69,11 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
     }
 
     @Override
+    public boolean canEdit() {
+        return true;
+    }
+
+    @Override
     public void edit() {
         // nothing needs here!..
     }
@@ -87,5 +92,4 @@ public class ServiceDictionaryViewActivity extends AbstractActivity implements S
     public Presenter getFeatureListerPresenter() {
         return featureLister;
     }
-
 }
