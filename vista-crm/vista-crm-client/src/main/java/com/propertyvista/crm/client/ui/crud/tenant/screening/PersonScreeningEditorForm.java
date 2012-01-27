@@ -280,7 +280,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
     private Widget createGuarantorsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().guarantors(), new GuarantorFolder(isEditable())));
+        main.setWidget(0, 0, inject(proto().guarantors(), new PersonGuarantorFolder(isEditable())));
 
         return new ScrollPanel(main);
     }

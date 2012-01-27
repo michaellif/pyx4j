@@ -35,9 +35,9 @@ import com.propertyvista.crm.rpc.services.SelectGuarantorCrudService;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
 
-public class GuarantorFolder extends VistaTableFolder<Guarantor> {
+public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
 
-    private static final I18n i18n = I18n.get(GuarantorFolder.class);
+    private static final I18n i18n = I18n.get(PersonGuarantorFolder.class);
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
@@ -48,7 +48,7 @@ public class GuarantorFolder extends VistaTableFolder<Guarantor> {
         );//@formatter:on
     }
 
-    public GuarantorFolder(boolean modifyable) {
+    public PersonGuarantorFolder(boolean modifyable) {
         super(Guarantor.class, modifyable);
         inheritContainerAccessRules(false);
         setViewable(true);
