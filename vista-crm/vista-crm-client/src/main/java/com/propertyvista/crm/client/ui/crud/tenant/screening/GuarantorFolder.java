@@ -83,17 +83,7 @@ public class GuarantorFolder extends VistaTableFolder<Guarantor> {
                 return false;
             } else {
                 for (Guarantor guarantor : getSelectedItems()) {
-                    boolean isNewAlreadySelected = false;
-                    for (Guarantor alreadySelected : getValue()) {
-                        if (alreadySelected.equals(guarantor)) {
-                            isNewAlreadySelected = true;
-                            break;
-                        }
-                    }
-
-                    if (!isNewAlreadySelected) {
-                        addItem(guarantor);
-                    }
+                    addItem(guarantor);
                 }
 
                 return true;

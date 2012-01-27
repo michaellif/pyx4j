@@ -37,8 +37,8 @@ import com.propertyvista.common.client.ui.components.folders.PhoneFolder;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.EmergencyContact;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
@@ -75,13 +75,14 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().maidenName()), 25).build());
             person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().nameSuffix()), 5).build());
         } else {
-            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel()), 25).customLabel(i18n.tr("Tenant")).build());
+            person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Tenant"))
+                    .build());
             get(proto().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
         person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
         person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate()), 9).build());
 
-        person.setWidget(++row, 0, new HTML("&nbsp"));
+        person.setBR(++row, 0, 1);
 
         person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
         person.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
@@ -142,11 +143,11 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         tabPanel.clear();
         switch (getValue().type().getValue()) {
         case person:
-            tabPanel.add(new CrmScrollPanel(person), i18n.tr("Details"));
+            tabPanel.add(person, i18n.tr("Details"));
             tabPanel.addDisable(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
             break;
         case company:
-            tabPanel.add(new CrmScrollPanel(company), proto().company().getMeta().getCaption());
+            tabPanel.add(company, proto().company().getMeta().getCaption());
             break;
         }
 

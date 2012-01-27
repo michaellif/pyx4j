@@ -178,16 +178,7 @@ class TenantInLeaseFolder extends VistaTableFolder<TenantInLease> {
                         newTenantInLease.role().setValue(Role.Applicant);
                         newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
                     }
-                    boolean isNewAlreadySelected = false;
-                    for (TenantInLease alreadySelected : getValue()) {
-                        if (alreadySelected.tenant().equals(tenant)) {
-                            isNewAlreadySelected = true;
-                            break;
-                        }
-                    }
-                    if (!isNewAlreadySelected) {
-                        addItem(newTenantInLease);
-                    }
+                    addItem(newTenantInLease);
                 }
 
                 return true;
