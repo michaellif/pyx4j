@@ -15,8 +15,8 @@ package com.propertyvista.admin.client.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.admin.client.ui.login.LoginView;
 import com.propertyvista.admin.client.ui.login.LoginViewImpl;
+import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 
 public class LoginVeiwFactory extends ViewFactoryBase {

@@ -17,6 +17,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -27,16 +28,16 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
-import com.propertyvista.admin.client.ui.login.LoginView;
 import com.propertyvista.admin.client.viewfactories.LoginVeiwFactory;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
+import com.propertyvista.common.client.ui.components.login.LoginView;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
 
     private final LoginView view;
 
     public LoginActivity(Place place) {
-        this.view = (LoginView) LoginVeiwFactory.instance(LoginView.class);
+        this.view = LoginVeiwFactory.instance(LoginView.class);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -62,12 +63,18 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof ChallengeVerificationRequired) {
-                    view.challengeVerificationRequired();
+                    view.enableHumanVerification();
                 }
                 throw new UnrecoverableClientError(caught);
             }
 
         };
         ((AdminAuthenticationService) GWT.create(AdminAuthenticationService.class)).authenticate(callback, ClientContext.getClientSystemInfo(), request);
+    }
+
+    @Override
+    public void gotoResetPassword() {
+        // FIXME implement gotoResetPassword for ADMIN login Activity
+        Window.alert("Sorry, but this feature hasn't been implemented yet!");
     }
 }

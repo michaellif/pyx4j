@@ -27,7 +27,7 @@ public class LoginViewImpl extends AbstractLoginViewImpl implements LoginView {
     private static final I18n i18n = I18n.get(LoginViewImpl.class);
 
     public LoginViewImpl() {
-        super(i18n.tr("Login to your account"));
+        super(i18n.tr("Login to Your Account"));
     }
 
     @Override

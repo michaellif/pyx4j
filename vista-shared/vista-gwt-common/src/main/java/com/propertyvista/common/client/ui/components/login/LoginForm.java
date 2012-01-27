@@ -17,7 +17,6 @@ import static com.pyx4j.commons.HtmlUtils.h2;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -200,7 +199,11 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
     }
 
     /**
-     * should be passed as callback to handle clicks
+     * Should be passed as callback to even handlers that monitor developer login.
+     * 
+     * @param shortcut
+     *            key code of the developer login
+     * @return <code>true</code> if developer's credentials that correspond to the provided key were found, otherwise <code>false</code>.
      */
     protected boolean onDevLogin(int shortcut) {
         if (prevDevKey != shortcut) {
@@ -218,14 +221,4 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         }
         return false;
     }
-
-    @Deprecated
-    protected String[][] devLogins() {
-        return new String[][] { { "Press 'Ctrl+Q' to login", "Q" } };
-    }
-
-    @Deprecated
-    protected void onDevLogin(NativeEvent event, int foo) {
-    }
-
 }
