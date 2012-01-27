@@ -84,7 +84,11 @@ public class Reportboard extends SimplePanel implements IBoard, IBoardRoot {
 
     @Override
     public void addGadget(IGadget gadget) {
-        addGadget(gadget, Location.Full);
+        if (gadget.isFullWidth()) {
+            addGadget(gadget, Location.Full);
+        } else {
+            addGadget(gadget, Location.Left);
+        }
     }
 
     @Override
