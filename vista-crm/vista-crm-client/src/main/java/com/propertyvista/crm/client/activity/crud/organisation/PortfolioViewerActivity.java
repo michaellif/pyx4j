@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
-import com.propertyvista.crm.rpc.services.PortfolioCrudService;
+import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioViewerActivity extends ViewerActivityBase<Portfolio> {

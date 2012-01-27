@@ -34,12 +34,12 @@ import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
 import com.propertyvista.crm.rpc.services.LockerCrudService;
 import com.propertyvista.crm.rpc.services.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
+import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
 import com.propertyvista.crm.rpc.services.RoofCrudService;
 import com.propertyvista.crm.rpc.services.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.ShowingCrudService;
 import com.propertyvista.crm.rpc.services.TenantCrudService;
 import com.propertyvista.crm.rpc.services.TenantInLeaseCrudService;
-import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
 import com.propertyvista.crm.rpc.services.UnitCrudService;
 import com.propertyvista.crm.rpc.services.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
@@ -48,9 +48,13 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
+import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.domain.company.Company;
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -70,6 +74,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
@@ -184,6 +189,15 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Concession.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ConcessionCrudService.class));
+
+// - Organization:
+        grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));
+        grant(VistaCrmBehavior.Organization, new EntityPermission(Employee.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeCrudService.class));
+
+        grant(VistaBasicBehavior.CRM, new EntityPermission(Portfolio.class, EntityPermission.READ));
+        grant(VistaCrmBehavior.Organization, new EntityPermission(Portfolio.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
 
 // - Marketing-related:
 

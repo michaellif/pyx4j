@@ -30,6 +30,8 @@ public enum VistaCrmBehavior implements Behavior {
 
     Marketing,
 
+    MarketingMedia,
+
     Tenants,
 
     Equifax,

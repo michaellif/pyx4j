@@ -27,7 +27,8 @@ public class EmployeeLister extends ListerBase<EmployeeDTO> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().title()).build(),
             new MemberColumnDescriptor.Builder(proto().name().firstName()).build(),
-            new MemberColumnDescriptor.Builder(proto().name().lastName()).build()
+            new MemberColumnDescriptor.Builder(proto().name().lastName()).build(),
+            new MemberColumnDescriptor.Builder(proto().email(), false).build()
         );//@formatter:on
     }
 

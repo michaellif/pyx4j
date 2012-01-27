@@ -11,13 +11,13 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.organization;
 
 import java.util.HashSet;
 
 import com.pyx4j.commons.Key;
 
-import com.propertyvista.crm.rpc.services.PortfolioCrudService;
+import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
