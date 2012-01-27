@@ -41,7 +41,6 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.misc.EquifaxApproval;
 
 @DiscriminatorValue("PersonScreening")
@@ -100,13 +99,6 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder {
     @Length(3)
     IList<PersonalAsset> assets();
 
-    @Owned
-    @Detached
-    @Length(2)
-    @Deprecated
-    IList<TenantGuarantor> guarantors_OLD();
-
-    @Owned
     @Detached
     @Length(2)
     IList<Guarantor> guarantors();

@@ -33,7 +33,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.GuarantorInLeaseFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
-import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.TenantFinancialDTO;
 
@@ -68,10 +67,6 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
 
         main.setH1(++row, 0, 1, proto().assets().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
-        main.setWidget(++row, 0, new HTML());
-
-        main.setH1(++row, 0, 1, proto().guarantors_OLD().getMeta().getCaption(), adjust);
-        main.setWidget(++row, 0, inject(proto().guarantors_OLD(), new TenantGuarantorFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
         main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), adjust);

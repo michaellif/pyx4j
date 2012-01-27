@@ -71,7 +71,6 @@ public class TenantRetriever {
                 if (financial) {
                     Persistence.service().retrieve(tenantScreening.incomes());
                     Persistence.service().retrieve(tenantScreening.assets());
-                    Persistence.service().retrieve(tenantScreening.guarantors_OLD());
                     Persistence.service().retrieve(tenantScreening.guarantors());
                     Persistence.service().retrieve(tenantScreening.equifaxApproval());
                 }
@@ -104,7 +103,6 @@ public class TenantRetriever {
         if (financial) {
             Persistence.service().merge(tenantScreening.incomes());
             Persistence.service().merge(tenantScreening.assets());
-            Persistence.service().merge(tenantScreening.guarantors_OLD());
             Persistence.service().merge(tenantScreening.guarantors());
         }
     }

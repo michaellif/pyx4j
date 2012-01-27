@@ -40,6 +40,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -121,6 +122,9 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(tenantSummary.tenantInLease());
             summary.lease().tenants().add(tenantSummary.tenantInLease());
 
+            for (Guarantor guarantor : tenantSummary.tenantScreening().guarantors()) {
+                Persistence.service().persist(guarantor);
+            }
             Persistence.service().persist(tenantSummary.tenantScreening());
 
             int no = 0;

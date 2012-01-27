@@ -60,7 +60,6 @@ import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
@@ -227,57 +226,37 @@ public class PTGenerator {
         applicationDocument.blobKey().set(applicationDocumentData.id());
     }
 
-    private void createPets(IList<Pet> pets) {
+    private Pet createPet() {
+        Pet pet = EntityFactory.create(Pet.class);
 
-        int maxPets;
-        if (Math.abs(this.seed) < 1000) {
-            maxPets = 1 + RandomUtil.randomInt(2);
+        pet.name().setValue(RandomUtil.random(PreloadData.PET_NAMES));
+        pet.color().setValue(RandomUtil.random(PreloadData.PET_COLORS));
+        pet.breed().setValue(RandomUtil.random(PreloadData.PET_BREEDS));
+
+        if (RandomUtil.randomBoolean()) {
+            pet.weightUnit().setValue(WeightUnit.kg);
+            pet.weight().setValue(4 + RandomUtil.randomInt(20));
         } else {
-            maxPets = RandomUtil.randomInt(3);
+            pet.weightUnit().setValue(WeightUnit.lb);
+            pet.weight().setValue(10 + RandomUtil.randomInt(30));
         }
 
-        for (int i = 0; i < maxPets; i++) {
-            Pet pet = EntityFactory.create(Pet.class);
+        pet.birthDate().setValue(RandomUtil.randomLogicalDate(1985, 2011));
 
-            pet.name().setValue(RandomUtil.random(PreloadData.PET_NAMES));
-            pet.color().setValue(RandomUtil.random(PreloadData.PET_COLORS));
-            pet.breed().setValue(RandomUtil.random(PreloadData.PET_BREEDS));
-
-            if (RandomUtil.randomBoolean()) {
-                pet.weightUnit().setValue(WeightUnit.kg);
-                pet.weight().setValue(4 + RandomUtil.randomInt(20));
-            } else {
-                pet.weightUnit().setValue(WeightUnit.lb);
-                pet.weight().setValue(10 + RandomUtil.randomInt(30));
-            }
-
-            pet.birthDate().setValue(RandomUtil.randomLogicalDate(1985, 2011));
-
-            pets.add(pet);
-        }
+        return pet;
     }
 
-    private void createVehicles(IList<Vehicle> vehicles) {
+    private Vehicle createVehicle() {
+        Vehicle vehicle = EntityFactory.create(Vehicle.class);
 
-        int maxVehicles;
-        if (Math.abs(this.seed) < 1000) {
-            maxVehicles = 1 + RandomUtil.randomInt(2);
-        } else {
-            maxVehicles = RandomUtil.randomInt(3);
-        }
+        vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
+        vehicle.year().setValue(RandomUtil.randomYear(1992, 2012));
+        vehicle.make().setValue(RandomUtil.random(PreloadData.CAR_MAKES));
+        vehicle.model().setValue(RandomUtil.random(PreloadData.CAR_MODELS));
+        vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
+        vehicle.country().set(vehicle.province().country());
 
-        for (int i = 0; i < maxVehicles; i++) {
-            Vehicle vehicle = EntityFactory.create(Vehicle.class);
-
-            vehicle.plateNumber().setValue("ML" + RandomUtil.randomInt(9999) + "K");
-            vehicle.year().setValue(RandomUtil.randomYear(1992, 2012));
-            vehicle.make().setValue(RandomUtil.random(PreloadData.CAR_MAKES));
-            vehicle.model().setValue(RandomUtil.random(PreloadData.CAR_MODELS));
-            vehicle.province().set(RandomUtil.random(SharedData.getProvinces()));
-            vehicle.country().set(vehicle.province().country());
-
-            vehicles.add(vehicle);
-        }
+        return vehicle;
     }
 
     public void populateAddress(AddressSimple address) {
@@ -461,7 +440,7 @@ public class PTGenerator {
         return tenantSummary;
     }
 
-    private void createFinancialInfo(PersonScreening ts, Application application) {
+    private void createFinancialInfo(PersonScreening screening, Application application) {
 
         for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             PersonalIncome income = EntityFactory.create(PersonalIncome.class);
@@ -475,11 +454,11 @@ public class PTGenerator {
             ApplicationDocument applicationDocument = createApplicationDocument(application, "doc-income" + RandomUtil.randomInt(3) + ".jpg");
             income.documents().add(applicationDocument);
 
-            ts.incomes().add(income);
+            screening.incomes().add(income);
         }
 
         int minAssets = 0;
-        if (ts.incomes().size() == 0) {
+        if (screening.incomes().size() == 0) {
             minAssets = 1;
         }
 
@@ -490,28 +469,16 @@ public class PTGenerator {
             asset.percent().setValue((double) RandomUtil.randomInt(100));
             asset.assetValue().setValue(500 + RandomUtil.randomDouble(500));
 
-            ts.assets().add(asset);
-        }
-
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            TenantGuarantor guarantor = EntityFactory.create(TenantGuarantor.class);
-            guarantor.name().firstName().setValue(DataGenerator.randomFirstName());
-            guarantor.name().lastName().setValue(DataGenerator.randomLastName());
-            guarantor.relationship().setValue(RandomUtil.random(PersonRelationship.values()));
-            guarantor.birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
-            guarantor.sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
-            guarantor.email().setValue(CommonsGenerator.createEmail(guarantor.name()));
-            ts.guarantors_OLD().add(guarantor);
+            screening.assets().add(asset);
         }
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
             Guarantor guarantor = EntityFactory.create(Guarantor.class);
-            guarantor.person().name().firstName().setValue(DataGenerator.randomFirstName());
-            guarantor.person().name().lastName().setValue(DataGenerator.randomLastName());
+            guarantor.person().name().set(CommonsGenerator.createName());
             guarantor.person().birthDate().setValue(RandomUtil.randomLogicalDate(1960, 2011 - 18));
             guarantor.person().sex().setValue(RandomUtil.randomEnum(Person.Sex.class));
             guarantor.person().email().setValue(CommonsGenerator.createEmail(guarantor.person().name()));
-            ts.guarantors().add(guarantor);
+            screening.guarantors().add(guarantor);
         }
     }
 

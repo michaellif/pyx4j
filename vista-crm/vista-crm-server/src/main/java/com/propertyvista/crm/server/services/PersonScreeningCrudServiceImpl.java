@@ -34,7 +34,6 @@ public class PersonScreeningCrudServiceImpl extends GenericCrudServiceImpl<Perso
             Persistence.service().retrieve(entity.documents());
             Persistence.service().retrieve(entity.incomes());
             Persistence.service().retrieve(entity.assets());
-            Persistence.service().retrieve(entity.guarantors_OLD());
             Persistence.service().retrieve(entity.guarantors());
         }
     }

@@ -40,7 +40,6 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
-import com.propertyvista.common.client.ui.components.folders.TenantGuarantorFolder;
 import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
@@ -50,6 +49,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.misc.BusinessRules;
 
 public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
@@ -59,6 +59,8 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     private ApplicationDocumentUploaderFolder fileUpload;
+
+    private Widget guarantorsTabWidget;
 
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
         @Override
@@ -84,7 +86,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         tabPanel.add(createlegalQuestionsTab(), proto().legalQuestions().getMeta().getCaption());
         tabPanel.add(createIncomesTab(), i18n.tr("Incomes"));
         tabPanel.add(createAssetsTab(), i18n.tr("Assets"));
-        tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
+        guarantorsTabWidget = createGuarantorsTab();
 
         tabPanel.setDisableMode(isEditable());
         tabPanel.setSize("100%", "100%");
@@ -106,6 +108,17 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         super.onPopulate();
 
         enablePreviousAddress();
+
+        // add/remove guarantors tab depends of screened person:
+        if (getValue().screene().getInstanceValueClass().equals(Tenant.class)) {
+            if (tabPanel.getWidgetIndex(guarantorsTabWidget) < 0) {
+                tabPanel.add(guarantorsTabWidget, i18n.tr("Guarantors"));
+            }
+        } else {
+            if (tabPanel.getWidgetIndex(guarantorsTabWidget) >= 0) {
+                tabPanel.remove(guarantorsTabWidget);
+            }
+        }
 
         get(proto().secureIdentifier()).setEnabled(!getValue().notCanadianCitizen().isBooleanTrue());
         fileUpload.setVisible(isEditable() && getValue().notCanadianCitizen().isBooleanTrue());
@@ -269,7 +282,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
     private Widget createGuarantorsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().guarantors_OLD(), new TenantGuarantorFolder(isEditable())));
+        main.setWidget(0, 0, inject(proto().guarantors(), new GuarantorFolder(isEditable())));
 
         return new ScrollPanel(main);
     }
