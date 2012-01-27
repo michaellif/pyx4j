@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
+// TODO rename to AptUnitOccupancySegment
 public interface AptUnitOccupancy extends IEntity {
 
     @I18n
@@ -36,8 +37,16 @@ public interface AptUnitOccupancy extends IEntity {
 
         available,
 
+        /**
+         * unit has lease that starts in the future and is not available for another lease
+         * (from the point of view of availability report it's leased, not in "net exposure")
+         */
         reserved,
 
+        /**
+         * Unit is vacant (i.e. no one lives there), but is not ready for marketing, needs some action in order to become available.
+         * or example: unit is leased right now, and a person gave a notice, it becomes vacant in the future (i.e. not yet scoped).
+         */
         vacant,
 
         offMarket;
@@ -48,6 +57,9 @@ public interface AptUnitOccupancy extends IEntity {
         }
     }
 
+    /**
+     * Based on MITS spec?
+     */
     @I18n
     public enum OffMarketType {
 
