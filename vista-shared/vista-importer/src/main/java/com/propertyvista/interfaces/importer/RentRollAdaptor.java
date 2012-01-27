@@ -54,7 +54,9 @@ public class RentRollAdaptor implements ImportAdapter {
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01", "nrp02", "nrp03", "nrp04",
             "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2", "roof3", "roof4")); // add erroneous "apt numbers" here (lower case)
 
-    private static List<BuildingIO> buildings = new LinkedList<BuildingIO>();
+    private final List<BuildingIO> buildings = new LinkedList<BuildingIO>();
+
+    private Map<String, BuildingIO> buildingList = new HashMap<String, BuildingIO>();
 
     @Override
     public ImportIO parse(byte[] data, DownloadFormat format) {
@@ -89,7 +91,7 @@ public class RentRollAdaptor implements ImportAdapter {
         }
     }
 
-    public static ImportIO parse(byte[] inFile, String type) throws IOException {
+    public ImportIO parse(byte[] inFile, String type) throws IOException {
 
         readTenantRoster(inFile, type); // populate buildings
 
@@ -112,7 +114,7 @@ public class RentRollAdaptor implements ImportAdapter {
      * @param args
      * @throws IOException
      */
-    public static void readTenantRoster(byte[] fileName, String type) throws IOException {
+    private void readTenantRoster(byte[] fileName, String type) throws IOException {
 
         EntityCSVReciver<RentRollCSV> csv = EntityCSVReciver.create(RentRollCSV.class);
         csv.setHeaderLinesCount(2);
@@ -171,7 +173,7 @@ public class RentRollAdaptor implements ImportAdapter {
         }
     }
 
-    private static double parseMoney(String money) {
+    private double parseMoney(String money) {
         NumberFormat nf = new DecimalFormat("#,###.##");
         try {
             return nf.parse(money).doubleValue();
@@ -181,18 +183,7 @@ public class RentRollAdaptor implements ImportAdapter {
 
     }
 
-    public static boolean isEmpty(String values[]) {
-        for (String val : values) {
-            if (!"".equals(val)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static Map<String, BuildingIO> buildingList = new HashMap<String, BuildingIO>();
-
-    public static Collection<BuildingIO> splitComplexes(BuildingIO building) { //sorts complexes that contain multiple buildings under the same externalId. Assumes either all units are with hyphen or none.
+    private Collection<BuildingIO> splitComplexes(BuildingIO building) { //sorts complexes that contain multiple buildings under the same externalId. Assumes either all units are with hyphen or none.
         Iterator<AptUnitIO> it = building.units().iterator();
         buildingList = new HashMap<String, BuildingIO>();
         while (it.hasNext()) {
@@ -210,7 +201,7 @@ public class RentRollAdaptor implements ImportAdapter {
         return buildingList.values();
     }
 
-    private static BuildingIO getBuildingForUnitNumber(String externalId, String unitNumber) {
+    private BuildingIO getBuildingForUnitNumber(String externalId, String unitNumber) {
         if (unitNumber.contains("-")) {
             String[] t = unitNumber.split("-");
 
@@ -233,7 +224,7 @@ public class RentRollAdaptor implements ImportAdapter {
         }
     }
 
-    private static Collection<BuildingIO> trimUnitNumbers(Collection<BuildingIO> verifiedBuildings) {
+    private Collection<BuildingIO> trimUnitNumbers(Collection<BuildingIO> verifiedBuildings) {
         Iterator<BuildingIO> it = verifiedBuildings.iterator();
         while (it.hasNext()) {
             for (AptUnitIO u : it.next().units()) {
