@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -41,7 +40,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, NavigationUpdateHandler {
 
@@ -123,14 +121,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
         list.add(folder);
 
-        //Organization
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
-            folder = new NavigFolder(i18n.tr("Organization"), CrmImages.INSTANCE.companyNormal(), CrmImages.INSTANCE.companyHover(),
-                    CrmImages.INSTANCE.companyActive());
-            folder.addNavigItem(new CrmSiteMap.Organization.Employee());
-            folder.addNavigItem(new CrmSiteMap.Organization.Portfolio());
-            list.add(folder);
-        }
+        //Organization        
+        folder = new NavigFolder(i18n.tr("Organization"), CrmImages.INSTANCE.companyNormal(), CrmImages.INSTANCE.companyHover(),
+                CrmImages.INSTANCE.companyActive());
+        folder.addNavigItem(new CrmSiteMap.Organization.Employee());
+        folder.addNavigItem(new CrmSiteMap.Organization.Portfolio());
+        list.add(folder);
 
         //Reports
         folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(), CrmImages.INSTANCE.reportsActive());
