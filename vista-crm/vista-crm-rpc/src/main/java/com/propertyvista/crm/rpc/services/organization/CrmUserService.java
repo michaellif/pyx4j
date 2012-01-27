@@ -14,14 +14,14 @@
 package com.propertyvista.crm.rpc.services.organization;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.crm.rpc.services.security.PasswordChangeService;
 
 /**
  * Self administration
  * This is secure services, user need to be lodged in to do this actions.
  */
-public interface CrmUserService extends AbstractCrudService<EmployeeDTO>, PasswordChangeService {
+public interface CrmUserService extends AbstractCrudService<EmployeeDTO>, AbstractPasswordChangeService {
 
 }

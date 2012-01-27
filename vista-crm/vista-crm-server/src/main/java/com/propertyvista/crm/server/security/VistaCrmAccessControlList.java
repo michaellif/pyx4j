@@ -49,9 +49,11 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
+import com.propertyvista.crm.rpc.services.tenant.TenantPasswordChangeService;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
@@ -180,6 +182,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
+        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(TenantPasswordChangeService.class));
+
 // - Service-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Service.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceCrudService.class));
@@ -199,6 +203,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization, new EntityPermission(Portfolio.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
 
+        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(ManagedCrmUserService.class));
 // - Marketing-related:
 
 // - Other:

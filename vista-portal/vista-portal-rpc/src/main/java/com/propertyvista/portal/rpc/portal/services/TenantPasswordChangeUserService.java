@@ -8,22 +8,13 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jan 27, 2012
- * @author ArtyomB
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.security;
+package com.propertyvista.portal.rpc.portal.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.PasswordChangeRequest;
-
-/**
- * A service for user administration from the password change perspective
- */
-public interface PasswordChangeService extends IService {
-
-    public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request);
+public interface TenantPasswordChangeUserService extends AbstractPasswordChangeService {
 
 }

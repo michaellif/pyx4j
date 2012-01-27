@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.tenant;
 
-import com.propertyvista.crm.rpc.services.security.PasswordChangeService;
+import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 
-public interface TenantPasswordChangeService extends PasswordChangeService {
+public interface TenantPasswordChangeService extends AbstractPasswordChangeService {
 
 }

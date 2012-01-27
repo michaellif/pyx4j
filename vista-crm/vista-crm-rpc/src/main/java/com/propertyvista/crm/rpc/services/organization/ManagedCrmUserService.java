@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.rpc.services.organization;
 
-import com.propertyvista.crm.rpc.services.security.PasswordChangeService;
+import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 
 /**
  * Service used by managers to administer their subordinate users.
  */
-public interface ManagedCrmUserService extends PasswordChangeService {
+public interface ManagedCrmUserService extends AbstractPasswordChangeService {
 
 }

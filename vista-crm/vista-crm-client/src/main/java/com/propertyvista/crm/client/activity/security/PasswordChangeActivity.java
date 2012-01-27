@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -36,7 +37,6 @@ import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
-import com.propertyvista.crm.rpc.services.security.PasswordChangeService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
 
@@ -80,7 +80,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     @Override
     public void changePassword(PasswordChangeRequest request) {
-        PasswordChangeService service = null;
+        AbstractPasswordChangeService service = null;
 
         if (principalClass.equals(PrincipalClass.EMPLOYEE)) {
             if (isSelfAdmin()) {

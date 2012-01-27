@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 20, 2012
- * @author ArtyomB
+ * Created on Jan 27, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.organization;
+package com.propertyvista.crm.server.services.tenant;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -21,18 +21,18 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
+import com.propertyvista.crm.rpc.services.tenant.TenantPasswordChangeService;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.domain.security.TenantUserCredential;
 
-public class ManagedCrmUserServiceImpl implements ManagedCrmUserService {
+public class TenantPasswordChangeServiceImpl implements TenantPasswordChangeService {
 
     @Override
     public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
         if (Context.getVisit().getUserVisit().getPrincipalPrimaryKey().equals(request.userPk().getValue())) {
             throw new SecurityViolationException("Permission denied");
         }
-        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, request.userPk().getValue());
+        TenantUserCredential credential = Persistence.service().retrieve(TenantUserCredential.class, request.userPk().getValue());
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
@@ -40,5 +40,4 @@ public class ManagedCrmUserServiceImpl implements ManagedCrmUserService {
         Persistence.service().persist(credential);
         callback.onSuccess(null);
     }
-
 }
