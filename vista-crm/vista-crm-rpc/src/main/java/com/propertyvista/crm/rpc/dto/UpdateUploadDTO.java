@@ -22,20 +22,6 @@ import com.propertyvista.dto.ImportAdapterType;
 @Transient
 public interface UpdateUploadDTO extends IEntity {
 
-//    public static enum ImportAdapterType {
-//
-//        vista,
-//
-//        rentRoll;
-//
-//        @Override
-//        public String toString() {
-//            return I18nEnum.toString(this);
-//        }
-//
-//    }
-//
-//    @NotNull
     IPrimitive<ImportAdapterType> adapterType();
 
 }
