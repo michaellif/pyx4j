@@ -11,24 +11,24 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant;
+package com.propertyvista.crm.client.activity.crud.tenant.guarantor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
-import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.crm.rpc.services.GuarantorCrudService;
+import com.propertyvista.dto.GuarantorDTO;
 
-public class PersonScreeningViewerActivity extends ViewerActivityBase<PersonScreening> {
+public class GuarantorEditorActivity extends EditorActivityBase<GuarantorDTO> implements GuarantorEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public PersonScreeningViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(PersonScreeningViewerView.class), (AbstractCrudService<PersonScreening>) GWT
-                .create(PersonScreeningCrudService.class));
+    public GuarantorEditorActivity(Place place) {
+        super(place, TenantViewFactory.instance(GuarantorEditorView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
+                GuarantorDTO.class);
     }
 }

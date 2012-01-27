@@ -46,6 +46,12 @@ import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEdit
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorViewerViewImpl;
 
 public class TenantViewFactory extends ViewFactoryBase {
 
@@ -57,6 +63,13 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantViewerViewImpl());
             } else if (TenantEditorView.class.equals(type)) {
                 map.put(type, new TenantEditorViewImpl());
+
+            } else if (GuarantorListerView.class.equals(type)) {
+                map.put(type, new GuarantorListerViewImpl());
+            } else if (GuarantorViewerView.class.equals(type)) {
+                map.put(type, new GuarantorViewerViewImpl());
+            } else if (GuarantorEditorView.class.equals(type)) {
+                map.put(type, new GuarantorEditorViewImpl());
 
             } else if (PersonScreeningViewerView.class.equals(type)) {
                 map.put(type, new PersonScreeningViewerViewImpl());

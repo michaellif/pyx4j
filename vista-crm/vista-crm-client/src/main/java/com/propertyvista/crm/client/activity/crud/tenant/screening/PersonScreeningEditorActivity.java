@@ -7,27 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.tenant;
+package com.propertyvista.crm.client.activity.crud.tenant.screening;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.EquifaxResultCrudService;
-import com.propertyvista.misc.EquifaxResult;
+import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
+import com.propertyvista.domain.tenant.PersonScreening;
 
-public class EquifaxResultViewerActivity extends ViewerActivityBase<EquifaxResult> {
+public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScreening> {
 
     @SuppressWarnings("unchecked")
-    public EquifaxResultViewerActivity(Place place) {
-        super(place, TenantViewFactory.instance(EquifaxResultViewerView.class), (AbstractCrudService<EquifaxResult>) GWT.create(EquifaxResultCrudService.class));
+    public PersonScreeningEditorActivity(Place place) {
+        super(place, TenantViewFactory.instance(PersonScreeningEditorView.class), (AbstractCrudService<PersonScreening>) GWT
+                .create(PersonScreeningCrudService.class), PersonScreening.class);
     }
 }
