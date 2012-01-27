@@ -23,16 +23,16 @@ public interface Transition {
         Pending, Ready, Triggered, Completed
     }
 
-    public void fromState(State state);
+    void fromState(State state);
 
-    public void toState(State state);
+    void toState(State state);
 
-    public List<State> getFromStates();
+    List<State> getFromList();
 
-    public List<State> getToStates();
+    List<State> getToList();
 
-    public TransitionStatus getStatus();
+    TransitionStatus getStatus();
 
-    public void execute();
+    void execute();
 
 }

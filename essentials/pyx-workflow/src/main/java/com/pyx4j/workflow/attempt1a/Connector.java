@@ -15,9 +15,9 @@ public interface Connector {
 
     void acceptFrom(Connector src);
 
-    void putValue(Connector src);
+    void putToken(Connector src, Token token);
 
-    boolean getValue(Connector dst);
+    Token getToken(Connector dst);
 
-    boolean clearValue();
+    boolean hasToken();
 }
