@@ -53,12 +53,23 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
         return null;
     }
 
+    private void normalizePreload(IssueClassificationPreload row) {
+        if (row.subjectDetails().isNull()) {
+            row.subjectDetails().setValue(row.repairSubject().getValue());
+        }
+        if (row.issue().isNull()) {
+            // Defaults to value in Subject Details
+            row.issue().set(row.subjectDetails());
+        }
+    }
+
     private void createIssueClassifications() {
         List<IssueClassificationPreload> data = EntityCSVReciver.create(IssueClassificationPreload.class).loadFile(
                 IOUtils.resourceFileName("maintenance-tree.csv", RefferenceDataPreloader.class));
 
         Map<String, IssueElement> elements = new HashMap<String, IssueElement>();
         for (IssueClassificationPreload row : data) {
+            normalizePreload(row);
             // Find or create Element
             IssueElement element = elements.get(row.type().getValue() + row.rooms().getValue());
             if (element == null) {
@@ -101,12 +112,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
             // Create IssueClassification
             IssueClassification classification = EntityFactory.create(IssueClassification.class);
             classification.subjectDetails().set(detail);
-            if (!row.issue().isNull()) {
-                classification.issue().set(row.issue());
-            } else {
-                // Defaults to value in Subject Details
-                classification.issue().set(row.subjectDetails());
-            }
+            classification.issue().set(row.issue());
             classification.priority().set(row.priority());
             Persistence.service().persist(classification);
         }
