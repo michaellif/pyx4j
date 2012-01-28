@@ -49,6 +49,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.PersonScreeningHolder;
@@ -483,7 +484,10 @@ public class PTGenerator {
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
                 Guarantor guarantor = EntityFactory.create(Guarantor.class);
                 guarantor.person().set(CommonsGenerator.createPerson());
-                screening.guarantors().add(guarantor);
+                PersonGuarantor personGuarantor = EntityFactory.create(PersonGuarantor.class);
+                personGuarantor.guarantor().set(guarantor);
+                personGuarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
+                screening.guarantors().add(personGuarantor);
 
                 tenantSummary.guarantorScreening().add(createScreening(guarantor, application, null));
             }

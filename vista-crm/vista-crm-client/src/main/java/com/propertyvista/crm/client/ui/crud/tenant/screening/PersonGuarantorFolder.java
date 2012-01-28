@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.tenant.screening;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 
@@ -24,6 +25,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,22 +37,23 @@ import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.rpc.services.SelectGuarantorCrudService;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 
-public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
+public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
 
     private static final I18n i18n = I18n.get(PersonGuarantorFolder.class);
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().person().name(), "25em"),
-                new EntityFolderColumnDescriptor(proto().person().birthDate(), "9em"),
-                new EntityFolderColumnDescriptor(proto().person().email(), "15em")
+                new EntityFolderColumnDescriptor(proto().guarantor().person().name(), "25em"),
+                new EntityFolderColumnDescriptor(proto().guarantor().person().birthDate(), "9em"),
+                new EntityFolderColumnDescriptor(proto().guarantor().person().email(), "15em")
         );//@formatter:on
     }
 
     public PersonGuarantorFolder(boolean modifyable) {
-        super(Guarantor.class, modifyable);
+        super(PersonGuarantor.class, modifyable);
         inheritContainerAccessRules(false);
         setEditable(modifyable);
         setViewable(true);
@@ -58,7 +61,7 @@ public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Guarantor) {
+        if (member instanceof PersonGuarantor) {
             return new GuarantorEditor();
         }
         return super.create(member);
@@ -69,10 +72,10 @@ public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
         new TenantSelectorDialog().show();
     }
 
-    private class GuarantorEditor extends CEntityFolderRowEditor<Guarantor> {
+    private class GuarantorEditor extends CEntityFolderRowEditor<PersonGuarantor> {
 
         public GuarantorEditor() {
-            super(Guarantor.class, columns());
+            super(PersonGuarantor.class, columns());
         }
 
         @Override
@@ -89,10 +92,20 @@ public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
         }
     }
 
+    List<Guarantor> alreadySelectedGuarantor() {
+        List<Guarantor> guarantors = new Vector<Guarantor>();
+        for (PersonGuarantor g : getValue()) {
+            if (g.guarantor().id() != null) {
+                guarantors.add(g.guarantor());
+            }
+        }
+        return guarantors;
+    }
+
     private class TenantSelectorDialog extends EntitySelectorDialog<Guarantor> {
 
         public TenantSelectorDialog() {
-            super(Guarantor.class, true, getValue(), i18n.tr("Select Guarantor"));
+            super(Guarantor.class, true, alreadySelectedGuarantor(), i18n.tr("Select Guarantor"));
         }
 
         @Override
@@ -101,7 +114,9 @@ public class PersonGuarantorFolder extends VistaTableFolder<Guarantor> {
                 return false;
             } else {
                 for (Guarantor guarantor : getSelectedItems()) {
-                    addItem(guarantor);
+                    PersonGuarantor personGuarantor = EntityFactory.create(PersonGuarantor.class);
+                    personGuarantor.guarantor().set(guarantor);
+                    addItem(personGuarantor);
                 }
 
                 return true;

@@ -41,6 +41,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -122,8 +123,14 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(tenantSummary.tenantInLease());
             summary.lease().tenants().add(tenantSummary.tenantInLease());
 
-            Persistence.service().persist(tenantSummary.tenantScreening().guarantors());
             Persistence.service().persist(tenantSummary.tenantScreening());
+
+            for (PersonGuarantor pg : tenantSummary.tenantScreening().guarantors()) {
+                // TODO remove this set, it should be automatic
+                pg.guarantee().set(tenantSummary.tenantScreening());
+                Persistence.service().persist(pg.guarantor());
+            }
+            Persistence.service().persist(tenantSummary.tenantScreening().guarantors());
 
             Persistence.service().persist(tenantSummary.guarantorScreening());
 

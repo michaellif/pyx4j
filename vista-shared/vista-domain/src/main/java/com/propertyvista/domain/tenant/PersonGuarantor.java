@@ -23,30 +23,27 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.ptapp.Application;
-
 @ToStringFormat("{0},  {1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface GuarantorInLease extends IBoundToApplication {
+public interface PersonGuarantor extends IEntity {
 
     @Owner
     @Detached
     @NotNull
     @Indexed
     @JoinColumn
-    Lease lease();
+    PersonScreening guarantee();
 
-    interface OrderInLeaseId extends ColumnId {
+    interface OrderInGuarantee extends ColumnId {
 
     }
 
-    @JoinTableOrderColumn(OrderInLeaseId.class)
-    IPrimitive<Integer> orderInLease();
+    @JoinTableOrderColumn(OrderInGuarantee.class)
+    IPrimitive<Integer> orderInGuarantee();
 
     @NotNull
     @ReadOnly
@@ -57,9 +54,4 @@ public interface GuarantorInLease extends IBoundToApplication {
     @ToString(index = 1)
     IPrimitive<PersonRelationship> relationship();
 
-    @Override
-    @NotNull
-    @Indexed
-    @Detached
-    Application application();
 }

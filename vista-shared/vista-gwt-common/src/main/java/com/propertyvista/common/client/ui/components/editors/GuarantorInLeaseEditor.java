@@ -26,10 +26,10 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.tenant.GuarantorInLease;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class GuarantorInLeaseEditor extends CEntityDecoratableEditor<GuarantorInLease> {
+public class GuarantorInLeaseEditor extends CEntityDecoratableEditor<PersonGuarantor> {
 
     protected I18n i18n = I18n.get(GuarantorInLeaseEditor.class);
 
@@ -40,7 +40,7 @@ public class GuarantorInLeaseEditor extends CEntityDecoratableEditor<GuarantorIn
     }
 
     public GuarantorInLeaseEditor(boolean twoColumns) {
-        super(GuarantorInLease.class);
+        super(PersonGuarantor.class);
         this.twoColumns = twoColumns;
     }
 

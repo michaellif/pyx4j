@@ -17,9 +17,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.editors.GuarantorInLeaseEditor;
-import com.propertyvista.domain.tenant.GuarantorInLease;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 
-public class GuarantorInLeaseFolder extends VistaBoxFolder<GuarantorInLease> {
+public class GuarantorInLeaseFolder extends VistaBoxFolder<PersonGuarantor> {
 
     private final boolean twoColumns;
 
@@ -28,13 +28,13 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<GuarantorInLease> {
     }
 
     public GuarantorInLeaseFolder(boolean modifyable, boolean twoColumns) {
-        super(GuarantorInLease.class, modifyable);
+        super(PersonGuarantor.class, modifyable);
         this.twoColumns = twoColumns;
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof GuarantorInLease) {
+        if (member instanceof PersonGuarantor) {
             return new GuarantorInLeaseEditor(twoColumns);
         }
         return super.create(member);

@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.GuarantorInLease;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
@@ -43,7 +43,7 @@ public interface TenantFinancialDTO extends IEntity {
     @Deprecated
     IList<TenantGuarantor> guarantors_OLD();
 
-    IList<GuarantorInLease> guarantors();
+    IList<PersonGuarantor> guarantors();
 
     EquifaxApproval equifaxApproval();
 }
