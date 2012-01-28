@@ -305,6 +305,6 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Value", value, address2.location().getValue());
     }
 
-    // TODO
+    // TODO Support Pair persistence
     // IPrimitive<Pair<Double, Double>> range();
 }

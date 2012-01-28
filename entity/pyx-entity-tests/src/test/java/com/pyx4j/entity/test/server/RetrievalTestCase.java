@@ -118,14 +118,14 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
             Assert.assertEquals("Retr 2. department.name", deptName, departments2.get(0).name().getValue());
         }
 
-        // TODO Variation of passing only Entity Key, Not supported for now
-        //        {
-        //            EntityCriteria<Department> criteria3 = EntityCriteria.create(Department.class);
-        //            criteria3.add(PropertyCriterion.eq(department.employees(), employee2.getPrimaryKey()));
-        //            List<Department> departments3 = srv.query(criteria3);
-        //            Assert.assertEquals("Retr 3. List size", 1, departments3.size());
-        //            Assert.assertEquals("Retr 3. department.name", deptName, departments3.get(0).name().getValue());
-        //        }
+        // Variation of passing only Entity Key,
+        {
+            EntityQueryCriteria<Department> criteria3 = EntityQueryCriteria.create(Department.class);
+            criteria3.add(PropertyCriterion.eq(department.employees(), employee2.getPrimaryKey()));
+            List<Department> departments3 = srv.query(criteria3);
+            Assert.assertEquals("Retr 3. List size", 1, departments3.size());
+            Assert.assertEquals("Retr 3. department.name", deptName, departments3.get(0).name().getValue());
+        }
     }
 
     public void testOwnedList() {
@@ -216,8 +216,8 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         runtestOwnedListQuery(true, true);
     }
 
-    //TODO
-    public void TODOtestEmbeddedEntity() {
+    //TODO Make it work on GAE
+    public void testEmbeddedEntity() {
 
         Address address = EntityFactory.create(Address.class);
 
@@ -241,11 +241,12 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         srv.persist(address2);
 
         Address address3 = srv.retrieve(Address.class, primaryKey);
+        Assert.assertNotNull("retrieve", address3);
         Assert.assertNull("null is saved", address3.city().name().getValue());
     }
 
-    //TODO
-    public void TODOtestEmbeddedEntityRemoval() {
+    //TODO Make it work on GAE
+    public void testEmbeddedEntityRemoval() {
 
         Address address = EntityFactory.create(Address.class);
 
@@ -269,6 +270,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         srv.persist(address2);
 
         Address address3 = srv.retrieve(Address.class, primaryKey);
+        Assert.assertNotNull("retrieve", address3);
         Assert.assertTrue("null is saved", address3.city().isNull());
     }
 

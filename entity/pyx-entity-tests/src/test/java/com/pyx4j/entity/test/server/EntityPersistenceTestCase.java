@@ -211,8 +211,6 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Retr. Set size", 2, departmentR.employees().getValue().size());
         Assert.assertTrue("Retr. contains(emp1)", departmentR.employees().contains(employee1));
         Assert.assertTrue("Retr. contains(emp2)", departmentR.employees().contains(employee2));
-        //TODO
-        //System.out.println(departmentR.employees().getValue().getClass());
 
     }
 
