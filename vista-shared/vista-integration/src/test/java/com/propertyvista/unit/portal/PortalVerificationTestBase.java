@@ -35,7 +35,6 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -283,7 +282,7 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName()));
+        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors(), row, proto(PersonGuarantor.class).guarantor().person().name().firstName()));
     }
 
     private void verifyIncome(IDebugId formDebugId, PersonalIncome income) {

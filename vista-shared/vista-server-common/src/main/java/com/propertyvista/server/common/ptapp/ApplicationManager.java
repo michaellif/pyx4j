@@ -28,9 +28,9 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
@@ -198,9 +198,9 @@ public class ApplicationManager {
             status.role().setValue(Role.Tenant);
 
             if (status.person().isEmpty()) {
-                EntityQueryCriteria<TenantGuarantor> criteria1 = EntityQueryCriteria.create(TenantGuarantor.class);
-                criteria1.add(PropertyCriterion.eq(criteria1.proto().user(), app.user()));
-                status.person().set(Persistence.service().retrieve(criteria1).name());
+                EntityQueryCriteria<PersonGuarantor> criteria1 = EntityQueryCriteria.create(PersonGuarantor.class);
+                criteria1.add(PropertyCriterion.eq(criteria1.proto().guarantor().user(), app.user()));
+                status.person().set(Persistence.service().retrieve(criteria1).guarantor().person().name());
                 status.role().setValue(Role.Guarantor);
             }
 
