@@ -37,6 +37,7 @@ import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
@@ -44,7 +45,6 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -319,9 +319,9 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         }
 
         num = 0;
-        for (TenantGuarantor guarantor : tenantFin.guarantors_OLD()) {
-            selenium.click(D.id(tenantFin.guarantors_OLD(), FormNavigationDebugId.Form_Add));
-            enterGuarantorRow(D.id(tenantFin.guarantors_OLD(), num), detach(guarantor));
+        for (PersonGuarantor guarantor : tenantFin.guarantors()) {
+            selenium.click(D.id(tenantFin.guarantors(), FormNavigationDebugId.Form_Add));
+            enterGuarantorRow(D.id(tenantFin.guarantors(), num), detach(guarantor));
             num++;
         }
 
@@ -398,15 +398,16 @@ public class CreateCompleteApplicationTest extends PortalVerificationTestBase {
         setValueOnForm(formDebugId, asset.assetValue());
     }
 
-    private void enterGuarantorRow(IDebugId fromDebugId, TenantGuarantor guarantor) {
-        setValueOnForm(fromDebugId, guarantor.name().firstName());
-        setValueOnForm(fromDebugId, guarantor.name().middleName());
-        setValueOnForm(fromDebugId, guarantor.name().lastName());
-        setValueOnForm(fromDebugId, guarantor.homePhone());
-        setValueOnForm(fromDebugId, guarantor.mobilePhone());
-        setValueOnForm(fromDebugId, guarantor.workPhone());
-        setValueOnForm(fromDebugId, guarantor.birthDate());
-        setValueOnForm(fromDebugId, guarantor.email());
+    private void enterGuarantorRow(IDebugId fromDebugId, PersonGuarantor guarantor) {
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().name().firstName());
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().name().middleName());
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().name().lastName());
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().homePhone());
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().mobilePhone());
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().workPhone());
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().birthDate());
+        setValueOnForm(fromDebugId, guarantor.guarantor().person().email());
+        setValueOnForm(fromDebugId, guarantor.relationship());
     }
 
 // TODO it's now should be on Apartment page:     

@@ -16,18 +16,18 @@ package com.propertyvista.common.client.ui.components.folders;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
-import com.propertyvista.common.client.ui.components.editors.GuarantorInLeaseEditor;
+import com.propertyvista.common.client.ui.components.editors.PersonGuarantorEditor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 
-public class GuarantorInLeaseFolder extends VistaBoxFolder<PersonGuarantor> {
+public class PersonGuarantorFolder extends VistaBoxFolder<PersonGuarantor> {
 
     private final boolean twoColumns;
 
-    public GuarantorInLeaseFolder(boolean modifyable) {
+    public PersonGuarantorFolder(boolean modifyable) {
         this(modifyable, true);
     }
 
-    public GuarantorInLeaseFolder(boolean modifyable, boolean twoColumns) {
+    public PersonGuarantorFolder(boolean modifyable, boolean twoColumns) {
         super(PersonGuarantor.class, modifyable);
         this.twoColumns = twoColumns;
     }
@@ -35,7 +35,7 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<PersonGuarantor> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PersonGuarantor) {
-            return new GuarantorInLeaseEditor(twoColumns);
+            return new PersonGuarantorEditor(twoColumns);
         }
         return super.create(member);
     }

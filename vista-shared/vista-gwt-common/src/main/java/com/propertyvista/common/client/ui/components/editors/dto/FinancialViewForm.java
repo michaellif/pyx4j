@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.folders.GuarantorInLeaseFolder;
+import com.propertyvista.common.client.ui.components.folders.PersonGuarantorFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.domain.person.Name;
@@ -70,7 +70,7 @@ public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialD
         main.setWidget(++row, 0, new HTML());
 
         main.setH1(++row, 0, 1, proto().guarantors().getMeta().getCaption(), adjust);
-        main.setWidget(++row, 0, inject(proto().guarantors(), new GuarantorInLeaseFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().guarantors(), new PersonGuarantorFolder(isEditable())));
         main.setWidget(++row, 0, new HTML());
 
         return main;

@@ -27,6 +27,7 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
@@ -277,12 +278,12 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertFalse(selenium.isElementPresent(D.id(proto(TenantFinancialDTO.class).assets(), row, proto(PersonalAsset.class).assetType())));
 
         row = 0;
-        for (TenantGuarantor guarantor : financial.guarantors_OLD()) {
-            debugID = D.id(financial.guarantors_OLD(), row);
+        for (PersonGuarantor guarantor : financial.guarantors()) {
+            debugID = D.id(financial.guarantors(), row);
             verifyGuarantor(debugID, detach(guarantor));
             row++;
         }
-        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors_OLD(), row, proto(TenantGuarantor.class).name().firstName()));
+        assertNotPresent(D.id(proto(TenantFinancialDTO.class).guarantors(), row, proto(TenantGuarantor.class).name().firstName()));
     }
 
     private void verifyIncome(IDebugId formDebugId, PersonalIncome income) {
@@ -357,15 +358,16 @@ abstract class PortalVerificationTestBase extends WizardSeleniumTestBase {
         assertValueOnForm(debugID, asset.assetValue());
     }
 
-    private void verifyGuarantor(IDebugId debugID, TenantGuarantor guarantor) {
-        assertValueOnForm(debugID, guarantor.name().firstName());
-        assertValueOnForm(debugID, guarantor.name().middleName());
-        assertValueOnForm(debugID, guarantor.name().lastName());
-        assertValueOnForm(debugID, guarantor.homePhone());
-        assertValueOnForm(debugID, guarantor.mobilePhone());
-        assertValueOnForm(debugID, guarantor.workPhone());
-        assertValueOnForm(debugID, guarantor.birthDate());
-        assertValueOnForm(debugID, guarantor.email());
+    private void verifyGuarantor(IDebugId debugID, PersonGuarantor guarantor) {
+        assertValueOnForm(debugID, guarantor.guarantor().person().name().firstName());
+        assertValueOnForm(debugID, guarantor.guarantor().person().name().middleName());
+        assertValueOnForm(debugID, guarantor.guarantor().person().name().lastName());
+        assertValueOnForm(debugID, guarantor.guarantor().person().homePhone());
+        assertValueOnForm(debugID, guarantor.guarantor().person().mobilePhone());
+        assertValueOnForm(debugID, guarantor.guarantor().person().workPhone());
+        assertValueOnForm(debugID, guarantor.guarantor().person().birthDate());
+        assertValueOnForm(debugID, guarantor.guarantor().person().email());
+        assertValueOnForm(debugID, guarantor.relationship());
     }
 
 // TODO it's now should be on Apartment page:     

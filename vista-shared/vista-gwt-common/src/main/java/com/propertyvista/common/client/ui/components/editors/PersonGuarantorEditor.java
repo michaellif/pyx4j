@@ -26,20 +26,21 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class GuarantorInLeaseEditor extends CEntityDecoratableEditor<PersonGuarantor> {
+public class PersonGuarantorEditor extends CEntityDecoratableEditor<PersonGuarantor> {
 
-    protected I18n i18n = I18n.get(GuarantorInLeaseEditor.class);
+    protected I18n i18n = I18n.get(PersonGuarantorEditor.class);
 
     private final boolean twoColumns;
 
-    public GuarantorInLeaseEditor() {
+    public PersonGuarantorEditor() {
         this(true);
     }
 
-    public GuarantorInLeaseEditor(boolean twoColumns) {
+    public PersonGuarantorEditor(boolean twoColumns) {
         super(PersonGuarantor.class);
         this.twoColumns = twoColumns;
     }
@@ -61,8 +62,8 @@ public class GuarantorInLeaseEditor extends CEntityDecoratableEditor<PersonGuara
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().name().middleName()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().name().lastName()), 20).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().guarantor().person().name(), new CEntityLabel()), 25)
-                    .customLabel(i18n.tr("Guarantor")).build());
+            main.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().guarantor().person().name(), new CEntityLabel<Name>()), 25).customLabel(i18n.tr("Guarantor")).build());
             get(proto().guarantor().person().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
 

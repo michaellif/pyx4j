@@ -35,7 +35,6 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.rpc.services.SelectGuarantorCrudService;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 
@@ -46,7 +45,8 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().guarantor().person().name(), "25em"),
+                new EntityFolderColumnDescriptor(proto().guarantor(), "25em"),
+                new EntityFolderColumnDescriptor(proto().relationship(), "10em"),
                 new EntityFolderColumnDescriptor(proto().guarantor().person().birthDate(), "9em"),
                 new EntityFolderColumnDescriptor(proto().guarantor().person().email(), "15em")
         );//@formatter:on
@@ -80,9 +80,9 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Name) {
+            if (member instanceof Guarantor) {
                 if (isEditable()) {
-                    return new CEntityLabel<Name>();
+                    return new CEntityLabel<Guarantor>();
                 } else {
                     return new CEntityCrudHyperlink<Guarantor>(MainActivityMapper.getCrudAppPlace(Guarantor.class));
                 }

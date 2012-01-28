@@ -24,7 +24,6 @@ import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
-import com.propertyvista.domain.tenant.income.TenantGuarantor;
 import com.propertyvista.misc.EquifaxApproval;
 
 @Transient
@@ -39,9 +38,6 @@ public interface TenantFinancialDTO extends IEntity {
     IList<IIncomeInfo> incomes2();
 
     IList<PersonalAsset> assets();
-
-    @Deprecated
-    IList<TenantGuarantor> guarantors_OLD();
 
     IList<PersonGuarantor> guarantors();
 
