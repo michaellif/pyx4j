@@ -235,8 +235,8 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
                 return CListBox.this.getItemName(item);
             }
         };
-        if (this.getDebugId() != null) {
-            pop.ensureDebugId(this.getDebugId().toString());
+        if (this.getCompositeDebugId() != null) {
+            pop.ensureDebugId(this.getCompositeDebugId().toString());
         }
         pop.setComparator(getComparator());
         pop.setRequiredValues(getRequiredValues());

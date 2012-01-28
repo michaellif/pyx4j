@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public class NativeViewer<E> extends SimplePanel implements INativeComponent<E> {
@@ -99,6 +100,12 @@ public class NativeViewer<E> extends SimplePanel implements INativeComponent<E> 
     public boolean isViewable() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
     }
 
 }

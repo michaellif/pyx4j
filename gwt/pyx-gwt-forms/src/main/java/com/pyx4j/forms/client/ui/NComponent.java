@@ -24,6 +24,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.Button;
@@ -82,6 +83,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     protected void onEditorCreate() {
         editor.asWidget().setWidth(getCComponent().getWidth());
+        editor.asWidget().ensureDebugId(getCComponent().getCompositeDebugId().debugId());
     }
 
     protected void onEditorInit() {
@@ -89,7 +91,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     }
 
     protected void onViewerCreate() {
-
+        viewer.asWidget().ensureDebugId(getCComponent().getCompositeDebugId().debugId());
     }
 
     protected void onViewerInit() {
@@ -187,6 +189,16 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     @Override
     public boolean isEditable() {
         return getEditor().isEditable();
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        if (getEditor() != null) {
+            getEditor().ensureDebugId(debugId.debugId());
+        }
+        if (getViewer() != null) {
+            getViewer().ensureDebugId(debugId.debugId());
+        }
     }
 
     @Override

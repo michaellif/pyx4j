@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
@@ -486,5 +487,11 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
     }
 }

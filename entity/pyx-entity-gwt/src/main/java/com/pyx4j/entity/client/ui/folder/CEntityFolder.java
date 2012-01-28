@@ -173,8 +173,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         addValueChangeHandler((IFolderDecorator) getDecorator());
         //TODO use components inheritance
-        if (this.getDebugId() != null) {
-            getDecorator().asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
+        if (this.getCompositeDebugId() != null) {
+            getDecorator().asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
 
         ((IFolderDecorator) getDecorator()).addItemAddClickHandler(new ClickHandler() {
@@ -189,7 +189,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     public void setDebugId(IDebugId debugId) {
         super.setDebugId(debugId);
         if ((debugId != null) && (getDecorator() != null)) {
-            getDecorator().asWidget().ensureDebugId(this.getDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
+            getDecorator().asWidget().ensureDebugId(this.getCompositeDebugId().debugId() + IFolderDecorator.DEBUGID_SUFIX);
         }
     }
 
@@ -321,7 +321,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         itemsList.add((CEntityFolderItem<E>) component);
         container.add(component);
 
-        IDebugId rowDebugId = new CompositeDebugId(this.getDebugId(), "row", currentRowDebugId);
+        IDebugId rowDebugId = new CompositeDebugId(this.getCompositeDebugId(), "row", currentRowDebugId);
         component.setDebugId(rowDebugId);
         currentRowDebugId++;
 

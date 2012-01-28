@@ -44,4 +44,6 @@ public interface IWidget extends IsWidget {
 
     void removeStyleDependentName(String styleSuffix);
 
+    void ensureDebugId(String id);
+
 }

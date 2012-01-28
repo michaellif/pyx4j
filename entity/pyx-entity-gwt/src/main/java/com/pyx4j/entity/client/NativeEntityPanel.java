@@ -22,6 +22,7 @@ package com.pyx4j.entity.client;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -90,6 +91,12 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
     @Override
     public E getNativeValue() {
         return null;
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
     }
 
 }

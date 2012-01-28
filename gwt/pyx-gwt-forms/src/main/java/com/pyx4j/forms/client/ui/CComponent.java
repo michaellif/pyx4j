@@ -345,9 +345,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     protected void onWidgetCreated() {
         applyAccessibilityRules();
-        asWidget().setWidth(getWidth());
-        asWidget().setHeight(getHeight());
+        getWidget().setWidth(getWidth());
+        getWidget().setHeight(getHeight());
         setNativeValue(getValue());
+        if (debugId != null) {
+            getWidget().setDebugId(getCompositeDebugId());
+        }
         this.addPropertyChangeHandler(widget);
     }
 
@@ -363,9 +366,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             } catch (Throwable e) {
                 throw new Error("Widget could not be initialized", e);
             }
-            if (getDebugId() != null) {
-                setDebugId(getDebugId());
-            }
             onWidgetCreated();
         }
         return widget.asWidget();
@@ -375,9 +375,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return widget;
     }
 
-    public IDebugId getDebugId() {
+    public IDebugId getCompositeDebugId() {
         if ((parent != null) && (debugId != null)) {
-            return new CompositeDebugId(parent.getDebugId(), debugId);
+            return new CompositeDebugId(parent.getCompositeDebugId(), debugId);
         } else {
             return debugId;
         }
@@ -385,8 +385,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void setDebugId(IDebugId debugId) {
         this.debugId = debugId;
-        if ((widget != null) && (debugId != null)) {
-            widget.asWidget().ensureDebugId(getDebugId().debugId());
+        if (isWidgetCreated() && (debugId != null)) {
+            getWidget().setDebugId(getCompositeDebugId());
         }
     }
 
@@ -599,7 +599,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public String shortDebugInfo() {
-        return GWTJava5Helper.getSimpleName(this.getClass()) + ((getDebugId() != null) ? " " + getDebugId() : "");
+        return GWTJava5Helper.getSimpleName(this.getClass()) + ((getCompositeDebugId() != null) ? " " + getCompositeDebugId() : "");
     }
 
     protected void setNativeValue(DATA_TYPE value) {

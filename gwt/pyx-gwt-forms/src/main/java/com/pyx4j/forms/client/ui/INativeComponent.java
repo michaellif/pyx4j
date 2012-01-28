@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.widgets.client.IWidget;
 
@@ -36,5 +37,7 @@ public interface INativeComponent<E> extends IWidget, PropertyChangeHandler {
     void setNativeValue(E value);
 
     E getNativeValue() throws ParseException;
+
+    void setDebugId(IDebugId debugId);
 
 }

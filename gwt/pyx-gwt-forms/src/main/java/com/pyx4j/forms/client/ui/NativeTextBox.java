@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.TextBox;
@@ -128,4 +129,11 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

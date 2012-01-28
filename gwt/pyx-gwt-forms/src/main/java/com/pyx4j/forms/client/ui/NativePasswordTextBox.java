@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.PasswordTextBox;
@@ -98,6 +99,12 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
                 addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
             }
         }
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
     }
 
 }

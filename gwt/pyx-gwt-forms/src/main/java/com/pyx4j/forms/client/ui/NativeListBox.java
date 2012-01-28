@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ListBox;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
@@ -181,6 +182,12 @@ public class NativeListBox<E> extends TriggerComponent<List<E>> implements INati
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
     }
 
 }

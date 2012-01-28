@@ -28,6 +28,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -151,6 +152,12 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
 
     @Override
     public void setAccessKey(char key) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
         // TODO Auto-generated method stub
 
     }

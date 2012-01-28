@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public class NativeLabel<E> extends HTML implements INativeReference<E> {
@@ -148,6 +149,12 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
 
     @Override
     public void setAccessKey(char key) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
         // TODO Auto-generated method stub
 
     }
