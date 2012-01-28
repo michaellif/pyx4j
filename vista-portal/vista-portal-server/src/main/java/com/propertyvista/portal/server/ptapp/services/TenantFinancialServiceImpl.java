@@ -40,6 +40,8 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     public void save(AsyncCallback<TenantFinancialDTO> callback, TenantFinancialDTO entity) {
         log.debug("Saving tenantFinancial {}", entity);
 
+        // TODO: check new/deleted PersonalGuarantor and correct Guarantors accordingly!.. 
+
         TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey(), true);
         new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.tenantScreening);
 
