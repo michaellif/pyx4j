@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -276,4 +277,11 @@ public class NativePhone extends SimplePanel implements INativeFocusComponent<Ph
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

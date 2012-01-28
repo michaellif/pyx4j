@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -353,4 +354,11 @@ public class NativeGeoLocation extends SimplePanel implements INativeFocusCompon
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

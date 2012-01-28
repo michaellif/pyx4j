@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
@@ -236,6 +237,12 @@ public class NativeMoney extends SimplePanel implements Focusable, INativeTextCo
     @Override
     public void setAccessKey(char key) {
         amount.setAccessKey(key);
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
     }
 
 }

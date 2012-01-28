@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -250,4 +251,11 @@ public class NativeEmail extends SimplePanel implements INativeFocusComponent<Em
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

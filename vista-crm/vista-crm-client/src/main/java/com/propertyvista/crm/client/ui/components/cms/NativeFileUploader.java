@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
@@ -145,6 +146,12 @@ public class NativeFileUploader extends TriggerComponent<File> implements INativ
     public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
     }
 
 }
