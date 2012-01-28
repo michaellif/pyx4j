@@ -85,6 +85,8 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
 
+    public <T extends IEntity> boolean exists(Class<T> entityClass, Key primaryKey);
+
     public <T extends IEntity> boolean exists(EntityQueryCriteria<T> criteria);
 
     /**

@@ -76,12 +76,12 @@ public class Mappings {
     }
 
     public TableModel ensureTable(Connection connection, Dialect dialect, EntityMeta entityMeta) {
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't operate on Transient Entity " + entityMeta.getEntityClass().getName());
-        }
         TableModel model = tables.get(entityMeta.getEntityClass());
         if (model != null) {
             return model;
+        }
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't operate on Transient Entity " + entityMeta.getEntityClass().getName());
         }
 
         // Avoid lock on EntityClass

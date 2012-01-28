@@ -100,8 +100,41 @@ public abstract class EntityGraphsSecurityTestCase extends DatastoreTestBase {
         Assert.assertEquals("streetName is changed", employee0.homeAddress().streetName().getValue(), employee1mod.homeAddress().streetName().getValue());
     }
 
-    //TODO
-    public void TODO_testOwnedOneToManyMerge() {
+    //TODO Make it work on GAE
+    public void testOwnedOneToManyPersist() {
+        Employee employee0 = EntityFactory.create(Employee.class);
+        employee0.firstName().setValue("A. " + uniqueString());
+        Task task0 = EntityFactory.create(Task.class);
+        task0.description().setValue("A. " + uniqueString());
+        employee0.tasks().add(task0);
+        srv.persist(employee0);
+
+        //Test insert wrong Task
+        {
+            Employee employee2 = EntityFactory.create(Employee.class);
+            employee2.firstName().setValue("B. " + uniqueString());
+
+            Task task2 = EntityFactory.create(Task.class);
+            task2.description().setValue("B. " + uniqueString());
+            task2.setPrimaryKey(task0.getPrimaryKey());
+            employee2.tasks().add(task2);
+
+            boolean saved = false;
+            try {
+                srv.persist(employee2);
+                saved = true;
+            } catch (SecurityViolationException e) {
+                // OK
+            }
+            if (saved) {
+                fail("Should not save OwnedMember with Id");
+            }
+        }
+
+    }
+
+    //TODO Make it work on GAE
+    public void testOwnedOneToManyMerge() {
         Employee employee0 = EntityFactory.create(Employee.class);
         employee0.firstName().setValue("A. " + uniqueString());
         Task task0 = EntityFactory.create(Task.class);
@@ -109,13 +142,40 @@ public abstract class EntityGraphsSecurityTestCase extends DatastoreTestBase {
         employee0.tasks().add(task0);
         srv.merge(employee0);
 
-        //Test insert
+        //Test insert wrong Task
         {
             Employee employee2 = EntityFactory.create(Employee.class);
             employee2.firstName().setValue("B. " + uniqueString());
 
             Task task2 = EntityFactory.create(Task.class);
             task2.description().setValue("B. " + uniqueString());
+            task2.setPrimaryKey(task0.getPrimaryKey());
+            employee2.tasks().add(task2);
+
+            boolean saved = false;
+            try {
+                srv.merge(employee2);
+                saved = true;
+            } catch (SecurityViolationException e) {
+                // OK
+            }
+            if (saved) {
+                fail("Should not save OwnedMember with Id");
+            }
+        }
+
+        // TODO Update with addition of wrong child
+        if (false) {
+            Employee employee2 = EntityFactory.create(Employee.class);
+            employee2.firstName().setValue("C. " + uniqueString());
+            Task task1 = EntityFactory.create(Task.class);
+            task1.description().setValue("C1. " + uniqueString());
+            employee2.tasks().add(task1);
+
+            srv.merge(employee2);
+
+            Task task2 = EntityFactory.create(Task.class);
+            task2.description().setValue("C2. " + uniqueString());
             task2.setPrimaryKey(task0.getPrimaryKey());
             employee2.tasks().add(task2);
 

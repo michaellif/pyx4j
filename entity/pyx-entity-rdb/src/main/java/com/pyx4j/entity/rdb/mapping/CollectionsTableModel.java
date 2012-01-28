@@ -130,8 +130,7 @@ public class CollectionsTableModel {
                     IEntity childEntity = (IEntity) value;
                     if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
                         log.error("Saving non persisted reference {}", childEntity);
-                        throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass().getName() + " from collection "
-                                + member.getMemberMeta().getCaption() + " of " + entity.getEntityMeta().getCaption());
+                        throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
                     }
                 }
                 int parameterIndex = 1;

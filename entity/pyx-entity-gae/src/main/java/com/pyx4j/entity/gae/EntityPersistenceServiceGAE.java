@@ -1563,6 +1563,19 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public <T extends IEntity> boolean exists(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        Query query = new Query(entityMeta.getPersistenceName());
+        query.addFilter(Entity.KEY_RESERVED_PROPERTY, Query.FilterOperator.EQUAL, KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey.asLong()));
+        query.setKeysOnly();
+        PreparedQuery pq = datastore.prepare(query);
+        return pq.asIterator(FetchOptions.Builder.withLimit(1)).hasNext();
+    }
+
+    @Override
     public <T extends IEntity> boolean exists(EntityQueryCriteria<T> criteria) {
         ICursorIterator<com.pyx4j.commons.Key> it = queryKeys(null, criteria);
         return it.hasNext();

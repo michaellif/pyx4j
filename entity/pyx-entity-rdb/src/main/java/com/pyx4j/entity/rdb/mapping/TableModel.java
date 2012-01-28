@@ -288,8 +288,7 @@ public class TableModel {
                 IEntity childEntity = (IEntity) member.getMember(entity);
                 if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
                     log.error("Saving non persisted reference {}", childEntity);
-                    throw new Error("Saving non persisted reference " + member.getMemberMeta().getValueClass().getName() + " "
-                            + member.getMemberMeta().getCaption() + " of " + entity.getEntityMeta().getCaption());
+                    throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
                 }
                 parameterIndex += member.getValueAdapter().bindValue(stmt, parameterIndex, childEntity);
             } else {
@@ -601,6 +600,43 @@ public class TableModel {
             }
         };
 
+    }
+
+    public boolean exists(Connection connection, Key primaryKey) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT id FROM ").append(tableName).append(" WHERE id = ?");
+            if (dialect.isMultitenant()) {
+                sql.append(" AND ns = ?");
+            }
+            stmt = connection.prepareStatement(sql.toString());
+            // Just in case, used for pooled connections 
+            stmt.setMaxRows(1);
+
+            stmt.setLong(1, primaryKey.asLong());
+            if (dialect.isMultitenant()) {
+                stmt.setString(2, NamespaceManager.getNamespace());
+            }
+
+            rs = stmt.executeQuery();
+            if (!rs.next()) {
+                return false;
+            } else {
+                Key key = new Key(rs.getLong("id"));
+                if (!primaryKey.equals(key)) {
+                    throw new RuntimeException();
+                }
+                return true;
+            }
+        } catch (SQLException e) {
+            log.error("{} SQL select error", tableName, e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(rs);
+            SQLUtils.closeQuietly(stmt);
+        }
     }
 
     public <T extends IEntity> List<Key> queryKeys(Connection connection, EntityQueryCriteria<T> criteria, int limit) {

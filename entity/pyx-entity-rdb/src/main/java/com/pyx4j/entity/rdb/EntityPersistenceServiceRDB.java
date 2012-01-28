@@ -37,6 +37,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.adapters.EntityModificationAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
@@ -213,15 +214,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (updatedTs != null) {
             updatedTs.setMemberValue(entity, now);
         }
-        if (entity.getPrimaryKey() == null) {
+        boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
+                connection, entity.getPrimaryKey()))));
+        if (isNewEntity) {
             insert(connection, tm, entity, now);
         } else {
             if (!update(connection, tm, entity, now, false)) {
-                if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
-                    insert(connection, tm, entity, now);
-                } else {
-                    throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
-                }
+                throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
             }
         }
         CacheService.entityCache().put(entity);
@@ -253,6 +252,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
+                            if (childEntity.getPrimaryKey() != null) {
+                                log.error("attempt to attach {} to different entity graphs of {}", childEntity.getDebugExceptionInfoString(),
+                                        entity.getDebugExceptionInfoString());
+                                if (ApplicationMode.isDevelopment()) {
+                                    throw new SecurityViolationException(ApplicationMode.DEV + "attempt to attach to different entity graphs "
+                                            + childEntity.getDebugExceptionInfoString());
+                                } else {
+                                    throw new SecurityViolationException("Permission denied");
+                                }
+                            }
                             if (!childEntity.isValueDetached()) {
                                 persist(connection, tableModel(connection, childEntity.getEntityMeta()), childEntity, now);
                             }
@@ -618,8 +627,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             throw new RuntimeException("Saving detached entity " + entity.getDebugExceptionInfoString());
         }
         final IEntity baseEntity = EntityFactory.create(tm.entityMeta().getEntityClass());
+
+        boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
+                connection, entity.getPrimaryKey()))));
+
         boolean updated;
-        if (entity.getPrimaryKey() != null) {
+        if (!isNewEntity) {
             updated = retrieveAndApplyModifications(connection, tm, baseEntity, entity);
         } else {
             fireModificationAdapters(connection, tm, entity);
@@ -632,8 +645,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (memberMeta.isOwnedRelationships()) {
                 if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
                     if (childEntity.getPrimaryKey() != null) {
-                        // attempt to attach to different entity graphs
-                        throw new SecurityViolationException("Permission denied");
+                        if (ApplicationMode.isDevelopment()) {
+                            throw new SecurityViolationException(ApplicationMode.DEV + "attempt to attach to different entity graphs "
+                                    + childEntity.getDebugExceptionInfoString());
+                        } else {
+                            throw new SecurityViolationException("Permission denied");
+                        }
                     } else if (baseChildEntity.getPrimaryKey() != null) {
                         // Cascade delete
                         cascadeDelete(connection, baseChildEntity.getEntityMeta(), baseChildEntity.getPrimaryKey(), baseChildEntity);
@@ -652,15 +669,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (updatedTs != null) {
                 updatedTs.setMemberValue(entity, now);
             }
-            if (entity.getPrimaryKey() == null) {
+            if (isNewEntity) {
                 insert(connection, tm, entity, now);
             } else {
                 if (!update(connection, tm, entity, now, true)) {
-                    if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
-                        insert(connection, tm, entity, now);
-                    } else {
-                        throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
-                    }
+                    throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
                 }
             }
             CacheService.entityCache().put(entity);
@@ -957,6 +970,18 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             } else {
                 throw new Error(e);
             }
+        }
+    }
+
+    @Override
+    public <T extends IEntity> boolean exists(Class<T> entityClass, Key primaryKey) {
+        Connection connection = null;
+        try {
+            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
+            TableModel tm = tableModel(connection, EntityFactory.getEntityMeta(entityClass));
+            return tm.exists(connection, primaryKey);
+        } finally {
+            SQLUtils.closeQuietly(connection);
         }
     }
 

@@ -34,6 +34,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete3AssignedPKEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.RefferenceNotOwnerEntity;
 
 public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
@@ -400,7 +401,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         String testId = uniqueString();
 
         // Prepare data
-        RefferenceEntity ent1 = EntityFactory.create(RefferenceEntity.class);
+        RefferenceNotOwnerEntity ent1 = EntityFactory.create(RefferenceNotOwnerEntity.class);
         ent1.testId().setValue(testId);
         Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
         ent11.nameC1().setValue("c1:" + uniqueString());
@@ -408,7 +409,7 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         srv.persist(ent11);
         srv.persist(ent1);
 
-        RefferenceEntity ent2 = EntityFactory.create(RefferenceEntity.class);
+        RefferenceNotOwnerEntity ent2 = EntityFactory.create(RefferenceNotOwnerEntity.class);
         ent2.testId().setValue(testId);
         // Force creation of second entity of different type with the same key
         Concrete3AssignedPKEntity ent21 = EntityFactory.create(Concrete3AssignedPKEntity.class);
@@ -419,20 +420,20 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         srv.persist(ent2);
 
         {
-            EntityQueryCriteria<RefferenceEntity> criteria = EntityQueryCriteria.create(RefferenceEntity.class);
+            EntityQueryCriteria<RefferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(RefferenceNotOwnerEntity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.eq(criteria.proto().refferences(), ent21));
-            List<RefferenceEntity> found = srv.query(criteria);
+            List<RefferenceNotOwnerEntity> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
             Assert.assertEquals(ent21, found.get(0).refferences().get(0));
         }
 
         //Query by Class
         {
-            EntityQueryCriteria<RefferenceEntity> criteria = EntityQueryCriteria.create(RefferenceEntity.class);
+            EntityQueryCriteria<RefferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(RefferenceNotOwnerEntity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.eq(criteria.proto().refferences(), Concrete1Entity.class));
-            RefferenceEntity found = srv.retrieve(criteria);
+            RefferenceNotOwnerEntity found = srv.retrieve(criteria);
             Assert.assertEquals(ent1, found);
             Assert.assertEquals(ent11, found.refferences().get(0));
         }

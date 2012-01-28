@@ -169,7 +169,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             }
         }
         if (getOwner() != null) {
-            b.append(" ").append(this.getFieldName()).append(" of ").append(GWTJava5Helper.getSimpleName(getOwner().getObjectClass()));
+            b.append(" '").append(this.getFieldName()).append("' of '").append(GWTJava5Helper.getSimpleName(getOwner().getObjectClass())).append("' ")
+                    .append(getOwner().getPath());
         }
         return b.toString();
     }
