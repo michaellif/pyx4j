@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
@@ -48,72 +47,32 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
     }
 
     public void scrollToBottom() {
-        //Workaround for initiation of "scrollHeight" - keep next line!!!
-        DOM.getElementPropertyInt(getElement(), "scrollHeight");
-        DOM.setElementPropertyInt(getElement(), "scrollTop", Integer.MAX_VALUE);
-    }
-
-    static String trimHtml(String html) {
-        while (html.startsWith("<br>")) {
-            html = html.substring(4).trim();
+        if (getEditor() != null) {
+            getEditor().scrollToBottom();
         }
-        while (html.endsWith("<br>")) {
-            html = html.substring(0, html.length() - 4).trim();
-        }
-        // make all tags lower case as in JTidy
-        StringBuilder b = new StringBuilder();
-        boolean tag = false;
-        boolean cr = false;
-        for (char part : html.toCharArray()) {
-            if (part == '<') {
-                tag = true;
-                cr = false;
-            } else if (tag) {
-                if (((part >= 'A') && (part <= 'Z')) || (part == '/')) {
-                    part = Character.toLowerCase(part);
-                } else {
-                    tag = false;
-                }
-                cr = false;
-            } else if ((part == '\r') || (part == '\n')) {
-                cr = true;
-                continue;
-            } else if (cr && (part != ' ')) {
-                b.append(' ');
-                cr = false;
-            }
-            b.append(part);
-        }
-        html = b.toString();
-        return html.replaceAll("<br>", "<br />");
     }
 
     @Override
     public void setNativeValue(String value) {
-        String newValue = value == null ? "" : value;
-// TODO        
-//        if (!newValue.equals(richTextArea.getHTML())) {
-//            richTextArea.setHTML(newValue);
-//        }
-
-        getEditor();
+        if (getEditor() != null) {
+            getEditor().setText(value);
+        }
     }
 
     @Override
     public String getNativeValue() {
-        return "";//TODO trimHtml(richTextArea.getHTML());
+        if (getEditor() != null) {
+            return getEditor().getText();
+        } else {
+            return "";
+        }
     }
 
     @Override
     public void onBrowserEvent(Event event) {
         super.onBrowserEvent(event);
-        switch (event.getTypeInt()) {
-        case Event.ONMOUSEOUT:
-//TODO            toolbar.getElement().getStyle().setOpacity(0.3);
-            break;
-        case Event.ONMOUSEOVER:
-//            toolbar.getElement().getStyle().setOpacity(1);
-            break;
+        if (getEditor() != null) {
+            getEditor().onBrowserEvent(event);
         }
     }
 

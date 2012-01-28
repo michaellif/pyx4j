@@ -45,6 +45,8 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     private final ExtendedRichTextToolbar toolbar;
 
+    private boolean editable;
+
     public ExtendedRichTextArea() {
         super();
 
@@ -89,6 +91,7 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
 
+        editable = true;
     }
 
     public void scrollToBottom() {
@@ -175,32 +178,35 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     @Override
     public void setEnabled(boolean enabled) {
-        // TODO Auto-generated method stub
+        richTextArea.setEnabled(enabled);
 
     }
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
+        return richTextArea.isEnabled();
     }
 
     @Override
     public void setEditable(boolean editable) {
-        // TODO Auto-generated method stub
-
+        this.editable = editable;
     }
 
     @Override
     public boolean isEditable() {
-        // TODO Auto-generated method stub
-        return false;
+        return editable;
     }
 
     @Override
     public int getTabIndex() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public void setTabIndex(int index) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -211,27 +217,17 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     @Override
     public void setFocus(boolean focused) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setTabIndex(int index) {
-        // TODO Auto-generated method stub
-
+        richTextArea.setFocus(focused);
     }
 
     @Override
     public String getText() {
-        // TODO Auto-generated method stub
-        // Html only
-        return null;
+        return trimHtml(richTextArea.getHTML());
     }
 
     @Override
     public void setText(String html) {
-        // TODO Auto-generated method stub
-
+        richTextArea.setHTML(html);
     }
 
     @Override
