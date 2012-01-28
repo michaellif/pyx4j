@@ -31,35 +31,40 @@ import com.propertyvista.domain.property.vendor.WarrantyItem;
 
 public class CompanyVendor {
 
+    //TODO fix perstence or declaration of Company
+    private static boolean TODO_FIX_BROKEN_MODEL = true;
+
     public static Company createCompany() {
 
         Company company = EntityFactory.create(Company.class);
 
         company.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
 
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            company.addresses().add(CommonsGenerator.createAddress());
-        }
+        if (!TODO_FIX_BROKEN_MODEL) {
+            for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+                company.addresses().add(CommonsGenerator.createAddress());
+            }
 
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            CompanyPhone phone = EntityFactory.create(CompanyPhone.class);
-            phone.phone().setValue(CommonsGenerator.createPhone());
-            company.phones().add(phone);
-        }
+            for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+                CompanyPhone phone = EntityFactory.create(CompanyPhone.class);
+                phone.phone().setValue(CommonsGenerator.createPhone());
+                company.phones().add(phone);
+            }
 
-        String domain = company.name().getStringView().toLowerCase() + ".com";
-        String website = "http://www." + domain;
-        company.website().setValue(website);
+            String domain = company.name().getStringView().toLowerCase() + ".com";
+            String website = "http://www." + domain;
+            company.website().setValue(website);
 
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            CompanyEmail email = EntityFactory.create(CompanyEmail.class);
-            email.email().setValue("contact" + (i + 1) + "@" + domain);
-            company.emails().add(email /* , Email.Type.work */);
-        }
+            for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+                CompanyEmail email = EntityFactory.create(CompanyEmail.class);
+                email.email().setValue("contact" + (i + 1) + "@" + domain);
+                company.emails().add(email /* , Email.Type.work */);
+            }
 
-        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-            OrganizationContacts contacts = createOrganizationContacts();
-            company.contacts().add(contacts);
+            for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+                OrganizationContacts contacts = createOrganizationContacts();
+                company.contacts().add(contacts);
+            }
         }
 
         // TODO Add logo

@@ -14,7 +14,6 @@
 package com.propertvista.generator;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -56,7 +55,6 @@ public class DashboardGenerator extends Dashboards {
         buildingLister.pageNumber().setValue(0);
         buildingLister.refreshInterval().setValue(RefreshInterval.Never);
         buildingLister.docking().column().setValue(0);
-        Persistence.service().persist(buildingLister);
 
         dmd.gadgets().add(buildingLister);
 
@@ -94,14 +92,12 @@ public class DashboardGenerator extends Dashboards {
         unitAvailabilityReport.pageNumber().setValue(0);
         unitAvailabilityReport.defaultFilteringPreset().setValue(FilterPreset.All);
         unitAvailabilityReport.docking().column().setValue(0);
-        Persistence.service().persist(unitAvailabilityReport);
         dmd.gadgets().add(unitAvailabilityReport);
 
         AvailabilitySummary availabilitySummary = EntityFactory.create(AvailabilitySummary.class);
         availabilitySummary.user().id().setValue(Key.DORMANT_KEY);
         availabilitySummary.refreshInterval().setValue(RefreshInterval.Never);
         availabilitySummary.docking().column().setValue(0);
-        Persistence.service().persist(availabilitySummary);
         dmd.gadgets().add(availabilitySummary);
 
         TurnoverAnalysisMetadata turnoverAnalysis = EntityFactory.create(TurnoverAnalysisMetadata.class);
@@ -109,7 +105,6 @@ public class DashboardGenerator extends Dashboards {
         turnoverAnalysis.refreshInterval().setValue(RefreshInterval.Never);
         turnoverAnalysis.isTurnoverMeasuredByPercent().setValue(false);
         turnoverAnalysis.docking().column().setValue(0);
-        Persistence.service().persist(turnoverAnalysis);
         dmd.gadgets().add(turnoverAnalysis);
 
         return dmd;
@@ -131,7 +126,6 @@ public class DashboardGenerator extends Dashboards {
         arrearsStatus.pageNumber().setValue(0);
         arrearsStatus.category().setValue(Category.Total);
         arrearsStatus.docking().column().setValue(0);
-        Persistence.service().persist(arrearsStatus);
         dmd.gadgets().add(arrearsStatus);
 
         arrearsStatus = EntityFactory.create(ArrearsStatus.class);
@@ -141,7 +135,6 @@ public class DashboardGenerator extends Dashboards {
         arrearsStatus.pageNumber().setValue(0);
         arrearsStatus.category().setValue(Category.Rent);
         arrearsStatus.docking().column().setValue(0);
-        Persistence.service().persist(arrearsStatus);
         dmd.gadgets().add(arrearsStatus);
 
         arrearsStatus = EntityFactory.create(ArrearsStatus.class);
@@ -151,7 +144,6 @@ public class DashboardGenerator extends Dashboards {
         arrearsStatus.pageNumber().setValue(0);
         arrearsStatus.category().setValue(Category.Parking);
         arrearsStatus.docking().column().setValue(0);
-        Persistence.service().persist(arrearsStatus);
         dmd.gadgets().add(arrearsStatus);
 
         arrearsStatus = EntityFactory.create(ArrearsStatus.class);
@@ -161,14 +153,12 @@ public class DashboardGenerator extends Dashboards {
         arrearsStatus.pageNumber().setValue(0);
         arrearsStatus.category().setValue(Category.Other);
         arrearsStatus.docking().column().setValue(0);
-        Persistence.service().persist(arrearsStatus);
         dmd.gadgets().add(arrearsStatus);
 
         ArrearsYOYAnalysisChart chart = EntityFactory.create(ArrearsYOYAnalysisChart.class);
         chart.user().id().setValue(Key.DORMANT_KEY);
         chart.refreshInterval().setValue(RefreshInterval.Never);
         chart.docking().column().setValue(0);
-        Persistence.service().persist(chart);
         dmd.gadgets().add(chart);
 
         return dmd;

@@ -40,10 +40,10 @@ import com.propertyvista.domain.contact.Email;
 import com.propertyvista.domain.contact.Phone;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -202,24 +202,24 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             // Elevators
             List<Elevator> elevators = generator.createElevators(building, config().numElevators);
             for (Elevator elevator : elevators) {
-                CmpanyVendorPersistHelper.persistWarranty(elevator.warranty());
-                CmpanyVendorPersistHelper.persistMaintenance(elevator.maintenance());
+                Persistence.service().persist(elevator.warranty().contract().contractor());
+                Persistence.service().persist(elevator.maintenance().contract().contractor());
                 Persistence.service().persist(elevator);
             }
 
             // Boilers
             List<Boiler> boilers = generator.createBoilers(building, config().numBoilers);
             for (Boiler boiler : boilers) {
-                CmpanyVendorPersistHelper.persistWarranty(boiler.warranty());
-                CmpanyVendorPersistHelper.persistMaintenance(boiler.maintenance());
+                Persistence.service().persist(boiler.warranty().contract().contractor());
+                Persistence.service().persist(boiler.maintenance().contract().contractor());
                 Persistence.service().persist(boiler);
             }
 
             // Roofs
             List<Roof> roofs = generator.createRoofs(building, config().numRoofs);
             for (Roof roof : roofs) {
-                CmpanyVendorPersistHelper.persistWarranty(roof.warranty());
-                CmpanyVendorPersistHelper.persistMaintenance(roof.maintenance());
+                Persistence.service().persist(roof.warranty().contract().contractor());
+                Persistence.service().persist(roof.maintenance().contract().contractor());
                 Persistence.service().persist(roof);
             }
 
