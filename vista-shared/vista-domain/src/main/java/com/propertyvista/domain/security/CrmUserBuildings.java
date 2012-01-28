@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.security;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -27,9 +28,11 @@ public interface CrmUserBuildings extends IEntity {
     @Indexed
     @MemberColumn(name = "usr")
     @JoinColumn
+    @Detached
     CrmUser user();
 
     @JoinColumn
-    Building environment();
+    @Detached
+    Building building();
 
 }

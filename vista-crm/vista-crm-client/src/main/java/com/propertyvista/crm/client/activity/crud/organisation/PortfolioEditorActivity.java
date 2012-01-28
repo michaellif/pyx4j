@@ -26,9 +26,8 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioEditorActivity extends EditorActivityBase<Portfolio> {
 
-    @SuppressWarnings("unchecked")
     public PortfolioEditorActivity(Place place) {
-        super(place, OrganizationViewFactory.instance(PortfolioEditorView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class),
+        super(place, OrganizationViewFactory.instance(PortfolioEditorView.class), GWT.<AbstractCrudService<Portfolio>> create(PortfolioCrudService.class),
                 Portfolio.class);
     }
 }
