@@ -15,12 +15,17 @@ package com.propertyvista.crm.client.ui.crud;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -29,11 +34,14 @@ import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.rpc.dto.UpdateUploadDTO;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
+import com.propertyvista.dto.ImportAdapterType;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static final I18n i18n = I18n.get(UpdateUploadDialog.class);
+
+    private final CEntityEditor<UpdateUploadDTO> form;
 
     private final UploadPanel<UpdateUploadDTO, IEntity> uploadPanel;
 
@@ -44,6 +52,10 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
         dialog = new Dialog(i18n.tr("Upload Update"), this, null);
 
         uploadPanel = new UploadPanel<UpdateUploadDTO, IEntity>((UploadService<UpdateUploadDTO, IEntity>) GWT.create(UpdateUploadService.class)) {
+            @Override
+            protected UpdateUploadDTO getUploadData() {
+                return form.getValue();
+            }
 
             @Override
             protected void onUploadSubmit() {
@@ -70,7 +82,24 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
-        dialog.setBody(uploadPanel);
+        form = new CEntityEditor<UpdateUploadDTO>(UpdateUploadDTO.class) {
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, uploadPanel);
+                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().adapterType())).componentWidth(10).build());
+                return main;
+            }
+        };
+        UpdateUploadDTO defaultSettings = EntityFactory.create(UpdateUploadDTO.class);
+        defaultSettings.adapterType().setValue(ImportAdapterType.vista);
+
+        form.initContent();
+        form.populate(defaultSettings);
+
+        dialog.setBody(form.asWidget());
         dialog.setPixelSize(460, 150);
     }
 

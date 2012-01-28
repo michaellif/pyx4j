@@ -145,7 +145,7 @@ public class BuildingImporter extends ImportPersister {
                             throw new UserRuntimeException("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '"
                                     + buildingIO.propertyCode().getValue() + "' can't be empty");
                         }
-
+                        aptUnitIO.number().setValue(AptUnitConverter.trimUnitNumber(aptUnitIO.number().getValue()));
                         {
                             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));

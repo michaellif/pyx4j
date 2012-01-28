@@ -278,8 +278,7 @@ public class BuildingUpdater extends ImportPersister {
         if (units.size() == 0) {
             criteria = EntityQueryCriteria.create(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
-            String unitNumber = trimUnitNumber(aptUnitIO.number().getValue());
-            aptUnitIO.number().setValue(unitNumber);
+            aptUnitIO.number().setValue(AptUnitConverter.trimUnitNumber(aptUnitIO.number().getValue()));
             criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
             if (floorplan != null) {
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
@@ -309,8 +308,4 @@ public class BuildingUpdater extends ImportPersister {
         }
     }
 
-    public String trimUnitNumber(String string) {
-        string = string.replaceFirst("^#+(?!$)", ""); //trims leading (#) and zeroes
-        return string.replaceFirst("^0+(?!$)", "");
-    }
 }

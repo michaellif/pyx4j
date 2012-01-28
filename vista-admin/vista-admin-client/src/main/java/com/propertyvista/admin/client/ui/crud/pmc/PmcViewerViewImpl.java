@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,7 +29,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
     public PmcViewerViewImpl() {
         super(AdminSiteMap.Management.PMC.class, new PmcEditorForm(true));
 
-        Button upload = new Button("Upload import.xml", new ClickHandler() {
+        Button upload = new Button("Upload import", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ImportUploadDialog.show(form.getValue());

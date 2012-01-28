@@ -34,7 +34,7 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
         super(CrmSiteMap.Properties.Building.class);
         setLister(new BuildingLister());
 
-        upload = new Button(i18n.tr("Upload Update.xml"), new ClickHandler() {
+        upload = new Button(i18n.tr("Upload Update"), new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
