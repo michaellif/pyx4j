@@ -51,9 +51,4 @@ public class CRadioGroupInteger extends CRadioGroup<Integer> {
         return options.keySet();
     }
 
-    @Override
-    public String getOptionDebugId(Integer option) {
-        return option.toString();
-    }
-
 }

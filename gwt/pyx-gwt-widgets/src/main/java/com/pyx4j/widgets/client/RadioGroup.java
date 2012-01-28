@@ -183,14 +183,18 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
         }
     }
 
-//    @Override
-//    protected void onEnsureDebugId(String baseID) {
-//        super.onEnsureDebugId(baseID);
-//
-//        for (Map.Entry<E, RadioButton> me : buttons.entrySet()) {
-//            me.getValue().ensureDebugId(baseID + "_" + cComponent.getOptionDebugId(me.getKey()));
-//        }
-//    }
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+
+        for (Map.Entry<E, RadioButton> me : buttons.entrySet()) {
+            me.getValue().ensureDebugId(baseID + "_" + getOptionDebugId(me.getKey()));
+        }
+    }
+
+    public String getOptionDebugId(E option) {
+        return option.toString();
+    }
 
     @Override
     public void setTabIndex(int tabIndex) {
@@ -240,4 +244,5 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
     }
+
 }

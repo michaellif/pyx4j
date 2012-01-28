@@ -45,8 +45,6 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
 
     public abstract Collection<E> getOptions();
 
-    public abstract String getOptionDebugId(E option);
-
     public IFormat<E> getFormat() {
         return format;
     }

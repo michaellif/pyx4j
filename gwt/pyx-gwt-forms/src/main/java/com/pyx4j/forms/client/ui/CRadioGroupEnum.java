@@ -55,13 +55,4 @@ public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
         return EnumSet.allOf(optionsClass);
     }
 
-    @Override
-    public String getOptionDebugId(E option) {
-        if (option == null) {
-            return "nil";
-        } else {
-            return option.name();
-        }
-    }
-
 }

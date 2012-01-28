@@ -62,14 +62,6 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
     }
 
     @Override
-    protected void onEnsureDebugId(String baseID) {
-//        super.onEnsureDebugId(baseID);
-//        for (Map.Entry<E, RadioButton> me : buttons.entrySet()) {
-//            me.getValue().ensureDebugId(baseID + "_" + cComponent.getOptionDebugId(me.getKey()));
-//        }
-    }
-
-    @Override
     protected RadioGroup<E> createEditor() {
         return new RadioGroup<E>(getCComponent().getLayout(), getCComponent().getOptions());
     }

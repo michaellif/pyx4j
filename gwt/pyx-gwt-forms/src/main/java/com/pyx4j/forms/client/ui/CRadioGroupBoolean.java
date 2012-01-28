@@ -77,14 +77,4 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
         this.falseText = falseText;
     }
 
-    @Override
-    public String getOptionDebugId(Boolean option) {
-        if (option == null) {
-            return "nil";
-        } else if (option) {
-            return "Y";
-        } else {
-            return "N";
-        }
-    }
 }
