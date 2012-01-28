@@ -20,12 +20,26 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.widgets.client.RadioGroup;
 
 public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGroup<E>> {
 
     public NRadioGroup(CRadioGroup<E> cComponent) {
         super(cComponent);
+    }
+
+    @Override
+    protected void onEditorCreate() {
+        super.onEditorCreate();
+        getEditor().addValueChangeHandler(new ValueChangeHandler<E>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<E> event) {
+                getCComponent().onEditingStop();
+            }
+        });
     }
 
     @Override

@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -43,7 +44,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 
-public class RadioGroup<E> extends SimplePanel implements IFocusWidget {
+public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValueChangeHandlers<E> {
 
     public enum Layout {
         VERTICAL, HORISONTAL;
@@ -90,6 +91,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget {
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue()) {
                         applyDependentStyles();
+                        RadioGroup.this.fireEvent(event);
                     }
                 }
             });
@@ -234,4 +236,8 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget {
         return value.toString();
     }
 
+    @Override
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
+        return addHandler(handler, ValueChangeEvent.getType());
+    }
 }
