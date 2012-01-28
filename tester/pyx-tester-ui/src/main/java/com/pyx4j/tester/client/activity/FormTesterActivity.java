@@ -56,7 +56,6 @@ public class FormTesterActivity extends AbstractActivity implements FormTesterVi
 
     @Override
     public void onClickClean() {
-        System.out.println("++++++ onClickClean");
         view.clean();
     }
 

@@ -167,7 +167,6 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         }
 
         public boolean isChecked() {
-            System.out.println("++++++++++++++isSelected " + value + " " + checked);
             return checked;
         }
 
