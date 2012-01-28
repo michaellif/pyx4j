@@ -25,7 +25,7 @@ import java.text.ParseException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.RegexValidator;
 
-public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTextBox> {
+public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox> {
 
     public CPasswordTextField() {
         this(null);
@@ -42,8 +42,8 @@ public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTex
     }
 
     @Override
-    protected NativePasswordTextBox createWidget() {
-        return new NativePasswordTextBox(this);
+    protected NPasswordTextBox createWidget() {
+        return new NPasswordTextBox(this);
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

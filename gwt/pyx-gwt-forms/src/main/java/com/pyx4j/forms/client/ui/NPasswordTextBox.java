@@ -14,25 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
- * @author michaellif
+ * Created on Jan 11, 2010
+ * @author Michael
  * @version $Id$
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.forms.client.ui;
 
-public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextBox implements ITextWidget {
+import com.pyx4j.widgets.client.PasswordTextBox;
 
-    public PasswordTextBox() {
-        setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+public class NPasswordTextBox extends NTextFieldBase<String, PasswordTextBox, CTextFieldBase<String, ?>> implements INativeTextComponent<String> {
+
+    public NPasswordTextBox(final CPasswordTextField cTextField) {
+        super(cTextField);
     }
 
     @Override
-    public void setEditable(boolean editable) {
-        setReadOnly(!editable);
+    protected PasswordTextBox createEditor() {
+
+        return new PasswordTextBox();
     }
 
-    @Override
-    public boolean isEditable() {
-        return !isReadOnly();
-    }
 }
