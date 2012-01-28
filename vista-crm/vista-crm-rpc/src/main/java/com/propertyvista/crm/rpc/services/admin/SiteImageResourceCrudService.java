@@ -7,22 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 23, 2012
- * @author vlads
+ * Created on Jan 27, 2012
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.site;
+package com.propertyvista.crm.rpc.services.admin;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.site.SiteImageResource;
 
-public interface SiteImageResource extends IEntity {
+public interface SiteImageResourceCrudService extends AbstractCrudService<SiteImageResource> {
 
-    @EmbeddedEntity
-    File fileInfo();
-
-    IPrimitive<String> title();
 }

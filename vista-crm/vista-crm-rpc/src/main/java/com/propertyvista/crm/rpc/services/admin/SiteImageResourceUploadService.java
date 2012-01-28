@@ -22,7 +22,7 @@ import com.pyx4j.essentials.rpc.upload.RichTextUploadService;
 
 import com.propertyvista.domain.site.SiteImageResource;
 
-public interface SiteImageResourcesUploadService extends RichTextUploadService<IEntity, SiteImageResource> {
+public interface SiteImageResourceUploadService extends RichTextUploadService<IEntity, SiteImageResource> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.BMP);

@@ -14,7 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,7 +29,10 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -38,8 +43,10 @@ import com.pyx4j.widgets.client.richtext.ImageGallery;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.crm.rpc.services.admin.SiteImageResourcesUploadService;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PageContentImageProvider extends Dialog implements CancelOption, RichTextImageProvider {
 
@@ -55,10 +62,18 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
 
     private final TextBox imgTitle;
 
+    private final SiteImageResourceCrudService service;
+
+    private final Map<Image, Key> imageResourceMap;
+
     @SuppressWarnings("unchecked")
     public PageContentImageProvider() {
         super("Image Picker");
         this.setDialogOptions(this);
+
+        service = GWT.create(SiteImageResourceCrudService.class);
+
+        imageResourceMap = new HashMap<Image, Key>();
 
         gallery = new ImageGallery() {
             @Override
@@ -70,10 +85,25 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
             @Override
             public void onImageRemoved(Image image) {
                 // TODO use service to remove on server
+                service.delete(new AsyncCallback<Boolean>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        // TODO Auto-generated method stub
+
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        // TODO Auto-generated method stub
+
+                    }
+
+                }, imageResourceMap.get(image));
             }
         };
 
-        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourcesUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class)) {
             @Override
             protected void onUploadSubmit() {
                 PageContentImageProvider.this.getCancelButton().setEnabled(false);
@@ -104,6 +134,8 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
                 submitButton.setEnabled(true);
             }
         };
+        uploadPanel.setSupportedExtensions(SiteImageResourceUploadService.supportedFormats);
+        uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.siteImageResourceServletMapping);
 
         imgTitle = new TextBox();
 
@@ -135,24 +167,29 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
         setBody(content);
 
         // TODO use service to get list from server
+        service.list(new AsyncCallback<EntitySearchResult<SiteImageResource>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                // TODO Auto-generated method stub
+                return;
+            }
+
+            @Override
+            public void onSuccess(EntitySearchResult<SiteImageResource> result) {
+                for (SiteImageResource rc : result.getData()) {
+                    String url = MediaUtils.createSiteImageResourceUrl(rc);
+                    Image image = new Image(url);
+                    imageResourceMap.put(image, rc.getPrimaryKey());
+                    gallery.addImage(image);
+                }
+            }
+
+        }, EntityListCriteria.create(SiteImageResource.class));
+
         // add sample images
         List<Image> images = new ArrayList<Image>();
         Image image = new Image("http://images.metmuseum.org/CRDImages/ma/web-thumb/1997.149.9.jpg");
-        image.setTitle("Reclining Nude");
-        images.add(image);
-        image = new Image("http://images.metmuseum.org/CRDImages/ma/web-thumb/DT1308.jpg");
-        image.setTitle("The Mountain");
-        images.add(image);
-        image = new Image("http://images.metmuseum.org/CRDImages/ma/web-thumb/DT2533.jpg");
-        image.setTitle("Juan Gris");
-        images.add(image);
-        image = new Image("http://images.metmuseum.org/CRDImages/ma/web-thumb/DT7873.jpg");
-        image.setTitle("The Marketplace, Vitebsk");
-        images.add(image);
-        image = new Image("http://images.metmuseum.org/CRDImages/ma/web-thumb/DT6414.jpg");
-        image.setTitle("Self-Portrait");
-        images.add(image);
-        image = new Image("http://images.metmuseum.org/CRDImages/ma/web-thumb/1997.149.9.jpg");
         image.setTitle("Reclining Nude");
         images.add(image);
         image = new Image("http://images.metmuseum.org/CRDImages/ma/web-thumb/DT1308.jpg");

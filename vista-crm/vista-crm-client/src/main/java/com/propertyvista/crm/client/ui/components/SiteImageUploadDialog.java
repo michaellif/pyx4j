@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;
-import com.propertyvista.crm.rpc.services.admin.SiteImageResourcesUploadService;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -43,7 +43,7 @@ public abstract class SiteImageUploadDialog extends VerticalPanel implements OkC
     public SiteImageUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourcesUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
