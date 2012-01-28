@@ -143,6 +143,17 @@ public class Button extends FocusPanel implements IFocusWidget {
         buttonFacesHandler.enable(enabled);
     }
 
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        if (this.image != null) {
+            image.ensureDebugId(baseID + "-image");
+        }
+
+        if (textLabel != null) {
+            textLabel.ensureDebugId(baseID + "-label");
+        }
+    }
+
     static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler {
 
         private Button button;

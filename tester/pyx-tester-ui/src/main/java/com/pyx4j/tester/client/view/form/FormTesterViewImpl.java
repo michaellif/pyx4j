@@ -74,6 +74,8 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
             }
         });
 
+        populateButton.ensureDebugId("buttonPanle-populateButton");
+
         buttonPanel.add(populateButton);
 
         cleanButton = new Button("Clean");
@@ -85,6 +87,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
             }
         });
+        cleanButton.ensureDebugId("buttonPanle-cleanButton");
         buttonPanel.add(cleanButton);
 
         repopulateButton = new Button("Repopulate");
@@ -95,6 +98,8 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
                 presenter.onClickRepopulate();
             }
         });
+
+        repopulateButton.ensureDebugId("buttonPanle-repopulateButton");
         buttonPanel.add(repopulateButton);
 
         container.add(buttonPanel, DockPanel.NORTH);

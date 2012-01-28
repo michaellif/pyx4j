@@ -43,16 +43,16 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     private TriggerPanel triggerPanel;
 
-    private ImageResource triggerImage;
+    private ImageResource triggerImageResource;
 
     public NComponent(CCOMP cComponent) {
         this(cComponent, null);
     }
 
-    public NComponent(CCOMP cComponent, ImageResource triggerImage) {
+    public NComponent(CCOMP cComponent, ImageResource triggerImageResource) {
         super();
         this.cComponent = cComponent;
-        this.triggerImage = triggerImage;
+        this.triggerImageResource = triggerImageResource;
 
         setViewable(cComponent.isViewable());
 
@@ -112,12 +112,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (editor == null) {
                 editor = createEditor();
                 onEditorCreate();
-                if (triggerImage != null) {
-                    triggerPanel = new TriggerPanel(this, triggerImage);
+                if (triggerImageResource != null) {
+                    triggerPanel = new TriggerPanel(this, triggerImageResource);
                 }
             }
             onEditorInit();
-            if (triggerImage == null) {
+            if (triggerImageResource == null) {
                 setWidget(editor);
             } else {
                 setWidget(triggerPanel);
@@ -195,6 +195,10 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     public void setDebugId(IDebugId debugId) {
         if (getEditor() != null) {
             getEditor().ensureDebugId(debugId.debugId());
+
+            if (triggerPanel != null)
+                triggerPanel.ensureDebugId(debugId.debugId() + "-triggerPanel");
+
         }
         if (getViewer() != null) {
             getViewer().ensureDebugId(debugId.debugId());

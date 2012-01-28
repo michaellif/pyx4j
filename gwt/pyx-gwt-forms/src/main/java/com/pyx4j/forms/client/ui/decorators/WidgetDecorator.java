@@ -113,6 +113,8 @@ public class WidgetDecorator extends FlexTable {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
             infoImageHolder.setWidget(infoImage);
+            infoImageHolder.ensureDebugId(component.getCompositeDebugId().debugId() + "-infoImageHolder");
+            infoImage.ensureDebugId(component.getCompositeDebugId().debugId() + "-infoImageHolder-infoImage");
         }
 
         mandatoryImageHolder = new SpaceHolder();
@@ -197,6 +199,7 @@ public class WidgetDecorator extends FlexTable {
                 mandatoryImage = new Image();
                 mandatoryImage.setResource(ImageFactory.getImages().mandatory());
                 mandatoryImage.setTitle("This field is mandatory");
+                mandatoryImage.ensureDebugId(component.getCompositeDebugId().debugId() + "-mandatoryImage");
             }
             mandatoryImageHolder.add(mandatoryImage);
         } else {
@@ -210,6 +213,8 @@ public class WidgetDecorator extends FlexTable {
         } else {
             validationLabel.setText(null);
         }
+
+        validationLabel.ensureDebugId(component.getCompositeDebugId().debugId() + "-validationLabel");
 
     }
 
