@@ -75,6 +75,15 @@ public class Context {
     }
 
     /**
+     * @see Lifecycle#inheritUserContext(InheritableUserContext);
+     * 
+     * @return
+     */
+    public static InheritableUserContext getInheritableUserContext() {
+        return new InheritableUserContext(getVisit());
+    }
+
+    /**
      * TODO remove public.
      * 
      * @return current HttpSession

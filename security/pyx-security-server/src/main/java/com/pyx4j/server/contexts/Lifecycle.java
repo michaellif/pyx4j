@@ -118,10 +118,14 @@ public class Lifecycle {
                 Context.getResponse().addCookie(c);
             }
         } finally {
-            Context.remove();
-            NamespaceManager.remove();
-            I18nManager.removeThreadLocale();
+            endContext();
         }
+    }
+
+    public static void endContext() {
+        Context.remove();
+        NamespaceManager.remove();
+        I18nManager.removeThreadLocale();
     }
 
     public static void endRpcRequest() {
@@ -194,6 +198,12 @@ public class Lifecycle {
         return sessionToken;
     }
 
+    public static void inheritUserContext(InheritableUserContext inheritableUserContext) {
+        Context.setVisit(inheritableUserContext.abstractVisit);
+        NamespaceManager.setNamespace(inheritableUserContext.namespace);
+        I18nManager.setThreadLocale(inheritableUserContext.locale);
+    }
+
     public static void endSession() {
         endSession(Context.getSession());
     }
@@ -213,4 +223,5 @@ public class Lifecycle {
             Context.getRequest().setAttribute(END_SESSION_ATR, Boolean.TRUE);
         }
     }
+
 }

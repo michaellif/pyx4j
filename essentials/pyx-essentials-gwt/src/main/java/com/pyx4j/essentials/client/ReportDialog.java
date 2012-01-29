@@ -76,7 +76,7 @@ public class ReportDialog extends DeferredProcessDialog {
 
             @Override
             public void onSuccess(String deferredCorrelationID) {
-                rd.setDeferredCorrelationID(deferredCorrelationID);
+                rd.startProgress(deferredCorrelationID);
             }
 
         };
@@ -86,7 +86,7 @@ public class ReportDialog extends DeferredProcessDialog {
     }
 
     public ReportDialog(String title, String initialMessage) {
-        super(title, initialMessage);
+        super(title, initialMessage, false);
         downloadServletPath = NavigationUri.getDeploymentBaseURL() + "download/";
     }
 
@@ -99,8 +99,7 @@ public class ReportDialog extends DeferredProcessDialog {
     }
 
     @Override
-    protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
-
+    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
         if (result.isCompletedSuccess()) {
             downloadUrl = ((DeferredReportProcessProgressResponse) result).getDownloadLink();
             if (useDownloadFrame()) {

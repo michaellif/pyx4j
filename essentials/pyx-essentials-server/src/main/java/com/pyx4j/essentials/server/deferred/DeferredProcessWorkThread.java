@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 29, 2011
+ * Created on Jan 29, 2012
  * @author vlads
  * @version $Id$
  */
@@ -25,44 +25,44 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.InheritableUserContext;
+import com.pyx4j.server.contexts.Lifecycle;
 
-/**
- * @deprecated DeferredProcessRegistry.fork(...) should be used
- * @author vlads
- * 
- */
-@Deprecated
-public class DeferredProcessorThread extends Thread {
+class DeferredProcessWorkThread extends Thread {
 
-    private final static Logger log = LoggerFactory.getLogger(DeferredProcessorThread.class);
+    private final static Logger log = LoggerFactory.getLogger(DeferredProcessWorkThread.class);
 
-    private final IDeferredProcess process;
+    private final DeferredProcessInfo info;
 
-    private final Runnable target;
+    InheritableUserContext inheritableUserContext;
 
-    public DeferredProcessorThread(String name, IDeferredProcess process, Runnable target) {
-        super(name + " processor");
-        this.process = process;
-        this.target = target;
+    DeferredProcessWorkThread(String name, DeferredProcessInfo info) {
+        super(name + "Process");
+        this.info = info;
+        inheritableUserContext = Context.getInheritableUserContext();
     }
 
     @Override
     public final void run() {
         try {
-            target.run();
-            process.status().setCompleted();
-            log.debug("processor completed");
+            Lifecycle.inheritUserContext(inheritableUserContext);
+            do {
+                info.process.execute();
+            } while (!info.process.status().isCompleted());
+            log.debug("process completed");
         } catch (UserRuntimeException e) {
             log.error("processor error", e);
-            //TODO wrong in general case.
-            process.status().setErrorStatusMessage(e.getMessage());
+            info.setProcessErrorWithStatusMessage(e.getMessage());
         } catch (Throwable e) {
             log.error("processor error", e);
             if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                process.status().setErrorStatusMessage(e.getClass().getName() + " " + e.getMessage());
+                info.setProcessErrorWithStatusMessage(e.getClass().getName() + " " + e.getMessage());
             } else {
-                process.status().setError();
+                info.setProcessErrorWithStatusMessage(null);
             }
+        } finally {
+            Lifecycle.endContext();
         }
     }
 }

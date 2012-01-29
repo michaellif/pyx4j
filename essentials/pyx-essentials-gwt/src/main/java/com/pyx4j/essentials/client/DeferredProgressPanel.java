@@ -40,6 +40,11 @@ public class DeferredProgressPanel extends FlowPanel {
 
     private final DeferredProcessService service;
 
+    /*
+     * The Process executed in User request threads, e.g. On GAE
+     */
+    private final boolean executeByUserRequests;
+
     protected String deferredCorrelationId;
 
     protected long deferredProcessStartTime;
@@ -54,8 +59,12 @@ public class DeferredProgressPanel extends FlowPanel {
 
     private boolean completed;
 
-    public DeferredProgressPanel(String width, String height) {
+    DeferredProgressListener listener;
+
+    public DeferredProgressPanel(String width, String height, boolean executeByUserRequests, DeferredProgressListener listener) {
         service = GWT.create(DeferredProcessService.class);
+        this.executeByUserRequests = executeByUserRequests;
+        this.listener = listener;
         this.add(progressBar = new ProgressBar());
         progressBar.setWidth(width);
         progressBar.setHeight(height);
@@ -111,12 +120,6 @@ public class DeferredProgressPanel extends FlowPanel {
         deferredCorrelationId = null;
     }
 
-    protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
-    }
-
-    protected void onDeferredError(DeferredProcessProgressResponse result) {
-    }
-
     private void checkProgressStatus(boolean finalize) {
         AsyncCallback<DeferredProcessProgressResponse> progressHandlingCallback = new AsyncCallback<DeferredProcessProgressResponse>() {
 
@@ -138,9 +141,9 @@ public class DeferredProgressPanel extends FlowPanel {
             public void onSuccess(DeferredProcessProgressResponse result) {
                 checkProgressErrorCount = 0;
                 if (result.isError()) {
-                    log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
+                    log.info("Deferred erred in " + TimeUtils.secSince(deferredProcessStartTime));
                     if (!completed) {
-                        onDeferredError(result);
+                        listener.onDeferredError(result);
                         completed = true;
                     }
                     deferredCorrelationId = null;
@@ -149,7 +152,7 @@ public class DeferredProgressPanel extends FlowPanel {
                     progressBar.setProgress(progressBar.getMaxProgress());
                     log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
                     if (!completed) {
-                        onDeferredSuccess(result);
+                        listener.onDeferredSuccess(result);
                         completed = true;
                     }
                     deferredCorrelationId = null;
@@ -165,7 +168,11 @@ public class DeferredProgressPanel extends FlowPanel {
 
         };
 
-        service.getStatus(progressHandlingCallback, deferredCorrelationId, finalize);
+        if (executeByUserRequests && !finalize) {
+            service.continueExecution(progressHandlingCallback, deferredCorrelationId);
+        } else {
+            service.getStatus(progressHandlingCallback, deferredCorrelationId, finalize);
+        }
 
     }
 }

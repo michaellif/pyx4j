@@ -62,6 +62,8 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
 
     protected volatile boolean canceled;
 
+    private int maximum = 0;
+
     private int fetchCount = 0;
 
     private boolean fetchCompleate;
@@ -94,7 +96,9 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             long start = System.currentTimeMillis();
             try {
                 if (selectedMemberNames == null) {
+                    maximum = Persistence.service().count(request.getCriteria());
                     createHeader();
+
                 }
                 @SuppressWarnings("unchecked")
                 ICursorIterator<E> it = (ICursorIterator<E>) Persistence.service().query(encodedCursorRefference, request.getCriteria());
@@ -217,6 +221,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
         } else {
             DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
             r.setProgress(fetchCount);
+            r.setProgressMaximum(maximum);
             if (canceled) {
                 r.setCanceled();
             }

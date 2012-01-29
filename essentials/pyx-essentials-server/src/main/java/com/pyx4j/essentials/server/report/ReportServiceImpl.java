@@ -33,7 +33,7 @@ public class ReportServiceImpl<E extends IEntity> implements ReportService<E> {
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.register(new SearchReportDeferredProcess(reportRequest)));
+        callback.onSuccess(DeferredProcessRegistry.fork(new SearchReportDeferredProcess<E>(reportRequest), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
     }
 
     @Override

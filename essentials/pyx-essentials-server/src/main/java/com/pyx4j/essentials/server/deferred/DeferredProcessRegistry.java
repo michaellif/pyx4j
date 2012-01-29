@@ -25,6 +25,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
@@ -34,14 +35,16 @@ public class DeferredProcessRegistry {
 
     private static final String DEFERRED_PROCESS_SESSION_ATTRIBUTE = DeferredProcessServicesImpl.class.getName();
 
+    public static final String THREAD_POOL_DOWNLOADS = "Download";
+
     @SuppressWarnings("unchecked")
-    private static synchronized HashMap<String, IDeferredProcess> getMap() {
+    private static synchronized HashMap<String, DeferredProcessInfo> getMap() {
         if (Context.getSession() == null) {
             Lifecycle.beginAnonymousSession();
         }
-        HashMap<String, IDeferredProcess> m = (HashMap<String, IDeferredProcess>) Context.getSession().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
+        HashMap<String, DeferredProcessInfo> m = (HashMap<String, DeferredProcessInfo>) Context.getSession().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
         if (m == null) {
-            m = new HashMap<String, IDeferredProcess>();
+            m = new HashMap<String, DeferredProcessInfo>();
             Context.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
         }
         return m;
@@ -56,22 +59,53 @@ public class DeferredProcessRegistry {
 
     /**
      * 
-     * @return DeferredCorrelationID
+     * @return DeferredCorrelationId to be used by client to query for status
      */
     public static synchronized String register(IDeferredProcess process) {
-        HashMap<String, IDeferredProcess> map = getMap();
-        String deferredCorrelationID = String.valueOf(System.currentTimeMillis());
-        map.put(deferredCorrelationID, process);
+        HashMap<String, DeferredProcessInfo> map = getMap();
+        String deferredCorrelationId = String.valueOf(System.currentTimeMillis());
+        map.put(deferredCorrelationId, new DeferredProcessInfo(process));
         saveMap();
-        log.debug("process created {}", deferredCorrelationID);
-        return deferredCorrelationID;
+        log.debug("process created {}", deferredCorrelationId);
+        return deferredCorrelationId;
     }
 
-    public static synchronized IDeferredProcess get(String deferredCorrelationID) {
-        return getMap().get(deferredCorrelationID);
+    /**
+     * Implementation dependent fork. For now just creates a new Thread.
+     * In future we may move this execution to another server.
+     * 
+     * @return DeferredCorrelationId to be used by client to query for status
+     */
+    public static synchronized String fork(IDeferredProcess process, String threadPoolName) {
+        String deferredCorrelationId = register(process);
+
+        DeferredProcessInfo info = getMap().get(deferredCorrelationId);
+        //TODO use ThreadPools
+        Thread t = new DeferredProcessWorkThread(threadPoolName + deferredCorrelationId, info);
+        t.setDaemon(true);
+        t.start();
+        return deferredCorrelationId;
     }
 
-    public static synchronized void remove(String deferredCorrelationID) {
-        getMap().remove(deferredCorrelationID);
+    public static synchronized IDeferredProcess get(String deferredCorrelationId) {
+        return getMap().get(deferredCorrelationId).process;
+    }
+
+    public static synchronized DeferredProcessProgressResponse getStatus(String deferredCorrelationId) {
+        DeferredProcessInfo info = getMap().get(deferredCorrelationId);
+        if (info != null) {
+            if (info.process != null) {
+                return info.process.status();
+            } else {
+                return info.status;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public static synchronized void remove(String deferredCorrelationId) {
+        getMap().remove(deferredCorrelationId);
+        saveMap();
     }
 }

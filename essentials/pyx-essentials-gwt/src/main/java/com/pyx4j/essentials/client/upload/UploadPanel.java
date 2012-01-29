@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.client.DeferredProgressListener;
 import com.pyx4j.essentials.client.DeferredProgressPanel;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -50,7 +51,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
+public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler,
+        DeferredProgressListener {
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);
 
@@ -109,19 +111,7 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
         content.add(line);
 
         line.add(upload);
-        line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px") {
-
-            @Override
-            protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
-                UploadPanel.this.onDeferredSuccess(result);
-            }
-
-            @Override
-            protected void onDeferredError(DeferredProcessProgressResponse result) {
-                UploadPanel.this.onDeferredError(result);
-            }
-
-        });
+        line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px", false, this));
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
     }
@@ -257,17 +247,25 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
 
     public void reset() {
         deferredProgressPanel.reset();
+        deferredProgressPanel.setVisible(false);
         uploadForm.reset();
         uploadId = null;
     }
 
-    private void onDeferredSuccess(DeferredProcessProgressResponse result) {
+    @Override
+    public final void onDeferredSuccess(DeferredProcessProgressResponse result) {
         onSubmitUploadComplete();
         reset();
     }
 
-    private void onDeferredError(DeferredProcessProgressResponse result) {
+    @Override
+    public final void onDeferredError(DeferredProcessProgressResponse result) {
         onUploadError(UploadError.ServerMessage, result.getMessage());
+    }
+
+    @Override
+    public void onDeferredProgress(DeferredProcessProgressResponse result) {
+        // Do nothing the progress is shown in panel
     }
 
     private final void onSubmitUploadComplete() {

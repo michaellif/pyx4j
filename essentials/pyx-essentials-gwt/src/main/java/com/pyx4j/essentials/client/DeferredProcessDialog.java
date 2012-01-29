@@ -23,9 +23,9 @@ package com.pyx4j.essentials.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -33,19 +33,17 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.CloseOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class DeferredProcessDialog extends SimplePanel implements CloseOption, CancelOption {
+public class DeferredProcessDialog extends SimplePanel implements CloseOption, CancelOption, DeferredProgressListener {
 
     private static final Logger log = LoggerFactory.getLogger(DeferredProcessDialog.class);
 
-    protected String deferredCorrelationID;
+    private static final I18n i18n = I18n.get(DeferredProcessDialog.class);
 
     protected long deferredProcessStartTime;
 
@@ -59,10 +57,18 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     protected final HTML message2;
 
-    public DeferredProcessDialog(String title, String initialMessage) {
+    private final DeferredProgressPanel deferredProgressPanel;
+
+    public DeferredProcessDialog(String title, String initialMessage, boolean executeByUserRequests) {
         this.setWidget(messagePenel = new VerticalPanel());
         messagePenel.add(message1 = new HTML(initialMessage));
         messagePenel.add(message2 = new HTML(""));
+
+        deferredProgressPanel = new DeferredProgressPanel("70px", "20px", executeByUserRequests, this);
+        deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
+        deferredProgressPanel.setVisible(false);
+        messagePenel.add(deferredProgressPanel);
+
         dialog = new Dialog(title, this, this);
         dialog.getCloseButton().setVisible(false);
     }
@@ -91,67 +97,45 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
         return true;
     }
 
-    public void setDeferredCorrelationID(final String deferredCorrelationID) {
-        this.deferredCorrelationID = deferredCorrelationID;
-        if (canceled) {
-            cancelProgress();
-        } else {
-            deferredProcessStartTime = System.currentTimeMillis();
-            executeProcess();
-        }
+    public void startProgress(final String deferredCorrelationId) {
+        deferredProgressPanel.startProgress(deferredCorrelationId);
+        deferredProgressPanel.setVisible(true);
     }
 
     public void cancelProgress() {
-        if (deferredCorrelationID != null) {
-            RPCManager.executeBackground(DeferredProcessServices.Cancel.class, deferredCorrelationID, null);
-            deferredCorrelationID = null;
-        }
+        deferredProgressPanel.cancelProgress();
     }
 
-    protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
-        message1.setHTML("Compleated");
+    @Override
+    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+        message1.setHTML(i18n.tr("Completed"));
         if (result.getMessage() != null) {
             message2.setHTML(result.getMessage().replace("\n", "<br/>"));
+        } else {
+            message2.setHTML("");
         }
         onDeferredCompleate();
     }
 
-    protected void onDeferredError(DeferredProcessProgressResponse result) {
+    @Override
+    public void onDeferredError(DeferredProcessProgressResponse result) {
         onDeferredCompleate();
         hide();
-        MessageDialog.error(dialog.getTitle(), result.getMessage());
+        if (!canceled) {
+            MessageDialog.error(dialog.getTitle(), result.getMessage());
+        }
+    }
+
+    @Override
+    public void onDeferredProgress(DeferredProcessProgressResponse result) {
+        // Do nothing the progress is shown in panel
     }
 
     protected void onDeferredCompleate() {
+        deferredProgressPanel.reset();
+        deferredProgressPanel.setVisible(false);
         dialog.getCancelButton().setVisible(false);
         dialog.getCloseButton().setVisible(true);
         log.info("Deferred " + dialog.getTitle() + " completed in " + TimeUtils.secSince(deferredProcessStartTime));
-    }
-
-    public void executeProcess() {
-        AsyncCallback<DeferredProcessProgressResponse> progressHandlingCallback = new AsyncCallback<DeferredProcessProgressResponse>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                hide();
-                if (!canceled) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            }
-
-            @Override
-            public void onSuccess(DeferredProcessProgressResponse result) {
-                if (result.isError()) {
-                    onDeferredError(result);
-                } else if (result.isCompleted()) {
-                    onDeferredSuccess(result);
-                } else {
-                    message2.setHTML("Progress: " + result.getProgress());
-                    executeProcess();
-                }
-            }
-
-        };
-        RPCManager.executeBackground(DeferredProcessServices.ContinueExecution.class, deferredCorrelationID, progressHandlingCallback);
     }
 }

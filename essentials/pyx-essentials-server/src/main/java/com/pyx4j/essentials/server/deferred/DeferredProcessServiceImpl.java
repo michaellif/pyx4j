@@ -35,9 +35,8 @@ public class DeferredProcessServiceImpl implements DeferredProcessService {
 
     @Override
     public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId, boolean finalize) {
-        IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationId);
-        if (process != null) {
-            DeferredProcessProgressResponse response = process.status();
+        DeferredProcessProgressResponse response = DeferredProcessRegistry.getStatus(deferredCorrelationId);
+        if (response != null) {
             if (response.isCompleted() && finalize) {
                 log.debug("process {} is completed and finalized", deferredCorrelationId);
                 DeferredProcessRegistry.remove(deferredCorrelationId);
@@ -57,6 +56,33 @@ public class DeferredProcessServiceImpl implements DeferredProcessService {
             DeferredProcessRegistry.remove(deferredCorrelationId);
             DeferredProcessRegistry.saveMap();
             callback.onSuccess(null);
+        } else {
+            throw new RuntimeException("Process " + deferredCorrelationId + " not found");
+        }
+
+    }
+
+    @Override
+    public void continueExecution(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId) {
+        IDeferredProcess process = DeferredProcessRegistry.get(deferredCorrelationId);
+        if (process != null) {
+            try {
+                log.debug("execute process {}", deferredCorrelationId);
+                process.execute();
+                DeferredProcessProgressResponse r = process.status();
+                if (r.isCompleted()) {
+                    DeferredProcessRegistry.remove(deferredCorrelationId);
+                }
+                callback.onSuccess(r);
+            } catch (Throwable e) {
+                log.error("execute error", e);
+                DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
+                r.setError();
+                DeferredProcessRegistry.remove(deferredCorrelationId);
+                callback.onSuccess(r);
+            } finally {
+                DeferredProcessRegistry.saveMap();
+            }
         } else {
             throw new RuntimeException("Process " + deferredCorrelationId + " not found");
         }

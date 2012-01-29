@@ -14,23 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 24, 2011
+ * Created on Jan 28, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.deferred;
+package com.pyx4j.essentials.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
+public interface DeferredProgressListener {
 
-public interface DeferredProcessService extends IService {
+    public void onDeferredSuccess(DeferredProcessProgressResponse result);
 
-    public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId, boolean finalize);
+    public void onDeferredError(DeferredProcessProgressResponse result);
 
-    public void cancel(AsyncCallback<VoidSerializable> callback, String deferredCorrelationId);
-
-    public void continueExecution(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId);
+    public void onDeferredProgress(DeferredProcessProgressResponse result);
 
 }

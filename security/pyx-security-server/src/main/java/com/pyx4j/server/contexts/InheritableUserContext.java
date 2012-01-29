@@ -14,23 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 24, 2011
+ * Created on Jan 29, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.deferred;
+package com.pyx4j.server.contexts;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.Locale;
 
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.i18n.server.I18nManager;
 
-public interface DeferredProcessService extends IService {
+public class InheritableUserContext {
 
-    public void getStatus(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId, boolean finalize);
+    final Visit abstractVisit;
 
-    public void cancel(AsyncCallback<VoidSerializable> callback, String deferredCorrelationId);
+    final String namespace;
 
-    public void continueExecution(AsyncCallback<DeferredProcessProgressResponse> callback, String deferredCorrelationId);
+    final Locale locale;
 
+    InheritableUserContext(Visit abstractVisit) {
+        this.abstractVisit = abstractVisit;
+        namespace = NamespaceManager.getNamespace();
+        locale = I18nManager.getThreadLocale();
+    }
 }
