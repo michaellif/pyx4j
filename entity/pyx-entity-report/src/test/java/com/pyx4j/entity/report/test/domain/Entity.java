@@ -14,27 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 23, 2012
- * @author DavidG
+ * Created on Mar 23, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.report.master;
+package com.pyx4j.entity.report.test.domain;
 
-import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * An entry in the master report
- * Comprised of one full-width report to be displayed across the master report
- * or one or two half-width reports to be displayed side-by-side
- */
-public interface ReportEntry extends IEntity {
+public interface Entity extends IEntity {
 
-    IPrimitive<JasperReportModel> leftReport();
+    IPrimitive<String> field1();
 
-    IPrimitive<JasperReportModel> rightReport();
-
-    IPrimitive<JasperReportModel> fullReport();
+    Inner inner();
 
 }

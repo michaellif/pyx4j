@@ -41,13 +41,9 @@ public class OrganizationsReportTest extends ReportsTestBase {
     private static final String organization2 = "Organization2";
 
     public void init() throws Exception {
-        createReport(createReportModel());
-    }
-
-    public JasperReportModel createReportModel() {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("REPORT_TITLE", "Organizations Report");
-        return new JasperReportModel("reports.Organizations", createOrganizations(), parameters);
+        createReport(new JasperReportModel("reports.Organizations", createOrganizations(), parameters));
     }
 
     @Test
