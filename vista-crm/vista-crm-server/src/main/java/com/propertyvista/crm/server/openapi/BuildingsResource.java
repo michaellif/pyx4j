@@ -145,7 +145,15 @@ public class BuildingsResource {
                 } else {
                     buildingRS = complexes.get(building.complex());
                     if (buildingRS == null) {
-                        buildingRS = new BuildingRS();
+                        // Just in case if somebody forgets to set Primary building 
+                        if (building.marketing().adBlurbs().getMeta().isDetached()) {
+                            Persistence.service().retrieve(building.marketing().adBlurbs());
+                        }
+                        if (building.contacts().phones().getMeta().isDetached()) {
+                            Persistence.service().retrieve(building.contacts().phones());
+                        }
+                        buildingRS = Converter.convertBuilding(building);
+
                         buildingsRS.buildings.add(buildingRS);
                         buildingRS.unitCount = 0;
                     }
