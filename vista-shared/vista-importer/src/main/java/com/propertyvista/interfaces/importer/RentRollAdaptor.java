@@ -153,10 +153,12 @@ public class RentRollAdaptor implements ImportAdapter {
                 double marketRent;
                 LogicalDate availableForRent = new LogicalDate();
 
+                marketRent = parseMoney(line.marketRent().getStringView());
+                unit.marketRent().setValue(marketRent);
                 if (line.name().getStringView().toLowerCase().trim().equals("vacant")) {
-                    marketRent = parseMoney(line.marketRent().getStringView());
                     unit.availableForRent().setValue(availableForRent);
-                    unit.marketRent().setValue(marketRent);
+                } else {
+                    unit.availableForRent().setValue(null);
                 }
 
                 building.units().add(unit);
