@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRPrintImage;
@@ -48,25 +47,19 @@ import net.sf.jasperreports.engine.util.JRProperties;
 
 public class JasperReportProcessor {
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void createReport(final JasperReportModel model, JasperFileFormat format, OutputStream out) {
 
         JasperReport jasperReport = JasperReportFactory.create(model);
 
-        Map parameters = model.getParameters();
+        Map<String, Object> parameters = model.getParameters();
         if (parameters == null) {
-            parameters = new HashMap();
+            parameters = new HashMap<String, Object>();
         }
         JRProperties.setProperty("net.sf.jasperreports.awt.ignore.missing.font", Boolean.TRUE);
 
         JasperPrint jasperPrint;
         try {
-            JRDataSource dataSource;
-            if (model.getData() != null) {
-                dataSource = new JRIEntityCollectionDataSource(model.getData());
-            } else {
-                dataSource = new JREmptyDataSource();
-            }
+            JRDataSource dataSource = model.createDataSource();
 
             jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
         } catch (JRException e) {

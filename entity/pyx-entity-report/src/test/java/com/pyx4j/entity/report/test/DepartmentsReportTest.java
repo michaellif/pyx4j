@@ -41,10 +41,14 @@ public class DepartmentsReportTest extends ReportsTestBase {
     private static final String department2 = "Department2";
 
     public void init() throws Exception {
+        createReport(createReportModel());
+    }
+
+    public JasperReportModel createReportModel() {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", "Departments Report");
 
-        createReport(new JasperReportModel("reports.Departments", createDepartments(), parameters));
+        return new JasperReportModel("reports.Departments", createDepartments(), parameters);
     }
 
     @Test

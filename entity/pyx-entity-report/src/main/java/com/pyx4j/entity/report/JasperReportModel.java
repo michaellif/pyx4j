@@ -23,6 +23,9 @@ package com.pyx4j.entity.report;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+
 import com.pyx4j.entity.shared.IEntity;
 
 public class JasperReportModel {
@@ -52,6 +55,15 @@ public class JasperReportModel {
 
     public List<? extends IEntity> getData() {
         return data;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public JRDataSource createDataSource() {
+        if (data != null) {
+            return new JRIEntityCollectionDataSource(data);
+        } else {
+            return new JREmptyDataSource();
+        }
     }
 
     public Map<String, Object> getParameters() {
