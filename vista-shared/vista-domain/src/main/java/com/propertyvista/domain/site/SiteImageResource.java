@@ -15,7 +15,6 @@ package com.propertyvista.domain.site;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.File;
 
@@ -23,6 +22,4 @@ public interface SiteImageResource extends IEntity {
 
     @EmbeddedEntity
     File fileInfo();
-
-    IPrimitive<String> title();
 }

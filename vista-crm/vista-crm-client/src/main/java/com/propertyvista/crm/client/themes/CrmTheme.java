@@ -354,6 +354,33 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("border-style", "inset");
         addStyle(style);
 
+        // Push Button
+        buttonEx = ".gwt-PushButton";
+        style = new Style(buttonEx);
+        style.addProperty("color", ThemeColors.background);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColors.background);
+        style.addProperty("margin", "0.2em 0.2em");
+        style.addProperty("padding", "0.2em 0.5em");
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(buttonEx + "-up-hovering");
+        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(buttonEx + "-down");
+        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(buttonEx + "-down-hovering");
+        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
         //
         // default AnchorButton: 
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
