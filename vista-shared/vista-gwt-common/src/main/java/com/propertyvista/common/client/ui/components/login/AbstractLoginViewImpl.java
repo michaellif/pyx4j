@@ -69,7 +69,7 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
 
     @Override
     public void discard() {
-        form.discard();
+        form.reset();
     }
 
     private void submit() {

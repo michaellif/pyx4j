@@ -52,7 +52,7 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
 
     @Override
     public void discard() {
-        form.discard();
+        form.reset();
     }
 
     @Override

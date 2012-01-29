@@ -63,6 +63,6 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
 
     @Override
     public void discard() {
-        form.discard();
+        form.reset();
     }
 }
