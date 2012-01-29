@@ -20,8 +20,6 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,16 +28,18 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -71,12 +71,6 @@ public abstract class ImageGallery implements IsWidget {
         contentPanel.setWidget(mainPanel);
     }
 
-    public void setImages(List<Image> list) {
-        for (Image img : list) {
-            addImage(img);
-        }
-    }
-
     class ImageFrame extends DockPanel {
         Double imgSize = 150.0;
 
@@ -97,16 +91,24 @@ public abstract class ImageGallery implements IsWidget {
             getElement().getStyle().setFloat(Style.Float.LEFT);
             getElement().getStyle().setProperty("border", "1px solid #ccc");
 
-            if (1.0 * image.getWidth() / image.getHeight() > 1) {
-                image.setWidth(imgSize + "px");
+            if (image.getWidth() > 0 && image.getHeight() > 0) {
+                scaleToFit(image);
             } else {
-                image.setHeight(imgSize + "px");
+                image.setVisible(false);
+                image.addLoadHandler(new LoadHandler() {
+                    @Override
+                    public void onLoad(LoadEvent event) {
+                        scaleToFit(image);
+                        image.setVisible(true);
+                    }
+                });
             }
+
             image.getElement().getStyle().setCursor(Cursor.POINTER);
             image.addDomHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    onImageSelected(image);
+                    onSelectImage(image);
                 }
             }, ClickEvent.getType());
 
@@ -114,12 +116,12 @@ public abstract class ImageGallery implements IsWidget {
             setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
             setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
 
-            HTML caption = new HTML(image.getTitle(), false);
+            String url = image.getUrl();
+            Label caption = new Label(url.substring(url.lastIndexOf('/') + 1), false);
             caption.setStyleName("ImageGallery-ImageFrameCaption");
             caption.setHeight(captionHeight + "px");
             caption.setWidth(captionWidth + "px");
             caption.getElement().getStyle().setProperty("overflow", "hidden");
-            caption.setTitle(image.getTitle());
             add(caption, SOUTH);
             setCellHorizontalAlignment(caption, HorizontalPanel.ALIGN_CENTER);
 
@@ -136,8 +138,7 @@ public abstract class ImageGallery implements IsWidget {
                 delButt.addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        ImageGallery.this.removeImage(mainPanel.getWidgetIndex(ImageFrame.this));
-                        onImageRemoved(image);
+                        onRemoveImage(image);
                     }
                 }, ClickEvent.getType());
 
@@ -158,14 +159,23 @@ public abstract class ImageGallery implements IsWidget {
                 }, MouseOutEvent.getType());
             }
         }
+
+        private void scaleToFit(Image image) {
+            if (1.0 * image.getWidth() / image.getHeight() > 1) {
+                image.setWidth(imgSize + "px");
+            } else {
+                image.setHeight(imgSize + "px");
+            }
+        }
     }
 
-    public void addImage(final Image image) {
+    public void addImage(String url) {
+        final Image image = new Image(url);
         mainPanel.add(new ImageFrame(image));
     }
 
-    private void removeImage(int index) {
-        mainPanel.remove(index);
+    public void removeImage(Image image) {
+        mainPanel.remove(image.getParent());
     }
 
     @Override
@@ -173,7 +183,7 @@ public abstract class ImageGallery implements IsWidget {
         return contentPanel;
     }
 
-    protected abstract void onImageSelected(Image image);
+    protected abstract void onSelectImage(Image image);
 
-    protected abstract void onImageRemoved(Image image);
+    protected abstract void onRemoveImage(Image image);
 }

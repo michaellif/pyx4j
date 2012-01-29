@@ -36,7 +36,9 @@ public class DefaultWidgetsTheme extends Theme {
 
         Anchor,
 
-        RateIt, RateItBar
+        RateIt, RateItBar,
+
+        ImageGallery
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -53,6 +55,7 @@ public class DefaultWidgetsTheme extends Theme {
         initButtonStyle();
         initToolbarStyle();
         initRateItStyle();
+        initImageGalleryStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -150,6 +153,25 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
+    }
+
+    protected void initImageGalleryStyle() {
+        String imgGallery = "ImageGallery";
+        Style style = new Style("." + imgGallery);
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "3px 5px");
+        style.addProperty("border", "1px solid #ccc");
+        style.addProperty("background", "white");
+        addStyle(style);
+
+        String imgFrame = "ImageFrame";
+        style = new Style("." + imgGallery + "-" + imgFrame);
+        style.addProperty("border", "2px solid #eee");
+        addStyle(style);
+
+        style = new Style("." + imgGallery + "-" + imgFrame + ":hover");
+        style.addProperty("border", "2px solid #ccc");
+        addStyle(style);
     }
 
 }
