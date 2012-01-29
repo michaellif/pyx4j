@@ -130,7 +130,7 @@ public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel impleme
     @Override
     public void discard() {
         assert (form != null);
-        form.discard();
+        form.reset();
     }
 
     @Override

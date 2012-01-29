@@ -196,7 +196,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         if (entity == null) {
             for (CComponent component : getComponents()) {
                 if (component instanceof CEntityEditor) {
-                    ((CEntityEditor) component).discard();
+                    ((CEntityEditor) component).reset();
                 } else {
                     component.setValue(null, fireEvent, populate);
                 }
@@ -252,7 +252,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         populate((E) EntityFactory.create(proto().getObjectClass()));
     }
 
-    public final void discard() {
+    public final void reset() {
         this.origEntity = null;
         setVisited(false);
         setValue(null, false, false);

@@ -49,7 +49,7 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
     @Override
     public void show(CComponent<?, ?> cComponent) {
         if (cComponent == null) {
-            form.discard();
+            form.reset();
             form.setVisible(false);
         } else {
             form.setVisible(true);
