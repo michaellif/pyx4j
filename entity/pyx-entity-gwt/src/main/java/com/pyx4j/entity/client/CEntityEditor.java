@@ -254,6 +254,7 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     public final void discard() {
         this.origEntity = null;
+        setVisited(false);
         setValue(null, false, false);
     }
 
