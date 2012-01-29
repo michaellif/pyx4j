@@ -66,6 +66,8 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO, 
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<UpdateUploadDTO, IEntity> process,
             final UploadResponse<IEntity> response) {
         final String namespace = NamespaceManager.getNamespace();
+
+        //TODO This is not the very best example how to for execution on server. VladS - Change!
         Thread t = new DeferredProcessorThread("Update", process, new Runnable() {
             @Override
             public void run() {

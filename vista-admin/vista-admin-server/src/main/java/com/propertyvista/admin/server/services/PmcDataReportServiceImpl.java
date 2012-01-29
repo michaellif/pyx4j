@@ -24,6 +24,7 @@ import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.server.qa.PmcDataBuildingsReportDeferredProcess;
 import com.propertyvista.admin.server.qa.PmcDataImagesReportDeferredProcess;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.server.domain.admin.Pmc;
 
 public class PmcDataReportServiceImpl extends ReportServiceImpl<PmcDTO> implements PmcDataReportService {
@@ -35,9 +36,9 @@ public class PmcDataReportServiceImpl extends ReportServiceImpl<PmcDTO> implemen
         reportdbo.setCriteria(EntityQueryCriteria.create(Pmc.class));
 
         if (reportRequest.getParameters() != null && Boolean.TRUE.equals(reportRequest.getParameters().get(PmcDataReportService.LoadImagesParameter))) {
-            callback.onSuccess(DeferredProcessRegistry.register(new PmcDataImagesReportDeferredProcess(reportdbo)));
+            callback.onSuccess(DeferredProcessRegistry.fork(new PmcDataImagesReportDeferredProcess(reportdbo), ThreadPoolNames.DOWNLOADS));
         } else {
-            callback.onSuccess(DeferredProcessRegistry.register(new PmcDataBuildingsReportDeferredProcess(reportdbo)));
+            callback.onSuccess(DeferredProcessRegistry.fork(new PmcDataBuildingsReportDeferredProcess(reportdbo), ThreadPoolNames.DOWNLOADS));
         }
     }
 

@@ -69,6 +69,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<PmcImportDTO, IEntity> process,
             final UploadResponse<IEntity> response) {
 
+        //TODO This is not the very best example how to for execution on server. VladS - Change!
         Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
             @Override
             public void run() {

@@ -59,14 +59,13 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.Query.class));
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(ReportServices.class, "*"));
-        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
 
         grant(VistaBasicBehavior.Admin, VistaBasicBehavior.CRM);
         grant(VistaBasicBehavior.Admin, new EntityPermission(CrmUser.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.Admin, new EntityPermission(CrmUserCredential.class, EntityPermission.ALL));
 
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DatastoreAdminServices.class, "*"));
-        grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
+        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(DeferredProcessServices.class, "*"));
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(AdminServices.class, "*"));
 
         freeze();
