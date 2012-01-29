@@ -36,10 +36,14 @@ public class StaticReportTest extends ReportsTestBase {
     private static final Logger log = LoggerFactory.getLogger(StaticReportTest.class);
 
     public void init() throws Exception {
+        createReport(createReportModel());
+    }
+
+    public JasperReportModel createReportModel() {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("ReportTitle", "Static Report");
 
-        createReport(new JasperReportModel("reports.Static", null, parameters));
+        return new JasperReportModel("reports.Static", null, parameters);
     }
 
     @Test
