@@ -39,7 +39,7 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
         buildingLister = new ListerInternalViewImplBase<BuildingDTO>(new BuildingLister());
 
         // set main form here:
-        setForm(new ComplexEditorForm(false));
+        setForm(new ComplexEditorForm(true));
     }
 
     @Override

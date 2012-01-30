@@ -255,7 +255,20 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         int row = -1;
         main.setWidget(++row, 0, inject(proto().marketing(), new MarketingEditor()));
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().email()), 30).customLabel(i18n.tr("Email Address")).build());
+        if (isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().email()), 30).customLabel(i18n.tr("Email Address")).build());
+        } else {
+
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().email(), new CHyperlink(new Command() {
+                @Override
+                public void execute() {
+                    String mail = getValue().contacts().email().getValue();
+                    mail = "mailto:" + mail;
+                    Window.open(mail, proto().contacts().email().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+                }
+            })), 50).build());
+
+        }
 
         main.setH1(++row, 0, 2, proto().contacts().phones().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contacts().phones(), new PropertyPhoneFolder()));

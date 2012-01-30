@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,10 +15,8 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -26,11 +24,11 @@ import com.propertyvista.domain.financial.offering.Concession;
 public class ConcessionEditorForm extends CrmEntityForm<Concession> {
 
     public ConcessionEditorForm() {
-        super(Concession.class, new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public ConcessionEditorForm(IEditableComponentFactory factory) {
-        super(Concession.class, factory);
+    public ConcessionEditorForm(boolean viewMode) {
+        super(Concession.class, viewMode);
     }
 
     @Override

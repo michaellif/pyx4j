@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGadget;
-import com.propertyvista.crm.client.ui.gadgets.availabilityreport.AvailabiltySummaryGadget;
+import com.propertyvista.crm.client.ui.gadgets.availabilityreport.AvailabilitySummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.TurnoverAnalysisGraphGadget;
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.UnitAvailabilityReportGadget;
 import com.propertyvista.crm.client.ui.gadgets.demo.BarChart2DGadget;
@@ -53,7 +53,7 @@ public class Directory {
         new ArrearsYOYAnalysisChartGadget(),
         
         new UnitAvailabilityReportGadget(),
-        new AvailabiltySummaryGadget(),
+        new AvailabilitySummaryGadget(),
         new TurnoverAnalysisGraphGadget(),
         
         new BarChart2DGadget(),

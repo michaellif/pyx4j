@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -38,7 +37,6 @@ import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -53,11 +51,11 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public LeaseEditorForm() {
-        this(new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public LeaseEditorForm(IEditableComponentFactory factory) {
-        super(LeaseDTO.class, factory);
+    public LeaseEditorForm(boolean viewMode) {
+        super(LeaseDTO.class, viewMode);
     }
 
     @Override

@@ -27,11 +27,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.DepositType;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.Service.Type;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.Service.Type;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -242,10 +242,10 @@ public class ProductCatalogGenerator {
             concession.description().setValue(i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service", concession.value().getValue()));
         } else if (concession.type().getValue() == Concession.Type.monetaryOff) {
             concession.value().setValue(50d + RandomUtil.randomInt(50));
-            concession.description().setValue(i18n.tr("Special Promotion Applies, {0}$ Off The Value Of The Service", concession.value().getValue()));
+            concession.description().setValue(i18n.tr("Special Promotion Applies, ${0} Off The Value Of The Service", concession.value().getValue()));
         } else if (concession.type().getValue() == Concession.Type.promotionalItem) {
             concession.value().setValue(100d + RandomUtil.randomInt(100));
-            concession.description().setValue(i18n.tr("Special Promotion Applies, {0}$ In Promotional Items Or Services", concession.value().getValue()));
+            concession.description().setValue(i18n.tr("Special Promotion Applies, ${0} In Promotional Items Or Services", concession.value().getValue()));
         } else if (concession.type().getValue() == Concession.Type.free) {
             concession.value().setValue(200d + RandomUtil.randomInt(100));
             concession.description().setValue(i18n.tr("Special Promotion Applies, Everything Completely Free"));

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -33,7 +32,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.maintenance.IssueClassification;
@@ -51,15 +49,15 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
     private static final String optionSelect = i18n.tr("Select");
 
     public MaintenanceRequestEditorForm() {
-        this(new CrmEditorsComponentFactory());
+        this(false);
     }
 
     public MaintenanceRequestEditorForm(Class<MaintenanceRequestDTO> rootClass) {
         super(rootClass);
     }
 
-    public MaintenanceRequestEditorForm(IEditableComponentFactory factory) {
-        super(MaintenanceRequestDTO.class, factory);
+    public MaintenanceRequestEditorForm(boolean viewMode) {
+        super(MaintenanceRequestDTO.class, viewMode);
     }
 
     @Override

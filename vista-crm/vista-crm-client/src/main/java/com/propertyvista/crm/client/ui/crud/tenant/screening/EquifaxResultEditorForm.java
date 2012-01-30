@@ -21,11 +21,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.misc.EquifaxResult;
 
@@ -42,11 +40,11 @@ public class EquifaxResultEditorForm extends CrmEntityForm<EquifaxResult> {
     private final SimplePanel resultHolder = new SimplePanel();
 
     public EquifaxResultEditorForm() {
-        super(EquifaxResult.class, new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public EquifaxResultEditorForm(IEditableComponentFactory factory) {
-        super(EquifaxResult.class, factory);
+    public EquifaxResultEditorForm(boolean viewMode) {
+        super(EquifaxResult.class, viewMode);
     }
 
     @Override

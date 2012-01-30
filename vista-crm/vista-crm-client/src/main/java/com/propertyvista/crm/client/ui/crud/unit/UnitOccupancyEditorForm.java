@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,10 +17,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
@@ -29,11 +27,11 @@ import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.Status;
 public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancy> {
 
     public UnitOccupancyEditorForm() {
-        super(AptUnitOccupancy.class, new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public UnitOccupancyEditorForm(IEditableComponentFactory factory) {
-        super(AptUnitOccupancy.class, factory);
+    public UnitOccupancyEditorForm(boolean viewMode) {
+        super(AptUnitOccupancy.class, viewMode);
     }
 
     @Override

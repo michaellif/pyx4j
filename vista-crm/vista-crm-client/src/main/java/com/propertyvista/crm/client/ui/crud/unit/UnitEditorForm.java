@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
@@ -39,7 +38,6 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.components.CrmEditorsComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -55,11 +53,11 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     private SimplePanel buildingPlace;
 
     public UnitEditorForm() {
-        this(new CrmEditorsComponentFactory());
+        this(false);
     }
 
-    public UnitEditorForm(IEditableComponentFactory factory) {
-        super(AptUnitDTO.class, factory);
+    public UnitEditorForm(boolean viewMode) {
+        super(AptUnitDTO.class, viewMode);
     }
 
     @Override

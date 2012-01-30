@@ -16,17 +16,23 @@ package com.propertyvista.crm.client.ui.crud.complex;
 import java.io.Serializable;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
@@ -83,8 +89,30 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
         int row = 0;
 
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().name()))).build());
-        panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
-        panel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().primaryBuilding())).build());
+        if (isEditable()) {
+            panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
+        } else {
+            panel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().website(), new CHyperlink(new Command() {
+                @Override
+                public void execute() {
+                    String url = getValue().website().getValue();
+                    if (!ValidationUtils.urlHasProtocol(url)) {
+                        url = "http://" + url;
+                    }
+                    Window.open(url, proto().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+                }
+            })), 50).build());
+        }
+
+        if (isEditable()) {
+            panel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().primaryBuilding())).build());
+        } else {
+            panel.setWidget(
+                    row++,
+                    0,
+                    new DecoratorBuilder(inject(proto().primaryBuilding(),
+                            new CEntityCrudHyperlink<Building>(MainActivityMapper.getCrudAppPlace(Building.class))), 15).build());
+        }
 
         CComponent<Building, ?> primaryBuildingWidget = get(proto().primaryBuilding());
 

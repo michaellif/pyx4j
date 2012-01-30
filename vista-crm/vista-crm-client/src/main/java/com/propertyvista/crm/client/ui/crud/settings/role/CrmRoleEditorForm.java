@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
@@ -39,8 +38,12 @@ public class CrmRoleEditorForm extends CrmEntityForm<CrmRole> {
 
     private static final I18n i18n = I18n.get(CrmRoleEditorForm.class);
 
-    public CrmRoleEditorForm(IEditableComponentFactory factory) {
-        super(CrmRole.class, factory);
+    public CrmRoleEditorForm() {
+        this(false);
+    }
+
+    public CrmRoleEditorForm(boolean viewMode) {
+        super(CrmRole.class, viewMode);
     }
 
     @Override

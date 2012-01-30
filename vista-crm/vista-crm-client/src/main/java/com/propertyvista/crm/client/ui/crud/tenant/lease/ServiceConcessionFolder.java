@@ -23,7 +23,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.dialogs.SelectDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.dto.LeaseDTO;
@@ -42,7 +41,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Concession) {
-            return new ConcessionEditorForm(new CrmViewersComponentFactory());
+            return new ConcessionEditorForm(true);
         }
         return super.create(member);
 
