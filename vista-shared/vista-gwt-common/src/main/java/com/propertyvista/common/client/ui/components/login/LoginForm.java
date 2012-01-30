@@ -74,6 +74,7 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         this.loginCommand = loginCommand;
         this.resetPasswordCommand = resetPasswordCommand;
         if (ApplicationMode.isDevelopment()) {
+            resetDevLoginHistory();
             this.devLoginValues = devLoginValues;
         } else {
             this.devLoginValues = null;
@@ -143,6 +144,7 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
                                 }
                             }
                             if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                                resetDevLoginHistory();
                                 loginCommand.execute();
                             }
                         }
@@ -196,6 +198,11 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
     public void disableCaptcha() {
         CCaptcha captcha = (CCaptcha) get(proto().captcha());
         captcha.setVisible(false);
+    }
+
+    public void resetDevLoginHistory() {
+        devCount = 0;
+        prevDevKey = -1;
     }
 
     /**
