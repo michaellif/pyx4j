@@ -93,7 +93,7 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
     @Override
     public void populate(MaintenanceRequestDTO request) {
         errorPanel.clearMessage();
-        form.reset();
+        form.clearInput();
         form.populate(request);
 
     }

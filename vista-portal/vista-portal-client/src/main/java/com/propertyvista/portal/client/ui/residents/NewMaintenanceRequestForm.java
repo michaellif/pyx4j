@@ -121,9 +121,9 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<Maintena
         return content;
     }
 
-//    public void reset() {
-//        mainCombo.setValue(null);
-//    }
+    public void clearInput() {
+        mainCombo.setValue(null);
+    }
 
     private void comboReset(CEntityComboBox<? extends IEntity> combo, PropertyCriterion crit, String title) {
         combo.resetCriteria();
