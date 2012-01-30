@@ -25,6 +25,8 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
@@ -38,6 +40,11 @@ public class MessageTemplates {
 
     public static String getSender() {
         return ServerSideConfiguration.instance().getApplicationEmailSender();
+    }
+
+    public static String getEmailTEmplate(EmailTemplateType type, Building building) {
+        //TODO Use policy framework to get the HTML text
+        return null;
     }
 
     public static String wrapHtml(String text) {

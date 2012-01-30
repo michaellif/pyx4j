@@ -7,25 +7,35 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 2, 2011
+ * Created on Jan 30, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain;
+package com.propertyvista.domain.communication;
 
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Deprecated
-public interface PhoneCallCampaign extends IEntity {
+@I18n
+public enum EmailTemplateType {
 
-    @MemberColumn(name = "trg")
-    IPrimitive<CampaignTrigger> trigger();
+    PasswordRetrivalCrm,
 
-    IPrimitive<String> campaignid();
+    PasswordRetrivalTenant,
 
-    IPrimitive<String> message();
+    ApplicationCreatedApplicant,
+
+    ApplicationCreatedCoApplicant,
+
+    ApplicationCreatedGuarantor,
+
+    ApplicationApproved,
+
+    ApplicationDeclined;
+
+    @Override
+    public String toString() {
+        return I18nEnum.toString(this);
+    }
+
 }
