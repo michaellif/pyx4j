@@ -199,7 +199,10 @@ public class WidgetDecorator extends FlexTable {
                 mandatoryImage = new Image();
                 mandatoryImage.setResource(ImageFactory.getImages().mandatory());
                 mandatoryImage.setTitle("This field is mandatory");
-                mandatoryImage.ensureDebugId(component.getCompositeDebugId().debugId() + "-mandatoryImage");
+                // TODO fix this 
+                if (component.getCompositeDebugId() != null) { // TODO never use string in DebugID!..                
+                    mandatoryImage.ensureDebugId(component.getCompositeDebugId().debugId() + "-mandatoryImage");
+                }
             }
             mandatoryImageHolder.add(mandatoryImage);
         } else {
@@ -214,8 +217,10 @@ public class WidgetDecorator extends FlexTable {
             validationLabel.setText(null);
         }
 
-        validationLabel.ensureDebugId(component.getCompositeDebugId().debugId() + "-validationLabel");
-
+        // TODO fix this 
+        if (component.getCompositeDebugId() != null) { // TODO never use string in DebugID!..
+            validationLabel.ensureDebugId(component.getCompositeDebugId().debugId() + "-validationLabel");
+        }
     }
 
     public static class Builder {
