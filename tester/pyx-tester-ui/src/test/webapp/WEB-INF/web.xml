@@ -4,6 +4,8 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 
+    <display-name>Pyx UI Tester ${buildLabel} svn:${scm.revision} ts:${timestamp}</display-name>
+
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
