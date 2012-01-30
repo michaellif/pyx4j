@@ -7,17 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 29, 2012
+ * Created on Jan 30, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.tax;
+package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-public interface TaxRule extends IEntity {
+import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.tax.TaxRule;
+import com.propertyvista.domain.policy.Policy;
 
-    IList<Tax> taxes();
+@DiscriminatorValue("TaxationPolicy")
+public interface TaxationPolicy extends Policy {
+
+    TaxRule taxRule();
+
+    ProductItemType productItemType();
 
 }

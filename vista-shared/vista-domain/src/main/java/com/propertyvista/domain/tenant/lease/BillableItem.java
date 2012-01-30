@@ -35,6 +35,8 @@ public interface BillableItem extends IEntity {
     // base price: originally - comes from item
     @ToString(index = 1)
     @Format("#0.00")
+    //TODO Take from ProductItem
+    @Deprecated
     IPrimitive<Double> originalPrice();
 
     /*
@@ -43,6 +45,8 @@ public interface BillableItem extends IEntity {
     @ToString(index = 2)
     @Format("#0.00")
     @Caption(name = "Price")
+    //TODO originalPrice + adjustment
+    @Deprecated
     IPrimitive<Double> agreedPrice();
 
     @Owned

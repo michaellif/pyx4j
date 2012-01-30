@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -53,6 +54,8 @@ public interface ProductItemType extends IEntity {
 
     GlCode glCode();
 
+    //TODO should be taken from Taxation policy
+    @Transient
     TaxRule taxRule();
 
 }

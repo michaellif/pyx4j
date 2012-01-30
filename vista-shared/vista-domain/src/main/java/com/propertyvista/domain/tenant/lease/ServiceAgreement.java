@@ -15,12 +15,10 @@ package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public interface ServiceAgreement extends IEntity {
@@ -34,6 +32,4 @@ public interface ServiceAgreement extends IEntity {
 
     IList<Concession> concessions();
 
-    @MemberColumn(name = "billingAccount")
-    BillingAccount account();
 }
