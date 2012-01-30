@@ -95,6 +95,7 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
                                 + ";\n UserAgent " + userAgent(), cause);
                         GoogleAnalytics.track("unrecoverableError");
                     } catch (Throwable ignore) {
+                        System.out.println("error in exception handling" + ignore);
                     }
                 }
                 if (UncaughtHandler.delegate != null) {

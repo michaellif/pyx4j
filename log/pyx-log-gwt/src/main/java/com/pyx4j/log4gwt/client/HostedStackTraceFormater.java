@@ -59,10 +59,25 @@ public class HostedStackTraceFormater implements AppenderStdOut.StackTraceFormat
             return "";
         }
         StringBuilder b = new StringBuilder();
-        b.append('\n').append(t.toString()).append('\n');
-        StackTraceElement[] trace = t.getStackTrace();
-        for (StackTraceElement traceElement : trace) {
-            b.append("\tat ").append(traceElement).append('\n');
+        {
+            b.append('\n').append(t.toString()).append('\n');
+            StackTraceElement[] trace = t.getStackTrace();
+            for (StackTraceElement traceElement : trace) {
+                b.append("\tat ").append(traceElement).append('\n');
+            }
+        }
+        Throwable causePrev = t;
+        Throwable cause = causePrev.getCause();
+        int cnt = 0;
+        while ((cause != null) && (cause != causePrev) && (cnt < 3)) {
+            b.append("Caused by: ").append(cause.toString()).append('\n');
+            StackTraceElement[] trace = cause.getStackTrace();
+            for (StackTraceElement traceElement : trace) {
+                b.append("\tat ").append(traceElement).append('\n');
+            }
+            causePrev = cause;
+            cause = causePrev.getCause();
+            cnt++;
         }
         return b.toString();
     }
