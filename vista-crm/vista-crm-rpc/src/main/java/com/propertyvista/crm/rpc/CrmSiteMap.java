@@ -166,7 +166,7 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Guarantor")
-        @NavigationItem(navigLabel = "Guarantor")
+        @NavigationItem(navigLabel = "Guarantors")
         public static class Guarantor extends CrudAppPlace {
         }
 
