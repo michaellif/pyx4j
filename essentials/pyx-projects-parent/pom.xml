@@ -13,7 +13,6 @@
         <relativePath>../pyx-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.pyx4j</groupId>
     <artifactId>pyx-projects-parent</artifactId>
 
     <packaging>pom</packaging>
