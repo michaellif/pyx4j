@@ -13,71 +13,21 @@
  */
 package com.propertyvista.portal.ptapp.client.activity;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.ChallengeVerificationRequired;
-import com.pyx4j.site.client.AppSite;
+import com.pyx4j.security.rpc.AuthenticationService;
 
+import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
-public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
-
-    private final LoginView view;
+public class LoginActivity extends AbstractLoginActivty implements LoginView.Presenter {
 
     public LoginActivity(Place place) {
-        view = PtAppViewFactory.instance(LoginView.class);
-        assert (view != null);
-        view.setPresenter(this);
-        withPlace(place);
-    }
-
-    public LoginActivity withPlace(Place place) {
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-    }
-
-    @Override
-    public void login(AuthenticationRequest request) {
-        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
-
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticated(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof ChallengeVerificationRequired) {
-                    view.enableHumanVerification();
-                }
-                throw new UnrecoverableClientError(caught);
-            }
-
-        };
-
-        ((PtAuthenticationService) GWT.create(PtAuthenticationService.class)).authenticate(callback, ClientContext.getClientSystemInfo(), request);
-
-    }
-
-    @Override
-    public void gotoResetPassword() {
-        AppSite.getPlaceController().goTo(new PtSiteMap.RetrievePassword());
+        super(place, PtAppViewFactory.instance(LoginView.class), GWT.<AuthenticationService> create(PtAuthenticationService.class),
+                new PtSiteMap.RetrievePassword());
     }
 }

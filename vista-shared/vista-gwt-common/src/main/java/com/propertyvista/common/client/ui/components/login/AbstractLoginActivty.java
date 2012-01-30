@@ -13,7 +13,11 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -25,27 +29,30 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-public abstract class AbstractLoginActivty implements LoginView.Presenter {
+public abstract class AbstractLoginActivty extends AbstractActivity implements LoginView.Presenter {
 
     private final AuthenticationService authService;
 
     private final AppPlace passwordResetRequestPlace;
 
-    private final LoginView view;
+    private final LoginView loginView;
 
     /**
      * @param authService
      * @param passwordResetRequestPlace
      *            a place to a activity that manages password reset request view.
      */
-    protected AbstractLoginActivty(AuthenticationService authService, AppPlace passwordResetRequestPlace) {
+    protected AbstractLoginActivty(Place place, LoginView loginView, AuthenticationService authService, AppPlace passwordResetRequestPlace) {
         this.authService = authService;
         this.passwordResetRequestPlace = passwordResetRequestPlace;
-        this.view = loginViewInstance();
+        this.loginView = loginView;
+        this.loginView.setPresenter(this);
     }
 
-    /** Called only once inside the constructor, must be overriden to fetch the right view from a factory */
-    protected abstract LoginView loginViewInstance();
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(loginView);
+    }
 
     @Override
     public void login(AuthenticationRequest request) {
@@ -58,7 +65,7 @@ public abstract class AbstractLoginActivty implements LoginView.Presenter {
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof ChallengeVerificationRequired) {
-                    view.enableHumanVerification();
+                    loginView.enableHumanVerification();
                 }
                 throw new UnrecoverableClientError(caught);
             }
