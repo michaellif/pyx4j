@@ -52,9 +52,8 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PersonalAsset) {
             return new PersonalAssetEditor();
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
     private class PersonalAssetEditor extends CEntityFolderRowEditor<PersonalAsset> {

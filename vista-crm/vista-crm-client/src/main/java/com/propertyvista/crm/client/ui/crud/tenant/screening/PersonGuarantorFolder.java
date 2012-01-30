@@ -54,15 +54,13 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
 
     public PersonGuarantorFolder(boolean modifyable) {
         super(PersonGuarantor.class, modifyable);
-        inheritContainerAccessRules(false);
-        setEditable(modifyable);
         setViewable(true);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PersonGuarantor) {
-            return new GuarantorEditor();
+            return new PersonGuarantorEditor();
         }
         return super.create(member);
     }
@@ -72,9 +70,9 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
         new TenantSelectorDialog().show();
     }
 
-    private class GuarantorEditor extends CEntityFolderRowEditor<PersonGuarantor> {
+    private class PersonGuarantorEditor extends CEntityFolderRowEditor<PersonGuarantor> {
 
-        public GuarantorEditor() {
+        public PersonGuarantorEditor() {
             super(PersonGuarantor.class, columns());
         }
 
