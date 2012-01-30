@@ -31,6 +31,6 @@ public interface LoginView extends IsWidget {
 
     void enableHumanVerification();
 
-    void discard();
+    void reset();
 
 }

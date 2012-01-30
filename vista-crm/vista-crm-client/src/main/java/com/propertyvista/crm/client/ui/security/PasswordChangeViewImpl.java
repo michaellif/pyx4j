@@ -106,7 +106,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     }
 
     @Override
-    public void discard() {
+    public void reset() {
         form.reset();
     }
 

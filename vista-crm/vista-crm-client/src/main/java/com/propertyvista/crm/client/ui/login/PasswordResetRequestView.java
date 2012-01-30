@@ -30,6 +30,6 @@ public interface PasswordResetRequestView extends IsWidget {
 
     void displayPasswordResetFailedMessage();
 
-    void discard();
+    void reset();
 
 }

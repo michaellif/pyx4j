@@ -38,7 +38,7 @@ public interface PasswordChangeView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    void discard();
+    void reset();
 
     /**
      * @param userName

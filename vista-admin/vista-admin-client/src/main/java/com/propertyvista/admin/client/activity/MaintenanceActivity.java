@@ -45,7 +45,7 @@ public class MaintenanceActivity extends AbstractActivity implements IEditorView
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-        view.discard();
+        view.reset();
         populate();
         container.setWidget(view);
     }
