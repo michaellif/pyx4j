@@ -30,7 +30,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 
 public class MessageTemplates {
 
@@ -66,7 +65,7 @@ public class MessageTemplates {
             break;
         case ProspectiveApp:
             url = ServerSideConfiguration.instance().getMainApplicationURL()
-                    + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.ResetPassword.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+                    + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
             break;
         default:
             throw new Error("TODO");
@@ -79,10 +78,10 @@ public class MessageTemplates {
     }
 
     public static String createMasterApplicationInvitationEmail(String name, String token) {
-        return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
-                + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}{2}\">Application</a>", name,
+        String url = ServerSideConfiguration.instance().getMainApplicationURL()
+                + AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.ResetPassword.class, AuthenticationService.AUTH_TOKEN_ARG, token);
 
-        ServerSideConfiguration.instance().getMainApplicationURL(),
-                AppPlaceInfo.absoluteUrl(DeploymentConsts.PTAPP_URL, PtSiteMap.Login.class, ActivationService.PASSWORD_TOKEN, token)));
+        return wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
+                + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}\">Application</a>", name, url));
     }
 }

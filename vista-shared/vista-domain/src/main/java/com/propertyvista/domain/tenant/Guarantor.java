@@ -13,26 +13,16 @@
  */
 package com.propertyvista.domain.tenant;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Guarantor")
-public interface Guarantor extends IEntity, PersonScreeningHolder {
-
-    @NotNull
-    @ReadOnly
-    @Detached
-    @MemberColumn(name = "user_id")
-    TenantUser user();
+public interface Guarantor extends IEntity, PersonScreeningHolder, TenantUserHolder {
 
     @ToString(index = 0)
     @EmbeddedEntity

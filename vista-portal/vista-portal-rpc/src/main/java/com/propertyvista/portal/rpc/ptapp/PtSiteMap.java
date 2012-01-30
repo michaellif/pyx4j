@@ -29,6 +29,13 @@ public class PtSiteMap implements SiteMap {
     public static class Login extends AppPlace implements PublicPlace {
     }
 
+    /**
+     * Used while user is waiting for authentication required for password reset or when new application is created for him.
+     */
+    public static class LoginWithToken extends AppPlace implements PublicPlace {
+
+    }
+
     @PlaceProperties(caption = "Application Form")
     public static class RetrievePassword extends AppPlace implements PublicPlace {
     }

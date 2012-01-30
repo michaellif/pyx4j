@@ -21,14 +21,23 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailDeliveryStatus;
+import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.TenantUser;
+import com.propertyvista.domain.security.TenantUserHolder;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.PersonGuarantor;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -39,11 +48,15 @@ import com.propertyvista.dto.ApplicationStatusDTO;
 import com.propertyvista.dto.ApplicationStatusDTO.Role;
 import com.propertyvista.dto.MasterApplicationStatusDTO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.server.common.mail.MessageTemplates;
+import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.TenantUserCredential;
 
 public class ApplicationManager {
+
+    private static final I18n i18n = I18n.get(ApplicationManager.class);
 
     private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
         ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
@@ -65,11 +78,11 @@ public class ApplicationManager {
         return progress;
     }
 
-    static TenantUser ensureTenantUser(Tenant tenant, VistaTenantBehavior behavior) {
+    static TenantUser ensureTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
         TenantUser user = tenant.user();
         if (user.getPrimaryKey() == null) {
-            user.name().setValue(tenant.person().name().getStringView());
-            user.email().setValue(tenant.person().email().getValue());
+            user.name().setValue(person.name().getStringView());
+            user.email().setValue(person.email().getValue());
             Persistence.service().persist(user);
             Persistence.service().persist(tenant);
 
@@ -78,7 +91,7 @@ public class ApplicationManager {
 
             credential.user().set(user);
             //TODO use tokens
-            credential.credential().setValue(PasswordEncryptor.encryptPassword(tenant.person().email().getValue()));
+            credential.credential().setValue(PasswordEncryptor.encryptPassword(person.email().getValue()));
             credential.enabled().setValue(Boolean.TRUE);
             credential.behaviors().add(behavior);
             Persistence.service().persist(credential);
@@ -102,7 +115,7 @@ public class ApplicationManager {
                 a.belongsTo().set(ma);
                 a.status().setValue(MasterApplication.Status.Invited);
                 a.steps().addAll(ApplicationManager.createApplicationProgress());
-                a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveApplicant));
+                a.user().set(ensureTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveApplicant));
                 a.lease().set(ma.lease());
                 Persistence.service().persist(a);
 
@@ -110,6 +123,9 @@ public class ApplicationManager {
                 Persistence.service().persist(tenantInLease);
 
                 ma.applications().add(a);
+
+                sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedApplicant);
+
                 return ma;
             }
         }
@@ -136,6 +152,32 @@ public class ApplicationManager {
         Persistence.service().retrieve(lease);
         boolean allApplicationsSubmited = true;
 
+        // Invite Guarantors 
+        {
+            EntityQueryCriteria<TenantInLease> criteriaTL = EntityQueryCriteria.create(TenantInLease.class);
+            criteriaTL.add(PropertyCriterion.eq(criteriaTL.proto().application(), application));
+            TenantInLease tenantInLease = Persistence.service().retrieve(criteriaTL);
+
+            EntityQueryCriteria<PersonScreening> criteriaPS = EntityQueryCriteria.create(PersonScreening.class);
+            criteriaPS.add(PropertyCriterion.eq(criteriaPS.proto().screene(), tenantInLease.tenant()));
+            PersonScreening tenantScreenings = Persistence.service().retrieve(criteriaPS);
+
+            Persistence.service().retrieve(tenantScreenings.guarantors());
+            for (PersonGuarantor personGuarantor : tenantScreenings.guarantors()) {
+                Application a = EntityFactory.create(Application.class);
+                a.belongsTo().set(ma);
+                a.status().setValue(MasterApplication.Status.Invited);
+                //a.steps().addAll(ApplicationManager.createApplicationProgress());
+                a.user().set(ensureTenantUser(personGuarantor.guarantor(), personGuarantor.guarantor().person(), VistaTenantBehavior.Guarantor));
+                a.lease().set(ma.lease());
+                Persistence.service().persist(a);
+
+                ma.applications().add(a);
+                allApplicationsSubmited = false;
+                sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedGuarantor);
+            }
+        }
+
         if (isPrimary) {
             Persistence.service().retrieve(lease.tenants());
             for (TenantInLease tenantInLease : lease.tenants()) {
@@ -144,7 +186,7 @@ public class ApplicationManager {
                     a.belongsTo().set(ma);
                     a.status().setValue(MasterApplication.Status.Invited);
                     a.steps().addAll(ApplicationManager.createApplicationProgress());
-                    a.user().set(ensureTenantUser(tenantInLease.tenant(), VistaTenantBehavior.ProspectiveCoApplicant));
+                    a.user().set(ensureTenantUser(tenantInLease.tenant(), tenantInLease.tenant().person(), VistaTenantBehavior.ProspectiveCoApplicant));
                     a.lease().set(ma.lease());
                     Persistence.service().persist(a);
 
@@ -153,11 +195,8 @@ public class ApplicationManager {
 
                     ma.applications().add(a);
                     allApplicationsSubmited = false;
-
+                    sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedCoApplicant);
                 }
-            }
-            if (!allApplicationsSubmited) {
-                // TODO send E-mail to created applications
             }
         } else {
             for (Application app : ma.applications()) {
@@ -178,6 +217,25 @@ public class ApplicationManager {
                 Persistence.service().persist(app);
             }
         }
+    }
+
+    private static void sendInvitationEmail(TenantUser user, EmailTemplateType emailTemplateType) {
+        // Create Token and other stuff
+        String token = AccessKey.createAccessToken(user, TenantUserCredential.class, 10);
+        if (token == null) {
+            throw new UserRuntimeException("Invalid user account");
+        }
+
+        MailMessage m = new MailMessage();
+        m.setTo(user.email().getValue());
+        m.setSender(MessageTemplates.getSender());
+        m.setSubject("Property Vista application TODO " + emailTemplateType);
+        m.setHtmlBody(MessageTemplates.createMasterApplicationInvitationEmail(user.name().getValue(), token));
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+
     }
 
     public static MasterApplicationStatusDTO calculateStatus(MasterApplication ma) {
