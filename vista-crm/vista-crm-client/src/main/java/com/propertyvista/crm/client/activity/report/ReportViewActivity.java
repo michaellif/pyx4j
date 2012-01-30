@@ -15,6 +15,9 @@ package com.propertyvista.crm.client.activity.report;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
+
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.activity.board.CrmBoardViewActivity;
 import com.propertyvista.crm.client.ui.report.ReportView;
@@ -24,18 +27,27 @@ import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 
 public class ReportViewActivity extends CrmBoardViewActivity<ReportView> implements ReportView.Presenter {
 
+    private final static I18n i18n = I18n.get(ReportViewActivity.class);
+
     private final ReportMetadataService service = GWT.create(ReportMetadataService.class);
 
     public ReportViewActivity(Place place) {
-        this((ReportView) DashboardViewFactory.instance(ReportView.class), place);
+        this(DashboardViewFactory.instance(ReportView.class), place);
     }
 
     public ReportViewActivity(ReportView view, Place place) {
         super(view, place);
+        view.setPresenter(this);
     }
 
     @Override
     protected BoardMetadataServiceBase getService() {
         return service;
+    }
+
+    @Override
+    public void print() {
+        Window.alert("here be print dialog for the report dashboard with key = " + view.getData().getPrimaryKey());
+        // TODO ReportDialog.start(GWT.<ReportService<?>> create(CrmReportDashboardPrintSerivce.class), criteria);
     }
 }

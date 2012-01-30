@@ -18,5 +18,9 @@ import com.propertyvista.crm.client.ui.board.BoardView;
 public interface ReportView extends BoardView {
 
     public interface Presenter extends BoardView.Presenter {
+
+        void print();
     }
+
+    void setPresenter(Presenter presenter);
 }

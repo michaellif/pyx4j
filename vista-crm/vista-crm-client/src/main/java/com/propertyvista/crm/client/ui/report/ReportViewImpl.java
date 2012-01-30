@@ -13,12 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.report;
 
+import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.CrmBoardViewImpl;
 
 public class ReportViewImpl extends CrmBoardViewImpl implements ReportView {
 
+    private ReportView.Presenter presenter;
+
     public ReportViewImpl() {
         super(new ReportPanel());
+    }
+
+    @Override
+    public void setPresenter(ReportView.Presenter presenter) {
+        this.presenter = presenter;
+        setPresenter((BoardView.Presenter) presenter);
+        ((ReportPanel) board).setPresenter(presenter);
     }
 
 }
