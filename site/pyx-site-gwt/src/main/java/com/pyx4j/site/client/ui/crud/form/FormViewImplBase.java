@@ -128,7 +128,7 @@ public class FormViewImplBase<E extends IEntity> extends DockLayoutPanel impleme
     }
 
     @Override
-    public void discard() {
+    public void reset() {
         assert (form != null);
         form.reset();
     }

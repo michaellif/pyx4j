@@ -110,14 +110,14 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         // should be called first in start - some views can set appropriate form according to the current mode
         view.setEditMode(isNewEntity() ? EditMode.newItem : EditMode.existingItem);
-        view.discard();
+        view.reset();
         populate();
         containerWidget.setWidget(view);
     }
 
     @Override
     public void onStop() {
-        view.discard();
+        view.reset();
         super.onStop();
     }
 
@@ -258,7 +258,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected void onApplySuccess(E result) {
         if (isNewEntity()) { // switch new item to regular editing after successful apply!..
-            view.discard();
+            view.reset();
             goToEditor(result.getPrimaryKey());
         } else {
             onPopulateSuccess(result);
@@ -266,7 +266,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void onSaveSuccess(E result) {
-        view.discard();
+        view.reset();
         goToViewer(result.getPrimaryKey());
     }
 
