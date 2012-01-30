@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -35,8 +34,12 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
 
     private final static I18n i18n = I18n.get(EmailTemplatesPolicyEditorForm.class);
 
-    public EmailTemplatesPolicyEditorForm(IEditableComponentFactory factory) {
-        super(EmailTemplatesPolicyDTO.class, factory);
+    public EmailTemplatesPolicyEditorForm() {
+        this(false);
+    }
+
+    public EmailTemplatesPolicyEditorForm(boolean viewMode) {
+        super(EmailTemplatesPolicyDTO.class, viewMode);
     }
 
     @Override
@@ -66,7 +69,7 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
                 proto().applicationCreatedGuarantor(),
                 proto().applicationApproved(),
                 proto().applicationDeclined()
-        );//@formatter:on         
+        );//@formatter:on
     }
 
     // TODO this cannot be used because too many tabs are too wide and unable to fit in one sceen
