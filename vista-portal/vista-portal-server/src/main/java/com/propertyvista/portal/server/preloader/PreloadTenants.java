@@ -114,6 +114,8 @@ public class PreloadTenants extends BaseVistaDevDataPreloader {
 
             ApplicationSummaryGDO summary = generator.createLease(tenant, aptUnitSource.next());
             LeaseHelper.updateLease(summary.lease());
+            Persistence.service().persist(summary.lease().leaseFinancial().serviceAgreement());
+            Persistence.service().persist(summary.lease().leaseFinancial());
             Persistence.service().persist(summary.lease());
             for (TenantSummaryGDO tenantSummary : summary.tenants()) {
                 Persistence.service().persist(tenantSummary.tenantInLease());

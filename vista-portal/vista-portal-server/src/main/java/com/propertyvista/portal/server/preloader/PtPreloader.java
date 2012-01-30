@@ -112,8 +112,8 @@ public class PtPreloader extends BaseVistaDevDataPreloader {
 
         LeaseHelper.updateLease(summary.lease());
 
+        Persistence.service().persist(summary.lease().leaseFinancial().serviceAgreement());
         Persistence.service().persist(summary.lease().leaseFinancial());
-
         Persistence.service().persist(summary.lease());
 
         Double overalPercentageApproval = 0.0, maxPercentageApproval = 0.0;
