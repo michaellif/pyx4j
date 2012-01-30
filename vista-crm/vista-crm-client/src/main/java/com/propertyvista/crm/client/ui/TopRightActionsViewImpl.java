@@ -58,6 +58,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final SearchBox search;
 
+    private final CHyperlink getSatisfaction;
+
     private final Theme otherTheme = Theme.BrownWarm;
 
     public TopRightActionsViewImpl() {
@@ -140,6 +142,17 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
         search = new SearchBox();
 
+        getSatisfaction = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                presenter.showAccount(); // TODO replace with getSatisfaction script code, this is just a placeholder
+            }
+        });
+
+        getSatisfaction.setDebugId(new StringDebugId("getSatisfaction"));
+        getSatisfaction.setValue(i18n.tr("Get Satisfaction"));
+        getSatisfaction.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+
         /**
          * the following set of wrappers keep login/logout group relatively steady when
          * the elements right of it disappear
@@ -165,6 +178,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         container.add(messagewr);
         container.add(alertwr);
         container.add(locales);
+        container.add(getSatisfaction);
 
         add(container);
     }
@@ -192,6 +206,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         account.setVisible(false);
         settings.setVisible(false);
         login.setVisible(true);
+        getSatisfaction.setVisible(false);
         greetings.setHTML("");
     }
 
@@ -204,6 +219,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         account.setVisible(true);
         settings.setVisible(true);
         search.setVisible(true);
+        getSatisfaction.setVisible(true);
         greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
     }
 

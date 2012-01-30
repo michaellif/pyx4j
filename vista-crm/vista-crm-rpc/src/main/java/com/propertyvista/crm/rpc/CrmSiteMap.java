@@ -332,7 +332,6 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Feature Item Type")
-        //yuriyl temp note Context? No idea what to do here
         @NavigationItem(navigLabel = "Feature Item Type")
         public static class FeatureItemType extends CrudAppPlace {
 
