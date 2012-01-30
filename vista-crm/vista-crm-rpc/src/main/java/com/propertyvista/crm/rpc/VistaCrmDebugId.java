@@ -15,9 +15,11 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.commons.IDebugId;
 
-public enum VistaFormsDebugId implements IDebugId {
+public enum VistaCrmDebugId implements IDebugId {
 
-    MainNavigation_Prefix;
+    MainNavigation_Prefix,
+
+    BuildingDashboardSelector;
 
     @Override
     public String debugId() {

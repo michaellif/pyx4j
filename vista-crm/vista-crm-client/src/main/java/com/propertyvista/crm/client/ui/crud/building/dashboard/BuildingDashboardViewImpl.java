@@ -24,6 +24,7 @@ import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
 import com.propertyvista.crm.client.ui.gadgets.building.IBuildingGadget;
+import com.propertyvista.crm.rpc.VistaCrmDebugId;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 
@@ -35,6 +36,7 @@ public class BuildingDashboardViewImpl extends DashboardPanel implements Buildin
 
     public BuildingDashboardViewImpl() {
 
+        dashboardSelect.setDebugId(VistaCrmDebugId.BuildingDashboardSelector);
         dashboardSelect.setWidth("25em");
         dashboardSelect.addCriterion(PropertyCriterion.eq(dashboardSelect.proto().type(), DashboardType.building));
         dashboardSelect.addValueChangeHandler(new ValueChangeHandler<DashboardMetadata>() {
