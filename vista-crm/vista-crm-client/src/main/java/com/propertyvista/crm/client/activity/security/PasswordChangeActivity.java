@@ -37,6 +37,7 @@ import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
+import com.propertyvista.crm.rpc.services.tenant.TenantPasswordChangeService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
 
@@ -89,7 +90,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
                 service = GWT.<ManagedCrmUserService> create(ManagedCrmUserService.class);
             }
         } else if (principalClass.equals(PrincipalClass.TENANT)) {
-            service = GWT.<ManagedCrmUserService> create(ManagedCrmUserService.class);
+            service = GWT.<TenantPasswordChangeService> create(TenantPasswordChangeService.class);
         } else {
             throw new UnrecoverableClientError("Got unknown principal class or changing password for this principal has not yet been implemented");
         }
