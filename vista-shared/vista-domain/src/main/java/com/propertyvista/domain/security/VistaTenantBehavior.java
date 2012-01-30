@@ -25,6 +25,8 @@ public enum VistaTenantBehavior implements Behavior {
 
     Guarantor,
 
+    GuarantorSubmited,
+
     ProspectiveSubmited,
 
     ProspectiveApplicantSubmited,
