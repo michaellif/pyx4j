@@ -26,8 +26,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -137,6 +140,22 @@ public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformation
             termText = termText.replace("$[DATE]", "1st of January");
             termContent.setValue(termText);
         }
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        get(proto().depositAgree()).addValueValidator(new EditableValueValidator<Boolean>() {
+            @Override
+            public ValidationFailure isValid(CComponent<Boolean, ?> component, Boolean value) {
+                if (value == null) {
+                    return null;
+                }
+                return value ? null : new ValidationFailure(i18n.tr("You should agree on the terms"));
+            }
+        });
+
     }
 
     private Widget createTotal(IPrimitive<Double> member) {

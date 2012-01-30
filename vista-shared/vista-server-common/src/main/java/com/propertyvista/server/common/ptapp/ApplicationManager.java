@@ -254,14 +254,18 @@ public class ApplicationManager {
 
             EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), app.user()));
-            status.person().set(Persistence.service().retrieve(criteria).person().name());
-            status.role().setValue(Role.Tenant);
-
-            if (status.person().isEmpty()) {
+            Tenant tenant = Persistence.service().retrieve(criteria);
+            if (tenant != null) {
+                status.person().set(tenant.person().name());
+                status.role().setValue(Role.Tenant);
+            } else {
                 EntityQueryCriteria<PersonGuarantor> criteria1 = EntityQueryCriteria.create(PersonGuarantor.class);
                 criteria1.add(PropertyCriterion.eq(criteria1.proto().guarantor().user(), app.user()));
-                status.person().set(Persistence.service().retrieve(criteria1).guarantor().person().name());
-                status.role().setValue(Role.Guarantor);
+                PersonGuarantor guarantor = Persistence.service().retrieve(criteria1);
+                if (guarantor != null) {
+                    status.person().set(guarantor.guarantor().person().name());
+                    status.role().setValue(Role.Guarantor);
+                }
             }
 
             // calculate progress:
