@@ -8,31 +8,33 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jan 25, 2012
- * @author michaellif
+ * @author vladlouk
  * @version $Id$
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 
-public interface Bill extends IEntity {
+public interface BillingRun extends IEntity {
 
     @I18n
-    enum BillStatus {
+    enum BillingRunStatus {
+
+        Scheduled,
 
         Running,
 
         Finished,
 
-        Approved,
-
-        Rejected;
+        Completed;
 
         @Override
         public String toString() {
@@ -40,12 +42,19 @@ public interface Bill extends IEntity {
         }
     };
 
-    IPrimitive<BillStatus> billStatus();
+    @ReadOnly
+    BillingCycle billingCycle();
 
     @ReadOnly
-    BillingAccount billingAccount();
+    IPrimitive<LogicalDate> billingPeriodStartDate();
 
     @ReadOnly
-    BillingRun billingRun();
+    Building building();
+
+    IPrimitive<BillingRunStatus> billingRunStatus();
+
+    @ReadOnly
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> executionDate();
 
 }

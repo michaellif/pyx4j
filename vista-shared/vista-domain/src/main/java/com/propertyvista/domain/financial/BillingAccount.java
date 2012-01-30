@@ -13,8 +13,26 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.tenant.lease.LeaseFinancial;
+
 public interface BillingAccount extends IEntity {
+
+    //TODO bidirectional reference
+    @ReadOnly
+    LeaseFinancial leaseFinancial();
+
+    @ReadOnly
+    BillingCycle billingCycle();
+
+    /**
+     * Assign to BillingRun during billing extract.
+     * Set to null when last period bill has been approved or rejected.
+     */
+    BillingRun currentBillingRun();
 
 }

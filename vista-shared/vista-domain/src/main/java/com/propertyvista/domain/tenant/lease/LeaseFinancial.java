@@ -18,9 +18,14 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.financial.BillingAccount;
+
 public interface LeaseFinancial extends IEntity {
 
     ServiceAgreement serviceAgreement();
+
+    @Owned
+    BillingAccount billingAccount();
 
     @Owned
     @Caption(name = "Adjustmant Items")
