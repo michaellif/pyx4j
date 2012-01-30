@@ -146,4 +146,11 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
             showSettings();
         }
     }
+
+    @Override
+    public native void getSatisfaction()
+    /*-{
+		$wnd.getSatisfaction();
+    }-*/;
+
 }

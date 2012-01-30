@@ -35,6 +35,8 @@ public interface TopRightActionsView extends IsWidget {
         void SwitchCrmAndSettings();
 
         void setLocale(CompiledLocale locale);
+
+        void getSatisfaction();
     }
 
     void onLogedOut();

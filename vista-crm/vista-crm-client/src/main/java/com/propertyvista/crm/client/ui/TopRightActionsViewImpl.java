@@ -145,7 +145,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         getSatisfaction = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
-                presenter.showAccount(); // TODO replace with getSatisfaction script code, this is just a placeholder
+                presenter.getSatisfaction();
             }
         });
 
