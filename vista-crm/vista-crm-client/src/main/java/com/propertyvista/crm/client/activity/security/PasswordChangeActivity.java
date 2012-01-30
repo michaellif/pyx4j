@@ -32,7 +32,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.crm.client.ui.security.PasswordChangeView;
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;

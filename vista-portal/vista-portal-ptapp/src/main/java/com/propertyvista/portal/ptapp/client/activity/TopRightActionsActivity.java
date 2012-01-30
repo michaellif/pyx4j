@@ -40,7 +40,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private final TopRightActionsView view;
 
     public TopRightActionsActivity(Place place) {
-        view = (TopRightActionsView) PtAppViewFactory.instance(TopRightActionsView.class);
+        view = PtAppViewFactory.instance(TopRightActionsView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -94,6 +94,11 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void login() {
         AppSite.getPlaceController().goTo(new PtSiteMap.Login());
+    }
+
+    @Override
+    public void changePassword() {
+        AppSite.getPlaceController().goTo(new PtSiteMap.PasswordChange());
     }
 
 }

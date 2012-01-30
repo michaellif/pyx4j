@@ -22,9 +22,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
-import com.propertyvista.crm.client.ui.security.PasswordChangeView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;

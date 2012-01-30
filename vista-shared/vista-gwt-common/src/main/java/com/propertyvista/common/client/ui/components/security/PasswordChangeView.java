@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.security;
+package com.propertyvista.common.client.ui.components.security;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

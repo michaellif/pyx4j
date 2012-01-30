@@ -52,6 +52,8 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private final CHyperlink login;
 
+    private final CHyperlink passwordChange;
+
     private final HorizontalPanel locales;
 
     public TopRightActionsViewImpl() {
@@ -68,6 +70,16 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
         greetings = new HTML("");
         topLinksPanel.add(greetings);
+
+        passwordChange = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                presenter.changePassword();
+            }
+        });
+        passwordChange.setValue(i18n.tr("Change Password"));
+        topLinksPanel.add(passwordChange);
+        topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
 
         logout = new CHyperlink(null, new Command() {
             @Override
@@ -107,6 +119,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     public void onLogedOut() {
         logout.setVisible(false);
         login.setVisible(true);
+        passwordChange.setVisible(false);
         greetings.setHTML("");
     }
 
@@ -114,6 +127,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     public void onLogedIn(String userName) {
         logout.setVisible(true);
         login.setVisible(false);
+        passwordChange.setVisible(true);
         greetings.setHTML("Hello " + userName + "&nbsp;-&nbsp;");
     }
 

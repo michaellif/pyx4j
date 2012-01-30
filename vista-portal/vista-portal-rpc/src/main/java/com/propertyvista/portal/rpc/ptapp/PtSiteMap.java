@@ -38,7 +38,7 @@ public class PtSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class ChangePassword extends AppPlace {
+    public static class PasswordChange extends AppPlace {
     }
 
     @NavigationItem(navigLabel = "Apartment")

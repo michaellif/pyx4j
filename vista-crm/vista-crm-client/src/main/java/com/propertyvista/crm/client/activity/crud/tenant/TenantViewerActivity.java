@@ -26,9 +26,9 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.client.ui.security.PasswordChangeView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
 import com.propertyvista.crm.rpc.services.TenantCrudService;

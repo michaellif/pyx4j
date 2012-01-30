@@ -16,6 +16,8 @@ package com.propertyvista.portal.ptapp.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.ui.components.login.LoginView;
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationStatusView;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationStatusViewImpl;
@@ -76,7 +78,12 @@ public class PtAppViewFactory extends ViewFactoryBase {
 
             } else if (ApplicationStatusView.class.equals(type)) {
                 map.put(type, new ApplicationStatusViewImpl());
+
+            } else if (PasswordChangeView.class.equals(type)) {
+                map.put(type, new PasswordChangeViewImpl());
+
             }
+
         }
 
         @SuppressWarnings("unchecked")

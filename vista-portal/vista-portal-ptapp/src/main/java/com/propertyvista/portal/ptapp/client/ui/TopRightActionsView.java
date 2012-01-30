@@ -32,6 +32,8 @@ public interface TopRightActionsView extends IsWidget {
 
         public void login();
 
+        void changePassword();
+
         void setLocale(CompiledLocale locale);
 
     }

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.security;
+package com.propertyvista.common.client.ui.components.security;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.HtmlUtils;
@@ -32,7 +33,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 
 public class PasswordChangeViewImpl implements PasswordChangeView {
 
@@ -64,7 +64,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
                 if (form.isValid()) {
                     presenter.changePassword(form.getValue());
                 } else {
-                    // hope that from tells the user what's wrong.
+                    // hope that the form tells the user what's wrong.
                 }
             }
         });
@@ -72,7 +72,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
         content.setWidget(++row, 0, submitButton);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-        panel = new CrmScrollPanel(content);
+        panel = new ScrollPanel(content);
     }
 
     @Override

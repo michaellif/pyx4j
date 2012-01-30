@@ -20,9 +20,9 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.ptapp.client.activity.ApplicationStatusActivity;
-import com.propertyvista.portal.ptapp.client.activity.ChangePasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
+import com.propertyvista.portal.ptapp.client.activity.PasswordChangeActivity;
 import com.propertyvista.portal.ptapp.client.activity.ResetPasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
@@ -44,8 +44,8 @@ public class ContentActivityMapper implements ActivityMapper {
             return new LoginActivity(place);
         } else if (place instanceof PtSiteMap.RetrievePassword) {
             return new RetrievePasswordActivity(place);
-        } else if (place instanceof PtSiteMap.ChangePassword) {
-            return new ChangePasswordActivity(place);
+        } else if (place instanceof PtSiteMap.PasswordChange) {
+            return new PasswordChangeActivity(place);
         } else if (place instanceof PtSiteMap.ResetPassword) {
             return new ResetPasswordActivity(place);
         } else if (place instanceof PtSiteMap.GenericMessage) {
