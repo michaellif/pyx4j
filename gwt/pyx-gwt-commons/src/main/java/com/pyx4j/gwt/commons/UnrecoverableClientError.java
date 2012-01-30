@@ -30,4 +30,8 @@ public class UnrecoverableClientError extends Error {
     public UnrecoverableClientError(Throwable caught) {
         super(caught.getMessage(), caught);
     }
+
+    public UnrecoverableClientError(String message, Throwable caught) {
+        super(message, caught);
+    }
 }

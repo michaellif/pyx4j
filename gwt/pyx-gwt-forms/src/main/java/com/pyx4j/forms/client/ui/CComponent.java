@@ -51,6 +51,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> implements HasHandlers, HasPropertyChangeHandlers, IsWidget,
@@ -364,7 +365,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             try {
                 widget = createWidget();
             } catch (Throwable e) {
-                throw new Error("Widget could not be initialized", e);
+                throw new UnrecoverableClientError("Widget could not be initialized", e);
             }
             onWidgetCreated();
         }

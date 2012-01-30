@@ -193,6 +193,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     @Override
     public void setDebugId(IDebugId debugId) {
+        // TODO remove this, or make configurable
+        if (debugId == null) {
+            return;
+        }
+
+        assert (debugId != null) : "Unassigned DebugId in native component of " + getCComponent().shortDebugInfo();
         if (getEditor() != null) {
             getEditor().ensureDebugId(debugId.debugId());
 
