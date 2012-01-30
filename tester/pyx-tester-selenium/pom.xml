@@ -30,6 +30,12 @@
 
     <dependencies>
 
+        <!-- Hack for httpclient order (from selenium or GWT-DEV) -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-selenium</artifactId>
