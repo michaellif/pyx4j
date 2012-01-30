@@ -124,12 +124,14 @@ public class ApplicationManager {
 
                 ma.applications().add(a);
 
-                sendInvitationEmail(a.user(), EmailTemplateType.ApplicationCreatedApplicant);
-
                 return ma;
             }
         }
         throw new Error("Main applicant not found");
+    }
+
+    public static void sendMasterApplicationEmail(MasterApplication ma) {
+        sendInvitationEmail(ma.applications().iterator().next().user(), EmailTemplateType.ApplicationCreatedApplicant);
     }
 
     public static void makeApplicationCompleted(Application application) {

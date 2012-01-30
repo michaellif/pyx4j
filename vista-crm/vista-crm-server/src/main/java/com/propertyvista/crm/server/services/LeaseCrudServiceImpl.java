@@ -186,23 +186,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
         Persistence.service().retrieve(lease.tenants());
         MasterApplication ma = ApplicationManager.createMasterApplication(lease);
-
-        //TODO Move sendmail to separate function
-//        if ((false) && (user != null)) {
-//            Persistence.service().retrieve(user);
-//            String token = UserAccessUtils.createAccessToken(user, 5);
-//
-//            MailMessage m = new MailMessage();
-//            m.setTo(user.email().getValue());
-//            m.setSender(MessageTemplates.getSender());
-//            m.setSubject(i18n.tr("Property Vista application"));
-//            m.setHtmlBody(MessageTemplates.createMasterApplicationInvitationEmail(user.name().getValue(), token));
-//
-//            if (MailDeliveryStatus.Success != Mail.send(m)) {
-//                throw new UserRuntimeException(i18n.tr("Mail Service is temporary unavailable, try again later"));
-//            }
-//        }
-
+        ApplicationManager.sendMasterApplicationEmail(ma);
         callback.onSuccess(null);
     }
 }
