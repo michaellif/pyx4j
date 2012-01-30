@@ -28,7 +28,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
 /**
  * For primary - Unit for lease info + price + term
@@ -65,23 +65,23 @@ public interface ApartmentInfoDTO extends IEntity {
 
     IList<ProductItemType> externalUtilities();
 
-    IList<AgreedItem> agreedUtilities();
+    IList<BillableItem> agreedUtilities();
 
     IList<ProductItem> availableUtilities();
 
-    IList<AgreedItem> agreedPets();
+    IList<BillableItem> agreedPets();
 
     IList<ProductItem> availablePets();
 
-    IList<AgreedItem> agreedParking();
+    IList<BillableItem> agreedParking();
 
     IList<ProductItem> availableParking();
 
-    IList<AgreedItem> agreedStorage();
+    IList<BillableItem> agreedStorage();
 
     IList<ProductItem> availableStorage();
 
-    IList<AgreedItem> agreedOther();
+    IList<BillableItem> agreedOther();
 
     IList<ProductItem> availableOther();
 

@@ -32,8 +32,8 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
-import com.propertyvista.domain.tenant.lease.AgreedItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.ServiceAgreement;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
@@ -69,8 +69,8 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
             TenantInLeaseRetriever.UpdateLeaseTenants(dto);
 
             // calculate price adjustments:
-            PriceCalculationHelpers.calculateChargeItemAdjustments(dto.serviceAgreement().serviceItem());
-            for (AgreedItem item : dto.serviceAgreement().featureItems()) {
+            PriceCalculationHelpers.calculateChargeItemAdjustments(dto.leaseFinancial().serviceAgreement().serviceItem());
+            for (BillableItem item : dto.leaseFinancial().serviceAgreement().featureItems()) {
                 PriceCalculationHelpers.calculateChargeItemAdjustments(item);
             }
 
@@ -83,12 +83,12 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     @Override
     protected void persistDBO(Lease dbo, LeaseDTO in) {
         // persist non-owned lists items:
-        for (AgreedItem item : dbo.serviceAgreement().featureItems()) {
+        for (BillableItem item : dbo.leaseFinancial().serviceAgreement().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
         }
-        updateAdjustments(dbo.serviceAgreement());
+        updateAdjustments(dbo.leaseFinancial().serviceAgreement());
         Persistence.service().merge(dbo);
 
         int no = 0;
@@ -101,13 +101,13 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
 
     private void updateAdjustments(ServiceAgreement serviceAgreement) {
         updateAdjustments(serviceAgreement.serviceItem());
-        for (AgreedItem ci : serviceAgreement.featureItems()) {
+        for (BillableItem ci : serviceAgreement.featureItems()) {
             updateAdjustments(ci);
         }
     }
 
-    private void updateAdjustments(AgreedItem chargeItem) {
-        for (AgreedItemAdjustment cia : chargeItem.adjustments()) {
+    private void updateAdjustments(BillableItem chargeItem) {
+        for (BillableItemAdjustment cia : chargeItem.adjustments()) {
             if (cia.createdWhen().isNull()) {
                 cia.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
@@ -175,7 +175,7 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
     }
 
     @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, AgreedItem item) {
+    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, BillableItem item) {
         callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
     }
 

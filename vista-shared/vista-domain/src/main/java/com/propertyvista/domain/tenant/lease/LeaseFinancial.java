@@ -7,33 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 1, 2011
+ * Created on Jan 29, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.offering.Concession;
+public interface LeaseFinancial extends IEntity {
 
-public interface ServiceAgreement extends IEntity {
-
-    @EmbeddedEntity
-    BillableItem serviceItem();
+    ServiceAgreement serviceAgreement();
 
     @Owned
-    @Caption(name = "Charge Items")
-    IList<BillableItem> featureItems();
+    @Caption(name = "Adjustmant Items")
+    IList<BillableItem> adjustmantItems();
 
-    IList<Concession> concessions();
-
-    @MemberColumn(name = "billingAccount")
-    BillingAccount account();
 }

@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-07-25
- * @author Vlad
+ * Created on Jan 29, 2012
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial;
+package com.propertyvista.domain.financial.tax;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface Account extends IEntity {
+public interface TaxRule extends IEntity {
 
 }

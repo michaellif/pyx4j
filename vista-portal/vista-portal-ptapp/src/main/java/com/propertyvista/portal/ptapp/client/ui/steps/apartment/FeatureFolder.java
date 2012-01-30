@@ -28,9 +28,9 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
-public class FeatureFolder extends VistaTableFolder<AgreedItem> {
+public class FeatureFolder extends VistaTableFolder<BillableItem> {
 
     private static final I18n i18n = I18n.get(FeatureFolder.class);
 
@@ -39,15 +39,15 @@ public class FeatureFolder extends VistaTableFolder<AgreedItem> {
     private final ApartmentViewForm apartmentViewForm;
 
     public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
-        super(AgreedItem.class, modifiable);
+        super(BillableItem.class, modifiable);
 
         this.type = type;
         this.apartmentViewForm = apartmentViewForm;
     }
 
     @Override
-    protected IFolderDecorator<AgreedItem> createDecorator() {
-        IFolderDecorator<AgreedItem> decor = super.createDecorator();
+    protected IFolderDecorator<BillableItem> createDecorator() {
+        IFolderDecorator<BillableItem> decor = super.createDecorator();
         return decor;
     }
 
@@ -68,7 +68,7 @@ public class FeatureFolder extends VistaTableFolder<AgreedItem> {
                 @Override
                 public boolean onClickOk() {
                     for (ProductItem item : getSelectedItems()) {
-                        AgreedItem newItem = EntityFactory.create(AgreedItem.class);
+                        BillableItem newItem = EntityFactory.create(BillableItem.class);
                         newItem.item().set(item);
                         newItem.originalPrice().setValue(item.price().getValue());
                         newItem.agreedPrice().setValue(item.price().getValue());
@@ -80,12 +80,12 @@ public class FeatureFolder extends VistaTableFolder<AgreedItem> {
         }
     }
 
-    protected void unconditionalRemoveItem(CEntityFolderItem<AgreedItem> item) {
+    protected void unconditionalRemoveItem(CEntityFolderItem<BillableItem> item) {
         super.removeItem(item);
     }
 
     @Override
-    protected void removeItem(final CEntityFolderItem<AgreedItem> item) {
+    protected void removeItem(final CEntityFolderItem<BillableItem> item) {
         if (!item.getValue().adjustments().isEmpty()) {
             MessageDialog.confirm(i18n.tr("Warning!"),
                     i18n.tr("By removing the selected item you will lose the agreed price and adjustment(s)! Are you sure you want to remove it?"),

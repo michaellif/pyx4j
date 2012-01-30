@@ -29,11 +29,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
+import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 
 @Table(name = "pt_vehicle")
 @DiscriminatorValue("Vehicle_ChargeItemExtraData")
-public interface Vehicle extends AgreedItemExtraData {
+public interface Vehicle extends BillableItemExtraData {
 
     @NotNull
     @BusinessEqualValue

@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.offering.ProductItem;
 
 @ToStringFormat("{0}")
-public interface AgreedItem extends IEntity {
+public interface BillableItem extends IEntity {
 
     @ToString(index = 0)
     @Caption(name = "Service Item")
@@ -46,9 +46,9 @@ public interface AgreedItem extends IEntity {
     IPrimitive<Double> agreedPrice();
 
     @Owned
-    IList<AgreedItemAdjustment> adjustments();
+    IList<BillableItemAdjustment> adjustments();
 
-    AgreedItemExtraData extraData();
+    BillableItemExtraData extraData();
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> effectiveDate();

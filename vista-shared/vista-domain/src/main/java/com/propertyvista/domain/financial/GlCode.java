@@ -7,26 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Jan 29, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
+package com.propertyvista.domain.financial;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ProductItem;
+public interface GlCode extends IEntity {
 
-public interface Adjustment extends IEntity {
+    IPrimitive<Integer> glId();
 
-    ProductItem adjustment();
-
-    @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> price();
+    GlCodeCategory glCodeCategory();
 
 }

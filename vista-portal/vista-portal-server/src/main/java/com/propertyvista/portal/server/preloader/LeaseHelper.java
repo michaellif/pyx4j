@@ -23,10 +23,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 class LeaseHelper {
@@ -59,7 +59,7 @@ class LeaseHelper {
                 Persistence.service().retrieve(service.items());
                 for (ProductItem item : service.items()) {
                     if (lease.unit().equals(item.element())) {
-                        lease.serviceAgreement().serviceItem().set(createChargeItem(item));
+                        lease.leaseFinancial().serviceAgreement().serviceItem().set(createChargeItem(item));
                         selectedService = service;
                         lease.type().set(selectedService.type());
                         break;
@@ -68,7 +68,7 @@ class LeaseHelper {
             }
         }
 
-        if (!lease.serviceAgreement().serviceItem().isEmpty()) {
+        if (!lease.leaseFinancial().serviceAgreement().serviceItem().isEmpty()) {
             Persistence.service().retrieve(building.serviceCatalog());
             // pre-populate utilities for the new service: 
             Persistence.service().retrieve(selectedService.features());
@@ -78,7 +78,7 @@ class LeaseHelper {
                     for (ProductItem item : feature.items()) {
                         if (!building.serviceCatalog().includedUtilities().contains(item.type())
                                 && !building.serviceCatalog().externalUtilities().contains(item.type())) {
-                            lease.serviceAgreement().featureItems().add(createChargeItem(item));
+                            lease.leaseFinancial().serviceAgreement().featureItems().add(createChargeItem(item));
                         }
                     }
                 }
@@ -88,13 +88,13 @@ class LeaseHelper {
             // pre-populate concessions for the new service: 
             Persistence.service().retrieve(selectedService.concessions());
             if (!selectedService.concessions().isEmpty()) {
-                lease.serviceAgreement().concessions().add(RandomUtil.random(selectedService.concessions()));
+                lease.leaseFinancial().serviceAgreement().concessions().add(RandomUtil.random(selectedService.concessions()));
             }
         }
     }
 
-    private static AgreedItem createChargeItem(ProductItem serviceItem) {
-        AgreedItem chargeItem = EntityFactory.create(AgreedItem.class);
+    private static BillableItem createChargeItem(ProductItem serviceItem) {
+        BillableItem chargeItem = EntityFactory.create(BillableItem.class);
         chargeItem.item().set(serviceItem);
         chargeItem.originalPrice().setValue(serviceItem.price().getValue());
         chargeItem.agreedPrice().setValue(serviceItem.price().getValue());

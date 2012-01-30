@@ -13,8 +13,20 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
 public interface Charge extends IEntity {
+
+    BillableItem agreedItem();
+
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<Double> price();
 
 }

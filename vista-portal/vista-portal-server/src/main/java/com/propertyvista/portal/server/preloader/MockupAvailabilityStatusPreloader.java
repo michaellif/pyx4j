@@ -116,9 +116,9 @@ public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {
                 EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
                 leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), unit));
                 Lease lease = Persistence.service().retrieve(leaseCriteria);
-                if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
-                    PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
-                    unit.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().agreedPrice().getValue());
+                if (lease != null && !lease.leaseFinancial().serviceAgreement().isNull() && !lease.leaseFinancial().serviceAgreement().serviceItem().isNull()) {
+                    PriceCalculationHelpers.calculateChargeItemAdjustments(lease.leaseFinancial().serviceAgreement().serviceItem());
+                    unit.financial()._unitRent().setValue(lease.leaseFinancial().serviceAgreement().serviceItem().agreedPrice().getValue());
                 }
 
                 double marketRent = unit.financial()._marketRent().isNull() ? 0d : unit.financial()._marketRent().getValue();

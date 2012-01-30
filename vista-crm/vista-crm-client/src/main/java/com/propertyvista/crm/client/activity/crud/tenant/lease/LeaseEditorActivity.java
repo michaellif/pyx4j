@@ -31,13 +31,13 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.TenantInLease;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -51,7 +51,7 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     @Override
     public void onPopulateSuccess(LeaseDTO result) {
         fillserviceItems(result);
-        fillServiceEligibilityData(result, result.serviceAgreement().serviceItem().item());
+        fillServiceEligibilityData(result, result.leaseFinancial().serviceAgreement().serviceItem().item());
 
         super.onPopulateSuccess(result);
     }
@@ -109,11 +109,11 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
             clearServiceAgreement(currentValue, false);
 
             // set selected service:
-            currentValue.serviceAgreement().serviceItem().set(createChargeItem(serviceItem));
+            currentValue.leaseFinancial().serviceAgreement().serviceItem().set(createChargeItem(serviceItem));
 
             // pre-populate utilities for the new service:
             for (ProductItem item : currentValue.selectedUtilityItems()) {
-                currentValue.serviceAgreement().featureItems().add(createChargeItem(item));
+                currentValue.leaseFinancial().serviceAgreement().featureItems().add(createChargeItem(item));
             }
 
             view.populate(currentValue);
@@ -131,16 +131,16 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, AgreedItem item) {
+    public void calculateChargeItemAdjustments(AsyncCallback<Double> callback, BillableItem item) {
         ((LeaseCrudService) service).calculateChargeItemAdjustments(callback, item);
     }
 
     private void clearServiceAgreement(LeaseDTO currentValue, boolean all) {
         if (all) {
-            currentValue.serviceAgreement().serviceItem().set(null);
+            currentValue.leaseFinancial().serviceAgreement().serviceItem().set(null);
         }
-        currentValue.serviceAgreement().featureItems().clear();
-        currentValue.serviceAgreement().concessions().clear();
+        currentValue.leaseFinancial().serviceAgreement().featureItems().clear();
+        currentValue.leaseFinancial().serviceAgreement().concessions().clear();
     }
 
     private void fillserviceItems(LeaseDTO currentValue) {
@@ -207,8 +207,8 @@ public class LeaseEditorActivity extends EditorActivityBase<LeaseDTO> implements
         return (selectedService != null);
     }
 
-    private AgreedItem createChargeItem(ProductItem serviceItem) {
-        AgreedItem chargeItem = EntityFactory.create(AgreedItem.class);
+    private BillableItem createChargeItem(ProductItem serviceItem) {
+        BillableItem chargeItem = EntityFactory.create(BillableItem.class);
         chargeItem.item().set(serviceItem);
         chargeItem.originalPrice().setValue(serviceItem.price().getValue());
         chargeItem.agreedPrice().setValue(serviceItem.price().getValue());

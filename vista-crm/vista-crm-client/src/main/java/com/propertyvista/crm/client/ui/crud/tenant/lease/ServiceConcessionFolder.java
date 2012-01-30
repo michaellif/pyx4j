@@ -57,7 +57,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
     @Override
     protected void addItem() {
-        if (parent.getValue().serviceAgreement().serviceItem().isNull()) {
+        if (parent.getValue().leaseFinancial().serviceAgreement().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
         } else {
 

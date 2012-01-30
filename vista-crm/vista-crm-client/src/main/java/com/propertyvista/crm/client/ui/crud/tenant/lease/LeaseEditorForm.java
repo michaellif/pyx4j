@@ -194,7 +194,7 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
         HorizontalPanel serviceItemPanel = new HorizontalPanel();
         if (isEditable()) {
             Widget select;
-            serviceItemPanel.add(inject(proto().serviceAgreement().serviceItem(), new AgreedItemEditor()));
+            serviceItemPanel.add(inject(proto().leaseFinancial().serviceAgreement().serviceItem(), new AgreedItemEditor()));
             serviceItemPanel.add(select = new AnchorButton("Select...", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -228,20 +228,20 @@ public class LeaseEditorForm extends CrmEntityForm<LeaseDTO> {
             }));
             select.getElement().getStyle().setMarginLeft(4, Unit.EM);
         } else {
-            serviceItemPanel.add(new DecoratorBuilder(inject(proto().serviceAgreement().serviceItem(), new CEntityLabel()), 50).build());
+            serviceItemPanel.add(new DecoratorBuilder(inject(proto().leaseFinancial().serviceAgreement().serviceItem(), new CEntityLabel()), 50).build());
         }
 
         int row = -1;
         main.setWidget(++row, 0, serviceItemPanel);
 
-        main.setH1(++row, 0, 2, proto().serviceAgreement().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().serviceAgreement().featureItems(), new AgreedItemFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().leaseFinancial().serviceAgreement().featureItems().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().leaseFinancial().serviceAgreement().featureItems(), new AgreedItemFolder(isEditable(), this)));
 
-        main.setH1(++row, 0, 2, proto().serviceAgreement().concessions().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().serviceAgreement().concessions(), new ServiceConcessionFolder(isEditable(), this)));
+        main.setH1(++row, 0, 2, proto().leaseFinancial().serviceAgreement().concessions().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().leaseFinancial().serviceAgreement().concessions(), new ServiceConcessionFolder(isEditable(), this)));
 
         main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceAgreement().account()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFinancial().serviceAgreement().account()), 15).build());
 
         return new CrmScrollPanel(main);
     }

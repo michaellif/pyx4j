@@ -13,15 +13,15 @@
  */
 package com.propertyvista.server.common.charges;
 
-import com.propertyvista.domain.tenant.lease.AgreedItem;
-import com.propertyvista.domain.tenant.lease.AgreedItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
 public class PriceCalculationHelpers {
 
-    public static Double calculateChargeItemAdjustments(AgreedItem item) {
+    public static Double calculateChargeItemAdjustments(BillableItem item) {
         Double adjustedPrice = item.originalPrice().getValue();
 
-        for (AgreedItemAdjustment adjustment : item.adjustments()) {
+        for (BillableItemAdjustment adjustment : item.adjustments()) {
             Double calculated = calculateChargeItemAdjustments(adjustedPrice, adjustment);
             if (!calculated.isNaN()) {
                 adjustedPrice = calculated;
@@ -31,7 +31,7 @@ public class PriceCalculationHelpers {
         return adjustedPrice;
     }
 
-    public static Double calculateChargeItemAdjustments(Double startPrice, AgreedItemAdjustment adjustment) {
+    public static Double calculateChargeItemAdjustments(Double startPrice, BillableItemAdjustment adjustment) {
         // preconditions:
         if (adjustment.isNull() || adjustment.type().isNull() || adjustment.termType().isNull()) {
             return Double.NaN; // not fully filled adjustment!.. 
@@ -39,8 +39,8 @@ public class PriceCalculationHelpers {
 
         // Calculate adjustments:
         Double adjustedPrice = startPrice;
-        if (adjustment.termType().getValue().equals(AgreedItemAdjustment.TermType.term)) {
-            if (adjustment.type().getValue().equals(AgreedItemAdjustment.Type.free)) {
+        if (adjustment.termType().getValue().equals(BillableItemAdjustment.TermType.term)) {
+            if (adjustment.type().getValue().equals(BillableItemAdjustment.Type.free)) {
                 adjustedPrice = 0.0;
             } else {
                 if (adjustment.value().isNull()) {

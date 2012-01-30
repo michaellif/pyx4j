@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
 
-public interface AgreedItemAdjustment extends IEntity {
+public interface BillableItemAdjustment extends IEntity {
 
     @I18n
     @XmlType(name = "ChargeAdjustmentType")

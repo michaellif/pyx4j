@@ -21,6 +21,6 @@ import com.pyx4j.i18n.annotations.I18n;
 @Inheritance
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AgreedItemExtraData extends IEntity {
+public interface BillableItemExtraData extends IEntity {
 
 }

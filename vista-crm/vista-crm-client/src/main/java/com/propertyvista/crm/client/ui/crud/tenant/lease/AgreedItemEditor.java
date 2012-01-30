@@ -37,13 +37,13 @@ import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
-import com.propertyvista.domain.tenant.lease.AgreedItemAdjustment;
-import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
+import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
-class AgreedItemEditor extends CEntityDecoratableEditor<AgreedItem> {
+class AgreedItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private static final I18n i18n = I18n.get(AgreedItemEditor.class);
 
@@ -52,7 +52,7 @@ class AgreedItemEditor extends CEntityDecoratableEditor<AgreedItem> {
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
     public AgreedItemEditor() {
-        super(AgreedItem.class);
+        super(BillableItem.class);
     }
 
     @Override
@@ -93,7 +93,7 @@ class AgreedItemEditor extends CEntityDecoratableEditor<AgreedItem> {
             if (getValue().item().type().featureType().getValue() == Feature.Type.utility) {
                 // correct folder item:
                 if (getParent() instanceof CEntityFolderItem) {
-                    CEntityFolderItem<AgreedItem> item = (CEntityFolderItem<AgreedItem>) getParent();
+                    CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
                     item.setRemovable(false);
                 }
             }
@@ -103,7 +103,7 @@ class AgreedItemEditor extends CEntityDecoratableEditor<AgreedItem> {
             }
 
             CEntityEditor editor = null;
-            AgreedItemExtraData extraData = getValue().extraData();
+            BillableItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:
             switch (getValue().item().type().type().getValue()) {
@@ -150,10 +150,10 @@ class AgreedItemEditor extends CEntityDecoratableEditor<AgreedItem> {
         super.addValidations();
     }
 
-    private class ChargeItemAdjustmentFolder extends VistaTableFolder<AgreedItemAdjustment> {
+    private class ChargeItemAdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
 
         public ChargeItemAdjustmentFolder() {
-            super(AgreedItemAdjustment.class, AgreedItemEditor.this.isEditable());
+            super(BillableItemAdjustment.class, AgreedItemEditor.this.isEditable());
         }
 
         @Override

@@ -76,9 +76,9 @@ public class UnitCrudServiceImpl extends GenericCrudServiceDtoImpl<AptUnit, AptU
         EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), in));
         Lease lease = Persistence.service().retrieve(leaseCriteria);
-        if (lease != null && !lease.serviceAgreement().isNull() && !lease.serviceAgreement().serviceItem().isNull()) {
-            PriceCalculationHelpers.calculateChargeItemAdjustments(lease.serviceAgreement().serviceItem());
-            dto.financial()._unitRent().setValue(lease.serviceAgreement().serviceItem().agreedPrice().getValue());
+        if (lease != null && !lease.leaseFinancial().serviceAgreement().isNull() && !lease.leaseFinancial().serviceAgreement().serviceItem().isNull()) {
+            PriceCalculationHelpers.calculateChargeItemAdjustments(lease.leaseFinancial().serviceAgreement().serviceItem());
+            dto.financial()._unitRent().setValue(lease.leaseFinancial().serviceAgreement().serviceItem().agreedPrice().getValue());
         }
     }
 

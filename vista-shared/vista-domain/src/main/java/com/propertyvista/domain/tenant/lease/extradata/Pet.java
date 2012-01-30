@@ -24,10 +24,10 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.tenant.lease.AgreedItemExtraData;
+import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 
 @DiscriminatorValue("Pet_ChargeItemExtraData")
-public interface Pet extends AgreedItemExtraData {
+public interface Pet extends BillableItemExtraData {
 
     @I18nComment("Weight unit")
     public enum WeightUnit {

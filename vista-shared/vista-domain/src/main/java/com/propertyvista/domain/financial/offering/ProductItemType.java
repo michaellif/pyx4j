@@ -23,6 +23,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.tax.TaxRule;
+
 public interface ProductItemType extends IEntity {
 
     @I18n
@@ -47,4 +50,9 @@ public interface ProductItemType extends IEntity {
     IPrimitive<Service.Type> serviceType();
 
     IPrimitive<Feature.Type> featureType();
+
+    GlCode glCode();
+
+    TaxRule taxRule();
+
 }

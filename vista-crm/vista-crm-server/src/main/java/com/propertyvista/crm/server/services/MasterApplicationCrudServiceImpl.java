@@ -27,7 +27,7 @@ import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -98,14 +98,14 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
 
     private void calculatePrices(MasterApplication in, MasterApplicationDTO dto) {
         // calculate price adjustments:
-        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().serviceAgreement().serviceItem());
+        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.lease().leaseFinancial().serviceAgreement().serviceItem());
 
-        dto.rentPrice().setValue(dto.lease().serviceAgreement().serviceItem().agreedPrice().getValue());
+        dto.rentPrice().setValue(dto.lease().leaseFinancial().serviceAgreement().serviceItem().agreedPrice().getValue());
         dto.parkingPrice().setValue(0.);
         dto.otherPrice().setValue(0.);
         dto.deposit().setValue(0.);
 
-        for (AgreedItem item : dto.lease().serviceAgreement().featureItems()) {
+        for (BillableItem item : dto.lease().leaseFinancial().serviceAgreement().featureItems()) {
             PriceCalculationHelpers.calculateChargeItemAdjustments(item); // calculate price adjustments
             if (item.item().product() instanceof Feature) {
                 switch (((Feature) item.item().product()).type().getValue()) {
@@ -119,7 +119,7 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
             }
         }
 
-        dto.discounts().setValue(!dto.lease().serviceAgreement().concessions().isEmpty());
+        dto.discounts().setValue(!dto.lease().leaseFinancial().serviceAgreement().concessions().isEmpty());
     }
 
     @Override

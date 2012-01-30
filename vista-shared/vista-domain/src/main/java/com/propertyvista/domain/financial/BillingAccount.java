@@ -7,26 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
- * @author michaellif
+ * Created on 2011-07-25
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
+package com.propertyvista.domain.financial;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ProductItem;
-
-public interface Adjustment extends IEntity {
-
-    ProductItem adjustment();
-
-    @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<Double> price();
+public interface BillingAccount extends IEntity {
 
 }

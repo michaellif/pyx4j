@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.AgreedItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
@@ -29,7 +29,7 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void removeTenat(AsyncCallback<Boolean> callback, Key entityId);
 
-    void calculateChargeItemAdjustments(AsyncCallback<Double> callback, AgreedItem item);
+    void calculateChargeItemAdjustments(AsyncCallback<Double> callback, BillableItem item);
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 }
