@@ -122,6 +122,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTemplatesPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
@@ -672,6 +675,18 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     }
 
+                } else if (place instanceof CrmSiteMap.Settings.Policies.EmailTemplates) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case lister:
+                        activity = new EmailTemplatesPolicyListerActivity(place);
+                        break;
+                    case editor:
+                        activity = new EmailTemplatesPolicyEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new EmailTemplatesPolicyViewerActivity(place);
+                        break;
+                    }
                 } else if (place instanceof CrmSiteMap.Settings.Policies.Misc) {
                     switch (((CrudAppPlace) place).getType()) {
                     case lister:

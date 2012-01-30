@@ -8,34 +8,16 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jan 30, 2012
- * @author vlads
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.communication;
+package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.entity.annotations.Transient;
 
-@I18n
-public enum EmailTemplateType {
+import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 
-    PasswordRetrievalCrm,
-
-    PasswordRetrievalTenant,
-
-    ApplicationCreatedApplicant,
-
-    ApplicationCreatedCoApplicant,
-
-    ApplicationCreatedGuarantor,
-
-    ApplicationApproved,
-
-    ApplicationDeclined;
-
-    @Override
-    public String toString() {
-        return I18nEnum.toString(this);
-    }
+@Transient
+public interface EmailTemplatesPolicyDTO extends PolicyDTOBase, EmailTemplatesPolicy {
 
 }

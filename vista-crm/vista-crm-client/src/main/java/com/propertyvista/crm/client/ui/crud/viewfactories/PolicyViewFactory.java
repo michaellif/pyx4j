@@ -20,6 +20,12 @@ import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.Ap
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
@@ -56,6 +62,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(PetPolicyEditorView.class, new PetPolicyEditorViewImpl());
             } else if (PetPolicyViewerView.class.equals(type)) {
                 map.put(PetPolicyViewerView.class, new PetPolicyViewerViewImpl());
+
+            } else if (EmailTemplatesPolicyListerView.class.equals(type)) {
+                map.put(EmailTemplatesPolicyListerView.class, new EmailTemplatesPolicyListerViewImpl());
+            } else if (EmailTemplatesPolicyViewerView.class.equals(type)) {
+                map.put(EmailTemplatesPolicyViewerView.class, new EmailTemplatesPolicyViewerViewImpl());
+            } else if (EmailTemplatesPolicyEditorView.class.equals(type)) {
+                map.put(EmailTemplatesPolicyEditorView.class, new EmailTemplatesPolicyEditorViewImpl());
 
             } else if (MiscPolicyListerView.class.equals(type)) {
                 map.put(MiscPolicyListerView.class, new MiscPolicyListerViewImpl());

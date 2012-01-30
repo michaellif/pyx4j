@@ -35,7 +35,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
     private final NavigView view;
 
     public NavigSettingsActivity(Place place) {
-        view = (NavigView) CrmVeiwFactory.instance(NavigView.class);
+        view = CrmVeiwFactory.instance(NavigView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -87,6 +87,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
 //        folder.addNavigItem(new CrmSiteMap.Settings.Policies.PetPolicy());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.EmailTemplates());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Misc());
         return folder;
     }

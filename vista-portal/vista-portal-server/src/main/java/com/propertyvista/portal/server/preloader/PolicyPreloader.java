@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertvista.generator.BuildingsGenerator;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -33,9 +36,11 @@ import com.propertyvista.domain.policy.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.Policy;
 import com.propertyvista.domain.policy.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
+import com.propertyvista.domain.policy.policies.specials.EmailTemplate;
 import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
@@ -47,6 +52,8 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
 
     private static final I18n i18n = I18n.get(PolicyPreloader.class);
 
+    private static final Logger log = LoggerFactory.getLogger(PolicyPreloader.class);
+
     @Override
     public String create() {
         // Create the node for default policies and default policies
@@ -57,7 +64,8 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
                 createMiscPolicy(),
                 createDefaultApplicationDocumentationPolicy(),
                 createDefaultLeaseTermsPolicy(),
-                createDefaultPetPolicy()
+                createDefaultPetPolicy(),
+                createDefaultEmailTemplatesPolicy()
         );//@formatter:on
 
         for (Policy policy : defaults) {
@@ -134,6 +142,86 @@ public class PolicyPreloader extends BaseVistaDevDataPreloader {
         }
         Persistence.service().persist(petPolicy);
         return petPolicy;
+    }
+
+    private EmailTemplatesPolicy createDefaultEmailTemplatesPolicy() {
+        EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
+
+        policy.passwordRetrievalCrm().set(defaultEmailTemplatePasswordRetrievalCrm());
+        policy.passwordRetrievalTenant().set(defaultEmailTemplatePasswordRetrievalTenant());
+        policy.applicationCreatedApplicant().set(defaultEmailTemplateApplicationCreatedApplicant());
+        policy.applicationCreatedCoApplicant().set(defaultEmailTemplateApplicationCreatedCoApplicant());
+        policy.applicationCreatedGuarantor().set(defaultEmailTemplateApplicationCreatedGuarantor());
+        policy.applicationApproved().set(defaultEmailTemplateApplicationApproved());
+        policy.applicationDeclined().set(defaultEmailTemplateApplicationDeclined());
+
+        Persistence.service().persist(policy);
+        return policy;
+    }
+
+    public static String wrapHtml(String text) {
+        try {
+            String html = IOUtils.getTextResource("email/template-basic.html");
+            return html.replace("{MESSAGE}", text);
+        } catch (IOException e) {
+            log.error("template error", e);
+            return text;
+        }
+    }
+
+    private EmailTemplate defaultEmailTemplatePasswordRetrievalCrm() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("here be subject"));
+        template.content().setValue(
+                wrapHtml(i18n.tr("Dear {userName},<br/>\n"
+                        + "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n"
+                        + "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n"
+                        + "    <a style=\"color:#929733\" href=\"{passwordResetUrl}\">Change Your Password</a>")));
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplatePasswordRetrievalTenant() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("here be subject"));
+        template.content().setValue(wrapHtml(i18n.tr("here be body")));
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateApplicationCreatedApplicant() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("here be subject"));
+        template.content().setValue(
+                wrapHtml(i18n.tr("Dear {0},<br/>\n" + "This email was sent to you in response to your request to apply for Property Vista apartments.<br/>\n"
+                        + "Click the link below to go to the Property Vista site:<br/>\n" + "    <a style=\"color:#929733\" href=\"{1}\">Application</a>")));
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateApplicationCreatedCoApplicant() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("here be subject"));
+        template.content().setValue(wrapHtml(i18n.tr("here be body")));
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateApplicationCreatedGuarantor() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("here be subject"));
+        template.content().setValue(wrapHtml(i18n.tr("here be body")));
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateApplicationApproved() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("here be subject"));
+        template.content().setValue(wrapHtml(i18n.tr("here be body")));
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateApplicationDeclined() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("here be subject"));
+        template.content().setValue(wrapHtml(i18n.tr("here be body")));
+        return template;
     }
 
     private LeaseTermsPolicy createDefaultLeaseTermsPolicy() {
