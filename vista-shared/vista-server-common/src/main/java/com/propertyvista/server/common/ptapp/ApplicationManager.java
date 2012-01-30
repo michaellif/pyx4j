@@ -78,6 +78,18 @@ public class ApplicationManager {
         return progress;
     }
 
+    public static List<ApplicationWizardStep> createGuarantorApplicationProgress() {
+        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
+        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
+        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+        return progress;
+    }
+
     static TenantUser ensureTenantUser(TenantUserHolder tenant, Person person, VistaTenantBehavior behavior) {
         TenantUser user = tenant.user();
         if (user.getPrimaryKey() == null) {
@@ -169,7 +181,7 @@ public class ApplicationManager {
                 Application a = EntityFactory.create(Application.class);
                 a.belongsTo().set(ma);
                 a.status().setValue(MasterApplication.Status.Invited);
-                //a.steps().addAll(ApplicationManager.createApplicationProgress());
+                a.steps().addAll(ApplicationManager.createGuarantorApplicationProgress());
                 a.user().set(ensureTenantUser(personGuarantor.guarantor(), personGuarantor.guarantor().person(), VistaTenantBehavior.Guarantor));
                 a.lease().set(ma.lease());
                 Persistence.service().persist(a);
