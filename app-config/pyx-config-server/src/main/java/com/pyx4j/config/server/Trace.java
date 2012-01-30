@@ -56,4 +56,24 @@ public class Trace {
         }
         return tid.id + "}";
     }
+
+    public static String getCallOrigin(Class<?> apiEntryClass) {
+        StackTraceElement[] ste = new Throwable().getStackTrace();
+        for (int i = ste.length - 1; i > 2; i--) {
+            if (ste[i].getClassName().equals(apiEntryClass.getName())) {
+                return clickableLocation(ste[i + 1]);
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Make Line# clickable in eclipse
+     */
+    public static String clickableLocation(StackTraceElement ste) {
+        if (ste == null) {
+            return "";
+        }
+        return "\t{ " + ste.getClassName() + "." + ste.getMethodName() + "(" + ste.getFileName() + ":" + ste.getLineNumber() + ")}";
+    }
 }

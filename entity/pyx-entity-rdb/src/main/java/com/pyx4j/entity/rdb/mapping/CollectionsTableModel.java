@@ -308,7 +308,8 @@ public class CollectionsTableModel {
             @SuppressWarnings("unchecked")
             Collection<Object> collectionMember = (Collection<Object>) member.getMember(entity);
             if (!collectionMember.isEmpty()) {
-                log.warn("retrieving to not empty collection {}", member.getMemberPath());
+                log.warn("retrieving to not empty collection {}\n called from {}", member.getMemberPath(),
+                        Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             while (rs.next()) {
                 Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
