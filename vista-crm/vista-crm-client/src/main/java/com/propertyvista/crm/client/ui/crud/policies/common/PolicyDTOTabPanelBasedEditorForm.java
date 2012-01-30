@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -56,7 +55,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList(//@formatter:off
-// reserved for future:            
+// reserved for future:
 //                AptUnit.class,
 //                Floorplan.class,
                 new NodeType.Builder(Building.class).build(),
@@ -66,8 +65,8 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
                 new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build()
     );//@formatter:on
 
-    public PolicyDTOTabPanelBasedEditorForm(Class<POLICY_DTO> policyDTOClass, final IEditableComponentFactory factory) {
-        super(policyDTOClass, factory);
+    public PolicyDTOTabPanelBasedEditorForm(Class<POLICY_DTO> policyDTOClass, final boolean viewMode) {
+        super(policyDTOClass, viewMode);
     }
 
     @Override
@@ -106,7 +105,7 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
 
         selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
         selectPolicyScopeBox.setMandatory(true);
-        // add value change handler that resets the node when node type is changed 
+        // add value change handler that resets the node when node type is changed
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<NodeType> event) {

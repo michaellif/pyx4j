@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -38,8 +37,12 @@ public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelB
 
     private static final I18n i18n = I18n.get(ApplicationDocumentationPolicyEditorForm.class);
 
-    public ApplicationDocumentationPolicyEditorForm(IEditableComponentFactory factory) {
-        super(ApplicationDocumentationPolicyDTO.class, factory);
+    public ApplicationDocumentationPolicyEditorForm() {
+        this(false);
+    }
+
+    public ApplicationDocumentationPolicyEditorForm(boolean viewMode) {
+        super(ApplicationDocumentationPolicyDTO.class, viewMode);
     }
 
     @Override
