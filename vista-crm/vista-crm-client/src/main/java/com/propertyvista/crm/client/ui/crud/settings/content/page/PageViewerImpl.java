@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,7 +20,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.ui.components.CrmViewersComponentFactory;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.PageDescriptor;
@@ -30,7 +29,7 @@ public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implem
     private static final I18n i18n = I18n.get(PageViewerImpl.class);
 
     public PageViewerImpl() {
-        super(CrmSiteMap.Settings.Page.class, new PageEditorForm(new CrmViewersComponentFactory()));
+        super(CrmSiteMap.Settings.Page.class, new PageEditorForm(true));
 
         // Add actions:
         addToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
