@@ -87,8 +87,17 @@ public class PersonGuarantorFolder extends VistaTableFolder<PersonGuarantor> {
                     return new CEntityCrudHyperlink<Guarantor>(MainActivityMapper.getCrudAppPlace(Guarantor.class));
                 }
             }
-
             return super.create(member);
+        }
+
+        @Override
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?, ?> comp = super.createCell(column);
+            if (isEditable() && proto().relationship() == column.getObject()) {
+                comp.inheritContainerAccessRules(false);
+                comp.setEditable(true);
+            }
+            return comp;
         }
     }
 
