@@ -46,8 +46,8 @@ public class ReportLister extends ListerBase<DashboardMetadata> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build()
+            new MemberColumnDescriptor.Builder(proto().isShared()).build(),
+            new MemberColumnDescriptor.Builder(proto().isFavorite()).build()
         );//@formatter:on
     }
-
 }
