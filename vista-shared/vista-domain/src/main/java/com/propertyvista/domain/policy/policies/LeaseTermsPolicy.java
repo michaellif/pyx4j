@@ -17,8 +17,8 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.policy.UnitPolicy;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.framework.UnitPolicy;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
 @DiscriminatorValue("LeaseTermsPolicy")
 public interface LeaseTermsPolicy extends UnitPolicy {

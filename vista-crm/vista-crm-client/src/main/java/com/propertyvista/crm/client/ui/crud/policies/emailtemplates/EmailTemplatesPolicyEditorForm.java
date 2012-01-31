@@ -28,7 +28,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
-import com.propertyvista.domain.policy.policies.specials.EmailTemplate;
+import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 
 public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<EmailTemplatesPolicyDTO> {
 

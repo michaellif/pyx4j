@@ -19,7 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.policy.policies.specials.PetConstraints;
+import com.propertyvista.domain.policy.policies.domain.PetConstraints;
 
 public class PetConstraintsFolder extends VistaTableFolder<PetConstraints> {
 

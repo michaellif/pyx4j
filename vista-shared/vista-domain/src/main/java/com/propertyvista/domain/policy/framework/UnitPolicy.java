@@ -7,22 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 19, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.domain.policy.framework;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 
-import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.Policy;
+/**
+ * Marker interface for policies that are available at unit/floorplan level.
+ */
+@AbstractEntity
+@Inheritance
+public interface UnitPolicy extends BuildingPolicy {
 
-@Transient
-public interface EffectivePolicyAtNodeDTO extends IEntity {
-
-    PolicyNode inheritedFrom();
-
-    Policy policy();
 }

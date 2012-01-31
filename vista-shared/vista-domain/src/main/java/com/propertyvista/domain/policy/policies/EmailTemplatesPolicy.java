@@ -16,8 +16,8 @@ package com.propertyvista.domain.policy.policies;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
 
-import com.propertyvista.domain.policy.BuildingPolicy;
-import com.propertyvista.domain.policy.policies.specials.EmailTemplate;
+import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 
 @DiscriminatorValue("EmailTemplatesPolicy")
 public interface EmailTemplatesPolicy extends BuildingPolicy {

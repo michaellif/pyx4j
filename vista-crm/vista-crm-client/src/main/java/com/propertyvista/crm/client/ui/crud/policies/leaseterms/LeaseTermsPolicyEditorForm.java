@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
 public class LeaseTermsPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<LeaseTermsPolicyDTO> {
 

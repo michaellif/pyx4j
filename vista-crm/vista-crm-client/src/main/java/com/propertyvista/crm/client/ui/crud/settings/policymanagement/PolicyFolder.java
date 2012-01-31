@@ -29,10 +29,10 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.policy.Policy;
-import com.propertyvista.domain.policy.PolicyAtNode;
-import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.dto.EffectivePolicyAtNodeDTO;
+import com.propertyvista.domain.policy.framework.EffectivePolicyAtNodeDTO;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyAtNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
 public class PolicyFolder extends VistaBoxFolder<EffectivePolicyAtNodeDTO> {
 

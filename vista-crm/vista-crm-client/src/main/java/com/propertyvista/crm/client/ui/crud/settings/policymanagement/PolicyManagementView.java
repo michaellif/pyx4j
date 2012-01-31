@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
+import com.propertyvista.domain.policy.framework.EffectivePoliciesDTO;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
 public interface PolicyManagementView extends IsWidget {
     interface Presenter {

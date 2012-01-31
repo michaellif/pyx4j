@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("Disc_Floorplan")

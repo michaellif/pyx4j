@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.policymanagement;
 
 import com.pyx4j.entity.client.CEntityEditor;
 
-import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.framework.Policy;
 
 public class PolicyEditorFormFactory {
 

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies.specials;
+package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;

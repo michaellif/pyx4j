@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.UnitPolicy;
+import com.propertyvista.domain.policy.framework.UnitPolicy;
 
 @DiscriminatorValue("MiscPolicy")
 public interface MiscPolicy extends UnitPolicy {

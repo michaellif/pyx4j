@@ -7,36 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 4, 2012
+ * Created on Jan 3, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies.specials;
+package com.propertyvista.domain.policy.policies.domain;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.site.AvailableLocale;
+@ToStringFormat("{0}")
+public interface LegalTermsDescriptor extends IEntity {
 
-@Caption(name = "Localized Content")
-public interface LegalTermsContent extends IEntity {
-
+    @ToString(index = 0)
     @NotNull
-    AvailableLocale locale();
+    IPrimitive<String> name();
 
-    @NotNull
-    @Caption(name = "Caption")
-    IPrimitive<String> localizedCaption();
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> description();
 
     @Owned
-    @Length(20845)
-    @Editor(type = Editor.EditorType.richtextarea)
-    //TODO Blob
-    IPrimitive<String> content();
-
+    IList<LegalTermsContent> content();
 }

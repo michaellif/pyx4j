@@ -7,18 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.framework;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.shared.IEntity;
-
-@Inheritance
-@AbstractEntity
-public interface Policy extends IEntity {
-
+@Deprecated
+public enum NodeType {
+    UNIT, FLOORPLAN, BUILDING, COMPLEX, PROVINCE, COUNTRY, ORGANIZATION
 }

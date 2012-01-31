@@ -19,8 +19,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.server.I18nManager;
 
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.policy.PolicyManager;

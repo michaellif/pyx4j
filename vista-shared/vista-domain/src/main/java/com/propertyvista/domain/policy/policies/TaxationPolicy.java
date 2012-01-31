@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.TaxRule;
-import com.propertyvista.domain.policy.Policy;
+import com.propertyvista.domain.policy.framework.Policy;
 
 @DiscriminatorValue("TaxationPolicy")
 public interface TaxationPolicy extends Policy {

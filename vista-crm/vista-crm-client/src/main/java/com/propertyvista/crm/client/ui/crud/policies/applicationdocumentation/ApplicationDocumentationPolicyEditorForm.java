@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
-import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
 
 public class ApplicationDocumentationPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm<ApplicationDocumentationPolicyDTO> {
 

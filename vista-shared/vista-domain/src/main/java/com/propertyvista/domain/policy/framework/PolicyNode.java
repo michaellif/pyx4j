@@ -11,20 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies.specials;
+package com.propertyvista.domain.policy.framework;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{0}")
-public interface IdentificationDocument extends IEntity {
+/**
+ * Represents a node in organizational structure that can have a policy
+ */
+@Inheritance
+@AbstractEntity
+public interface PolicyNode extends IEntity {
 
-    @Caption(name = "ID Type")
-    @NotNull
-    @ToString(index = 0)
-    IPrimitive<String> name();
 }

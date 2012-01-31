@@ -27,7 +27,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
-import com.propertyvista.domain.policy.policies.specials.EmailTemplate;
+import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;

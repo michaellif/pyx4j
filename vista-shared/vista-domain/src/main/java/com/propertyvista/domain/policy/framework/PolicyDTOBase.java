@@ -7,18 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 21, 2011
+ * Created on Dec 22, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.framework;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-/** Connects policy with policy node */
-public interface PolicyAtNode extends IEntity {
 
-    Policy policy();
+public abstract interface PolicyDTOBase extends IEntity {
 
     PolicyNode node();
+
+    @Caption(name = "Scope")
+    IPrimitive<String> nodeType();
+
+    @Caption(name = "Applied To")
+    IPrimitive<String> nodeRepresentation();
 }

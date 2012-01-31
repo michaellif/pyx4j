@@ -7,21 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 16, 2011
+ * Created on Jan 30, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.policies.domain;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * Represents a node in organizational structure that can have a policy
- */
-@Inheritance
-@AbstractEntity
-public interface PolicyNode extends IEntity {
+public interface EmailTemplate extends IEntity {
+
+    @NotNull
+    IPrimitive<String> subject();
+
+    @NotNull
+    @Owned
+    @Length(20845)
+    @Editor(type = Editor.EditorType.richtextarea)
+    //TODO Blob
+    IPrimitive<String> content();
 
 }

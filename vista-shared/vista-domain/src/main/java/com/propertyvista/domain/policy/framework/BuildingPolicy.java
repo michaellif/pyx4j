@@ -7,25 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 22, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.domain.policy.framework;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 
-import com.propertyvista.domain.policy.PolicyNode;
+/**
+ * Marker interface for policies that can be assigned only to building.
+ */
+@Inheritance
+@AbstractEntity
+public interface BuildingPolicy extends Policy {
 
-public abstract interface PolicyDTOBase extends IEntity {
-
-    PolicyNode node();
-
-    @Caption(name = "Scope")
-    IPrimitive<String> nodeType();
-
-    @Caption(name = "Applied To")
-    IPrimitive<String> nodeRepresentation();
 }

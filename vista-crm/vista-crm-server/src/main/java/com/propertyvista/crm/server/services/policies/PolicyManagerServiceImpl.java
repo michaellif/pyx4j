@@ -18,9 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.policies.PolicyManagerService;
-import com.propertyvista.domain.policy.Policy;
-import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
+import com.propertyvista.domain.policy.framework.EffectivePoliciesDTO;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.server.common.policy.PolicyManager;
 
 public class PolicyManagerServiceImpl implements PolicyManagerService {

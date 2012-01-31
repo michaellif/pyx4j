@@ -19,8 +19,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.policy.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
 public interface OrganizationPolicyBrowserService extends IService {
 

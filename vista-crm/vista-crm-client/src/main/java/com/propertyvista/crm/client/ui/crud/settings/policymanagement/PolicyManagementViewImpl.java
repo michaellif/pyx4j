@@ -23,8 +23,8 @@ import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.dto.EffectivePoliciesDTO;
+import com.propertyvista.domain.policy.framework.EffectivePoliciesDTO;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
 public class PolicyManagementViewImpl extends DockLayoutPanel implements PolicyManagementView {
 

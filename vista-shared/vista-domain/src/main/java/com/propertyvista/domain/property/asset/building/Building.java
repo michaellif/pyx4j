@@ -37,7 +37,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.PropertyManagerReferenceAdapter;
 import com.propertyvista.domain.property.asset.Complex;

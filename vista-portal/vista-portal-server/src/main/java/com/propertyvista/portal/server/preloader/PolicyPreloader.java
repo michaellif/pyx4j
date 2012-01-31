@@ -32,19 +32,19 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
-import com.propertyvista.domain.policy.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.Policy;
-import com.propertyvista.domain.policy.PolicyAtNode;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyAtNode;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
-import com.propertyvista.domain.policy.policies.specials.EmailTemplate;
-import com.propertyvista.domain.policy.policies.specials.IdentificationDocument;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
-import com.propertyvista.domain.policy.policies.specials.PetConstraints;
+import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
+import com.propertyvista.domain.policy.policies.domain.IdentificationDocument;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.policies.domain.PetConstraints;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.CompiledLocale;
 

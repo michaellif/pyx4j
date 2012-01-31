@@ -19,8 +19,8 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.UnitPolicy;
-import com.propertyvista.domain.policy.policies.specials.PetConstraints;
+import com.propertyvista.domain.policy.framework.UnitPolicy;
+import com.propertyvista.domain.policy.policies.domain.PetConstraints;
 
 @DiscriminatorValue("PetPolicy")
 public interface PetPolicy extends UnitPolicy {

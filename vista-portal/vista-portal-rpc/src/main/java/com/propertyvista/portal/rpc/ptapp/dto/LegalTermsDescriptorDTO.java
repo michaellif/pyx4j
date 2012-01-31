@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.portal.domain.ptapp.IAgree;
 
 @Transient

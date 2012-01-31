@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
 @DiscriminatorValue("Disc_Province")
 public interface Province extends PolicyNode {

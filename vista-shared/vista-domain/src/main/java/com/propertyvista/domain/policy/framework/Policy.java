@@ -7,18 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 10, 2012
+ * Created on Dec 16, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.domain.policy.framework;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
-
-@Transient
-public interface ApplicationDocumentationPolicyDTO extends PolicyDTOBase, ApplicationDocumentationPolicy {
+@Inheritance
+@AbstractEntity
+public interface Policy extends IEntity {
 
 }

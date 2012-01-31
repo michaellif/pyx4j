@@ -21,7 +21,7 @@ public class MiscPolicyEditorViewImpl extends CrmEditorViewImplBase<MiscPolicyDT
 
     public MiscPolicyEditorViewImpl() {
         super(CrmSiteMap.Settings.Policies.Misc.class);
-        setForm(new MiscPolicyEditorForm(true));
+        setForm(new MiscPolicyEditorForm());
     }
 
 }

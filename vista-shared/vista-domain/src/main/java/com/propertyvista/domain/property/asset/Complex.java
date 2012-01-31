@@ -21,7 +21,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
 @DiscriminatorValue("Disc Complex")
 public interface Complex extends PolicyNode {

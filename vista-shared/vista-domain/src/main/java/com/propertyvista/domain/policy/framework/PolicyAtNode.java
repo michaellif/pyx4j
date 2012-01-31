@@ -7,25 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 23, 2011
+ * Created on Dec 21, 2011
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy;
+package com.propertyvista.domain.policy.framework;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IEntity;
 
-/**
- * 
- * Node in the policies hierarchy that represents the whole organization.
- * 
- */
-@DiscriminatorValue("OrganizationPoliciesNode")
-@Caption(name = "Organization")
-public interface OrganizationPoliciesNode extends PolicyNode {
+/** Connects policy with policy node */
+public interface PolicyAtNode extends IEntity {
 
-    @Deprecated
-    IPrimitive<String> x();
+    Policy policy();
+
+    PolicyNode node();
 }

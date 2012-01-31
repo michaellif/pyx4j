@@ -24,12 +24,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.policy.BuildingPolicy;
-import com.propertyvista.domain.policy.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.Policy;
-import com.propertyvista.domain.policy.PolicyAtNode;
-import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.UnitPolicy;
+import com.propertyvista.domain.policy.framework.BuildingPolicy;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyAtNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.framework.UnitPolicy;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;

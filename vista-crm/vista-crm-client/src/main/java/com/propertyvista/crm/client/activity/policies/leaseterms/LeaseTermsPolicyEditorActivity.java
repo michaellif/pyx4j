@@ -25,8 +25,8 @@ import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicy
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
 public class LeaseTermsPolicyEditorActivity extends EditorActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEditorView.Presenter {
 

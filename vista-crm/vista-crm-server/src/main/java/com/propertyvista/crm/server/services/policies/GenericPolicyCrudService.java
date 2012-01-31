@@ -23,11 +23,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
-import com.propertyvista.domain.policy.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.Policy;
-import com.propertyvista.domain.policy.PolicyAtNode;
-import com.propertyvista.domain.policy.PolicyNode;
-import com.propertyvista.domain.policy.dto.PolicyDTOBase;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyAtNode;
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 
 public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO extends POLICY> extends GenericCrudServiceDtoImpl<POLICY, POLICY_DTO> {
 

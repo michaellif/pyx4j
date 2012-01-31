@@ -28,7 +28,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 import com.propertyvista.domain.policy.policies.PetPolicy;
-import com.propertyvista.domain.policy.policies.specials.PetConstraints;
+import com.propertyvista.domain.policy.policies.domain.PetConstraints;
 
 public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy, PetPolicyDTO> implements PetPolicyCrudService {
 

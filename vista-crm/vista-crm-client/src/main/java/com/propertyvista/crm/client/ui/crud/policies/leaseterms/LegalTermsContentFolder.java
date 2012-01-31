@@ -27,8 +27,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsContent;
-import com.propertyvista.domain.policy.policies.specials.LegalTermsDescriptor;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
 public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
 

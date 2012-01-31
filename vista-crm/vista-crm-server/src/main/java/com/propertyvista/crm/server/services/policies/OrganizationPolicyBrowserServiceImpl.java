@@ -18,7 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.services.policies.OrganizationPolicyBrowserService;
-import com.propertyvista.domain.policy.PolicyNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.server.common.policy.PolicyManager;
 
 public class OrganizationPolicyBrowserServiceImpl implements OrganizationPolicyBrowserService {

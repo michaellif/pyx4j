@@ -30,8 +30,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.policy.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.dto.PolicyDTOBase;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 
 public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBase<P> {
 
