@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services;
+package com.propertyvista.portal.rpc.ptapp.services.steps;
 
 import com.propertyvista.portal.domain.ptapp.Charges;
 

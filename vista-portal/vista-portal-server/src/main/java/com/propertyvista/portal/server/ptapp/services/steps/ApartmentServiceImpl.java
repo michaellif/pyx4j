@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services;
+package com.propertyvista.portal.server.ptapp.services.steps;
 
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +40,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
-import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;

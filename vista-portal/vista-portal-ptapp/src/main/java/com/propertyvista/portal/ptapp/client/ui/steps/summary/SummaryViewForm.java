@@ -58,7 +58,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.charges.ChargesViewForm;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 
 public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
 

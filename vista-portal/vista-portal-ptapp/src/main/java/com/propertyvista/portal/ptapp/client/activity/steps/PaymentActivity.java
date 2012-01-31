@@ -24,7 +24,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
-import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
 
 public class PaymentActivity extends WizardStepActivity<PaymentInformationDTO, PaymentPresenter> implements PaymentPresenter {
 

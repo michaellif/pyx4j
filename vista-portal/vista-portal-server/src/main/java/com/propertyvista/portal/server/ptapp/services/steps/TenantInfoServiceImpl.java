@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services;
+package com.propertyvista.portal.server.ptapp.services.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.dto.TenantInfoDTO;
-import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;

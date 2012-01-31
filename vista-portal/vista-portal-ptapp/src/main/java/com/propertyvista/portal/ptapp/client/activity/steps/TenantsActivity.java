@@ -21,7 +21,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
-import com.propertyvista.portal.rpc.ptapp.services.TenantService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
 
 public class TenantsActivity extends WizardStepActivity<TenantInApplicationListDTO, TenantsViewPresenter> implements TenantsViewPresenter {
 

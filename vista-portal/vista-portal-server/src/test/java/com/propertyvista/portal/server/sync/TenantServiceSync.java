@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.sync;
 import com.pyx4j.unit.server.TestServiceFactory;
 
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
-import com.propertyvista.portal.rpc.ptapp.services.TenantService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
 
 public class TenantServiceSync {
     private TenantInLeaseListDTO tenantList;

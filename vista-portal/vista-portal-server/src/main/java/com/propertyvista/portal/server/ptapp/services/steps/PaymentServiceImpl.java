@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services;
+package com.propertyvista.portal.server.ptapp.services.steps;
 
 import java.util.EnumSet;
 
@@ -37,9 +37,10 @@ import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
-import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
 import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;
 import com.propertyvista.server.domain.CampaignTrigger;

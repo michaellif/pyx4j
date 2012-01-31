@@ -21,7 +21,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialView;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 
 public class FinancialActivity extends WizardStepWithSubstepsActivity<TenantFinancialDTO, FinancialViewPresenter> implements FinancialViewPresenter {
 

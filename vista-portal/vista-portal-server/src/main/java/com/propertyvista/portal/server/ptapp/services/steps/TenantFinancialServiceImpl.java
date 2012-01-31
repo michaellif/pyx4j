@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services;
+package com.propertyvista.portal.server.ptapp.services.steps;
 
 import java.util.List;
 import java.util.Vector;
@@ -26,7 +26,8 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.tenant.PersonGuarantor;
 import com.propertyvista.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
+import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantInLeaseRetriever;

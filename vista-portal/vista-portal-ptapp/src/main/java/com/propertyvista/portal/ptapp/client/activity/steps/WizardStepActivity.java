@@ -30,7 +30,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
-import com.propertyvista.portal.rpc.ptapp.services.AbstractWizardService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
 
 public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter<E>> extends AbstractActivity implements WizardStepPresenter<E> {
 

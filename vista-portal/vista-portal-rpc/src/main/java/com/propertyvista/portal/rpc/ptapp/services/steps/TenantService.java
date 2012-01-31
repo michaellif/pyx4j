@@ -11,16 +11,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services;
+package com.propertyvista.portal.rpc.ptapp.services.steps;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
-import com.pyx4j.rpc.shared.VoidSerializable;
-
-import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-
-public interface SummaryService extends AbstractWizardService<SummaryDTO> {
-
-    public void downloadSummary(AsyncCallback<String> callback, VoidSerializable none);
+public interface TenantService extends AbstractWizardService<TenantInApplicationListDTO> {
 
 }

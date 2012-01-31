@@ -11,10 +11,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services;
+package com.propertyvista.portal.rpc.ptapp.services.steps;
 
-import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface ApartmentService extends AbstractWizardService<ApartmentInfoDTO> {
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
+public interface PaymentService extends AbstractWizardService<PaymentInformationDTO> {
+
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 }

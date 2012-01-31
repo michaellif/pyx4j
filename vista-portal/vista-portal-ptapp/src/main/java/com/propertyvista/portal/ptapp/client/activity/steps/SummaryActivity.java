@@ -22,7 +22,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryView;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SummaryViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
-import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 
 public class SummaryActivity extends WizardStepActivity<SummaryDTO, SummaryViewPresenter> implements SummaryViewPresenter {
 

@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
-import com.propertyvista.portal.rpc.ptapp.services.AbstractWizardService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
 
 abstract class WizardStepWithSubstepsActivity<E extends IEntity, T extends WizardStepPresenter<E>> extends WizardStepActivity<E, T> {
 

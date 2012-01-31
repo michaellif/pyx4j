@@ -51,18 +51,18 @@ import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudServi
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
-import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
-import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
-import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
-import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
-import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
-import com.propertyvista.portal.rpc.ptapp.services.TenantService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.ChargesService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 

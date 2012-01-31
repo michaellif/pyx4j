@@ -22,7 +22,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.misc.VistaDevPreloadConfig;
-import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class ApartmentServiceTest extends VistaDBTestBase {

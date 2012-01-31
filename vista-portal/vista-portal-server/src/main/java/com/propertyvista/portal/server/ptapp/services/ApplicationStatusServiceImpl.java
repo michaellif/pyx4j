@@ -27,6 +27,7 @@ import com.propertyvista.domain.tenant.ptapp.MasterApplication;
 import com.propertyvista.portal.rpc.ptapp.dto.ApplicationStatusSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.ptapp.services.steps.SummaryServiceImpl;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 
 public class ApplicationStatusServiceImpl extends ApplicationEntityServiceImpl implements ApplicationStatusService {

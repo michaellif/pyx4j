@@ -21,7 +21,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ApartmentViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
-import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
 
 public class ApartmentActivity extends WizardStepActivity<ApartmentInfoDTO, ApartmentViewPresenter> implements ApartmentViewPresenter {
 

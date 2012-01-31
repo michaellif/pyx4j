@@ -47,15 +47,15 @@ import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
-import com.propertyvista.portal.rpc.ptapp.services.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
-import com.propertyvista.portal.rpc.ptapp.services.ChargesService;
-import com.propertyvista.portal.rpc.ptapp.services.PaymentService;
-import com.propertyvista.portal.rpc.ptapp.services.SummaryService;
-import com.propertyvista.portal.rpc.ptapp.services.TenantFinancialService;
-import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
-import com.propertyvista.portal.rpc.ptapp.services.TenantService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.ChargesService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class VistaAccessControlListTest {

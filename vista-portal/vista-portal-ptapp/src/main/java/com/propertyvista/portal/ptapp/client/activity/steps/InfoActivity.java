@@ -21,7 +21,7 @@ import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.info.InfoView;
 import com.propertyvista.portal.ptapp.client.ui.steps.info.InfoViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
-import com.propertyvista.portal.rpc.ptapp.services.TenantInfoService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
 
 public class InfoActivity extends WizardStepWithSubstepsActivity<TenantInfoDTO, InfoViewPresenter> implements InfoViewPresenter {
 

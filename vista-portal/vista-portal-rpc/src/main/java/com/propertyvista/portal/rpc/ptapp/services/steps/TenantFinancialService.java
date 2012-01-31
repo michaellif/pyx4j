@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-03-11
+ * Created on Mar 10, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.services;
+package com.propertyvista.portal.rpc.ptapp.services.steps;
 
-import com.propertyvista.dto.TenantInfoDTO;
+import com.propertyvista.dto.TenantFinancialDTO;
 
-public interface TenantInfoService extends AbstractWizardService<TenantInfoDTO> {
+public interface TenantFinancialService extends AbstractWizardService<TenantFinancialDTO> {
 
 }
