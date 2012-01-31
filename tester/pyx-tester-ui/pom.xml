@@ -12,7 +12,6 @@
     <artifactId>pyx-tester-ui</artifactId>
     <name>pyx-tester-ui</name>
     <description>pyx-tester-ui Implementations</description>
-    <packaging>war</packaging>
 
     <distributionManagement>
         <!-- not for deployment in repository -->
@@ -67,7 +66,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
+                    <primaryArtifact>false</primaryArtifact>
                     <archiveClasses>true</archiveClasses>
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <warSourceDirectory>${basedir}/src/test/webapp</warSourceDirectory>

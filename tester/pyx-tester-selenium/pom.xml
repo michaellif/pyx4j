@@ -52,6 +52,7 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-tester-ui</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
