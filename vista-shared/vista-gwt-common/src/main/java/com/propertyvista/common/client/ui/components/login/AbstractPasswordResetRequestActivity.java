@@ -68,8 +68,7 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email"));
-                AppSite.getPlaceController().goTo(loginPlace);
+                onPasswordResetRequestSuccess();
             }
 
             @Override
@@ -79,5 +78,17 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
             }
         };
         authService.requestPasswordReset(callback, request);
+    }
+
+    /**
+     * Default implementation of successful password request: <br/>
+     * 
+     * <li>Show dialog with happy message (something like "an email with password reset instructions has been sent, check your mailbox").</li>
+     * 
+     * <li>Go to login page (defined by the place that was passed via the constructor).</li>
+     */
+    protected void onPasswordResetRequestSuccess() {
+        MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email"));
+        AppSite.getPlaceController().goTo(loginPlace);
     }
 }

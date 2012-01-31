@@ -26,6 +26,21 @@ public class PortalSiteMap implements SiteMap {
 
     public static String ARG_PAYMENT_METHOD_ID = "payment-method-id";
 
+    public static class Login extends AppPlace {
+    }
+
+    public static class LoginWithToken extends AppPlace {
+    }
+
+    public static class PasswordResetRequest extends AppPlace {
+    }
+
+    public static class PasswordReset extends AppPlace {
+    }
+
+    public static class PasswordChange extends AppPlace {
+    }
+
     public static class Landing extends AppPlace {
     }
 

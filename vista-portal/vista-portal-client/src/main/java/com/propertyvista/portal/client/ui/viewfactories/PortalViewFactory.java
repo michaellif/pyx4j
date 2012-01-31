@@ -15,6 +15,14 @@ package com.propertyvista.portal.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
+import com.propertyvista.common.client.ui.components.login.LoginWithTokenViewImpl;
+import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
+import com.propertyvista.common.client.ui.components.login.PasswordResetRequestViewImpl;
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
+import com.propertyvista.common.client.ui.components.security.PasswordResetView;
+import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
 import com.propertyvista.portal.client.ui.CaptionView;
 import com.propertyvista.portal.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ui.NavigView;
@@ -29,10 +37,10 @@ import com.propertyvista.portal.client.ui.residents.DashboardView;
 import com.propertyvista.portal.client.ui.residents.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.EditPaymentMethodViewImpl;
-import com.propertyvista.portal.client.ui.residents.NewMaintenanceRequestView;
-import com.propertyvista.portal.client.ui.residents.NewMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.MaintenanceViewImpl;
+import com.propertyvista.portal.client.ui.residents.NewMaintenanceRequestView;
+import com.propertyvista.portal.client.ui.residents.NewMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodViewImpl;
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
@@ -68,9 +76,17 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new NewPaymentMethodViewImpl());
             } else if (EditPaymentMethodView.class.equals(type)) {
                 map.put(type, new EditPaymentMethodViewImpl());
+            } else if (PasswordResetRequestView.class.equals(type)) {
+                map.put(type, new PasswordResetRequestViewImpl());
+            } else if (PasswordResetView.class.equals(type)) {
+                map.put(type, new PasswordResetViewImpl());
+            } else if (LoginWithTokenView.class.equals(type)) {
+                map.put(type, new LoginWithTokenViewImpl());
+            } else if (PasswordChangeView.class.equals(type)) {
+                map.put(type, new PasswordChangeViewImpl());
             }
-
         }
+
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);
         if (impl == null) {

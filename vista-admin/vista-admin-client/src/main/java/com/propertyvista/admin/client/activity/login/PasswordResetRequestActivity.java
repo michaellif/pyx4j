@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Jan 31, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.admin.client.activity.login;
@@ -21,14 +21,14 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.propertyvista.admin.client.viewfactories.LoginVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
-import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
-import com.propertyvista.common.client.ui.components.login.LoginView;
+import com.propertyvista.common.client.ui.components.login.AbstractPasswordResetRequestActivity;
+import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 
-public class LoginActivity extends AbstractLoginActivty implements LoginView.Presenter {
+public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity {
 
-    public LoginActivity(Place place) {
-        super(place, LoginVeiwFactory.instance(LoginView.class), GWT.<AuthenticationService> create(AdminAuthenticationService.class),
-                new AdminSiteMap.PasswordResetRequest());
+    public PasswordResetRequestActivity(Place place) {
+        super(place, LoginVeiwFactory.instance(PasswordResetRequestView.class), GWT.<AuthenticationService> create(AdminAuthenticationService.class),
+                new AdminSiteMap.Login());
     }
 
 }

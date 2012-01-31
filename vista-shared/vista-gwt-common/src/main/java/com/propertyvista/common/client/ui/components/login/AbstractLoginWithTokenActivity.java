@@ -63,10 +63,13 @@ public class AbstractLoginWithTokenActivity extends AbstractActivity {
 
             @Override
             public void onFailure(Throwable caught) {
-                MessageDialog.error(i18n.tr("Authentication failed"), i18n.tr("The URL you have used is either incorrect or expired."));
-                AppSite.getPlaceController().goTo(loginPlace);
+                onLoginFailure(caught);
             }
         }, ClientContext.getClientSystemInfo(), authToken);
     }
 
+    protected void onLoginFailure(Throwable caught) {
+        MessageDialog.error(i18n.tr("Authentication failed"), i18n.tr("The URL you have used is either incorrect or expired."));
+        AppSite.getPlaceController().goTo(loginPlace);
+    }
 }

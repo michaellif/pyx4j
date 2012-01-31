@@ -28,16 +28,15 @@ public class AdminSiteMap implements SiteMap {
     public static class SigningOut extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Retrieve Password")
-    public static class RetrievePassword extends AppPlace {
+    public static class PasswordResetRequest extends AppPlace {
     }
 
     @PlaceProperties(caption = "Reset Password")
-    public static class ResetPassword extends AppPlace {
+    public static class PasswordReset extends AppPlace {
     }
 
     @PlaceProperties(caption = "Change Password")
-    public static class ChangePassword extends AppPlace {
+    public static class PasswordChange extends AppPlace {
     }
 
     public static class Management extends AppPlace {

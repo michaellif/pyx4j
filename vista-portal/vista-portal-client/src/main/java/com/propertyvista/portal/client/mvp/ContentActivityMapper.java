@@ -31,6 +31,10 @@ import com.propertyvista.portal.client.activity.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
+import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
+import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
+import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivity;
+import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
@@ -70,8 +74,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new CurrentBillActivity(place);
                 } else if (place instanceof Residents.PaymentMethods.EditPaymentMethod) {
                     activity = new EditPaymentMethodActivity(place);
-                }
 
+                    // TODO not sure if these activities belong here 
+                } else if (place instanceof PortalSiteMap.Login) {
+                    activity = new RedirectToLoginPageActivity(place);
+                } else if (place instanceof PortalSiteMap.LoginWithToken) {
+                    activity = new LoginWithTokenActivity(place);
+                } else if (place instanceof PortalSiteMap.PasswordResetRequest) {
+                    activity = new PasswordResetRequestActivity(place);
+                } else if (place instanceof PortalSiteMap.PasswordReset) {
+                    activity = new PasswordResetActivity(place);
+                } else if (place instanceof PortalSiteMap.PasswordChange) {
+                    // TODO portal password change activity
+                }
                 callback.onSuccess(activity);
             }
 
