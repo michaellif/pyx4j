@@ -59,7 +59,7 @@ public class BillingUtils {
     static Bill getLatestBill(BillingAccount billingAccount) {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Approved));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Confirmed));
         criteria.asc(criteria.proto().billingRun().billingPeriodStartDate());
         return Persistence.service().retrieve(criteria);
     }
