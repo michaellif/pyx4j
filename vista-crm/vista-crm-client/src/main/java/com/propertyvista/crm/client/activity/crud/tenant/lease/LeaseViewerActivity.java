@@ -40,7 +40,7 @@ import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
 
-    private final IListerView.Presenter billLister;
+    private final IListerView.Presenter<Bill> billLister;
 
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(Place place) {
@@ -67,7 +67,13 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
     }
 
     @Override
-    public Presenter getBillListerPresenter() {
+    public void runBill() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Presenter<Bill> getBillListerPresenter() {
         return billLister;
     }
 
@@ -81,4 +87,5 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
     }
+
 }

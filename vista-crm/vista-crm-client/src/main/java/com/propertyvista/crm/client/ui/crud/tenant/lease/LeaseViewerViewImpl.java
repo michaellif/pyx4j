@@ -36,6 +36,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private final Button createApplicationAction;
 
+    private final Button runBillAction;
+
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
@@ -52,6 +54,16 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             }
         });
         addToolbarItem(createApplicationAction.asWidget());
+
+        runBillAction = new Button(i18n.tr("Run Bill"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((LeaseViewerView.Presenter) presenter).runBill();
+            }
+        });
+        addToolbarItem(createApplicationAction.asWidget());
+
     }
 
     @Override

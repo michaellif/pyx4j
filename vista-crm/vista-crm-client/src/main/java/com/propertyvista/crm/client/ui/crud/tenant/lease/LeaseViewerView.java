@@ -23,9 +23,11 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        IListerView.Presenter getBillListerPresenter();
+        IListerView.Presenter<Bill> getBillListerPresenter();
 
         void createMasterApplication();
+
+        void runBill();
     }
 
     IListerView<Bill> getBillListerView();
