@@ -23,7 +23,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.FeatureCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 

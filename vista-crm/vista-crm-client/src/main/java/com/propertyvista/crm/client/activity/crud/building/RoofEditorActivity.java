@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.RoofCrudService;
+import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.dto.RoofDTO;
 
 public class RoofEditorActivity extends EditorActivityBase<RoofDTO> {

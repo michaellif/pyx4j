@@ -25,9 +25,9 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.UnitCrudService;
-import com.propertyvista.crm.rpc.services.UnitItemCrudService;
-import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 import com.propertyvista.dto.AptUnitDTO;

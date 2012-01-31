@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.ApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.app.ApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
 
 public class ApplicationEditorActivity extends EditorActivityBase<ApplicationDTO> implements ApplicationEditorView.Presenter {

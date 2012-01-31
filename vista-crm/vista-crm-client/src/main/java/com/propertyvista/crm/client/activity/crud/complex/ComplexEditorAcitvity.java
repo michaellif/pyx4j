@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.complex.ComplexEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.ComplexCrudService;
+import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexEditorAcitvity extends EditorActivityBase<ComplexDTO> implements ComplexEditorView.Presenter {

@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.ConcessionCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionEditorActivity extends EditorActivityBase<Concession> {

@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
+import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaEditorActivity extends EditorActivityBase<LockerAreaDTO> implements LockerAreaEditorView.Presenter {

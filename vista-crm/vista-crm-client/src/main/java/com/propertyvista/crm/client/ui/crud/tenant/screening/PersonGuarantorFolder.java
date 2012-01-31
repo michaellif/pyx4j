@@ -34,7 +34,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
-import com.propertyvista.crm.rpc.services.SelectGuarantorCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectGuarantorCrudService;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonGuarantor;
 

@@ -41,7 +41,7 @@ import com.pyx4j.site.client.ui.crud.lister.EntitySelectorDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.SelectEmployeeListService;
+import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.person.Name;
 

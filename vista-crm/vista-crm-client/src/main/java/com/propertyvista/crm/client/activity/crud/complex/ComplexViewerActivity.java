@@ -25,8 +25,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.complex.ComplexViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
-import com.propertyvista.crm.rpc.services.ComplexCrudService;
+import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
 

@@ -30,8 +30,8 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.crm.client.ui.crud.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
-import com.propertyvista.crm.rpc.services.TenantCrudService;
+import com.propertyvista.crm.rpc.services.tenant.TenantCrudService;
+import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;

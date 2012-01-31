@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitListerActivity extends ListerActivityBase<AptUnitDTO> {

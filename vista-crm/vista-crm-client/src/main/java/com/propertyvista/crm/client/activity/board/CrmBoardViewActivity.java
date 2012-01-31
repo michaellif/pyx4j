@@ -22,7 +22,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.CrmBoardView;
-import com.propertyvista.crm.rpc.services.SelectBuildingCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 

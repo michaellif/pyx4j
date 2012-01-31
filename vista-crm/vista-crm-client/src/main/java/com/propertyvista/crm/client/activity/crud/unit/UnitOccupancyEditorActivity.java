@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.UnitOccupancyCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
 
 public class UnitOccupancyEditorActivity extends EditorActivityBase<AptUnitOccupancy> {

@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.GuarantorCrudService;
+import com.propertyvista.crm.rpc.services.tenant.screening.GuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {

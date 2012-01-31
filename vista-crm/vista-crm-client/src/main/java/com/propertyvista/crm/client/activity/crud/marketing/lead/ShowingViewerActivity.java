@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.marketing.lead.ShowingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.ShowingCrudService;
+import com.propertyvista.crm.rpc.services.tenant.lead.ShowingCrudService;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 public class ShowingViewerActivity extends ViewerActivityBase<Showing> {

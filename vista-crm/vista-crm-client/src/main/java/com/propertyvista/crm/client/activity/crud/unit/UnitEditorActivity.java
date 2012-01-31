@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.UnitCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorActivity extends EditorActivityBase<AptUnitDTO> implements UnitEditorView.Presenter {

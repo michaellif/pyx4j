@@ -24,8 +24,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.ParkingCrudService;
-import com.propertyvista.crm.rpc.services.ParkingSpotCrudService;
+import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
+import com.propertyvista.crm.rpc.services.building.ParkingSpotCrudService;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.dto.ParkingDTO;
 

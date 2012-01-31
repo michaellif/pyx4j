@@ -23,7 +23,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceTypeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.ServiceItemTypeCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public class ServiceItemTypeEditorActivity extends EditorActivityBase<ProductItemType> {

@@ -25,8 +25,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.GuarantorCrudService;
-import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
+import com.propertyvista.crm.rpc.services.tenant.screening.GuarantorCrudService;
+import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.dto.GuarantorDTO;

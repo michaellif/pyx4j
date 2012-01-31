@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.BoilerCrudService;
+import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorActivity extends EditorActivityBase<BoilerDTO> {

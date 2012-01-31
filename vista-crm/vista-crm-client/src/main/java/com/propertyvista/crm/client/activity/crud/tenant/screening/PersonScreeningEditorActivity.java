@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.PersonScreeningCrudService;
+import com.propertyvista.crm.rpc.services.tenant.screening.PersonScreeningCrudService;
 import com.propertyvista.domain.tenant.PersonScreening;
 
 public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScreening> {

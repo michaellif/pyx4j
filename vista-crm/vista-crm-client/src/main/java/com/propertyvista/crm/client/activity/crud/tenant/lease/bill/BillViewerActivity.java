@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.BillCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillViewerActivity extends ViewerActivityBase<Bill> {

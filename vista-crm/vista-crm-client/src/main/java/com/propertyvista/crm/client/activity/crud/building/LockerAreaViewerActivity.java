@@ -24,8 +24,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.LockerAreaCrudService;
-import com.propertyvista.crm.rpc.services.LockerCrudService;
+import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
+import com.propertyvista.crm.rpc.services.building.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.dto.LockerAreaDTO;
 

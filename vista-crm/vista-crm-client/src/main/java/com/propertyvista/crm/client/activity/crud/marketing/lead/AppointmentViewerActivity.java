@@ -25,8 +25,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.AppointmentCrudService;
-import com.propertyvista.crm.rpc.services.ShowingCrudService;
+import com.propertyvista.crm.rpc.services.tenant.lead.AppointmentCrudService;
+import com.propertyvista.crm.rpc.services.tenant.lead.ShowingCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Showing;
 

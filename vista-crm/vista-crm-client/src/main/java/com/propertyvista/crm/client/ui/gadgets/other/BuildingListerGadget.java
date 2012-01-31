@@ -33,7 +33,7 @@ import com.propertyvista.crm.client.ui.gadgets.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.Directory;
 import com.propertyvista.crm.client.ui.gadgets.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.ListerGadgetInstanceBase;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;

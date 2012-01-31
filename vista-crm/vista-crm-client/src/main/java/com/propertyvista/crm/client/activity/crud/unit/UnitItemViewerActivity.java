@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
-import com.propertyvista.crm.rpc.services.UnitItemCrudService;
+import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemViewerActivity extends ViewerActivityBase<AptUnitItem> {

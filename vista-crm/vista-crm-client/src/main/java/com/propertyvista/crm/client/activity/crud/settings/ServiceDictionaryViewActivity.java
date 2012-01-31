@@ -26,8 +26,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.settings.dictionary.ServiceDictionaryView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.FeatureItemTypeCrudService;
-import com.propertyvista.crm.rpc.services.ServiceItemTypeCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 
 public class ServiceDictionaryViewActivity extends AbstractActivity implements ServiceDictionaryView.Presenter {

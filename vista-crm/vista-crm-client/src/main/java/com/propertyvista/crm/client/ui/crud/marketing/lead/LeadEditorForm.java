@@ -41,7 +41,7 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.crm.rpc.services.SelectFloorplanCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectFloorplanCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 

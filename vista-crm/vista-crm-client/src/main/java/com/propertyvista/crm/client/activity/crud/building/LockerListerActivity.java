@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.LockerCrudService;
+import com.propertyvista.crm.rpc.services.building.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerListerActivity extends ListerActivityBase<Locker> {

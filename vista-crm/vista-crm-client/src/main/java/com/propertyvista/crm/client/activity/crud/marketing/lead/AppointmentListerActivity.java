@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.marketing.lead.AppointmentListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.AppointmentCrudService;
+import com.propertyvista.crm.rpc.services.tenant.lead.AppointmentCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentListerActivity extends ListerActivityBase<Appointment> {

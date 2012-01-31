@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.screening.guarantor.GuarantorEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.GuarantorCrudService;
+import com.propertyvista.crm.rpc.services.tenant.screening.GuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorEditorActivity extends EditorActivityBase<GuarantorDTO> implements GuarantorEditorView.Presenter {

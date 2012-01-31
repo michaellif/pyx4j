@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.BuildingCrudService;
+import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> implements BuildingEditorView.Presenter {

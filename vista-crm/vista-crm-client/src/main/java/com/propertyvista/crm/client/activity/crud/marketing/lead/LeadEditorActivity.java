@@ -25,7 +25,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.marketing.lead.LeadEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.LeadCrudService;
+import com.propertyvista.crm.rpc.services.tenant.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 

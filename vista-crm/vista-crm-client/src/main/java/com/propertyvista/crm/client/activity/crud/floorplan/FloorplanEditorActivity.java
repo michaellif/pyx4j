@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.FloorplanCrudService;
+import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.dto.FloorplanDTO;
 
 public class FloorplanEditorActivity extends EditorActivityBase<FloorplanDTO> implements FloorplanEditorView.Presenter {

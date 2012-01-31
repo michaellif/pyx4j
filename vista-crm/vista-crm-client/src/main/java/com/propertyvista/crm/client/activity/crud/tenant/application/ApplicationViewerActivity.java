@@ -21,7 +21,7 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.tenant.application.ApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
-import com.propertyvista.crm.rpc.services.ApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.app.ApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
 
 public class ApplicationViewerActivity extends ViewerActivityBase<ApplicationDTO> implements ApplicationViewerView.Presenter {
