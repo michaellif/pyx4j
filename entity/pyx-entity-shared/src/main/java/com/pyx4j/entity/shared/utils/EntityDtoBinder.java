@@ -20,8 +20,11 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -51,6 +54,8 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     private final boolean copyPrimaryKey;
 
     private final List<Binding> binding = new Vector<Binding>();
+
+    private final Map<Path, Binding> bindingByDTOMemberPath = new HashMap<Path, Binding>();
 
     private static class Binding {
 
@@ -87,21 +92,26 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
     protected abstract void bind();
 
+    private void addBinding(Binding b) {
+        binding.add(b);
+        bindingByDTOMemberPath.put(b.dtoMemberPath, b);
+    }
+
     protected final <TYPE> void bind(IObject<TYPE> dtoMember, IObject<TYPE> dboMember) {
-        binding.add(new Binding(dtoMember, dboMember, null));
+        addBinding(new Binding(dtoMember, dboMember, null));
     }
 
     protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(TDTO dtoMember, TDBO dboMember, EntityDtoBinder<TDBO, TDTO> binder) {
-        binding.add(new Binding(dtoMember, dboMember, binder));
+        addBinding(new Binding(dtoMember, dboMember, binder));
     }
 
     protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(IList<TDTO> dtoMember, IList<TDBO> dboMember, EntityDtoBinder<TDBO, TDTO> binder) {
-        binding.add(new Binding(dtoMember, dboMember, binder));
+        addBinding(new Binding(dtoMember, dboMember, binder));
     }
 
     protected final <F extends IEntity, S extends F, D extends F> void bind(Class<F> fragmentClass, S dto, D dbo) {
         for (String memberName : EntityFactory.getEntityMeta(fragmentClass).getMemberNames()) {
-            binding.add(new Binding(dto.getMember(memberName), dbo.getMember(memberName), null));
+            addBinding(new Binding(dto.getMember(memberName), dbo.getMember(memberName), null));
         }
     }
 
@@ -117,9 +127,24 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
 
     public Path getBoundDboMemberPath(Path dtoMemberPath) {
         init();
-        for (Binding b : binding) {
-            if (b.dtoMemberPath.equals(dtoMemberPath)) {
-                return b.dboMemberPath;
+        Binding b = bindingByDTOMemberPath.get(dtoMemberPath);
+        if (b != null) {
+            return b.dboMemberPath;
+        }
+        // The binding may have been done by Entity member,
+        StringBuilder shortDTOMemberPath = new StringBuilder();
+        shortDTOMemberPath.append(dtoMemberPath.getRootObjectClassName()).append(Path.PATH_SEPARATOR);
+        Iterator<String> it = dtoMemberPath.getPathMembers().iterator();
+        while (it.hasNext()) {
+            String memeber = it.next();
+            shortDTOMemberPath.append(memeber).append(Path.PATH_SEPARATOR);
+            b = bindingByDTOMemberPath.get(new Path(shortDTOMemberPath.toString()));
+            if (b != null) {
+                StringBuilder shortDBOMemberPath = new StringBuilder(b.dboMemberPath.toString());
+                while (it.hasNext()) {
+                    shortDBOMemberPath.append(it.next()).append(Path.PATH_SEPARATOR);
+                }
+                return new Path(shortDBOMemberPath.toString());
             }
         }
         return null;

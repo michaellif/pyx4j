@@ -95,8 +95,7 @@ public class Path implements Serializable, IDebugId {
         pathMembers = Collections.unmodifiableList(Arrays.asList(members));
     }
 
-    //This does not work after RPC!
-    @Deprecated
+    //This does not work after obfuscated class names in GWT!
     public String getRootObjectClassName() {
         if (rootObjectClassName == null) {
             parsPath();
