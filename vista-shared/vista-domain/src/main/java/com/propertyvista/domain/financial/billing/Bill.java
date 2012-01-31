@@ -55,12 +55,6 @@ public interface Bill extends IEntity {
     @JoinTable(value = Charge.class, orderColumn = Charge.OrderId.class, cascade = false)
     IList<Charge> charges();
 
-    IPrimitive<Double> totalRecurringCharges();
-
-    IPrimitive<Double> totalOneTimeCharges();
-
-    IPrimitive<Double> totalAdjustments();
-
     /**
      * The total amount due from the previous bill.
      */
@@ -72,5 +66,13 @@ public interface Bill extends IEntity {
     IPrimitive<Double> paymentReceivedAmount();
 
     IPrimitive<Double> pastDueAmount();
+
+    IPrimitive<Double> totalRecurringCharges();
+
+    IPrimitive<Double> totalOneTimeCharges();
+
+    IPrimitive<Double> totalAdjustments();
+
+    IPrimitive<Double> totalTaxes();
 
 }
