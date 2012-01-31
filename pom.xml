@@ -159,6 +159,7 @@
 
         <module>tester/pyx-tester-shared</module>
         <module>tester/pyx-tester-ui</module>
+        <module>tester/pyx-tester-server</module>
 
         <module>incubator/tester/tester-client</module>
         <module>incubator/tester/tester-gae-server</module>
