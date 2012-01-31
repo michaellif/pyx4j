@@ -50,8 +50,7 @@ public class FormBasicTest extends TesterSeleniumTestBase {
         assertVisible(D.id(entityIempty.textBox()));
         assertValueOnForm(entityIempty.textBox());
 
-        // TODO Use Debug Id 
-        selenium.click(D.id(FormTesterViewImpl.DebugIds.ButtonPanel, FormTesterViewImpl.DebugIds.PopulateButton) + "-label");
+        selenium.click(D.id(FormTesterViewImpl.DebugIds.ButtonPanel, FormTesterViewImpl.DebugIds.PopulateButton));
 
         EntityI entityIpopulated = DomainFactory.createEntityI();
         // Verify the form is populated with data from factory
