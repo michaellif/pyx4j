@@ -7,26 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-06-29
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.lease;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseViewerView extends IViewerView<LeaseDTO> {
-
-    interface Presenter extends IViewerView.Presenter {
-
-        IListerView.Presenter getBillListerPresenter();
-
-        void createMasterApplication();
-    }
-
-    IListerView<Bill> getBillListerView();
+public interface BillCrudService extends AbstractCrudService<Bill> {
 }

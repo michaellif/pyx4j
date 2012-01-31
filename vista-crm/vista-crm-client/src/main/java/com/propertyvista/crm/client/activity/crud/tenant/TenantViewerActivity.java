@@ -50,7 +50,7 @@ public class TenantViewerActivity extends ViewerActivityBase<TenantDTO> implemen
     }
 
     @Override
-    public Presenter getScreeningPresenter() {
+    public Presenter getScreeningListerPresenter() {
         return screeningLister;
     }
 

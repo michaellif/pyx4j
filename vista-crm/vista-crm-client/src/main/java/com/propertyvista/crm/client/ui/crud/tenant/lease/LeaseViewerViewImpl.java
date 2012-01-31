@@ -17,10 +17,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -28,10 +32,17 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
+    private final IListerView<Bill> billLister;
+
     private final Button createApplicationAction;
 
     public LeaseViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Lease.class, new LeaseEditorForm(true));
+        super(CrmSiteMap.Tenants.Lease.class);
+
+        billLister = new ListerInternalViewImplBase<Bill>(new BillLister());
+
+        //set main form here:
+        setForm(new LeaseEditorForm(true));
 
         createApplicationAction = new Button(i18n.tr("Create Application"), new ClickHandler() {
 
@@ -47,5 +58,10 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     public void populate(LeaseDTO value) {
         createApplicationAction.setVisible(!value.id().isNull() && Lease.Status.Draft.equals(value.status().getValue()));
         super.populate(value);
+    }
+
+    @Override
+    public IListerView<Bill> getBillListerView() {
+        return billLister;
     }
 }

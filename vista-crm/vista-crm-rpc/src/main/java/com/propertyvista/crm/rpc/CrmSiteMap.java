@@ -185,6 +185,11 @@ public class CrmSiteMap implements SiteMap {
         public static class Lease extends CrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Bill")
+        @NavigationItem(navigLabel = "Bills")
+        public static class Bill extends CrudAppPlace {
+        }
+
         @PlaceProperties(caption = "Application")
         @NavigationItem(navigLabel = "Applications")
         public static class MasterApplication extends CrudAppPlace {

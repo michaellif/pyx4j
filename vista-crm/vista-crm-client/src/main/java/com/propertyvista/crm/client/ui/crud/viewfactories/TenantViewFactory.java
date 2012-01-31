@@ -40,6 +40,10 @@ import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillEditorView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillViewerView;
+import com.propertyvista.crm.client.ui.crud.tenant.lease.bill.BillViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerView;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.EquifaxResultViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.tenant.screening.PersonScreeningEditorView;
@@ -82,6 +86,11 @@ public class TenantViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseViewerViewImpl());
             } else if (LeaseEditorView.class.equals(type)) {
                 map.put(type, new LeaseEditorViewImpl());
+
+            } else if (BillViewerView.class.equals(type)) {
+                map.put(type, new BillViewerViewImpl());
+            } else if (BillEditorView.class.equals(type)) {
+                map.put(type, new BillEditorViewImpl());
 
             } else if (MasterApplicationListerView.class.equals(type)) {
                 map.put(type, new MasterApplicationListerViewImpl());

@@ -13,25 +13,41 @@
  */
 package com.propertyvista.crm.client.activity.crud.tenant.lease;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
+import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
+import com.propertyvista.crm.rpc.services.BillCrudService;
 import com.propertyvista.crm.rpc.services.LeaseCrudService;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
 
+    private final IListerView.Presenter billLister;
+
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(Place place) {
         super(place, TenantViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
+
+        billLister = new ListerActivityBase<Bill>(place, ((LeaseViewerView) view).getBillListerView(),
+                (AbstractCrudService<Bill>) GWT.create(BillCrudService.class), Bill.class);
     }
 
     @Override
@@ -50,4 +66,19 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
         }, entityId);
     }
 
+    @Override
+    public Presenter getBillListerPresenter() {
+        return billLister;
+    }
+
+    @Override
+    protected void onPopulateSuccess(LeaseDTO result) {
+        super.onPopulateSuccess(result);
+
+        List<DataTableFilterData> preDefinedFilters = new ArrayList<DataTableFilterData>();
+        preDefinedFilters.add(new DataTableFilterData(EntityFactory.getEntityPrototype(Bill.class).billingAccount().id().getPath(), Operators.is, result
+                .leaseFinancial().billingAccount().getPrimaryKey()));
+        billLister.setPreDefinedFilters(preDefinedFilters);
+        billLister.populate();
+    }
 }

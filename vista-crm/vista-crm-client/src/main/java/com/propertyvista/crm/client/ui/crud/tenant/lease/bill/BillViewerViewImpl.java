@@ -11,22 +11,15 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.tenant.lease;
+package com.propertyvista.crm.client.ui.crud.tenant.lease.bill;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseViewerView extends IViewerView<LeaseDTO> {
+public class BillViewerViewImpl extends CrmViewerViewImplBase<Bill> implements BillViewerView {
 
-    interface Presenter extends IViewerView.Presenter {
-
-        IListerView.Presenter getBillListerPresenter();
-
-        void createMasterApplication();
+    public BillViewerViewImpl() {
+        super(CrmSiteMap.Tenants.Bill.class, new BillEditorForm(true));
     }
-
-    IListerView<Bill> getBillListerView();
 }

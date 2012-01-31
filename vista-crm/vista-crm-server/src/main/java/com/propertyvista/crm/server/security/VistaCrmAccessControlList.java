@@ -22,6 +22,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.crm.rpc.services.ApplicationCrudService;
 import com.propertyvista.crm.rpc.services.AppointmentCrudService;
+import com.propertyvista.crm.rpc.services.BillCrudService;
 import com.propertyvista.crm.rpc.services.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.ConcessionCrudService;
@@ -60,6 +61,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -179,6 +181,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseCrudService.class));
+
+        grant(VistaBasicBehavior.CRM, new EntityPermission(Bill.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BillCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Application.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationCrudService.class));

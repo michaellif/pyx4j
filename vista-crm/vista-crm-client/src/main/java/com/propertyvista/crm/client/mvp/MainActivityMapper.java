@@ -69,7 +69,6 @@ import com.propertyvista.crm.client.activity.crud.marketing.lead.LeadEditorActiv
 import com.propertyvista.crm.client.activity.crud.marketing.lead.LeadListerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.LeadViewerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.ShowingEditorActivity;
-import com.propertyvista.crm.client.activity.crud.marketing.lead.ShowingListerActivity;
 import com.propertyvista.crm.client.activity.crud.marketing.lead.ShowingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.EmployeeListerActivity;
@@ -103,6 +102,8 @@ import com.propertyvista.crm.client.activity.crud.tenant.application.MasterAppli
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.lease.LeaseViewerActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lease.bill.BillEditorActivity;
+import com.propertyvista.crm.client.activity.crud.tenant.lease.bill.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.EquifaxResultViewerActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.PersonScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.tenant.screening.PersonScreeningViewerActivity;
@@ -400,9 +401,6 @@ public class MainActivityMapper implements AppActivityMapper {
                     case viewer:
                         activity = new ShowingViewerActivity(place);
                         break;
-                    case lister:
-                        activity = new ShowingListerActivity(place);
-                        break;
                     }
 
 // - Tenant-related:
@@ -439,6 +437,16 @@ public class MainActivityMapper implements AppActivityMapper {
                         break;
                     case viewer:
                         activity = new PersonScreeningViewerActivity(place);
+                        break;
+                    }
+
+                } else if (place instanceof CrmSiteMap.Tenants.Bill) {
+                    switch (((CrudAppPlace) place).getType()) {
+                    case editor:
+                        activity = new BillEditorActivity(place);
+                        break;
+                    case viewer:
+                        activity = new BillViewerActivity(place);
                         break;
                     }
 
