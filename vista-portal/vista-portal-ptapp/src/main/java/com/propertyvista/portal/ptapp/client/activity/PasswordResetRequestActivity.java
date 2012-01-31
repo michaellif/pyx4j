@@ -20,28 +20,34 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
-public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
+// TODO PasswordResetRequestActivity must inherit from abstract class shared between all three apps
+public class PasswordResetRequestActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
+
+    private final static I18n i18n = I18n.get(PasswordResetRequestActivity.class);
 
     private final RetrievePasswordView view;
 
-    public RetrievePasswordActivity(Place place) {
+    public PasswordResetRequestActivity(Place place) {
         view = PtAppViewFactory.instance(RetrievePasswordView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }
 
-    public RetrievePasswordActivity withPlace(Place place) {
+    public PasswordResetRequestActivity withPlace(Place place) {
         return this;
     }
 
@@ -55,7 +61,8 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                PtAppSite.instance().showMessageDialog("Please check your email", "", null, null);
+                MessageDialog.info(i18n.tr("An email that describes password reset procedure has been sent to your email"));
+                AppSite.getPlaceController().goTo(new PtSiteMap.Login());
             }
         };
         AuthenticationService authService = GWT.<AuthenticationService> create(PtAuthenticationService.class);

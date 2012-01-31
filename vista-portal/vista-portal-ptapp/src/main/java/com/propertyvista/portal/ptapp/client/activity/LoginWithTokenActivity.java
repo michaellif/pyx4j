@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Jan 30, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.ptapp.client.activity;
@@ -18,16 +18,17 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.rpc.AuthenticationService;
 
-import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
-import com.propertyvista.common.client.ui.components.login.LoginView;
+import com.propertyvista.common.client.ui.components.login.AbstractLoginWithTokenActivity;
+import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
-public class LoginActivity extends AbstractLoginActivty implements LoginView.Presenter {
+public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {
 
-    public LoginActivity(Place place) {
-        super(place, PtAppViewFactory.instance(LoginView.class), GWT.<AuthenticationService> create(PtAuthenticationService.class),
-                new PtSiteMap.PasswordResetRequest());
+    public LoginWithTokenActivity(Place place) {
+        super(place, PtAppViewFactory.instance(LoginWithTokenView.class), GWT.<AuthenticationService> create(PtAuthenticationService.class),
+                new PtSiteMap.PasswordReset(), new PtSiteMap.Login());
     }
+
 }

@@ -29,8 +29,8 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetService;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.security.PasswordResetView;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;

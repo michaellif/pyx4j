@@ -22,9 +22,10 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.ptapp.client.activity.ApplicationStatusActivity;
 import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
+import com.propertyvista.portal.ptapp.client.activity.LoginWithTokenActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordChangeActivity;
-import com.propertyvista.portal.ptapp.client.activity.ResetPasswordActivity;
-import com.propertyvista.portal.ptapp.client.activity.RetrievePasswordActivity;
+import com.propertyvista.portal.ptapp.client.activity.PasswordResetActivity;
+import com.propertyvista.portal.ptapp.client.activity.PasswordResetRequestActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ApartmentActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.ChargesActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.CompletionActivity;
@@ -42,12 +43,14 @@ public class ContentActivityMapper implements ActivityMapper {
 
         if (place instanceof PtSiteMap.Login) {
             return new LoginActivity(place);
-        } else if (place instanceof PtSiteMap.RetrievePassword) {
-            return new RetrievePasswordActivity(place);
+        } else if (place instanceof PtSiteMap.LoginWithToken) {
+            return new LoginWithTokenActivity(place);
+        } else if (place instanceof PtSiteMap.PasswordResetRequest) {
+            return new PasswordResetRequestActivity(place);
         } else if (place instanceof PtSiteMap.PasswordChange) {
             return new PasswordChangeActivity(place);
-        } else if (place instanceof PtSiteMap.ResetPassword) {
-            return new ResetPasswordActivity(place);
+        } else if (place instanceof PtSiteMap.PasswordReset) {
+            return new PasswordResetActivity(place);
         } else if (place instanceof PtSiteMap.GenericMessage) {
             return new GenericMessageActivity(place);
 // WizardSteps:

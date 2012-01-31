@@ -37,11 +37,11 @@ public class PtSiteMap implements SiteMap {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class RetrievePassword extends AppPlace implements PublicPlace {
+    public static class PasswordResetRequest extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Application Form")
-    public static class ResetPassword extends AppPlace {
+    public static class PasswordReset extends AppPlace {
     }
 
     @PlaceProperties(caption = "Application Form")

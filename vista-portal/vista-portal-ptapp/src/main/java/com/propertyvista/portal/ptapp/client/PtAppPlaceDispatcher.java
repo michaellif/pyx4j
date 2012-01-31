@@ -29,6 +29,7 @@ public class PtAppPlaceDispatcher extends AppPlaceDispatcher {
 
     @Override
     public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
+
         if (isAuthenticated()) {
             if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveSubmited)) {
                 callback.onSuccess(new PtSiteMap.ApplicationStatus());
@@ -40,6 +41,8 @@ public class PtAppPlaceDispatcher extends AppPlaceDispatcher {
                 PtAppSite.getWizardManager().forwardTo(null, callback);
                 return;
             }
+        } else if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
+            callback.onSuccess(new PtSiteMap.PasswordReset());
         } else {
             if (!(newPlace instanceof PublicPlace)) {
                 callback.onSuccess(new PtSiteMap.Login());

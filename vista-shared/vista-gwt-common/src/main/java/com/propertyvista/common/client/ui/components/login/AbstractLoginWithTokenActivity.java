@@ -11,10 +11,9 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.login;
+package com.propertyvista.common.client.ui.components.login;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -28,40 +27,44 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
-import com.propertyvista.crm.client.ui.viewfactories.LoginViewFactory;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+public class AbstractLoginWithTokenActivity extends AbstractActivity {
 
-public class LoginWithTokenActivity extends AbstractActivity {
-
-    private static final I18n i18n = I18n.get(LoginWithTokenActivity.class);
+    private static final I18n i18n = I18n.get(AbstractLoginWithTokenActivity.class);
 
     private final LoginWithTokenView view;
 
     private final String authToken;
 
-    public LoginWithTokenActivity(Place place) {
+    private final AuthenticationService service;
+
+    private final AppPlace passwordResetPlace;
+
+    private final AppPlace loginPlace;
+
+    public AbstractLoginWithTokenActivity(Place place, LoginWithTokenView view, AuthenticationService service, AppPlace passwordResetPlace, AppPlace loginPlace) {
         assert (place instanceof AppPlace);
-        authToken = ((AppPlace) place).getFirstArg(AuthenticationService.AUTH_TOKEN_ARG);
-        view = LoginViewFactory.instance(LoginWithTokenView.class);
+        this.authToken = ((AppPlace) place).getFirstArg(AuthenticationService.AUTH_TOKEN_ARG);
+        this.view = view;
+        this.service = service;
+        this.passwordResetPlace = passwordResetPlace;
+        this.loginPlace = loginPlace;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
 
-        GWT.<AuthenticationService> create(CrmAuthenticationService.class).authenticateWithToken(new DefaultAsyncCallback<AuthenticationResponse>() {
+        service.authenticateWithToken(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
-                AppSite.getPlaceController().goTo(new CrmSiteMap.PasswordReset());
+                AppSite.getPlaceController().goTo(passwordResetPlace);
             }
 
             @Override
             public void onFailure(Throwable caught) {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
                 MessageDialog.error(i18n.tr("Authentication failed"), i18n.tr("The URL you have used is either incorrect or expired."));
+                AppSite.getPlaceController().goTo(loginPlace);
             }
         }, ClientContext.getClientSystemInfo(), authToken);
     }

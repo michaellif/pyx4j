@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.login;
+package com.propertyvista.common.client.ui.components.login;
 
 import static com.pyx4j.commons.HtmlUtils.h2;
 
