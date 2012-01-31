@@ -11,18 +11,25 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui;
+package com.propertyvista.common.client.ui.components.login;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
-public interface RetrievePasswordView extends IsWidget {
+public interface PasswordResetRequestView extends IsWidget {
 
-    public void setPresenter(Presenter presenter);
+    interface Presenter {
 
-    public interface Presenter {
-
-        void retrievePassword(PasswordRetrievalRequest value);
+        void requestPasswordReset(PasswordRetrievalRequest value);
     }
+
+    void setPresenter(Presenter presenter);
+
+    void createNewCaptchaChallenge();
+
+    void displayPasswordResetFailedMessage();
+
+    void reset();
+
 }

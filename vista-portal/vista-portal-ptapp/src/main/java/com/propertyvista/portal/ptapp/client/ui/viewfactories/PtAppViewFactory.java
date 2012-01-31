@@ -18,6 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenViewImpl;
+import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
+import com.propertyvista.common.client.ui.components.login.PasswordResetRequestViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
@@ -36,8 +38,6 @@ import com.propertyvista.portal.ptapp.client.ui.LogoView;
 import com.propertyvista.portal.ptapp.client.ui.LogoViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigView;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordView;
-import com.propertyvista.portal.ptapp.client.ui.RetrievePasswordViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigView;
 import com.propertyvista.portal.ptapp.client.ui.SecondNavigViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.StaticContentView;
@@ -76,9 +76,8 @@ public class PtAppViewFactory extends ViewFactoryBase {
             } else if (LoginWithTokenView.class.equals(type)) {
                 map.put(type, new LoginWithTokenViewImpl());
 
-                // TODO change RetrievPasswordView to generic PasswordResetRequestView
-            } else if (RetrievePasswordView.class.equals(type)) {
-                map.put(type, new RetrievePasswordViewImpl());
+            } else if (PasswordResetRequestView.class.equals(type)) {
+                map.put(type, new PasswordResetRequestViewImpl());
 
             } else if (PasswordResetView.class.equals(type)) {
                 map.put(type, new PasswordResetViewImpl());

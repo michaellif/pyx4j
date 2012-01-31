@@ -11,14 +11,13 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.login;
+package com.propertyvista.common.client.ui.components.login;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.common.client.ui.components.login.RetrievePasswordForm;
 
 public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordResetRequestView {
 

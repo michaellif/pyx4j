@@ -13,67 +13,22 @@
  */
 package com.propertyvista.crm.client.activity.security;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetService;
-import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
-import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 
-public class PasswordResetActivity extends AbstractActivity implements PasswordResetView.Presenter {
-
-    private static final I18n i18n = I18n.get(PasswordResetActivity.class);
-
-    private final PasswordResetView view;
+public class PasswordResetActivity extends AbstractPasswordResetActivity implements PasswordResetView.Presenter {
 
     public PasswordResetActivity(Place place) {
-        this.view = SecurityViewFactory.instance(PasswordResetView.class);
-        view.setPresenter(this);
-        withPlace(place);
-    }
-
-    public PasswordResetActivity withPlace(Place place) {
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-    }
-
-    @Override
-    public void resetPassword(PasswordChangeRequest request) {
-        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticated(result);
-                CrmSite.instance().showMessageDialog(i18n.tr("Your password has been reset successfully!"), i18n.tr("Success!"), i18n.tr("Log In"),
-                        new Command() {
-                            @Override
-                            public void execute() {
-                                AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
-                            }
-                        });
-            }
-        };
-
-        GWT.<PasswordResetService> create(CrmPasswordResetService.class).resetPassword(callback, request);
-
+        super(place, SecurityViewFactory.instance(PasswordResetView.class), GWT.<PasswordResetService> create(CrmPasswordResetService.class),
+                new CrmSiteMap.Login());
     }
 
 }

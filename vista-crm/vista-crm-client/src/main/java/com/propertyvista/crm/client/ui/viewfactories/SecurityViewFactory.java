@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
+import com.propertyvista.common.client.ui.components.login.PasswordResetRequestViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.crm.client.ui.login.PasswordResetRequestView;
-import com.propertyvista.crm.client.ui.login.PasswordResetRequestViewImpl;
 
 public class SecurityViewFactory extends ViewFactoryBase {
 
