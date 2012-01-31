@@ -145,12 +145,15 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     @Override
     protected void onEnsureDebugId(String baseID) {
-        if (this.image != null) {
-            image.ensureDebugId(baseID + "-image");
-        }
-
         if (textLabel != null) {
-            textLabel.ensureDebugId(baseID + "-label");
+            textLabel.ensureDebugId(baseID);
+        }
+        if (this.image != null) {
+            if (textLabel != null) {
+                image.ensureDebugId(baseID);
+            } else {
+                image.ensureDebugId(baseID + "-image");
+            }
         }
     }
 
