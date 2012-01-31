@@ -21,12 +21,19 @@
 package com.pyx4j.tester.client;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
+import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.log4gwt.rpcappender.RPCAppender;
+import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.tester.client.ui.TesterPanel;
 import com.pyx4j.widgets.client.GlassPanel;
@@ -41,8 +48,21 @@ public class TesterSite extends AppSite {
 
     @Override
     public void onSiteLoad() {
-
         ApplicationCommon.initRpcGlassPanel();
+        if (Window.Location.getParameter("trace") != null) {
+            final RPCAppender rpcAppender = new RPCAppender(Level.TRACE);
+            rpcAppender.autoFlush(2 * Consts.SEC2MILLISECONDS);
+            ClientLogger.addAppender(rpcAppender);
+            ClientLogger.setTraceOn(true);
+            Window.addWindowClosingHandler(new ClosingHandler() {
+                @Override
+                public void onWindowClosing(ClosingEvent event) {
+                    rpcAppender.flush();
+                }
+            });
+        } else {
+            ClientLogger.addAppender(new RPCAppender(Level.WARN));
+        }
 
         RootPanel.get().add(GlassPanel.instance());
 

@@ -48,29 +48,29 @@ public class InitializationServletContextListener implements ServletContextListe
     public void contextInitialized(ServletContextEvent sce) {
         try {
             String configClass = sce.getServletContext().getInitParameter(ServerSideConfiguration.class.getName());
+            ServletContext servletContext = sce.getServletContext();
             if (CommonsStringUtils.isStringSet(configClass)) {
                 try {
                     configClass += System.getProperty("com.pyx4j.appConfig", "");
-                    ServletContext servletContext = sce.getServletContext();
                     String configContextName = getContextName(servletContext);
                     LoggerConfig.setContextName(configContextName);
                     ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
                     ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(servletContext, configContextName));
-
-                    Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
-                    log.debug("ServerInfo {}", servletContext.getServerInfo());
-                    log.debug("Java Servlet API {} {}", servletContext.getMajorVersion(), servletContext.getMinorVersion());
-                    log.debug("ServletContext {} {}", servletContext.getContextPath(), servletContext.getServletContextName());
-                    ServerSideConfiguration.logSystemProperties();
-
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
                     log.error("ServerSideConfiguration creation error", e);
                     throw new ServletException("ServerSideConfiguration not available");
                 }
             } else {
+                LoggerConfig.setContextName(getContextName(servletContext));
                 ServerSideConfiguration.setInstance(new ServerSideConfiguration());
             }
+
+            Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
+            log.debug("ServerInfo {}", servletContext.getServerInfo());
+            log.debug("Java Servlet API {} {}", servletContext.getMajorVersion(), servletContext.getMinorVersion());
+            log.debug("ServletContext {} {}", servletContext.getContextPath(), servletContext.getServletContextName());
+            ServerSideConfiguration.logSystemProperties();
 
             EntityImplGenerator.generate(ServerSideConfiguration.instance().getEnvironmentType() == EnvironmentType.GAESandbox);
         } catch (Throwable e) {
