@@ -20,6 +20,7 @@
  */
 package com.pyx4j.gwt.server;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,6 +79,14 @@ public class DateUtils extends TimeUtils {
         dayStart(calendar);
         calendar.add(Calendar.DATE, 1);
         calendar.add(Calendar.SECOND, -1);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void setTime(Calendar calendar, Time time) {
+        calendar.set(Calendar.HOUR_OF_DAY, time.getHours());
+        calendar.set(Calendar.MINUTE, time.getMinutes());
+        calendar.set(Calendar.SECOND, time.getSeconds());
+        calendar.set(Calendar.MILLISECOND, 0);
     }
 
     public static Date yearsAdd(Date date, int years) {
