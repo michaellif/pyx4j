@@ -22,12 +22,16 @@ package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
@@ -153,33 +157,28 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return addDomHandler(handler, FocusEvent.getType());
     }
 
     @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return addDomHandler(handler, BlurEvent.getType());
     }
 
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return addDomHandler(handler, KeyDownEvent.getType());
     }
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return addDomHandler(handler, KeyUpEvent.getType());
     }
 
     @Override
     public void setEnabled(boolean enabled) {
         richTextArea.setEnabled(enabled);
-
     }
 
     @Override
