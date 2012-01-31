@@ -30,6 +30,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.view.form.folder.EntityIForm;
@@ -53,6 +55,15 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
     private CEntityEditor<EntityI> currentForm;
 
+    public enum DebugIds implements IDebugId {
+        ButtonPanel, PopulateButton, CleanButton, RepopulateButton;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+    }
+
     public FormTesterViewImpl() {
         setSize("100%", "100%");
 
@@ -74,7 +85,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
             }
         });
 
-        populateButton.ensureDebugId("buttonPanle-populateButton");
+        populateButton.ensureDebugId(CompositeDebugId.debugId(DebugIds.ButtonPanel, DebugIds.PopulateButton));
 
         buttonPanel.add(populateButton);
 
@@ -87,7 +98,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
             }
         });
-        cleanButton.ensureDebugId("buttonPanle-cleanButton");
+        cleanButton.ensureDebugId(CompositeDebugId.debugId(DebugIds.ButtonPanel, DebugIds.CleanButton));
         buttonPanel.add(cleanButton);
 
         repopulateButton = new Button("Repopulate");
@@ -99,7 +110,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
             }
         });
 
-        repopulateButton.ensureDebugId("buttonPanle-repopulateButton");
+        repopulateButton.ensureDebugId(CompositeDebugId.debugId(DebugIds.ButtonPanel, DebugIds.RepopulateButton));
         buttonPanel.add(repopulateButton);
 
         container.add(buttonPanel, DockPanel.NORTH);
@@ -109,14 +120,6 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
         container.add(formPanel, DockPanel.NORTH);
 
         setWidget(container);
-
-        //EntityIFormWithoutLists mainForm = new EntityIFormWithoutLists();
-        //mainForm.initContent();
-
-        //setWidget(mainForm);
-
-        //mainForm.populate(DomainFactory.createEntityI());
-
     }
 
     @Override

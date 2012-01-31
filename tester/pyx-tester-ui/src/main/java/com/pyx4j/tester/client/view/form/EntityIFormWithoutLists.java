@@ -80,9 +80,6 @@ public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
         box.setOptions(options);
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().suggest(), box)));
 
-//        box = new CSuggestStringBox();
-//        box.setOptions(options);
-
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().datePicker())));
 
         main.setWidget(row, 1, new TesterWidgetDecorator(inject(proto().monthPicker())));

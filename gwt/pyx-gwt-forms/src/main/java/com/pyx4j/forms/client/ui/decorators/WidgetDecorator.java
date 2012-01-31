@@ -43,6 +43,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
@@ -51,6 +53,15 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 
 public class WidgetDecorator extends FlexTable {
+
+    public enum HolderDebugIds implements IDebugId {
+        InfoImageHolder, InfoImage;
+
+        @Override
+        public String debugId() {
+            return name();
+        }
+    }
 
     private final CComponent<?, ?> component;
 
@@ -112,9 +123,11 @@ public class WidgetDecorator extends FlexTable {
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
+
+            infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), HolderDebugIds.InfoImageHolder));
+            infoImage.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), new CompositeDebugId(HolderDebugIds.InfoImageHolder,
+                    HolderDebugIds.InfoImage)));
             infoImageHolder.setWidget(infoImage);
-            infoImageHolder.ensureDebugId(component.getCompositeDebugId().debugId() + "-infoImageHolder");
-            infoImage.ensureDebugId(component.getCompositeDebugId().debugId() + "-infoImageHolder-infoImage");
         }
 
         mandatoryImageHolder = new SpaceHolder();
