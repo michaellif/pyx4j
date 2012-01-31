@@ -88,7 +88,7 @@
                 <configuration>
                     <archiveClasses>true</archiveClasses>
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
-                    <warSourceDirectory>${basedir}/src/test/webapp</warSourceDirectory>
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
                     <warSourceExcludes>${warSourceExcludes}</warSourceExcludes>
                     <!-- web.xml processed by maven filters -->
                     <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
