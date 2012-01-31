@@ -31,8 +31,6 @@ public class TesterSeleniumTestConfiguration extends DefaultSeleniumTestConfigur
 
         local_9000, // Deployed in Tomcat
 
-        local_mac, // Igor, to run on Mac
-
         dev
 
     }
@@ -65,14 +63,6 @@ public class TesterSeleniumTestConfiguration extends DefaultSeleniumTestConfigur
         case local:
             if (getRemoteDriverHost() == null) {
                 url.append("localhost");
-            } else {
-                url.append(HostConfig.getLocalHostIP());
-            }
-            url.append(":8881/tester/");
-            break;
-        case local_mac:
-            if (getRemoteDriverHost() == null) {
-                url.append("127.0.0.1");
             } else {
                 url.append(HostConfig.getLocalHostIP());
             }
