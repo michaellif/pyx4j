@@ -16,7 +16,6 @@ package com.propertyvista.crm.rpc.dto.company;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
@@ -28,7 +27,6 @@ import com.propertyvista.domain.security.CrmRole;
 @Transient
 public interface EmployeeDTO extends Employee {
 
-    @ReadOnly
     IPrimitive<Boolean> enabled();
 
     IPrimitive<Boolean> accessAllBuildings();
