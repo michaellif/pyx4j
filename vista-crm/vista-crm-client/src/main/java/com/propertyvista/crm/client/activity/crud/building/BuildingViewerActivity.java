@@ -166,6 +166,11 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     }
 
     @Override
+    public void runBill() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
     public void onPopulateSuccess(BuildingDTO result) {
 
         // should be called before call to super, because

@@ -55,6 +55,8 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
         IListerView.Presenter getFeaturePresenter();
 
         IListerView.Presenter getConcessionPresenter();
+
+        void runBill();
     }
 
     BuildingDashboardView getDashboardView();

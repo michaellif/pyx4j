@@ -63,7 +63,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             }
         });
         addToolbarItem(runBillAction.asWidget());
-
     }
 
     @Override

@@ -13,8 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
@@ -45,6 +50,8 @@ import com.propertyvista.dto.RoofDTO;
 
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
 
+    private static final I18n i18n = I18n.get(BuildingViewerViewImpl.class);
+
     private final IListerView<FloorplanDTO> floorplanLister;
 
     private final IListerView<AptUnitDTO> unitLister;
@@ -67,6 +74,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final BuildingDashboardView dashboardView = new BuildingDashboardViewImpl();
 
+    private final Button runBillAction;
+
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
 
@@ -87,6 +96,15 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         // set main form here:
         setForm(new BuildingEditorForm(true));
+
+        runBillAction = new Button(i18n.tr("Run Bill"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((BuildingViewerView.Presenter) presenter).runBill();
+            }
+        });
+        addToolbarItem(runBillAction.asWidget());
     }
 
     @Override
