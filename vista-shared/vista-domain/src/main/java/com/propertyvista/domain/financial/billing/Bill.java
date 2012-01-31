@@ -13,8 +13,11 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -47,5 +50,27 @@ public interface Bill extends IEntity {
 
     @ReadOnly
     BillingRun billingRun();
+
+    @Detached
+    @JoinTable(value = Charge.class, orderColumn = Charge.OrderId.class, cascade = false)
+    IList<Charge> charges();
+
+    IPrimitive<Double> totalRecurringCharges();
+
+    IPrimitive<Double> totalOneTimeCharges();
+
+    IPrimitive<Double> totalAdjustments();
+
+    /**
+     * The total amount due from the previous bill.
+     */
+    IPrimitive<Double> previousBalanceAmount();
+
+    /**
+     * The total amount of payments received since the previous bill, up to the current Bill day.
+     */
+    IPrimitive<Double> paymentReceivedAmount();
+
+    IPrimitive<Double> pastDueAmount();
 
 }

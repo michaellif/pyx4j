@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -29,4 +30,7 @@ public interface Charge extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<Double> price();
 
+    interface OrderId extends ColumnId {
+
+    }
 }
