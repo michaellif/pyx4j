@@ -20,9 +20,6 @@
  */
 package com.propertyvista.server.billing;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,83 +32,18 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Bill.BillStatus;
-import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingCycle.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.BillingRun.BillingRunStatus;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseFinancial;
 
 public class BillingLifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycle.class);
 
-    /*
-     * Creates BillingAccount when possible
-     */
-    public static BillingAccount ensureBillingAccount(Lease lease) {
-        if (lease.leaseFrom().isNull()) {
-            throw new Error();
-        }
-        LeaseFinancial leaseFinancial = lease.leaseFinancial();
-        if (leaseFinancial.isValueDetached()) {
-            Persistence.service().retrieve(leaseFinancial);
-        }
-        if (!leaseFinancial.billingAccount().id().isNull()) {
-            return leaseFinancial.billingAccount();
-        }
-
-        // TOTO select a day base on lease.leaseFrom(), e.g. use Policy
-        int billingDay = 1;
-        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingDay(), billingDay));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriod(), BillingPeriod.monthly));
-        BillingCycle billingCycle = Persistence.service().retrieve(criteria);
-        // Auto Create BillingCycle for now. 
-        if (billingCycle == null) {
-            billingCycle = EntityFactory.create(BillingCycle.class);
-            billingCycle.billingDay().setValue(billingDay);
-            billingCycle.billingPeriod().setValue(BillingPeriod.monthly);
-            Persistence.service().persist(billingCycle);
-        }
-        leaseFinancial.billingAccount().billingCycle().set(billingCycle);
-        leaseFinancial.billingAccount().leaseFinancial().set(leaseFinancial);
-
-        Persistence.service().persist(leaseFinancial.billingAccount());
-        Persistence.service().persist(leaseFinancial);
-
-        return leaseFinancial.billingAccount();
-
-    }
-
-    static Bill getLatestBill(BillingAccount billingAccount) {
-        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), BillStatus.Approved));
-        criteria.asc(criteria.proto().billingRun().billingPeriodStartDate());
-        return Persistence.service().retrieve(criteria);
-    }
-
-    static LogicalDate getNextBillingPeriodStartDate(BillingAccount billingAccount, Bill bill) {
-        Calendar c = new GregorianCalendar();
-        c.setTime(bill.billingRun().billingPeriodStartDate().getValue());
-        switch (billingAccount.billingCycle().billingPeriod().getValue()) {
-        case monthly:
-            // TODO use proper bill day
-            c.add(Calendar.MONTH, 1);
-            break;
-        case weekly:
-        case biWeekly:
-        case semiMonthly:
-        case annyally:
-            throw new Error("Not implemented");
-        }
-        return new LogicalDate(c.getTime());
-    }
-
     public static void runBilling(Lease lease) {
-        BillingAccount billingAccount = ensureBillingAccount(lease);
+        BillingAccount billingAccount = BillingUtils.ensureBillingAccount(lease);
         if (!billingAccount.currentBillingRun().isNull()) {
             throw new UserRuntimeException("Can't run billing on with un-approved bills");
         }
@@ -120,9 +52,9 @@ public class BillingLifecycle {
         billingRun.billingCycle().set(billingAccount.billingCycle());
         billingRun.building().set(lease.unit().belongsTo());
 
-        Bill bill = getLatestBill(billingAccount);
+        Bill bill = BillingUtils.getLatestBill(billingAccount);
         if (bill != null) {
-            billingRun.billingPeriodStartDate().setValue(getNextBillingPeriodStartDate(billingAccount, bill));
+            billingRun.billingPeriodStartDate().setValue(BillingUtils.getNextBillingPeriodStartDate(billingAccount, bill));
         } else {
             billingRun.billingPeriodStartDate().setValue(lease.leaseFrom().getValue());
         }
@@ -135,11 +67,21 @@ public class BillingLifecycle {
         runBilling(billingRun);
     }
 
-    public static void runBilling(BillingRun billingRun) {
+    public static void runBilling(Building building, BillingPeriod billingPeriod, Integer billingDay, LogicalDate billingPeriodStartDate) {
+        //TODO
+    }
+
+    private static void runBilling(BillingRun billingRun) {
         billingRun.status().setValue(BillingRunStatus.Running);
         billingRun.executionDate().setValue(new LogicalDate());
         Persistence.service().persist(billingRun);
         try {
+
+            EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().currentBillingRun(), billingRun));
+            for (BillingAccount billingAccount : Persistence.service().query(criteria)) {
+                Billing.createBill(billingRun, billingAccount);
+            }
 
             billingRun.status().setValue(BillingRunStatus.Finished);
             Persistence.service().persist(billingRun);
@@ -149,4 +91,5 @@ public class BillingLifecycle {
             Persistence.service().persist(billingRun);
         }
     }
+
 }

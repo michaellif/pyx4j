@@ -31,6 +31,8 @@ public interface Bill extends IEntity {
 
         Running,
 
+        Erred,
+
         Finished,
 
         Approved,
