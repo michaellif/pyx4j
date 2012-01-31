@@ -75,4 +75,6 @@ public interface Bill extends IEntity {
 
     IPrimitive<Double> totalTaxes();
 
+    IPrimitive<Double> totalDueAmount();
+
 }
