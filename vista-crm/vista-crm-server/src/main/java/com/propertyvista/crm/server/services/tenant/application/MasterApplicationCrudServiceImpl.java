@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.tenant.app;
+package com.propertyvista.crm.server.services.tenant.application;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertvista.generator.util.RandomUtil;
@@ -20,7 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
-import com.propertyvista.crm.rpc.services.tenant.app.MasterApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericConverter;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;

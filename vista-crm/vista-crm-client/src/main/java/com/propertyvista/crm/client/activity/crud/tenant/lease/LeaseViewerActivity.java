@@ -35,7 +35,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
-import com.propertyvista.crm.rpc.services.tenant.app.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.LeaseDTO;
 

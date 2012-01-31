@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.tenant.app;
+package com.propertyvista.crm.server.services.tenant.application;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.crm.rpc.services.tenant.app.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.crm.server.services.billing.BillingDeferredProcess;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;

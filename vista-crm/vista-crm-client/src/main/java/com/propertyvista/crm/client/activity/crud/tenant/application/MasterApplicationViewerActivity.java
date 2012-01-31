@@ -27,8 +27,8 @@ import com.propertyvista.crm.client.ui.crud.tenant.application.MasterApplication
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.tenant.TenantInLeaseCrudService;
-import com.propertyvista.crm.rpc.services.tenant.app.ApplicationCrudService;
-import com.propertyvista.crm.rpc.services.tenant.app.MasterApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.MasterApplicationCrudService;
 import com.propertyvista.dto.ApplicationDTO;
 import com.propertyvista.dto.MasterApplicationDTO;
 import com.propertyvista.dto.TenantInLeaseDTO;

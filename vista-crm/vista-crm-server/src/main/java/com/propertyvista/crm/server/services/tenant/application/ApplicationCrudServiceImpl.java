@@ -11,9 +11,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.tenant.app;
+package com.propertyvista.crm.server.services.tenant.application;
 
-import com.propertyvista.crm.rpc.services.tenant.app.ApplicationCrudService;
+import com.propertyvista.crm.rpc.services.tenant.application.ApplicationCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.dto.ApplicationDTO;

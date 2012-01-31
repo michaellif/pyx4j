@@ -11,17 +11,11 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.tenant.app;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package com.propertyvista.crm.rpc.services.tenant.application;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.dto.MasterApplicationActionDTO;
-import com.propertyvista.dto.MasterApplicationDTO;
+import com.propertyvista.dto.ApplicationDTO;
 
-public interface MasterApplicationCrudService extends AbstractCrudService<MasterApplicationDTO> {
-
-    public void action(AsyncCallback<MasterApplicationDTO> callback, MasterApplicationActionDTO actionDTO);
-
+public interface ApplicationCrudService extends AbstractCrudService<ApplicationDTO> {
 }
