@@ -26,7 +26,10 @@ import java.io.Serializable;
  * Base interface for Remote Service implementations.
  * 
  * Use RPCManager.execute(...) in client code;
+ * 
+ * @deprecated use IService
  */
+@Deprecated
 public interface Service<I extends Serializable, O extends Serializable> {
 
     public O execute(I request);
