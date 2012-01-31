@@ -32,6 +32,8 @@ public interface BillingRun extends IEntity {
 
         Running,
 
+        Erred,
+
         Finished,
 
         Completed;
@@ -51,7 +53,7 @@ public interface BillingRun extends IEntity {
     @ReadOnly
     Building building();
 
-    IPrimitive<BillingRunStatus> billingRunStatus();
+    IPrimitive<BillingRunStatus> status();
 
     @ReadOnly
     @Format("MM/dd/yyyy")

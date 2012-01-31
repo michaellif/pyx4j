@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-shared</artifactId>
         <version>1.0.2-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -18,6 +18,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-server-config</artifactId>
