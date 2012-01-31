@@ -37,7 +37,7 @@ public interface AbstractUser extends IEntity {
 
     @Editor(type = EditorType.email)
     @NotNull
-    @Indexed
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> email();
 
     @Timestamp(Timestamp.Update.Created)

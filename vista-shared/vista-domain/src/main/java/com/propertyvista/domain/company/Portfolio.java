@@ -14,7 +14,6 @@
 package com.propertyvista.domain.company;
 
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -32,6 +31,5 @@ public interface Portfolio extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
-    @Owned
     IList<Building> buildings();
 }
