@@ -93,7 +93,7 @@
             <id>build-selenium</id>
             <properties>
                 <seleniumJvm>xvfb-run</seleniumJvm>
-                <seleniumJvmArgLine>--wait=10 --server-num=1 --server-args="-screen 0 1050x1680x24" ${java.home}/bin/java</seleniumJvmArgLine>
+                <seleniumJvmArgLine>--wait=10 --server-num=1 --server-args="-screen 0 1680x1680x24" ${java.home}/bin/java</seleniumJvmArgLine>
             </properties>
         </profile>
 
