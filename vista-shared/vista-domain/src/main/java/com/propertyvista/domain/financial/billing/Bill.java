@@ -35,7 +35,7 @@ public interface Bill extends IEntity {
 
         Finished,
 
-        Approved,
+        Confirmed,
 
         Rejected;
 
@@ -46,6 +46,8 @@ public interface Bill extends IEntity {
     };
 
     IPrimitive<BillStatus> billStatus();
+
+    IPrimitive<Integer> billSequenceNumber();
 
     @ReadOnly
     BillingAccount billingAccount();
@@ -67,16 +69,38 @@ public interface Bill extends IEntity {
      */
     IPrimitive<Double> paymentReceivedAmount();
 
+    /**
+     * pastDueAmount = previousBalanceAmount - paymentReceivedAmount - totalImmidiateAdjustments
+     */
     IPrimitive<Double> pastDueAmount();
 
     IPrimitive<Double> totalRecurringCharges();
 
     IPrimitive<Double> totalOneTimeCharges();
 
+    /**
+     * 
+     * It includes all feature/service adjustments as well as Product Item adjustments
+     * 
+     */
     IPrimitive<Double> totalAdjustments();
+
+    IPrimitive<Double> totalImmidiateAdjustments();
+
+    IPrimitive<Double> depositPaidAmount();
+
+    IPrimitive<Double> latePaimantCharges();
+
+    /**
+     * totalDueAmount = pastDueAmount + totalRecurringCharges + totalOneTimeCharges + totalAdjustments -depositPaidAmount + latePaimantCharges
+     */
+    IPrimitive<Double> totalCurrentAmount();
 
     IPrimitive<Double> totalTaxes();
 
+    /**
+     * totalDueAmount = totalCurrentAmount + totalTaxes
+     */
     IPrimitive<Double> totalDueAmount();
 
 }

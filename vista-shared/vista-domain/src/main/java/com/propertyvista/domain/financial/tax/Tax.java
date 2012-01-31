@@ -16,8 +16,10 @@ package com.propertyvista.domain.financial.tax;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-//TODO add IVerasionedEntity which will have effective date, expiration date
+//TODO add IVersionedEntity which will have effective date, expiration date
 public interface Tax extends IEntity {
+
+    IPrimitive<String> authority();
 
     IPrimitive<String> name();
 

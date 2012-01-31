@@ -58,6 +58,8 @@ public interface Lease extends IEntity {
 
         Broken,
 
+        Renewed,
+
         Transferred;
 
         @Override

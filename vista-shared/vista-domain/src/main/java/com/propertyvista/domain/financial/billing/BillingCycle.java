@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface BillingCycle extends IEntity {
 
     public enum BillingPeriod {
-        monthly, weekly, semiMonthly, biWeekly, annyally
+        monthly, weekly, semiMonthly, biWeekly, semiannyally, annyally
     }
 
     IPrimitive<BillingPeriod> billingPeriod();
