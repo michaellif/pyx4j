@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.selenium.D;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.EntityI;
+import com.pyx4j.tester.client.view.form.FormTesterViewImpl;
 
 public class FormBasicTest extends TesterSeleniumTestBase {
 
@@ -50,7 +51,7 @@ public class FormBasicTest extends TesterSeleniumTestBase {
         assertValueOnForm(entityIempty.textBox());
 
         // TODO Use Debug Id 
-        selenium.click("gwt-debug-buttonPanle-populateButton-label");
+        selenium.click(D.id(FormTesterViewImpl.DebugIds.ButtonPanel, FormTesterViewImpl.DebugIds.PopulateButton) + "-label");
 
         EntityI entityIpopulated = DomainFactory.createEntityI();
         // Verify the form is populated with data from factory
