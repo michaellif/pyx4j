@@ -77,7 +77,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().portfolios()).setViewable(!isManager);
         get(proto().portfolios()).setEditable(isManager);
 
-        get(proto().employees()).setEditable(!isManager);
+        get(proto().employees()).setViewable(!isManager);
         get(proto().employees()).setEditable(isManager);
     }
 

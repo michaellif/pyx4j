@@ -43,4 +43,9 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         addToolbarItem(passwordAction.asWidget());
     }
 
+    @Override
+    public void populate(EmployeeDTO value) {
+        super.populate(value);
+        passwordAction.setVisible(presenter.canEdit());
+    }
 }
