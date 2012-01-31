@@ -27,7 +27,8 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         void createMasterApplication();
 
-        void runBill();
+        void startBilling();
+
     }
 
     IListerView<Bill> getBillListerView();

@@ -59,7 +59,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).runBill();
+                ((LeaseViewerView.Presenter) presenter).startBilling();
             }
         });
         addToolbarItem(runBillAction.asWidget());

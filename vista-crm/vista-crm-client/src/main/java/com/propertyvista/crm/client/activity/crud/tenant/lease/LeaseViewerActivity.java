@@ -18,13 +18,14 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData;
 import com.pyx4j.entity.client.ui.datatable.filter.DataTableFilterData.Operators;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.essentials.client.DeferredProcessDialog;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
@@ -52,23 +53,33 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
 
     @Override
     public void createMasterApplication() {
-        ((LeaseCrudService) service).createMasterApplication(new AsyncCallback<VoidSerializable>() {
+        ((LeaseCrudService) service).createMasterApplication(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
 
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
         }, entityId);
     }
 
     @Override
-    public void runBill() {
-        // TODO Auto-generated method stub
+    public void startBilling() {
+        ((LeaseCrudService) service).startBilling(new DefaultAsyncCallback<String>() {
+
+            @Override
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog("Billing", "Running Billing..", false) {
+                    @Override
+                    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                        // Navigate to created bill
+                        super.onDeferredSuccess(result);
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
+            }
+        }, entityId);
 
     }
 

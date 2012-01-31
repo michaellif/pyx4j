@@ -45,7 +45,7 @@ public class BillingLifecycle {
     public static void runBilling(Lease lease) {
         BillingAccount billingAccount = BillingUtils.ensureBillingAccount(lease);
         if (!billingAccount.currentBillingRun().isNull()) {
-            throw new UserRuntimeException("Can't run billing on with un-approved bills");
+            throw new UserRuntimeException("Can't run billing on Account with un-approved bills");
         }
         BillingRun billingRun = EntityFactory.create(BillingRun.class);
         billingRun.status().setValue(BillingRunStatus.Scheduled);
