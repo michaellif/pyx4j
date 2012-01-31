@@ -14,6 +14,7 @@
 package com.propertyvista.pmsite.server.panels;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,6 +24,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.pmsite.server.PMSiteContentManager.SocialSite;
@@ -81,6 +84,13 @@ public class FooterPanel extends Panel {
             }
         });
 
-        add(new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo(((PMSiteWebRequest) getRequest()).getSiteLocale())));
+        Label copy = new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo(
+                ((PMSiteWebRequest) getRequest()).getSiteLocale()));
+        if (ApplicationMode.isDevelopment()) {
+            copy.setDefaultModelObject(copy.getDefaultModelObjectAsString() + "<br/>" + new Date());
+            copy.setEscapeModelStrings(false);
+        }
+
+        add(copy);
     }
 }
