@@ -25,9 +25,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.policy.policies.MiscPolicy;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.Application;
@@ -145,5 +147,17 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         tenants.tenantsMaximum().setValue((int) (lease.unit().info()._bedrooms().getValue() * miscPolicy.occupantsPerBedRoom().getValue()));
 
         return tenants;
+    }
+
+    @Override
+    public void update(AsyncCallback<Boolean> callback) {
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
+            ApplicationProgressMgr.syncroizeApplicationProgress(PtAppContext.getCurrentUserApplication(), retrieveData().tenants());
+        } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            ApplicationProgressMgr.createGurantorDataSteps(PtAppContext.getCurrentUserApplication(), PtAppContext.getCurrentUserGuarantor());
+        } else {
+            callback.onSuccess(false);
+        }
+        callback.onSuccess(true);
     }
 }

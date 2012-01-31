@@ -16,4 +16,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps;
 public interface WizardStepPresenter<E> {
 
     public void save(E entity);
+
+    public void next(E entity);
 }

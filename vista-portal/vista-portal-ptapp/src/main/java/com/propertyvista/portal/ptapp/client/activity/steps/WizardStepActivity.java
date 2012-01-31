@@ -117,4 +117,10 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
             }
         }, entity);
     }
+
+    @Override
+    public void next(E entity) {
+        WizardStepActivity.this.entity = entity;
+        PtAppSite.getWizardManager().nextStep();
+    }
 }

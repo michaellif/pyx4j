@@ -45,6 +45,8 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         TenantUser currentUser = PtAppContext.getCurrentUser();
         log.debug("Asking for current application for current user {}", currentUser);
 
+// TODO what was it for?
+
 //        Tenant tenant;
 //        {
 //            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);

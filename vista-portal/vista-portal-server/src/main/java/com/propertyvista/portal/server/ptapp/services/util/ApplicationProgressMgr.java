@@ -26,6 +26,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
@@ -82,6 +83,29 @@ public class ApplicationProgressMgr extends ApplicationManager {
                 updateParentStepStatus(financialStep, financialSubstep);
             }
         }
+
+        updateStepCompletion(infoStep);
+        updateStepCompletion(financialStep);
+
+        Persistence.service().merge(infoStep);
+        Persistence.service().merge(financialStep);
+    }
+
+    public static void createGurantorDataSteps(Application application, Guarantor guarantor) {
+        ApplicationWizardStep infoStep = findWizardStep(application, PtSiteMap.Info.class);
+        ApplicationWizardStep financialStep = findWizardStep(application, PtSiteMap.Financial.class);
+
+        // create an new sub-step:
+        ApplicationWizardSubstep subStep = EntityFactory.create(ApplicationWizardSubstep.class);
+        subStep.placeArgument().setValue(guarantor.getPrimaryKey().toString());
+        subStep.name().setValue(guarantor.person().name().getStringView());
+        subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
+
+        infoStep.substeps().add((ApplicationWizardSubstep) subStep.duplicate());
+        updateParentStepStatus(infoStep, subStep);
+
+        financialStep.substeps().add((ApplicationWizardSubstep) subStep.duplicate());
+        updateParentStepStatus(financialStep, subStep);
 
         updateStepCompletion(infoStep);
         updateStepCompletion(financialStep);

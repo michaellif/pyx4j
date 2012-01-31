@@ -43,9 +43,9 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         form.initContent();
         add(form);
 
-        Button saveButton = new Button(actionName());
-        saveButton.ensureDebugId(CrudDebugId.Crud_Save.debugId());
-        saveButton.addClickHandler(new ClickHandler() {
+        Button actionButton = new Button(actionName());
+        actionButton.ensureDebugId(CrudDebugId.Crud_Save.debugId());
+        actionButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -55,7 +55,8 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
                     Window.scrollTo(0, 0);
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
-                presenter.save(getValue());
+
+                doAction();
                 Window.scrollTo(0, 0);
             }
         });
@@ -65,8 +66,8 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         separator.getElement().getStyle().setProperty("margin", "1em 0em 0em 0em");
         add(separator);
 
-        saveButton.getElement().getStyle().setProperty("margin", "1em 1em 1em 0em");
-        add(saveButton);
+        actionButton.getElement().getStyle().setProperty("margin", "1em 1em 1em 0em");
+        add(actionButton);
 
         getElement().getStyle().setMarginTop(15, Unit.PX);
         getElement().getStyle().setMarginBottom(15, Unit.PX);
@@ -74,6 +75,18 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
     protected String actionName() {
         return i18n.tr("Save and Continue");
+    }
+
+    protected void doAction() {
+        saveAction();
+    }
+
+    protected void saveAction() {
+        presenter.save(getValue());
+    }
+
+    protected void nextAction() {
+        presenter.next(getValue());
     }
 
     @Override

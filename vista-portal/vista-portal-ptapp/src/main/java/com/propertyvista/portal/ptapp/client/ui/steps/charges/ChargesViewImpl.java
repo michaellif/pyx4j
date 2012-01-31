@@ -27,6 +27,19 @@ public class ChargesViewImpl extends WizardStepViewImpl<Charges, ChargesViewPres
 
     @Override
     protected String actionName() {
-        return (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant) ? super.actionName() : i18n.tr("Continue"));
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
+            return super.actionName();
+        } else {
+            return i18n.tr("Continue");
+        }
+    }
+
+    @Override
+    protected void doAction() {
+        if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveApplicant)) {
+            super.doAction();
+        } else {
+            nextAction();
+        }
     }
 }

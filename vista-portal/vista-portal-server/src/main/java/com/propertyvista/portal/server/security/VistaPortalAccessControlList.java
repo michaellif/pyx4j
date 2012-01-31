@@ -126,7 +126,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.ProspectiveApplicant, VistaTenantBehavior.Prospective);
         grant(VistaTenantBehavior.ProspectiveCoApplicant, VistaTenantBehavior.Prospective);
 
-        // Guarantor for prospective tenent:
+        // Guarantor for prospective tenant:
         grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaTenantBehavior.Guarantor, VistaTenantBehavior.Prospective);
 

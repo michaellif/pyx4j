@@ -15,6 +15,7 @@ package com.propertyvista.portal.ptapp.client.activity.steps;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.ptapp.client.ui.steps.tenants.TenantsView;
@@ -26,7 +27,17 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
 public class TenantsActivity extends WizardStepActivity<TenantInApplicationListDTO, TenantsViewPresenter> implements TenantsViewPresenter {
 
     public TenantsActivity(AppPlace place) {
-        super((TenantsView) WizardStepsViewFactory.instance(TenantsView.class), TenantInApplicationListDTO.class, (TenantService) GWT.create(TenantService.class));
+        super(WizardStepsViewFactory.instance(TenantsView.class), TenantInApplicationListDTO.class, (TenantService) GWT.create(TenantService.class));
         withPlace(place);
+    }
+
+    @Override
+    public void next(final TenantInApplicationListDTO entity) {
+        ((TenantService) getService()).update(new DefaultAsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                TenantsActivity.super.next(entity);
+            }
+        });
     }
 }
