@@ -22,16 +22,12 @@ package com.pyx4j.widgets.client.richtext;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
-import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
@@ -158,22 +154,22 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     @Override
     public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return addDomHandler(handler, FocusEvent.getType());
+        return richTextArea.addFocusHandler(handler);
     }
 
     @Override
     public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return addDomHandler(handler, BlurEvent.getType());
+        return richTextArea.addBlurHandler(handler);
     }
 
     @Override
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return addDomHandler(handler, KeyDownEvent.getType());
+        return null;
     }
 
     @Override
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return addDomHandler(handler, KeyUpEvent.getType());
+        return null;
     }
 
     @Override
