@@ -76,4 +76,8 @@ public class Trace {
         }
         return "\t{ " + ste.getClassName() + "." + ste.getMethodName() + "(" + ste.getFileName() + ":" + ste.getLineNumber() + ")}";
     }
+
+    public static String clickableClassLocation(Class<?> sourceClass) {
+        return "\t{ " + sourceClass.getName() + ".<>(" + sourceClass.getSimpleName() + ".java:0)}";
+    }
 }

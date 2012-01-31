@@ -149,10 +149,13 @@ public class RemoteServiceImpl implements RemoteService {
                 return returnValue;
             } catch (Throwable e) {
                 logOnce = false;
-                if (e instanceof IsWarningException) {
-                    log.warn("Service call exception for {}", Context.getVisit(), e);
-                } else {
-                    log.error("Service call error {} for " + Context.getVisit(), serviceInterfaceClassName, e);
+                // Avoid duplicated log
+                if (!serviceInterfaceClassName.equals(IServiceAdapter.class.getName())) {
+                    if (e instanceof IsWarningException) {
+                        log.warn("Service call exception for {}", Context.getVisit(), e);
+                    } else {
+                        log.error("Service call error {} for " + Context.getVisit(), serviceInterfaceClassName, e);
+                    }
                 }
                 if (e instanceof RuntimeExceptionSerializable) {
                     throw (RuntimeExceptionSerializable) e;

@@ -32,6 +32,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IEntity;
@@ -196,10 +197,10 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             log.error("Error", e);
             throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         } catch (InvocationTargetException e) {
+            log.error("Service call error\n{}\n for user:" + Context.getVisit(), Trace.clickableClassLocation(serviceInstance.getClass()), e.getCause());
             if (e.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) e.getCause();
             } else {
-                log.error("Error", e.getCause());
                 if (ApplicationMode.isDevelopment()) {
                     throw new DevInfoUnRecoverableRuntimeException(e.getCause());
                 } else {
