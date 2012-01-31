@@ -26,11 +26,13 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.specials.EmailTemplate;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.server.common.policy.PolicyManager;
 
 public class MessageTemplates {
 
@@ -42,9 +44,41 @@ public class MessageTemplates {
         return ServerSideConfiguration.instance().getApplicationEmailSender();
     }
 
+    /**
+     * Warning: can return <code>null</code> if the policy is not found.
+     * 
+     * @param type
+     * @param building
+     * @return
+     */
     public static EmailTemplate getEmailTEmplate(EmailTemplateType type, Building building) {
-        //TODO Use policy framework to get the HTML text
-        return null;
+        EmailTemplatesPolicy policy = PolicyManager.effectivePolicy(building, EmailTemplatesPolicy.class).duplicate();
+        if (policy == null) {
+            return null;
+        } else {
+            return fetchEmailTemplate(type, policy);
+        }
+    }
+
+    private static EmailTemplate fetchEmailTemplate(EmailTemplateType type, EmailTemplatesPolicy policy) {
+        switch (type) {
+        case ApplicationApproved:
+            return policy.applicationApproved();
+        case ApplicationCreatedApplicant:
+            return policy.applicationCreatedApplicant();
+        case ApplicationCreatedCoApplicant:
+            return policy.applicationCreatedCoApplicant();
+        case ApplicationCreatedGuarantor:
+            return policy.applicationCreatedGuarantor();
+        case ApplicationDeclined:
+            return policy.applicationDeclined();
+        case PasswordRetrievalCrm:
+            return policy.passwordRetrievalCrm();
+        case PasswordRetrievalTenant:
+            return policy.passwordRetrievalTenant();
+        default:
+            throw new Error("Something weird has just happened!!!");
+        }
     }
 
     public static String wrapHtml(String text) {
