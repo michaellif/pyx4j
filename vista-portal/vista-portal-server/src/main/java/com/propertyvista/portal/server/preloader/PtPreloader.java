@@ -52,6 +52,7 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.domain.ptapp.TenantChargeList;
+import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.ptapp.ApplicationManager;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 

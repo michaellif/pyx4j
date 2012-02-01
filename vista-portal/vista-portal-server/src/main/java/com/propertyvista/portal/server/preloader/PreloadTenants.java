@@ -44,6 +44,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 
 public class PreloadTenants extends BaseVistaDevDataPreloader {
 

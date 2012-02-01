@@ -58,6 +58,7 @@ import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
+import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.ThumbnailBlob;

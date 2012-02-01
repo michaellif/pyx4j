@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTrigger;
 import com.propertyvista.server.domain.PhoneCallCampaign;

@@ -62,7 +62,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
 
             add(new DevelopmentSecurityPreloader());
 
-            add(new PolicyPreloader());
+            add(new PreloadPolicies());
 
             // DEMO - temporary!!!
             // Availability Report Gadgets related

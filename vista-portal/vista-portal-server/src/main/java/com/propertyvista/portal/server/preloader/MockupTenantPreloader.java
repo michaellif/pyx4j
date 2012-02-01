@@ -38,6 +38,7 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.MockupTenant;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitVacancyReportTurnoverAnalysisDTO.AnalysisResolution;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.portal.server.preloader.util.AbstractMockupPreloader;
 
 /**
  * Generates and preloads mockup tenants for the Arrears Gadget Demos.

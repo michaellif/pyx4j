@@ -33,6 +33,7 @@ import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.TenantUser;
 import com.propertyvista.domain.security.VistaTenantBehavior;
+import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.TenantUserCredential;

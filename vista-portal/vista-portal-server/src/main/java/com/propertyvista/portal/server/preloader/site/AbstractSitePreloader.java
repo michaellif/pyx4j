@@ -46,7 +46,7 @@ import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
-import com.propertyvista.portal.server.preloader.AbstractVistaDataPreloader;
+import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.shared.CompiledLocale;
 

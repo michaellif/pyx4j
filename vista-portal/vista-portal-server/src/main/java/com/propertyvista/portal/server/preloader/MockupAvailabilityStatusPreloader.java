@@ -35,6 +35,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailab
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.server.preloader.util.AbstractMockupPreloader;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public class MockupAvailabilityStatusPreloader extends AbstractMockupPreloader {

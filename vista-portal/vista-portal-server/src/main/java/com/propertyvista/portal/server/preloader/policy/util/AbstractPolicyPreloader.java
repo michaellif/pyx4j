@@ -1,0 +1,92 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Feb 1, 2012
+ * @author ArtyomB
+ * @version $Id$
+ */
+package com.propertyvista.portal.server.preloader.policy.util;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.framework.PolicyAtNode;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
+
+public abstract class AbstractPolicyPreloader<P extends Policy> extends AbstractVistaDataPreloader {
+
+    private final Class<P> policyClass;
+
+    private final List<Class<? extends IEntity>> whatToDelete;
+
+    private PolicyNode topNode;
+
+    protected AbstractPolicyPreloader(Class<P> policyClass) {
+        this(policyClass, new ArrayList<Class<? extends IEntity>>(1));
+    }
+
+    protected AbstractPolicyPreloader(Class<P> policyClass, List<Class<? extends IEntity>> helperDomain) {
+        this.policyClass = policyClass;
+        this.whatToDelete = new ArrayList<Class<? extends IEntity>>(helperDomain.size() + 1);
+        this.whatToDelete.add(policyClass);
+        this.whatToDelete.addAll(helperDomain);
+        this.topNode = null;
+    }
+
+    protected abstract P createPolicy(StringBuilder log);
+
+    public void setTopNode(PolicyNode topNode) {
+        this.topNode = topNode;
+    }
+
+    @Override
+    public String create() {
+        StringBuilder log = new StringBuilder();
+        try {
+            if (topNode == null) {
+                throw new Error("top node was not set");
+            }
+            PolicyAtNode policyAtNode = EntityFactory.create(PolicyAtNode.class);
+            policyAtNode.node().set(topNode);
+            policyAtNode.policy().set(createPolicy(log));
+            Persistence.service().persist(policyAtNode);
+        } catch (Throwable e) {
+            // We need this policyClass for hack
+            String policyName = policyClass.equals(Policy.class) ? "" : " " + policyClass.getSimpleName();
+            return "ERROR:" + policyName + " could not be preloaded due to '" + topNode.getStringView() + "' due to: " + e.getMessage();
+        }
+        String policyCreationLog = log.toString();
+        return policyClass.getSimpleName() + " was successfuly assigned to '" + topNode.getStringView() + "'"
+                + ("".equals(policyCreationLog) ? "" : ": " + policyCreationLog);
+    }
+
+    @Override
+    public String delete() {
+        if (ApplicationMode.isDevelopment()) {
+            StringBuilder deleteLog = new StringBuilder();
+            for (Class<? extends IEntity> x : whatToDelete) {
+                String d = deleteAll(x);
+                if (d != null) {
+                    deleteLog.append(d);
+                }
+            }
+            return !deleteLog.toString().equals("") ? deleteLog.toString() : null;
+        } else {
+            return "This is production";
+        }
+    }
+
+}

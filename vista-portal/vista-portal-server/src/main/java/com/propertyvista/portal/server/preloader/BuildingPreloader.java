@@ -66,6 +66,7 @@ import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
+import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
