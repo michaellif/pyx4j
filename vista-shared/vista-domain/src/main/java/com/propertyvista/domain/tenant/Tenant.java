@@ -15,16 +15,21 @@ package com.propertyvista.domain.tenant;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -62,4 +67,12 @@ public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder
 //    @Detached
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
+
+    /**
+     * This used to enforce Data access
+     */
+    @RpcTransient
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = TenantInLease.class, cascade = false)
+    ISet<TenantInLease> _tenantInLease();
 }

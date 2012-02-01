@@ -242,6 +242,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), Roof.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseDatasetAccessRule(), Lease.class);
+        if (false) {
+            grant(VistaDataAccessBehavior.BuildingsAssigned, new TenantDatasetAccessRule(), Tenant.class);
+        }
 
         freeze();
     }
