@@ -21,6 +21,7 @@
 package com.pyx4j.tester.selenium.ui;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.selenium.D;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.EntityI;
@@ -40,6 +41,8 @@ public class FormBasicTest extends TesterSeleniumTestBase {
         //selenium.click("gwt-debug-Navigation_Item-form_tester");
         // HAck to make it work for demo
         selenium.navigate().to(selenium.getCurrentUrl() + "#form_tester?formtype=FormBasic");
+        //AppPlace place = new TesterSiteMap.FormTester();
+        //selenium.click(new CompositeDebugId(com.pyx4j.site.client..Navigation_Item, place.getPlaceId()).toString());
         selenium.waitWhileWorking();
 
     }
@@ -55,5 +58,7 @@ public class FormBasicTest extends TesterSeleniumTestBase {
         EntityI entityIpopulated = DomainFactory.createEntityI();
         // Verify the form is populated with data from factory
         assertValueOnForm(entityIpopulated.textBox());
+
+        selenium.click(D.id(D.id(proto(EntityI.class).textBox()), WidgetDecorator.DebugIds.Label.debugId()));
     }
 }
