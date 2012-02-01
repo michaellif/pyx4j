@@ -1,0 +1,183 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Jan 30, 2012
+ * @author dev_vista
+ * @version $Id$
+ */
+package com.propertyvista.crm.client.ui.crud.settings.content.site;
+
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.entity.client.ui.CEntityHyperlink;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkDialog;
+
+import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
+import com.propertyvista.domain.File;
+import com.propertyvista.domain.site.SiteImageResource;
+
+public class SiteImageResourceFolder extends VistaBoxFolder<SiteImageResource> {
+    private static final I18n i18n = I18n.get(SiteImageResourceFolder.class);
+
+    public SiteImageResourceFolder(boolean editable) {
+        super(SiteImageResource.class, editable);
+    }
+
+    @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof SiteImageResource) {
+            return new SiteImageResourceEditor();
+        }
+        return super.create(member);
+    }
+
+    class SiteImageResourceEditor extends CEntityDecoratableEditor<SiteImageResource> {
+
+        private final SiteImageThumbnail thumb = new SiteImageThumbnail();
+
+        public SiteImageResourceEditor() {
+            super(SiteImageResource.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel main = new FormFlexPanel();
+
+            int row = -1;
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
+            if (SiteImageResourceFolder.this.isEditable()) {
+
+                CEntityHyperlink<File> link = new CEntityHyperlink<File>(new Command() {
+                    @Override
+                    public void execute() {
+                        SiteImageResourceProvider provider = new SiteImageResourceProvider();
+                        provider.selectResource(new AsyncCallback<SiteImageResource>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
+                            }
+
+                            @Override
+                            public void onSuccess(SiteImageResource rc) {
+                                getValue().file().set(rc.file());
+                            }
+                        });
+                    }
+                });
+                link.setFormat(new IFormat<File>() {
+                    @Override
+                    public String format(File value) {
+                        if (value.blobKey().isNull()) {
+                            return i18n.tr("Add Image");
+                        } else {
+                            return i18n.tr("Change Image");
+                        }
+                    }
+
+                    @Override
+                    public File parse(String string) {
+                        return null;
+                    }
+                });
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), link), 10).build());
+            } else {
+                CEntityHyperlink<File> link = new CEntityHyperlink<File>(new Command() {
+                    @Override
+                    public void execute() {
+                        OkDialog dialog = new OkDialog(getValue().file().fileName().getValue()) {
+                            @Override
+                            public boolean onClickOk() {
+                                return true;
+                            }
+                        };
+                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue())));
+                        dialog.center();
+                    }
+                });
+                link.setFormat(new IFormat<File>() {
+                    @Override
+                    public String format(File value) {
+                        if (value.blobKey().isNull()) {
+                            return i18n.tr("Not set");
+                        } else {
+                            return value.fileName().getStringView();
+                        }
+                    }
+
+                    @Override
+                    public File parse(String string) {
+                        return null;
+                    }
+                });
+                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), link), 10).build());
+            }
+            main.setWidget(0, 1, thumb);
+            main.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
+
+            return main;
+        }
+
+        @Override
+        public void onPopulate() {
+            super.onPopulate();
+            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue()));
+        }
+    }
+
+    class SiteImageThumbnail extends Image {
+        private double thumbSize = 80;
+
+        public SiteImageThumbnail() {
+        }
+
+        public SiteImageThumbnail(double size) {
+            thumbSize = size;
+        }
+
+        @Override
+        public void setUrl(String url) {
+            super.setUrl(url);
+            if (getWidth() > 0 && getHeight() > 0) {
+                scaleToFit();
+            } else {
+                setVisible(false);
+                addLoadHandler(new LoadHandler() {
+                    @Override
+                    public void onLoad(LoadEvent event) {
+                        scaleToFit();
+                        setVisible(true);
+                    }
+                });
+            }
+        }
+
+        private void scaleToFit() {
+            if (1.0 * getWidth() / getHeight() > 1) {
+                setWidth(thumbSize + "px");
+            } else {
+                setHeight(thumbSize + "px");
+            }
+        }
+
+    }
+}

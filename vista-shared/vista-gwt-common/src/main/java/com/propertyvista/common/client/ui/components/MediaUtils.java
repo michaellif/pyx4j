@@ -43,6 +43,6 @@ public class MediaUtils {
 
     public static String createSiteImageResourceUrl(SiteImageResource resource) {
         return ClentNavigUtils.getDeploymentBaseURL() + DeploymentConsts.siteImageResourceServletMapping + resource.id().getStringView() + "/"
-                + resource.fileInfo().fileName().getStringView();
+                + resource.file().fileName().getStringView();
     }
 }

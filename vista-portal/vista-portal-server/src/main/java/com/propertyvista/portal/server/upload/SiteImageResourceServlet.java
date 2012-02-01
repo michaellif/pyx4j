@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.upload;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,16 +27,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.domain.FileBlob;
 
 @SuppressWarnings("serial")
 public class SiteImageResourceServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(SiteImageResourceServlet.class);
+
+    private int cacheExpiresHours = 24;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        String rate = config.getInitParameter("cacheExpiresHours");
+        if (rate != null) {
+            cacheExpiresHours = Integer.parseInt(rate);
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,7 +69,40 @@ public class SiteImageResourceServlet extends HttpServlet {
             return;
         }
 
-        FileBlob blob = Persistence.service().retrieve(FileBlob.class, doc.fileInfo().blobKey().getValue());
+        File file = doc.file();
+
+        if (file.blobKey().isNull()) {
+            log.debug("resources {} {} is not file", id, filename);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        String token = ETag.getEntityTag(file, "");
+        response.setHeader("Etag", token);
+
+        if (!file.timestamp().isNull()) {
+            long since = request.getDateHeader("If-Modified-Since");
+            if ((since != -1) && (file.timestamp().getValue() < since)) {
+                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                return;
+            }
+            response.setDateHeader("Last-Modified", file.timestamp().getValue());
+            // HTTP 1.0
+            response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
+            // HTTP 1.1
+            response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
+
+        }
+        if (ETag.checkIfNoneMatch(token, request.getHeader("If-None-Match"))) {
+            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+            return;
+        }
+
+        if (!file.contentMimeType().isNull()) {
+            response.setContentType(file.contentMimeType().getValue());
+        }
+
+        FileBlob blob = Persistence.service().retrieve(FileBlob.class, doc.file().blobKey().getValue());
         if (blob == null) {
             log.debug("no such blob {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

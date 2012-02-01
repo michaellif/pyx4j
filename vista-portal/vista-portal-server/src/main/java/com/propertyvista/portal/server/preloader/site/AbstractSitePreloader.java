@@ -41,9 +41,9 @@ import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
-import com.propertyvista.domain.site.Resource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.portal.server.preloader.AbstractVistaDataPreloader;
@@ -411,7 +411,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         if (raw != null) {
             Key blobKey = BlobService.persist(raw, "crm-logo.png", "image/png");
             for (LocaleInfo li : siteLocale) {
-                Resource res = site.logo().$();
+                SiteImageResource res = site.logo().$();
                 res.locale().set(li.aLocale);
                 res.file().blobKey().setValue(blobKey);
                 res.file().fileSize().setValue(raw.length);

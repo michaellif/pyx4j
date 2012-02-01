@@ -11,7 +11,7 @@
  * @author dev_vista
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.content.page;
+package com.propertyvista.crm.client.ui.components.cms;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -46,13 +45,15 @@ import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
 
-public class PageContentImageProvider extends Dialog implements CancelOption, RichTextImageProvider {
+public class SiteImageResourceProvider extends Dialog implements CancelOption, RichTextImageProvider {
 
-    private static final I18n i18n = I18n.get(PageContentImageProvider.class);
+    private static final I18n i18n = I18n.get(SiteImageResourceProvider.class);
 
     private final ImageGallery gallery;
 
-    private AsyncCallback<String> selectionHandler;
+    private AsyncCallback<String> imageSelectionHandler;
+
+    private AsyncCallback<SiteImageResource> resourceSelectionHandler;
 
     private final UploadPanel<IEntity, SiteImageResource> uploadPanel;
 
@@ -60,22 +61,27 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
 
     private final SiteImageResourceCrudService service;
 
-    private final Map<String, Key> imageResourceMap;
+    private final Map<String, SiteImageResource> imageResourceMap;
 
     @SuppressWarnings("unchecked")
-    public PageContentImageProvider() {
+    public SiteImageResourceProvider() {
         super("Image Picker");
         this.setDialogOptions(this);
 
         service = GWT.create(SiteImageResourceCrudService.class);
 
-        imageResourceMap = new HashMap<String, Key>();
+        imageResourceMap = new HashMap<String, SiteImageResource>();
 
         gallery = new ImageGallery() {
             @Override
             public void onSelectImage(Image image) {
-                selectionHandler.onSuccess(image.getUrl());
-                PageContentImageProvider.this.hide();
+                if (imageSelectionHandler != null) {
+                    imageSelectionHandler.onSuccess(image.getUrl());
+                }
+                if (resourceSelectionHandler != null) {
+                    resourceSelectionHandler.onSuccess(imageResourceMap.get(image.getUrl()));
+                }
+                SiteImageResourceProvider.this.hide();
             }
 
             @Override
@@ -94,7 +100,7 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
                                 gallery.removeImage(image);
                             }
 
-                        }, imageResourceMap.get(image.getUrl()));
+                        }, imageResourceMap.get(image.getUrl()).getPrimaryKey());
                     }
                 });
             }
@@ -103,14 +109,14 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
         uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class)) {
             @Override
             protected void onUploadSubmit() {
-                PageContentImageProvider.this.getCancelButton().setEnabled(false);
+                SiteImageResourceProvider.this.getCancelButton().setEnabled(false);
                 submitButton.setEnabled(false);
             }
 
             @Override
             protected void onUploadError(UploadError error, String args) {
                 super.onUploadError(error, args);
-                PageContentImageProvider.this.getCancelButton().setEnabled(true);
+                SiteImageResourceProvider.this.getCancelButton().setEnabled(true);
                 submitButton.setEnabled(true);
                 uploadPanel.reset();
             }
@@ -120,7 +126,7 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
                 String url = MediaUtils.createSiteImageResourceUrl(serverUploadResponse.data);
                 gallery.addImage(url);
 
-                PageContentImageProvider.this.getCancelButton().setEnabled(true);
+                SiteImageResourceProvider.this.getCancelButton().setEnabled(true);
                 submitButton.setEnabled(true);
             }
         };
@@ -160,7 +166,7 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
             public void onSuccess(EntitySearchResult<SiteImageResource> result) {
                 for (SiteImageResource rc : result.getData()) {
                     String url = MediaUtils.createSiteImageResourceUrl(rc);
-                    imageResourceMap.put(url, rc.getPrimaryKey());
+                    imageResourceMap.put(url, rc);
                     gallery.addImage(url);
                 }
             }
@@ -168,9 +174,14 @@ public class PageContentImageProvider extends Dialog implements CancelOption, Ri
         }, EntityListCriteria.create(SiteImageResource.class));
     }
 
+    public void selectResource(AsyncCallback<SiteImageResource> callback) {
+        resourceSelectionHandler = callback;
+        center();
+    }
+
     @Override
     public void selectImage(AsyncCallback<String> callback) {
-        selectionHandler = callback;
+        imageSelectionHandler = callback;
         center();
     }
 

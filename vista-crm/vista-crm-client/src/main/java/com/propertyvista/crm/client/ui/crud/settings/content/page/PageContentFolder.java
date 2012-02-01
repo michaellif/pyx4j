@@ -29,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
@@ -93,7 +94,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
             if (isEditable()) {
                 CRichTextArea editor = new CRichTextArea();
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
-                editor.setImageProvider(new PageContentImageProvider());
+                editor.setImageProvider(new SiteImageResourceProvider());
             } else {
                 CLabel content = new CLabel();
                 content.setAllowHtml(true);

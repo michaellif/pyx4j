@@ -71,16 +71,17 @@ public interface SiteDescriptor extends Descriptor {
     @Owned
     SitePalette sitePalette();
 
-    IList<Resource> logo();
-
-    IList<Resource> slogan();
-
     @Owned
     IList<SiteTitles> siteTitles();
 
-    // Image for landing page
     @Owned
-    IList<Resource> images();
+    IList<SiteImageResource> logo();
+
+    @Owned
+    IList<HtmlContent> slogan();
+
+    @Owned
+    IList<SiteImageResource> banner();
 
     @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
