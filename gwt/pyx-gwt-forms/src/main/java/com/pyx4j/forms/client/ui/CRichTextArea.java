@@ -20,9 +20,12 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
-public class CRichTextArea extends CRichTextAreaBase<NRichTextArea> {
+public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
+
+    private IRichTextTidy tidy;
 
     private RichTextImageProvider imageProvider;
 
@@ -37,6 +40,14 @@ public class CRichTextArea extends CRichTextAreaBase<NRichTextArea> {
         }
     }
 
+    public void setTidy(IRichTextTidy tidy) {
+        this.tidy = tidy;
+    }
+
+    public IRichTextTidy getTidy() {
+        return tidy;
+    }
+
     public void setImageProvider(RichTextImageProvider imageProvider) {
         this.imageProvider = imageProvider;
         if (getWidget() != null) {
@@ -46,6 +57,11 @@ public class CRichTextArea extends CRichTextAreaBase<NRichTextArea> {
 
     public RichTextImageProvider getImageProvider() {
         return imageProvider;
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return super.isValueEmpty() || HtmlUtils.isEmpty(getValue());
     }
 
 }

@@ -47,6 +47,8 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     private boolean editable;
 
+    private boolean textMode;
+
     public ExtendedRichTextArea() {
         super();
 
@@ -67,9 +69,11 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
             public void onClick(ClickEvent event) {
                 if (((ToggleButton) event.getSource()).isDown()) {
                     richTextArea.setText(richTextArea.getHTML());
+                    textMode = false;
                     toolbar.getElement().getStyle().setVisibility(Visibility.HIDDEN);
                 } else {
                     richTextArea.setHTML(richTextArea.getText());
+                    textMode = true;
                     toolbar.getElement().getStyle().setVisibility(Visibility.VISIBLE);
                 }
             }
@@ -92,6 +96,7 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         sinkEvents(Event.ONMOUSEOUT);
 
         editable = true;
+        textMode = true;
     }
 
     public void scrollToBottom() {
@@ -217,12 +222,16 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
 
     @Override
     public String getText() {
-        return trimHtml(richTextArea.getHTML());
+        return trimHtml(textMode ? richTextArea.getHTML() : richTextArea.getText());
     }
 
     @Override
     public void setText(String html) {
-        richTextArea.setHTML(html);
+        if (textMode) {
+            richTextArea.setHTML(html);
+        } else {
+            richTextArea.setText(html);
+        }
     }
 
     @Override

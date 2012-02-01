@@ -20,16 +20,22 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.Event;
 
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
 public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, CRichTextArea> {
+    private static final Logger log = LoggerFactory.getLogger(NRichTextArea.class);
 
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
         textArea.setWidth("100%");
+        textArea.setHeight("20em");
+
         getElement().getStyle().setProperty("resize", "none");
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
@@ -62,6 +68,7 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
     @Override
     public String getNativeValue() {
         if (getEditor() != null) {
+            log.debug("NativeValue = " + getEditor().getText());
             return getEditor().getText();
         } else {
             return "";

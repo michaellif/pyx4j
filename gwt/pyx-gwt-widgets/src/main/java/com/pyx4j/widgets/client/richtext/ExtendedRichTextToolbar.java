@@ -32,15 +32,18 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
  * rich text formatting, dynamically displayed only for the available functionality.
  */
 public class ExtendedRichTextToolbar extends Composite {
+    private static final I18n i18n = I18n.get(ExtendedRichTextToolbar.class);
 
     /**
      * We use an inner EventListener class to avoid exposing event methods on the
@@ -94,18 +97,15 @@ public class ExtendedRichTextToolbar extends Composite {
             } else if (sender == insertImage) {
                 if (provider != null) {
                     provider.selectImage(new AsyncCallback<String>() {
-
                         @Override
                         public void onFailure(Throwable caught) {
-                            // TODO Auto-generated method stub
-
+                            MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
                         }
 
                         @Override
                         public void onSuccess(String result) {
                             formatter.insertImage(result);
                         }
-
                     });
                 } else {
                     formatter.insertImage(Window.prompt("Enter an image URL:", "http://"));

@@ -30,6 +30,7 @@ public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
         getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         getElement().getStyle().setBorderWidth(1, Unit.PX);
         getElement().getStyle().setBackgroundColor("white");
+
     }
 
 }
