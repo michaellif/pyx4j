@@ -110,7 +110,7 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
             @Override
             public void onClick(ClickEvent event) {
-                loginCommand.execute();
+                login();
             }
         });
 
@@ -139,13 +139,12 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
                         @Override
                         public void onPreviewNativeEvent(NativePreviewEvent event) {
                             if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
-                                if (onDevLogin(event.getNativeEvent().getKeyCode())) {
+                                if (onDevLoginRequest(event.getNativeEvent().getKeyCode())) {
                                     event.getNativeEvent().preventDefault();
                                 }
                             }
                             if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
-                                resetDevLoginHistory();
-                                loginCommand.execute();
+                                login();
                             }
                         }
                     });
@@ -169,7 +168,7 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    if (onDevLogin(shortcut)) {
+                    if (onDevLoginRequest(shortcut)) {
                         event.getNativeEvent().preventDefault();
                     }
                 }
@@ -205,6 +204,11 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
         prevDevKey = -1;
     }
 
+    protected void login() {
+        resetDevLoginHistory();
+        loginCommand.execute();
+    }
+
     /**
      * Should be passed as callback to even handlers that monitor developer login.
      * 
@@ -212,7 +216,7 @@ public class LoginForm extends CEntityEditor<AuthenticationRequest> {
      *            key code of the developer login
      * @return <code>true</code> if developer's credentials that correspond to the provided key were found, otherwise <code>false</code>.
      */
-    protected boolean onDevLogin(int shortcut) {
+    protected boolean onDevLoginRequest(int shortcut) {
         if (prevDevKey != shortcut) {
             devCount = 0;
         }
