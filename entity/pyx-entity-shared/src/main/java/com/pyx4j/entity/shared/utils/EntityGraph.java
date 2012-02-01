@@ -32,10 +32,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IdentityHashSet;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
@@ -74,14 +76,18 @@ public class EntityGraph {
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+            IObject<?> member = entity.getMember(memberName);
+            if (member.getAttachLevel() == AttachLevel.Detached) {
+                continue;
+            }
             if (memberMeta.isEntity()) {
-                applyRecursively((IEntity) entity.getMember(memberName), method, processed, processedValues);
+                applyRecursively((IEntity) member, method, processed, processedValues);
             } else if (ISet.class.equals(memberMeta.getObjectClass())) {
-                for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
+                for (IEntity value : (ISet<?>) member) {
                     applyRecursively(value, method, processed, processedValues);
                 }
             } else if (IList.class.equals(memberMeta.getObjectClass())) {
-                for (IEntity value : (IList<?>) entity.getMember(memberName)) {
+                for (IEntity value : (IList<?>) member) {
                     applyRecursively(value, method, processed, processedValues);
                 }
             }

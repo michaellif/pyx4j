@@ -29,6 +29,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
 
@@ -82,7 +83,9 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
         if (data == null) {
             return null;
         } else {
-            return (Set<Map<String, Object>>) data.get(getFieldName());
+            Object value = data.get(getFieldName());
+            assert (value != AttachLevel.Detached) : "Access to detached ISet " + exceptionInfo();
+            return (Set<Map<String, Object>>) value;
         }
     }
 
