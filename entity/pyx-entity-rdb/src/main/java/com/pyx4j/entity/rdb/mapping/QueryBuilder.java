@@ -79,13 +79,13 @@ public class QueryBuilder<T extends IEntity> {
     //keep the keys in the order they were inserted.
     private final Map<String, JoinDef> memberJoinAliases = new LinkedHashMap<String, JoinDef>();
 
-    private static class MemeberWithAlias {
+    private static class MemberWithAlias {
 
         MemberOperationsMeta memberOper;
 
         String alias;
 
-        public MemeberWithAlias(MemberOperationsMeta memberOper, String alias) {
+        public MemberWithAlias(MemberOperationsMeta memberOper, String alias) {
             this.memberOper = memberOper;
             this.alias = alias;
         }
@@ -135,7 +135,7 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sortsSql.append(", ");
                 }
-                MemeberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyPath(), true);
+                MemberWithAlias descr = getMemberOperationsMetaByPath(alias, sort.getPropertyPath(), true);
                 if (descr == null) {
                     throw new RuntimeException("Unknown member " + sort.getPropertyPath() + " in " + entityMeta.getEntityClass().getName());
                 }
@@ -175,7 +175,7 @@ public class QueryBuilder<T extends IEntity> {
 
     private void appendPropertyCriterion(EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
         ObjectClassType objectClassType = ObjectClassType.Primitive;
-        MemeberWithAlias memeberWithAlias = null;
+        MemberWithAlias memeberWithAlias = null;
         BindHolder bindHolder = new BindHolder();
         bindHolder.bindValue = propertyCriterion.getValue();
 
@@ -296,14 +296,14 @@ public class QueryBuilder<T extends IEntity> {
         }
     }
 
-    private MemeberWithAlias getMemberOperationsMetaByPath(String mainAlias, String propertyPath, boolean leftJoin) {
+    private MemberWithAlias getMemberOperationsMetaByPath(String mainAlias, String propertyPath, boolean leftJoin) {
         return getMemberOperationsMetaByPath(operationsMeta, mainAlias, propertyPath, leftJoin);
     }
 
-    private MemeberWithAlias getMemberOperationsMetaByPath(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin) {
+    private MemberWithAlias getMemberOperationsMetaByPath(EntityOperationsMeta fromEntityOperMeta, String fromAlias, String propertyPath, boolean leftJoin) {
         MemberOperationsMeta memberOper = fromEntityOperMeta.getMember(propertyPath);
         if (memberOper != null) {
-            return new MemeberWithAlias(memberOper, fromAlias);
+            return new MemberWithAlias(memberOper, fromAlias);
         } else {
             memberOper = fromEntityOperMeta.getFirstDirectMember(propertyPath);
             if (memberOper == null) {
