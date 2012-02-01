@@ -21,13 +21,10 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
-import com.propertyvista.crm.server.services.billing.BillingDeferredProcess;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.crm.server.util.GenericCrudServiceDtoImpl;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -193,9 +190,4 @@ public class LeaseCrudServiceImpl extends GenericCrudServiceDtoImpl<Lease, Lease
         callback.onSuccess(null);
     }
 
-    @Override
-    public void startBilling(AsyncCallback<String> callback, Key leaseEntityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, leaseEntityId);
-        callback.onSuccess(DeferredProcessRegistry.fork(new BillingDeferredProcess(lease), ThreadPoolNames.DOWNLOADS));
-    }
 }

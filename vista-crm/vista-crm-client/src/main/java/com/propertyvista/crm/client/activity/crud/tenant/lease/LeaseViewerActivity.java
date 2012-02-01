@@ -35,6 +35,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.propertyvista.crm.client.ui.crud.tenant.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.TenantViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.tenant.application.LeaseCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.LeaseDTO;
@@ -65,7 +66,7 @@ public class LeaseViewerActivity extends ViewerActivityBase<LeaseDTO> implements
 
     @Override
     public void startBilling() {
-        ((LeaseCrudService) service).startBilling(new DefaultAsyncCallback<String>() {
+        GWT.<BillingExecutionService> create(BillingExecutionService.class).startBilling(new DefaultAsyncCallback<String>() {
 
             @Override
             public void onSuccess(String deferredCorrelationId) {

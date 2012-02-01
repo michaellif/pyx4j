@@ -22,6 +22,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
@@ -182,15 +183,17 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseCrudService.class));
 
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Bill.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BillCrudService.class));
-
         grant(VistaBasicBehavior.CRM, new EntityPermission(Application.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(TenantPasswordChangeService.class));
+
+// - Billing
+        grant(VistaCrmBehavior.Billing, new EntityPermission(Bill.class, EntityPermission.READ));
+        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillCrudService.class));
+        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingExecutionService.class));
 
 // - Service-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Service.class, EntityPermission.ALL));

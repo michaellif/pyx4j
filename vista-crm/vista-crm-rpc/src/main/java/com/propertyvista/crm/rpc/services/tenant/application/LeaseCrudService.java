@@ -33,5 +33,4 @@ public interface LeaseCrudService extends AbstractCrudService<LeaseDTO> {
 
     void createMasterApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 
-    void startBilling(AsyncCallback<String> callback, Key leaseEntityId);
 }

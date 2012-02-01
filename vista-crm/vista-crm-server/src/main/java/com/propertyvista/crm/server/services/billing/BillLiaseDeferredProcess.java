@@ -19,7 +19,7 @@ import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.billing.BillingLifecycle;
 
-public class BillingDeferredProcess implements IDeferredProcess {
+class BillLiaseDeferredProcess implements IDeferredProcess {
 
     private static final long serialVersionUID = 132587695984533361L;
 
@@ -29,7 +29,7 @@ public class BillingDeferredProcess implements IDeferredProcess {
 
     private final Lease lease;
 
-    public BillingDeferredProcess(Lease lease) {
+    BillLiaseDeferredProcess(Lease lease) {
         this.lease = lease;
     }
 
@@ -54,7 +54,7 @@ public class BillingDeferredProcess implements IDeferredProcess {
             return r;
         } else {
             DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-            r.setProgress(1);
+            r.setProgress(10);
             r.setProgressMaximum(10);
             if (canceled) {
                 r.setCanceled();

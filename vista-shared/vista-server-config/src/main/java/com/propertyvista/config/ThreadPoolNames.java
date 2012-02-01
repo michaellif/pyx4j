@@ -20,4 +20,9 @@ public class ThreadPoolNames {
     public static final String DOWNLOADS = DeferredProcessRegistry.THREAD_POOL_DOWNLOADS;
 
     public static final String IMPORTS = "Import";
+
+    public static final String BILL_SINGLE = "Billing1";
+
+    public static final String BILL_BUILDING = "BillingB";
+
 }
