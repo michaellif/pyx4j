@@ -306,7 +306,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 long limit1 = date.getValue().getTime() + 2678400000L; //limits current Move In date to be within a month of previous Move Out date
                 long limit2 = date.getValue().getTime() - 2678400000L;
                 return (date.isNull() || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(i18n
-                        .tr("Current address Move In date should be after previous address Move Out date"));
+                        .tr("Move In date has to be within 30 days of previous Move Out date"));
             }
 
         });
@@ -323,7 +323,7 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 long limit1 = date.getValue().getTime() + 2678400000L; //limits current Move In date to be within a month of previous Move Out date
                 long limit2 = date.getValue().getTime() - 2678400000L;
                 return (date.isNull() || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(i18n
-                        .tr("Current address Move In date should be after previous address Move Out date"));
+                        .tr("Move Out date has to be within 30 days of current Move In date"));
             }
 
         });
