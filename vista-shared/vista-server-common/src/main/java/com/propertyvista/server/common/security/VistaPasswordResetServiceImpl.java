@@ -25,7 +25,6 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetService;
-import com.pyx4j.security.server.AuthenticationServiceImpl;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.AbstractUser;
@@ -43,23 +42,27 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         this.credentialClass = credentialClass;
     }
 
+    protected abstract AuthenticationResponse authenticate(E credentials);
+
     @Override
     public void resetPassword(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request) {
-        E cr = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
-        if (cr == null) {
+        E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
+        if (credentials == null) {
             throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
         }
-        if (!cr.enabled().isBooleanTrue()) {
+        if (!credentials.enabled().isBooleanTrue()) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
 
-        cr.accessKey().setValue(null);
-        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        Persistence.service().persist(cr);
+        credentials.accessKey().setValue(null);
+        credentials.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        credentials.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+        Persistence.service().persist(credentials);
         log.info("password changed by user {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
         // logout
         VistaLifecycle.endSession();
-        callback.onSuccess(AuthenticationServiceImpl.createAuthenticationResponse(null));
+        callback.onSuccess(authenticate(credentials));
     }
+
 }

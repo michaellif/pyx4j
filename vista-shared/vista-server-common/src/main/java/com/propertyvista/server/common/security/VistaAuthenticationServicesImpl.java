@@ -201,6 +201,17 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
     }
 
+    public AuthenticationResponse authenticate(E credentials) {
+        U user = Persistence.service().retrieve(userClass, credentials.getPrimaryKey());
+        // Try to begin Session
+        String sessionToken = beginSession(user, credentials);
+        if (!SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior())) {
+            VistaLifecycle.endSession();
+            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+        return createAuthenticationResponse(sessionToken);
+    }
+
     public String beginSession(AbstractUser user, E userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
 

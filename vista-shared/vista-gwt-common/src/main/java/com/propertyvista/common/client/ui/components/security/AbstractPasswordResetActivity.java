@@ -63,7 +63,8 @@ public class AbstractPasswordResetActivity extends AbstractActivity implements P
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
                 MessageDialog.info(i18n.tr("Your password has been reset successfully!"));
-                AppSite.getPlaceController().goTo(loginPlace);
+                //let AppPlaceDispatcher manage this. e.g. go to default place as defined in AppPlaceDispatcher. Or to target URL.
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
             }
         };
 

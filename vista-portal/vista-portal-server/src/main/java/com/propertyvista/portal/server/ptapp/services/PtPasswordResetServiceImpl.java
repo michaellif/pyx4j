@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
+import com.pyx4j.security.rpc.AuthenticationResponse;
+
 import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
 import com.propertyvista.server.domain.security.TenantUserCredential;
@@ -21,6 +23,11 @@ public class PtPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<Te
 
     public PtPasswordResetServiceImpl() {
         super(TenantUserCredential.class);
+    }
+
+    @Override
+    protected AuthenticationResponse authenticate(TenantUserCredential credentials) {
+        return new PtAuthenticationServiceImpl().authenticate(credentials);
     }
 
 }
