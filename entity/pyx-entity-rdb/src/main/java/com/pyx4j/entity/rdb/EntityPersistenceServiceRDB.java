@@ -903,6 +903,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             SQLUtils.closeQuietly(connection);
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
+            } else if (e instanceof Error) {
+                throw (Error) e;
             } else {
                 throw new Error(e);
             }
@@ -967,6 +969,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             SQLUtils.closeQuietly(connection);
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
+            } else if (e instanceof Error) {
+                throw (Error) e;
             } else {
                 throw new Error(e);
             }
