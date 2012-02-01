@@ -33,10 +33,14 @@ public abstract class AbstractCrudServiceImpl<E extends IEntity> extends Abstrac
 
     private static final I18n i18n = I18n.get(AbstractCrudServiceImpl.class);
 
-    protected AbstractCrudServiceImpl(Class<E> entityClass) {
+    public AbstractCrudServiceImpl(Class<E> entityClass) {
         super(entityClass);
     }
 
+    /**
+     * This method called for single entity returned to the GWT client. As opposite to entries in list.
+     * This is empty callback function that don't need to be called from implementation.
+     */
     protected void enhanceRetrieved(E entity) {
     }
 

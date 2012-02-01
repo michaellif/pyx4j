@@ -34,11 +34,12 @@ public abstract class AbstractListServiceImpl<E extends IEntity> implements Abst
 
     protected Class<E> entityClass;
 
-    protected AbstractListServiceImpl(Class<E> entityClass) {
+    public AbstractListServiceImpl(Class<E> entityClass) {
         this.entityClass = entityClass;
     }
 
     /**
+     * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
      * This function is empty no need to call when you override this method
      */
     protected void enhanceListRetrieved(E entity) {
