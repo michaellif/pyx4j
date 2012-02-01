@@ -14,13 +14,20 @@
 package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
+
+import com.propertyvista.domain.person.Person;
 
 @AbstractEntity
 @Inheritance
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface PersonScreeningHolder extends IEntity {
 
+    @ToString(index = 0)
+    @EmbeddedEntity
+    Person person();
 }

@@ -82,7 +82,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     public TenantFinancialDTO retrieveData(TenantInLeaseRetriever tr) {
         TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
-        dto.person().set(tr.tenant.person());
+        dto.person().set(tr.getPerson());
 
 //        SharedData.init();
 //

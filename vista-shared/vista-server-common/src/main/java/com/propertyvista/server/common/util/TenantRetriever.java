@@ -22,12 +22,17 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.media.ApplicationDocument;
+import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.PersonScreeningHolder;
 import com.propertyvista.domain.tenant.Tenant;
 
 public class TenantRetriever {
 
-    public Tenant tenant;
+    public Class<? extends PersonScreeningHolder> tenantClass;
+
+    private PersonScreeningHolder tenant;
 
     public PersonScreening tenantScreening;
 
@@ -36,26 +41,27 @@ public class TenantRetriever {
     private final boolean financial;
 
     // Construction:
-    public TenantRetriever() {
-        this.financial = false;
+    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass) {
+        this(tenantClass, false);
     }
 
-    public TenantRetriever(boolean financial) {
+    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass, boolean financial) {
+        this.tenantClass = tenantClass;
         this.financial = financial;
     }
 
-    public TenantRetriever(Key tenantId) {
-        this(tenantId, false);
+    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass, Key tenantId) {
+        this(tenantClass, tenantId, false);
     }
 
-    public TenantRetriever(Key tenantId, boolean financial) {
-        this(financial);
+    public TenantRetriever(Class<? extends PersonScreeningHolder> tenantClass, Key tenantId, boolean financial) {
+        this(tenantClass, financial);
         retrieve(tenantId);
     }
 
     // Manipulation:
     public void retrieve(Key tenantId) {
-        tenant = Persistence.service().retrieve(Tenant.class, tenantId);
+        tenant = Persistence.service().retrieve(tenantClass, tenantId);
         if (tenant != null) {
             EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().screene(), tenant));
@@ -79,7 +85,29 @@ public class TenantRetriever {
                 tenantScreening.screene().set(tenant);
             }
 
-            Persistence.service().retrieve(tenant.emergencyContacts());
+            if (tenant instanceof Tenant) {
+                Persistence.service().retrieve(((Tenant) tenant).emergencyContacts());
+            }
+        }
+    }
+
+    public Person getPerson() {
+        return tenant.person();
+    }
+
+    public Tenant getTenant() {
+        if (tenant instanceof Tenant) {
+            return (Tenant) tenant;
+        } else {
+            throw new Error(tenantClass.getName() + " object stored!");
+        }
+    }
+
+    public Guarantor getGuarantor() {
+        if (tenant instanceof Guarantor) {
+            return (Guarantor) tenant;
+        } else {
+            throw new Error(tenantClass.getName() + " object stored!");
         }
     }
 

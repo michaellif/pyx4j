@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityViolationException;
 
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.TenantInLease.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -31,15 +32,16 @@ public class TenantInLeaseRetriever extends TenantRetriever {
 
     // Construction:
     public TenantInLeaseRetriever() {
+        super(Tenant.class);
     }
 
     public TenantInLeaseRetriever(Key tenanInLeasetId) {
-        super(false);
+        super(Tenant.class, false);
         retrieve(tenanInLeasetId);
     }
 
     public TenantInLeaseRetriever(Key tenanInLeasetId, boolean financial) {
-        super(financial);
+        super(Tenant.class, financial);
         retrieve(tenanInLeasetId);
     }
 

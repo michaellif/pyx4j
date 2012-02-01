@@ -92,8 +92,6 @@ public class ApplicationProgressMgr extends ApplicationManager {
     }
 
     public static void createGurantorDataSteps(Application application, Guarantor guarantor) {
-        ApplicationWizardStep infoStep = findWizardStep(application, PtSiteMap.Info.class);
-        ApplicationWizardStep financialStep = findWizardStep(application, PtSiteMap.Financial.class);
 
         // create an new sub-step:
         ApplicationWizardSubstep subStep = EntityFactory.create(ApplicationWizardSubstep.class);
@@ -101,17 +99,21 @@ public class ApplicationProgressMgr extends ApplicationManager {
         subStep.name().setValue(guarantor.person().name().getStringView());
         subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
 
-        infoStep.substeps().add((ApplicationWizardSubstep) subStep.duplicate());
-        updateParentStepStatus(infoStep, subStep);
+        ApplicationWizardStep infoStep = findWizardStep(application, PtSiteMap.Info.class);
+        if (infoStep.substeps().isEmpty()) {
+            infoStep.substeps().add((ApplicationWizardSubstep) subStep.duplicate());
+            updateParentStepStatus(infoStep, subStep);
+            updateStepCompletion(infoStep);
+            Persistence.service().merge(infoStep);
+        }
 
-        financialStep.substeps().add((ApplicationWizardSubstep) subStep.duplicate());
-        updateParentStepStatus(financialStep, subStep);
-
-        updateStepCompletion(infoStep);
-        updateStepCompletion(financialStep);
-
-        Persistence.service().merge(infoStep);
-        Persistence.service().merge(financialStep);
+        ApplicationWizardStep financialStep = findWizardStep(application, PtSiteMap.Financial.class);
+        if (financialStep.substeps().isEmpty()) {
+            financialStep.substeps().add((ApplicationWizardSubstep) subStep.duplicate());
+            updateParentStepStatus(financialStep, subStep);
+            updateStepCompletion(financialStep);
+            Persistence.service().merge(financialStep);
+        }
     }
 
     public static void invalidateChargesStep(Application application) {

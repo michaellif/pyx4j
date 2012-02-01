@@ -30,7 +30,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.company.Company;
-import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.TenantUserHolder;
 
 @DiscriminatorValue("Tenant")
@@ -53,10 +52,6 @@ public interface Tenant extends IEntity, PersonScreeningHolder, TenantUserHolder
     @NotNull
     @MemberColumn(name = "tenantType")
     IPrimitive<Type> type();
-
-    @ToString(index = 0)
-    @EmbeddedEntity
-    Person person();
 
     @ToString(index = 1)
     @EmbeddedEntity

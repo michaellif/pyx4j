@@ -35,8 +35,8 @@ import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.MasterApplication;
-import com.propertyvista.dto.PetsDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -117,7 +117,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaTenantBehavior.Prospective, new EntityPermission(ApplicationDocumentBlob.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(TenantInLeaseListDTO.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(TenantInLease.class, applicationEntityAccess, CRUD));
-        grant(VistaTenantBehavior.Prospective, new EntityPermission(PetsDTO.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(TenantFinancialDTO.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(Charges.class, applicationEntityAccess, CRUD));
         grant(VistaTenantBehavior.Prospective, new EntityPermission(SummaryDTO.class, applicationEntityAccess, CRUD));
@@ -128,6 +127,26 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         // Guarantor for prospective tenant:
         grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(ApplicationService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(ApartmentService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(TenantService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(TenantInfoService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(TenantFinancialService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(ChargesService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(SummaryService.class));
+        grant(VistaTenantBehavior.Guarantor, new IServiceExecutePermission(PaymentService.class));
+
+        //TODO Fix ME
+        grant(VistaTenantBehavior.Guarantor, new AllPermissions());
+
+        grant(VistaTenantBehavior.Guarantor, new EntityPermission(ApplicationDocument.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.Guarantor, new EntityPermission(ApplicationDocumentBlob.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.Guarantor, new EntityPermission(TenantInLeaseListDTO.class, applicationEntityAccess, EntityPermission.READ));
+        grant(VistaTenantBehavior.Guarantor, new EntityPermission(TenantInfoDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.Guarantor, new EntityPermission(TenantFinancialDTO.class, applicationEntityAccess, CRUD));
+        grant(VistaTenantBehavior.Guarantor, new EntityPermission(Charges.class, applicationEntityAccess, EntityPermission.READ));
+        grant(VistaTenantBehavior.Guarantor, new EntityPermission(SummaryDTO.class, applicationEntityAccess, CRUD));
+
         grant(VistaTenantBehavior.Guarantor, VistaTenantBehavior.Prospective);
 
         // Submitted prospective:

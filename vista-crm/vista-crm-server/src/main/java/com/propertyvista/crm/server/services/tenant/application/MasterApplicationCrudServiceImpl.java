@@ -85,14 +85,14 @@ public class MasterApplicationCrudServiceImpl extends GenericCrudServiceDtoImpl<
 
     // internal helpers:
     private TenantInfoDTO createTenantInfoDTO(TenantInLeaseRetriever tr) {
-        TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
+        TenantInfoDTO tiDTO = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, tiDTO);
         return tiDTO;
     }
 
     private TenantFinancialDTO createTenantFinancialDTO(TenantInLeaseRetriever tr) {
         TenantFinancialDTO tfDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.tenantScreening);
-        tfDTO.person().set(tr.tenant.person());
+        tfDTO.person().set(tr.getPerson());
         return tfDTO;
     }
 

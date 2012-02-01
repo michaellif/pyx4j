@@ -41,13 +41,13 @@ public class TenantInfoServiceImpl implements TenantInfoService {
         log.debug("Saving Tenant Info {}", entity);
 
         TenantInLeaseRetriever tr = new TenantInLeaseRetriever(entity.getPrimaryKey());
-        new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(entity, tr.tenant);
+        new TenantConverter.Tenant2TenantInfo().copyDTOtoDBO(entity, tr.getTenant());
         new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.tenantScreening);
 
         tr.saveTenant();
         tr.saveScreening();
 
-        entity = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
+        entity = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, entity);
         entity.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
 
@@ -60,7 +60,7 @@ public class TenantInfoServiceImpl implements TenantInfoService {
     }
 
     public TenantInfoDTO retrieveData(TenantInLeaseRetriever tr) {
-        TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.tenant);
+        TenantInfoDTO dto = new TenantConverter.Tenant2TenantInfo().createDTO(tr.getTenant());
         new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.tenantScreening, dto);
         dto.setPrimaryKey(tr.tenantInLease.getPrimaryKey());
         return dto;
