@@ -23,11 +23,11 @@ public interface BillingRunCrudService extends AbstractCrudService<BillingRun> {
     /**
      * Make all Finished bills Confirmed
      */
-    //void confirmAllBills(AsyncCallback<VoidSerializable> callback, Key billEntityId);
+    //void confirmAllBills(AsyncCallback<VoidSerializable> callback, Key billRunEntityId);
 
     /**
      * Make all Finished bills Rejected
      */
-    //void rejectedAllBill(AsyncCallback<VoidSerializable> callback, Key billEntityId);
+    //void rejectedAllBill(AsyncCallback<VoidSerializable> callback, Key billRunEntityId);
 
 }
