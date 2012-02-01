@@ -36,6 +36,7 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.join.AccPrincipal;
 import com.pyx4j.entity.test.shared.domain.join.AccSubject;
 import com.pyx4j.entity.test.shared.domain.join.AccSubjectPrincipal;
@@ -180,6 +181,30 @@ public abstract class QueryJoinRDBTestCase extends DatastoreTestBase {
             List<Employee> empsSortedAsc = srv.query(criteria);
             Assert.assertEquals("result set size", 2, empsSortedAsc.size());
             Assert.assertEquals("PK Value", empsSortedAsc.get(0).getPrimaryKey(), emp1.getPrimaryKey());
+        }
+    }
+
+    //TODO P2 
+    public void TODO_testOneToManyQueryCriteria() {
+        String setId = uniqueString();
+        String searchBy = uniqueString();
+
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(uniqueString());
+        emp.workAddress().streetName().setValue(setId);
+
+        Task task = EntityFactory.create(Task.class);
+        task.description().setValue(searchBy);
+        emp.tasksSorted().add(task);
+
+        srv.persist(emp);
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().tasks().$().description(), searchBy));
+
+            List<Employee> emps = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, emps.size());
+            Assert.assertEquals("PK Value", emps.get(0).getPrimaryKey(), emp.getPrimaryKey());
         }
     }
 

@@ -40,6 +40,8 @@ import com.pyx4j.entity.test.shared.domain.join.BRefPolyReadOwner1;
 import com.pyx4j.entity.test.shared.domain.join.BRefPolyReadOwner2;
 import com.pyx4j.entity.test.shared.domain.join.BRefReadChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefReadOwner;
+import com.pyx4j.entity.test.shared.domain.join.OneToOneReadChild;
+import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
 
 public abstract class JoinTableTestCase extends DatastoreTestBase {
 
@@ -215,5 +217,42 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
         {
 
         }
+    }
+
+    //TODO P1
+    public void TODO_testOneToOneRead() {
+        String testId = uniqueString();
+
+        OneToOneReadOwner o = EntityFactory.create(OneToOneReadOwner.class);
+        o.name().setValue(uniqueString());
+        o.testId().setValue(testId);
+        srv.persist(o);
+
+        OneToOneReadChild c = EntityFactory.create(OneToOneReadChild.class);
+        c.name().setValue(uniqueString());
+        c.testId().setValue(testId);
+        c.o2oOwner().set(o);
+        srv.persist(c);
+
+        {
+
+        }
+
+    }
+
+    //TODO P1
+    public void TODO_testOneToOneQuery() {
+        String testId = uniqueString();
+
+        OneToOneReadOwner o = EntityFactory.create(OneToOneReadOwner.class);
+        o.name().setValue(uniqueString());
+        o.testId().setValue(testId);
+        srv.persist(o);
+
+        OneToOneReadChild c = EntityFactory.create(OneToOneReadChild.class);
+        c.name().setValue(uniqueString());
+        c.testId().setValue(testId);
+        c.o2oOwner().set(o);
+        srv.persist(c);
     }
 }
