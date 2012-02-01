@@ -26,11 +26,11 @@ public class SelectFloorplanCrudServiceImpl extends GenericCrudServiceImpl<Floor
     }
 
     @Override
-    protected void enhanceRetrieve(Floorplan entity, boolean fromList) {
+    protected void enhanceRetrieved(Floorplan entity, boolean fromList) {
         if (fromList) {
             Persistence.service().retrieve(entity.building());
             Persistence.service().retrieve(entity.building().complex());
         }
-        super.enhanceRetrieve(entity, fromList);
+        super.enhanceRetrieved(entity, fromList);
     }
 }

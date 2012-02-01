@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class ReportMetadataCrudServiceImpl extends AbstractCrudServiceImpl implements ReportMetadataCrudService {
+public class ReportMetadataCrudServiceImpl extends AbstractMetadataCrudServiceImpl implements ReportMetadataCrudService {
 
     public ReportMetadataCrudServiceImpl() {
         super();

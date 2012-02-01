@@ -37,7 +37,7 @@ public class PageDescriptorCrudServiceImpl extends GenericCrudServiceImpl<PageDe
     }
 
     @Override
-    protected void enhanceRetrieve(PageDescriptor entity, boolean fromList) {
+    protected void enhanceRetrieved(PageDescriptor entity, boolean fromList) {
         if (!fromList) {
             // load content caption:
             for (PageContent content : entity.content()) {

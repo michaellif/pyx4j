@@ -28,7 +28,7 @@ public class PersonScreeningCrudServiceImpl extends GenericCrudServiceImpl<Perso
     }
 
     @Override
-    protected void enhanceRetrieve(PersonScreening entity, boolean fromList) {
+    protected void enhanceRetrieved(PersonScreening entity, boolean fromList) {
         if (!fromList) {
             // load detached entities:
             Persistence.service().retrieve(entity.documents());

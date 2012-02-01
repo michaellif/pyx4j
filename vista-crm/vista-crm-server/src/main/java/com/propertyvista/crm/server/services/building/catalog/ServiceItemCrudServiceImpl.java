@@ -26,7 +26,7 @@ public class ServiceItemCrudServiceImpl extends GenericCrudServiceImpl<ProductIt
     }
 
     @Override
-    protected void enhanceRetrieve(ProductItem entity, boolean fromList) {
+    protected void enhanceRetrieved(ProductItem entity, boolean fromList) {
         if (!fromList) {
             // Load detached data:
             if (entity.element().isValueDetached()) {

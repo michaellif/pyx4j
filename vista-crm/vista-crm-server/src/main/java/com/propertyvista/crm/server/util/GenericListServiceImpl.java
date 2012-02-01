@@ -24,7 +24,10 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 /**
  * DBO - Data Base Object
+ * 
+ * @deprecated use AbstractListServiceImpl
  */
+@Deprecated
 public abstract class GenericListServiceImpl<DBO extends IEntity> implements AbstractListService<DBO> {
 
     protected Class<DBO> dboClass;
@@ -36,7 +39,7 @@ public abstract class GenericListServiceImpl<DBO extends IEntity> implements Abs
     /**
      * This is empty method. Don't need to call it in Override
      */
-    protected void enhanceRetrieve(DBO entity, boolean fromList) {
+    protected void enhanceRetrieved(DBO entity, boolean fromList) {
     }
 
     @Override
@@ -49,7 +52,7 @@ public abstract class GenericListServiceImpl<DBO extends IEntity> implements Abs
     public void list(AsyncCallback<EntitySearchResult<DBO>> callback, EntityListCriteria<DBO> criteria) {
         EntitySearchResult<DBO> result = Persistence.secureQuery(criteria);
         for (DBO entity : result.getData()) {
-            enhanceRetrieve(entity, true);
+            enhanceRetrieved(entity, true);
         }
         callback.onSuccess(result);
     }

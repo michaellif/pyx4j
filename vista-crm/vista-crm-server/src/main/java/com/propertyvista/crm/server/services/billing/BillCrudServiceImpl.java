@@ -13,23 +13,27 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
-import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
 import com.propertyvista.domain.financial.billing.Bill;
 
-public class BillCrudServiceImpl extends GenericCrudServiceImpl<Bill> implements BillCrudService {
+public class BillCrudServiceImpl extends AbstractCrudServiceImpl<Bill> implements BillCrudService {
 
     public BillCrudServiceImpl() {
         super(Bill.class);
     }
 
     @Override
-    protected void enhanceRetrieve(Bill entity, boolean fromList) {
-        if (!fromList) {
-            // load detached entities:
-            Persistence.service().retrieve(entity.charges());
-        }
+    protected void enhanceRetrieved(Bill entity) {
+        // load detached entities:
+        Persistence.service().retrieve(entity.charges());
     }
+
+    @Override
+    protected void persist(Bill entity) {
+        throw new IllegalArgumentException();
+    }
+
 }

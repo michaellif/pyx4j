@@ -15,19 +15,19 @@ package com.propertyvista.crm.rpc.services.billing;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingRun;
 
-public interface BillCrudService extends AbstractCrudService<Bill> {
+public interface BillingRunCrudService extends AbstractCrudService<BillingRun> {
 
     //TODO Review
     /**
-     * Make bill Confirmed
+     * Make all Finished bills Confirmed
      */
-    //void confirmBill(AsyncCallback<VoidSerializable> callback, Key billEntityId);
+    //void confirmAllBills(AsyncCallback<VoidSerializable> callback, Key billEntityId);
 
     /**
-     * Make bill Rejected
+     * Make all Finished bills Rejected
      */
-    //void rejectedBill(AsyncCallback<VoidSerializable> callback, Key billEntityId);
+    //void rejectedAllBill(AsyncCallback<VoidSerializable> callback, Key billEntityId);
 
 }

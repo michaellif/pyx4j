@@ -26,7 +26,7 @@ public class SelectUnitCrudServiceImpl extends GenericCrudServiceImpl<AptUnit> i
     }
 
     @Override
-    protected void enhanceRetrieve(AptUnit entity, boolean fromList) {
+    protected void enhanceRetrieved(AptUnit entity, boolean fromList) {
         // load detached entities (temporary):
         Persistence.service().retrieve(entity.belongsTo());
         Persistence.service().retrieve(entity.floorplan());
@@ -34,6 +34,6 @@ public class SelectUnitCrudServiceImpl extends GenericCrudServiceImpl<AptUnit> i
         //Persistence.service().retrieve(entity.floorplan().name());
         //Persistence.service().retrieve(entity.floorplan().marketingName());
 
-        super.enhanceRetrieve(entity, fromList);
+        super.enhanceRetrieved(entity, fromList);
     }
 }

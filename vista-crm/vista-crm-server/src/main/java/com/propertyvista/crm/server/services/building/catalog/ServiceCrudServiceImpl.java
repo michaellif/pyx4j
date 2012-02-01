@@ -28,7 +28,7 @@ public class ServiceCrudServiceImpl extends GenericCrudServiceImpl<Service> impl
     }
 
     @Override
-    protected void enhanceRetrieve(Service entity, boolean fromList) {
+    protected void enhanceRetrieved(Service entity, boolean fromList) {
         if (!fromList) {
             // Load detached data:
             Persistence.service().retrieve(entity.catalog());

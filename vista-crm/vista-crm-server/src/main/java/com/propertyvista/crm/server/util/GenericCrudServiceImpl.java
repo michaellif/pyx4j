@@ -22,7 +22,10 @@ import com.pyx4j.entity.shared.IEntity;
 
 /**
  * DBO - Data Base Object
+ * 
+ * @deprecated use AbstractCrudServiceImpl
  */
+@Deprecated
 public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends GenericListServiceImpl<DBO> implements AbstractCrudService<DBO> {
 
     protected GenericCrudServiceImpl(Class<DBO> dboClass) {
@@ -42,7 +45,7 @@ public abstract class GenericCrudServiceImpl<DBO extends IEntity> extends Generi
     @Override
     public void retrieve(AsyncCallback<DBO> callback, Key entityId) {
         DBO entity = Persistence.secureRetrieve(dboClass, entityId);
-        enhanceRetrieve(entity, false);
+        enhanceRetrieved(entity, false);
         callback.onSuccess(entity);
     }
 
