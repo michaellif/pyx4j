@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.richtext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -40,6 +43,7 @@ import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.RichTextArea;
 
 public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
+    private static final Logger log = LoggerFactory.getLogger(ExtendedRichTextArea.class);
 
     private final RichTextArea richTextArea;
 
@@ -150,9 +154,11 @@ public class ExtendedRichTextArea extends DockPanel implements ITextWidget {
         switch (event.getTypeInt()) {
         case Event.ONMOUSEOUT:
             toolbar.getElement().getStyle().setOpacity(0.3);
+            richTextArea.ignoreBlur(false);
             break;
         case Event.ONMOUSEOVER:
             toolbar.getElement().getStyle().setOpacity(1);
+            richTextArea.ignoreBlur(true);
             break;
         }
     }

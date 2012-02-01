@@ -22,15 +22,33 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.shared.GwtEvent;
 
 public class RichTextArea extends com.google.gwt.user.client.ui.RichTextArea {
+    private boolean ignoreBlur;
 
     public RichTextArea() {
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
         getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         getElement().getStyle().setBorderWidth(1, Unit.PX);
         getElement().getStyle().setBackgroundColor("white");
-
+        ignoreBlur = false;
     }
 
+    /*
+     * This method is used by containing component (ExtendedRichTextArea) to ignore blur events
+     * triggered by toolbar buttons. This prevents from loosing text selections due to accessing
+     * the text value by onEditiongStop() method via onBlur handler.
+     */
+    public void ignoreBlur(boolean ignore) {
+        ignoreBlur = ignore;
+    }
+
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        if (!event.getAssociatedType().equals(BlurEvent.getType()) || !ignoreBlur) {
+            super.fireEvent(event);
+        }
+    }
 }

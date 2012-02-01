@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -36,6 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
+import com.pyx4j.widgets.client.RichTextArea;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 /**
