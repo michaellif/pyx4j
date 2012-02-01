@@ -13,32 +13,41 @@
  */
 package com.propertyvista.domain.financial.billing;
 
-import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTableOrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
-/**
- * 
- * Actual payment record. {@link com.propertyvista.domain.financial.billing.BillPayment} captures payment portion for particular charge (in future version)
- * 
- */
-public interface Payment extends IEntity {
+public interface BillProductAdjustment extends IEntity {
 
-    IPrimitive<Integer> paymentSequenceNumber();
-
-    IPrimitive<LogicalDate> depositDate();
-
-    @ReadOnly
-    BillingAccount billingAccount();
+    BillableItemAdjustment billableItemAdjustment();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<Double> ammount();
+    IPrimitive<Double> price();
+
+    interface OrderId extends ColumnId {
+
+    }
+
+    @Owner
+    @Detached
+    @NotNull
+    @Indexed
+    @JoinColumn
+    Bill bill();
+
+    @JoinTableOrderColumn(OrderId.class)
+    IPrimitive<Integer> orderId();
 
 }

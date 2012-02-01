@@ -56,8 +56,12 @@ public interface Bill extends IEntity {
     BillingRun billingRun();
 
     @Detached
-    @JoinTable(value = Charge.class, orderColumn = Charge.OrderId.class, cascade = false)
-    IList<Charge> charges();
+    @JoinTable(value = BillCharge.class, orderColumn = BillCharge.OrderId.class, cascade = false)
+    IList<BillCharge> charges();
+
+    @Detached
+    @JoinTable(value = BillProductAdjustment.class, orderColumn = BillProductAdjustment.OrderId.class, cascade = false)
+    IList<BillProductAdjustment> adjustments();
 
     /**
      * The total amount due from the previous bill.

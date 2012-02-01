@@ -28,9 +28,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
-public interface Charge extends IEntity {
+public interface BillCharge extends IEntity {
 
-    BillableItem agreedItem();
+    BillableItem billableItem();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)

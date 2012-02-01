@@ -29,7 +29,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
+import com.propertyvista.domain.financial.billing.BillCharge;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 
 class Billing {
 
@@ -61,7 +63,7 @@ class Billing {
     private void run() {
         getPreviousTotals();
         getPayments();
-        calulateCharges();
+        createCharges();
     }
 
     private void getPreviousTotals() {
@@ -76,8 +78,27 @@ class Billing {
         bill.paymentReceivedAmount().setValue(25.0);
     }
 
-    private void calulateCharges() {
-        // TODO Auto-generated method stub
-        bill.totalRecurringCharges().setValue(110.0);
+    private void createCharges() {
+
+        Persistence.service().retrieve(bill.billingAccount().leaseFinancial());
+
+        double totalRecurringCharges = 0;
+
+        totalRecurringCharges += createCharge(bill.billingAccount().leaseFinancial().serviceAgreement().serviceItem()).price().getValue();
+
+        for (BillableItem item : bill.billingAccount().leaseFinancial().serviceAgreement().featureItems()) {
+            totalRecurringCharges += createCharge(item).price().getValue();
+        }
+
+        bill.totalRecurringCharges().setValue(totalRecurringCharges);
     }
+
+    private BillCharge createCharge(BillableItem serviceItem) {
+        return null;
+    }
+
+    private void addCharge(BillCharge charge) {
+
+    }
+
 }
