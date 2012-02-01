@@ -74,7 +74,6 @@ public interface SiteDescriptor extends Descriptor {
     @Owned
     IList<SiteTitles> siteTitles();
 
-    @Owned
     IList<SiteImageResource> logo();
 
     @Owned
