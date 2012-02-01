@@ -23,12 +23,12 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.TenantInLease;
+import com.propertyvista.domain.tenant.PersonScreeningHolder;
 
 public interface DigitalSignature extends IEntity {
 
     @ToString
-    TenantInLease tenant();
+    PersonScreeningHolder person();
 
     @Format("MM/dd/yyyy hh:mm a")
     @MemberColumn(name = "signDate")

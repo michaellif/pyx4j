@@ -152,12 +152,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
     @Override
     public void update(AsyncCallback<Boolean> callback) {
         if (SecurityController.checkBehavior(VistaTenantBehavior.ProspectiveCoApplicant)) {
-            Application application = PtAppContext.getCurrentUserApplication();
-            Lease lease = PtAppContext.getCurrentUserLease();
-            TenantInLeaseRetriever.UpdateLeaseTenants(lease);
-            // update wizard:
-            DigitalSignatureMgr.update(application, lease.tenants());
-            ApplicationProgressMgr.syncroizeApplicationProgress(application, retrieveData().tenants());
+            ApplicationProgressMgr.createTenantDataSteps(PtAppContext.getCurrentUserApplication(), PtAppContext.getCurrentUserTenant());
         } else if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
             ApplicationProgressMgr.createGurantorDataSteps(PtAppContext.getCurrentUserApplication(), PtAppContext.getCurrentUserGuarantor());
         } else {

@@ -16,15 +16,15 @@ package com.propertyvista.portal.rpc.ptapp.validators;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.person.Person;
 
 public class DigitalSignatureValidation {
 
-    public static boolean isSignatureValid(Tenant tenant, String signature) {
+    public static boolean isSignatureValid(Person person, String signature) {
         if (CommonsStringUtils.isEmpty(signature)) {
             return false;
         }
-        return isCombinationMatch(signature, tenant.person().name().firstName(), tenant.person().name().lastName(), tenant.person().name().middleName());
+        return isCombinationMatch(signature, person.name().firstName(), person.name().lastName(), person.name().middleName());
     }
 
     public static boolean isCombinationMatch(String signature, IPrimitive<String> value1, IPrimitive<String> value2, IPrimitive<String> value3) {

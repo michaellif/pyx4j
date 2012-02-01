@@ -69,7 +69,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
     public void save(AsyncCallback<SummaryDTO> callback, SummaryDTO entity) {
         Summary summary = entity.duplicate(Summary.class);
         for (DigitalSignature sig : summary.application().signatures()) {
-            if (!DigitalSignatureValidation.isSignatureValid(sig.tenant().tenant(), sig.fullName().getValue())) {
+            if (!DigitalSignatureValidation.isSignatureValid(sig.person().person(), sig.fullName().getValue())) {
                 // reset all if mismatch:
                 sig.fullName().setValue(null);
             }
@@ -128,7 +128,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
 
             // add I Agree option:
             IAgree agree = EntityFactory.create(IAgree.class);
-            agree.person().set(sig.tenant().tenant().person());
+            agree.person().set(sig.person().person());
             agree.agree().setValue(Boolean.TRUE);
             agrees.add(agree);
 

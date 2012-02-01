@@ -32,7 +32,7 @@ public class TenantRetriever {
 
     public Class<? extends PersonScreeningHolder> tenantClass;
 
-    private PersonScreeningHolder tenant;
+    private PersonScreeningHolder screeningHolder;
 
     public PersonScreening tenantScreening;
 
@@ -61,10 +61,10 @@ public class TenantRetriever {
 
     // Manipulation:
     public void retrieve(Key tenantId) {
-        tenant = Persistence.service().retrieve(tenantClass, tenantId);
-        if (tenant != null) {
+        screeningHolder = Persistence.service().retrieve(tenantClass, tenantId);
+        if (screeningHolder != null) {
             EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), tenant));
+            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), screeningHolder));
             tenantScreenings = Persistence.service().query(criteria);
             if (tenantScreenings != null && !tenantScreenings.isEmpty()) {
                 tenantScreening = tenantScreenings.get(tenantScreenings.size() - 1); // use last screenings
@@ -82,37 +82,41 @@ public class TenantRetriever {
                 }
             } else {
                 // newly created - set belonging to tenant:
-                tenantScreening.screene().set(tenant);
+                tenantScreening.screene().set(screeningHolder);
             }
 
-            if (tenant instanceof Tenant) {
-                Persistence.service().retrieve(((Tenant) tenant).emergencyContacts());
+            if (screeningHolder instanceof Tenant) {
+                Persistence.service().retrieve(((Tenant) screeningHolder).emergencyContacts());
             }
         }
     }
 
     public Person getPerson() {
-        return tenant.person();
+        return screeningHolder.person();
+    }
+
+    public PersonScreeningHolder getPersonScreeningHolder() {
+        return screeningHolder;
     }
 
     public Tenant getTenant() {
-        if (tenant instanceof Tenant) {
-            return (Tenant) tenant;
+        if (screeningHolder instanceof Tenant) {
+            return (Tenant) screeningHolder;
         } else {
             throw new Error(tenantClass.getName() + " object stored!");
         }
     }
 
     public Guarantor getGuarantor() {
-        if (tenant instanceof Guarantor) {
-            return (Guarantor) tenant;
+        if (screeningHolder instanceof Guarantor) {
+            return (Guarantor) screeningHolder;
         } else {
             throw new Error(tenantClass.getName() + " object stored!");
         }
     }
 
     public void saveTenant() {
-        Persistence.service().merge(tenant);
+        Persistence.service().merge(screeningHolder);
     }
 
     public void saveScreening() {

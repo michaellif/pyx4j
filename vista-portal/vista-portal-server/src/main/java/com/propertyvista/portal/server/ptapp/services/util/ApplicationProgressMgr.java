@@ -18,15 +18,21 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.PersonGuarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
@@ -91,12 +97,36 @@ public class ApplicationProgressMgr extends ApplicationManager {
         Persistence.service().merge(financialStep);
     }
 
+    public static void createTenantDataSteps(Application application, Tenant tenant) {
+
+        EntityQueryCriteria<TenantInLease> criteria = EntityQueryCriteria.create(TenantInLease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
+        TenantInLease outer = Persistence.service().retrieve(criteria);
+        if (outer == null) {
+            throw new Error("TenantInLease for '" + tenant.getStringView() + "' not found");
+        }
+
+        createPersonDataSteps(application, tenant.person(), outer.getPrimaryKey());
+    }
+
     public static void createGurantorDataSteps(Application application, Guarantor guarantor) {
+
+        EntityQueryCriteria<PersonGuarantor> criteria = EntityQueryCriteria.create(PersonGuarantor.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().guarantor(), guarantor));
+        PersonGuarantor outer = Persistence.service().retrieve(criteria);
+        if (outer == null) {
+            throw new Error("PersonGuarantor for '" + guarantor.getStringView() + "' not found");
+        }
+
+        createPersonDataSteps(application, guarantor.person(), outer.getPrimaryKey());
+    }
+
+    public static void createPersonDataSteps(Application application, Person person, Key stepID) {
 
         // create an new sub-step:
         ApplicationWizardSubstep subStep = EntityFactory.create(ApplicationWizardSubstep.class);
-        subStep.placeArgument().setValue(guarantor.getPrimaryKey().toString());
-        subStep.name().setValue(guarantor.person().name().getStringView());
+        subStep.placeArgument().setValue(stepID.toString());
+        subStep.name().setValue(person.name().getStringView());
         subStep.status().setValue(ApplicationWizardStep.Status.notVisited);
 
         ApplicationWizardStep infoStep = findWizardStep(application, PtSiteMap.Info.class);

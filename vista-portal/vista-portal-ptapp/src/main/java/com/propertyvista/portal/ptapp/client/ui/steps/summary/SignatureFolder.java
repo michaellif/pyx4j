@@ -79,7 +79,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant().tenant().person().name(), new CEntityLabel<Name>()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().person().name(), new CEntityLabel<Name>()), 25).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName(), new CTextField()), 25).build());
 
             row = -1;
@@ -93,7 +93,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
         @Override
         protected void onPopulate() {
             super.onPopulate();
-            setEditable(!DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), getValue().fullName().getValue()));
+            setEditable(!DigitalSignatureValidation.isSignatureValid(getValue().person().person(), getValue().fullName().getValue()));
         }
 
         @Override
@@ -107,7 +107,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
                         return null;
                     }
 
-                    return DigitalSignatureValidation.isSignatureValid(getValue().tenant().tenant(), value) ? null : new ValidationFailure(i18n
+                    return DigitalSignatureValidation.isSignatureValid(getValue().person().person(), value) ? null : new ValidationFailure(i18n
                             .tr("Digital Signature Must Match Your Name On File"));
                 }
 

@@ -71,7 +71,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
 
         tr.saveScreening();
 
-        DigitalSignatureMgr.reset(tr.tenantInLease);
+        DigitalSignatureMgr.reset(tr.getTenant());
 
         // we do not use return value, so return the same as input one:        
         callback.onSuccess(entity);

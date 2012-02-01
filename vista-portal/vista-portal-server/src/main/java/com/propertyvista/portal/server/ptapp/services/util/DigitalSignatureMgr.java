@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.tenant.PersonScreeningHolder;
 import com.propertyvista.domain.tenant.TenantInLease;
 import com.propertyvista.domain.tenant.ptapp.Application;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
@@ -49,7 +50,7 @@ public class DigitalSignatureMgr {
                 boolean alreadyPresent = false;
                 for (Iterator<DigitalSignature> it = existingSignatures.iterator(); it.hasNext();) {
                     DigitalSignature sig = it.next();
-                    if (sig.tenant().equals(tenant)) {
+                    if (sig.person().equals(tenant.tenant())) {
                         alreadyPresent = true;
                         application.signatures().add(sig);
                         it.remove();
@@ -57,7 +58,7 @@ public class DigitalSignatureMgr {
                     }
                 }
                 if (!alreadyPresent) { // create signature if absent: 
-                    createDigitalSignature(application, tenant);
+                    createDigitalSignature(application, tenant.tenant());
                     ApplicationProgressMgr.invalidateSummaryStep(application);
                 }
             }
@@ -75,13 +76,13 @@ public class DigitalSignatureMgr {
         update(application);
     }
 
-    static public void reset(TenantInLease tenant) {
+    static public void reset(PersonScreeningHolder person) {
         Application application = PtAppContext.getCurrentUserApplication();
 
         boolean found = false;
         for (Iterator<DigitalSignature> it = application.signatures().iterator(); it.hasNext();) {
             DigitalSignature sig = it.next();
-            if (sig.tenant().equals(tenant)) {
+            if (sig.person().equals(person)) {
                 found = true;
                 it.remove();
                 break;
@@ -89,16 +90,16 @@ public class DigitalSignatureMgr {
         }
 
         if (found) {
-            createDigitalSignature(application, tenant);
+            createDigitalSignature(application, person);
             ApplicationProgressMgr.invalidateSummaryStep(application);
         }
 
         Persistence.service().merge(application);
     }
 
-    static private DigitalSignature createDigitalSignature(Application application, TenantInLease tenant) { // create signature if absent: 
+    static private DigitalSignature createDigitalSignature(Application application, PersonScreeningHolder person) {
         DigitalSignature sig = EntityFactory.create(DigitalSignature.class);
-        sig.tenant().set(tenant);
+        sig.person().set(person);
         application.signatures().add(sig);
         return sig;
     }

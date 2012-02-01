@@ -15,19 +15,32 @@ package com.propertyvista.portal.ptapp.client.activity.steps;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialView;
 import com.propertyvista.portal.ptapp.client.ui.steps.financial.FinancialViewPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
+import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.GuarantorFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 
 public class FinancialActivity extends WizardStepWithSubstepsActivity<TenantFinancialDTO, FinancialViewPresenter> implements FinancialViewPresenter {
 
     public FinancialActivity(AppPlace place) {
-        super((FinancialView) WizardStepsViewFactory.instance(FinancialView.class), TenantFinancialDTO.class, (TenantFinancialService) GWT
-                .create(TenantFinancialService.class));
+        super(WizardStepsViewFactory.instance(FinancialView.class), TenantFinancialDTO.class, createaService());
         withPlace(place);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static AbstractWizardService<TenantFinancialDTO> createaService() {
+
+        if (SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            return (AbstractWizardService<TenantFinancialDTO>) GWT.create(GuarantorFinancialService.class);
+        } else {
+            return (AbstractWizardService<TenantFinancialDTO>) GWT.create(TenantFinancialService.class);
+        }
     }
 }
