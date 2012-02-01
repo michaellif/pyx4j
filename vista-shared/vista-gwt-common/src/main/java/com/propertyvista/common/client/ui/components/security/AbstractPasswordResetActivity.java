@@ -37,12 +37,9 @@ public class AbstractPasswordResetActivity extends AbstractActivity implements P
 
     private final PasswordResetService service;
 
-    private final AppPlace loginPlace;
-
-    public AbstractPasswordResetActivity(Place place, PasswordResetView view, PasswordResetService service, AppPlace loginPlace) {
+    public AbstractPasswordResetActivity(Place place, PasswordResetView view, PasswordResetService service) {
         this.view = view;
         this.service = service;
-        this.loginPlace = loginPlace;
         view.setPresenter(this);
         withPlace(place);
     }

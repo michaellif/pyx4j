@@ -19,13 +19,11 @@ import com.google.gwt.place.shared.Place;
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 
 public class PasswordResetActivity extends AbstractPasswordResetActivity {
 
     public PasswordResetActivity(Place place) {
-        super(place, PtAppViewFactory.instance(PasswordResetView.class), GWT.<PtPasswordResetService> create(PtPasswordResetService.class),
-                new PtSiteMap.Login());
+        super(place, PtAppViewFactory.instance(PasswordResetView.class), GWT.<PtPasswordResetService> create(PtPasswordResetService.class));
     }
 }
