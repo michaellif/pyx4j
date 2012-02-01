@@ -346,11 +346,12 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     protected void onWidgetCreated() {
         applyAccessibilityRules();
-        getWidget().setWidth(getWidth());
-        getWidget().setHeight(getHeight());
+        widget.setWidth(getWidth());
+        widget.setHeight(getHeight());
+
         setNativeValue(getValue());
         if (debugId != null) {
-            getWidget().setDebugId(getCompositeDebugId());
+            widget.setDebugId(getCompositeDebugId());
         }
         this.addPropertyChangeHandler(widget);
     }
@@ -372,7 +373,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return widget.asWidget();
     }
 
-    public WIDGET_TYPE getWidget() {
+    public final WIDGET_TYPE getWidget() {
         return widget;
     }
 
@@ -401,7 +402,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void applyEnablingRules() {
         boolean enabled = isEnabled();
-        if (isWidgetCreated() && !isViewable() && widget.isEnabled() != enabled) {
+        if (isWidgetCreated() && widget.isEnabled() != enabled) {
             widget.setEnabled(enabled);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
@@ -409,10 +410,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void applyEditabilityRules() {
         boolean editable = isEditable();
-        if (isWidgetCreated() && !isViewable() && widget.isEditable() != editable) {
+        if (isWidgetCreated() && widget.isEditable() != editable) {
             widget.setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
+
     }
 
     public void applyViewabilityRules() {

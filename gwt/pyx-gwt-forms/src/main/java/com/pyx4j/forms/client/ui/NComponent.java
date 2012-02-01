@@ -164,9 +164,10 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     @Override
     public boolean isEnabled() {
         if (isViewable()) {
-            assert false : "isEnabled shouldn't be called in viewable mode";
+            return false;
+        } else {
+            return getEditor().isEnabled();
         }
-        return getEditor().isEnabled();
     }
 
     @Override
@@ -188,7 +189,11 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     @Override
     public boolean isEditable() {
-        return getEditor().isEditable();
+        if (isViewable()) {
+            return false;
+        } else {
+            return getEditor().isEditable();
+        }
     }
 
     @Override

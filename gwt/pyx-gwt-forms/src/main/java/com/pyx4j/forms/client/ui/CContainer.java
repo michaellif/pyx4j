@@ -180,6 +180,16 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @Override
+    public void applyViewabilityRules() {
+        super.applyViewabilityRules();
+        if (getComponents() != null) {
+            for (CComponent<?, ?> component : getComponents()) {
+                component.applyViewabilityRules();
+            }
+        }
+    }
+
+    @Override
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {

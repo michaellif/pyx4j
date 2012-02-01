@@ -73,19 +73,20 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        if (enabled) {
-            getEditor().getYearSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
-        } else {
-            getEditor().getYearSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
-        }
-        if (!getCComponent().isYearOnly()) {
+        if (getEditor() != null) {
             if (enabled) {
-                getEditor().getMonthSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
             } else {
-                getEditor().getMonthSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+            }
+            if (!getCComponent().isYearOnly()) {
+                if (enabled) {
+                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                } else {
+                    getEditor().getMonthSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                }
             }
         }
-
     }
 
     @Override
