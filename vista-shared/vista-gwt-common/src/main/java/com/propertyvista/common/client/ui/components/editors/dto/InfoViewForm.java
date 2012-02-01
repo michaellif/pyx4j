@@ -303,8 +303,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 }
 
                 IPrimitive<LogicalDate> date = getValue().currentAddress().moveInDate();
-                return (date.isNull() || value.getTime() == date.getValue().getTime() - 86400000) ? null : new ValidationFailure(i18n
-                        .tr("Current Move In date should be a day after previous Move Out date"));
+                long limit1 = date.getValue().getTime() + 2678400000L; //limits current Move In date to be within a month of previous Move Out date
+                long limit2 = date.getValue().getTime() - 2678400000L;
+                return (date.isNull() || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(i18n
+                        .tr("Current address Move In date should be after previous address Move Out date"));
             }
 
         });
@@ -318,8 +320,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
                 }
 
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                return (date.isNull() || value.getTime() == date.getValue().getTime() + 86400000) ? null : new ValidationFailure(i18n
-                        .tr("Current Move In date should be a day after previous Move Out date"));
+                long limit1 = date.getValue().getTime() + 2678400000L; //limits current Move In date to be within a month of previous Move Out date
+                long limit2 = date.getValue().getTime() - 2678400000L;
+                return (date.isNull() || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(i18n
+                        .tr("Current address Move In date should be after previous address Move Out date"));
             }
 
         });
