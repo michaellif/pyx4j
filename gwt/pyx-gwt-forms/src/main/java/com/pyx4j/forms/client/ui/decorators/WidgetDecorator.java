@@ -54,8 +54,8 @@ import com.pyx4j.forms.client.ui.Cursor;
 
 public class WidgetDecorator extends FlexTable {
 
-    public enum HolderDebugIds implements IDebugId {
-        InfoImageHolder, InfoImage;
+    public enum DebugIds implements IDebugId {
+        Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;
 
         @Override
         public String debugId() {
@@ -117,6 +117,8 @@ public class WidgetDecorator extends FlexTable {
             });
         }
 
+        label.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), DebugIds.Label));
+
         infoImageHolder = new SpaceHolder();
         infoImageHolder.setStyleName(WidgetDecoratorInfoImage.name());
 
@@ -124,9 +126,9 @@ public class WidgetDecorator extends FlexTable {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
 
-            infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), HolderDebugIds.InfoImageHolder));
-            infoImage.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), new CompositeDebugId(HolderDebugIds.InfoImageHolder,
-                    HolderDebugIds.InfoImage)));
+            infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(), DebugIds.InfoImageHolder));
+            infoImage.ensureDebugId(CompositeDebugId.debugId(component.getCompositeDebugId(),
+                    new CompositeDebugId(DebugIds.InfoImageHolder, DebugIds.InfoImage)));
             infoImageHolder.setWidget(infoImage);
         }
 
@@ -212,9 +214,9 @@ public class WidgetDecorator extends FlexTable {
                 mandatoryImage = new Image();
                 mandatoryImage.setResource(ImageFactory.getImages().mandatory());
                 mandatoryImage.setTitle("This field is mandatory");
-                // TODO fix this 
-                if (component.getCompositeDebugId() != null) { // TODO never use string in DebugID!..                
-                    mandatoryImage.ensureDebugId(component.getCompositeDebugId().debugId() + "-mandatoryImage");
+
+                if (component.getCompositeDebugId() != null) {
+                    mandatoryImage.ensureDebugId(new CompositeDebugId(component.getCompositeDebugId(), DebugIds.MandatoryImage).debugId());
                 }
             }
             mandatoryImageHolder.add(mandatoryImage);
@@ -230,9 +232,8 @@ public class WidgetDecorator extends FlexTable {
             validationLabel.setText(null);
         }
 
-        // TODO fix this 
-        if (component.getCompositeDebugId() != null) { // TODO never use string in DebugID!..
-            validationLabel.ensureDebugId(component.getCompositeDebugId().debugId() + "-validationLabel");
+        if (component.getCompositeDebugId() != null) {
+            validationLabel.ensureDebugId(new CompositeDebugId(component.getCompositeDebugId(), DebugIds.ValidationLabel).debugId());
         }
     }
 
