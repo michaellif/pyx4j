@@ -152,7 +152,7 @@ public class Lifecycle {
         Visit currentVisit = Context.getVisit();
         if ((currentVisit != null) && (userVisit != null) && (currentVisit.isUserLoggedIn())
                 && EqualsHelper.equals(userVisit.getPrincipalPrimaryKey(), currentVisit.getUserVisit().getPrincipalPrimaryKey())) {
-            // The same user. No need to create new session, consider that behaviours are updated
+            // The same user. No need to create new session, consider that behaviors are updated
         } else {
             HttpSession session = Context.getSession();
             // Preserve some administration and debug session attributes 
@@ -178,6 +178,7 @@ public class Lifecycle {
             beginSession(newSession);
         }
         Context.getVisit().beginSession(userVisit, SecurityController.instance().authenticate(behaviours));
+        Context.getRequest().removeAttribute(END_SESSION_ATR);
         return Context.getVisit().getSessionToken();
     }
 
