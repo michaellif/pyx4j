@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Table(prefix = "admin")
@@ -41,6 +42,8 @@ public interface Pmc extends IEntity {
     @Length(63)
     @Indexed(uniqueConstraint = true)
     IPrimitive<String> dnsName();
+
+    IPrimitiveSet<String> dnsNameAliases();
 
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
