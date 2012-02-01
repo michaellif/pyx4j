@@ -25,11 +25,11 @@ import com.propertyvista.payment.Merchant;
 
 public abstract class CaledonTestBase extends TestCase {
 
-    protected static Merchant testMerchant = createTestCaledonMerchant(TestData.TEST_TERMID);
+    static Merchant testMerchant = createTestCaledonMerchant(TestData.TEST_TERMID);
 
-    protected static Merchant testMerchantError = createTestCaledonMerchant(TestData.TEST_TERMID_ERROR);
+    static Merchant testMerchantError = createTestCaledonMerchant(TestData.TEST_TERMID_ERROR);
 
-    protected static CCInformation createCCInformation(String creditCardNumber, String exp) {
+    static CCInformation createCCInformation(String creditCardNumber, String exp) {
 
         CCInformation ccInfo = EntityFactory.create(CCInformation.class);
 
@@ -44,7 +44,7 @@ public abstract class CaledonTestBase extends TestCase {
         return ccInfo;
     }
 
-    protected static Merchant createTestCaledonMerchant(String terminalID) {
+    static Merchant createTestCaledonMerchant(String terminalID) {
         Merchant m = EntityFactory.create(Merchant.class);
 
         m.terminalID().setValue(terminalID);

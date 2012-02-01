@@ -24,7 +24,7 @@ import com.propertyvista.payment.PaymentResponse;
 
 public class CaledonRealTimeTest extends CaledonTestBase {
 
-    private static PaymentRequest createRequest(String creditCardNumber, String exp, double amount) {
+    static PaymentRequest createRequest(String creditCardNumber, String exp, double amount) {
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.referenceNumber().setValue("Test1");
         request.amount().setValue((float) amount);
@@ -33,7 +33,7 @@ public class CaledonRealTimeTest extends CaledonTestBase {
         return request;
     }
 
-    private static PaymentResponse assertRealTimeSale(Merchant merchant, PaymentRequest request, String responseCode) {
+    static PaymentResponse assertRealTimeSale(Merchant merchant, PaymentRequest request, String responseCode) {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         PaymentResponse response = proc.realTimeSale(merchant, request);
         assertEquals(responseCode, response.code().getValue());
