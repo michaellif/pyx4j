@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -55,6 +55,24 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
     @Override
     public String create() {
         createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, VistaCrmBehavior.values());
+
+        createRole("Accountant", VistaCrmBehavior.ProductCatalog, VistaCrmBehavior.Billing, VistaCrmBehavior.Reports);
+        createRole("Accounting", VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole("Admin", VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole("AM", VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole("Asset Manager", VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
+        createRole("BR", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Maintenance, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole("Executive", VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole("Leasing", VistaCrmBehavior.Tenants, VistaCrmBehavior.Equifax, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Reports);
+        createRole("Legal", VistaCrmBehavior.Equifax, VistaCrmBehavior.Reports);
+        createRole("Maintenance", VistaCrmBehavior.Mechanicals, VistaCrmBehavior.Occupancy, VistaCrmBehavior.Maintenance, VistaCrmBehavior.Reports);
+        createRole("Marketing and Leasing Specialist", VistaCrmBehavior.Marketing, VistaCrmBehavior.MarketingMedia, VistaCrmBehavior.Reports);
+        createRole("Mechanical Engineer", VistaCrmBehavior.Mechanicals, VistaCrmBehavior.Reports);
+        createRole("Owner", VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
+        createRole("PM", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
+                VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+
         if (ApplicationMode.isDevelopment()) {
             for (VistaCrmBehavior behavior : EnumSet.allOf(VistaCrmBehavior.class)) {
                 createRole("Test-" + behavior.name(), behavior);

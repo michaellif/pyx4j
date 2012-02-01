@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -41,6 +42,7 @@ import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -111,6 +113,11 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     }
 
     @Override
+    public boolean canEdit() {
+        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+    }
+
+    @Override
     public DashboardView.Presenter getDashboardPresenter() {
         return dashboard;
     }
@@ -174,7 +181,7 @@ public class BuildingViewerActivity extends ViewerActivityBase<BuildingDTO> impl
     public void onPopulateSuccess(BuildingDTO result) {
 
         // should be called before call to super, because
-        // BuildingViewerViewImpl.populate sets building filtering!  
+        // BuildingViewerViewImpl.populate sets building filtering!
         dashboard.populate(result.dashboard());
 
         super.onPopulateSuccess(result);
