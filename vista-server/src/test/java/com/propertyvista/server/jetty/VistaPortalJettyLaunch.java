@@ -27,6 +27,11 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
     }
 
     @Override
+    public int getServerSslPort() {
+        return 443;
+    }
+
+    @Override
     public String getContextPath() {
         return "/vista";
     }
@@ -35,6 +40,5 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
     public boolean isRunningInDeveloperEnviroment() {
         // return false to test wicket applications as in Tomcat
         return true;
-
     }
 }

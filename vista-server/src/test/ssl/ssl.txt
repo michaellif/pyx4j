@@ -1,0 +1,15 @@
+# $Id$
+
+
+keytool -genkey -keystore jetty.keystore -keyalg rsa -alias  jetty -storepass 123456 -keypass 123456 -keyalg RSA -keysize 1024 -validity 4386 -dname "cn=Vista Team, ou=Testing, o=propertyvista, c=CA"
+keytool -keystore jetty.keystore -storepass 123456 -list
+
+--- This is not required ......
+On Unix:
+openssl genrsa -des3 -out jetty.key
+openssl req -new -x509 -key jetty.key -out jetty.crt
+
+### keytool -delete -alias localhost -keystore jetty.keystore -storepass 123456
+### keytool -keystore jetty.keystore -storepass 123456 -import -alias jetty -file jetty.crt -trustcacerts
+keytool -keystore jetty.keystore -storepass 123456 -import -alias localhost -file jetty.crt -trustcacerts
+
