@@ -16,7 +16,6 @@ package com.propertyvista.admin.client.activity.security;
 import com.google.gwt.place.shared.Place;
 
 import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
-import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 
@@ -24,7 +23,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 public class PasswordResetActivity extends AbstractPasswordResetActivity {
 
     public PasswordResetActivity(Place place) {
-        super(place, AdminVeiwFactory.instance(PasswordResetView.class), null, new AdminSiteMap.Login());
+        super(place, AdminVeiwFactory.instance(PasswordResetView.class), null);
     }
 
 }
