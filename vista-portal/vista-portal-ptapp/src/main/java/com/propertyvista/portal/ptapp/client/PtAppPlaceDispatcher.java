@@ -43,8 +43,10 @@ public class PtAppPlaceDispatcher extends AppPlaceDispatcher {
             }
         } else if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
             callback.onSuccess(new PtSiteMap.PasswordReset());
+            return;
         } else if (newPlace instanceof PtSiteMap.LoginWithToken) {
             callback.onSuccess(newPlace);
+            return;
         } else {
             if (!(newPlace instanceof PublicPlace)) {
                 callback.onSuccess(new PtSiteMap.Login());
