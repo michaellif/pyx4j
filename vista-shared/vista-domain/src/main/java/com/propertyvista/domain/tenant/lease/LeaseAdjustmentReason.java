@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.tax.TaxRule;
  * Corporate-wide reasons (AS defined 20 major)
  * 
  */
-public interface AdjustmentReason extends IEntity {
+public interface LeaseAdjustmentReason extends IEntity {
 
     @ToString
     IPrimitive<String> name();

@@ -44,9 +44,7 @@ public interface Feature extends Product {
 
         locker(true),
 
-        booking(false),
-
-        adjustment(false);
+        booking(false);
 
         private final boolean inAgreement;
 

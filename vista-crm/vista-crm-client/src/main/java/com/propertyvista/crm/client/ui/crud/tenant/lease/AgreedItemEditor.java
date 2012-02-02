@@ -159,7 +159,7 @@ class AgreedItemEditor extends CEntityDecoratableEditor<BillableItem> {
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().adjustmentType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().chargeType(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().termType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));

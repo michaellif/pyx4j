@@ -25,10 +25,12 @@ public interface LeaseAdjustment extends IEntity {
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "itemType")
-    AdjustmentReason reason();
+    LeaseAdjustmentReason reason();
 
     @ToString(index = 1)
     @Format("#0.00")
     IPrimitive<Double> amount();
+
+    IPrimitive<String> description();
 
 }

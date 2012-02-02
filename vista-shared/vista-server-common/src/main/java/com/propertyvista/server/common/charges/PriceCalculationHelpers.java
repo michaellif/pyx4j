@@ -33,21 +33,21 @@ public class PriceCalculationHelpers {
 
     public static Double calculateChargeItemAdjustments(Double startPrice, BillableItemAdjustment adjustment) {
         // preconditions:
-        if (adjustment.isNull() || adjustment.type().isNull() || adjustment.termType().isNull()) {
+        if (adjustment.isNull() || adjustment.adjustmentType().isNull() || adjustment.termType().isNull()) {
             return Double.NaN; // not fully filled adjustment!.. 
         }
 
         // Calculate adjustments:
         Double adjustedPrice = startPrice;
         if (adjustment.termType().getValue().equals(BillableItemAdjustment.TermType.term)) {
-            if (adjustment.type().getValue().equals(BillableItemAdjustment.Type.free)) {
+            if (adjustment.adjustmentType().getValue().equals(BillableItemAdjustment.AdjustmentType.free)) {
                 adjustedPrice = 0.0;
             } else {
                 if (adjustment.value().isNull()) {
                     return Double.NaN; // value is necessary on this stage!..
                 }
 
-                switch (adjustment.type().getValue()) {
+                switch (adjustment.adjustmentType().getValue()) {
                 case monetary:
                     switch (adjustment.chargeType().getValue()) {
                     case discount:

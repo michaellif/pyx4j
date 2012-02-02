@@ -32,8 +32,8 @@ import com.propertyvista.domain.company.Employee;
 public interface BillableItemAdjustment extends IEntity {
 
     @I18n
-    @XmlType(name = "ChargeAdjustmentType")
-    enum Type {
+    @XmlType(name = "AdjustmentType")
+    enum AdjustmentType {
         percentage, monetary, free;
 
         @Override
@@ -45,7 +45,7 @@ public interface BillableItemAdjustment extends IEntity {
     @I18n
     @XmlType(name = "ChargeType")
     enum ChargeType {
-        discount, priceRaise;
+        negotiation, discount, priceRaise;
 
         @Override
         public String toString() {
@@ -54,7 +54,7 @@ public interface BillableItemAdjustment extends IEntity {
     }
 
     @I18n
-    @XmlType(name = "ChargeTermType")
+    @XmlType(name = "TermType")
     enum TermType {
         firstMonth, lastMonth, term;
 
@@ -66,8 +66,7 @@ public interface BillableItemAdjustment extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    @MemberColumn(name = "concessionType")
-    IPrimitive<Type> type();
+    IPrimitive<AdjustmentType> adjustmentType();
 
     @NotNull
     IPrimitive<ChargeType> chargeType();
@@ -82,7 +81,7 @@ public interface BillableItemAdjustment extends IEntity {
     @NotNull
     @Format("#0.00")
     @ToString(index = 1)
-    @MemberColumn(name = "concessionValue")
+    @MemberColumn(name = "adjustmentValue")
     IPrimitive<Double> value();
 
     Employee createdBy();
