@@ -37,6 +37,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -47,6 +48,7 @@ import com.propertyvista.common.client.ui.validators.CanadianSinValidator;
 import com.propertyvista.domain.EmergencyContact;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.security.VistaTenantBehavior;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
@@ -153,8 +155,10 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
 
-        main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+        if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
+            main.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+        }
 
         addValidations();
 
@@ -338,18 +342,20 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
 
         get(proto().secureIdentifier()).addValueValidator(new CanadianSinValidator());
 
-        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
+        if (!SecurityController.checkBehavior(VistaTenantBehavior.Guarantor)) {
+            get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
-            @Override
-            public ValidationFailure isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
-                if (value == null || getValue() == null) {
-                    return null;
+                @Override
+                public ValidationFailure isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+                    if (value == null || getValue() == null) {
+                        return null;
+                    }
+
+                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationFailure(i18n
+                            .tr("Duplicate contacts specified"));
                 }
-
-                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationFailure(i18n
-                        .tr("Duplicate contacts specified"));
-            }
-        });
+            });
+        }
     }
 
     private void enablePreviousAddress() {
