@@ -17,12 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeListerActivity extends ListerActivityBase<EmployeeDTO> {
 
@@ -30,5 +32,10 @@ public class EmployeeListerActivity extends ListerActivityBase<EmployeeDTO> {
     public EmployeeListerActivity(Place place) {
         super(place, OrganizationViewFactory.instance(EmployeeListerView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
                 EmployeeDTO.class);
+    }
+
+    @Override
+    public boolean canAddNew() {
+        return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
     }
 }

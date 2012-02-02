@@ -17,11 +17,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestViewerActivity extends ViewerActivityBase<MaintenanceRequestDTO> {
@@ -30,5 +32,10 @@ public class MaintenanceRequestViewerActivity extends ViewerActivityBase<Mainten
     public MaintenanceRequestViewerActivity(Place place) {
         super(place, MaintenanceViewFactory.instance(MaintenanceRequestViewerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceCrudService.class));
+    }
+
+    @Override
+    public boolean canEdit() {
+        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Maintenance);
     }
 }
