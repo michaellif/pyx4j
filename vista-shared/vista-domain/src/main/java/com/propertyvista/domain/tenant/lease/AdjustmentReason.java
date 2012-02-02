@@ -7,28 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2012
+ * Created on Jul 26, 2011
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease;
 
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface LeaseAdjustment extends IEntity {
+import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.tax.TaxRule;
 
-    @NotNull
-    @ToString(index = 0)
-    @MemberColumn(name = "itemType")
-    AdjustmentReason reason();
+/**
+ * 
+ * Corporate-wide reasons (AS defined 20 major)
+ * 
+ */
+public interface AdjustmentReason extends IEntity {
 
-    @ToString(index = 1)
-    @Format("#0.00")
-    IPrimitive<Double> amount();
+    @ToString
+    IPrimitive<String> name();
+
+    GlCode glCode();
+
+    //TODO should be taken from Taxation policy
+    @Transient
+    TaxRule taxRule();
 
 }

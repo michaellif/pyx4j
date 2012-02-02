@@ -7,20 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 25, 2012
+ * Created on Jul 26, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
+package com.propertyvista.domain.financial.offering;
 
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * 
- * @see {@link com.propertyvista.domain.financial.offering.Feature.Type.adjustment}
- */
-public interface BillLeaseAdjustment extends BillEntry {
+import com.propertyvista.domain.financial.GlCode;
+import com.propertyvista.domain.financial.tax.TaxRule;
 
-    LeaseAdjustment leaseAdjustment();
+public interface ChargeCode extends IEntity {
+
+    @ToString
+    IPrimitive<String> name();
+
+    GlCode glCode();
+
+    @Transient
+    TaxRule taxRule();
 
 }
