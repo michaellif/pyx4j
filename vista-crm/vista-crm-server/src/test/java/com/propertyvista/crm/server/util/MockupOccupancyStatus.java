@@ -17,8 +17,8 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.OffMarketType;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.Status;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment.OffMarketType;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment.Status;
 
 public interface MockupOccupancyStatus extends IEntity {
 

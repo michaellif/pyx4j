@@ -30,7 +30,7 @@ import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 
@@ -47,8 +47,8 @@ public class UnitViewerActivity extends ViewerActivityBase<AptUnitDTO> implement
         unitItemsLister = new ListerActivityBase<AptUnitItem>(place, ((UnitViewerView) view).getUnitItemsListerView(),
                 (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
 
-        OccupanciesLister = new ListerActivityBase<AptUnitOccupancy>(place, ((UnitViewerView) view).getOccupanciesListerView(),
-                (AbstractCrudService<AptUnitOccupancy>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancy.class);
+        OccupanciesLister = new ListerActivityBase<AptUnitOccupancySegment>(place, ((UnitViewerView) view).getOccupanciesListerView(),
+                (AbstractCrudService<AptUnitOccupancySegment>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancySegment.class);
 
     }
 

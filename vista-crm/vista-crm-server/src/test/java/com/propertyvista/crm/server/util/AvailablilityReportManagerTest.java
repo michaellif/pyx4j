@@ -34,8 +34,8 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.Status;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AvailablilityReportManagerTest {
@@ -90,8 +90,8 @@ public class AvailablilityReportManagerTest {
         assertEquals(msg + status.moveOutDay().getPath().toString(), expectedStatus.moveOutDay().getValue(), status.moveOutDay().getValue());
     }
 
-    private final AptUnitOccupancy convert(MockupOccupancyStatus mockup) {
-        AptUnitOccupancy status = EntityFactory.create(AptUnitOccupancy.class);
+    private final AptUnitOccupancySegment convert(MockupOccupancyStatus mockup) {
+        AptUnitOccupancySegment status = EntityFactory.create(AptUnitOccupancySegment.class);
         status.unit().set(unit);
         status.status().set(mockup.status());
         status.dateFrom().set(mockup.dateFrom());
@@ -117,7 +117,7 @@ public class AvailablilityReportManagerTest {
 
         private final LogicalDate eventTimestamp;
 
-        private final List<AptUnitOccupancy> occupancy;
+        private final List<AptUnitOccupancySegment> occupancy;
 
         public AptUnitOccupancyEventEffect(LogicalDate eventTimestamp, List<MockupOccupancyStatus> mockup) {
             assert eventTimestamp != null : "timestamp must not be null";
@@ -125,7 +125,7 @@ public class AvailablilityReportManagerTest {
             assert !mockup.isEmpty() : "mockup occupancy must not be empty";
 
             this.eventTimestamp = eventTimestamp;
-            this.occupancy = new ArrayList<AptUnitOccupancy>();
+            this.occupancy = new ArrayList<AptUnitOccupancySegment>();
             for (MockupOccupancyStatus mockupStatus : mockup) {
                 this.occupancy.add(convert(mockupStatus));
             }

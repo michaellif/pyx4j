@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -30,5 +30,5 @@ public interface AptUnitGDO extends IEntity {
 
     IList<AptUnitItem> details();
 
-    IList<AptUnitOccupancy> occupancies();
+    IList<AptUnitOccupancySegment> occupancies();
 }

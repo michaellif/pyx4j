@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 
-public class UnitOccupancyEditorViewImpl extends CrmEditorViewImplBase<AptUnitOccupancy> implements UnitOccupancyEditorView {
+public class UnitOccupancyEditorViewImpl extends CrmEditorViewImplBase<AptUnitOccupancySegment> implements UnitOccupancyEditorView {
 
     public UnitOccupancyEditorViewImpl() {
         super(CrmSiteMap.Properties.UnitOccupancy.class, new UnitOccupancyEditorForm());

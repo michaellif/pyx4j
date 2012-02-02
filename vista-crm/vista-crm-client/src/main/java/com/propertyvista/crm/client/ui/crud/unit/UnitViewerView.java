@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 import com.propertyvista.dto.AptUnitDTO;
 
 public interface UnitViewerView extends IViewerView<AptUnitDTO> {
@@ -31,5 +31,5 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
 
     IListerView<AptUnitItem> getUnitItemsListerView();
 
-    IListerView<AptUnitOccupancy> getOccupanciesListerView();
+    IListerView<AptUnitOccupancySegment> getOccupanciesListerView();
 }

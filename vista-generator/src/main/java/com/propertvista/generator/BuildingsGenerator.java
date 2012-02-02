@@ -52,7 +52,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.ptapp.LeaseTerms;
 
@@ -501,9 +501,9 @@ public class BuildingsGenerator {
         // some ServerSideDomainUtils
         unit.availableForRent().setValue(RandomUtil.randomLogicalDate(2012, 2012));
 
-        AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
+        AptUnitOccupancySegment occupancy = EntityFactory.create(AptUnitOccupancySegment.class);
         occupancy.unit().set(unit);
-        occupancy.status().setValue(AptUnitOccupancy.Status.available);
+        occupancy.status().setValue(AptUnitOccupancySegment.Status.available);
         occupancy.dateFrom().setValue(unit.availableForRent().getValue());
         occupancy.dateTo().setValue(new LogicalDate(occupancy.dateFrom().getValue().getTime() + RandomUtil.randomInt()));
         occupancy.description().setValue(RandomUtil.randomLetters(25).toLowerCase());

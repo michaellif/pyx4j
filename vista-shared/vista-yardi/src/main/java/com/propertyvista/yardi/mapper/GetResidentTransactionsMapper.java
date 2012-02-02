@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.yardi.Model;
 import com.propertyvista.yardi.bean.mits.Customer;
@@ -42,7 +42,7 @@ public class GetResidentTransactionsMapper {
     private final Model model = new Model();
 
     // TODO for now we are not converting these just yet
-    private final List<AptUnitOccupancy> occupancies = new ArrayList<AptUnitOccupancy>();
+    private final List<AptUnitOccupancySegment> occupancies = new ArrayList<AptUnitOccupancySegment>();
 
     // TODO later we will need to do transactions here
     public void map(ResidentTransactions transactions) {
@@ -116,7 +116,7 @@ public class GetResidentTransactionsMapper {
      * TODO for now we are not using this method
      */
     public void mapOccupancy(Information info) {
-        AptUnitOccupancy occupancy = EntityFactory.create(AptUnitOccupancy.class);
+        AptUnitOccupancySegment occupancy = EntityFactory.create(AptUnitOccupancySegment.class);
 
         occupancies.add(occupancy);
     }

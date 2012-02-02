@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 
-public interface UnitOccupancyViewerView extends IViewerView<AptUnitOccupancy> {
+public interface UnitOccupancyViewerView extends IViewerView<AptUnitOccupancySegment> {
 
 }

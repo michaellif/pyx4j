@@ -15,11 +15,11 @@ package com.propertyvista.crm.server.services.unit;
 
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.crm.server.util.GenericCrudServiceImpl;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 
-public class UnitOccupancyCrudServiceImpl extends GenericCrudServiceImpl<AptUnitOccupancy> implements UnitOccupancyCrudService {
+public class UnitOccupancyCrudServiceImpl extends GenericCrudServiceImpl<AptUnitOccupancySegment> implements UnitOccupancyCrudService {
 
     public UnitOccupancyCrudServiceImpl() {
-        super(AptUnitOccupancy.class);
+        super(AptUnitOccupancySegment.class);
     }
 }

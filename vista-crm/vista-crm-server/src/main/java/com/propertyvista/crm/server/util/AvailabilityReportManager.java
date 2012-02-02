@@ -34,8 +34,8 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy.OffMarketType;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AvailabilityReportManager {
@@ -47,7 +47,7 @@ public class AvailabilityReportManager {
         criteria.add(PropertyCriterion.ge(criteria.proto().statusDate(), when));
         Persistence.service().delete(criteria);
 
-        List<AptUnitOccupancy> occupancy = queryOccupancy(unit);
+        List<AptUnitOccupancySegment> occupancy = queryOccupancy(unit);
         List<UnitAvailabilityStatus> availability = computeUnitAvaialbility(when, occupancy);
 
         for (UnitAvailabilityStatus status : availability) {
@@ -55,8 +55,8 @@ public class AvailabilityReportManager {
         }
     }
 
-    private List<AptUnitOccupancy> queryOccupancy(AptUnit unit) {
-        EntityQueryCriteria<AptUnitOccupancy> criteria = new EntityQueryCriteria<AptUnitOccupancy>(AptUnitOccupancy.class);
+    private List<AptUnitOccupancySegment> queryOccupancy(AptUnit unit) {
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
         criteria.sort(new Sort(criteria.proto().dateFrom().getPath().toString(), false));
         return Persistence.service().query(criteria);
@@ -69,13 +69,13 @@ public class AvailabilityReportManager {
      *            starting point of computation
      * @param occupancy
      *            non empty list of occupancy state interval that cover the whole time, don't overlap, and ordered in ascending order by
-     *            {@link AptUnitOccupancy#dateFrom()}.
+     *            {@link AptUnitOccupancySegment#dateFrom()}.
      * @return
      */
-    public static List<UnitAvailabilityStatus> computeUnitAvaialbility(LogicalDate startTime, List<AptUnitOccupancy> occupancy) {
+    public static List<UnitAvailabilityStatus> computeUnitAvaialbility(LogicalDate startTime, List<AptUnitOccupancySegment> occupancy) {
         List<UnitAvailabilityStatus> result = new ArrayList<UnitAvailabilityStatus>();
 
-        ListIterator<AptUnitOccupancy> i = getOccupancyStatusCursorAt(startTime, occupancy);
+        ListIterator<AptUnitOccupancySegment> i = getOccupancyStatusCursorAt(startTime, occupancy);
         do {
             result.add(computeUnitAvailabilityStatus(startTime, occupancy));
             startTime = i.next().dateFrom().getValue();
@@ -86,18 +86,18 @@ public class AvailabilityReportManager {
 
     /**
      * @param occupancy
-     *            sorted (in the ascending order by {@link AptUnitOccupancy#dateFrom()}) non empty list of occupancy intervals covering the whole possible
+     *            sorted (in the ascending order by {@link AptUnitOccupancySegment#dateFrom()}) non empty list of occupancy intervals covering the whole possible
      *            time
      * @return
      */
-    public static UnitAvailabilityStatus computeUnitAvailabilityStatus(LogicalDate when, List<AptUnitOccupancy> occupancy) {
+    public static UnitAvailabilityStatus computeUnitAvailabilityStatus(LogicalDate when, List<AptUnitOccupancySegment> occupancy) {
 
         // TODO currently use OffMarketType "other" to denote units that have not been scoped yet, i.e. "Unrented" and loosing money
 
         UnitAvailabilityStatus status = null;
 
-        ListIterator<AptUnitOccupancy> i = getOccupancyStatusCursorAt(when, occupancy);
-        AptUnitOccupancy occupancyStatusAtRequestedTime = i.next();
+        ListIterator<AptUnitOccupancySegment> i = getOccupancyStatusCursorAt(when, occupancy);
+        AptUnitOccupancySegment occupancyStatusAtRequestedTime = i.next();
 
         switch (occupancyStatusAtRequestedTime.status().getValue()) {
         case available:
@@ -123,7 +123,7 @@ public class AvailabilityReportManager {
         return status;
     }
 
-    private static UnitAvailabilityStatus available(ListIterator<AptUnitOccupancy> i) {
+    private static UnitAvailabilityStatus available(ListIterator<AptUnitOccupancySegment> i) {
         final UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
 
         // if the unit is available it means it's ready for rent, hence it's been scoped
@@ -136,7 +136,7 @@ public class AvailabilityReportManager {
 
         boolean doLoop = true;
         while (doLoop & i.hasNext()) {
-            AptUnitOccupancy occupancyStatus = i.next();
+            AptUnitOccupancySegment occupancyStatus = i.next();
             switch (occupancyStatus.status().getValue()) {
             case leased:
                 status.rentedStatus().setValue(RentedStatus.Rented);
@@ -151,7 +151,7 @@ public class AvailabilityReportManager {
         return status;
     }
 
-    private static UnitAvailabilityStatus leased(Lease lease, ListIterator<AptUnitOccupancy> i) {
+    private static UnitAvailabilityStatus leased(Lease lease, ListIterator<AptUnitOccupancySegment> i) {
 
         final UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
         // we have to deduce if the unit has Notice, and if it is we have to do the following:
@@ -168,7 +168,7 @@ public class AvailabilityReportManager {
             status.vacancyStatus().setValue(VacancyStatus.Notice);
             status.moveOutDay().setValue(getMoveOutDate(lease));
             status.rentedStatus().setValue(RentedStatus.Unrented);
-            AptUnitOccupancy occupancyStatus = i.next();
+            AptUnitOccupancySegment occupancyStatus = i.next();
 
             // continue to check statuses until we reach the end or find out that the unit is rented
             do {
@@ -217,7 +217,7 @@ public class AvailabilityReportManager {
         return status;
     }
 
-    private static UnitAvailabilityStatus offMarket(OffMarketType type, ListIterator<AptUnitOccupancy> other) {
+    private static UnitAvailabilityStatus offMarket(OffMarketType type, ListIterator<AptUnitOccupancySegment> other) {
 
         final UnitAvailabilityStatus availablilityStatus = EntityFactory.create(UnitAvailabilityStatus.class);
 
@@ -234,7 +234,7 @@ public class AvailabilityReportManager {
         // if the unit is not rented, it means it is off market for good (for the logic see comments for leased() handler)
         boolean doLoop = true;
         while (doLoop & other.hasNext()) {
-            AptUnitOccupancy occupancyStatus = other.next();
+            AptUnitOccupancySegment occupancyStatus = other.next();
             switch (occupancyStatus.status().getValue()) {
             case leased:
                 availablilityStatus.rentedStatus().setValue(RentedStatus.Rented);
@@ -268,23 +268,23 @@ public class AvailabilityReportManager {
         return availablilityStatus;
     }
 
-    private static UnitAvailabilityStatus reserved(ListIterator<AptUnitOccupancy> other) {
+    private static UnitAvailabilityStatus reserved(ListIterator<AptUnitOccupancySegment> other) {
         // TODO: reserved status handler
         throw new Error("occupancy status handler for 'reserved' has not yet been implemented");
     }
 
-    private static UnitAvailabilityStatus vacant(ListIterator<AptUnitOccupancy> other) {
+    private static UnitAvailabilityStatus vacant(ListIterator<AptUnitOccupancySegment> other) {
         // TODO: vacant status handler
         throw new Error("occupancy status handler for 'vacant' has not yet been implemented");
     }
 
-    public static ListIterator<AptUnitOccupancy> getOccupancyStatusCursorAt(LogicalDate when, List<AptUnitOccupancy> occupancy) {
-        AptUnitOccupancy key = EntityFactory.create(AptUnitOccupancy.class);
+    public static ListIterator<AptUnitOccupancySegment> getOccupancyStatusCursorAt(LogicalDate when, List<AptUnitOccupancySegment> occupancy) {
+        AptUnitOccupancySegment key = EntityFactory.create(AptUnitOccupancySegment.class);
         key.dateFrom().setValue(when);
 
-        int index = Collections.binarySearch(occupancy, key, new Comparator<AptUnitOccupancy>() {
+        int index = Collections.binarySearch(occupancy, key, new Comparator<AptUnitOccupancySegment>() {
             @Override
-            public int compare(AptUnitOccupancy paramT1, AptUnitOccupancy paramT2) {
+            public int compare(AptUnitOccupancySegment paramT1, AptUnitOccupancySegment paramT2) {
                 return paramT1.dateFrom().compareTo(paramT2.dateFrom());
             }
         });

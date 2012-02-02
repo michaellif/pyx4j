@@ -22,13 +22,13 @@ import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 
-public class UnitOccupancyViewerActivity extends ViewerActivityBase<AptUnitOccupancy> {
+public class UnitOccupancyViewerActivity extends ViewerActivityBase<AptUnitOccupancySegment> {
 
     @SuppressWarnings("unchecked")
     public UnitOccupancyViewerActivity(Place place) {
-        super(place, UnitViewFactory.instance(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancy>) GWT
+        super(place, UnitViewFactory.instance(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancySegment>) GWT
                 .create(UnitOccupancyCrudService.class));
     }
 }

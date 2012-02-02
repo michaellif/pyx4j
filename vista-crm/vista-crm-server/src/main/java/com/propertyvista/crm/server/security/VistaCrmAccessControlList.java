@@ -79,7 +79,7 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.AptUnitOccupancy;
+import com.propertyvista.domain.property.asset.unit.AptUnitOccupancySegment;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -158,7 +158,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitCrudService.class));
         grant(VistaBasicBehavior.CRM, new EntityPermission(AptUnitItem.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitItemCrudService.class));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(AptUnitOccupancy.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(AptUnitOccupancySegment.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitOccupancyCrudService.class));
 
 // - Tenant-related:
